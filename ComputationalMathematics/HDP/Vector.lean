@@ -1,0 +1,49 @@
+import ComputationalMathematics.HDP.Vector.AffineMoments
+import ComputationalMathematics.HDP.Vector.Bernoulli
+import ComputationalMathematics.HDP.Vector.BernoulliSubGaussian
+import ComputationalMathematics.HDP.Vector.CenteredPairs
+import ComputationalMathematics.HDP.Vector.CoordinateDistribution
+import ComputationalMathematics.HDP.Vector.Covariance
+import ComputationalMathematics.HDP.Vector.FiniteAtomicSubGaussian
+import ComputationalMathematics.HDP.Vector.Frame
+import ComputationalMathematics.HDP.Vector.FrameIsotropy
+import ComputationalMathematics.HDP.Vector.Gaussian
+import ComputationalMathematics.HDP.Vector.GaussianAffine
+import ComputationalMathematics.HDP.Vector.GaussianIndependence
+import ComputationalMathematics.HDP.Vector.GaussianNormConcentration
+import ComputationalMathematics.HDP.Vector.GaussianPolar
+import ComputationalMathematics.HDP.Vector.IndependentCoordinates
+import ComputationalMathematics.HDP.Vector.IsotropicSubGaussianNonConcentration
+import ComputationalMathematics.HDP.Vector.Isotropy
+import ComputationalMathematics.HDP.Vector.IsotropyMarginals
+import ComputationalMathematics.HDP.Vector.IsotropyPairs
+import ComputationalMathematics.HDP.Vector.L1Ball
+import ComputationalMathematics.HDP.Vector.L1BallMoments
+import ComputationalMathematics.HDP.Vector.L1BallSubGaussian
+import ComputationalMathematics.HDP.Vector.LinearMarginals
+import ComputationalMathematics.HDP.Vector.MarginalVariance
+import ComputationalMathematics.HDP.Vector.Moments
+import ComputationalMathematics.HDP.Vector.NormConcentration
+import ComputationalMathematics.HDP.Vector.NormExpectation
+import ComputationalMathematics.HDP.Vector.NormFourthMoment
+import ComputationalMathematics.HDP.Vector.NormVariance
+import ComputationalMathematics.HDP.Vector.PlaneDirections
+import ComputationalMathematics.HDP.Vector.PrincipalComponents
+import ComputationalMathematics.HDP.Vector.ProjectiveLimit
+import ComputationalMathematics.HDP.Vector.SmallBall
+import ComputationalMathematics.HDP.Vector.Spherical
+import ComputationalMathematics.HDP.Vector.SphericalProjective
+import ComputationalMathematics.HDP.Vector.SphericalSubGaussian
+import ComputationalMathematics.HDP.Vector.StandardGaussianSubGaussian
+import ComputationalMathematics.HDP.Vector.SubGaussian
+import ComputationalMathematics.HDP.Vector.SubGaussianDomination
+import ComputationalMathematics.HDP.Vector.SubGaussianFinite
+import ComputationalMathematics.HDP.Vector.SubGaussianIndependent
+import ComputationalMathematics.HDP.Vector.UniformBall
+import ComputationalMathematics.HDP.Vector.UniformBallSubGaussian
+
+/-!
+# Vector high-dimensional probability
+
+Entry point for reusable finite-dimensional random-vector foundations.
+-/

@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.SubExponential
+import ComputationalMathematics.HDP.Scalar.SubExponential.Basic
 
 /-!
 # Centering a sub-exponential random variable
