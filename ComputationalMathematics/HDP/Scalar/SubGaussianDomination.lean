@@ -81,6 +81,49 @@ theorem isSubGaussian_of_abs_le
   exact lt_of_le_of_lt (psiTwoNorm_le_of_abs_le hX hXY)
     ((isSubGaussian_iff_psiTwoNorm_finite (μ := mu) (X := Y)).1 hYSubGaussian)
 
+/-- A deterministic upper bound on the exact `ψ₂` norm yields a one-sided
+sub-Gaussian tail with the explicit universal exponent constant `1/4`. -/
+theorem oneSidedTail_le_of_psiTwoNorm_le
+    {Omega : Type*} [MeasurableSpace Omega]
+    {mu : Measure Omega} [IsProbabilityMeasure mu]
+    {X : Omega → ℝ} (hX : Measurable X) {K : ℝ} (hK : 0 < K)
+    (hPsi : PsiTwoNorm mu X ≤ ENNReal.ofReal K)
+    {u : ℝ} (hu : 0 ≤ u) :
+    mu.real {omega | u ≤ X omega} ≤
+      2 * Real.exp (-u ^ 2 / (4 * K ^ 2)) := by
+  let t : ℝ≥0∞ := ENNReal.ofReal (2 * K)
+  have ht0 : t ≠ 0 := (ENNReal.ofReal_ne_zero_iff).2 (by positivity)
+  have htTop : t ≠ ∞ := ENNReal.ofReal_ne_top
+  have hGaugeLt : PsiTwoGauge mu X < t := by
+    calc
+      PsiTwoGauge mu X ≤ ENNReal.ofReal K := by
+        simpa [PsiTwoNorm] using hPsi
+      _ < ENNReal.ofReal (2 * K) :=
+        (ENNReal.ofReal_lt_ofReal_iff (by positivity : 0 < 2 * K)).2 (by nlinarith)
+  have htAdmissible : PsiTwoAdmissible mu X t := by
+    unfold PsiTwoGauge at hGaugeLt
+    rcases (sInf_lt_iff.mp hGaugeLt) with ⟨s, hs, hst⟩
+    exact psiTwoAdmissible_mono hs hst.le ht0 htTop
+  have htReal : t.toReal = 2 * K := by
+    dsimp [t]
+    rw [ENNReal.toReal_ofReal (mul_nonneg (by norm_num) hK.le)]
+  have htail := squareMGFToTail hX (by rw [htReal]; positivity)
+    (X := X) (K := t.toReal)
+    ⟨htAdmissible.2.2.2.1, htAdmissible.2.2.2.2⟩ hu
+  have hsubset : {omega | u ≤ X omega} ⊆ {omega | |X omega| ≥ u} := by
+    intro omega homega
+    exact homega.trans (le_abs_self (X omega))
+  have hmono : mu.real {omega | u ≤ X omega} ≤
+      mu.real {omega | |X omega| ≥ u} := by
+    rw [Measure.real_def, Measure.real_def]
+    exact ENNReal.toReal_mono (measure_ne_top mu _) (measure_mono hsubset)
+  calc
+    mu.real {omega | u ≤ X omega} ≤ mu.real {omega | |X omega| ≥ u} := hmono
+    _ ≤ 2 * Real.exp (-u ^ 2 / t.toReal ^ 2) := htail
+    _ = 2 * Real.exp (-u ^ 2 / (4 * K ^ 2)) := by
+      rw [htReal]
+      ring_nf
+
 /-- A measurable random variable with a deterministic finite absolute bound
 is sub-Gaussian.  The scale `B / sqrt (log 2)` makes the defining exponential
 square moment at most two. -/
