@@ -23,11 +23,13 @@ No selected source obligation remains open. The spectral-gap parent and Exercise
 
 Remark 4.7.2 is excluded for unresolved dependence of the printed comparison constants on the inherited subgaussian parameter. Its existing conditional sufficient bound remains useful mathematics and grants no source-row credit. All saved source uncertainty and the earlier formal target remain preserved. See [the sample-complexity analysis](remark-4-7-2-analysis.md).
 
-The actual Chapter 4 terminal gate and whole-unit organization check both pass. The native organization receipt covers 666 modules, with all five finding counters zero and complete semantic coverage. It retains 665 unchanged assessments and the final two-parent aggregate assessment; the affected aggregate build passes 4105 jobs. Protected publication is tracked separately.
+The actual Chapter 4 terminal gate and whole-unit organization check both pass. The native organization receipt covers 668 modules and 13 import-only API boundaries, with all five finding counters zero and complete semantic coverage. It retains 663 assessment records byte for byte, refreshes three affected facade records and adds two global facade/API records. The chapter aggregate keeps its exact 177 imports in casefold order; four reusable facades gain seven missing canonical exports. The clean public layout check passes for 4742 modules and the final affected facade build passes 6820 jobs. Protected publication is tracked separately.
 
 ## Module structure
 
 Reusable mathematics lives below `Analysis`, `Algorithms` and `HDP`; source correspondences, witnesses and corrected counterparts live below `Source/Vershynin/Chapter04`. The [public chapter aggregate](../../../ComputationalMathematics/Source/Vershynin/Chapter04.lean) exposes accepted source proofs. [The organization record](../../architecture/ch04-organization-20261029.md) describes the preserved module/API assessments and pseudoinverse extraction.
+
+The final whole-parent proofs are `spectralGapWholeParent_proved` and `exercise476WholeParent_proved` in `NumStability.HDP.Contract.DiscrepancyParents`. Each exports the accepted witness together with the complete corrected counterpart.
 
 The principal dependency chains are matrix spectral theory → norm and singular-value contracts; nets and packing → matrix norm approximation → concentration; covariance estimation → spectral perturbation → clustering. Generic Moore–Penrose and symmetric partial-inverse algebra also supports singular covariance and whitening constructions.
 
