@@ -1,4 +1,11 @@
+import ComputationalMathematics.HDP.Graph.ArbitraryReferenceSpectralSignRecovery
 import ComputationalMathematics.HDP.Graph.ArccosBound
+import ComputationalMathematics.HDP.Graph.BalancedCommunityEquivalence
+import ComputationalMathematics.HDP.Graph.CertifiedEigenvectorOrientation
+import ComputationalMathematics.HDP.Graph.CertifiedSecondEigenvector
+import ComputationalMathematics.HDP.Graph.CertifiedSpectralSignRecovery
+import ComputationalMathematics.HDP.Graph.CommunityZeroSumKernel
+import ComputationalMathematics.HDP.Graph.FinStochasticBlockRelabeling
 import ComputationalMathematics.HDP.Graph.GaussianHyperplaneExpectation
 import ComputationalMathematics.HDP.Graph.HyperplaneApproximation
 import ComputationalMathematics.HDP.Graph.MaxCut
@@ -8,6 +15,10 @@ import ComputationalMathematics.HDP.Graph.MaxCutSigns
 import ComputationalMathematics.HDP.Graph.RandomCut
 import ComputationalMathematics.HDP.Graph.RandomizedRounding
 import ComputationalMathematics.HDP.Graph.RepeatedRandomCut
+import ComputationalMathematics.HDP.Graph.SpectralBinaryClassification
+import ComputationalMathematics.HDP.Graph.SpectralClusteringRelabeling
+import ComputationalMathematics.HDP.Graph.StochasticBlockSpectrum
+import ComputationalMathematics.HDP.Graph.UnitEigenvectorCertificate
 
 
 /-! Stable entry point for finite-graph foundations used in HDP. -/

@@ -2570,4 +2570,50 @@ theorem complexMatrixSingularValue_ne_zero_of_rank_eq_card {m n : Nat}
     (by simpa [s] using hcard_s)
   intro i
   exact hall i (Finset.mem_univ i)
+
+/-- For a matrix with `k + 1` columns, the last ordered singular value is
+strictly positive exactly when the matrix has full column rank. -/
+theorem complexMatrixSingularValue_last_pos_iff_rank_eq_card {m k : Nat}
+    (A : CMatrix m (k + 1)) :
+    0 < complexMatrixSingularValue A (Fin.last k) ↔
+      complexMatrixRank A = k + 1 := by
+  constructor
+  · intro hlast
+    let s : Finset (Fin (k + 1)) :=
+      Finset.univ.filter (fun i => complexMatrixSingularValue A i ≠ 0)
+    have hall : ∀ i : Fin (k + 1), complexMatrixSingularValue A i ≠ 0 := by
+      intro i
+      have hle := complexMatrixSingularValue_antitone A (Fin.le_last i)
+      exact ne_of_gt (lt_of_lt_of_le hlast hle)
+    have hs : s = Finset.univ := by
+      apply Finset.filter_eq_self.mpr
+      intro i _
+      exact hall i
+    calc
+      complexMatrixRank A =
+          Fintype.card
+            {i : Fin (k + 1) // complexMatrixSingularValue A i ≠ 0} :=
+        complexMatrixRank_eq_card_nonzero_singularValue A
+      _ = s.card := by simp [s, Fintype.card_subtype]
+      _ = (Finset.univ : Finset (Fin (k + 1))).card := by rw [hs]
+      _ = k + 1 := by simp
+  · intro hrank
+    have hne :=
+      complexMatrixSingularValue_ne_zero_of_rank_eq_card A hrank (Fin.last k)
+    exact lt_of_le_of_ne'
+      (complexMatrixSingularValue_nonneg A (Fin.last k)) hne
+
+/-- A matrix's last column-indexed singular value can be nonzero only when
+the number of columns does not exceed the number of rows. -/
+theorem complexMatrixSingularValue_last_ne_zero_imp_card_le_height {m k : Nat}
+    (A : CMatrix m (k + 1))
+    (hne : complexMatrixSingularValue A (Fin.last k) ≠ 0) :
+    k + 1 ≤ m := by
+  have hpos : 0 < complexMatrixSingularValue A (Fin.last k) :=
+    lt_of_le_of_ne' (complexMatrixSingularValue_nonneg A (Fin.last k)) hne
+  have hrank : complexMatrixRank A = k + 1 :=
+    (complexMatrixSingularValue_last_pos_iff_rank_eq_card A).1 hpos
+  have hle : complexMatrixRank A ≤ m := by
+    simpa [complexMatrixRank] using Matrix.rank_le_height A
+  omega
 end NumStability
