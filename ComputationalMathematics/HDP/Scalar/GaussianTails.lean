@@ -456,4 +456,116 @@ theorem standardNormal_truncatedSecondMoment (t : ℝ) (ht : 1 ≤ t) :
     _ = (t + 1 / t) * (Real.sqrt (2 * Real.pi))⁻¹ *
           Real.exp (-(t ^ 2) / 2) := by ring
 
+/-- Reflection symmetry identifies the lower and upper contributions to the
+standard-normal second moment beyond a threshold. -/
+private theorem standardNormal_integral_sq_Iio_neg_eq_Ioi (R : ℝ) :
+    (∫ x in Iio (-R), x ^ 2 ∂standardNormalLaw) =
+      ∫ x in Ioi R, x ^ 2 ∂standardNormalLaw := by
+  have hmap : standardNormalLaw.map (fun x : ℝ => -x) = standardNormalLaw := by
+    simpa [standardNormalLaw] using
+      (ProbabilityTheory.gaussianReal_map_neg (μ := (0 : ℝ)) (v := (1 : ℝ≥0)))
+  have hmeas : Measurable (fun x : ℝ => (Iio (-R)).indicator (fun y => y ^ 2) x) :=
+    (measurable_id.pow_const 2).indicator measurableSet_Iio
+  rw [← integral_indicator measurableSet_Iio]
+  conv_lhs => rw [← hmap]
+  rw [integral_map (by fun_prop) hmeas.aestronglyMeasurable]
+  rw [← integral_indicator measurableSet_Ioi]
+  apply integral_congr_ae
+  filter_upwards [] with x
+  by_cases hx : x ∈ Ioi R
+  · have hneg : -x ∈ Iio (-R) := by simpa using hx
+    simp [Set.indicator_of_mem hx, Set.indicator_of_mem hneg]
+  · have hneg : -x ∉ Iio (-R) := by simpa using hx
+    simp [hx, hneg]
+
+/-- The two-sided standard-normal second moment beyond `R` is at most twice
+the one-sided bound from Exercise 2.1.4. -/
+theorem standardNormal_absTail_secondMoment_le (R : ℝ) (hR : 1 ≤ R) :
+    (∫ x in {x : ℝ | |x| > R}, x ^ 2 ∂standardNormalLaw) ≤
+      2 * (R + 1 / R) * (Real.sqrt (2 * Real.pi))⁻¹ *
+        Real.exp (-(R ^ 2) / 2) := by
+  have hRpos : 0 < R := zero_lt_one.trans_le hR
+  have hset : {x : ℝ | |x| > R} = Ioi R ∪ Iio (-R) := by
+    ext x
+    simp only [mem_setOf_eq, mem_union, mem_Ioi, mem_Iio]
+    constructor
+    · intro h
+      rcases (lt_abs.mp h) with h | h
+      · exact Or.inl h
+      · exact Or.inr (by linarith)
+    · rintro (h | h)
+      · exact lt_abs.mpr (Or.inl h)
+      · exact lt_abs.mpr (Or.inr (by linarith))
+  have hdisj : Disjoint (Ioi R) (Iio (-R)) := by
+    rw [Set.disjoint_left]
+    intro x hx hy
+    change R < x at hx
+    change x < -R at hy
+    linarith
+  have hsq : Integrable (fun x : ℝ => x ^ 2) standardNormalLaw := by
+    apply (memLp_two_iff_integrable_sq measurable_id.aestronglyMeasurable).mp
+    simpa [standardNormalLaw] using
+      (ProbabilityTheory.memLp_id_gaussianReal'
+        (μ := (0 : ℝ)) (v := (1 : ℝ≥0)) 2 (by simp))
+  rw [hset, Measure.restrict_union hdisj measurableSet_Iio]
+  rw [integral_add_measure hsq.integrableOn hsq.integrableOn]
+  rw [standardNormal_integral_sq_Iio_neg_eq_Ioi]
+  have hupper := (standardNormal_truncatedSecondMoment R hR).2
+  linarith
+
+/-- The explicit two-sided truncated-moment bound is strictly smaller than
+`4 / R²` for every `R ≥ 1`. -/
+theorem standardNormal_absTail_secondMoment_lt_four_div_sq
+    (R : ℝ) (hR : 1 ≤ R) :
+    2 * (R + 1 / R) * (Real.sqrt (2 * Real.pi))⁻¹ *
+        Real.exp (-(R ^ 2) / 2) < 4 / R ^ 2 := by
+  have hRpos : 0 < R := zero_lt_one.trans_le hR
+  have hsqrtpos : 0 < Real.sqrt (2 * Real.pi) := by positivity
+  have hsqrtle : 2 ≤ Real.sqrt (2 * Real.pi) := by
+    calc
+      (2 : ℝ) = Real.sqrt 4 := by norm_num
+      _ ≤ Real.sqrt (2 * Real.pi) :=
+        Real.sqrt_le_sqrt (by nlinarith [Real.two_le_pi])
+  have hc : (Real.sqrt (2 * Real.pi))⁻¹ ≤ (1 / 2 : ℝ) := by
+    rw [inv_eq_one_div]
+    exact (div_le_iff₀ hsqrtpos).2 (by nlinarith)
+  let z : ℝ := R ^ 2 / 4
+  have hzpos : 0 < z := by dsimp [z]; positivity
+  have hzexp : z + 1 < Real.exp z := Real.add_one_lt_exp hzpos.ne'
+  have hzadd : 0 < Real.exp z + (z + 1) := by positivity
+  have hsquare : (z + 1) ^ 2 < (Real.exp z) ^ 2 := by
+    have hprod := mul_pos (sub_pos.mpr hzexp) hzadd
+    nlinarith
+  have hexp_square : (Real.exp z) ^ 2 = Real.exp (R ^ 2 / 2) := by
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    dsimp [z]
+    ring
+  have hpolypos :
+      0 < R ^ 2 * (R - 2) ^ 2 + 4 * R * (R - 1) + 16 := by
+    nlinarith [sq_nonneg (R - 2), sq_nonneg R]
+  have hpoly : R ^ 3 + R < 4 * (z + 1) ^ 2 := by
+    dsimp [z]
+    nlinarith
+  have hpolyexp : R ^ 3 + R < 4 * Real.exp (R ^ 2 / 2) := by
+    rw [← hexp_square]
+    nlinarith
+  have htail : (R ^ 3 + R) * Real.exp (-(R ^ 2 / 2)) < 4 := by
+    rw [Real.exp_neg]
+    simpa [div_eq_mul_inv] using
+      ((div_lt_iff₀ (Real.exp_pos (R ^ 2 / 2))).2 hpolyexp)
+  have hscale :
+      (R + 1 / R) * Real.exp (-(R ^ 2) / 2) < 4 / R ^ 2 := by
+    apply (lt_div_iff₀ (sq_pos_of_pos hRpos)).2
+    convert htail using 1
+    field_simp
+  calc
+    2 * (R + 1 / R) * (Real.sqrt (2 * Real.pi))⁻¹ *
+          Real.exp (-(R ^ 2) / 2) ≤
+        2 * (R + 1 / R) * (1 / 2 : ℝ) *
+          Real.exp (-(R ^ 2) / 2) := by
+      gcongr
+    _ = (R + 1 / R) * Real.exp (-(R ^ 2) / 2) := by ring
+    _ < 4 / R ^ 2 := hscale
+
 end NumStability.HDP.Scalar.GaussianTails
