@@ -1,0 +1,17 @@
+import ComputationalMathematics.HDP.Optimization.GrothendieckBipartiteSDP
+import ComputationalMathematics.HDP.Optimization.GrothendieckBounds
+import ComputationalMathematics.HDP.Optimization.GrothendieckConstant
+import ComputationalMathematics.HDP.Optimization.GrothendieckGaussian
+import ComputationalMathematics.HDP.Optimization.GrothendieckGaussianMaximum
+import ComputationalMathematics.HDP.Optimization.GrothendieckHilbert
+import ComputationalMathematics.HDP.Optimization.GrothendieckKrivine
+import ComputationalMathematics.HDP.Optimization.GrothendieckRelaxationGuarantee
+import ComputationalMathematics.HDP.Optimization.GrothendieckSymmetric
+import ComputationalMathematics.HDP.Optimization.GrothendieckTruncation
+import ComputationalMathematics.HDP.Optimization.SemidefiniteConvexity
+import ComputationalMathematics.HDP.Optimization.SemidefiniteProgram
+import ComputationalMathematics.HDP.Optimization.SemidefiniteRelaxation
+import ComputationalMathematics.HDP.Optimization.SignQuadratic
+import ComputationalMathematics.HDP.Optimization.VectorQuadratic
+
+/-! Stable entry point for finite optimization foundations used in HDP. -/
