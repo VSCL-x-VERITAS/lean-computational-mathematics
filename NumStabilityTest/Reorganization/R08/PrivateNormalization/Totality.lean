@@ -7,6 +7,7 @@ import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method
 import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.BlockResidual.LeftResidualBounds
 import NumStability.Source.Higham.Chapter14.Theorem05.EliminationFamilies.CoefficientAsymptotics
 import NumStability.Source.Higham.Chapter14.Theorem05.PrintedEnvelopes.CorrectionBounds
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R08 approved private normalization (exhaustive)
@@ -129,8 +130,12 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R08 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R08 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"

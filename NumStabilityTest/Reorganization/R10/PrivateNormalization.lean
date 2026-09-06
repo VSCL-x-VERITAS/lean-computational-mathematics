@@ -15,6 +15,7 @@ import NumStability.Source.DrineasMahoney.RandNLA2016.Equation05.GramApproximati
 import NumStability.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.SampledGramOperatorNorm
 import NumStability.Source.DrineasMahoney.RandNLA2016.Equation08.LeastSquaresSketch.FloatingPointObjectiveBounds
 import NumStability.Source.DrineasMahoney.RandNLA2016.Equation08.LeastSquaresSketch.SketchedObjectiveBounds
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R10 private normalization (exhaustive)
@@ -45,8 +46,12 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R10 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R10 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"

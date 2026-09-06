@@ -1,4 +1,5 @@
 import NumStability.Algorithms.LinearSystems.QR.Householder.StoredQR
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R11 focused test — `StoredQR`
@@ -38,11 +39,15 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R11 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R11 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"
 
 #check @NumStability.coxHigham_exactSignedPivotPanel_sequence_active_block_bound_of_initial_block_bound_of_swapped_active_max_pivot_of_leading_block_det_ne_zero
 #check @NumStability.dim_mul_budget_sq_lt_trailingNorm2Sq_of_leadingBlock_leftInverse_frobNorm_budget

@@ -1,3 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter11.Theorem07.Core.Results
+
 /-!
 Copyright (c) 2026. Released under Apache 2.0.
 SPDX-License-Identifier: Apache-2.0
@@ -26,8 +28,6 @@ the `hfactor` hypothesis of the conditional theorem outright, leaving only the t
 genuine Higham source hypotheses (`FlMixedPivots` per-stage (11.5) coupling, and the
 (11.5) solve backward error `hsolve`).  The constant `c₀ = bunchTriGrowthC0` is
 explicit and depends only on `u`, `M0`, and the number of stages. -/
-
-import ComputationalMathematics.Source.Higham.Chapter11.Theorem07.Core.Results
 
 /-!
 Historical import path retained for compatibility.

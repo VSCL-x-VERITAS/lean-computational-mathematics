@@ -8,12 +8,17 @@ invoked. The baseline commit must remain available in the Git object database.
 
 from pathlib import Path
 from datetime import datetime, timezone
-import argparse, hashlib, io, json, re, subprocess, tarfile
+import argparse, copy, hashlib, io, json, re, subprocess, tarfile
 
 DOCS = Path(__file__).resolve().parent
 ROOT = DOCS.parents[2]
 MAP_SHA = 'cbd53b282d8832245bb58b4c0d56958b6f15fb4810fd5da9cf748f24948429d5'
 IMPORT_ORDER_MODULE = 'ComputationalMathematics.Source.Higham.Chapter14.Problem14'
+FORWARDER_HEADER_MODULE = 'NumStability.Source.Higham.Chapter11.Theorem07.Core.Results'
+PRIVATE_ADAPTER = 'NumStabilityTest.Reorganization.ProjectIdentityPrivateNames'
+PRIVATE_ADAPTER_TEST = PRIVATE_ADAPTER + 'Test'
+PRIVATE_TEMPLATE_SHA = 'cfb3edfa6825d3e1d6d59f87a3362e87d974fac3bc19d18d8aa4b32a4d7070a4'
+PRIVATE_TEST_SHA = '95f8d39351c9fbd87a12f3e458471103d642d84cfdf42ae0404758cc5625a9b3'
 IMPORT = re.compile(r'(?:(?:public|private|meta)\s+)*import[ \t]+([A-Za-z0-9_\'.]+)')
 
 def header_imports(text):
@@ -127,9 +132,201 @@ def permute_reviewed_import_header(raw, adjustment):
     return result
 
 
+def forwarder_header_adjustment(mapping):
+    path = DOCS / 'forwarder-header-adjustments.json'
+    document = json.loads(path.read_text(encoding='utf-8'))
+    assert document['schema_version'] == 1
+    assert document['module_map_sha256'] == MAP_SHA
+    assert document['baseline_commit'] == mapping['baseline_commit']
+    assert document['failed_candidate'] == 'abceba9f3f45f5432ed24ed9ba3902f7bd5d5bbf'
+    assert len(document['adjustments']) == 1, 'only the reviewed generated forwarder may relocate its import'
+    adjustment = document['adjustments'][0]
+    record = next(r for r in mapping['implementation_modules'] if r['old_module'] == FORWARDER_HEADER_MODULE)
+    assert adjustment['module'] == FORWARDER_HEADER_MODULE
+    assert adjustment['path'] == record['old_path']
+    assert adjustment['target_module'] == record['new_module']
+    assert adjustment['baseline_sha256'] == record['baseline_sha256']
+    assert adjustment['permutation'] == ['import', 'retained_notices', 'compatibility_documentation']
+    return adjustment, sha(path.read_bytes())
+
+
+def relocate_reviewed_forwarder_import(raw, adjustment):
+    """Move the one import before the preserved module-doc notice, changing no bytes."""
+    marker = ('import ' + adjustment['target_module'] + '\n\n').encode('utf-8')
+    assert sha(raw) == adjustment['before_sha256']
+    assert raw.count(marker) == 1
+    prefix, suffix = raw.split(marker)
+    assert prefix.startswith(b'/-!') and prefix.endswith(b'\n\n')
+    assert sha(marker) == adjustment['moved_import_sha256']
+    assert sha(prefix) == adjustment['preserved_prefix_sha256']
+    assert sha(suffix) == adjustment['preserved_suffix_sha256']
+    result = marker + prefix + suffix
+    assert sha(result) == adjustment['after_sha256']
+    return result
+
+
+def private_authority_rows(raw, kind):
+    pattern = (rb'private def ' + kind.encode() +
+        rb'PrivateNames\s*:\s*List Lean\.Name\s*:=\s*\[(.*?)\r?\n\]')
+    match = re.search(pattern, raw, re.S)
+    if match is None:
+        assert kind == 'retired', 'approved authority list missing'
+        return [], b''
+    row = re.compile(rb'(?:mangledPrivateName|approvedPrivateName) "([^"]+)" "([^"]+)"(?: (\d+))?')
+    assert not row.sub(b'', match[1]).strip(b' \t\r\n,'), 'unparsed private authority row'
+    return [(a.decode(), b.decode(), int(c or b'0')) for a, b, c in row.findall(match[1])], match[0]
+
+
+def public_probe_lines(raw):
+    return re.findall(rb'(?m)^#(?:check|synth|print|eval|guard)[^\r\n]*(?:\r?\n|$)', raw)
+
+
+def private_insert(raw, offset, text, kind, operations):
+    """The reviewed allowance consists only of additions at derived byte positions."""
+    assert 0 <= offset <= len(raw)
+    operations.append({'kind': kind, 'byte_offset': offset, 'insert_utf8': text})
+    return raw[:offset] + text.encode('utf-8') + raw[offset:]
+
+
+def expected_private_fixture(raw):
+    newline = '\r\n' if b'\r\n' in raw else '\n'
+    text = raw.decode('utf-8')
+    last = header_imports(text)[0][-1]
+    end = text.index('\n', last['end']) + 1
+    operations = []
+    result = private_insert(raw, len(text[:end].encode('utf-8')),
+        'import ' + PRIVATE_ADAPTER + newline, 'adapter_import', operations)
+    marker = ('  for name in approvedPrivateNames do' + newline).encode()
+    assert result.count(marker) == 1
+    result = private_insert(result, result.index(marker) + len(marker),
+        '    let name ← ' + PRIVATE_ADAPTER + '.requireMapped name' + newline,
+        'approved_owner_lookup', operations)
+    retired = re.search(rb'  for name in retiredPrivateNames do\r?\n'
+        rb'    if Lean\.Environment\.contains environment name then\r?\n'
+        rb'      throwError "[^\r\n]+"(?:\r?\n|$)', result)
+    assert bool(retired) == bool(private_authority_rows(raw, 'retired')[0])
+    if retired:
+        old_absence_check = retired[0]
+        result = private_insert(result, retired.end(),
+            '    if let some mappedName := ' + PRIVATE_ADAPTER + '.migrate? name then' + newline +
+            '      if Lean.Environment.contains environment mappedName then' + newline +
+            '        throwError "private normalization: canonical retired name {mappedName} still present"' + newline,
+            'mapped_retired_absence', operations)
+        assert result.count(old_absence_check) == 1, 'original retired absence check changed'
+    for kind in ['approved', 'retired']:
+        assert private_authority_rows(result, kind) == private_authority_rows(raw, kind)
+    assert public_probe_lines(result) == public_probe_lines(raw)
+    imports = [r['module'] for r in header_imports(result.decode('utf-8'))[0]]
+    assert imports.count(PRIVATE_ADAPTER) == 1
+    assert [m for m in imports if m != PRIVATE_ADAPTER] == [
+        r['module'] for r in header_imports(raw.decode('utf-8'))[0]]
+    return result, operations
+
+
+def validate_private_adjustments(document, mapping, original_tests, expected_root):
+    assert document['schema_version'] == 1
+    assert document['baseline_commit'] == mapping['baseline_commit']
+    assert document['failed_candidate'] == 'abceba9f3f45f5432ed24ed9ba3902f7bd5d5bbf'
+    assert document['module_map_sha256'] == MAP_SHA
+    assert document['adapter_module'] == PRIVATE_ADAPTER
+    assert document['standalone_test_module'] == PRIVATE_ADAPTER_TEST
+    paths = sorted(p for p, raw in original_tests.items() if b'private def approvedPrivateNames' in raw)
+    assert len(paths) == 21 and [r['path'] for r in document['fixtures']] == paths
+    owners = set(); approved_owners = set(); approved_count = retired_count = mapped_retired = 0
+    canonical = {r['old_module']: r['new_module'] for r in mapping['implementation_modules']}
+    expected = {}
+    for record in document['fixtures']:
+        relative = record['path']; raw = original_tests[relative]
+        result, operations = expected_private_fixture(raw)
+        # Recorded edits cannot grant arbitrary text substitutions: derive every
+        # insertion from trusted baseline syntax and then require exact replay.
+        assert record['insertions'] == operations, relative + ': unapproved edit operation'
+        replay = raw
+        for operation in record['insertions']:
+            offset = operation['byte_offset']
+            replay = replay[:offset] + operation['insert_utf8'].encode('utf-8') + replay[offset:]
+        assert replay == result and sha(raw) == record['before_sha256'] and sha(result) == record['after_sha256']
+        approved, approved_block = private_authority_rows(raw, 'approved')
+        retired, retired_block = private_authority_rows(raw, 'retired')
+        assert record['approved_rows'] == len(approved) and record['retired_rows'] == len(retired)
+        assert record['approved_authority_sha256'] == sha(approved_block)
+        assert record['retired_authority_sha256'] == sha(retired_block)
+        assert record['public_probe_lines_sha256'] == sha(b''.join(public_probe_lines(raw)))
+        assert all(owner in canonical for owner, _, _ in approved), 'unknown approved owner'
+        owners.update(row[0] for row in approved + retired)
+        approved_owners.update(row[0] for row in approved)
+        approved_count += len(approved); retired_count += len(retired)
+        mapped_retired += sum(row[0] in canonical for row in retired)
+        expected[relative] = result
+    pairs = [{'old_module': owner, 'new_module': canonical[owner]}
+             for owner in sorted(owners & canonical.keys())]
+    helper = document['helper']; test = document['standalone_test']
+    assert helper['path'] == PRIVATE_ADAPTER.replace('.', '/') + '.lean'
+    assert helper['owner_pairs'] == pairs, 'helper table is not the exact map-backed authority intersection'
+    template = helper['template_utf8']
+    assert sha(template.encode('utf-8')) == helper['template_sha256'] == PRIVATE_TEMPLATE_SHA
+    assert template.count('__EXACT_OWNER_PAIRS__') == 1
+    entries = ',\n'.join('  (' + json.dumps(p['old_module']) + ', ' + json.dumps(p['new_module']) + ')' for p in pairs)
+    expected[helper['path']] = template.replace('__EXACT_OWNER_PAIRS__', entries).encode('utf-8')
+    assert sha(expected[helper['path']]) == helper['sha256']
+    assert test['path'] == PRIVATE_ADAPTER_TEST.replace('.', '/') + '.lean'
+    expected[test['path']] = test['source_utf8'].encode('utf-8')
+    assert sha(expected[test['path']]) == test['sha256'] == PRIVATE_TEST_SHA
+    root = document['test_root']; root_operations = []
+    assert root['path'] == 'NumStabilityTest.lean' and root['before_sha256'] == sha(expected_root)
+    marker = b'import NumStabilityTest.Reorganization.R01'
+    assert expected_root.count(marker) == 1
+    newline = '\r\n' if b'\r\n' in expected_root else '\n'
+    expected['NumStabilityTest.lean'] = private_insert(expected_root, expected_root.index(marker),
+        'import ' + PRIVATE_ADAPTER_TEST + newline, 'standalone_adapter_test_import', root_operations)
+    assert root['insertions'] == root_operations and root['after_sha256'] == sha(expected['NumStabilityTest.lean'])
+    counts = {'fixtures': len(paths), 'approved_rows': approved_count, 'retired_rows': retired_count,
+        'owner_pairs': len(pairs), 'approved_owners': len(approved_owners), 'mapped_retired_rows': mapped_retired}
+    assert document['counts'] == counts
+    return expected, counts
+
+
+def private_adjustment_self_test(document, mapping, original_tests, expected_root):
+    validate_private_adjustments(document, mapping, original_tests, expected_root)
+    mutations = []
+    changed = copy.deepcopy(document); changed['fixtures'][0]['insertions'][0]['byte_offset'] += 1
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['fixtures'][0]['insertions'].pop()
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['fixtures'][1]['insertions'].pop()
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['fixtures'][0]['approved_authority_sha256'] = '0' * 64
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['fixtures'][0]['public_probe_lines_sha256'] = '0' * 64
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['helper']['owner_pairs'][0]['new_module'] += '.Unapproved'
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['helper']['owner_pairs'].pop()
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['helper']['template_utf8'] = changed['helper']['template_utf8'].replace('throwError', 'pure')
+    changed['helper']['template_sha256'] = sha(changed['helper']['template_utf8'].encode())
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['standalone_test']['source_utf8'] += '-- altered\n'
+    changed['standalone_test']['sha256'] = sha(changed['standalone_test']['source_utf8'].encode())
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['test_root']['insertions'][0]['insert_utf8'] += 'import Unapproved\n'
+    mutations.append(changed)
+    changed = copy.deepcopy(document); changed['fixtures'].pop()
+    mutations.append(changed)
+    for mutation in mutations:
+        try:
+            validate_private_adjustments(mutation, mapping, original_tests, expected_root)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('unapproved private-fixture mutation was accepted')
+    print('Private fixture preservation self-test passed: 11 edit/map/authority/probe/template/coverage mutations rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report', type=Path, help='Write the evidence JSON to this path.')
+    parser.add_argument('--self-test', action='store_true', help='Test the strict live-private-fixture replay allowance without compiling Lean.')
     args = parser.parse_args()
     failures = []
 
@@ -141,6 +338,7 @@ def main():
     verify(sha(map_raw) == MAP_SHA, 'module-map.json differs from the reviewed immutable map')
     mapping = json.loads(map_raw)
     order_adjustment, order_manifest_sha = import_order_adjustment(mapping)
+    header_adjustment, header_manifest_sha = forwarder_header_adjustment(mapping)
     fixtures = json.loads((DOCS / 'fixture-inventory.json').read_text(encoding='utf-8'))
     baseline = baseline_sources(mapping['baseline_commit'])
     implementations = mapping['implementation_modules']
@@ -169,6 +367,8 @@ def main():
             record['old_path'] + ': baseline hash differs')
         expected_old = (implementation_wrapper(before, record) if old in canonical else
             historical_wrapper(before, record, forwarding))
+        if old == FORWARDER_HEADER_MODULE:
+            expected_old = relocate_reviewed_forwarder_import(expected_old, header_adjustment)
         verify((ROOT / record['old_path']).read_bytes() == expected_old,
             record['old_path'] + ': forwarding source differs from the exact expected transformation')
         if old not in canonical:
@@ -193,35 +393,54 @@ def main():
             'historical_forwarder_sha256': sha(expected_old)})
     original_tests = {p: raw for p, raw in baseline.items()
         if p.startswith('NumStabilityTest/') and p.endswith('.lean')}
-    for relative, before in original_tests.items():
-        verify((ROOT / relative).read_bytes() == before,
-            relative + ': pre-existing test source changed')
     aggregate = fixtures['test_root_added_import']
     original_root = baseline['NumStabilityTest.lean'].decode('utf-8')
     insertion = header_imports(original_root)[0][-1]['end']
     expected_root = (original_root[:insertion] + '\nimport ' + aggregate + original_root[insertion:]).encode('utf-8')
-    verify((ROOT / 'NumStabilityTest.lean').read_bytes() == expected_root,
-        'NumStabilityTest.lean differs beyond its one documented aggregate import')
+    private_manifest_path = DOCS / 'live-private-name-adjustments.json'
+    private_document = json.loads(private_manifest_path.read_text(encoding='utf-8'))
+    private_expected, private_counts = validate_private_adjustments(private_document, mapping, original_tests, expected_root)
+    if args.self_test:
+        private_adjustment_self_test(private_document, mapping, original_tests, expected_root)
+    for relative, before in original_tests.items():
+        verify((ROOT / relative).read_bytes() == private_expected.get(relative, before),
+            relative + ': pre-existing test source differs outside exact private-owner adapter insertions')
+    for relative, expected in private_expected.items():
+        verify((ROOT / relative).is_file() and (ROOT / relative).read_bytes() == expected,
+            relative + ': live private-name adapter differs from its exact replay/map-bound source')
     for relative, digest in fixtures['generated_files'].items():
         verify((ROOT / relative).is_file() and sha((ROOT / relative).read_bytes()) == digest,
             relative + ': generated regression fixture differs from its inventory hash')
     report = {'schema_version': 1, 'checked_at_utc': datetime.now(timezone.utc).isoformat(),
         'baseline_commit': mapping['baseline_commit'], 'module_map_sha256': sha(map_raw),
         'import_order_adjustments_sha256': order_manifest_sha,
+        'forwarder_header_adjustments_sha256': header_manifest_sha,
+        'live_private_name_adjustments_sha256': sha(private_manifest_path.read_bytes()),
         'status': 'PASS' if not failures else 'FAIL',
         'claim': 'All canonical bytes are preserved except exact initial import module tokens and one documented 14-import header permutation; authored declaration names, mathematical bodies, documentation, and attribution remain unchanged.',
         'counts': {'canonical_modules': len(implementations), 'historical_forwarders': len(records),
             'existing_wrapper_comment_bodies_preserved': len(historical),
             'canonical_import_tokens_rewritten': token_count, 'external_import_tokens_preserved': external_count,
             'import_order_adjusted_aggregates': 1, 'import_order_permuted_header_lines': 14,
+            'generated_forwarder_imports_relocated_before_preserved_module_docs': 1,
             'new_wrappers_with_retained_license_notices': copyright_count,
-            'existing_test_files_preserved': len(original_tests),
+            'existing_test_files_byte_preserved': len(original_tests) - private_counts['fixtures'],
+            'existing_test_files_with_authority_content_preserved': len(original_tests),
+            'live_private_name_fixtures_adapted': private_counts['fixtures'],
+            'approved_private_names_checked_after_exact_owner_translation': private_counts['approved_rows'],
+            'original_retired_private_name_absence_checks_preserved': private_counts['retired_rows'],
+            'canonical_retired_private_name_absence_checks_added': private_counts['mapped_retired_rows'],
+            'exact_private_owner_pairs': private_counts['owner_pairs'],
+            'private_adapter_and_standalone_test_files': 2,
             'generated_test_files_checked': len(fixtures['generated_files']),
-            'test_root_added_imports': 1},
+            'test_root_added_imports': 2},
         'limitations': ['This is a source preservation gate. Lean compilation and downstream behavior require separate validation.'],
         'import_order_adjustments': [{'module': IMPORT_ORDER_MODULE,
             'manifest': 'import-order-adjustments.json',
             'unchanged_body_sha256': order_adjustment['unchanged_body_sha256']}],
+        'live_private_name_adjustments': {'manifest': 'live-private-name-adjustments.json',
+            'scope': 'Only exact adapter imports/helper-call insertions; all authority row bytes, ordinals, authored suffixes, public probes and original retired absence checks remain unchanged.',
+            'helper_template_sha256': PRIVATE_TEMPLATE_SHA, 'standalone_test_sha256': PRIVATE_TEST_SHA},
         'failures': failures, 'canonical_sources': source_records}
     if args.report:
         args.report.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')

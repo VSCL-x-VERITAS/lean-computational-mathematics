@@ -19,6 +19,7 @@ import NumStability.Source.Higham.Chapter16.Problem02.Results.Core
 import NumStability.Source.Higham.Chapter16.QuasiRounded.Solve
 import NumStability.Source.Higham.Chapter16.Spectrum.Results
 import NumStability.Source.Higham.Chapter16.VecPermutation.Notes
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R06 approved private normalization (exhaustive)
@@ -440,8 +441,12 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R06 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R06 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"

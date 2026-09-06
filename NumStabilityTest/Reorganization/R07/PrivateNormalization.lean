@@ -28,6 +28,7 @@ import NumStability.Analysis.LinearOperators.NumericalRadius.Core.Internal.Eucli
 import NumStability.Analysis.LinearOperators.Pseudospectra.Resolvent.Internal.ScalarNotation
 import NumStability.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
 import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerKreissUnconditional.Bounds
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R07 private normalization (exhaustive)
@@ -142,11 +143,15 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R07 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R07 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"
 
 #check @NumStability.RationalOrderCertificate.arcLength_le
 #check @NumStability.RationalOrderCertificate.arcLength_le_of_planar_analyticBridge

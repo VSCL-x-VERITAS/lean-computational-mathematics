@@ -2,6 +2,7 @@ import NumStability.Source.Higham.Chapter17.Results.Equation20.DiagonalizableBou
 import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Projectors.FixedRange
 import NumStability.Source.Higham.Chapter17.Results.Equation29.SingularBounds
 import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.TriangularBlockForm
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R01 approved private normalization
@@ -33,6 +34,7 @@ private def approvedPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "missing authority-approved private declaration {name}"
 

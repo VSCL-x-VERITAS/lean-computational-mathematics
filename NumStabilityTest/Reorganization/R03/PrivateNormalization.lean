@@ -40,6 +40,7 @@ import NumStability.Source.Higham.Chapter08.Problem08.SingleEntrySingularity.Res
 import NumStability.Source.Higham.Chapter08.Problem09.KahanSingularValues.Results.Theorems
 import NumStability.Source.Higham.Chapter08.Section03.TriangularSystems.ComparisonConditioningResults.Theorems
 import NumStability.Source.Higham.Chapter08.Section03.TriangularSystems.InverseNormResults.Theorems
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R03 approved private normalization (exhaustive)
@@ -861,8 +862,12 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R03 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R03 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"

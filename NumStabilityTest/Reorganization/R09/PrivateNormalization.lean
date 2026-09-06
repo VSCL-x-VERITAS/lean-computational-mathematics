@@ -39,6 +39,7 @@ import NumStability.Source.Higham.Chapter28.Section06.Companion.CharacteristicPo
 import NumStability.Source.Higham.Chapter28.Section06.Companion.Nonderogatory
 import NumStability.Source.Higham.Chapter28.Section06.Companion.Normality
 import NumStability.Source.Higham.Chapter28.Section06.Companion.SingularValues
+import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 
 /-!
 # R09 private normalization (exhaustive)
@@ -393,8 +394,12 @@ private def retiredPrivateNames : List Lean.Name := [
 run_cmd do
   let environment ← Lean.getEnv
   for name in approvedPrivateNames do
+    let name ← NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.requireMapped name
     unless Lean.Environment.contains environment name do
       throwError "R09 private normalization: missing approved name {name}"
   for name in retiredPrivateNames do
     if Lean.Environment.contains environment name then
       throwError "R09 private normalization: retired name {name} still present"
+    if let some mappedName := NumStabilityTest.Reorganization.ProjectIdentityPrivateNames.migrate? name then
+      if Lean.Environment.contains environment mappedName then
+        throwError "private normalization: canonical retired name {mappedName} still present"
