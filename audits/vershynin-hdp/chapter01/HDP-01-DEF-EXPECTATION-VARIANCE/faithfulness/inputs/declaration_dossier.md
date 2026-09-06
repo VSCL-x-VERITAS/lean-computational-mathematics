@@ -9,11 +9,17 @@ Interpret every dependency from its supplied declaration; names are not definiti
 theorem hdp_01_hdef_hexpectation_hvariance_spec
     {Ω : Type*} [MeasurableSpace Ω]
     (μ : Measure Ω) [IsProbabilityMeasure μ]
-    (X : Ω → ℝ) (_hX : Measurable X) :
-    NumStability.HDP.Scalar.Preliminaries.expectation μ X =
-        (∫ ω, X ω ∂μ) ∧
-      NumStability.HDP.Scalar.Preliminaries.variance μ X =
-        ∫ ω, (X ω - ∫ x, X x ∂μ) ^ 2 ∂μ
+    (X : Ω → ℝ) :
+    (Integrable X μ →
+        NumStability.HDP.Scalar.Preliminaries.expectation μ X = ∫ ω, X ω ∂μ) ∧
+      (MemLp X 2 μ →
+        Integrable (fun ω =>
+            (X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2) μ ∧
+          NumStability.HDP.Scalar.Preliminaries.variance μ X =
+            NumStability.HDP.Scalar.Preliminaries.expectation μ
+              (fun ω =>
+                (X ω -
+                  NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2))
 ```
 
 ## Elaborated target type
@@ -21,40 +27,87 @@ theorem hdp_01_hdef_hexpectation_hvariance_spec
 ```lean
 ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ]
   (X : Ω → Real),
-  Measurable X →
-    And (Eq (NumStability.HDP.Scalar.Preliminaries.expectation μ X) (MeasureTheory.integral μ fun ω => X ω))
-      (Eq (NumStability.HDP.Scalar.Preliminaries.variance μ X)
-        (MeasureTheory.integral μ fun ω =>
-          instHPow.hPow (instHSub.hSub (X ω) (MeasureTheory.integral μ fun x => X x)) 2))
+  And
+    (MeasureTheory.Integrable X μ →
+      Eq (NumStability.HDP.Scalar.Preliminaries.expectation μ X) (MeasureTheory.integral μ fun ω => X ω))
+    (MeasureTheory.MemLp X 2 μ →
+      And
+        (MeasureTheory.Integrable
+          (fun ω => instHPow.hPow (instHSub.hSub (X ω) (NumStability.HDP.Scalar.Preliminaries.expectation μ X)) 2) μ)
+        (Eq (NumStability.HDP.Scalar.Preliminaries.variance μ X)
+          (NumStability.HDP.Scalar.Preliminaries.expectation μ fun ω =>
+            instHPow.hPow (instHSub.hSub (X ω) (NumStability.HDP.Scalar.Preliminaries.expectation μ X)) 2)))
 ```
 
 ## Fully explicit elaborated target type
 
 ```lean
 ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω inst)
-  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst μ] (X : Ω → Real)
-  (_hX : @Measurable.{u_1, 0} Ω Real inst Real.measurableSpace X),
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst μ] (X : Ω → Real),
   And
-    (@Eq.{1} Real (@NumStability.HDP.Scalar.Preliminaries.expectation.{u_1} Ω inst μ X)
-      (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
-        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
-          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
-          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
-        inst μ fun (ω : Ω) => X ω))
-    (@Eq.{1} Real (@NumStability.HDP.Scalar.Preliminaries.variance.{u_1} Ω inst μ X)
-      (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
-        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
-          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
-          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
-        inst μ fun (ω : Ω) =>
-        @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
-          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (X ω)
-            (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
-              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
-                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
-                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
-              inst μ fun (x : Ω) => X x))
-          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+    (@MeasureTheory.Integrable.{0, u_1} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@SeminormedAddGroup.toContinuousENorm.{0} Real
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))
+        Ω inst X μ →
+      @Eq.{1} Real (@NumStability.HDP.Scalar.Preliminaries.expectation.{u_1} Ω inst μ X)
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst μ fun (ω : Ω) => X ω))
+    (@MeasureTheory.MemLp.{u_1, 0} Ω Real inst
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        X
+        (@OfNat.ofNat.{0} ENNReal (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} ENNReal (nat_lit 2)
+            (@AddMonoidWithOne.toNatCast.{0} ENNReal
+              (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instAddCommMonoidWithOneENNReal))
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+        μ →
+      And
+        (@MeasureTheory.Integrable.{0, u_1} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))
+          Ω inst
+          (fun (ω : Ω) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (X ω)
+                (@NumStability.HDP.Scalar.Preliminaries.expectation.{u_1} Ω inst μ X))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          μ)
+        (@Eq.{1} Real (@NumStability.HDP.Scalar.Preliminaries.variance.{u_1} Ω inst μ X)
+          (@NumStability.HDP.Scalar.Preliminaries.expectation.{u_1} Ω inst μ fun (ω : Ω) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (X ω)
+                (@NumStability.HDP.Scalar.Preliminaries.expectation.{u_1} Ω inst μ X))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
 ```
 
 ## Local import graph
@@ -120,7 +173,59 @@ fun {Ω} [MeasurableSpace Ω] μ X =>
     instHPow.hPow (instHSub.hSub (X ω) (NumStability.HDP.Scalar.Preliminaries.expectation μ X)) 2
 ```
 
-### D003: `And`
+### D003: `AddCommMonoidWithOne.toAddMonoidWithOne`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Nat.Cast.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `07f48d3cfc3c7c30b6298df8531409d9844ab8c7e0ba94dea2a3fd29879320af`
+
+Type:
+
+```lean
+{R : Type u_2} → [self : AddCommMonoidWithOne R] → AddMonoidWithOne R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_2} → [self : AddCommMonoidWithOne.{u_2} R] → AddMonoidWithOne.{u_2} R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R [self : AddCommMonoidWithOne R] => self.1
+```
+
+### D004: `AddMonoidWithOne.toNatCast`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Nat.Cast.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6b956e88ee642e7533983b76ff8087f4537eea04f025165ce1fa45dc80e795a2`
+
+Type:
+
+```lean
+{R : Type u_2} → [self : AddMonoidWithOne R] → NatCast R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_2} → [self : AddMonoidWithOne.{u_2} R] → NatCast.{u_2} R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R [self : AddMonoidWithOne R] => self.1
+```
+
+### D005: `And`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -140,7 +245,59 @@ Fully explicit type:
 (a b : Prop) → Prop
 ```
 
-### D004: `Eq`
+### D006: `ContinuousENorm.toENorm`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `31fb1ad5ceaae342dc2fe1c1f2eba1b18e67d9d01a5451201d210b585bde97c0`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ContinuousENorm E] → ENorm E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace.{u_8} E} → [self : @ContinuousENorm.{u_8} E inst] → ENorm.{u_8} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ContinuousENorm E] => self.1
+```
+
+### D007: `ENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `5b8f4d61311ebccecf6a54ceca44191d394e0108c8596129a77f03c15a7e457f`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop NNReal
+```
+
+### D008: `Eq`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -160,7 +317,7 @@ Fully explicit type:
 {α : Sort u_1} → α → α → Prop
 ```
 
-### D005: `HPow.hPow`
+### D009: `HPow.hPow`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -186,7 +343,7 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HPow α β γ] => self.1
 ```
 
-### D006: `HSub.hSub`
+### D010: `HSub.hSub`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -212,7 +369,7 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HSub α β γ] => self.1
 ```
 
-### D007: `InnerProductSpace.toNormedSpace`
+### D011: `InnerProductSpace.toNormedSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.InnerProductSpace.Defs`
@@ -246,34 +403,7 @@ Definition body (one-level semantic boundary):
 fun 𝕜 E {inst} {inst_1} [self : InnerProductSpace 𝕜 E] => self.1
 ```
 
-### D008: `Measurable`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
-- Declaration kind: `def`
-- Distance from target type: `1`
-- Semantic SHA-256: `6d56983cd98232a62c5c1b4a0368519a8b381777b32b6e8301ade2ccd7f4c3a4`
-
-Type:
-
-```lean
-{α : Type u_1} → {β : Type u_2} → [MeasurableSpace α] → [MeasurableSpace β] → (α → β) → Prop
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} → {β : Type u_2} → [MeasurableSpace.{u_1} α] → [MeasurableSpace.{u_2} β] → (f : α → β) → Prop
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} {β} [MeasurableSpace α] [MeasurableSpace β] f =>
-  ∀ ⦃t : Set β⦄, MeasurableSet t → MeasurableSet (Set.preimage f t)
-```
-
-### D009: `MeasurableSpace`
+### D012: `MeasurableSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
@@ -293,7 +423,44 @@ Fully explicit type:
 (α : Type u_7) → Type u_7
 ```
 
-### D010: `MeasureTheory.IsProbabilityMeasure`
+### D013: `MeasureTheory.Integrable`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Function.L1Space.Integrable`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `51e5158e8f2f2a375463d510858200b96afa04fb8f33126da2c5d1c572a76165`
+
+Type:
+
+```lean
+{ε : Type u_5} →
+  [inst : TopologicalSpace ε] →
+    [ContinuousENorm ε] →
+      {α : Type u_8} →
+        {x : MeasurableSpace α} → (α → ε) → autoParam (MeasureTheory.Measure α) MeasureTheory.Integrable._auto_1 → Prop
+```
+
+Fully explicit type:
+
+```lean
+{ε : Type u_5} →
+  [inst : TopologicalSpace.{u_5} ε] →
+    [@ContinuousENorm.{u_5} ε inst] →
+      {α : Type u_8} →
+        {x : MeasurableSpace.{u_8} α} →
+          (f : α → ε) →
+            (μ : autoParam.{u_8 + 1} (@MeasureTheory.Measure.{u_8} α x) MeasureTheory.Integrable._auto_1) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {ε} [TopologicalSpace ε] [ContinuousENorm ε] {α} {x} f μ =>
+  And (MeasureTheory.AEStronglyMeasurable f μ) (MeasureTheory.HasFiniteIntegral f μ)
+```
+
+### D014: `MeasureTheory.IsProbabilityMeasure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.Typeclasses.Probability`
@@ -313,7 +480,7 @@ Fully explicit type:
 {α : Type u_1} → {m0 : MeasurableSpace.{u_1} α} → (μ : @MeasureTheory.Measure.{u_1} α m0) → Prop
 ```
 
-### D011: `MeasureTheory.Measure`
+### D015: `MeasureTheory.Measure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -333,7 +500,47 @@ Fully explicit type:
 (α : Type u_6) → [MeasurableSpace.{u_6} α] → Type u_6
 ```
 
-### D012: `MeasureTheory.integral`
+### D016: `MeasureTheory.MemLp`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Function.LpSeminorm.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3d38a386250cbaad2a5c216f9bf80b5f748106d4406c769283ef0114b4f42398`
+
+Type:
+
+```lean
+{α : Type u_1} →
+  {ε : Type u_2} →
+    {m0 : MeasurableSpace α} →
+      [ENorm ε] →
+        [TopologicalSpace ε] →
+          (α → ε) → ENNReal → autoParam (MeasureTheory.Measure α) MeasureTheory.MemLp._auto_1 → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} →
+  {ε : Type u_2} →
+    {m0 : MeasurableSpace.{u_1} α} →
+      [ENorm.{u_2} ε] →
+        [TopologicalSpace.{u_2} ε] →
+          (f : α → ε) →
+            (p : ENNReal) →
+              (μ : autoParam.{u_1 + 1} (@MeasureTheory.Measure.{u_1} α m0) MeasureTheory.MemLp._auto_1) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ε} {m0} [ENorm ε] [TopologicalSpace ε] f p μ =>
+  And (MeasureTheory.AEStronglyMeasurable f μ)
+    (ENNReal.instPartialOrder.lt (MeasureTheory.eLpNorm f p μ) instTopENNReal.top)
+```
+
+### D017: `MeasureTheory.integral`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Integral.Bochner.Basic`
@@ -366,7 +573,7 @@ Definition body (one-level semantic boundary):
 MeasureTheory.wrapped✝.1
 ```
 
-### D013: `Monoid.toNatPow`
+### D018: `Monoid.toNatPow`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Algebra.Group.Defs`
@@ -392,7 +599,7 @@ Definition body (one-level semantic boundary):
 fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }
 ```
 
-### D014: `Nat`
+### D019: `Nat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -412,7 +619,108 @@ Fully explicit type:
 Type
 ```
 
-### D015: `NormedAddCommGroup.toSeminormedAddCommGroup`
+### D020: `Nat.instAtLeastTwoHAddOfNat`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Nat.Init`
+- Declaration kind: `theorem`
+- Distance from target type: `1`
+- Semantic SHA-256: `309ef94c4b7cfbe2e668952e6915279353921d5d48b6123a30f90dd932dac3e6`
+
+Type:
+
+```lean
+∀ (n : Nat) [NeZero n], (instHAdd.hAdd n 1).AtLeastTwo
+```
+
+Fully explicit type:
+
+```lean
+∀ (n : Nat) [@NeZero.{0} Nat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0))) n],
+  Nat.AtLeastTwo
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+```
+
+### D021: `Nat.instNeZeroSucc`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Nat.Basic`
+- Declaration kind: `theorem`
+- Distance from target type: `1`
+- Semantic SHA-256: `a0735a528184c05594c4c79312c1225bb4dcffcdf0df7eb1a50c5733047c85ad`
+
+Type:
+
+```lean
+∀ {n : Nat}, NeZero (instHAdd.hAdd n 1)
+```
+
+Fully explicit type:
+
+```lean
+∀ {n : Nat},
+  @NeZero.{0} Nat (@Zero.ofOfNat0.{0} Nat (instOfNatNat (nat_lit 0)))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+```
+
+### D022: `NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `c697ff5e735ebe18733e51950717037e73ba73e94ac2e99953bfb521708cabd2`
+
+Type:
+
+```lean
+{α : Type u_5} → [self : NonUnitalSeminormedCommRing α] → NonUnitalSeminormedRing α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_5} → [self : NonUnitalSeminormedCommRing.{u_5} α] → NonUnitalSeminormedRing.{u_5} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : NonUnitalSeminormedCommRing α] => self.1
+```
+
+### D023: `NonUnitalSeminormedRing.toSeminormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `db7996fa414ad67340b9d6991cd145ac2a5d251a870097d20f2f63e371fb101d`
+
+Type:
+
+```lean
+{α : Type u_2} → [NonUnitalSeminormedRing α] → SeminormedAddCommGroup α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} → [NonUnitalSeminormedRing.{u_2} α] → SeminormedAddCommGroup.{u_2} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : NonUnitalSeminormedRing α] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D024: `NormedAddCommGroup.toSeminormedAddCommGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Defs`
@@ -441,7 +749,35 @@ fun {E} [inst : NormedAddCommGroup E] =>
     dist_eq := ⋯ }
 ```
 
-### D016: `OfNat.ofNat`
+### D025: `NormedCommRing.toSeminormedCommRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ad504b2606febc5a066d58ac540c9826bd1b7fce734d59a7fef63c7c27112fe3`
+
+Type:
+
+```lean
+{α : Type u_2} → [β : NormedCommRing α] → SeminormedCommRing α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} → [β : NormedCommRing.{u_2} α] → SeminormedCommRing.{u_2} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [β : NormedCommRing α] =>
+  { toNorm := β.toNorm, toRing := β.toRing, toPseudoMetricSpace := β.toPseudoMetricSpace, dist_eq := ⋯,
+    norm_mul_le := ⋯, mul_comm := ⋯ }
+```
+
+### D026: `OfNat.ofNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -467,7 +803,33 @@ Definition body (one-level semantic boundary):
 fun α x [self : OfNat α x] => self.1
 ```
 
-### D017: `RCLike.toInnerProductSpaceReal`
+### D027: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D028: `RCLike.toInnerProductSpaceReal`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.InnerProductSpace.Basic`
@@ -504,7 +866,7 @@ fun {𝕜} [RCLike 𝕜] =>
     conj_inner_symm := ⋯, add_left := ⋯, smul_left := ⋯ }
 ```
 
-### D018: `Real`
+### D029: `Real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -524,7 +886,7 @@ Fully explicit type:
 Type
 ```
 
-### D019: `Real.instMonoid`
+### D030: `Real.instMonoid`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -550,7 +912,7 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D020: `Real.instRCLike`
+### D031: `Real.instRCLike`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.RCLike.Basic`
@@ -581,7 +943,7 @@ Definition body (one-level semantic boundary):
   toPartialOrder := Real.partialOrder, le_iff_re_im := @Real.instRCLike._proof_13, toDecidableEq := Real.decidableEq }
 ```
 
-### D021: `Real.instSub`
+### D032: `Real.instSub`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -607,33 +969,7 @@ Definition body (one-level semantic boundary):
 { sub := fun a b => instHAdd.hAdd a (Real.instNeg.neg b) }
 ```
 
-### D022: `Real.measurableSpace`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.MeasureTheory.Constructions.BorelSpace.Basic`
-- Declaration kind: `def`
-- Distance from target type: `1`
-- Semantic SHA-256: `51b107725c4edbe40e50ff5651a2c7ee5a10037e341c2764964a6d6cc26d82a1`
-
-Type:
-
-```lean
-MeasurableSpace Real
-```
-
-Fully explicit type:
-
-```lean
-MeasurableSpace.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-borel Real
-```
-
-### D023: `Real.normedAddCommGroup`
+### D033: `Real.normedAddCommGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Real`
@@ -659,7 +995,241 @@ Definition body (one-level semantic boundary):
 { toNorm := Real.norm, toAddCommGroup := Real.instAddCommGroup, toMetricSpace := Real.metricSpace, dist_eq := ⋯ }
 ```
 
-### D024: `instHPow`
+### D034: `Real.normedCommRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `69cccc1e864661e103785f4a2712b9ad164d845c03b7737801c37e5ac852bad7`
+
+Type:
+
+```lean
+NormedCommRing Real
+```
+
+Fully explicit type:
+
+```lean
+NormedCommRing.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+let __src := Real.normedAddCommGroup;
+let __src_1 := Real.commRing;
+{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedCommRing._proof_1,
+  toMul := __src_1.toMul, left_distrib := Real.normedCommRing._proof_2, right_distrib := Real.normedCommRing._proof_3,
+  zero_mul := Real.normedCommRing._proof_4, mul_zero := Real.normedCommRing._proof_5,
+  mul_assoc := Real.normedCommRing._proof_6, toOne := __src_1.toOne, one_mul := Real.normedCommRing._proof_7,
+  mul_one := Real.normedCommRing._proof_8, toNatCast := __src_1.toNatCast, natCast_zero := Real.normedCommRing._proof_9,
+  natCast_succ := Real.normedCommRing._proof_10, npow := __src_1.npow, npow_zero := Real.normedCommRing._proof_11,
+  npow_succ := Real.normedCommRing._proof_12, toNeg := __src.toNeg, toSub := __src.toSub,
+  sub_eq_add_neg := Real.normedCommRing._proof_13, zsmul := __src.zsmul, zsmul_zero' := Real.normedCommRing._proof_14,
+  zsmul_succ' := Real.normedCommRing._proof_15, zsmul_neg' := Real.normedCommRing._proof_16,
+  neg_add_cancel := Real.normedCommRing._proof_17, toIntCast := __src_1.toIntCast,
+  intCast_ofNat := Real.normedCommRing._proof_18, intCast_negSucc := Real.normedCommRing._proof_19,
+  toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul_le := Real.normedCommRing._proof_20, mul_comm := ⋯ }
+```
+
+### D035: `Real.pseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
+
+Type:
+
+```lean
+PseudoMetricSpace Real
+```
+
+Fully explicit type:
+
+```lean
+PseudoMetricSpace.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
+  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
+  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
+```
+
+### D036: `SeminormedAddCommGroup.toSeminormedAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8cf35215f509cdee10a3a95158cbaadd3c5fb584bc0d1f4fad6ecfc69b1bd205`
+
+Type:
+
+```lean
+{E : Type u_5} → [SeminormedAddCommGroup E] → SeminormedAddGroup E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_5} → [SeminormedAddCommGroup.{u_5} E] → SeminormedAddGroup.{u_5} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : SeminormedAddCommGroup E] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddGroup := __src.toAddGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D037: `SeminormedAddGroup.toContinuousENorm`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `17a83cbf3059dd0bbaefd43c93ce329f1d6b760d440889322b3582a18b23a141`
+
+Type:
+
+```lean
+{E : Type u_4} → [inst : SeminormedAddGroup E] → ContinuousENorm E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_4} →
+  [inst : SeminormedAddGroup.{u_4} E] →
+    @ContinuousENorm.{u_4} E
+      (@UniformSpace.toTopologicalSpace.{u_4} E
+        (@PseudoMetricSpace.toUniformSpace.{u_4} E (@SeminormedAddGroup.toPseudoMetricSpace.{u_4} E inst)))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [SeminormedAddGroup E] => { toENorm := NNNorm.toENorm, continuous_enorm := ⋯ }
+```
+
+### D038: `SeminormedAddGroup.toPseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `d4043bb9912319b688406ba77c3a5b0fdd8f53ab605cf1962721b51314c66d3f`
+
+Type:
+
+```lean
+{E : Type u_8} → [self : SeminormedAddGroup E] → PseudoMetricSpace E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} → [self : SeminormedAddGroup.{u_8} E] → PseudoMetricSpace.{u_8} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E [self : SeminormedAddGroup E] => self.3
+```
+
+### D039: `SeminormedCommRing.toNonUnitalSeminormedCommRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `a29f0377c9baf2265c34aaf85b852e7c4260b34d2dc04574484c335ebc09a6e9`
+
+Type:
+
+```lean
+{α : Type u_2} → [β : SeminormedCommRing α] → NonUnitalSeminormedCommRing α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} → [β : SeminormedCommRing.{u_2} α] → NonUnitalSeminormedCommRing.{u_2} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [β : SeminormedCommRing α] =>
+  { toNorm := β.toNorm, toAddMonoid := β.toAddMonoid, toNeg := β.toNeg, toSub := β.toSub, sub_eq_add_neg := ⋯,
+    zsmul := β.zsmul, zsmul_zero' := ⋯, zsmul_succ' := ⋯, zsmul_neg' := ⋯, neg_add_cancel := ⋯, add_comm := ⋯,
+    toMul := β.toMul, left_distrib := ⋯, right_distrib := ⋯, zero_mul := ⋯, mul_zero := ⋯, mul_assoc := ⋯,
+    toPseudoMetricSpace := β.toPseudoMetricSpace, dist_eq := ⋯, norm_mul_le := ⋯, mul_comm := ⋯ }
+```
+
+### D040: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D041: `instAddCommMonoidWithOneENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `31d9551885e3007e5d1368365622cfd7638ea41cc6d885234041621de873f55c`
+
+Type:
+
+```lean
+AddCommMonoidWithOne ENNReal
+```
+
+Fully explicit type:
+
+```lean
+AddCommMonoidWithOne.{0} ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop.addCommMonoidWithOne
+```
+
+### D042: `instHPow`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -685,7 +1255,7 @@ Definition body (one-level semantic boundary):
 fun {α} {β} [inst : Pow α β] => { hPow := fun a b => inst.pow a b }
 ```
 
-### D025: `instHSub`
+### D043: `instHSub`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -711,7 +1281,33 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Sub α] => { hSub := fun a b => inst.sub a b }
 ```
 
-### D026: `instOfNatNat`
+### D044: `instOfNatAtLeastTwo`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Nat.Cast.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `37355febc51d6fa8ff12fc8e7b429771db340390d46411d7608c566bdffd358d`
+
+Type:
+
+```lean
+{R : Type u_1} → {n : Nat} → [NatCast R] → [n.AtLeastTwo] → OfNat R n
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_1} → {n : Nat} → [NatCast.{u_1} R] → [Nat.AtLeastTwo n] → OfNat.{u_1} R n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} {n} [NatCast R] [n.AtLeastTwo] => { ofNat := n.cast }
+```
+
+### D045: `instOfNatNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -742,7 +1338,7 @@ fun n => { ofNat := n }
 ### `NumStability.HDP.Scalar.Preliminaries`
 
 Path: `lean-numerical-stability/NumStability/HDP/Scalar/Preliminaries.lean`
-SHA-256: `0f26eab184f14361fdbe52b2849a53072364088d170bf50d0580f74118009a32`
+SHA-256: `c605609d5ad25240806484c73a9b7ed84030dbcd08d1feac1df55e10e804f248`
 
 ```lean
 import Mathlib.Probability.Moments.Variance
@@ -1997,201 +2593,4 @@ def expectationVarianceModel
       simpa using expectation_centered hX }
 
 end NumStability.HDP.Scalar.Preliminaries
-
-namespace NumStability.HDP.Contract
-
-def hdp_01_hdef_hindicator
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (E : Set Ω) (hE : MeasurableSet E) :
-    NumStability.HDP.Scalar.Preliminaries.expectation μ
-        (NumStability.HDP.Scalar.Preliminaries.indicatorFunction E) = μ.real E :=
-  NumStability.HDP.Scalar.Preliminaries.indicatorExpectation μ E hE
-
-def hdp_01_hdef_hmoments
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X : Ω → ℝ) :
-  Type :=
-  NumStability.HDP.Scalar.Preliminaries.MomentModelData μ X
-
-def hdp_01_hdef_hmgf
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X : Ω → ℝ) :
-    Type :=
-  NumStability.HDP.Scalar.Preliminaries.MGFModelData μ X
-
-def hdp_01_hdef_hlp_hnorm_hspace
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (p : ENNReal) :
-    NumStability.HDP.Scalar.Preliminaries.LpNormSpaceModelData μ p :=
-  NumStability.HDP.Scalar.Preliminaries.lpNormSpaceModel μ p
-
-theorem hdp_01_hthm_hlp_hbanach_hquasinorm
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (p : ENNReal) [Fact (1 ≤ p)] :
-    NumStability.HDP.Scalar.Preliminaries.LpQuotientBanachModelData μ p :=
-  NumStability.HDP.Scalar.Preliminaries.lpQuotientBanach μ p
-
-theorem hdp_01_hthm_hlp_hbanach_hquasinorm_counterexample :
-    ∃ (μ : Measure (Fin 2)) (f g : Fin 2 → ℝ),
-      IsProbabilityMeasure μ ∧
-        ¬ MeasureTheory.eLpNorm (f + g) (1 / 2 : ENNReal) μ ≤
-          MeasureTheory.eLpNorm f (1 / 2 : ENNReal) μ +
-            MeasureTheory.eLpNorm g (1 / 2 : ENNReal) μ :=
-  NumStability.HDP.Scalar.Preliminaries.twoPointLpTriangleFailure
-
-theorem hdp_01_hdef_hconvex_hfunction
-    {φ : ℝ → ℝ}
-    (hφ : NumStability.HDP.Scalar.Preliminaries.convexFunctionInterface φ)
-    (r : ℝ) :
-    Convex ℝ {x : ℝ | x ∈ (Set.univ : Set ℝ) ∧ φ x ≤ r} :=
-  NumStability.HDP.Scalar.Preliminaries.convexFunction_sublevel_convex hφ r
-
-theorem hdp_01_hthm_hjensen
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} {φ : ℝ → ℝ}
-    (hφ : ConvexOn ℝ Set.univ φ)
-    (hX : Integrable X μ)
-    (hφX : Integrable (fun ω => φ (X ω)) μ) :
-    φ (NumStability.HDP.Scalar.Preliminaries.expectation μ X) ≤
-      NumStability.HDP.Scalar.Preliminaries.expectation μ (fun ω => φ (X ω)) :=
-  NumStability.HDP.Scalar.Preliminaries.jensenIntegral hφ hX hφX
-
-theorem hdp_01_hlem_hlayer_hcake_hpointwise {x : ℝ} (hx : 0 ≤ x) :
-    x = (∫ t in Set.Ioc 0 x, (1 : ℝ) ∂volume) ∧
-      ENNReal.ofReal x =
-        ∫⁻ t in Set.Ioi 0,
-          (Set.Iio x).indicator (fun _ => (1 : ENNReal)) t ∂volume :=
-  NumStability.HDP.Scalar.Preliminaries.layerCakePointwise hx
-
-theorem hdp_01_hlem_h1_d2_d1
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X)
-    (hNonneg : ∀ ω, 0 ≤ X ω) :
-    ((∫⁻ ω, ENNReal.ofReal (X ω) ∂μ) =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < X ω}) ∧
-      (∀ hInt : Integrable X μ,
-        NumStability.HDP.Scalar.Preliminaries.expectation μ X =
-          ∫ t in Set.Ioi 0, μ.real {ω | t < X ω}) :=
-  NumStability.HDP.Scalar.Preliminaries.layerCakeExpectation hX hNonneg
-
-/-! Stable Chapter 1 alias for the corrected signed-tail statement and its
-    standard-Cauchy obstruction in Exercise 1.2.2. -/
-theorem hdp_01_hex_h1_d2_d2
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X) :
-    (
-      (((∫⁻ ω, ENNReal.ofReal (max (X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (X ω) 0}) ∧
-      (∫⁻ ω, ENNReal.ofReal (max (-X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (-X ω) 0})) ∧
-      (∀ hInt : Integrable X μ,
-        (∫ ω, X ω ∂μ) =
-          (∫ t in Set.Ioi 0, μ.real {a | t < X a}) -
-            (∫ t in Set.Iio 0, μ.real {a | X a < t})))
-      ∧
-        ((∫⁻ t in Set.Ioi 0,
-          Probability.cauchyMeasure 0 1 {x | t < x}) = ⊤) ∧
-        ((∫⁻ t in Set.Iio 0,
-          Probability.cauchyMeasure 0 1 {x | x < t}) = ⊤)
-    ) := by
-  exact NumStability.HDP.Scalar.Preliminaries.exercise122CorrectedWithCauchy hX
-
-theorem hdp_01_hex_h1_d2_d3
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X) {p : ℝ} (hp : 0 < p) :
-    (NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p =
-        ENNReal.ofReal p *
-          ∫⁻ t in Set.Ioi 0,
-            μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1))) ∧
-      (∀ hfinite :
-          NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p <
-              (⊤ : ENNReal) ∨
-            ENNReal.ofReal p *
-                ∫⁻ t in Set.Ioi 0,
-                  μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1)) <
-              (⊤ : ENNReal),
-        (NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p).toReal =
-          (ENNReal.ofReal p *
-            ∫⁻ t in Set.Ioi 0,
-              μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1))).toReal) :=
-  NumStability.HDP.Scalar.Preliminaries.momentTailFormula hX hp
-
-theorem hdp_01_hlem_hmarkov_hindicator_hbound {x t : ℝ}
-    (hx : 0 ≤ x) (ht : 0 < t) :
-    t * Set.indicator (Set.Ici t) (fun _ => (1 : ℝ)) x ≤ x :=
-  NumStability.HDP.Scalar.Preliminaries.markovIndicatorBound hx ht
-
-theorem hdp_01_hex_h1_d2_d6
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X : Ω → ℝ} (hX : Measurable X)
-    (hInt : Integrable X μ)
-    (hSqInt : Integrable
-      (fun ω => (X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2) μ)
-    {t : ℝ} (ht : 0 < t) :
-    μ.real {ω | |X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X| ≥ t} ≤
-      NumStability.HDP.Scalar.Preliminaries.variance μ X / t ^ 2 :=
-  NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound hX hInt hSqInt ht
-
-theorem hdp_01_hcor_h1_d2_d5
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X : Ω → ℝ} (hX : Measurable X)
-    (hInt : Integrable X μ)
-    (hSqInt : Integrable
-      (fun ω => (X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2) μ)
-    {t : ℝ} (ht : 0 < t) :
-    μ.real {ω | |X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X| ≥ t} ≤
-      NumStability.HDP.Scalar.Preliminaries.variance μ X / t ^ 2 :=
-  NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound hX hInt hSqInt ht
-
-theorem hdp_01_hthm_hminkowski
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X Y : Ω → ℝ} {p : ENNReal}
-    (hX : AEStronglyMeasurable X μ) (hY : AEStronglyMeasurable Y μ)
-    (hp : 1 ≤ p) :
-    MeasureTheory.eLpNorm (X + Y) p μ ≤
-      MeasureTheory.eLpNorm X p μ + MeasureTheory.eLpNorm Y p μ :=
-  NumStability.HDP.Scalar.Preliminaries.minkowskiEpnorm hX hY hp
-
-/-! Corrected equation (1.3): positive Lp exponents are monotone on a
-  probability space, with the zero-exponent source endpoint recorded
-  separately as a discrepancy. -/
-theorem hdp_01_hcor_hlp_hmonotone
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} {p q : ENNReal}
-    (hpq : p ≤ q) (hX : AEStronglyMeasurable X μ) :
-    MeasureTheory.eLpNorm X p μ ≤ MeasureTheory.eLpNorm X q μ :=
-  NumStability.HDP.Scalar.Preliminaries.lpNormMonoProbability hpq hX
-
-theorem hdp_01_hcor_hlp_hmonotone_zero :
-    ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} {X : Ω → ℝ},
-      MeasureTheory.eLpNorm X 0 μ = 0 :=
-  fun {_} {_} {_} => NumStability.HDP.Scalar.Preliminaries.lpNormExponentZero
-
-theorem hdp_01_hthm_hholder
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X Y : Ω → ℝ) :
-    NumStability.HDP.Scalar.Preliminaries.HolderModelData μ X Y :=
-  NumStability.HDP.Scalar.Preliminaries.holderModel μ X Y
-
-theorem hdp_01_hthm_hcdf_hdetermines_hlaw
-    {μ ν : Measure ℝ} [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
-    (∀ t : ℝ, μ (Set.Iic t) = ν (Set.Iic t)) ↔ μ = ν :=
-  NumStability.HDP.Scalar.Preliminaries.cdfDeterminesLaw
-
-theorem hdp_01_hrem_h1_d1_d1
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X Y : Ω → ℝ}
-    (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ) :
-    ‖NumStability.HDP.Scalar.Preliminaries.covariance μ X Y‖ ≤
-      NumStability.HDP.Scalar.Preliminaries.standardDeviation μ X *
-        NumStability.HDP.Scalar.Preliminaries.standardDeviation μ Y :=
-  NumStability.HDP.Scalar.Preliminaries.covarianceCauchySchwarzBound hX hY
-
-end NumStability.HDP.Contract
 ```

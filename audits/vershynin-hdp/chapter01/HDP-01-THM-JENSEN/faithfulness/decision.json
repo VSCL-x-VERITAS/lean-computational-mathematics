@@ -1,44 +1,96 @@
 {
-  "accepted": false,
-  "adjudicated": true,
-  "adjudication_reasons": [
-    "blind translator left dependency_coverage item D007 unclear",
-    "blind translator left dependency_coverage item D009 unclear",
-    "blind translator left dependency_coverage item D010 unclear",
-    "blind translator left dependency_coverage item D015 unclear",
-    "blind translator left dependency_coverage item D029 unclear"
-  ],
-  "classification": "not-faithful-weaker",
-  "completed_at_utc": "2026-08-28T09:38:16.005926+00:00",
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-08-28T22:49:25.626556+00:00",
   "findings": [
     {
-      "category": "reduced-applicability-integrability",
-      "evidence": "The source says 'for any random variable X' and gives no explicit integrability premises, whereas Lean assumes Integrable X \u03bc and Integrable (\u03c6\u2218X) \u03bc.",
-      "impact": "The target omits source-stated cases outside the finite-integral domain; added hypotheses make it less applicable and therefore not-faithful-weaker.",
-      "severity": "major"
+      "category": "policy-bound definability premises",
+      "impact": "Recorded for transparency only. Under this module's authoritative definability convention, each ordinary real-valued E X is read on its finite-integral domain, so both premises are part of the configured source contract rather than optional proof conveniences, and their presence is explicitly not scored as reduced applicability or as `not-faithful-weaker`. No hypothesis beyond these declared conditions appears in the Lean statement. Anyone reading the printed sentence in isolation should nonetheless be aware that neither premise is in the text.",
+      "lean_evidence": "`hX : Integrable X \u03bc` and `h\u03c6X : Integrable (fun \u03c9 => \u03c6 (X \u03c9)) \u03bc`.",
+      "severity": "note",
+      "source_evidence": "PDF page 2 / printed page 6: 'Jensen's inequality states that for any random variable X and a convex function \u03c6 : R \u2192 R, we have \u03c6(E X) \u2264 E \u03c6(X).' No integrability or Lp condition is printed, unlike the neighbouring Minkowski ('X, Y \u2208 Lp') and Cauchy-Schwarz ('X, Y \u2208 L2') statements, and footnote 1 supplies no exceptional-value convention for E X."
     },
     {
-      "category": "source-well-definedness",
-      "evidence": "The source defines expectation as Lebesgue integration but does not state conditions making E X and E \u03c6(X) finite or otherwise comparable, and it gives no extended-value convention.",
-      "impact": "The source is analytically underspecified. The target makes one valid finite-real choice, but that choice must be recorded as a restriction rather than silently treated as an explicit source hypothesis.",
-      "severity": "note"
+      "category": "measurability strength",
+      "impact": "The Lean hypothesis is marginally weaker than 'random variable' (a.e. measurability rather than measurability), so the Lean statement covers slightly more functions than the printed sentence literally speaks about. This is a standard measure-theoretic equivalence \u2014 an a.e. strongly measurable real function coincides a.e. with a measurable one and has the same integral \u2014 so it does not alter the mathematical content or the classification, and it is a generalisation rather than a restriction.",
+      "lean_evidence": "X is bound only as `{X : \u03a9 \u2192 \u211d}` with no `Measurable X`; measurability enters solely through `Integrable`'s first conjunct `MeasureTheory.AEStronglyMeasurable X \u03bc` (D008).",
+      "severity": "note",
+      "source_evidence": "Footnote 1, printed page 5: 'the expectation E X of a random variable X on a probability space (\u03a9, \u03a3, P) is, by definition, the Lebesgue integral of the function X : \u03a9 \u2192 R' \u2014 a random variable is a measurable function."
+    },
+    {
+      "category": "convexity domain",
+      "impact": "The Lean hypothesis matches the printed typing exactly, which is the standard this module directs the judge to apply. It does mean the Lean theorem does not directly cover the book's own downstream use at (1.3) with \u03c6(x) = x^{q/p}; that looseness is internal to the source, not a defect of the formalization, and no narrower-domain version was stated by the source to be matched.",
+      "lean_evidence": "`h\u03c6 : ConvexOn \u211d Set.univ \u03c6`, where `Set.univ` unfolds to `{x | True}` (D026), i.e. convexity on the whole real line.",
+      "severity": "note",
+      "source_evidence": "Printed page 6: 'a convex function \u03c6 : R \u2192 R' with footnote 3 quantifying over 'all vectors x, y in the domain of \u03c6'; but the book's own next sentence instantiates \u03c6(x) = x^{q/p}, which is convex on [0, \u221e) rather than on all of R."
+    },
+    {
+      "category": "junk-value semantics",
+      "impact": "No effect on faithfulness: the `Integrable` premises make the junk-value branch unreachable, so the Lean statement asserts nothing about cases on which the source is silent. Worth recording because a reader who did not unfold `expectation` might wrongly suspect a junk-value reading was being asserted as source content.",
+      "lean_evidence": "`expectation \u03bc X` unfolds (D001) to the Bochner integral `MeasureTheory.integral \u03bc (fun \u03c9 => X \u03c9)` (D029), which is 0 by convention when the function is not integrable.",
+      "severity": "note",
+      "source_evidence": "Footnote 1 defines E as the Lebesgue integral but states no convention for non-integrable X; the contract records this absence explicitly."
+    },
+    {
+      "category": "convexity parameterization",
+      "impact": "The two-scalar (a, b) parameterization is equivalent to the (\u03bb, 1 \u2212 \u03bb) parameterization with \u03bb \u2208 [0, 1], so the Lean hypothesis is neither stronger nor weaker than footnote 3 under the forced reading of the \u03bb/t slip. No adjudication needed.",
+      "lean_evidence": "`ConvexOn` unfolds (D005) to the two-scalar form `\u2200 a b, 0 \u2264 a \u2192 0 \u2264 b \u2192 a + b = 1 \u2192 \u03c6 (a\u2022x + b\u2022y) \u2264 a\u2022\u03c6 x + b\u2022\u03c6 y`.",
+      "severity": "note",
+      "source_evidence": "Footnote 3, printed page 6, verbatim: '\u03c6(\u03bbx + (1 \u2212 \u03bb)y) \u2264 \u03bb\u03c6(x) + (1 \u2212 \u03bb)\u03c6(y) for all t \u2208 [0, 1] and all vectors x, y in the domain of \u03c6' \u2014 the formula uses \u03bb while the quantifier binds t, an evident typographical slip."
+    },
+    {
+      "category": "interpretation-policy applied (definability premises)",
+      "impact": "None on the verdict. Per the authoritative module definability convention recorded in my instructions, these two premises are part of the configured source contract, not optional proof conveniences, and their presence must not by itself be scored as reduced applicability. I applied that policy here. The blind translator, working without the source, characterized h\u03c6X as an added hypothesis that \"weakens the conclusion's scope (the +\u221e case is excluded rather than proven)\" \u2014 but the source neither asserts nor denies the +\u221e case (contract ambiguity 2), so no such claim is dropped, and no restriction beyond the declared definability conditions is present.",
+      "severity": "note",
+      "source_evidence": "Printed text states no integrability hypothesis \u2014 \"for any random variable X\" \u2014 while footnote 1 defines E X as a Lebesgue integral with no exceptional-value convention; the contract's MODULE DEFINABILITY POLICY installs Integrable X and Integrable (\u03c6 \u2218 X) as configured contract premises, and undebatable_constraints requires that they \"must appear as hypotheses\".",
+      "translation_evidence": "hX : Integrable X \u03bc and h\u03c6X : Integrable (fun \u03c9 => \u03c6 (X \u03c9)) \u03bc, with D008 unfolding Integrable to a.e. strong measurability plus finite integral, and restrictions_and_vacuity_risks noting they \"rule out this degenerate reading\" of the Bochner junk value."
+    },
+    {
+      "category": "convexity domain \u2014 apparent strengthening resolved against printed form",
+      "impact": "None on the verdict. Convexity on all of \u211d is exactly the printed hypothesis, so this is faithful, not a strengthening of the hypothesis relative to the source. The blind translator's comparison was against the sharpest possible Jensen rather than against Vershynin's sentence. Worth recording that the contract itself notes an internal looseness in the book \u2014 the very next sentence instantiates \u03c6(x) = x^{q/p}, convex on [0, \u221e) rather than on all of R \u2014 but the contract directs that the selected passage be judged against its printed R \u2192 R typing, which the translation matches.",
+      "severity": "note",
+      "source_evidence": "\"a convex3 function \u03c6 : R \u2192 R\" with footnote 3 quantifying over \"all vectors x, y in the domain of \u03c6\"; contract undebatable_constraints: \"\u03c6 must be typed R \u2192 R with domain all of R ... A version restricted to a subinterval or to a convex subset is not what this passage states.\"",
+      "translation_evidence": "h\u03c6 : ConvexOn \u211d Set.univ \u03c6; D026 and restrictions_and_vacuity_risks call this \"strictly stronger than the sharpest form of Jensen's inequality\", and translation.ambiguities concedes the point \"cannot be judged blind\"."
+    },
+    {
+      "category": "measurability strength (a.e. strong vs. strict)",
+      "impact": "None on the verdict. This makes the translation cover every source instance and marginally more (a.e.-modifications), which is widened applicability rather than a gap; since a.e.-equal functions have equal integrals, the mathematical content is unchanged. Both implications survive.",
+      "severity": "note",
+      "source_evidence": "Footnote 1 speaks of \"the function X : \u03a9 \u2192 R\" on a probability space, i.e. a measurable real-valued random variable; the contract records measurability as implicit and notes the analyst inference that convex \u03c6 : R \u2192 R is continuous hence \u03c6 \u2218 X is measurable, though \"the book never says this\".",
+      "translation_evidence": "restrictions_and_vacuity_risks: \"No measurability assumption is placed on X beyond what Integrable supplies (a.e. strong measurability); X need not be measurable in the strict sense, only a.e. strongly measurable.\""
+    },
+    {
+      "category": "explicit ambient probability space",
+      "impact": "None. Making inherited ambient context into explicit binders is required for a self-contained statement and preserves quantifier order and scope; the probability normalization \u03bc(univ) = 1 matches footnote 1's setting and is essential (the inequality fails for non-probability measures), so it is neither an added restriction nor an omission.",
+      "severity": "note",
+      "source_evidence": "Contract statement.binders: \"A probability space (\u03a9, \u03a3, P) is fixed as ambient context (inherited from Section 1.1, footnote 1); it is not re-quantified in the Jensen sentence.\"",
+      "translation_evidence": "\u03a9, [MeasurableSpace \u03a9], \u03bc, and [IsProbabilityMeasure \u03bc] appear as leading binders of the translated statement."
+    },
+    {
+      "category": "no equality/strictness content added",
+      "impact": "None; recorded as confirmation that the translation adds no conclusion the source does not state, keeping the result single-part as the contract's undebatable constraints require.",
+      "severity": "note",
+      "source_evidence": "Contract: \"the source offers nothing on when equality holds. Any equality-case or strict-inequality content in a formalization would be an addition beyond the source.\"",
+      "translation_evidence": "restrictions_and_vacuity_risks: \"The statement gives no equality/strictness information: it says nothing about when equality holds ... nor any quantitative gap.\""
     }
   ],
   "implications": {
     "lean_implies_source": {
-      "reasoning": "The Lean proposition yields Jensen only for the subclass where X and \u03c6\u2218X are both integrable. It gives no conclusion for the additional cases included by the source's literal 'any random variable' quantifier, so it does not imply the full printed claim.",
-      "verdict": "no"
+      "reasoning": "Take the printed statement as fixed by the module definability convention: for any probability space (\u03a9, \u03a3, P), any real random variable X whose expectation and whose transformed expectation are defined as finite Lebesgue integrals, and any convex \u03c6 : R \u2192 R, \u03c6(E X) \u2264 E \u03c6(X). Every ingredient of that reading is discharged by the Lean statement under a literal translation: (\u03a9, \u03a3, P) \u21a6 `{\u03a9} [MeasurableSpace \u03a9] {\u03bc} [IsProbabilityMeasure \u03bc]`; 'X a random variable with E X and E \u03c6(X) finite Lebesgue integrals' \u21a6 `Integrable X \u03bc` and `Integrable (fun \u03c9 => \u03c6 (X \u03c9)) \u03bc`, which is (slightly more than) enough since a.e. strong measurability is implied by measurability; '\u03c6 : R \u2192 R convex' \u21a6 `ConvexOn \u211d Set.univ \u03c6` (D005 unfolded against footnote 3); 'E' \u21a6 `expectation` = Bochner integral, which coincides with the Lebesgue integral for integrable real functions; '\u2264' \u21a6 the ordinary real order. The Lean conclusion is then literally the printed display, so the Lean theorem yields the source claim on its entire contract domain, with no residual case left uncovered.",
+      "verdict": "yes"
     },
     "source_implies_lean": {
-      "reasoning": "Specializing the source's universal claim to X and \u03c6\u2218X satisfying the target's integrability premises gives the Lean conclusion. D001 and D029 then denote the same finite real Lebesgue expectations, D005 gives global real convexity, and D009 supplies the same probability-space normalization.",
+      "reasoning": "Conversely, every instance of the Lean statement is an instance of the contract-read source claim. Given Lean data \u03a9, \u03bc (a probability measure), X, \u03c6 satisfying the three hypotheses, (\u03a9, MeasurableSpace \u03a9, \u03bc) is a probability space in the book's sense; \u03c6 is convex on all of R in footnote 3's sense (unfolding `ConvexOn \u211d Set.univ \u03c6` and setting \u03bb = a, 1 \u2212 \u03bb = b); and `expectation \u03bc X`, `expectation \u03bc (\u03c6 \u2218 X)` are the finite Lebesgue integrals E X and E \u03c6(X) precisely because of `hX` and `h\u03c6X`. The single point where the Lean hypotheses are a hair weaker than the source's wording is that `Integrable` requires only a.e. strong measurability, whereas 'random variable' means measurable; this is not a genuine gap, since an a.e. strongly measurable real function agrees a.e. with a measurable one and both integrals are unchanged by such modification, so the source claim transfers verbatim. Hence the source result (on the module's declared definability domain) entails the Lean proposition.",
       "verdict": "yes"
     }
   },
   "judge_classifications": {
-    "direct": "not-faithful-weaker",
-    "roundtrip": "not-faithful-weaker"
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
   },
-  "rationale": "The five blind uncertainties are resolved from the pinned Lean environment: the target uses a genuine measurable space, countably additive measure, probability normalization, real numbers, and the Bochner integral; none introduces an additional mismatch. The conclusion, object roles, global convexity, composition order, inequality direction, and probability-space semantics match the source, and the premises are nonvacuous. The decisive discrepancy is domain: hX and h\u03c6X restrict the target to finite integrable cases, while the printed result quantifies over any random variable without selecting those restrictions. Applying the protocol's reduced-applicability rule gives Lean\u21d2source no, source\u21d2Lean yes, classification not-faithful-weaker, and accepted=false.",
+  "rationale": "Direct comparison of the first-edition Jensen passage (PDF page 2 / printed page 6, Section 1.2) with `hdp_01_hthm_hjensen`. Reading the printed sentence together with its three inherited footnotes, the source claim is: on a probability space (\u03a9, \u03a3, P), for any real random variable X and any convex \u03c6 : R \u2192 R, \u03c6(E X) \u2264 E[\u03c6 \u2218 X], where E is the Lebesgue integral (footnote 1), the right-hand side is the expectation of the composite (footnote 2's binding convention), and 'convex' is the non-strict combination inequality over the whole domain of \u03c6, here all of R (footnote 3). I applied this module's authoritative definability convention: because the first edition defines E as a Lebesgue integral without any exceptional-value convention for non-integrable real random variables, each ordinary real-valued E X is read on its finite-integral domain, so `Integrable X \u03bc` and `Integrable (fun \u03c9 => \u03c6 (X \u03c9)) \u03bc` are part of the configured source contract and are NOT scored as reduced applicability; I also verified that the Lean statement adds no restriction beyond those declared definability conditions, which would have been `not-faithful-weaker`. Following the module's second instruction, I judged `ConvexOn \u211d Set.univ \u03c6` against the printed '\u03c6 : R \u2192 R' typing (which it matches exactly) rather than against a sharper interval-domain reading, noting only that the book's own use at (1.3) with x^{q/p} is internally looser than its own typing. All 33 dependencies were interpreted from their supplied declarations rather than their names: the single local definition `expectation` unfolds to the Bochner integral against \u03bc, i.e. footnote 1's Lebesgue integral (and not the L2 inner product of (1.1) or a conditional expectation); `ConvexOn` unfolds to footnote 3's inequality; `Integrable` unfolds to a.e. strong measurability plus finite integral; `Set.univ` to all of R; `IsProbabilityMeasure` to \u03bc univ = 1, i.e. P(\u03a9) = 1; and the remaining 27 entries are order, algebra, norm, topology, and integral instance plumbing on R that deliver only the standard structures. All twelve semantic checks pass except C09, marked not-applicable with a concrete reason (the selected result contains no constants, coefficients, exponents, or indices to compare). Both implications hold: the Lean theorem yields the contract-read source claim on its full domain, and every Lean instance is an instance of that claim, the only slack being `Integrable`'s a.e.-measurability versus the source's 'random variable', which is an a.e.-modification equivalence with no effect on either integral. Nonvacuity was tested concretely (standard Gaussian X with \u03c6 = t \u21a6 t\u00b2, giving the strict instance 0 \u2264 1), and both `ConvexOn` and `IsProbabilityMeasure` were checked to be load-bearing by exhibiting counterexamples when each is dropped. Classification: faithful-equivalent. Nothing was left unresolved, so no adjudication is required; the five findings are all note-level records of the policy-bound premises, the measurability slack, the convexity-domain typing, the unreachable Bochner junk value, and the equivalent convex-combination parameterization.",
   "remaining_uncertainties": [],
   "role": "final-decision",
   "schema_version": "formalization-faithfulness-1",

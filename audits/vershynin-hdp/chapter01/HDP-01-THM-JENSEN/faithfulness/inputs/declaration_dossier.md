@@ -6,7 +6,7 @@ Interpret every dependency from its supplied declaration; names are not definiti
 ## Proof-free source declaration
 
 ```lean
-theorem hdp_01_hthm_hjensen_spec
+theorem hdp_01_hthm_hjensen
     {Ω : Type*} [MeasurableSpace Ω]
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {X : Ω → ℝ} {φ : ℝ → ℝ}
@@ -67,7 +67,8 @@ theorem hdp_01_hthm_hjensen_spec
 
 ## Local import graph
 
-- `AuditTarget` imports: `NumStability.HDP.Scalar.Preliminaries`
+- `AuditTarget` imports: `NumStability.HDP.ContractSignatures.C_01_hthm_hjensen`, `NumStability.HDP.Scalar.Preliminaries`
+- `NumStability.HDP.ContractSignatures.C_01_hthm_hjensen` imports: `Mathlib.Analysis.Convex.Integral`
 - `NumStability.HDP.Scalar.Preliminaries` imports: `Mathlib.Probability.Moments.Variance`, `Mathlib.Probability.CDF`, `Mathlib.MeasureTheory.Function.LpSpace.Basic`, `Mathlib.MeasureTheory.Function.LpSpace.Complete`, `Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm`, `Mathlib.MeasureTheory.Function.LpSeminorm.Indicator`, `Mathlib.Probability.UniformOn`, `Mathlib.Analysis.Convex.Integral`, `Mathlib.Analysis.Convex.Continuous`, `Mathlib.MeasureTheory.Integral.Bochner.Set`, `Mathlib.MeasureTheory.Integral.Lebesgue.Markov`, `Mathlib.MeasureTheory.Integral.Layercake`, `Mathlib.MeasureTheory.Measure.Lebesgue.Integral`, `Mathlib.Probability.Distributions.Cauchy`, `Mathlib.Analysis.SpecialFunctions.NonIntegrable`, `Mathlib.Analysis.SpecialFunctions.Pow.Integral`, `Mathlib.Tactic`
 
 ## Semantic dependency inventory
@@ -1018,10 +1019,39 @@ Definition body (one-level semantic boundary):
 
 ## Complete local imported sources
 
+### `NumStability.HDP.ContractSignatures.C_01_hthm_hjensen`
+
+Path: `lean-numerical-stability/NumStability/HDP/ContractSignatures/C_01_hthm_hjensen.lean`
+SHA-256: `43e482b9ae3ac23493bf0e52c65ae85b476a21caf0a00ed339369eee2773e435`
+
+```lean
+import Mathlib.Analysis.Convex.Integral
+
+/-! Frozen proof-free signature for Jensen's inequality. -/
+
+noncomputable section
+
+open MeasureTheory
+
+namespace NumStability.HDP.Contract
+
+def hdp_01_hthm_hjensen__contract_type : Prop :=
+  ∀ {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : Ω → ℝ} {φ : ℝ → ℝ}
+    (hφ : ConvexOn ℝ Set.univ φ)
+    (hX : Integrable X μ)
+    (hφX : Integrable (fun ω => φ (X ω)) μ),
+    φ (∫ ω, X ω ∂μ) ≤
+      ∫ ω, φ (X ω) ∂μ
+
+end NumStability.HDP.Contract
+```
+
 ### `NumStability.HDP.Scalar.Preliminaries`
 
 Path: `lean-numerical-stability/NumStability/HDP/Scalar/Preliminaries.lean`
-SHA-256: `bf31c4ccc4bfa157c6f850e8f3fed8b2043a24ca2bc09297c7683f4850e38d45`
+SHA-256: `c605609d5ad25240806484c73a9b7ed84030dbcd08d1feac1df55e10e804f248`
 
 ```lean
 import Mathlib.Probability.Moments.Variance
@@ -2276,183 +2306,4 @@ def expectationVarianceModel
       simpa using expectation_centered hX }
 
 end NumStability.HDP.Scalar.Preliminaries
-
-namespace NumStability.HDP.Contract
-
-def hdp_01_hdef_hindicator
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (E : Set Ω) (hE : MeasurableSet E) :
-    NumStability.HDP.Scalar.Preliminaries.expectation μ
-        (NumStability.HDP.Scalar.Preliminaries.indicatorFunction E) = μ.real E :=
-  NumStability.HDP.Scalar.Preliminaries.indicatorExpectation μ E hE
-
-theorem hdp_01_hthm_hlp_hbanach_hquasinorm
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (p : ENNReal) [Fact (1 ≤ p)] :
-    NumStability.HDP.Scalar.Preliminaries.LpQuotientBanachModelData μ p :=
-  NumStability.HDP.Scalar.Preliminaries.lpQuotientBanach μ p
-
-theorem hdp_01_hthm_hlp_hbanach_hquasinorm_counterexample :
-    ∃ (μ : Measure (Fin 2)) (f g : Fin 2 → ℝ),
-      IsProbabilityMeasure μ ∧
-        ¬ MeasureTheory.eLpNorm (f + g) (1 / 2 : ENNReal) μ ≤
-          MeasureTheory.eLpNorm f (1 / 2 : ENNReal) μ +
-            MeasureTheory.eLpNorm g (1 / 2 : ENNReal) μ :=
-  NumStability.HDP.Scalar.Preliminaries.twoPointLpTriangleFailure
-
-theorem hdp_01_hdef_hconvex_hfunction
-    {φ : ℝ → ℝ}
-    (hφ : NumStability.HDP.Scalar.Preliminaries.convexFunctionInterface φ)
-    (r : ℝ) :
-    Convex ℝ {x : ℝ | x ∈ (Set.univ : Set ℝ) ∧ φ x ≤ r} :=
-  NumStability.HDP.Scalar.Preliminaries.convexFunction_sublevel_convex hφ r
-
-theorem hdp_01_hthm_hjensen
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} {φ : ℝ → ℝ}
-    (hφ : ConvexOn ℝ Set.univ φ)
-    (hX : Integrable X μ)
-    (hφX : Integrable (fun ω => φ (X ω)) μ) :
-    φ (NumStability.HDP.Scalar.Preliminaries.expectation μ X) ≤
-      NumStability.HDP.Scalar.Preliminaries.expectation μ (fun ω => φ (X ω)) :=
-  NumStability.HDP.Scalar.Preliminaries.jensenIntegral hφ hX hφX
-
-theorem hdp_01_hlem_hlayer_hcake_hpointwise {x : ℝ} (hx : 0 ≤ x) :
-    x = (∫ t in Set.Ioc 0 x, (1 : ℝ) ∂volume) ∧
-      ENNReal.ofReal x =
-        ∫⁻ t in Set.Ioi 0,
-          (Set.Iio x).indicator (fun _ => (1 : ENNReal)) t ∂volume :=
-  NumStability.HDP.Scalar.Preliminaries.layerCakePointwise hx
-
-theorem hdp_01_hlem_h1_d2_d1
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X)
-    (hNonneg : ∀ ω, 0 ≤ X ω) :
-    ((∫⁻ ω, ENNReal.ofReal (X ω) ∂μ) =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < X ω}) ∧
-      (∀ hInt : Integrable X μ,
-        NumStability.HDP.Scalar.Preliminaries.expectation μ X =
-          ∫ t in Set.Ioi 0, μ.real {ω | t < X ω}) :=
-  NumStability.HDP.Scalar.Preliminaries.layerCakeExpectation hX hNonneg
-
-/-! Stable Chapter 1 alias for the corrected signed-tail statement and its
-    standard-Cauchy obstruction in Exercise 1.2.2. -/
-theorem hdp_01_hex_h1_d2_d2
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X) :
-    (
-      (((∫⁻ ω, ENNReal.ofReal (max (X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (X ω) 0}) ∧
-      (∫⁻ ω, ENNReal.ofReal (max (-X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (-X ω) 0})) ∧
-      (∀ hInt : Integrable X μ,
-        (∫ ω, X ω ∂μ) =
-          (∫ t in Set.Ioi 0, μ.real {a | t < X a}) -
-            (∫ t in Set.Iio 0, μ.real {a | X a < t})))
-      ∧
-        ((∫⁻ t in Set.Ioi 0,
-          Probability.cauchyMeasure 0 1 {x | t < x}) = ⊤) ∧
-        ((∫⁻ t in Set.Iio 0,
-          Probability.cauchyMeasure 0 1 {x | x < t}) = ⊤)
-    ) := by
-  exact NumStability.HDP.Scalar.Preliminaries.exercise122CorrectedWithCauchy hX
-
-theorem hdp_01_hex_h1_d2_d3
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X) {p : ℝ} (hp : 0 < p) :
-    (NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p =
-        ENNReal.ofReal p *
-          ∫⁻ t in Set.Ioi 0,
-            μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1))) ∧
-      (∀ hfinite :
-          NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p <
-              (⊤ : ENNReal) ∨
-            ENNReal.ofReal p *
-                ∫⁻ t in Set.Ioi 0,
-                  μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1)) <
-              (⊤ : ENNReal),
-        (NumStability.HDP.Scalar.Preliminaries.absoluteMoment μ X p).toReal =
-          (ENNReal.ofReal p *
-            ∫⁻ t in Set.Ioi 0,
-              μ {ω | t < |X ω|} * ENNReal.ofReal (t ^ (p - 1))).toReal) :=
-  NumStability.HDP.Scalar.Preliminaries.momentTailFormula hX hp
-
-theorem hdp_01_hlem_hmarkov_hindicator_hbound {x t : ℝ}
-    (hx : 0 ≤ x) (ht : 0 < t) :
-    t * Set.indicator (Set.Ici t) (fun _ => (1 : ℝ)) x ≤ x :=
-  NumStability.HDP.Scalar.Preliminaries.markovIndicatorBound hx ht
-
-theorem hdp_01_hex_h1_d2_d6
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X : Ω → ℝ} (hX : Measurable X)
-    (hInt : Integrable X μ)
-    (hSqInt : Integrable
-      (fun ω => (X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2) μ)
-    {t : ℝ} (ht : 0 < t) :
-    μ.real {ω | |X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X| ≥ t} ≤
-      NumStability.HDP.Scalar.Preliminaries.variance μ X / t ^ 2 :=
-  NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound hX hInt hSqInt ht
-
-theorem hdp_01_hcor_h1_d2_d5
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X : Ω → ℝ} (hX : Measurable X)
-    (hInt : Integrable X μ)
-    (hSqInt : Integrable
-      (fun ω => (X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X) ^ 2) μ)
-    {t : ℝ} (ht : 0 < t) :
-    μ.real {ω | |X ω - NumStability.HDP.Scalar.Preliminaries.expectation μ X| ≥ t} ≤
-      NumStability.HDP.Scalar.Preliminaries.variance μ X / t ^ 2 :=
-  NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound hX hInt hSqInt ht
-
-theorem hdp_01_hthm_hminkowski
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {X Y : Ω → ℝ} {p : ENNReal}
-    (hX : AEStronglyMeasurable X μ) (hY : AEStronglyMeasurable Y μ)
-    (hp : 1 ≤ p) :
-    MeasureTheory.eLpNorm (X + Y) p μ ≤
-      MeasureTheory.eLpNorm X p μ + MeasureTheory.eLpNorm Y p μ :=
-  NumStability.HDP.Scalar.Preliminaries.minkowskiEpnorm hX hY hp
-
-/-! Corrected equation (1.3): positive Lp exponents are monotone on a
-  probability space, with the zero-exponent source endpoint recorded
-  separately as a discrepancy. -/
-theorem hdp_01_hcor_hlp_hmonotone
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} {p q : ENNReal}
-    (hpq : p ≤ q) (hX : AEStronglyMeasurable X μ) :
-    MeasureTheory.eLpNorm X p μ ≤ MeasureTheory.eLpNorm X q μ :=
-  NumStability.HDP.Scalar.Preliminaries.lpNormMonoProbability hpq hX
-
-theorem hdp_01_hcor_hlp_hmonotone_zero :
-    ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} {X : Ω → ℝ},
-      MeasureTheory.eLpNorm X 0 μ = 0 :=
-  fun {_} {_} {_} => NumStability.HDP.Scalar.Preliminaries.lpNormExponentZero
-
-theorem hdp_01_hthm_hholder
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X Y : Ω → ℝ) :
-    NumStability.HDP.Scalar.Preliminaries.HolderModelData μ X Y :=
-  NumStability.HDP.Scalar.Preliminaries.holderModel μ X Y
-
-theorem hdp_01_hthm_hcdf_hdetermines_hlaw
-    {μ ν : Measure ℝ} [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
-    (∀ t : ℝ, μ (Set.Iic t) = ν (Set.Iic t)) ↔ μ = ν :=
-  NumStability.HDP.Scalar.Preliminaries.cdfDeterminesLaw
-
-theorem hdp_01_hrem_h1_d1_d1
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X Y : Ω → ℝ}
-    (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ) :
-    ‖NumStability.HDP.Scalar.Preliminaries.covariance μ X Y‖ ≤
-      NumStability.HDP.Scalar.Preliminaries.standardDeviation μ X *
-        NumStability.HDP.Scalar.Preliminaries.standardDeviation μ Y :=
-  NumStability.HDP.Scalar.Preliminaries.covarianceCauchySchwarzBound hX hY
-
-end NumStability.HDP.Contract
 ```

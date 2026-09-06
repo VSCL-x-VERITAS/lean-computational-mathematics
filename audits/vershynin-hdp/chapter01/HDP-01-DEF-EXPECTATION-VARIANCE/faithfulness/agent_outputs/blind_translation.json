@@ -1,67 +1,368 @@
 {
   "schema_version": "formalization-faithfulness-1",
   "role": "blind-translation",
-  "dossier_sha256": "0cfec7671a6094bdcf084b522093ea288a141fce9f7d05aa7bb38532e082fe78",
+  "dossier_sha256": "daf905a4ba216c252f6583bd217e862d496c26d9dcc922361f7729abdf1f5324",
   "dependency_coverage": [
-    {"id":"D001","name":"LocalDef001","meaning":"Given a measure μ and a real-valued function X, LocalDef001 μ X is the real Bochner integral ∫ X(ω) dμ(ω).","effect_on_target":"The first equality unfolds this definition, and the same quantity is used as the centering constant inside LocalDef002.","status":"understood"},
-    {"id":"D002","name":"LocalDef002","meaning":"Given μ and X, LocalDef002 μ X is LocalDef001 applied to the function ω ↦ (X(ω) − LocalDef001 μ X)^2; equivalently, it is the integral of the squared deviation of X from its LocalDef001 value.","effect_on_target":"The second equality unfolds this definition into the integral of (X(ω) minus the integral of X)^2.","status":"understood"},
-    {"id":"D003","name":"And","meaning":"Logical conjunction of two propositions.","effect_on_target":"Requires both stated real equalities to hold simultaneously.","status":"understood"},
-    {"id":"D004","name":"Eq","meaning":"Equality between two objects of the same type.","effect_on_target":"Expresses each conclusion as an equality of real numbers.","status":"understood"},
-    {"id":"D005","name":"HPow.hPow","meaning":"Heterogeneous exponentiation; in this target it raises a real number to a natural-number exponent and returns a real number.","effect_on_target":"Forms the square of each centered real value using exponent 2.","status":"understood"},
-    {"id":"D006","name":"HSub.hSub","meaning":"Heterogeneous subtraction; in this target it is ordinary subtraction of real numbers.","effect_on_target":"Forms X(ω) minus the integral of X in the centered integrand.","status":"understood"},
-    {"id":"D007","name":"InnerProductSpace.toNormedSpace","meaning":"Derives a normed-space structure from an inner-product-space structure.","effect_on_target":"Contributes typeclass infrastructure needed to regard Real as a normed space for the Bochner integral; it does not add a mathematical hypothesis.","status":"understood"},
-    {"id":"D008","name":"Measurable","meaning":"A function is measurable when the preimage of every measurable target set is measurable in the source.","effect_on_target":"The sole explicit hypothesis asserts that X is measurable from Ω to Real equipped with its Borel measurable space.","status":"understood"},
-    {"id":"D009","name":"MeasurableSpace","meaning":"A specification of which subsets of a type are measurable.","effect_on_target":"Provides the measurable structure on Ω needed to define μ and state measurability of X.","status":"understood"},
-    {"id":"D010","name":"MeasureTheory.IsProbabilityMeasure","meaning":"A typeclass proposition asserting that a measure is a probability measure, in particular having total mass one.","effect_on_target":"Restricts μ to probability measures, although the two definitional equalities do not appear to use normalization substantively.","status":"understood"},
-    {"id":"D011","name":"MeasureTheory.Measure","meaning":"A measure on a type equipped with a measurable space.","effect_on_target":"Types the explicit binder μ and supplies the measure against which both integrals are taken.","status":"understood"},
-    {"id":"D012","name":"MeasureTheory.integral","meaning":"The real-valued Bochner integral of a real-valued function against a measure.","effect_on_target":"Computes the integral of X in the first conclusion and the integral of the squared centered function in the second conclusion.","status":"understood"},
-    {"id":"D013","name":"Monoid.toNatPow","meaning":"Supplies exponentiation by natural numbers from monoid multiplication.","effect_on_target":"Provides the operation used to interpret the real square as multiplication-based natural power.","status":"understood"},
-    {"id":"D014","name":"Nat","meaning":"The type of natural numbers.","effect_on_target":"Types the exponent 2 in the squared-deviation expression.","status":"understood"},
-    {"id":"D015","name":"NormedAddCommGroup.toSeminormedAddCommGroup","meaning":"Forgets part of a normed additive commutative group structure to obtain a seminormed additive commutative group structure.","effect_on_target":"Provides inherited analytic typeclass infrastructure for the real-valued Bochner integral; it introduces no extra mathematical condition.","status":"understood"},
-    {"id":"D016","name":"OfNat.ofNat","meaning":"Interprets a numeral in a specified type.","effect_on_target":"Interprets the written numeral 2 as the natural-number exponent two.","status":"understood"},
-    {"id":"D017","name":"RCLike.toInnerProductSpaceReal","meaning":"Supplies a real inner-product-space structure for a type carrying an RCLike structure.","effect_on_target":"Helps derive the normed-space infrastructure on Real used by the integral.","status":"understood"},
-    {"id":"D018","name":"Real","meaning":"The type of real numbers.","effect_on_target":"It is the codomain of X, the type of both integral values, the type on which subtraction and squaring act, and the type of both sides of each equality.","status":"understood"},
-    {"id":"D019","name":"Real.instMonoid","meaning":"The standard multiplicative monoid structure on the real numbers.","effect_on_target":"Provides real multiplication and hence natural powers used to square centered values.","status":"understood"},
-    {"id":"D020","name":"Real.instRCLike","meaning":"The standard RCLike analytic structure on Real.","effect_on_target":"Supplies analytic structure from which the inner-product and normed-space instances needed by integration are obtained.","status":"understood"},
-    {"id":"D021","name":"Real.instSub","meaning":"The standard subtraction operation on real numbers.","effect_on_target":"Interprets the centered difference X(ω) − ∫X dμ as ordinary real subtraction.","status":"understood"},
-    {"id":"D022","name":"Real.measurableSpace","meaning":"The Borel measurable-space structure on the real numbers.","effect_on_target":"Determines the target measurable space used in the hypothesis Measurable X.","status":"understood"},
-    {"id":"D023","name":"Real.normedAddCommGroup","meaning":"The standard normed additive commutative group structure on Real.","effect_on_target":"Provides the norm and additive structure required for real-valued Bochner integration.","status":"understood"},
-    {"id":"D024","name":"instHPow","meaning":"Promotes a homogeneous power operation to a heterogeneous-power interface with the same base and result type.","effect_on_target":"Connects real natural-power squaring to the HPow notation used in the target.","status":"understood"},
-    {"id":"D025","name":"instHSub","meaning":"Promotes a homogeneous subtraction operation to a heterogeneous-subtraction interface with the same operand and result type.","effect_on_target":"Connects ordinary real subtraction to the HSub notation used in the target.","status":"understood"},
-    {"id":"D026","name":"instOfNatNat","meaning":"The instance that interprets natural-number numerals as elements of Nat.","effect_on_target":"Makes the exponent numeral 2 denote the natural number two.","status":"understood"}
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "A local definition taking an implicit type Ω with a measurable-space structure, a measure μ on Ω, and a real-valued function X : Ω → ℝ, and returning the real number `∫ ω, X ω ∂μ`, i.e. the Bochner integral of X with respect to μ. Under a probability measure this is the expectation E[X]. Note it is a total function: for non-integrable X the Bochner integral is defined to be 0 by Mathlib convention, so LocalDef001 μ X is 0 in that case rather than undefined.",
+      "effect_on_target": "It is the 'expectation' operator appearing on the left of the first conclusion, inside the centering subtraction (X ω − LocalDef001 μ X), and as the outer operator in the second conclusion. The first conjunct asserts precisely that this operator agrees with the Bochner integral of X (which is definitionally trivial given the body).",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "A local definition with the same signature (Ω, measurable space, measure μ, X : Ω → ℝ) → ℝ, defined as LocalDef001 μ (fun ω => (X ω − LocalDef001 μ X)^2), i.e. the integral with respect to μ of the squared deviation of X from its own integral. Under a probability measure this is the variance Var[X] = E[(X − E X)^2]. It is likewise total, inheriting the 'integral of a non-integrable function is 0' convention.",
+      "effect_on_target": "It is the left-hand side of the second conclusion's equality; that equality states that this 'variance' operator equals the expectation of the squared centered variable — again definitionally true from its body.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "AddCommMonoidWithOne.toAddMonoidWithOne",
+      "meaning": "Structure projection extracting the AddMonoidWithOne structure from an AddCommMonoidWithOne structure on a type R.",
+      "effect_on_target": "Purely instance plumbing: part of the chain producing the numeral 2 : ℝ≥0∞ used as the Lp exponent. No mathematical content beyond fixing which numeral structure is used.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "AddMonoidWithOne.toNatCast",
+      "meaning": "Structure projection extracting the natural-number cast NatCast R from an AddMonoidWithOne structure on R.",
+      "effect_on_target": "Instance plumbing enabling the numeral 2 in ENNReal to be interpreted as the cast of the natural number 2; fixes the exponent p = 2 in the MemLp hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "And",
+      "meaning": "The logical conjunction connective on propositions: And p q is 'p and q'.",
+      "effect_on_target": "Structures the statement: the top level is a conjunction of two implications, and the consequent of the second implication is itself a conjunction of two claims.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "ContinuousENorm.toENorm",
+      "meaning": "Projection extracting the extended-norm (ENorm) structure from a ContinuousENorm structure on a topological space E.",
+      "effect_on_target": "Instance plumbing: supplies the ENorm on ℝ required by MeasureTheory.MemLp so that the L² seminorm of X is meaningful. It is the usual absolute value on ℝ.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "ENNReal",
+      "meaning": "The extended nonnegative reals ℝ≥0∞ = WithTop ℝ≥0, i.e. [0, ∞].",
+      "effect_on_target": "The type of the Lp exponent; the exponent 2 in the MemLp hypothesis lives here, so it denotes 2 ∈ [0, ∞] and the hypothesis is square-integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "Eq",
+      "meaning": "Propositional equality between two terms of the same type.",
+      "effect_on_target": "Both conclusions are equalities between real numbers.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "HPow.hPow",
+      "meaning": "Heterogeneous power operation, projecting the `hPow` field of a HPow instance; here it gives exponentiation of a real base by a natural exponent.",
+      "effect_on_target": "Forms the square (X ω − E X)^2 with natural-number exponent 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "HSub.hSub",
+      "meaning": "Heterogeneous subtraction, projecting the `hSub` field of a HSub instance; here real minus real.",
+      "effect_on_target": "Forms the centered variable X ω − LocalDef001 μ X.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "InnerProductSpace.toNormedSpace",
+      "meaning": "Projection giving the NormedSpace 𝕜 E structure underlying an InnerProductSpace 𝕜 E.",
+      "effect_on_target": "Instance plumbing: supplies the ℝ-normed-space structure on ℝ needed by MeasureTheory.integral. No mathematical content.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "MeasurableSpace",
+      "meaning": "The type class of σ-algebras: MeasurableSpace Ω equips Ω with a σ-algebra of measurable sets.",
+      "effect_on_target": "Supplies the measurable structure on the sample space Ω implicitly assumed by the statement; every integral, integrability and Lp claim is relative to it.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "MeasureTheory.Integrable",
+      "meaning": "Integrable f μ means f is almost-everywhere strongly measurable with respect to μ and has finite integral (∫⁻ ‖f‖ ∂μ < ∞), i.e. f ∈ L¹(μ).",
+      "effect_on_target": "Appears as the antecedent of the first implication (X ∈ L¹(μ)) and as the first component of the second implication's conclusion (the squared centered variable is in L¹(μ)).",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "MeasureTheory.IsProbabilityMeasure",
+      "meaning": "Typeclass asserting that the measure μ is a probability measure, i.e. μ(univ) = 1.",
+      "effect_on_target": "An instance-implicit hypothesis on μ throughout, so Ω with μ is a probability space and the integrals are genuinely expectation and variance.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "MeasureTheory.Measure",
+      "meaning": "The type of (countably additive, outer-regularized) measures on a measurable space α.",
+      "effect_on_target": "μ ranges over measures on Ω; combined with D014 it is a probability measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "MeasureTheory.MemLp",
+      "meaning": "MemLp f p μ means f is almost-everywhere strongly measurable with respect to μ and its Lp seminorm eLpNorm f p μ is strictly less than ∞, i.e. f ∈ L^p(μ).",
+      "effect_on_target": "With p = 2 it is the antecedent of the second implication: X is square-integrable (X ∈ L²(μ)).",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "MeasureTheory.integral",
+      "meaning": "The Bochner integral ∫ ω, f ω ∂μ of a function into a normed ℝ-vector space; by Mathlib convention it returns 0 when the function is not integrable.",
+      "effect_on_target": "Provides the actual integral on the right-hand side of the first conclusion and is the meaning unfolded inside LocalDef001; the junk-value convention is why both equalities can be stated without their integrability antecedents mattering.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Monoid.toNatPow",
+      "meaning": "Derives the Pow M ℕ instance from a monoid structure, defining x^n by iterated multiplication.",
+      "effect_on_target": "Fixes the meaning of the exponent 2 as multiplication of the centered variable by itself.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Nat",
+      "meaning": "The type of natural numbers.",
+      "effect_on_target": "Type of the exponent 2 in the squaring operation.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Nat.instAtLeastTwoHAddOfNat",
+      "meaning": "Instance/theorem showing n + 1 is 'at least two' whenever n is nonzero.",
+      "effect_on_target": "Numeral elaboration plumbing certifying that the literal 2 qualifies for the AtLeastTwo numeral cast used for the ENNReal exponent.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Nat.instNeZeroSucc",
+      "meaning": "Instance showing n + 1 is nonzero for any natural n.",
+      "effect_on_target": "Numeral elaboration plumbing supporting D020; no mathematical content.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "meaning": "Structure projection from a non-unital seminormed commutative ring to the underlying non-unital seminormed ring.",
+      "effect_on_target": "Instance plumbing in the chain deriving the norm/ENorm structure on ℝ used by Integrable and MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "meaning": "Derives the seminormed additive commutative group structure underlying a non-unital seminormed ring.",
+      "effect_on_target": "Instance plumbing toward the norm on ℝ; no mathematical content.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "meaning": "Forgets a normed additive commutative group to a seminormed one.",
+      "effect_on_target": "Instance plumbing supplying the seminormed group structure on ℝ required by the inner-product/normed-space route into MeasureTheory.integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "meaning": "Forgets a normed commutative ring to a seminormed commutative ring.",
+      "effect_on_target": "Instance plumbing in the ℝ norm chain used by Integrable/MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "OfNat.ofNat",
+      "meaning": "Numeral interpretation: gives the element of α denoted by the literal n.",
+      "effect_on_target": "Interprets the literals 2 (as ℕ for the exponent and as ℝ≥0∞ for the Lp index).",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Projection extracting the uniform-space structure from a pseudometric space.",
+      "effect_on_target": "Instance plumbing toward the topology on ℝ used by Integrable/MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "RCLike.toInnerProductSpaceReal",
+      "meaning": "Every RCLike field 𝕜 (ℝ or ℂ) is a real inner product space over ℝ.",
+      "effect_on_target": "Instance plumbing supplying the ℝ-normed-space structure on ℝ for the Bochner integral; mathematically it is just the standard structure on ℝ.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Real",
+      "meaning": "The type of real numbers ℝ.",
+      "effect_on_target": "Codomain of the random variable X and the type of both sides of both equalities.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "Real.instMonoid",
+      "meaning": "The multiplicative monoid structure on ℝ.",
+      "effect_on_target": "Gives the natural-power operation used for squaring.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "Real.instRCLike",
+      "meaning": "The RCLike instance for ℝ (ℝ as a real- or complex-like field with trivial imaginary part).",
+      "effect_on_target": "Instance plumbing feeding D028 to give ℝ its ℝ-normed-space structure for the integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "Real.instSub",
+      "meaning": "Subtraction on ℝ, defined as a − b = a + (−b).",
+      "effect_on_target": "Realizes the centering subtraction X ω − E X.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "Real.normedAddCommGroup",
+      "meaning": "The standard normed additive commutative group structure on ℝ with norm the absolute value.",
+      "effect_on_target": "Provides the target normed group for MeasureTheory.integral of a real-valued function.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "Real.normedCommRing",
+      "meaning": "The standard normed commutative ring structure on ℝ.",
+      "effect_on_target": "Root of the instance chain supplying the norm/ENorm on ℝ used by Integrable and MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "The standard pseudometric on ℝ given by dist x y = |x − y|.",
+      "effect_on_target": "Instance plumbing supplying the standard topology on ℝ used in the measurability/integrability predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "meaning": "Forgets commutativity: seminormed additive commutative group to seminormed additive group.",
+      "effect_on_target": "Instance plumbing in the ℝ norm chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "meaning": "Turns a seminormed additive group into a ContinuousENorm structure, i.e. the extended-valued norm ‖·‖₊ viewed in ℝ≥0∞ with continuity.",
+      "effect_on_target": "Supplies the ContinuousENorm on ℝ required by MeasureTheory.Integrable; concretely the enorm is the absolute value.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "SeminormedAddGroup.toPseudoMetricSpace",
+      "meaning": "Projection giving the pseudometric induced by a seminorm on an additive group.",
+      "effect_on_target": "Instance plumbing giving the topology on ℝ used in MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "meaning": "Forgets unitality: seminormed commutative ring to non-unital seminormed commutative ring.",
+      "effect_on_target": "Instance plumbing in the ℝ norm chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Projection extracting the topology induced by a uniform structure.",
+      "effect_on_target": "Instance plumbing supplying the topological space structure on ℝ needed by Integrable and MemLp.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "instAddCommMonoidWithOneENNReal",
+      "meaning": "The AddCommMonoidWithOne instance on ℝ≥0∞, inherited from WithTop.",
+      "effect_on_target": "Instance plumbing making the numeral 2 : ℝ≥0∞ available as the Lp exponent.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "instHPow",
+      "meaning": "Derives the heterogeneous power HPow α β α from a homogeneous Pow α β instance.",
+      "effect_on_target": "Makes the notation (X ω − E X)^2 elaborate with real base and natural exponent.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "instHSub",
+      "meaning": "Derives the heterogeneous subtraction HSub α α α from a Sub α instance.",
+      "effect_on_target": "Makes X ω − E X elaborate as real subtraction.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "instOfNatAtLeastTwo",
+      "meaning": "Provides OfNat R n for numerals n ≥ 2 in any type with a NatCast, interpreting the numeral as the cast of the natural number n.",
+      "effect_on_target": "Interprets the Lp exponent 2 in ℝ≥0∞ as the cast of the natural number 2, i.e. genuinely the exponent two.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "instOfNatNat",
+      "meaning": "Interprets a numeral literal n in the type ℕ as n itself.",
+      "effect_on_target": "Gives the natural-number exponent 2 in the squaring operation.",
+      "status": "understood"
+    }
   ],
   "translation": {
     "binders": [
-      "{Ω : Type u}: An implicit type Ω in universe u, serving as the sample space.",
-      "[MeasurableSpace Ω]: An implicit measurable-space structure on Ω.",
-      "(μ : Measure Ω): An explicit measure μ on Ω.",
-      "[IsProbabilityMeasure μ]: An implicit proof/typeclass instance that μ is a probability measure.",
-      "(X : Ω → Real): An explicit real-valued function, interpreted as a random variable on Ω."
+      "Ω : Type (universe u_1), implicit — the underlying sample space",
+      "[inst : MeasurableSpace Ω] — instance-implicit σ-algebra on Ω",
+      "μ : MeasureTheory.Measure Ω, explicit — a measure on Ω",
+      "[MeasureTheory.IsProbabilityMeasure μ] — instance-implicit assumption that μ is a probability measure (μ(Ω) = 1)",
+      "X : Ω → ℝ, explicit — an arbitrary real-valued function (random variable) on Ω, with no measurability assumed at the binder level",
+      "No further quantifiers: both statements are implications about this fixed μ and X"
     ],
     "hypotheses": [
-      "Measurable X: X is measurable from the given measurable space on Ω into the Borel measurable space on Real."
+      "Global standing hypotheses: Ω is a measurable space and μ is a probability measure on it; X : Ω → ℝ is arbitrary.",
+      "Antecedent of the first implication: MeasureTheory.Integrable X μ, i.e. X is a.e. strongly measurable and has finite integral — X ∈ L¹(μ).",
+      "Antecedent of the second implication: MeasureTheory.MemLp X 2 μ, i.e. X is a.e. strongly measurable and its L² seminorm is finite — X ∈ L²(μ), X is square-integrable.",
+      "No relation is assumed between the two implications; each carries only its own antecedent."
     ],
     "conclusions": [
-      "LocalDef001 μ X = integral μ (fun ω => X ω): LocalDef001 of μ and X equals the real Bochner integral of X with respect to μ.",
-      "LocalDef002 μ X = integral μ (fun ω => (X ω - integral μ (fun x => X x))^2): LocalDef002 of μ and X equals the real Bochner integral of the square of X(ω) minus the real Bochner integral of X; the inner variable x is a bound dummy variable.",
-      "And of the two equalities: Both equalities are asserted together."
+      "First conjunct (under X ∈ L¹(μ)): LocalDef001 μ X = ∫ ω, X ω ∂μ, i.e. the defined expectation operator applied to X equals the Bochner integral of X with respect to μ. Written mathematically: E[X] = ∫_Ω X dμ.",
+      "Second conjunct (under X ∈ L²(μ)), part (a): the function ω ↦ (X ω − LocalDef001 μ X)^2 is Integrable with respect to μ; that is, the squared deviation of X from its expectation is μ-integrable, (X − E X)^2 ∈ L¹(μ).",
+      "Second conjunct (under X ∈ L²(μ)), part (b): LocalDef002 μ X = LocalDef001 μ (fun ω ↦ (X ω − LocalDef001 μ X)^2), i.e. the defined variance operator applied to X equals the expectation of the squared centered variable. Written mathematically: Var[X] = E[(X − E[X])^2].",
+      "The whole statement is the conjunction: (X ∈ L¹(μ) → E[X] = ∫ X dμ) ∧ (X ∈ L²(μ) → ((X − E X)^2 ∈ L¹(μ) ∧ Var[X] = E[(X − E X)^2]))."
     ],
     "mathematical_definitions": [
-      "LocalDef001: LocalDef001 μ X := ∫_Ω X(ω) dμ(ω).",
-      "LocalDef002: LocalDef002 μ X := LocalDef001 μ (ω ↦ (X(ω) − LocalDef001 μ X)^2) = ∫_Ω (X(ω) − ∫_Ω X(x) dμ(x))^2 dμ(ω).",
-      "Measurable X: For every Borel measurable subset B of Real, X⁻¹(B) is measurable in Ω.",
-      "Probability measure: μ is assumed to have the probability-measure property, including total mass μ(Ω) = 1.",
-      "Integral: Every occurrence of integral is the real-valued Bochner integral against μ.",
-      "Centered square: For each ω, subtract the integral of X from X(ω) using real subtraction and square the result using natural exponent 2."
+      "LocalDef001 μ X := ∫ ω, X ω ∂μ — the Bochner integral of X against μ; under a probability measure this is the expectation E[X]. It is a total function of X: by the Mathlib convention the Bochner integral of a non-integrable function is 0, so LocalDef001 μ X = 0 whenever X is not integrable.",
+      "LocalDef002 μ X := LocalDef001 μ (fun ω ↦ (X ω − LocalDef001 μ X)^2) = ∫ ω, (X ω − ∫ X dμ)^2 ∂μ — the variance of X, defined as the expectation of the squared deviation from the mean, again with the junk-value-0 convention when the squared centered function is not integrable.",
+      "MeasureTheory.Integrable f μ := AEStronglyMeasurable f μ ∧ HasFiniteIntegral f μ (membership in L¹).",
+      "MeasureTheory.MemLp f p μ := AEStronglyMeasurable f μ ∧ eLpNorm f p μ < ∞ (membership in L^p); here p = 2 : ℝ≥0∞.",
+      "The exponent 2 in the square is a natural-number exponent interpreted via the monoid power on ℝ (repeated multiplication); the exponent 2 in MemLp is the ENNReal numeral 2."
     ],
-    "proposition_plain_english": "For every measurable space Ω, every probability measure μ on Ω, and every Borel-measurable real-valued function X on Ω, LocalDef001 is exactly the integral of X, and LocalDef002 is exactly the integral of the squared difference between X and the integral of X."
+    "proposition_plain_english": "Let (Ω, F) be a measurable space, let μ be a probability measure on it, and let X : Ω → ℝ be any real-valued function. Define the mean operator E[X] := ∫_Ω X dμ and the variance operator Var[X] := ∫_Ω (X − E[X])^2 dμ. The statement asserts two things at once. First: if X is μ-integrable (X ∈ L¹(μ)), then E[X] is exactly the Bochner integral of X with respect to μ — the definitional unfolding of the mean operator. Second: if X is square-integrable (X ∈ L²(μ)), then (i) the centered square ω ↦ (X ω − E[X])^2 is itself μ-integrable, and (ii) Var[X] equals E[(X − E[X])^2], the expectation of that squared deviation — the definitional unfolding of the variance operator. Only claim (i), the integrability of the centered square under an L² hypothesis, carries genuine mathematical content; the two equalities hold by definition of the two local operators and in fact hold for every X, integrable or not."
   },
   "restrictions_and_vacuity_risks": [
-    "The only explicit regularity assumption on X is measurability; there is no hypothesis that X is Bochner integrable, absolutely integrable, square-integrable, or has finite first or second moment.",
-    "Accordingly, the expressions are Lean's totalized Bochner integrals and should not automatically be read as asserting the usual finite expectation or finite variance of an arbitrary measurable random variable.",
-    "The proposition asserts definitional expansion of LocalDef001 and LocalDef002, not a substantive probabilistic theorem derived from the probability-measure or measurability assumptions.",
-    "The probability-measure assumption and the measurability hypothesis may be logically unnecessary for proving these equalities, because the local definitions and integral expressions can be unfolded without using them.",
-    "The conjunction is not vacuous in the logical sense, but it risks being mathematically weak: both conjuncts follow from the supplied local definitions rather than establishing existence, finiteness, or a new identity."
+    "The two equalities are definitionally trivial: LocalDef001 μ X is literally defined as ∫ ω, X ω ∂μ, so the first conclusion is a restatement of the definition; likewise LocalDef002 μ X is literally defined as LocalDef001 μ (fun ω ↦ (X ω − LocalDef001 μ X)^2), so the second equality is also definitionally true. Neither equality actually uses its antecedent, IsProbabilityMeasure, or any property of X.",
+    "Consequently the Integrable hypothesis in the first implication and the MemLp hypothesis in the second are strictly stronger than needed for the equalities; they are only genuinely used (and only can be used) for the integrability claim (X − E X)^2 ∈ L¹(μ).",
+    "Both local operators are total and rely on the Bochner-integral junk-value convention (integral of a non-integrable function = 0). So E[X] and Var[X] as encoded return 0 rather than being undefined for badly behaved X; the statement does not distinguish 'variance is zero' from 'variance is undefined'.",
+    "X is not assumed measurable at the binder; measurability enters only through the a.e.-strong-measurability component inside Integrable/MemLp. For a non-measurable X neither implication has a satisfiable antecedent, so both are vacuously true for such X — the statement carries no information there.",
+    "The IsProbabilityMeasure instance is required for the reading of these integrals as expectation and variance, but nothing in the encoded propositions actually depends on μ(Ω) = 1; the same statement would hold for an arbitrary measure. Its role is interpretive, not logical.",
+    "The nonnegativity of the variance, the alternative formula Var[X] = E[X²] − (E[X])², the finiteness of Var[X], and the L² ⊆ L¹ inclusion (which under a probability measure is what makes E[X] well defined in the second branch) are not stated anywhere.",
+    "The conclusion of the second implication does not assert that Var[X] is finite as a real number beyond the fact that it is a real value — finiteness is captured only indirectly by the integrability claim.",
+    "'Random variable', 'expectation' and 'variance' as probabilistic notions are not encoded semantically: nothing in the type names or the statement forces the intended interpretation; the reading depends entirely on the two local definitions and the probability-measure instance."
   ],
-  "ambiguities": []
+  "ambiguities": [
+    "The intended names/roles of LocalDef001 and LocalDef002 are anonymized; I read them purely from their bodies as 'expectation/mean of X under μ' and 'variance of X under μ'. If they were intended to denote something else (e.g. a conditional or normalized quantity), the bodies do not support that.",
+    "It is unclear whether the definitional triviality of the two equalities is intentional (an API-level 'unfolding lemma' recording that the defined operators agree with the standard integral formulas) or whether stronger, non-definitional content was intended (e.g. Var[X] = E[X²] − (E[X])²). As stated, only the integrability conjunct has real content.",
+    "The dossier gives no information on whether an L²-implies-L¹ step or the finiteness of E[X] under the second branch was meant to be part of the claim; those do not appear in the target type.",
+    "MeasureTheory.integral's junk-value behavior is inferred from standard Mathlib convention rather than from the supplied definition body (which is opaque, `MeasureTheory.wrapped✝.1`); the vacuity/totality remarks above rest on that inference."
+  ]
 }

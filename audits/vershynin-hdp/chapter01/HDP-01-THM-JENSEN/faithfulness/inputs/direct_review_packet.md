@@ -6,7 +6,7 @@ Interpret every dependency from its supplied declaration; names are not definiti
 ## Proof-free source declaration
 
 ```lean
-theorem hdp_01_hthm_hjensen_spec
+theorem hdp_01_hthm_hjensen
     {Ω : Type*} [MeasurableSpace Ω]
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {X : Ω → ℝ} {φ : ℝ → ℝ}
@@ -67,7 +67,8 @@ theorem hdp_01_hthm_hjensen_spec
 
 ## Local import graph
 
-- `AuditTarget` imports: `NumStability.HDP.Scalar.Preliminaries`
+- `AuditTarget` imports: `NumStability.HDP.ContractSignatures.C_01_hthm_hjensen`, `NumStability.HDP.Scalar.Preliminaries`
+- `NumStability.HDP.ContractSignatures.C_01_hthm_hjensen` imports: `Mathlib.Analysis.Convex.Integral`
 - `NumStability.HDP.Scalar.Preliminaries` imports: `Mathlib.Probability.Moments.Variance`, `Mathlib.Probability.CDF`, `Mathlib.MeasureTheory.Function.LpSpace.Basic`, `Mathlib.MeasureTheory.Function.LpSpace.Complete`, `Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm`, `Mathlib.MeasureTheory.Function.LpSeminorm.Indicator`, `Mathlib.Probability.UniformOn`, `Mathlib.Analysis.Convex.Integral`, `Mathlib.Analysis.Convex.Continuous`, `Mathlib.MeasureTheory.Integral.Bochner.Set`, `Mathlib.MeasureTheory.Integral.Lebesgue.Markov`, `Mathlib.MeasureTheory.Integral.Layercake`, `Mathlib.MeasureTheory.Measure.Lebesgue.Integral`, `Mathlib.Probability.Distributions.Cauchy`, `Mathlib.Analysis.SpecialFunctions.NonIntegrable`, `Mathlib.Analysis.SpecialFunctions.Pow.Integral`, `Mathlib.Tactic`
 
 ## Semantic dependency inventory

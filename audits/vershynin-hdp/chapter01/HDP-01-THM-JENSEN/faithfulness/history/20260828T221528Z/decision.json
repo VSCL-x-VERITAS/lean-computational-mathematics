@@ -1,0 +1,46 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "blind translator left dependency_coverage item D007 unclear",
+    "blind translator left dependency_coverage item D009 unclear",
+    "blind translator left dependency_coverage item D010 unclear",
+    "blind translator left dependency_coverage item D015 unclear",
+    "blind translator left dependency_coverage item D029 unclear"
+  ],
+  "classification": "not-faithful-weaker",
+  "completed_at_utc": "2026-08-28T09:38:16.005926+00:00",
+  "findings": [
+    {
+      "category": "reduced-applicability-integrability",
+      "evidence": "The source says 'for any random variable X' and gives no explicit integrability premises, whereas Lean assumes Integrable X \u03bc and Integrable (\u03c6\u2218X) \u03bc.",
+      "impact": "The target omits source-stated cases outside the finite-integral domain; added hypotheses make it less applicable and therefore not-faithful-weaker.",
+      "severity": "major"
+    },
+    {
+      "category": "source-well-definedness",
+      "evidence": "The source defines expectation as Lebesgue integration but does not state conditions making E X and E \u03c6(X) finite or otherwise comparable, and it gives no extended-value convention.",
+      "impact": "The source is analytically underspecified. The target makes one valid finite-real choice, but that choice must be recorded as a restriction rather than silently treated as an explicit source hypothesis.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "The Lean proposition yields Jensen only for the subclass where X and \u03c6\u2218X are both integrable. It gives no conclusion for the additional cases included by the source's literal 'any random variable' quantifier, so it does not imply the full printed claim.",
+      "verdict": "no"
+    },
+    "source_implies_lean": {
+      "reasoning": "Specializing the source's universal claim to X and \u03c6\u2218X satisfying the target's integrability premises gives the Lean conclusion. D001 and D029 then denote the same finite real Lebesgue expectations, D005 gives global real convexity, and D009 supplies the same probability-space normalization.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "not-faithful-weaker",
+    "roundtrip": "not-faithful-weaker"
+  },
+  "rationale": "The five blind uncertainties are resolved from the pinned Lean environment: the target uses a genuine measurable space, countably additive measure, probability normalization, real numbers, and the Bochner integral; none introduces an additional mismatch. The conclusion, object roles, global convexity, composition order, inequality direction, and probability-space semantics match the source, and the premises are nonvacuous. The decisive discrepancy is domain: hX and h\u03c6X restrict the target to finite integrable cases, while the printed result quantifies over any random variable without selecting those restrictions. Applying the protocol's reduced-applicability rule gives Lean\u21d2source no, source\u21d2Lean yes, classification not-faithful-weaker, and accepted=false.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-01-THM-JENSEN"
+}

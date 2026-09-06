@@ -1,0 +1,7 @@
+# Inconsistencies — session claude-chapter01-b
+
+Record skill, harness, prompt, gate, tool, or agent-process inconsistencies encountered in this scope. Use stable IDs; never delete history—mark superseded or closed entries.
+
+| ID | Observed at | Surfaces compared | Inconsistency | Evidence | Risk | Status | Owner/next action |
+|---|---|---|---|---|---|---|---|
+| S-CLAUDE-C01B-N001 | 2026-08-28, initialization organization preflight | `scripts/organization_preflight.py` vs. `tools/architecture/check_layout.py` | The preflight reports `PASS` on the organization counters while the repository's own layout contract scan exits non-zero on the same tree. The preflight verifies only that the gates *agree* on four integers; it does not recompute them or run the layout contract. | Preflight output: `PASS organization preflight: 2 gate(s) agree on organization counters {...unclassified_modules: 309...}`; `check_layout.py` on the same tree: `LAYOUT_EXIT=1`. Independent scan confirmed 309/2359, so the counters themselves are correct. | Low for counter accuracy, moderate for process: a `PASS` preflight can coexist with a failing layout contract, so preflight alone is not evidence that organization work is clean. The workflow's own instruction to "not trust inherited organization counters without a current repository scan" is what caught this. | open | Skill owner: consider having the preflight invoke, or require evidence from, the target repository's layout/placement scan rather than only cross-checking gate agreement. |
