@@ -1,0 +1,135 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Printed page 37: 'where K = max_i ||X_i||_{psi_1}'. Nothing excludes all X_i being 0 almost surely, in which case K = 0 and both t^2/K^2 and t/K divide by zero.",
+      "impact": "A formalization must decide how to treat K = 0 (hypothesis K > 0, extended-real arithmetic, or the vacuous truth of the bound); the source is silent.",
+      "issue": "Degenerate case K = 0"
+    },
+    {
+      "evidence": "Printed page 37: 'Let X_1, ..., X_N be independent ...' with no clause 'for N >= 1' or 'N in NN'.",
+      "impact": "N = 0 (empty family, 1/N undefined) is not addressed; a formalization must supply N >= 1 or accept a vacuous/degenerate reading.",
+      "issue": "N is never explicitly bound or constrained"
+    },
+    {
+      "evidence": "Corollary 2.8.3 (printed page 37) ends only with 'where K = max_i ||X_i||_{psi_1}'; the phrase 'where c > 0 is an absolute constant' appears only under Theorem 2.8.1 (printed page 36).",
+      "impact": "Whether the corollary's c is literally the same constant as in Theorem 2.8.1/2.8.2 or merely some absolute constant is not stated; the mathematically intended reading is 'some absolute constant'.",
+      "issue": "The constant c is not re-declared in the corollary"
+    },
+    {
+      "evidence": "Printed page 37: 'independent, mean zero, sub-exponential random variables' with no integrability discussion.",
+      "impact": "Integrability of X_i is implied by sub-exponentiality (Proposition 2.7.1 property b) but the source never states E|X_i| < infinity as a hypothesis.",
+      "issue": "Almost-sure versus pointwise reading of 'mean zero'"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "There is one positive absolute constant c, fixed once and for all, such that: whenever X_1, ..., X_N are independent, mean-zero, sub-exponential random variables and K denotes the largest of their sub-exponential norms max_i ||X_i||_{psi_1} (where ||X||_{psi_1} = inf{ t > 0 : E exp(|X|/t) <= 2 }), then for every real t >= 0 the probability that the ABSOLUTE VALUE of the average (1/N)(X_1 + ... + X_N) is at least t is at most 2 exp( - c * min(t^2/K^2, t/K) * N ). The prefactor 2 and the factor N are explicit; c is an absolute constant with no numeric value; the factor N multiplies the minimum from outside, and the minimum is taken between the sub-gaussian term t^2/K^2 and the sub-exponential term t/K. Nothing is assumed about boundedness or variances, and the statement is asserted for t = 0 as well.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Corollary 2.8.3 (Bernstein's inequality), full statement",
+      "location": "PDF page 26; printed page 37",
+      "observation": "Rendered page reads: 'Let X_1, ..., X_N be independent, mean zero, sub-exponential random variables. Then, for every t >= 0, we have P{ |(1/N) sum_{i=1}^{N} X_i| >= t } <= 2 exp[ - c min( t^2/K^2 , t/K ) N ] where K = max_i ||X_i||_{psi_1}.' The absolute-value bars around the average are present in the rendered page (pdftotext drops them). The factor N sits OUTSIDE the min, multiplying the whole min, still inside the exponent's leading minus sign: '- c min(...) N'."
+    },
+    {
+      "anchor": "Sentence introducing Corollary 2.8.3",
+      "location": "PDF page 26; printed page 37",
+      "observation": "'In the special case where a_i = 1/N, we obtain a form of Bernstein's inequality for averages:' \u2014 so the corollary is Theorem 2.8.2 specialized to the constant weight vector a_i = 1/N, for which ||a||_2^2 = 1/N and ||a||_inf = 1/N."
+    },
+    {
+      "anchor": "Sentence following Corollary 2.8.3",
+      "location": "PDF page 26; printed page 37",
+      "observation": "'This result can be considered as a quantitative form of the law of large numbers for the averages (1/N) sum_{i=1}^{N} X_i.' \u2014 interpretive remark only, no additional hypothesis."
+    },
+    {
+      "anchor": "Definition 2.7.5 (Sub-exponential random variables) and display (2.21)",
+      "location": "PDF page 22; printed page 33",
+      "observation": "'A random variable X that satisfies one of the equivalent properties a-d Proposition 2.7.1 is called a sub-exponential random variable. The sub-exponential norm of X, denoted ||X||_{psi_1}, is defined to be the smallest K_3 in property 3. In other words, ||X||_{psi_1} = inf { t > 0 : E exp(|X|/t) <= 2 }.' (2.21)"
+    },
+    {
+      "anchor": "Theorem 2.8.1, trailing clause",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'where c > 0 is an absolute constant.' Corollary 2.8.3 itself does NOT re-declare c; it inherits the book's convention that lower-case c denotes a positive absolute constant."
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "c: a positive absolute constant, quantified OUTSIDE everything else (existential, chosen once, independent of N, of the random variables, and of t); the statement does not name it in the 'where' clause, inheriting the book's c/C convention",
+      "N: the number of summands, appearing as X_1, ..., X_N; implicitly a positive integer (never explicitly bound or constrained in the statement)",
+      "X_1, ..., X_N: random variables on a common (unnamed) probability space",
+      "t: a real number, universally quantified with 'for every t >= 0'",
+      "K: not a free binder but an abbreviation fixed by the trailing clause 'where K = max_i ||X_i||_{psi_1}'"
+    ],
+    "conclusions": [
+      "P{ |(1/N) sum_{i=1}^{N} X_i| >= t } <= 2 exp[ - c min( t^2 / K^2 , t / K ) N ], where K = max_i ||X_i||_{psi_1}",
+      "The left-hand event is TWO-SIDED: the absolute value of the average exceeds t, with a non-strict inequality '>= t' inside the probability",
+      "The right-hand side carries the explicit numeric prefactor 2, the unquantified absolute constant c inside the exponent, and the factor N multiplying the min from outside"
+    ],
+    "definitions_and_conventions": [
+      "||X||_{psi_1} (sub-exponential norm) = inf { t > 0 : E exp(|X|/t) <= 2 } \u2014 Definition 2.7.5 / display (2.21), printed page 33",
+      "K = max_i ||X_i||_{psi_1}, the maximum over i = 1, ..., N of the sub-exponential norms",
+      "'sub-exponential random variable' = satisfies one of the equivalent properties a-d of Proposition 2.7.1 (Definition 2.7.5)",
+      "Book convention: lower-case c (and upper-case C) denote positive ABSOLUTE constants \u2014 not explicit numbers, and not depending on N, the X_i, or t (see 'where c > 0 is an absolute constant', printed page 36)",
+      "The average is (1/N) sum_{i=1}^{N} X_i, i.e. the arithmetic mean of the N terms"
+    ],
+    "hypotheses": [
+      "X_1, ..., X_N are independent (jointly independent; the book says only 'independent')",
+      "X_1, ..., X_N are mean zero, i.e. E X_i = 0 for each i",
+      "X_1, ..., X_N are sub-exponential random variables in the sense of Definition 2.7.5 (equivalently they satisfy properties a-d of Proposition 2.7.1), so each ||X_i||_{psi_1} is finite",
+      "t >= 0"
+    ],
+    "implicit_context": [
+      "Proposition 2.7.1 (printed pages 31-32) asserts that the parameters K_1, ..., K_5 in its equivalent properties a-e differ from one another by at most an absolute constant factor; footnote 7 makes this precise: there exists an absolute constant C such that property i implies property j with K_j <= C K_i",
+      "All random variables are assumed to live on one common probability space; the book states no measurability or integrability hypothesis beyond 'mean zero' and sub-exponentiality",
+      "The corollary is derived from Theorem 2.8.2 with a_i = 1/N; the constant c here need not be numerically the same as the c in Theorem 2.8.1 or Theorem 2.8.2, only an absolute constant",
+      "Section 2.8 as a whole is announced as 'a concentration inequality for sums of independent sub-exponential random variables' (printed page 36)"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "Two-sided: the event is |average| >= t, so it covers both upper and lower deviations",
+          "The prefactor 2 is exactly the price of the two-sidedness (the proof of Theorem 2.8.1 combines the bound for S >= t with the bound for -S >= t)"
+        ],
+        "topic": "Tail sidedness"
+      },
+      {
+        "details": [
+          "c is an unquantified positive absolute constant, never given a numeric value",
+          "2 is an explicit numeric prefactor",
+          "The exponents 2 on t and on K in t^2/K^2 are explicit",
+          "N appears as an explicit multiplicative factor outside the min"
+        ],
+        "topic": "Constant status"
+      },
+      {
+        "details": [
+          "Exists an absolute constant c > 0 such that: for all N, for all independent mean-zero sub-exponential X_1, ..., X_N, for all t >= 0, the bound holds",
+          "c must NOT be allowed to depend on N, on the X_i, or on t"
+        ],
+        "topic": "Quantifier order"
+      },
+      {
+        "details": [
+          "min of a sub-gaussian term t^2/K^2 and a sub-exponential term t/K, the min then scaled by N",
+          "Both arguments of the min are normalized by the single scalar K = max_i ||X_i||_{psi_1}, not by a sum of norms",
+          "As t -> 0 the bound degenerates to 2, so it is trivially true at t = 0 (the statement still asserts it there)"
+        ],
+        "topic": "Shape of the bound"
+      }
+    ]
+  },
+  "task_id": "HDP-02-COR-2.8.3",
+  "undebatable_constraints": [
+    "The probability is of a TWO-SIDED event: absolute value bars around the average (1/N) sum X_i are present in the source",
+    "The inequality inside the probability is non-strict: '>= t'",
+    "The right-hand prefactor is exactly 2",
+    "c is an unquantified positive absolute constant (book c/C convention), never an explicit number, and quantified before N, the X_i and t",
+    "The factor N multiplies the min from OUTSIDE; it is not inside either argument of the min",
+    "The two arguments of the min are exactly t^2/K^2 and t/K, in that order",
+    "K is defined as max_i ||X_i||_{psi_1} with ||.||_{psi_1} the sub-exponential norm of Definition 2.7.5, i.e. inf{ t > 0 : E exp(|X|/t) <= 2 }",
+    "Hypotheses are exactly: independent, mean zero, sub-exponential; no boundedness and no variance hypothesis",
+    "The bound is asserted for every t >= 0, t = 0 included",
+    "The sum is normalized by 1/N (an average), not an unnormalized sum and not a 1/sqrt(N) normalization"
+  ]
+}
