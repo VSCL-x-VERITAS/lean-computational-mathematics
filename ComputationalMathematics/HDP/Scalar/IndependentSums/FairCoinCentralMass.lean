@@ -28,7 +28,8 @@ theorem fairBinomial_centralMass (n : ℕ) :
   norm_num [Fin.last, Fin.sub_def]
   have hsub : 2 * n - n = n := by omega
   rw [hsub, ← pow_add]
-  congr 2 <;> omega
+  congr 2
+  omega
 
 /-- The law of the standardized count in `2n` fair trials.  Since its mean is
 `n` and its variance is `n / 2`, this is the even-index specialization of the
@@ -142,7 +143,9 @@ theorem stirlingRatio_eq_four_pow_div_sqrt (n : ℕ) (hn : 0 < n) :
     calc
       (((n : ℝ) / Real.exp 1) ^ n) ^ 2 =
           ((n : ℝ) / Real.exp 1) ^ (n * 2) := (pow_mul _ _ _).symm
-      _ = ((n : ℝ) / Real.exp 1) ^ (2 * n) := by congr 1 <;> omega
+      _ = ((n : ℝ) / Real.exp 1) ^ (2 * n) := by
+        congr 1
+        omega
   rw [hdenpow]
   field_simp [hpow_ne, hsqrt_ne]
   nlinarith [hsqrt_sq]

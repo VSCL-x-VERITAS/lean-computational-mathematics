@@ -39,7 +39,7 @@ theorem hdp_02_hex_h2_d3_d5_quarter
     rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
     by_cases hb : B i ω
     · simpa [hb] using Real.exp_le_exp.mpr (le_abs_self lam)
-    · simpa [hb] using Real.one_le_exp (abs_nonneg lam)
+    · simp [hb]
   have hSMeas : Measurable
       (fun ω => ∑ i, (if B i ω then (1 : ℝ) else 0)) :=
     Finset.measurable_sum Finset.univ fun i _ => hYi i
@@ -83,6 +83,7 @@ theorem hdp_02_hex_h2_d3_d5 :
   refine ⟨1 / 4, by norm_num, ?_⟩
   intro ι Ω _ _ μ _ B p hp hB hLaw hMeas δ hδ0 hδ1
   have h := hdp_02_hex_h2_d3_d5_quarter hp hB hLaw hMeas hδ0 hδ1
-  convert h using 1 <;> ring
+  convert h using 1
+  ring
 
 end NumStability.HDP.Contract

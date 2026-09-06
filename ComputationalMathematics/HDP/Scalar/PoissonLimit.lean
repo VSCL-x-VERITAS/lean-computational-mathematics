@@ -410,7 +410,7 @@ theorem isTight_probabilityMeasure_range_of_nonneg_expectation_le
             ((ENNReal.ofReal (C + 1))⁻¹ * ENNReal.ofReal C) := by ac_rfl
         _ ≤ (n : ENNReal)⁻¹ * 1 := by
           gcongr
-          exact (mul_le_mul_left'
+          exact (mul_le_mul_right
             (ENNReal.ofReal_le_ofReal (by linarith : C ≤ C + 1))
             (ENNReal.ofReal (C + 1))⁻¹).trans
               (ENNReal.inv_mul_le_one (ENNReal.ofReal (C + 1)))

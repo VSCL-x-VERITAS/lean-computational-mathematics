@@ -51,6 +51,7 @@ theorem hdp_02_hex_h2_d3_d6 :
   refine ⟨1 / 4, by norm_num, ?_⟩
   intro rate hrate t ht0 ht
   have h := hdp_02_hex_h2_d3_d6_quarter rate hrate ht0 ht
-  convert h using 1 <;> ring
+  convert h using 1
+  ring
 
 end NumStability.HDP.Contract

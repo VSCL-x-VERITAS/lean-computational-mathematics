@@ -94,7 +94,8 @@ theorem affineLawIsRademacherIff (q : PMF ℝ) :
     congr 1
     funext b
     cases b <;> norm_num [Function.comp_apply, affineBernoulliValue,
-      rademacherValue, bernoulliIndicator] <;> rfl
+      rademacherValue, bernoulliIndicator]
+    rfl
 
 /-- An arbitrary real probability measure is the ordinary fair Bernoulli law
 exactly when its affine image under `x ↦ 2x - 1` is the Rademacher law.  Unlike
@@ -405,15 +406,12 @@ theorem integrable_exp_mul_rademacher
     (lam a : ℝ) :
     Integrable (fun ω => Real.exp (lam * (a * X ω))) μ := by
   let f : ℝ → ℝ := fun x => Real.exp (lam * (a * x))
-  have hf_bool :
-      Integrable (fun b : Bool => f (rademacherValue b)) fairBernoulliPMF.toMeasure :=
-    Integrable.of_finite
   have hf_rademacher : Integrable f rademacherPMF.toMeasure := by
     unfold rademacherPMF
     rw [← PMF.toMeasure_map]
     · rw [integrable_map_measure (by fun_prop)
           (measurable_of_countable rademacherValue).aemeasurable]
-      simpa [Function.comp_def] using hf_bool
+      exact Integrable.of_finite
     · exact measurable_of_countable rademacherValue
   have hf_map : Integrable f (Measure.map X μ) := by
     rw [hLaw]

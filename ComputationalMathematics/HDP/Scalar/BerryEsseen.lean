@@ -633,7 +633,6 @@ theorem integral_abs_sq_mul_abs_cdfUpperError_map_mul_eq
         (fun x => |c * x| ^ 2 * |cdfUpperError mu nu x|) c⁻¹) using 1
       apply integral_congr_ae
       exact ae_of_all _ fun x => by
-        congr 3
         field_simp
     _ = c ^ 3 * ∫ x, |x| ^ 2 * |cdfUpperError mu nu x| := by
       rw [inv_inv, abs_of_pos hc]
@@ -665,8 +664,8 @@ theorem gaussianReal_nat_succ_conv_standardNormalLaw (N : ℕ) :
   rw [NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw]
   convert (ProbabilityTheory.gaussianReal_conv_gaussianReal
       (m₁ := 0) (m₂ := 0)
-      (v₁ := (N + 1 : ℝ≥0)) (v₂ := (1 : ℝ≥0))) using 1 <;>
-    norm_num [Nat.cast_add, add_assoc]
+      (v₁ := (N + 1 : ℝ≥0)) (v₂ := (1 : ℝ≥0))) using 1
+  norm_num [Nat.cast_add, add_assoc]
 
 /-- Scaling a centered Gaussian of natural variance `N + 1` by
 `1 / sqrt(N + 1)` gives the standard normal law. -/
@@ -1008,7 +1007,7 @@ theorem hasDerivAt_standardNormalCDF (x : ℝ) :
       (intervalIntegral.integral_hasDerivAt_right
         (ProbabilityTheory.integrable_gaussianPDFReal 0 1).intervalIntegrable
         (ProbabilityTheory.stronglyMeasurable_gaussianPDFReal 0 1).stronglyMeasurableAtFilter
-        (by rw [ProbabilityTheory.gaussianPDFReal_def]; fun_prop)) using 1 <;> simp
+        (by rw [ProbabilityTheory.gaussianPDFReal_def]; fun_prop)) using 1; simp
 
 /-- The standard-normal density exactly cancels the integrating factor in
 the Stein equation. -/
@@ -1052,10 +1051,10 @@ theorem hasDerivAt_standardNormalSteinLower (x z : ℝ) :
       (z * standardNormalSteinLower x z +
         (1 - cdf NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw x)) z := by
   have hinner : HasDerivAt (fun y : ℝ => y ^ 2 / 2) z z := by
-    convert ((hasDerivAt_id z).pow 2).div_const 2 using 1 <;> simp <;> ring
+    convert ((hasDerivAt_id z).pow 2).div_const 2 using 1; simp
   have hexp : HasDerivAt (fun y : ℝ => Real.exp (y ^ 2 / 2))
       (Real.exp (z ^ 2 / 2) * z) z := by
-    convert (Real.hasDerivAt_exp (z ^ 2 / 2)).comp z hinner using 1 <;> simp
+    convert (Real.hasDerivAt_exp (z ^ 2 / 2)).comp z hinner using 1
   have h :=
     (((hexp.const_mul (Real.sqrt (2 * Real.pi))).mul
       (hasDerivAt_standardNormalCDF z)).mul_const
@@ -1071,10 +1070,10 @@ theorem hasDerivAt_standardNormalSteinUpper (x z : ℝ) :
       (z * standardNormalSteinUpper x z -
         cdf NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw x) z := by
   have hinner : HasDerivAt (fun y : ℝ => y ^ 2 / 2) z z := by
-    convert ((hasDerivAt_id z).pow 2).div_const 2 using 1 <;> simp <;> ring
+    convert ((hasDerivAt_id z).pow 2).div_const 2 using 1; simp
   have hexp : HasDerivAt (fun y : ℝ => Real.exp (y ^ 2 / 2))
       (Real.exp (z ^ 2 / 2) * z) z := by
-    convert (Real.hasDerivAt_exp (z ^ 2 / 2)).comp z hinner using 1 <;> simp
+    convert (Real.hasDerivAt_exp (z ^ 2 / 2)).comp z hinner using 1
   have honeSub := (hasDerivAt_const z 1).sub (hasDerivAt_standardNormalCDF z)
   have h :=
     (((hexp.const_mul (Real.sqrt (2 * Real.pi))).mul_const
@@ -1096,7 +1095,7 @@ theorem hasDerivAt_standardNormalSteinUpper (x z : ℝ) :
         rw [hcancel]
         ring
     _ = _ := by
-      simp only [Pi.sub_apply, Pi.one_apply]
+      simp only [Pi.sub_apply]
       ring
 
 theorem continuous_standardNormalCDF :
@@ -2918,7 +2917,7 @@ theorem integral_abs_standardNormalSteinDerivative_sub_le_of_nonpos
   have hpow : (∫ z in uIoc w (w + y), |z - w|) = y ^ 2 / 2 := by
     have h := integral_pow_abs_sub_uIoc (a := w) (b := w + y) (n := 1)
     norm_num [abs_of_nonpos hy] at h
-    convert h using 1 <;> ring
+    convert h using 1
   have hconst : (∫ _z in uIoc w (w + y), K) = (-y) * K := by
     have hvol : volume.real (uIoc w (w + y)) = -y := by
       simp [MeasureTheory.measureReal_def, hy]
@@ -2977,7 +2976,7 @@ theorem abs_mul_standardNormalSteinDerivative_sub_intervalIntegral_le_crossingSe
         ∫ z in uIoc w (w + y),
           |standardNormalSteinDerivative x z -
             standardNormalSteinDerivative x w| := by
-    convert h using 1 <;> ring
+    convert h using 1; ring
   exact h'.trans
     (integral_abs_standardNormalSteinDerivative_sub_le_crossingSet x w y)
 
@@ -3354,8 +3353,8 @@ theorem hasDerivAt_standardNormalPDF (x : ℝ) :
     HasDerivAt (ProbabilityTheory.gaussianPDFReal 0 1)
       (-x * ProbabilityTheory.gaussianPDFReal 0 1 x) x := by
   have hinner : HasDerivAt (fun y : ℝ => -(y - 0) ^ 2 / (2 * (1 : ℝ))) (-x) x := by
-    convert (((hasDerivAt_id x).sub_const 0).pow 2).neg.div_const (2 * 1) using 1 <;>
-      simp <;> ring
+    convert (((hasDerivAt_id x).sub_const 0).pow 2).neg.div_const (2 * 1) using 1
+    simp; ring
   have hexp : HasDerivAt
       (fun y : ℝ => Real.exp (-(y - 0) ^ 2 / (2 * (1 : ℝ))))
       (Real.exp (-(x - 0) ^ 2 / (2 * (1 : ℝ))) * (-x)) x :=
@@ -3368,8 +3367,8 @@ theorem hasDerivAt_standardNormalPDF_deriv (x : ℝ) :
     HasDerivAt
       (fun y => -y * ProbabilityTheory.gaussianPDFReal 0 1 y)
       ((x ^ 2 - 1) * ProbabilityTheory.gaussianPDFReal 0 1 x) x := by
-  convert (hasDerivAt_id x).neg.mul (hasDerivAt_standardNormalPDF x) using 1 <;>
-    simp <;> ring
+  convert (hasDerivAt_id x).neg.mul (hasDerivAt_standardNormalPDF x) using 1
+  simp; ring
 
 theorem contDiff_three_standardNormalCDF :
     ContDiff ℝ 3
@@ -3457,10 +3456,10 @@ theorem iteratedDeriv_one_affine_standardNormalPDF (a y t : ℝ) :
         ProbabilityTheory.gaussianPDFReal 0 1 (a + y * t)) := by
   rw [show 1 = 0 + 1 by norm_num, iteratedDeriv_succ', iteratedDeriv_zero]
   have hinner : HasDerivAt (fun u : ℝ => a + y * u) y t := by
-    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1 <;>
-      simp <;> ring
-  convert ((hasDerivAt_standardNormalPDF (a + y * t)).comp t hinner).deriv using 1 <;>
-    ring
+    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1
+    simp
+  convert ((hasDerivAt_standardNormalPDF (a + y * t)).comp t hinner).deriv using 1
+  ring
 
 theorem iteratedDeriv_two_affine_standardNormalPDF (a y t : ℝ) :
     iteratedDeriv 2
@@ -3477,11 +3476,11 @@ theorem iteratedDeriv_two_affine_standardNormalPDF (a y t : ℝ) :
     exact iteratedDeriv_one_affine_standardNormalPDF a y u
   rw [hfirst]
   have hinner : HasDerivAt (fun u : ℝ => a + y * u) y t := by
-    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1 <;>
-      simp <;> ring
+    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1
+    simp
   have hpdf :=
     (hasDerivAt_standardNormalPDF_deriv (a + y * t)).comp t hinner
-  convert hpdf.const_mul y |>.deriv using 1 <;> ring
+  convert hpdf.const_mul y |>.deriv using 1; ring
 
 theorem abs_iteratedDeriv_two_affine_standardNormalPDF_le (a y t : ℝ) :
     |iteratedDeriv 2
@@ -3723,10 +3722,10 @@ theorem iteratedDeriv_one_affine_standardNormalCDF (a y t : ℝ) :
       y * ProbabilityTheory.gaussianPDFReal 0 1 (a + y * t) := by
   rw [show 1 = 0 + 1 by norm_num, iteratedDeriv_succ', iteratedDeriv_zero]
   have hinner : HasDerivAt (fun u : ℝ => a + y * u) y t := by
-    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1 <;>
-      simp <;> ring
-  convert ((hasDerivAt_standardNormalCDF (a + y * t)).comp t hinner).deriv using 1 <;>
-    ring
+    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1
+    simp
+  convert ((hasDerivAt_standardNormalCDF (a + y * t)).comp t hinner).deriv using 1
+  ring
 
 theorem iteratedDeriv_two_affine_standardNormalCDF (a y t : ℝ) :
     iteratedDeriv 2
@@ -3742,10 +3741,10 @@ theorem iteratedDeriv_two_affine_standardNormalCDF (a y t : ℝ) :
     exact iteratedDeriv_one_affine_standardNormalCDF a y u
   rw [hfirst]
   have hinner : HasDerivAt (fun u : ℝ => a + y * u) y t := by
-    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1 <;>
-      simp <;> ring
+    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1
+    simp
   have hpdf := (hasDerivAt_standardNormalPDF (a + y * t)).comp t hinner
-  convert hpdf.const_mul y |>.deriv using 1 <;> ring
+  convert hpdf.const_mul y |>.deriv using 1; ring
 
 theorem iteratedDeriv_three_affine_standardNormalCDF (a y t : ℝ) :
     iteratedDeriv 3
@@ -3762,11 +3761,11 @@ theorem iteratedDeriv_three_affine_standardNormalCDF (a y t : ℝ) :
     exact iteratedDeriv_two_affine_standardNormalCDF a y u
   rw [hsecond]
   have hinner : HasDerivAt (fun u : ℝ => a + y * u) y t := by
-    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1 <;>
-      simp <;> ring
+    convert (hasDerivAt_const t a).add ((hasDerivAt_id t).const_mul y) using 1
+    simp
   have hpdf :=
     (hasDerivAt_standardNormalPDF_deriv (a + y * t)).comp t hinner
-  convert hpdf.const_mul (y ^ 2) |>.deriv using 1 <;> ring
+  convert hpdf.const_mul (y ^ 2) |>.deriv using 1; ring
 
 theorem abs_iteratedDeriv_three_affine_standardNormalCDF_le (a y t : ℝ) :
     |iteratedDeriv 3
@@ -3858,8 +3857,8 @@ theorem scaledStandardNormalCDF_quadratic_remainder
       ((3 * (Real.sqrt (2 * Real.pi))⁻¹) / 6) * |y / σ| ^ 3 := by
   rw [cdf_map_mul NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw hσ,
     cdf_map_mul NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw hσ]
-  convert standardNormalCDF_quadratic_remainder (a / σ) (y / σ) using 1 <;>
-    field_simp [hσ.ne'] <;> ring
+  convert standardNormalCDF_quadratic_remainder (a / σ) (y / σ) using 1
+  field_simp [hσ.ne']
 
 /-- Canonical-polynomial form of the scaled standard-normal CDF remainder.
 The cubic constant scales as the inverse cube of the smoothing standard
@@ -3876,7 +3875,7 @@ theorem scaledStandardNormalCDF_quadratic_remainder_canonical
       (((3 * (Real.sqrt (2 * Real.pi))⁻¹) / σ ^ 3) / 6) * |y| ^ 3 := by
   have h := scaledStandardNormalCDF_quadratic_remainder hσ a y
   convert h using 1
-  · field_simp [hσ.ne'] <;> ring
+  · field_simp [hσ.ne']
   · rw [abs_div, abs_of_pos hσ]
     field_simp [hσ.ne']
 
@@ -4233,7 +4232,7 @@ theorem integral_standardNormalSteinCrossingSet_comp_le
     exact ae_of_all _ fun p => by
       dsimp only [F]
       by_cases hp : (p.2, p.1) ∈ standardNormalSteinCrossingSet x scale <;>
-        simp [Set.indicator_apply, hp]
+        simp [hp]
   have heq := integral_comp_pair_eq_integral_integral_of_indepFun
     X Y hX hY hIndep.symm F hFint
   have hleft : Integrable (fun v => ∫ w, F (v, w) ∂nuY) nuX :=
@@ -4301,7 +4300,7 @@ theorem integral_sq_mul_standardNormalSteinCrossingSet_comp_le
     exact ae_of_all _ fun p => by
       dsimp only [F]
       by_cases hp : (p.2, p.1) ∈ standardNormalSteinCrossingSet x scale <;>
-        simp [hp, abs_of_nonneg (sq_nonneg p.1), sq_nonneg]
+        simp [hp, sq_nonneg]
   have heq := integral_comp_pair_eq_integral_integral_of_indepFun
     X Y hX hY hIndep.symm F hFint
   have hleft : Integrable (fun v => ∫ w, F (v, w) ∂nuY) nuX :=
@@ -4599,7 +4598,7 @@ theorem integral_abs_standardNormalSteinDerivative_sum_sub_leaveOneOut_le
     exact ae_of_all mu fun omega => by
       by_cases hp : (Wi omega, X i.1 omega) ∈
           standardNormalSteinCrossingSet x scale <;>
-        simp [Set.indicator_apply, hp]
+        simp [hp]
   have hLeft : Integrable (fun omega =>
       |standardNormalSteinDerivative x (W omega) -
         standardNormalSteinDerivative x (Wi omega)|) mu := by
@@ -4918,7 +4917,7 @@ theorem integral_abs_normalizedSummand_steinIntervalRemainder_le
     exact ae_of_all mu fun omega => by
       by_cases hp : (Wi omega, X i.1 omega) ∈
           standardNormalSteinCrossingSet x scale <;>
-        simp [hp, abs_of_nonneg (sq_nonneg (X i.1 omega)), sq_nonneg]
+        simp [hp, sq_nonneg]
   have hCross : Integrable (fun omega => scale ^ 2 * (X i.1 omega) ^ 2 *
       (standardNormalSteinCrossingSet x scale).indicator
         (fun _ : ℝ × ℝ => (1 : ℝ)) (Wi omega, X i.1 omega)) mu := by
@@ -5584,7 +5583,7 @@ theorem abs_cdf_normalizedCenteredIidSum_sub_standardNormal_le_collapsedStein
               (Measure.map (normalizedCenteredIidLeaveOneOut X N i) mu)
               NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw := by
       simp only [Finset.sum_add_distrib, Finset.sum_const, Finset.card_fin,
-        nsmul_eq_mul, ← Finset.mul_sum, Nat.cast_add, Nat.cast_one, Nat.add_comm]
+        nsmul_eq_mul, ← Finset.mul_sum, Nat.cast_add, Nat.cast_one]
       ring
     _ = _ := by rw [hscaleSq, one_mul]
 
@@ -6156,8 +6155,8 @@ theorem exists_quadratic_remainder_cdf_conv_scaledStandardNormal
                 ProbabilityTheory.gaussianPDFReal 0 1 ((a - z) / σ)) /
               (2 * σ ^ 2)) * y ^ 2)| ≤
             (((3 * (Real.sqrt (2 * Real.pi))⁻¹) / σ ^ 3) / 6) * |y| ^ 3 by
-        convert scaledStandardNormalCDF_quadratic_remainder_canonical hσ (a - z) y using 1 <;>
-          ring)
+        convert scaledStandardNormalCDF_quadratic_remainder_canonical hσ (a - z) y using 1
+        ring)
   rw [← smoothedCDF_eq_cdf_conv gamma kappa (a + y)]
   unfold smoothedCDF
   have hpoly :
@@ -6239,7 +6238,7 @@ theorem exists_quadratic_remainder_cdf_conv_scaledStandardNormal_sub
   obtain ⟨a0, a1, a2, hrem⟩ :=
     exists_quadratic_remainder_cdf_conv_scaledStandardNormal kappa hσ a
   refine ⟨a0, -a1, a2, fun y => ?_⟩
-  convert hrem (-y) using 1 <;> simp only [abs_neg, neg_sq] <;> ring
+  convert hrem (-y) using 1 <;> simp only [abs_neg, neg_sq]; ring
 
 theorem abs_integral_cdf_conv_scaledStandardNormal_sub_standardNormal_le_sub
     (kappa mu : Measure ℝ)
@@ -7333,8 +7332,8 @@ theorem cdfUpperError_normalizedCenteredIidSum_succ_gaussian_telescope
       Measure.map (fun y : ℝ => (Real.sqrt (N + 2 : ℝ))⁻¹ * y)
           (ProbabilityTheory.gaussianReal 0 (N + 2 : ℝ≥0)) =
         NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw := by
-    convert map_gaussianReal_nat_succ_eq_standardNormalLaw (N + 1) using 1 <;>
-      norm_num [Nat.cast_add, add_assoc]
+    convert map_gaussianReal_nat_succ_eq_standardNormalLaw (N + 1) using 1
+    norm_num [Nat.cast_add, add_assoc]
   calc
     cdfUpperError
         (Measure.map
@@ -7928,7 +7927,7 @@ theorem integrable_cdf_sub_cdf_of_firstMoments
         (le_of_lt ha).trans (le_abs_self a)
     calc
       |cdf μ x - cdf ν x| =
-          |(1 - cdf ν x) - (1 - cdf μ x)| := by congr 1 <;> ring
+          |(1 - cdf ν x) - (1 - cdf μ x)| := by congr 1; ring
       _ ≤ |1 - cdf ν x| + |1 - cdf μ x| := abs_sub _ _
       _ = (1 - cdf ν x) + (1 - cdf μ x) := by
         rw [abs_of_nonneg (sub_nonneg.mpr (cdf_le_one ν x)),
@@ -8304,7 +8303,7 @@ theorem integral_norm_centeredCDFKernel (y : ℝ) :
           ∫ x : ℝ, (Ico y 0).indicator (fun _ : ℝ => (1 : ℝ)) x := by
         apply integral_congr_ae
         exact ae_of_all volume fun x => by
-          by_cases hx : x ∈ Ico y 0 <;> simp [Set.indicator_apply, hx]
+          by_cases hx : x ∈ Ico y 0 <;> simp [hx]
       _ = volume.real (Ico y 0) := integral_indicator_one measurableSet_Ico
       _ = |y| := by rw [Real.volume_real_Ico_of_le hy, abs_of_nonpos hy]; ring
   · have hy' : 0 < y := lt_of_not_ge hy
@@ -8314,7 +8313,7 @@ theorem integral_norm_centeredCDFKernel (y : ℝ) :
           ∫ x : ℝ, (Ico 0 y).indicator (fun _ : ℝ => (1 : ℝ)) x := by
         apply integral_congr_ae
         exact ae_of_all volume fun x => by
-          by_cases hx : x ∈ Ico 0 y <;> simp [Set.indicator_apply, hx]
+          by_cases hx : x ∈ Ico 0 y <;> simp [hx]
       _ = volume.real (Ico 0 y) := integral_indicator_one measurableSet_Ico
       _ = |y| := by
         rw [Real.volume_real_Ico_of_le hy'.le, abs_of_pos hy']
@@ -8411,7 +8410,7 @@ theorem integrable_id_mul_centeredCDFKernel (y : ℝ) :
     have hInd := hIco.integrable_indicator measurableSet_Ico
     convert hInd using 1
     funext x
-    by_cases hx : x ∈ Ico y 0 <;> simp [Set.indicator_apply, hx]
+    by_cases hx : x ∈ Ico y 0 <;> simp [hx]
   · have hy' : 0 < y := lt_of_not_ge hy
     rw [centeredCDFKernel_eq_neg_indicator_of_pos hy']
     have hIco : IntegrableOn (fun x : ℝ => x) (Ico 0 y) :=
@@ -8419,7 +8418,7 @@ theorem integrable_id_mul_centeredCDFKernel (y : ℝ) :
     have hInd := (hIco.integrable_indicator measurableSet_Ico).neg
     convert hInd using 1
     funext x
-    by_cases hx : x ∈ Ico 0 y <;> simp [Set.indicator_apply, hx]
+    by_cases hx : x ∈ Ico 0 y <;> simp [hx]
 
 /-- The exact squared-spatial-weight mass of one centered half-line kernel
 is one third of the cubed displacement. -/
@@ -9339,7 +9338,7 @@ theorem integrable_fourier_cdf_sub_cdf_of_integrable_discrepancy
     filter_upwards [volume.ae_ne (0 : ℝ)] with w hw
     dsimp only [f]
     convert (norm_fourier_cdf_sub_cdf_eq_charFunDiscrepancyQuotient
-      mu nu hmu1 hnu1 hw).symm using 1 <;> ring
+      mu nu hmu1 hnu1 hw).symm using 1
   exact (integrable_norm_iff hFourierCont.aestronglyMeasurable).mp hnorm
 
 /-- Convolution by a common probability smoothing measure cannot increase
@@ -9574,7 +9573,7 @@ theorem cdfGap_uniformSmoothingKernel_conv_le_integral_discrepancy
       dsimp only [f]
       convert norm_fourier_cdf_sub_cdf_eq_charFunDiscrepancyQuotient
         (uniformSmoothingKernel delta ∗ mu)
-        (uniformSmoothingKernel delta ∗ nu) hmuConv1 hnuConv1 hw using 1 <;> ring
+        (uniformSmoothingKernel delta ∗ nu) hmuConv1 hnuConv1 hw using 1
 
 /-- The same inversion estimate after the exact `-2π` change of variables. -/
 theorem cdfGap_uniformSmoothingKernel_conv_le_integral_discrepancy_scaled
@@ -9621,18 +9620,18 @@ theorem cdf_shift_bounds_of_smoothing_approximation
     have hμRight := (hμ (x - δ)).2
     have hcompare := (abs_le.mp (hdiff (x - δ))).1
     have hνLeft' : cdf ν (x - 2 * δ) ≤ Hν (x - δ) := by
-      convert hνLeft using 1 <;> ring
+      convert hνLeft using 1; ring
     have hμRight' : Hμ (x - δ) ≤ cdf μ x := by
-      convert hμRight using 1 <;> ring
+      convert hμRight using 1; ring
     linarith
   · intro x
     have hμLeft := (hμ (x + δ)).1
     have hνRight := (hν (x + δ)).2
     have hcompare := (abs_le.mp (hdiff (x + δ))).2
     have hμLeft' : cdf μ x ≤ Hμ (x + δ) := by
-      convert hμLeft using 1 <;> ring
+      convert hμLeft using 1; ring
     have hνRight' : Hν (x + δ) ≤ cdf ν (x + 2 * δ) := by
-      convert hνRight using 1 <;> ring
+      convert hνRight using 1; ring
     linarith
 
 /-- Standard-normal Kolmogorov consequence of comparing two smoothed CDFs.
@@ -10377,8 +10376,8 @@ theorem norm_cexp_mul_I_sub_quadratic_le_sharp (y : ℝ) :
       norm_num
     have hx2 : HasDerivAt
         (fun z : ℝ => (((z ^ 2 : ℝ) : ℂ) / 2)) (x : ℂ) x := by
-      convert (((hasDerivAt_id x).pow 2).ofReal_comp).div_const 2 using 1 <;>
-        norm_num
+      convert (((hasDerivAt_id x).pow 2).ofReal_comp).div_const 2 using 1
+      norm_num
     convert (((hf x).sub_const 1).sub hxi).add hx2 using 1
   have hf2cont : Continuous f2 := by
     dsimp only [f2, f]
@@ -10526,8 +10525,8 @@ theorem norm_integral_cexp_mul_I_sub_quadratic_le_sharp
           ((((u * X omega) ^ 2 : ℝ) : ℂ) / 2)) ∂mu‖ ≤
         ∫ omega, (|u| ^ 3 / 6) * |X omega| ^ 3 ∂mu :=
       norm_integral_le_of_norm_le hg <| ae_of_all mu fun omega => by
-        convert norm_cexp_mul_I_sub_quadratic_le_sharp (u * X omega) using 1 <;>
-          simp only [abs_mul, mul_pow] <;> ring
+        convert norm_cexp_mul_I_sub_quadratic_le_sharp (u * X omega) using 1
+        simp only [abs_mul, mul_pow]; ring
     _ = (|u| ^ 3 / 6) * ∫ omega, |X omega| ^ 3 ∂mu := by
       rw [integral_const_mul]
 
@@ -11206,8 +11205,8 @@ theorem abs_rexp_neg_sub_one_add_le_half_sq {x : ℝ} (hx : 0 ≤ x) :
   let d : ℝ → ℝ := fun z => 1 - Real.exp (-z)
   have hR (z : ℝ) : HasDerivAt R (d z) z := by
     have he := (Real.hasDerivAt_exp (-z)).comp z (hasDerivAt_neg z)
-    convert (he.sub_const 1).add (hasDerivAt_id z) using 1 <;>
-      dsimp only [R, d] <;> ring
+    convert (he.sub_const 1).add (hasDerivAt_id z) using 1
+    dsimp only [R, d]; ring
   have hdcont : Continuous d := by
     dsimp only [d]
     fun_prop
@@ -12505,7 +12504,7 @@ theorem normalized_damped_cubic_quartic_quotient_eq_sharp
       have hn : (N + 1 : ℝ) ≠ 0 := by positivity
       have hs : Real.sqrt (N + 1 : ℝ) ≠ 0 := by positivity
       field_simp [hn, hs]
-      <;> ring
+      ring
 
 /-- Sharp simplified damped polynomial bound for the normalized discrepancy
 quotient. -/
@@ -12732,7 +12731,7 @@ theorem tunableThirdMomentCondition_iff_abs_le_cutoff
   rw [show c * rho * (|t| / Real.sqrt (N + 1 : ℝ)) =
       (c * rho * |t|) / Real.sqrt (N + 1 : ℝ) by ring,
     div_le_iff₀ hspos, le_div_iff₀ (mul_pos hc hrho)]
-  simp only [mul_assoc, mul_left_comm, mul_comm, one_mul]
+  simp only [mul_left_comm, mul_comm, one_mul]
 
 /-- Polynomial moments are integrable against every positive tunable
 Gaussian envelope. -/
@@ -12976,7 +12975,6 @@ theorem absorbedIdealTunableBerryEsseenFrequencyConstant_two_lt_one :
   have hrpow : (5 / 24 : ℝ) ^ (-(3 / 2 : ℝ)) =
       1 / ((5 / 24 : ℝ) * Real.sqrt (5 / 24 : ℝ)) := by
     rw [Real.rpow_neg hb.le]
-    congr 1
     rw [show (3 / 2 : ℝ) = 1 + 1 / 2 by ring,
       Real.rpow_add hb, Real.rpow_one, ← Real.sqrt_eq_rpow]
     rw [one_div]
@@ -13572,7 +13570,7 @@ theorem eight_div_three_le_sharpGaussianDampedMoment_two :
     rw [show |x| ^ 2 = x ^ 2 by exact sq_abs x]
     have hexp : 1 - 5 * x ^ 2 / 24 ≤
         Real.exp (-(5 * x ^ 2 / 24)) := by
-      convert Real.add_one_le_exp (-(5 * x ^ 2 / 24)) using 1 <;> ring
+      convert Real.add_one_le_exp (-(5 * x ^ 2 / 24)) using 1; ring
     exact mul_le_mul_of_nonneg_left hexp (sq_nonneg x)
   have hpoly : (∫ x in Icc (-2 : ℝ) 2, f x) = 8 / 3 := by
     have h2 : IntervalIntegrable (fun x : ℝ => x ^ 2) volume (-2) 2 :=
@@ -14786,7 +14784,7 @@ theorem cdfGap_smoothingKernel_conv_le_integral_discrepancy
       filter_upwards [volume.ae_ne (0 : ℝ)] with w hw
       dsimp only [f]
       convert norm_fourier_cdf_sub_cdf_eq_charFunDiscrepancyQuotient
-        (kappa ∗ mu) (kappa ∗ nu) hmuConv1 hnuConv1 hw using 1 <;> ring
+        (kappa ∗ mu) (kappa ∗ nu) hmuConv1 hnuConv1 hw using 1
 
 /-- The generic common-kernel inversion estimate after the exact `-2π`
 change of variables. -/
@@ -15313,7 +15311,7 @@ theorem abs_one_sub_mul_prawitzCotFactor_le_two
       nlinarith [Real.pi_pos]
     have hJordan : 2 * u ≤ Real.sin (Real.pi * u) := by
       have := Real.mul_le_sin hArg0.le hArgHalf
-      convert this using 1 <;> field_simp [Real.pi_ne_zero]
+      convert this using 1; field_simp [Real.pi_ne_zero]
     have hNum : (1 - u) * Real.pi * u ≤ 4 * u := by
       calc
         (1 - u) * Real.pi * u = (1 - u) * (Real.pi * u) := by ring
@@ -15334,7 +15332,7 @@ theorem abs_one_sub_mul_prawitzCotFactor_le_two
         rw [show Real.pi * (1 - u) = Real.pi - Real.pi * u by ring,
           Real.sin_pi_sub]
       rw [hSinEq] at hj
-      convert hj using 1 <;> field_simp [Real.pi_ne_zero]
+      convert hj using 1; field_simp [Real.pi_ne_zero]
     have hPiU : Real.pi * u ≤ 4 := by
       calc
         Real.pi * u ≤ Real.pi * 1 :=
@@ -15368,7 +15366,7 @@ theorem prawitzSmoothingFilter_neg (t : ℝ) :
   · rw [prawitzSmoothingFilter, prawitzSmoothingFilter,
       if_pos ht, if_pos (by simpa only [abs_neg] using ht),
       abs_neg, prawitzCotFactor_neg]
-    apply Complex.ext <;> simp <;> ring
+    apply Complex.ext <;> simp
   · have ht' : ¬ |-t| < 1 := by simpa only [abs_neg] using ht
     rw [prawitzSmoothingFilter, prawitzSmoothingFilter,
       if_neg ht, if_neg ht']
@@ -15952,7 +15950,7 @@ theorem prawitzPVIntegrand_neg
     have harg :
         (((-((-t) * x) : ℝ) : ℂ) * Complex.I) =
           (starRingEnd ℂ) (((-(t * x) : ℝ) : ℂ) * Complex.I) := by
-      apply Complex.ext <;> simp <;> ring
+      apply Complex.ext <;> simp
     rw [harg, Complex.exp_conj]
   rw [prawitzPVIntegrand, prawitzPVIntegrand,
     prawitzPVNumerator, prawitzPVNumerator, hexp,
@@ -16024,8 +16022,7 @@ theorem re_prawitzCoefficient_mul_symmetric_sub
           Complex.I))).re = _
   simp only [Complex.I_re, Complex.I_im, Complex.ofReal_re,
     Complex.ofReal_im, Complex.mul_re, Complex.mul_im, Complex.sub_re,
-    Complex.sub_im, zero_mul, mul_one, sub_zero, zero_sub, add_zero,
-    zero_add]
+    Complex.sub_im, zero_mul, mul_one, sub_zero, add_zero]
   field_simp [Real.pi_ne_zero, ht]
   ring
 
@@ -16131,7 +16128,7 @@ theorem truncatedPrawitzInversion_im_eq_zero
     (truncatedPrawitzInversion T epsilon f x).im = 0 := by
   have hstar := star_truncatedPrawitzInversion (T := T) hf hepsilon x
   apply_fun Complex.im at hstar
-  simp only [map_neg, Complex.conj_im] at hstar
+  simp only [Complex.conj_im] at hstar
   linarith
 
 /-- The full paired Prawitz inversion functional, defined when the removable
@@ -16199,7 +16196,7 @@ theorem prawitzPVIntegrand_charFun_dirac_translate
       show inner ℝ (y - x) t = (y - x) * t by
         change t * (y - x) = (y - x) * t
         ring]
-  simp only [mul_zero, neg_zero, map_zero, zero_mul, Complex.exp_zero, one_mul]
+  simp only [mul_zero, neg_zero]
   have hExp :
       Complex.exp (((-(t * x) : ℝ) : ℂ) * Complex.I) *
           Complex.exp ((((y * t : ℝ) : ℂ)) * Complex.I) =
@@ -16272,7 +16269,7 @@ theorem prawitzPVIntegrand_charFun_dirac_scale
       show inner ℝ (T * z) u = (T * z) * u by
         change u * (T * z) = (T * z) * u
         ring]
-  simp only [mul_zero, neg_zero, map_zero, zero_mul, Complex.exp_zero, one_mul,
+  simp only [mul_zero, neg_zero,
     scaledPrawitzSmoothingFilter]
   rw [mul_div_cancel_left₀ u hT.ne', div_one]
   have hphase : z * (T * u) = (T * z) * u := by ring
@@ -17119,9 +17116,9 @@ theorem integral_two_mul_one_sub_mul_cos
   have hF (u : ℝ) :
       HasDerivAt F (2 * (1 - u) * Real.cos (z * u)) u := by
     have hlin : HasDerivAt (fun v : ℝ => 1 - v) (-1) u := by
-      convert (hasDerivAt_const u 1).sub (hasDerivAt_id u) using 1 <;> ring
+      convert (hasDerivAt_const u 1).sub (hasDerivAt_id u) using 1; ring
     have harg : HasDerivAt (fun v : ℝ => z * v) z u :=
-      by convert (hasDerivAt_id u).const_mul z using 1 <;> simp
+      by convert (hasDerivAt_id u).const_mul z using 1; simp
     have hsin : HasDerivAt (fun v : ℝ => Real.sin (z * v))
         (Real.cos (z * u) * z) u :=
       (Real.hasDerivAt_sin (z * u)).comp u harg
@@ -17129,8 +17126,8 @@ theorem integral_two_mul_one_sub_mul_cos
         (-Real.sin (z * u) * z) u :=
       (Real.hasDerivAt_cos (z * u)).comp u harg
     have h := ((hlin.mul hsin).div_const z).sub (hcos.div_const (z ^ 2))
-    convert h.const_mul 2 using 1 <;>
-      dsimp only [F] <;> field_simp [hz] <;> ring
+    convert h.const_mul 2 using 1
+    dsimp only [F]; field_simp [hz]; ring
   have hInt : IntervalIntegrable
       (fun u : ℝ => 2 * (1 - u) * Real.cos (z * u)) volume 0 1 :=
     (by fun_prop : Continuous fun u : ℝ =>
@@ -17786,6 +17783,7 @@ theorem prawitzCotangentIntegralTarget_add_one_sub
   field_simp [Real.pi_ne_zero, hx, hx1]
   ring
 
+/-- The cotangent sine integral on `[0, 1]` minus `prawitzCotangentIntegralTarget`. -/
 noncomputable def prawitzCotangentIntegralError (x : ℝ) : ℝ :=
   (∫ u : ℝ in 0..1, prawitzCotangentSineIntegrand x u) -
     prawitzCotangentIntegralTarget x
@@ -19933,8 +19931,8 @@ theorem fourfoldUniformKernel_supported :
   unfold fourfoldUniformKernel
   convert isSupportedInSmoothingWindow_conv
     (isSupportedInSmoothingWindow_conv
-      (isSupportedInSmoothingWindow_conv hυ hυ) hυ) hυ using 1 <;>
-    norm_num
+      (isSupportedInSmoothingWindow_conv hυ hυ) hυ) hυ using 1
+  norm_num
 
 theorem charFun_fourfoldUniformKernel (t : ℝ) :
     MeasureTheory.charFun fourfoldUniformKernel t =
@@ -19984,8 +19982,7 @@ theorem uniformUnitDensity_lconvolution_self (x : ℝ) :
   by_cases hx0 : x ≤ 0
   · by_cases hxm : x < -2
     · have : x + 1 < -1 := by linarith
-      simp [max_eq_left (by linarith : (-1 : ℝ) ≥ x - 1),
-        min_eq_right this.le, abs_of_nonpos hx0]
+      simp [max_eq_left (by linarith : (-1 : ℝ) ≥ x - 1), abs_of_nonpos hx0]
       rw [min_eq_right (by linarith : x + 1 ≤ (1 : ℝ))]
       simp [ENNReal.ofReal_eq_zero.mpr (by linarith : x + 1 + 1 ≤ 0),
         ENNReal.ofReal_eq_zero.mpr (by linarith : 2 + x ≤ 0)]
@@ -19999,8 +19996,7 @@ theorem uniformUnitDensity_lconvolution_self (x : ℝ) :
   · have hx0' : 0 ≤ x := le_of_not_ge hx0
     by_cases hx2 : 2 < x
     · have : 1 < x - 1 := by linarith
-      simp [max_eq_right this.le,
-        min_eq_left (by linarith : (1 : ℝ) ≤ x + 1), abs_of_nonneg hx0']
+      simp [min_eq_left (by linarith : (1 : ℝ) ≤ x + 1), abs_of_nonneg hx0']
       rw [max_eq_right (by linarith : (-1 : ℝ) ≤ x - 1)]
       simp [ENNReal.ofReal_eq_zero.mpr (by linarith : 1 - (x - 1) ≤ 0),
         ENNReal.ofReal_eq_zero.mpr (by linarith : 2 - x ≤ 0)]
@@ -20034,6 +20030,7 @@ theorem uniformSmoothingKernel_one_eq_withDensity :
       by_cases hx : x ∈ Icc (-1 : ℝ) 1 <;>
         simp [uniformUnitDensity, Pi.smul_apply, smul_eq_mul, hx]
 
+/-- Real-valued triangular density `max (2 - |x|) 0 / 4`. -/
 noncomputable def twofoldUniformDensityReal (x : ℝ) : ℝ :=
   max (2 - |x|) 0 / 4
 
@@ -20173,6 +20170,7 @@ theorem fourfoldUniformKernel_eq_withDensity :
   funext x
   exact twofoldUniformDensity_lconvolution_self x
 
+/-- Complex-valued form of `fourfoldUniformDensity` for Fourier inversion. -/
 noncomputable def fourfoldUniformDensityComplex (x : ℝ) : ℂ :=
   fourfoldUniformDensity x
 
@@ -20219,7 +20217,6 @@ theorem fourierInv_fourfoldUniformDensityComplex_eq_sincFourthWeight (w : ℝ) :
     𝓕⁻ fourfoldUniformDensityComplex w =
       (sincFourthWeight ((2 * Real.pi) * w) : ℂ) := by
   rw [sincFourthWeight_eq_fourierInv_fourfoldUniformDensityComplex]
-  congr 1
   field_simp [Real.pi_ne_zero]
 
 theorem integrable_fourierInv_fourfoldUniformDensityComplex :
@@ -20278,8 +20275,6 @@ theorem integral_eq_mul_integral_comp_mul_left
   change (∫ x : ℝ, g x) =
     (a : ℂ) * ((a⁻¹ : ℝ) • ∫ x : ℝ, g x)
   rw [@Complex.real_smul (a⁻¹) (∫ x : ℝ, g x)]
-  change (∫ x : ℝ, g x) =
-    (a : ℂ) * ((a⁻¹ : ℝ) * ∫ x : ℝ, g x)
   rw [← mul_assoc]
   rw [← Complex.ofReal_mul, mul_inv_cancel₀ ha.ne']
   simp
@@ -20757,7 +20752,7 @@ theorem hasDerivAt_prawitzOffDiagonalHalfProfile
   have hsinArg : HasDerivAt (fun y : ℝ => Real.sin (Real.pi * y))
       (Real.pi * Real.cos (Real.pi * x)) x := by
     convert (Real.hasDerivAt_sin (Real.pi * x)).comp x
-      ((hasDerivAt_const x Real.pi).mul (hasDerivAt_id x)) using 1 <;> ring
+      ((hasDerivAt_const x Real.pi).mul (hasDerivAt_id x)) using 1; ring
   have hsin : HasDerivAt (fun y : ℝ => Real.sin (Real.pi * y) / Real.pi)
       (Real.cos (Real.pi * x)) x := by
     convert hsinArg.div_const Real.pi using 1
@@ -20788,7 +20783,7 @@ theorem hasDerivAt_prawitzOffDiagonalHalfProfile
   unfold prawitzOffDiagonalHalfProfile
   have h := (hsin.pow 2).mul hBracket
   simp only [Pi.pow_apply] at h
-  convert h using 1 <;> ring
+  convert h using 1; ring
 
 /-- A sinc-based continuous extension of the positive half-profile through
 the spatial center. -/
@@ -21324,8 +21319,8 @@ theorem twofoldUniformKernel_supported :
     uniformSmoothingKernel_isProbabilityMeasure (by norm_num)
   let hUniform := uniformSmoothingKernel_supported 1
   unfold twofoldUniformKernel
-  convert isSupportedInSmoothingWindow_conv hUniform hUniform using 1 <;>
-    norm_num
+  convert isSupportedInSmoothingWindow_conv hUniform hUniform using 1
+  norm_num
 
 theorem charFun_twofoldUniformKernel (t : ℝ) :
     MeasureTheory.charFun twofoldUniformKernel t =
@@ -21363,6 +21358,7 @@ theorem integral_twofoldUniformKernel_eq_integral_density
     rw [twofoldUniformDensity_toReal]
     rw [Complex.real_smul]
 
+/-- Complex-valued form of `twofoldUniformDensityReal` for Fourier inversion. -/
 noncomputable def twofoldUniformDensityComplex (x : ℝ) : ℂ :=
   twofoldUniformDensityReal x
 
@@ -21409,7 +21405,6 @@ theorem fourierInv_twofoldUniformDensityComplex_eq_sincSquareWeight (w : ℝ) :
     𝓕⁻ twofoldUniformDensityComplex w =
       (sincSquareWeight ((2 * Real.pi) * w) : ℂ) := by
   rw [sincSquareWeight_eq_fourierInv_twofoldUniformDensityComplex]
-  congr 1
   field_simp [Real.pi_ne_zero]
 
 theorem integrable_fourierInv_twofoldUniformDensityComplex :
@@ -21518,7 +21513,6 @@ theorem sincSquareWeight_eq_integral_twofoldUniformKernel (s : ℝ) :
     MeasureTheory.charFun_apply_real]
   apply integral_congr_ae
   exact ae_of_all twofoldUniformKernel fun z => by
-    congr 1
     push_cast
     ring
 
@@ -21820,7 +21814,6 @@ theorem integral_prawitzReflectionFrequency_eq_scaledDensity
     funext z
     dsimp only [g]
     congr 3 <;> try ring
-    congr 1
     field_simp [hT.ne']
   rw [hfun, hcomp]
   congr 1
@@ -22270,8 +22263,7 @@ theorem re_pairedPrawitzReflectionFrequencyIntegrand_standardNormal
     ring
   rw [hneg, hpos, ← Complex.ofReal_exp]
   simp only [Complex.mul_re, Complex.add_re, Complex.ofReal_re,
-    Complex.ofReal_im, Complex.exp_ofReal_mul_I_re, zero_mul, sub_zero,
-    add_zero, mul_zero]
+    Complex.ofReal_im, Complex.exp_ofReal_mul_I_re, zero_mul, sub_zero, mul_zero]
   rw [Real.cos_neg]
   ring
 
@@ -23347,7 +23339,6 @@ theorem prawitzGaussianCosineRemainder_eq_full_sub_tail_sub_correction
     have h := integrable_exp_neg_mul_sq (by norm_num : (0 : ℝ) < 1 / 2)
     apply h.congr
     exact ae_of_all _ fun t => by
-      congr 1
       ring
   have hf : Integrable f := by
     apply hgauss.mono' (by dsimp only [f]; fun_prop)
@@ -23455,7 +23446,6 @@ theorem prawitzGaussianCosineRemainder_zero
     have h := integrable_exp_neg_mul_sq (by norm_num : (0 : ℝ) < 1 / 2)
     apply h.congr
     exact ae_of_all _ fun t => by
-      congr 1
       ring
   have hsubset : Ici T ⊆ Ioi (0 : ℝ) := by
     intro t ht
@@ -23478,8 +23468,7 @@ theorem prawitzGaussianCosineRemainder_zero
     rw [show (∫ t in Ioi (0 : ℝ), Real.exp (-(t ^ 2) / 2)) =
         Real.sqrt (2 * Real.pi) / 2 by
       simpa using integral_Ioi_rexp_neg_sq_div_two_mul_cos 0]
-  simp only [zero_mul, Real.cos_zero, mul_one, zero_pow, neg_zero,
-    Real.exp_zero] at hdecomp
+  simp only [zero_mul, Real.cos_zero, mul_one] at hdecomp
   have hexpZero : Real.exp (-((0 : ℝ) ^ 2) / 2) = 1 := by
     rw [show -((0 : ℝ) ^ 2) / 2 = 0 by norm_num, Real.exp_zero]
   rw [hexpZero, mul_one] at hdecomp
@@ -23512,7 +23501,7 @@ theorem one_div_lt_prawitzGaussianCosineRemainder_zero
   have hpoint : ∀ t, p t ≤ f t := by
     intro t
     dsimp only [p, f]
-    convert Real.add_one_le_exp (-(t ^ 2) / 2) using 1 <;> ring
+    convert Real.add_one_le_exp (-(t ^ 2) / 2) using 1; ring
   have hpoly : (∫ t in Icc (0 : ℝ) 1, p t) = 5 / 6 := by
     have h2 : IntervalIntegrable (fun t : ℝ => t ^ 2) volume 0 1 :=
       (continuous_id.pow 2).intervalIntegrable _ _
@@ -25264,7 +25253,7 @@ theorem reflected_sub_im_sub_forward_eq_filter_re_mul_phase_im
     simp only [map_mul, map_sub]
     rw [← Complex.exp_conj]
     congr 2
-    apply Complex.ext <;> simp <;> ring
+    apply Complex.ext <;> simp
   have hReflected :
       prawitzPVNumerator T
           (MeasureTheory.charFun (reflectedLaw mu)) (-x) t -
@@ -28356,7 +28345,7 @@ theorem cdf_sub_standardNormalCDF_normalizedCenteredIidSum_le_signedPrawitz_tuna
         X hX hIndep hIdent hMean hSecond hc hN hT ht
           htWindow.1 htWindow.2 x
     dsimp only [F, g, law, target, T, A, Y, rho]
-    convert hpoint using 1 <;> ring
+    convert hpoint using 1; ring
   have hsigned := cdf_sub_standardNormalCDF_le_prawitz_singleSignedIntegral
     law hLaw1 hT x
   have hmajor := integral_Icc_absorbedPrawitzMajorant_le hc hA hT
@@ -28494,7 +28483,7 @@ theorem cdf_sub_standardNormalCDF_normalizedCenteredIidSum_le_signedPrawitz_tuna
         X hX hIndep hIdent hMean hSecond hc hN hT ht
           htWindow.1 htWindow.2 x
     dsimp only [F, g, r, law, target, T, A, Y, rho]
-    convert hpoint using 1 <;> ring
+    convert hpoint using 1; ring
   have hsigned := cdf_sub_standardNormalCDF_le_prawitz_singleSignedIntegral
     law hLaw1 hT x
   have hmajor := integral_Icc_absorbedPrawitzFrequencyMajorant_le hc hA hT
@@ -28581,7 +28570,7 @@ theorem integral_charFunDiscrepancyQuotient_normalizedCenteredIidSum_tunableWind
         charFunDiscrepancyQuotient_normalizedCenteredIidSum_le_gaussian_tunable_absorbed
           X hX hIndep hIdent hMean hSecond hc hN ht.1 ht.2
       dsimp only [g, A, q, law, target, rho, s]
-      convert hpoint using 1 <;> ring
+      convert hpoint using 1; ring
     _ ≤ ∫ t, g t :=
       integral_mono_measure Measure.restrict_le_self
         (ae_of_all volume hgNonneg) hg
@@ -30365,7 +30354,6 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_sharpBerryEsseenConstant
       (1 / (8 * (N + 1 : ℝ))) * M3 =
           ((1 / 8) * M3) * (1 / (N + 1 : ℝ)) := by
         field_simp [hn.ne']
-        <;> ring
       _ ≤ ((1 / 8) * M3) * (rho / s) :=
         mul_le_mul_of_nonneg_left hInv (by positivity)
   have hden : 0 < 1 + 2 * rho := by positivity
@@ -30379,7 +30367,6 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_sharpBerryEsseenConstant
       (4 / (s / (1 + 2 * rho))) * K =
           (4 * K) * ((1 + 2 * rho) / s) := by
         field_simp [hs.ne', hden.ne']
-        <;> ring
       _ ≤ (4 * K) * ((3 * rho) / s) := by
         exact mul_le_mul_of_nonneg_left
           ((div_le_div_iff_of_pos_right hs).2 hdenBound) (by positivity)
@@ -30517,7 +30504,6 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_maximalSharpBerryEsseenCo
       (1 / (8 * (N + 1 : ℝ))) * M3 =
           ((1 / 8) * M3) * (1 / (N + 1 : ℝ)) := by
         field_simp [hn.ne']
-        <;> ring
       _ ≤ ((1 / 8) * M3) * (rho / s) :=
         mul_le_mul_of_nonneg_left hInv (by positivity)
   have hSpatial :
@@ -30526,7 +30512,7 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_maximalSharpBerryEsseenCo
     have hcut : maximalSharpBerryEsseenFrequencyCutoff rho N = s / (2 * rho) := rfl
     rw [hcut]
     field_simp [hs.ne', hrhoPos.ne']
-    <;> ring
+    ring
   have hFourier :
       (2 * Real.pi)⁻¹ *
           ((rho / (6 * s)) * M2 +
@@ -30663,7 +30649,6 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_berryEsseenConstant
       (1 / (4 * (N + 1 : ℝ))) * M3 =
           ((1 / 4) * M3) * (1 / (N + 1 : ℝ)) := by
         field_simp [hn.ne']
-        <;> ring
       _ ≤ ((1 / 4) * M3) * (rho / s) :=
         mul_le_mul_of_nonneg_left hInv (by positivity)
   have hden : 0 < 1 + 16 * rho := by positivity
@@ -30677,7 +30662,6 @@ theorem kolmogorovDistance_normalizedCenteredIidSum_le_berryEsseenConstant
       (4 / (s / (1 + 16 * rho))) * K =
           (4 * K) * ((1 + 16 * rho) / s) := by
         field_simp [hs.ne', hden.ne']
-        <;> ring
       _ ≤ (4 * K) * ((17 * rho) / s) := by
         exact mul_le_mul_of_nonneg_left
           ((div_le_div_iff_of_pos_right hs).2 hdenBound) (by positivity)

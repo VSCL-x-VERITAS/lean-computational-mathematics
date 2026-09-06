@@ -93,7 +93,6 @@ theorem fairBernoulliSum_chebyshev
   · rw [hMean, hVar] at hCheb
     have hratio : (n / 4) / (n / 4) ^ 2 = 4 / n := by
       field_simp [ne_of_gt hn]
-      <;> ring
     rw [hratio] at hCheb
     simpa [S, X, n] using hCheb
 

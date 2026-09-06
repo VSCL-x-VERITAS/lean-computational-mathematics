@@ -45,7 +45,7 @@ lemma binomialRandom_graphAdjIndicator_mean
   simp only [smul_eq_mul, mul_one]
   rw [hevent, measureReal_def, binomialRandom_graphStarExactEvent_probability p]
   · norm_num
-  · simpa [hvw]
+  · simp [hvw]
   · simp
 
 /-- The expected degree of a fixed vertex in `G(n,p)` is `(n - 1) p`. -/

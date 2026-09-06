@@ -38,9 +38,7 @@ theorem psiTwoGauge_const_le_two_mul_abs
           Real.exp_le_exp.mpr (by nlinarith [Real.log_two_gt_d9])
         _ = 2 := Real.exp_log (by norm_num)
     refine ⟨measurable_const, hscale, ?_, ?_⟩
-    · simpa [harg] using
-        (integrable_const (Real.exp (1 / 4 : ℝ)) :
-          Integrable (fun _ : Ω => Real.exp (1 / 4 : ℝ)) μ)
+    · simp
     · simpa [harg] using hexp
 
 /-- Intrinsic quantitative centering: subtracting the expectation preserves

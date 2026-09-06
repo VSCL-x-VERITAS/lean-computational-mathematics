@@ -2081,9 +2081,8 @@ theorem psiOneGauge_zero
     have hr0 : r ≠ 0 := ne_of_gt hr
     have hAd : PsiOneAdmissible μ (fun _ : Ω => (0 : ℝ)) r := by
       refine ⟨measurable_const, hr0, hrTop, ?_, ?_⟩
-      · simpa using
-          (integrable_const (1 : ℝ) : Integrable (fun _ : Ω => (1 : ℝ)) μ)
-      · simpa using (show (1 : ℝ) ≤ 2 by norm_num)
+      · simp
+      · simp
     exact sInf_le hAd
   · exact bot_le
 

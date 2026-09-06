@@ -42,7 +42,7 @@ theorem hdp_02_hthm_h2_d3_d1_source
       rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
       by_cases hb : B i ω
       · simpa [hb] using Real.exp_le_exp.mpr (le_abs_self lam)
-      · simpa [hb] using Real.one_le_exp (abs_nonneg lam)
+      · simp [hb]
     have hExpS : Integrable
         (fun ω => Real.exp (lam * ∑ i, (if B i ω then 1 else 0))) μ := by
       have hSMeas : Measurable

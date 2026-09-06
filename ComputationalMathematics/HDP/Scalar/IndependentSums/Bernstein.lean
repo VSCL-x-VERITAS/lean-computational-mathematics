@@ -145,7 +145,7 @@ private theorem localMGFOneSided
       have : v * lam ^ 2 - lam * t = -(t ^ 2 / (4 * v)) := by
         rw [hlameq]; field_simp; ring
       rw [this]
-      simpa using neg_le_neg (min_le_left (t ^ 2 / (4 * v)) (t / (2 * M)))
+      simp
     · -- Window boundary active: the sub-exponential regime.
       have hlameq : lam = M⁻¹ := min_eq_right hcase.le
       -- The constraint being active says exactly that `2v < t M`.
@@ -175,7 +175,7 @@ private theorem localMGFOneSided
         linarith [key]
       rw [hval]
       refine hstep.trans ?_
-      simpa using neg_le_neg (min_le_right (t ^ 2 / (4 * v)) (t / (2 * M)))
+      simp
   calc
     μ.real {ω | X ω ≥ t} ≤ μ.real (Y ⁻¹' Set.Ici (Real.exp (lam * t))) :=
       hmono hsubset
@@ -291,7 +291,7 @@ theorem localMGFToTail
     have : (∫ ω, Real.exp (lam * (-X ω)) ∂μ)
         = ∫ ω, Real.exp (-lam * X ω) ∂μ := by
       refine integral_congr_ae (Filter.Eventually.of_forall fun ω => ?_)
-      congr 1; ring
+      ring
     rw [this]
     refine hBound.trans (Real.exp_le_exp.2 ?_)
     have : (-lam) ^ 2 = lam ^ 2 := by ring
@@ -1510,7 +1510,7 @@ theorem bernsteinNormalizedTailPsiOne :
   have hsup : Finset.univ.sup' hne
       (fun _i : ι => |(Real.sqrt (Fintype.card ι : ℝ))⁻¹|) =
       (Real.sqrt (Fintype.card ι : ℝ))⁻¹ := by
-    simp [abs_of_pos (inv_pos.mpr hsqrt), hne]
+    simp [abs_of_pos (inv_pos.mpr hsqrt)]
   have h := htail (X := X)
     (a := fun _ => (Real.sqrt (Fintype.card ι : ℝ))⁻¹)
     hne hmeas hCenter hSubExp hIndep ht

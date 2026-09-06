@@ -343,9 +343,7 @@ theorem tendsto_centered_unitSecondMoment_charFun_pow_sqrt
       atTop (𝓝 (Complex.exp (-(t : ℂ) ^ 2 / 2))) := by
   by_cases ht : t = 0
   · subst t
-    simpa [integral_const] using
-      (tendsto_const_nhds :
-        Filter.Tendsto (fun _ : ℕ => (1 : ℂ)) atTop (𝓝 1))
+    simp [integral_const]
   · let φ : ℝ → ℂ := fun u =>
       ∫ ω, Complex.exp (((u * X ω : ℝ) : ℂ) * Complex.I) ∂μ
     let u : ℕ → ℝ := fun n => t / Real.sqrt n
@@ -389,7 +387,8 @@ theorem tendsto_centered_unitSecondMoment_charFun_pow_sqrt
           (fun n : ℕ => ((φ (u n) - 1) / (u n : ℂ) ^ 2) *
             ((n : ℂ) * (u n : ℂ) ^ 2))
           atTop (𝓝 (-((t : ℂ) ^ 2) / 2)) := by
-        convert hprod using 1 <;> ring
+        convert hprod using 1
+        ring
       refine hprod'.congr' ?_
       filter_upwards [hune] with n hun
       dsimp [g]

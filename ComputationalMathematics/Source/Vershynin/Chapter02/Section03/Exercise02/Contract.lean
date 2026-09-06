@@ -38,7 +38,7 @@ theorem hdp_02_hex_h2_d3_d2_source
     rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
     by_cases hb : B i ω
     · simpa [hb] using Real.exp_le_exp.mpr (neg_le_abs lam)
-    · simpa [hb] using Real.one_le_exp (abs_nonneg lam)
+    · simp [hb]
   have hSMeas : Measurable
       (fun ω => ∑ i, (if B i ω then (1 : ℝ) else 0)) :=
     Finset.measurable_sum Finset.univ fun i _ => hYi i

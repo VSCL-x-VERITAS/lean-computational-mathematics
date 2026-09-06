@@ -3781,7 +3781,8 @@ theorem psiTwoGaugeToLpMomentGrowth
       exact psiTwoGaugeToTail hX hFinite ht
     have hGrowth := tailToLpMomentGrowth hX (by positivity)
       (K := 2 * (PsiTwoGauge μ X).toReal) hTail
-    convert hGrowth using 1 <;> ring
+    convert hGrowth using 1
+    ring
 
 /-! Equation (2.16): a centered finite-gauge variable has a global linear MGF
 bound with one explicit universal coefficient. -/

@@ -150,7 +150,7 @@ theorem not_integrable_exp_mul_expMeasure
     · filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with x hx
       rw [Real.norm_eq_abs, abs_one]
       exact Real.one_le_exp (mul_nonneg (sub_nonneg.mpr hl) (le_of_lt hx))
-  exact not_integrableOn_Ioi_rpow 0 (by simpa using hconst)
+  simp at hconst
 
 /-- Every positive-rate exponential distribution is not sub-Gaussian. -/
 theorem exponentialPsiTwoGauge_eq_top_of_pos (rate : ℝ) (hrate : 0 < rate) :

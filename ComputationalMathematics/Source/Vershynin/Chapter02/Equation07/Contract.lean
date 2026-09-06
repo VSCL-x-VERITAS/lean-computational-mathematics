@@ -40,7 +40,7 @@ theorem hdp_02_heq_h2_d7
     rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
     by_cases hb : B i ω
     · simpa [Y, hb] using Real.exp_le_exp.mpr (le_abs_self lam)
-    · simpa [Y, hb] using Real.one_le_exp (abs_nonneg lam)
+    · simp [Y, hb]
   have hSMeas : Measurable S := by
     exact Finset.measurable_sum Finset.univ fun i _ => hYi i
   have hExpS : Integrable (fun ω => Real.exp (lam * S ω)) μ := by

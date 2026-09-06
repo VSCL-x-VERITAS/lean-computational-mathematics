@@ -33,6 +33,7 @@ theorem hdp_02_hbody_h2_d4_hdegree_hchernoff :
     have hcore :=
       NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiDegreeDeviationBound
         n p v (δ := 1 / 10) (by norm_num) (by norm_num)
-    convert hcore using 1 <;> ring
+    convert hcore using 1
+    ring
 
 end NumStability.HDP.Contract
