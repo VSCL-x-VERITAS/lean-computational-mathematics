@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify import-only identity changes against the immutable Git baseline.
+"""Verify exact mapped identity changes against the immutable Git baseline.
 
 Run from any directory. The default is a read-only check; --report writes the
 explicitly selected JSON evidence path. No Lean compiler or dependency cache is
@@ -19,6 +19,12 @@ PRIVATE_ADAPTER = 'NumStabilityTest.Reorganization.ProjectIdentityPrivateNames'
 PRIVATE_ADAPTER_TEST = PRIVATE_ADAPTER + 'Test'
 PRIVATE_TEMPLATE_SHA = 'cfb3edfa6825d3e1d6d59f87a3362e87d974fac3bc19d18d8aa4b32a4d7070a4'
 PRIVATE_TEST_SHA = '95f8d39351c9fbd87a12f3e458471103d642d84cfdf42ae0404758cc5625a9b3'
+PUBLIC_INSTANCE_MODULE = 'ComputationalMathematics.Analysis.Equidistribution.AddCircle'
+PUBLIC_INSTANCE_NAME = 'NumStability.instFactLtRealOfNat_numStability'
+PUBLIC_INSTANCE_INSERTION = 'instFactLtRealOfNat_numStability '
+PUBLIC_INSTANCE_BEFORE_SHA = '2384ebfc9dd635eaa8c2f9a58e3c5fd46ecbdd857a1fe8aa96cd5b60c6b172c2'
+PUBLIC_INSTANCE_TEST = 'NumStabilityTest.Import.ProjectIdentity.GeneratedInstanceName'
+PUBLIC_INSTANCE_TEST_SHA = '5e24035e5c8cb9b25f2dc38e8bd056feb76c7b36fb903fa408cea2a6930adaff'
 IMPORT = re.compile(r'(?:(?:public|private|meta)\s+)*import[ \t]+([A-Za-z0-9_\'.]+)')
 
 def header_imports(text):
@@ -163,6 +169,108 @@ def relocate_reviewed_forwarder_import(raw, adjustment):
     result = marker + prefix + suffix
     assert sha(result) == adjustment['after_sha256']
     return result
+
+
+def validate_public_instance_document(document, mapping):
+    assert document['schema_version'] == 1
+    assert document['baseline_commit'] == mapping['baseline_commit']
+    assert document['module_map_sha256'] == MAP_SHA
+    assert document['failed_candidate'] == 'feb121c8813abc72f6e6ea1f419e8fe5427dfb43'
+    assert document['failed_run_id'] == 34012018278
+    assert len(document['adjustments']) == 1, 'only the one observed public instance may be named'
+    adjustment = document['adjustments'][0]
+    record = next(r for r in mapping['implementation_modules'] if r['new_module'] == PUBLIC_INSTANCE_MODULE)
+    for key, expected in [('module', record['new_module']), ('path', record['new_path']),
+                          ('old_module', record['old_module']), ('old_path', record['old_path']),
+                          ('baseline_sha256', record['baseline_sha256'])]:
+        assert adjustment[key] == expected, 'public instance adjustment is outside the exact map'
+    assert adjustment['baseline_public_name'] == PUBLIC_INSTANCE_NAME
+    assert adjustment['observed_migrated_name'] == 'NumStability.instFactLtRealOfNat_computationalMathematics'
+    return adjustment
+
+
+def public_instance_adjustment(mapping):
+    path = DOCS / 'public-instance-name-adjustments.json'
+    document = json.loads(path.read_text(encoding='utf-8'))
+    validate_public_instance_document(document, mapping)
+    return document, sha(path.read_bytes())
+
+
+def name_reviewed_public_instance(raw, adjustment):
+    """Insert only the baseline public name at its exact anonymous-instance boundary."""
+    marker = 'instance : Fact (0 < (1 : ℝ)) := ⟨by norm_num⟩'.encode('utf-8')
+    assert sha(raw) == adjustment['canonical_before_sha256'] == PUBLIC_INSTANCE_BEFORE_SHA
+    assert raw.count(marker) == 1
+    offset = raw.index(marker) + len(b'instance ')
+    assert adjustment['insertion'] == {'byte_offset': offset, 'insert_utf8': PUBLIC_INSTANCE_INSERTION}
+    prefix, suffix = raw[:offset], raw[offset:]
+    assert sha(prefix) == adjustment['unchanged_prefix_sha256']
+    assert sha(suffix) == adjustment['unchanged_suffix_sha256']
+    inserted = PUBLIC_INSTANCE_INSERTION.encode('utf-8')
+    result = prefix + inserted + suffix
+    assert sha(result) == adjustment['canonical_after_sha256']
+    assert result[:offset] + result[offset + len(inserted):] == raw
+    return result
+
+
+def validate_public_instance_regression(document, expected_root):
+    test = document['standalone_test']
+    assert test['module'] == PUBLIC_INSTANCE_TEST
+    assert test['path'] == PUBLIC_INSTANCE_TEST.replace('.', '/') + '.lean'
+    source = test['source_utf8'].encode('utf-8')
+    assert sha(source) == test['sha256'] == PUBLIC_INSTANCE_TEST_SHA
+    root = document['test_root']
+    assert root['path'] == 'NumStabilityTest.lean' and root['before_sha256'] == sha(expected_root)
+    marker = b'import NumStabilityTest.Import.ProjectIdentity\n'
+    assert expected_root.count(marker) == 1
+    offset = expected_root.index(marker) + len(marker)
+    inserted = 'import ' + PUBLIC_INSTANCE_TEST + '\n'
+    assert root['insertion'] == {'byte_offset': offset, 'insert_utf8': inserted}
+    result = expected_root[:offset] + inserted.encode('utf-8') + expected_root[offset:]
+    assert sha(result) == root['after_sha256']
+    assert result[:offset] + result[offset + len(inserted.encode('utf-8')):] == expected_root
+    return {test['path']: source, 'NumStabilityTest.lean': result}
+
+
+def public_instance_self_test(document, mapping, before, expected_root):
+    adjustment = validate_public_instance_document(document, mapping)
+    name_reviewed_public_instance(before, adjustment)
+    validate_public_instance_regression(document, expected_root)
+    mutations = []
+    for key, value in [('module_map_sha256', '0' * 64), ('failed_run_id', 1)]:
+        changed = copy.deepcopy(document); changed[key] = value; mutations.append(changed)
+    for key, value in [('module', PUBLIC_INSTANCE_MODULE + '.Unapproved'), ('baseline_sha256', '0' * 64),
+                       ('baseline_public_name', PUBLIC_INSTANCE_NAME + 'Changed'),
+                       ('canonical_after_sha256', '0' * 64), ('unchanged_suffix_sha256', '0' * 64)]:
+        changed = copy.deepcopy(document); changed['adjustments'][0][key] = value; mutations.append(changed)
+    changed = copy.deepcopy(document); changed['adjustments'].append(copy.deepcopy(changed['adjustments'][0])); mutations.append(changed)
+    changed = copy.deepcopy(document); changed['adjustments'][0]['insertion']['byte_offset'] += 1; mutations.append(changed)
+    changed = copy.deepcopy(document); changed['adjustments'][0]['insertion']['insert_utf8'] += 'unapproved '; mutations.append(changed)
+    changed = copy.deepcopy(document); changed['standalone_test']['source_utf8'] = changed['standalone_test']['source_utf8'].replace('some 1000', 'some 999')
+    changed['standalone_test']['sha256'] = sha(changed['standalone_test']['source_utf8'].encode()); mutations.append(changed)
+    changed = copy.deepcopy(document); changed['test_root']['insertion']['insert_utf8'] += 'import Unapproved\n'; mutations.append(changed)
+    changed = copy.deepcopy(document); changed['test_root']['insertion']['byte_offset'] += 1; mutations.append(changed)
+    for mutation in mutations:
+        try:
+            current = validate_public_instance_document(mutation, mapping)
+            name_reviewed_public_instance(before, current)
+            validate_public_instance_regression(mutation, expected_root)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('unapproved public instance/test/root adjustment accepted')
+    # Forged hashes cannot make a changed instance type, proof or attribute eligible.
+    for changed_raw in [before.replace(b'0 < (1', b'0 <= (1'),
+                        before.replace(b'by norm_num', b'by positivity'),
+                        before.replace(b'instance : Fact', b'@[simp] instance : Fact')]:
+        forged = copy.deepcopy(adjustment); forged['canonical_before_sha256'] = sha(changed_raw)
+        try:
+            name_reviewed_public_instance(changed_raw, forged)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('changed mathematics or attributes admitted through forged manifest hashes')
+    print('Public instance preservation self-test passed: 16 map/name/insertion/test/root/type/proof/attribute mutations rejected')
 
 
 def private_authority_rows(raw, kind):
@@ -326,7 +434,7 @@ def private_adjustment_self_test(document, mapping, original_tests, expected_roo
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report', type=Path, help='Write the evidence JSON to this path.')
-    parser.add_argument('--self-test', action='store_true', help='Test the strict live-private-fixture replay allowance without compiling Lean.')
+    parser.add_argument('--self-test', action='store_true', help='Test the strict live-fixture and public-instance insertion allowances without compiling Lean.')
     args = parser.parse_args()
     failures = []
 
@@ -339,6 +447,8 @@ def main():
     mapping = json.loads(map_raw)
     order_adjustment, order_manifest_sha = import_order_adjustment(mapping)
     header_adjustment, header_manifest_sha = forwarder_header_adjustment(mapping)
+    instance_document, instance_manifest_sha = public_instance_adjustment(mapping)
+    instance_adjustment = instance_document['adjustments'][0]
     fixtures = json.loads((DOCS / 'fixture-inventory.json').read_text(encoding='utf-8'))
     baseline = baseline_sources(mapping['baseline_commit'])
     implementations = mapping['implementation_modules']
@@ -378,8 +488,13 @@ def main():
             expected = permute_reviewed_import_header(expected, order_adjustment)
             verify(sha(expected_old) == order_adjustment['unchanged_forwarder_sha256'],
                 record['old_path'] + ': documented import-order adjustment changed the forwarder')
+        if record['new_module'] == PUBLIC_INSTANCE_MODULE:
+            public_instance_before = expected
+            expected = name_reviewed_public_instance(expected, instance_adjustment)
+            verify(sha(expected_old) == instance_adjustment['unchanged_forwarder_sha256'],
+                record['old_path'] + ': explicit public instance name changed the forwarder')
         actual = (ROOT / record['new_path']).read_bytes()
-        verify(actual == expected, record['new_path'] + ': change outside permitted import tokens or the one exact reviewed import permutation')
+        verify(actual == expected, record['new_path'] + ': change outside exact import mapping, reviewed import permutation or baseline public-instance-name insertion')
         verify(not any(i['module'] == 'NumStability' or i['module'].startswith('NumStability.')
             for i in header_imports(actual.decode('utf-8'))[0]),
             record['new_path'] + ': canonical production imports a historical module')
@@ -400,14 +515,16 @@ def main():
     private_manifest_path = DOCS / 'live-private-name-adjustments.json'
     private_document = json.loads(private_manifest_path.read_text(encoding='utf-8'))
     private_expected, private_counts = validate_private_adjustments(private_document, mapping, original_tests, expected_root)
+    instance_expected = validate_public_instance_regression(instance_document, private_expected['NumStabilityTest.lean'])
     if args.self_test:
         private_adjustment_self_test(private_document, mapping, original_tests, expected_root)
+        public_instance_self_test(instance_document, mapping, public_instance_before, private_expected['NumStabilityTest.lean'])
     for relative, before in original_tests.items():
         verify((ROOT / relative).read_bytes() == private_expected.get(relative, before),
             relative + ': pre-existing test source differs outside exact private-owner adapter insertions')
-    for relative, expected in private_expected.items():
+    for relative, expected in {**private_expected, **instance_expected}.items():
         verify((ROOT / relative).is_file() and (ROOT / relative).read_bytes() == expected,
-            relative + ': live private-name adapter differs from its exact replay/map-bound source')
+            relative + ': live identity regression differs from its exact replay/map-bound source')
     for relative, digest in fixtures['generated_files'].items():
         verify((ROOT / relative).is_file() and sha((ROOT / relative).read_bytes()) == digest,
             relative + ': generated regression fixture differs from its inventory hash')
@@ -416,13 +533,16 @@ def main():
         'import_order_adjustments_sha256': order_manifest_sha,
         'forwarder_header_adjustments_sha256': header_manifest_sha,
         'live_private_name_adjustments_sha256': sha(private_manifest_path.read_bytes()),
+        'public_instance_name_adjustments_sha256': instance_manifest_sha,
         'status': 'PASS' if not failures else 'FAIL',
-        'claim': 'All canonical bytes are preserved except exact initial import module tokens and one documented 14-import header permutation; authored declaration names, mathematical bodies, documentation, and attribution remain unchanged.',
+        'claim': 'All canonical bytes are preserved except exact initial import module tokens, one documented 14-import header permutation, and one insertion explicitly preserving the baseline generated public instance name; mathematical bodies, authored names, documentation and attribution remain unchanged.',
         'counts': {'canonical_modules': len(implementations), 'historical_forwarders': len(records),
             'existing_wrapper_comment_bodies_preserved': len(historical),
             'canonical_import_tokens_rewritten': token_count, 'external_import_tokens_preserved': external_count,
             'import_order_adjusted_aggregates': 1, 'import_order_permuted_header_lines': 14,
             'generated_forwarder_imports_relocated_before_preserved_module_docs': 1,
+            'baseline_public_instance_names_explicitly_preserved': 1,
+            'public_instance_name_regression_test_files': 1,
             'new_wrappers_with_retained_license_notices': copyright_count,
             'existing_test_files_byte_preserved': len(original_tests) - private_counts['fixtures'],
             'existing_test_files_with_authority_content_preserved': len(original_tests),
@@ -433,11 +553,15 @@ def main():
             'exact_private_owner_pairs': private_counts['owner_pairs'],
             'private_adapter_and_standalone_test_files': 2,
             'generated_test_files_checked': len(fixtures['generated_files']),
-            'test_root_added_imports': 2},
+            'test_root_added_imports': 3},
         'limitations': ['This is a source preservation gate. Lean compilation and downstream behavior require separate validation.'],
         'import_order_adjustments': [{'module': IMPORT_ORDER_MODULE,
             'manifest': 'import-order-adjustments.json',
             'unchanged_body_sha256': order_adjustment['unchanged_body_sha256']}],
+        'public_instance_name_adjustments': {'manifest': 'public-instance-name-adjustments.json',
+            'module': PUBLIC_INSTANCE_MODULE, 'baseline_public_name': PUBLIC_INSTANCE_NAME,
+            'scope': 'Only the exact identifier is inserted after the baseline anonymous instance keyword; type, proof, attributes, registration and all other bytes remain unchanged.',
+            'standalone_test_sha256': PUBLIC_INSTANCE_TEST_SHA},
         'live_private_name_adjustments': {'manifest': 'live-private-name-adjustments.json',
             'scope': 'Only exact adapter imports/helper-call insertions; all authority row bytes, ordinals, authored suffixes, public probes and original retired absence checks remain unchanged.',
             'helper_template_sha256': PRIVATE_TEMPLATE_SHA, 'standalone_test_sha256': PRIVATE_TEST_SHA},

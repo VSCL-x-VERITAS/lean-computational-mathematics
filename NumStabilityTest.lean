@@ -596,6 +596,7 @@ import NumStabilityTest.Reorganization.CheckpointSync.OldOnly.NumStability_Algor
 import NumStabilityTest.Reorganization.W06.MatrixPowersCanonical
 import NumStabilityTest.Reorganization.W06.MatrixPowersCompatibility
 import NumStabilityTest.Import.ProjectIdentity
+import NumStabilityTest.Import.ProjectIdentity.GeneratedInstanceName
 
 /-!
 # NumStability test suite

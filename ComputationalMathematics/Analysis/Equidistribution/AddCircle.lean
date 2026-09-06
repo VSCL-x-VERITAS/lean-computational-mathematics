@@ -24,7 +24,7 @@ to Haar probability for infinite-order rotations, and the resulting frequency
 laws for balls and half-open arcs.
 -/
 
-instance : Fact (0 < (1 : ℝ)) := ⟨by norm_num⟩
+instance instFactLtRealOfNat_numStability : Fact (0 < (1 : ℝ)) := ⟨by norm_num⟩
 
 def finUniformProbability (N : ℕ) : ProbabilityMeasure (Fin (N + 1)) :=
   ⟨uniformOn Set.univ, inferInstance⟩
