@@ -1,0 +1,5 @@
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real`. -/
+
+#check NumStability.infNorm_le_mul_of_abs_le_mul_abs

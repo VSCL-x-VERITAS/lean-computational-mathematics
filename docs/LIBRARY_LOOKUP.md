@@ -1,11 +1,11 @@
-# Lean FP Analysis Library Lookup
+# Lean Computational Mathematics Library Lookup
 
 This file records source-facing entry points that are easy to miss from import
 graphs alone. The executable lookup remains `examples/LibraryLookup.lean`.
 
 ## Higham Chapter 6
 
-The canonical source entry point is `NumStability.Source.Higham.Chapter06`.
+The canonical source entry point is `ComputationalMathematics.Source.Higham.Chapter06`.
 The Phase 11B2 source leaves are organized by printed locator and mathematical
 topic:
 
@@ -30,7 +30,7 @@ Source PDF: `References/1.9780898718027.ch7.pdf`.
 
 Core perturbation module:
 
-- `NumStability.Analysis.PerturbationTheory`
+- `ComputationalMathematics.Analysis.PerturbationTheory`
 - `forward_error_from_residual`
 - `normwise_perturbation_bound`
 - `oettli_prager_necessary`
@@ -52,16 +52,16 @@ Core perturbation module:
 Generic norm helpers used by the Chapter 7 arbitrary-norm wrappers, grouped by
 their canonical semantic owners:
 
-- `NumStability.Analysis.VectorNorms.Duality`:
+- `ComputationalMathematics.Analysis.VectorNorms.Duality`:
   `exists_dualFunctionalNormValue_one_of_pos_vector`
-- `NumStability.Analysis.MatrixNorms.Basic`:
+- `ComputationalMathematics.Analysis.MatrixNorms.Basic`:
   `complexMatrixVecMul_absMatrix_absVec_apply`,
   `complexMatrixVecMul_absMatrix_absVec_norm_apply`, and
   `complexAbsVec_complexMatrixVecMul_absMatrix_absVec`
-- `NumStability.Analysis.MatrixNorms.Lp`:
+- `ComputationalMathematics.Analysis.MatrixNorms.Lp`:
   `complexMatrixLpNormOfReal_mul_le`, `continuous_complexMatrixLpNorm`, and
   `continuous_complexMatrixLpNormOfReal`
-- `NumStability.Analysis.MatrixNorms.SpectralRadius`:
+- `ComputationalMathematics.Analysis.MatrixNorms.SpectralRadius`:
   `complexMatrixEigenvalueModulusSet_eq_toLin_spectrum_modulusSet`,
   `toLin_spectralRadius_eq_of_spectrum_modulusSet_isGreatest`,
   `toLin_spectralRadius_toReal_eq_of_spectrum_modulusSet_isGreatest`, and
@@ -1009,13 +1009,13 @@ Source PDF: `References/1.9780898718027.ch8.pdf`.
 
 Reusable triangular-system entry point:
 
-- `NumStability.Algorithms.LinearSystems.Triangular`
+- `ComputationalMathematics.Algorithms.LinearSystems.Triangular`
 
 Additional Chapter 8 and specialized modules:
 
 - `NumStability.Algorithms.TriangularArbitraryOrder`
 - `NumStability.Algorithms.TriangularNoGuard`
-- `NumStability.Algorithms.MMatrix`
+- `ComputationalMathematics.Algorithms.MMatrix`
 
 Source-facing Chapter 8 wrappers:
 
@@ -1213,14 +1213,14 @@ Source PDF: `References/1.9780898718027.ch9.pdf`.
 
 Core LU modules:
 
-- `NumStability.Algorithms.LU.GaussianElimination`
-- `NumStability.Algorithms.LU.LUSolve`
-- `NumStability.Algorithms.LU.GrowthFactor`
+- `ComputationalMathematics.Algorithms.LU.GaussianElimination`
+- `ComputationalMathematics.Algorithms.LU.LUSolve`
+- `ComputationalMathematics.Algorithms.LU.GrowthFactor`
 - `NumStability.Algorithms.LU.Doolittle`
-- `NumStability.Algorithms.LU.Tridiagonal`
-- `NumStability.Algorithms.LU.TridiagonalRecurrence`
-- `NumStability.Algorithms.LU.SpecialMatrices`
-- `NumStability.Algorithms.LU.TridiagonalCond`
+- `ComputationalMathematics.Algorithms.LU.Tridiagonal`
+- `ComputationalMathematics.Algorithms.LU.TridiagonalRecurrence`
+- `ComputationalMathematics.Algorithms.LU.SpecialMatrices`
+- `ComputationalMathematics.Algorithms.LU.TridiagonalCond`
 
 Source-facing Chapter 9 wrappers:
 
@@ -4692,15 +4692,15 @@ Appendix source read: `References/1.9780898718027.appa.pdf`.
 
 Core Cholesky modules:
 
-- `NumStability.Algorithms.Cholesky.CholeskySpec`
+- `ComputationalMathematics.Algorithms.Cholesky.CholeskySpec`
 - `spd_schur_complement_isSymPosDef`
 - `NumStability.Algorithms.Cholesky.CholeskySolve`
-- `NumStability.Algorithms.Cholesky.CholeskyDemmel`
-- `NumStability.Algorithms.Cholesky.CholeskyFl`
+- `ComputationalMathematics.Algorithms.Cholesky.CholeskyDemmel`
+- `ComputationalMathematics.Algorithms.Cholesky.CholeskyFl`
 - `NumStability.Algorithms.Cholesky.CholeskyPerturbation`
 - `NumStability.Algorithms.Cholesky.CholeskyPSD`
 - `NumStability.Algorithms.Cholesky.CholeskyIndefinite`
-- `NumStability.Algorithms.Cholesky.CholeskyNonsym`
+- `ComputationalMathematics.Algorithms.Cholesky.CholeskyNonsym`
 
 Source-facing Chapter 10 wrappers:
 
@@ -5168,10 +5168,10 @@ Core iterative-refinement module:
 
 Canonical Chapter 12 source surface:
 
-- `NumStability.Source.Higham.Chapter12` (complete declaration-free aggregate)
+- `ComputationalMathematics.Source.Higham.Chapter12` (complete declaration-free aggregate)
 - `NumStability.Source.Higham.Chapter12.IterativeRefinement`
-- `NumStability.Source.Higham.Chapter12.OmegaDiscontinuity`
-- `NumStability.Source.Higham.Chapter12.Problem02`
+- `ComputationalMathematics.Source.Higham.Chapter12.OmegaDiscontinuity`
+- `ComputationalMathematics.Source.Higham.Chapter12.Problem02`
 - `higham12_1_SolverWBound`
 - `higham12_2_residual_delta_bound`
 - `higham12_forward_error_linear_contraction`
@@ -5219,7 +5219,7 @@ Chapter 12 formalization status and source inventory:
 
 ## Higham Chapter 22: Vandermonde Systems
 
-- Import: `NumStability.Source.Higham.Chapter22`. Its canonical leaves are
+- Import: `ComputationalMathematics.Source.Higham.Chapter22`. Its canonical leaves are
   `VandermondeSystems`, `MonomialResidual`, `Problem07`, and the
   `Section03` aggregate over `RealRefinement` and
   `ComplexConfluentRefinement`.
@@ -5286,37 +5286,37 @@ layer is migrated gradually.
 
 | Goal shape | Start with | Main definitions | Main theorem names | Notes |
 |---|---|---|---|---|
-| Floating-point model assumptions | `NumStability/FloatingPoint/Model.lean` | `FPModel` | fields `model_add`, `model_sub`, `model_mul`, `model_div`, `model_sqrt` | Axiomatic Higham-style model; not IEEE-specific. Square root is modeled for nonnegative inputs. |
-| Accumulated rounding errors | `NumStability/Analysis/Rounding.lean` | `gamma`, `gammaValid` | `gammaValid_mono`, `gamma_nonneg`, `gamma_mono`, `prod_error_bound`, `gamma_mul`, `gamma_inv`, `gamma_div`, `gamma_sum_le` | Most algorithm bounds require a `gammaValid fp k` hypothesis. |
-| Basic error and stability predicates | `NumStability/Analysis/Error.lean`, `NumStability/Analysis/Stability.lean` | `absError`, `relError`, `backwardErrorBounded`, `backwardErrorBoundedVec`, `relBackwardErrorBounded2`, `isRelComponentwiseBackwardStable` | `forward_from_backward` | General scalar/vector definitions used by low-level algorithm contracts. |
-| Sequential summation | `NumStability/Analysis/Summation/ErrorBounds.lean` | accumulated sums through `Fin.foldl` | `fl_sum_error`, `fl_sum_error_init`, `fl_sum_error_tight` | Core input to dot-product proofs. |
-| Subtraction folds and inverse products | `NumStability/Analysis/SubtractionFold.lean` | subtraction accumulation helpers | `fl_sub_sum_error_init`, `inv_prod_error_bound` | Used heavily by triangular substitution proofs. |
-| Dot product forward error | `NumStability/Algorithms/DotProduct.lean` | `fl_dotProduct` | `dotProduct_error_bound` | Tight `gamma fp n` bound for the sequential dot product. |
-| Dot product backward error | `NumStability/Algorithms/DotProduct.lean` | `fl_dotProduct` | `dotProduct_backward_error`, `dotProduct_backward_stable_x`, `dotProduct_backward_stable_y`, `dotProduct_isRelBackwardStable` | Componentwise relative perturbations of one input vector. |
-| Floating 2-norm | `NumStability/Algorithms/Norm2.lean` | `fl_norm2Sq`, `fl_norm2` | `norm_toLp_two_eq_sqrt_dotProduct`, `dotProduct_self_nonneg_real`, `dotProduct_self_eq_zero_iff_real`, `dotProduct_self_pos_iff_real`, `fl_norm2Sq_backward_error`, `fl_norm2Sq_nonneg_of_gammaValid_two_mul`, `fl_norm2_unroll`, `fl_norm2_unroll_of_gammaValid_two_mul` | Exact facts use Mathlib `dotProduct` and `‖WithLp.toLp 2 x‖` directly; FP facts compute `xᵀx` by `fl_dotProduct`, then apply rounded `FPModel.fl_sqrt`. |
-| Matrix-vector product | `NumStability/Algorithms/MatVec.lean` | `fl_matVec` | `matVec_backward_error`, `matVec_error_bound`, `matVec_row_isRelBackwardStable` | Built row-by-row from dot products. |
-| Matrix multiplication | `NumStability/Algorithms/MatMul.lean` | `fl_matMul` | `matMul_error_bound`, `matMul_backward_error_col` | Backward theorem is columnwise; each column may use a different perturbation. |
-| Outer product | `NumStability/Algorithms/OuterProduct.lean` | `fl_outerProduct` | `outerProduct_error_bound`, `outerProduct_backward_error` | Useful for rank-one update reasoning. |
-| Recursive, pairwise, and tree summation | `NumStability/Algorithms/Summation/Recursive/Core.lean`, `NumStability/Algorithms/Summation/Pairwise/Core.lean`, and `NumStability/Algorithms/Summation/Tree.lean` | recursive/tree sum algorithms | `recursiveSum_backward_error`, `recursiveSum_forward_error_bound`, `pairwiseSum_backward_error`, `pairwiseSum_forward_error_bound`, `backward_error`, `forward_error` | Prefer the narrow reusable leaves. `NumStability/Algorithms/Summation.lean` is the complete published surface, including supported source-facing declarations. `SumTree.backward_error` and `SumTree.forward_error` are in the same namespace and have generic names. |
-| Insertion summation | `NumStability/Algorithms/Summation/Insertion/{ActiveList,Executor,Schedule,RunningError,ScheduleExecution}.lean` | `IncreasingAbsList`, `fl_insertionSumList`, `InsertionScheduleTree`, `GreedyInsertionTree` | `GreedyInsertionTree.exactMergeCost_le`, `runningErrorBudget_exactWithUnitRoundoff_greedyInsertion_le`, `fl_insertionSumList_has_greedy_schedule_exactWithUnitRoundoff_of_ne_nil` | Import the narrow reusable layer. `NumStability/Algorithms/Summation/Insertion.lean` is the complete family surface and also re-exports the Higham Section 4.1 examples. |
-| Forward substitution | `NumStability/Algorithms/LinearSystems/Triangular/ForwardSubstitution.lean` | `fl_forwardSub` | `forwardSub_backward_error`, `fl_forwardSub_satisfies_spec` | Lower-triangular solve. Requires nonzero diagonal and lower-triangular zero pattern. |
-| Back substitution | `NumStability/Algorithms/LinearSystems/Triangular/BackSubstitution.lean` | `fl_backSub` | `backSub_backward_error`, `backSub_backward_error_perturbed`, `backSub_backward_error_dual`, `fl_backSub_satisfies_spec` | Upper-triangular solve. Requires nonzero diagonal and upper-triangular zero pattern. |
-| Combined triangular solve | `NumStability/Algorithms/LinearSystems/Triangular/Combined.lean` | `fl_forwardSub`, `fl_backSub` | `triangularSolve_backward_error` | Composes forward and back substitution. |
-| Triangular forward-error bounds | `NumStability/Analysis/ForwardError.lean`, `Algorithms/LinearSystems/Triangular/DiagonalDominance.lean`, `Algorithms/LinearSystems/Triangular/ComparisonBounds.lean` | inverse and comparison quantities | `backSub_forward_error`, `forwardSub_forward_error`, `backSub_forward_error_diagDom`, `forwardSub_forward_error_comparison`, `forwardSub_forward_error_mu_bound` | These convert backward-error statements into forward-error bounds under matrix assumptions. |
-| M-matrix forward substitution | `NumStability/Algorithms/MMatrix.lean` | M-matrix predicates and comparison quantities | `forwardSub_nonneg`, `mmatrix_forwardSub_relative_error` | Proves the Corollary 8.10 relative-error statement in mu-form. |
-| Inverse and triangular inverse bounds | `NumStability/Algorithms/LinearSystems/Triangular/InverseBounds.lean` | inverse and norm bounds | `theorem_8_11_first_ineq`, `theorem_8_11_upper_bound` | Higham chapter 8 inverse-bound infrastructure. |
-| LU factorization backward error | `NumStability/Algorithms/LU/GaussianElimination.lean` | `LUBackwardError` | `lu_backward_error_perturbation`, `lu_backward_error_relative`, `lu_backward_error_gamma` | Specification of computed LU factors and perturbation bounds. |
-| LU solve backward error | `NumStability/Algorithms/LU/LUSolve.lean` | `fl_forwardSub`, `fl_backSub`, `LUBackwardError` | `lu_solve_backward_error`, `lu_solve_backward_error_tight`, `lu_solve_backward_error_mixed` | Composes LU factorization with triangular solves. |
-| Structured LU bounds | `NumStability/Algorithms/LU/GrowthFactor.lean`, `SpecialMatrices.lean`, `Tridiagonal.lean`, `Doolittle.lean`, `NumStability/Source/Higham/Chapter13/Theorem06/AssumptionModel.lean` | growth-factor and special-matrix specs; `IsTridiagonal`, `IsBanded` | `diagDom_lu_solve_backward_stable`, `spd_lu_backward_error`, `mmatrix_lu_backward_stable`, `banded_lu_backward_error`, `isBanded_one_one_of_isTridiagonal`, `isTridiagonal_of_isBanded_one_one`, `isBanded_mono`, `isBanded_common_of_le`, `doolittle_solve_backward_error`, `block_lu_solve_backward_error` | Some structured results are specification-level interfaces; inspect hypotheses. Use `isBanded_mono`/`isBanded_common_of_le` when a proof has a narrower lower/upper bandwidth than the source-facing common bandwidth. |
-| Cholesky factorization | `NumStability/Algorithms/Cholesky/CholeskySpec.lean` | `CholeskyBackwardError` | `cholesky_backward_error_perturbation`, `cholesky_backward_error_relative`, `cholesky_spd_backward_stable` | Factorization contract for SPD-style analyses. |
+| Floating-point model assumptions | `ComputationalMathematics/FloatingPoint/Model.lean` | `FPModel` | fields `model_add`, `model_sub`, `model_mul`, `model_div`, `model_sqrt` | Axiomatic Higham-style model; not IEEE-specific. Square root is modeled for nonnegative inputs. |
+| Accumulated rounding errors | `ComputationalMathematics/Analysis/Rounding.lean` | `gamma`, `gammaValid` | `gammaValid_mono`, `gamma_nonneg`, `gamma_mono`, `prod_error_bound`, `gamma_mul`, `gamma_inv`, `gamma_div`, `gamma_sum_le` | Most algorithm bounds require a `gammaValid fp k` hypothesis. |
+| Basic error and stability predicates | `NumStability/Analysis/Error.lean`, `ComputationalMathematics/Analysis/Stability.lean` | `absError`, `relError`, `backwardErrorBounded`, `backwardErrorBoundedVec`, `relBackwardErrorBounded2`, `isRelComponentwiseBackwardStable` | `forward_from_backward` | General scalar/vector definitions used by low-level algorithm contracts. |
+| Sequential summation | `ComputationalMathematics/Analysis/Summation/ErrorBounds.lean` | accumulated sums through `Fin.foldl` | `fl_sum_error`, `fl_sum_error_init`, `fl_sum_error_tight` | Core input to dot-product proofs. |
+| Subtraction folds and inverse products | `ComputationalMathematics/Analysis/SubtractionFold.lean` | subtraction accumulation helpers | `fl_sub_sum_error_init`, `inv_prod_error_bound` | Used heavily by triangular substitution proofs. |
+| Dot product forward error | `ComputationalMathematics/Algorithms/DotProduct.lean` | `fl_dotProduct` | `dotProduct_error_bound` | Tight `gamma fp n` bound for the sequential dot product. |
+| Dot product backward error | `ComputationalMathematics/Algorithms/DotProduct.lean` | `fl_dotProduct` | `dotProduct_backward_error`, `dotProduct_backward_stable_x`, `dotProduct_backward_stable_y`, `dotProduct_isRelBackwardStable` | Componentwise relative perturbations of one input vector. |
+| Floating 2-norm | `ComputationalMathematics/Algorithms/Norm2.lean` | `fl_norm2Sq`, `fl_norm2` | `norm_toLp_two_eq_sqrt_dotProduct`, `dotProduct_self_nonneg_real`, `dotProduct_self_eq_zero_iff_real`, `dotProduct_self_pos_iff_real`, `fl_norm2Sq_backward_error`, `fl_norm2Sq_nonneg_of_gammaValid_two_mul`, `fl_norm2_unroll`, `fl_norm2_unroll_of_gammaValid_two_mul` | Exact facts use Mathlib `dotProduct` and `‖WithLp.toLp 2 x‖` directly; FP facts compute `xᵀx` by `fl_dotProduct`, then apply rounded `FPModel.fl_sqrt`. |
+| Matrix-vector product | `ComputationalMathematics/Algorithms/MatVec.lean` | `fl_matVec` | `matVec_backward_error`, `matVec_error_bound`, `matVec_row_isRelBackwardStable` | Built row-by-row from dot products. |
+| Matrix multiplication | `ComputationalMathematics/Algorithms/MatMul.lean` | `fl_matMul` | `matMul_error_bound`, `matMul_backward_error_col` | Backward theorem is columnwise; each column may use a different perturbation. |
+| Outer product | `ComputationalMathematics/Algorithms/OuterProduct.lean` | `fl_outerProduct` | `outerProduct_error_bound`, `outerProduct_backward_error` | Useful for rank-one update reasoning. |
+| Recursive, pairwise, and tree summation | `ComputationalMathematics/Algorithms/Summation/Recursive/Core.lean`, `ComputationalMathematics/Algorithms/Summation/Pairwise/Core.lean`, and `ComputationalMathematics/Algorithms/Summation/Tree.lean` | recursive/tree sum algorithms | `recursiveSum_backward_error`, `recursiveSum_forward_error_bound`, `pairwiseSum_backward_error`, `pairwiseSum_forward_error_bound`, `backward_error`, `forward_error` | Prefer the narrow reusable leaves. `ComputationalMathematics/Algorithms/Summation.lean` is the complete published surface, including supported source-facing declarations. `SumTree.backward_error` and `SumTree.forward_error` are in the same namespace and have generic names. |
+| Insertion summation | `ComputationalMathematics/Algorithms/Summation/Insertion/{ActiveList,Executor,Schedule,RunningError,ScheduleExecution}.lean` | `IncreasingAbsList`, `fl_insertionSumList`, `InsertionScheduleTree`, `GreedyInsertionTree` | `GreedyInsertionTree.exactMergeCost_le`, `runningErrorBudget_exactWithUnitRoundoff_greedyInsertion_le`, `fl_insertionSumList_has_greedy_schedule_exactWithUnitRoundoff_of_ne_nil` | Import the narrow reusable layer. `ComputationalMathematics/Algorithms/Summation/Insertion.lean` is the complete family surface and also re-exports the Higham Section 4.1 examples. |
+| Forward substitution | `ComputationalMathematics/Algorithms/LinearSystems/Triangular/ForwardSubstitution.lean` | `fl_forwardSub` | `forwardSub_backward_error`, `fl_forwardSub_satisfies_spec` | Lower-triangular solve. Requires nonzero diagonal and lower-triangular zero pattern. |
+| Back substitution | `ComputationalMathematics/Algorithms/LinearSystems/Triangular/BackSubstitution.lean` | `fl_backSub` | `backSub_backward_error`, `backSub_backward_error_perturbed`, `backSub_backward_error_dual`, `fl_backSub_satisfies_spec` | Upper-triangular solve. Requires nonzero diagonal and upper-triangular zero pattern. |
+| Combined triangular solve | `ComputationalMathematics/Algorithms/LinearSystems/Triangular/Combined.lean` | `fl_forwardSub`, `fl_backSub` | `triangularSolve_backward_error` | Composes forward and back substitution. |
+| Triangular forward-error bounds | `ComputationalMathematics/Analysis/ForwardError.lean`, `Algorithms/LinearSystems/Triangular/DiagonalDominance.lean`, `Algorithms/LinearSystems/Triangular/ComparisonBounds.lean` | inverse and comparison quantities | `backSub_forward_error`, `forwardSub_forward_error`, `backSub_forward_error_diagDom`, `forwardSub_forward_error_comparison`, `forwardSub_forward_error_mu_bound` | These convert backward-error statements into forward-error bounds under matrix assumptions. |
+| M-matrix forward substitution | `ComputationalMathematics/Algorithms/MMatrix.lean` | M-matrix predicates and comparison quantities | `forwardSub_nonneg`, `mmatrix_forwardSub_relative_error` | Proves the Corollary 8.10 relative-error statement in mu-form. |
+| Inverse and triangular inverse bounds | `ComputationalMathematics/Algorithms/LinearSystems/Triangular/InverseBounds.lean` | inverse and norm bounds | `theorem_8_11_first_ineq`, `theorem_8_11_upper_bound` | Higham chapter 8 inverse-bound infrastructure. |
+| LU factorization backward error | `ComputationalMathematics/Algorithms/LU/GaussianElimination.lean` | `LUBackwardError` | `lu_backward_error_perturbation`, `lu_backward_error_relative`, `lu_backward_error_gamma` | Specification of computed LU factors and perturbation bounds. |
+| LU solve backward error | `ComputationalMathematics/Algorithms/LU/LUSolve.lean` | `fl_forwardSub`, `fl_backSub`, `LUBackwardError` | `lu_solve_backward_error`, `lu_solve_backward_error_tight`, `lu_solve_backward_error_mixed` | Composes LU factorization with triangular solves. |
+| Structured LU bounds | `ComputationalMathematics/Algorithms/LU/GrowthFactor.lean`, `SpecialMatrices.lean`, `Tridiagonal.lean`, `Doolittle.lean`, `ComputationalMathematics/Source/Higham/Chapter13/Theorem06/AssumptionModel.lean` | growth-factor and special-matrix specs; `IsTridiagonal`, `IsBanded` | `diagDom_lu_solve_backward_stable`, `spd_lu_backward_error`, `mmatrix_lu_backward_stable`, `banded_lu_backward_error`, `isBanded_one_one_of_isTridiagonal`, `isTridiagonal_of_isBanded_one_one`, `isBanded_mono`, `isBanded_common_of_le`, `doolittle_solve_backward_error`, `block_lu_solve_backward_error` | Some structured results are specification-level interfaces; inspect hypotheses. Use `isBanded_mono`/`isBanded_common_of_le` when a proof has a narrower lower/upper bandwidth than the source-facing common bandwidth. |
+| Cholesky factorization | `ComputationalMathematics/Algorithms/Cholesky/CholeskySpec.lean` | `CholeskyBackwardError` | `cholesky_backward_error_perturbation`, `cholesky_backward_error_relative`, `cholesky_spd_backward_stable` | Factorization contract for SPD-style analyses. |
 | Cholesky solve | `NumStability/Algorithms/Cholesky/CholeskySolve.lean` | `fl_forwardSub`, `fl_backSub`, `CholeskyBackwardError` | `cholesky_solve_backward_error_expanded`, `cholesky_solve_backward_error`, `cholesky_solve_spd_backward_stable` | Composes Cholesky factorization with two triangular solves. |
 | QR factorization and QR solve | `NumStability/Algorithms/QR/*.lean` | `householder`, `fl_householderApply`, `fl_householderQR_R`, `fl_householderQR_R_safe`, `fl_householderQR_Q_safe`, `fl_householderQR_safe_witness`, `fl_householderQR_rhs`, `fl_householderQR_rhs_safe`, `fl_householderQR_solve`, `fl_householderQR_solve_safe`, `givensRotation`, `givensC`, `givensS`, `fl_givensC`, `fl_givensS`, `fl_givensApply`, `fl_givensApplyMatrix`, `fl_givensApplyMatrixRect`, `fl_givensColumnStepMatrix`, `fl_givensColumnStepMatrixRect`, `GivensCoeffError`, `ColumnwiseGivensStepError`, `HouseholderQRWitness`, `HouseholderQRExplicitBackwardError`, `HouseholderQRBackwardError`, `HouseholderQRRhsPanelBackwardError`, `HouseholderQRPanelSolveBackwardError`, `GivensQRBackwardError`, `QRSolveBackwardError` | `HouseholderQRPanelSafeReady_square_of_global_gammaValid`, `fl_householderQR_Q_safe_orthogonal_of_global_gammaValid`, `fl_householderQR_safe_witness_Q_orthogonal_of_global_gammaValid`, `fl_householderQR_safe_witness_R_structured_backward_error_of_global_gammaValid`, `fl_householderQR_safe_witness_explicit_backward_error_of_global_gammaValid`, `fl_householderQR_R_safe_structured_backward_error_of_global_gammaValid`, `fl_householderQR_R_safe_structured_backward_error`, `fl_householderQR_R_safe_backward_error`, `fl_householderQR_R_structured_backward_error`, `fl_householderQR_rhs_safe_backward_error_of_global_gammaValid`, `fl_householderQR_rhs_safe_backward_error`, `fl_householderQR_solve_components_safe_backward_error_of_global_gammaValid`, `fl_householderQR_solve_components_safe_backward_error`, `fl_householderQR_solve_safe_backward_error_of_global_gammaValid`, `fl_householderQR_solve_safe_backward_error`, `fl_householderQRPanel_rhs_backward_error`, `fl_householderQR_rhs_backward_error`, `fl_householderQR_solve_components_backward_error`, `fl_householderQR_solve_backward_error`, `givensCoeff_norm_sq`, `givensCoeff_zero_second`, `givensRotation_constructed_orthogonal`, `fl_givensC_relative_error_conservative`, `fl_givensS_relative_error_conservative`, `fl_givensCoeffError_conservative`, `givensRotation_matMulVec_p`, `givensRotation_matMulVec_q`, `fl_givensApply_supplied_app_error`, `fl_givensApply_coeffError_app_error`, `fl_givensApply_computed_app_error_conservative`, `fl_givensApply_computed_matrix_step_error`, `fl_givensColumnStep_matrix_step_error`, `fl_givensApply_computed_matrix_step_error_rect`, `fl_givensColumnStep_matrix_step_error_rect`, `fl_givens_sequence_backward_error`, `fl_givens_sequence_backward_error_uniform`, `fl_givens_column_sequence_backward_error_uniform`, `fl_givens_panel_sequence_backward_error`, `fl_givens_panel_sequence_backward_error_uniform`, `fl_givens_column_panel_sequence_backward_error_uniform`, `householder_qr_backward`, `givens_qr_backward`, `qr_solve_backward_error_from_components`, `qr_solve_perturbation_bound` | Householder QR `R` has a zero-aware implementation-backed theorem: `fl_householderQR_R_safe_structured_backward_error` handles zero active columns by exact skip branches and nonzero columns by the concrete rounded Householder construction/application bridge. The `fl_householderQR_Q_safe` / `fl_householderQR_safe_witness` layer exposes the exact orthogonal `Q` witness associated with the safe rounded `R` run, and `fl_householderQR_safe_witness_explicit_backward_error_of_global_gammaValid` ties that `Q` directly to the perturbation equation; it is not yet a separately rounded accumulated `Q_hat`. QR solve now has a matching zero-aware path: `fl_householderQR_solve_safe_backward_error` combines safe QR, safe RHS-transform, and concrete back substitution. Prefer the `_of_global_gammaValid` wrappers when possible; they replace recursive safe-readiness hypotheses with one `gammaValid fp (11*n+23)` assumption. The remaining safe solve assumptions are `0 < n`, nonzero diagonal of computed `R_safe`, and global QR gamma validity. The older nonzero-panel theorems remain available for compatibility. Givens has exact and rounded coefficient kernels, conservative computed-coefficient vector and matrix-step bridges, current-matrix column-step sequence accumulation, and a uniform `gamma 8 * sqrt n` corollary; the sharper Higham Lemma 18.6/18.7 constants and the concrete annihilation schedule/triangular-shape proof for full Givens QR remain pending. |
 | Residual computation | `NumStability/Algorithms/IterativeRefinement.lean` | `fl_residual`, `ResidualError` | `conventional_residual_error` | Bound for the computed residual `fl(b - A*x_hat)`. |
 | Iterative refinement | `NumStability/Algorithms/IterativeRefinement.lean` | `SolverSpec`, `ResidualError` | `one_step_refinement_error_identity`, `one_step_residual_bound`, `one_step_backward_error_contraction`, `lu_refinement_backward_stable`, `refinement_forward_error_bound`, `thm_11_4_residual_bound` | Mixes exact algebra, solver specifications, and residual computation bounds. |
 | Stationary iteration | `NumStability/Algorithms/StationaryIteration.lean` | iteration/residual helpers | `one_step_error`, `local_error_simplified`, `residual_eq_A_error`, `one_step_residual`, `normwise_forward_bound`, `main_forward_bound`, `normwise_one_step_residual_bound`, `normwise_residual_bound` | Useful for harder compositional stability analyses. |
-| Matrix algebra infrastructure | `NumStability/Analysis/MatrixAlgebra.lean` | `RVec`, `RMat`, `RSqMat`, `RMatFn`, `frobNorm`, `infNorm`, `matrixMulVecCLM`, matrix products, identities, inverses | `matMul_id_right`, `matMul_id_left`, `matMul_assoc`, `matMul_vec_eq`, `matMulVec_matMul`, `matMulVec_const_mul_right`, `matMulVec_of_isRightInverse`, `matrixMulVecCLM_apply`, `matrixMulVecCLM_norm_eq_infNorm`, `matrixMulVecCLM_right_inverse_of_isRightInverse`, `matrixMulVecCLM_left_inverse_of_isRightInverse`, `frobNorm_matMul_le`, `abs_entry_le_frobNorm`, `abs_matMulVec_le_card_bound_infNormVec`, `IsOrthogonal.abs_matMulVec_le_card_infNormVec`, `row_sum_le_infNorm`, `continuous_vecNorm2`, `continuous_vecNorm2_matMulVec`, `isCompact_vecNorm2_unit_sphere`, `exists_vecNorm2_matMulVec_unit_minimizer`, `exists_vecNorm2_matMulVec_unit_maximizer`, `opNorm2_le_of_unit_vecNorm2_bound`, `opNorm2_eq_vecNorm2_matMulVec_of_unit_maximizer`, `exists_vecNorm2_matMulVec_unit_opNorm2_attained`, `matMulVecLowerNorm2`, `matMulVecLowerNorm2_attained`, `matMulVecLowerNorm2_le`, `matMulVecLowerNorm2_le_inv_opNorm2_of_isRightInverse`, `matMulVecLowerNorm2_eq_inv_opNorm2_of_isRightInverse`, `opNorm2_sub_le`, `vecNorm2_matMulVec_triple_le_opNorm2`, `vecNorm2_matMulVec_triple_le_opNorm2_of_unit`, `opNorm2_matMul_triple_le`, `opNorm2_inv_recip_le_vecNorm2_matMulVec_of_isRightInverse` | Exact matrix reasoning. `frobNorm` and `infNorm` are compatibility wrappers over Mathlib norms for legacy function-shaped matrices. `matrixMulVecCLM` views a Mathlib square matrix as its continuous linear `mulVec` action; `matrixMulVecCLM_norm_eq_infNorm` identifies its operator norm with the repository `infNorm`/Mathlib matrix `∞` operator norm; and the two `matrixMulVecCLM_*_inverse_of_isRightInverse` lemmas turn repository square-matrix right-inverse certificates into the corresponding CLM action identities. The `matMulVecLowerNorm2` family constructs the attained Euclidean lower norm of a finite matrix action on `||x||₂=1`; the unit-maximizer/attainment lemmas prove the exact finite-dimensional `opNorm2` is attained and `matMulVecLowerNorm2_eq_inv_opNorm2_of_isRightInverse` identifies a certified inverse's reciprocal operator norm with the lower norm. The `opNorm2_sub_le` and `opNorm2_matMul_triple_le` lemmas provide the exact Euclidean local-Schur triangle/product algebra; the vector-action `vecNorm2_matMulVec_triple_le_opNorm2` pair gives the corresponding unit-vector perturbation estimate. The `opNorm2` reciprocal lower-bound lemma turns a certified right inverse into the Euclidean unit-vector inequality `||Minv||₂⁻¹ <= ||M x||₂`, a reusable route for lower-norm source tables. |
-| Generic continuous-linear lower norm | `NumStability/Analysis/MatrixAlgebra.lean` | `continuousLinearMapLowerNorm` | `isCompact_norm_unit_sphere`, `exists_continuousLinearMap_unit_minimizer`, `continuousLinearMapLowerNorm_attained`, `continuousLinearMapLowerNorm_le`, `exists_continuousLinearMap_unit_maximizer`, `continuousLinearMap_opNorm_eq_norm_of_unit_maximizer`, `exists_continuousLinearMap_unit_opNorm_attained`, `continuousLinearMap_opNorm_pos_of_right_inverse`, `continuousLinearMapLowerNorm_le_inv_opNorm_of_inverse`, `inv_opNorm_le_continuousLinearMapLowerNorm_of_inverse`, `continuousLinearMapLowerNorm_eq_inv_opNorm_of_inverse`, `continuousLinearMap_triple_norm_le`, `continuousLinearMap_triple_norm_le_of_unit` | In a proper normed real vector space with nonempty unit sphere, continuous linear maps attain both the unit-sphere lower norm and operator norm. A two-sided continuous-linear inverse identifies the lower norm with the reciprocal Mathlib operator norm of the inverse. The triple-product lemmas give the generic subordinate-norm perturbation estimate for composed continuous-linear block actions. This is the source-faithful arbitrary-norm lower-table dependency used by the Chapter 13 Eq.13.18 route; the remaining work is tying the concrete Chapter 13 block actions and inverse certificates into this surface. |
-| Perturbation theory | `NumStability/Analysis/PerturbationTheory.lean` | residual and perturbation quantities | `forward_error_from_residual`, `componentwise_forward_error`, `forward_error_from_backward_error`, `componentwise_forward_error_exact`, `normwise_forward_error_exact` | Converts residual/backward-error hypotheses into forward-error conclusions. |
+| Matrix algebra infrastructure | `ComputationalMathematics/Analysis/MatrixAlgebra.lean` | `RVec`, `RMat`, `RSqMat`, `RMatFn`, `frobNorm`, `infNorm`, `matrixMulVecCLM`, matrix products, identities, inverses | `matMul_id_right`, `matMul_id_left`, `matMul_assoc`, `matMul_vec_eq`, `matMulVec_matMul`, `matMulVec_const_mul_right`, `matMulVec_of_isRightInverse`, `matrixMulVecCLM_apply`, `matrixMulVecCLM_norm_eq_infNorm`, `matrixMulVecCLM_right_inverse_of_isRightInverse`, `matrixMulVecCLM_left_inverse_of_isRightInverse`, `frobNorm_matMul_le`, `abs_entry_le_frobNorm`, `abs_matMulVec_le_card_bound_infNormVec`, `IsOrthogonal.abs_matMulVec_le_card_infNormVec`, `row_sum_le_infNorm`, `continuous_vecNorm2`, `continuous_vecNorm2_matMulVec`, `isCompact_vecNorm2_unit_sphere`, `exists_vecNorm2_matMulVec_unit_minimizer`, `exists_vecNorm2_matMulVec_unit_maximizer`, `opNorm2_le_of_unit_vecNorm2_bound`, `opNorm2_eq_vecNorm2_matMulVec_of_unit_maximizer`, `exists_vecNorm2_matMulVec_unit_opNorm2_attained`, `matMulVecLowerNorm2`, `matMulVecLowerNorm2_attained`, `matMulVecLowerNorm2_le`, `matMulVecLowerNorm2_le_inv_opNorm2_of_isRightInverse`, `matMulVecLowerNorm2_eq_inv_opNorm2_of_isRightInverse`, `opNorm2_sub_le`, `vecNorm2_matMulVec_triple_le_opNorm2`, `vecNorm2_matMulVec_triple_le_opNorm2_of_unit`, `opNorm2_matMul_triple_le`, `opNorm2_inv_recip_le_vecNorm2_matMulVec_of_isRightInverse` | Exact matrix reasoning. `frobNorm` and `infNorm` are compatibility wrappers over Mathlib norms for legacy function-shaped matrices. `matrixMulVecCLM` views a Mathlib square matrix as its continuous linear `mulVec` action; `matrixMulVecCLM_norm_eq_infNorm` identifies its operator norm with the repository `infNorm`/Mathlib matrix `∞` operator norm; and the two `matrixMulVecCLM_*_inverse_of_isRightInverse` lemmas turn repository square-matrix right-inverse certificates into the corresponding CLM action identities. The `matMulVecLowerNorm2` family constructs the attained Euclidean lower norm of a finite matrix action on `||x||₂=1`; the unit-maximizer/attainment lemmas prove the exact finite-dimensional `opNorm2` is attained and `matMulVecLowerNorm2_eq_inv_opNorm2_of_isRightInverse` identifies a certified inverse's reciprocal operator norm with the lower norm. The `opNorm2_sub_le` and `opNorm2_matMul_triple_le` lemmas provide the exact Euclidean local-Schur triangle/product algebra; the vector-action `vecNorm2_matMulVec_triple_le_opNorm2` pair gives the corresponding unit-vector perturbation estimate. The `opNorm2` reciprocal lower-bound lemma turns a certified right inverse into the Euclidean unit-vector inequality `||Minv||₂⁻¹ <= ||M x||₂`, a reusable route for lower-norm source tables. |
+| Generic continuous-linear lower norm | `ComputationalMathematics/Analysis/MatrixAlgebra.lean` | `continuousLinearMapLowerNorm` | `isCompact_norm_unit_sphere`, `exists_continuousLinearMap_unit_minimizer`, `continuousLinearMapLowerNorm_attained`, `continuousLinearMapLowerNorm_le`, `exists_continuousLinearMap_unit_maximizer`, `continuousLinearMap_opNorm_eq_norm_of_unit_maximizer`, `exists_continuousLinearMap_unit_opNorm_attained`, `continuousLinearMap_opNorm_pos_of_right_inverse`, `continuousLinearMapLowerNorm_le_inv_opNorm_of_inverse`, `inv_opNorm_le_continuousLinearMapLowerNorm_of_inverse`, `continuousLinearMapLowerNorm_eq_inv_opNorm_of_inverse`, `continuousLinearMap_triple_norm_le`, `continuousLinearMap_triple_norm_le_of_unit` | In a proper normed real vector space with nonempty unit sphere, continuous linear maps attain both the unit-sphere lower norm and operator norm. A two-sided continuous-linear inverse identifies the lower norm with the reciprocal Mathlib operator norm of the inverse. The triple-product lemmas give the generic subordinate-norm perturbation estimate for composed continuous-linear block actions. This is the source-faithful arbitrary-norm lower-table dependency used by the Chapter 13 Eq.13.18 route; the remaining work is tying the concrete Chapter 13 block actions and inverse certificates into this surface. |
+| Perturbation theory | `ComputationalMathematics/Analysis/PerturbationTheory.lean` | residual and perturbation quantities | `forward_error_from_residual`, `componentwise_forward_error`, `forward_error_from_backward_error`, `componentwise_forward_error_exact`, `normwise_forward_error_exact` | Converts residual/backward-error hypotheses into forward-error conclusions. |
 
 Householder QR now has two distinct `Q`-side APIs.  Use
 `fl_householderQR_Q_safe` / `HouseholderQRWitness` when you need the exact
@@ -5930,17 +5930,17 @@ When a theorem almost matches a goal, compare:
 This section is a human-readable companion to `examples/LibraryLookup.lean`
 for the Chapter 13 declarations.
 
-Canonical source entry: `NumStability/Source/Higham/Chapter13.lean`.
+Canonical source entry: `ComputationalMathematics/Source/Higham/Chapter13.lean`.
 Demmel's strengthened sharp multiplier bound and equality witness are owned by
-`NumStability/Source/Higham/Chapter13/DemmelSharpMultiplier.lean`; the
+`ComputationalMathematics/Source/Higham/Chapter13/DemmelSharpMultiplier.lean`; the
 historical `Algorithms/LU/Higham13DemmelSharpMultiplier.lean` path is an
 import-only compatibility wrapper.
 
 Reusable Block LU foundations are published through the sixteen-member
-`NumStability.Algorithms.LinearSystems.LU.BlockLU` aggregate: fifteen
+`ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU` aggregate: fifteen
 declaration-bearing leaves plus the five-leaf `VaryingBlocks` subaggregate.
 Numbered source correspondence is published through the exact 82-member
-`NumStability.Source.Higham.Chapter13.BlockLU` aggregate. Historical
+`ComputationalMathematics.Source.Higham.Chapter13.BlockLU` aggregate. Historical
 `NumStability.Algorithms.LU.BlockLU` is an exact two-import compatibility
 facade over those surfaces. The ten scoped sibling paths are now import-only
 compatibility wrappers:
@@ -6333,7 +6333,7 @@ The audited chapter summary is
 [`chapter20/CHAPTER20_FORMALIZATION_REPORT.md`](chapter20/CHAPTER20_FORMALIZATION_REPORT.md),
 with source-order classifications in
 [`chapter20/CHAPTER20_SOURCE_INVENTORY.md`](chapter20/CHAPTER20_SOURCE_INVENTORY.md).
-All modules below are re-exported by `NumStability.Algorithms` and
+All modules below are re-exported by `ComputationalMathematics.Algorithms` and
 `NumStability`.
 
 | Topic | Representative module | Public declarations |
@@ -6372,16 +6372,16 @@ remains PARTIAL/OPEN. Chapters 20-27 are `PASS` with no selected open row.
 | Chapter/topic | Public module(s) | Audit report |
 |---|---|---|
 | 21, underdetermined systems | [`Underdetermined/Higham21.lean`](../NumStability/Algorithms/Underdetermined/Higham21.lean) | [`chapter21/CHAPTER21_FORMALIZATION_REPORT.md`](chapter21/CHAPTER21_FORMALIZATION_REPORT.md) |
-| 22, Vandermonde systems | [`Source/Higham/Chapter22.lean`](../NumStability/Source/Higham/Chapter22.lean) | [`chapter22/CHAPTER22_FORMALIZATION_REPORT.md`](chapter22/CHAPTER22_FORMALIZATION_REPORT.md) |
-| 23, fast matrix multiplication | [`Source/Higham/Chapter23.lean`](../NumStability/Source/Higham/Chapter23.lean) | [`chapter23/CHAPTER23_FORMALIZATION_REPORT.md`](chapter23/CHAPTER23_FORMALIZATION_REPORT.md) |
-| 24, FFT and circulants | [`Source/Higham/Chapter24.lean`](../NumStability/Source/Higham/Chapter24.lean) | [`chapter24/CHAPTER24_FORMALIZATION_REPORT.md`](chapter24/CHAPTER24_FORMALIZATION_REPORT.md) |
-| 25, nonlinear systems | [`Source/Higham/Chapter25.lean`](../NumStability/Source/Higham/Chapter25.lean) | [`chapter25/CHAPTER25_FORMALIZATION_REPORT.md`](chapter25/CHAPTER25_FORMALIZATION_REPORT.md) |
-| 26, automatic error analysis | [`Source/Higham/Chapter26.lean`](../NumStability/Source/Higham/Chapter26.lean) | [`chapter26/CHAPTER26_FORMALIZATION_REPORT.md`](chapter26/CHAPTER26_FORMALIZATION_REPORT.md) |
-| 27, software issues | [`Source/Higham/Chapter27.lean`](../NumStability/Source/Higham/Chapter27.lean) | [`chapter27/CHAPTER27_FORMALIZATION_REPORT.md`](chapter27/CHAPTER27_FORMALIZATION_REPORT.md) |
+| 22, Vandermonde systems | [`Source/Higham/Chapter22.lean`](../ComputationalMathematics/Source/Higham/Chapter22.lean) | [`chapter22/CHAPTER22_FORMALIZATION_REPORT.md`](chapter22/CHAPTER22_FORMALIZATION_REPORT.md) |
+| 23, fast matrix multiplication | [`Source/Higham/Chapter23.lean`](../ComputationalMathematics/Source/Higham/Chapter23.lean) | [`chapter23/CHAPTER23_FORMALIZATION_REPORT.md`](chapter23/CHAPTER23_FORMALIZATION_REPORT.md) |
+| 24, FFT and circulants | [`Source/Higham/Chapter24.lean`](../ComputationalMathematics/Source/Higham/Chapter24.lean) | [`chapter24/CHAPTER24_FORMALIZATION_REPORT.md`](chapter24/CHAPTER24_FORMALIZATION_REPORT.md) |
+| 25, nonlinear systems | [`Source/Higham/Chapter25.lean`](../ComputationalMathematics/Source/Higham/Chapter25.lean) | [`chapter25/CHAPTER25_FORMALIZATION_REPORT.md`](chapter25/CHAPTER25_FORMALIZATION_REPORT.md) |
+| 26, automatic error analysis | [`Source/Higham/Chapter26.lean`](../ComputationalMathematics/Source/Higham/Chapter26.lean) | [`chapter26/CHAPTER26_FORMALIZATION_REPORT.md`](chapter26/CHAPTER26_FORMALIZATION_REPORT.md) |
+| 27, software issues | [`Source/Higham/Chapter27.lean`](../ComputationalMathematics/Source/Higham/Chapter27.lean) | [`chapter27/CHAPTER27_FORMALIZATION_REPORT.md`](chapter27/CHAPTER27_FORMALIZATION_REPORT.md) |
 | 28, test matrices | [`TestMatrices/Higham28.lean`](../NumStability/Algorithms/TestMatrices/Higham28.lean), [`Higham28Exact.lean`](../NumStability/Algorithms/TestMatrices/Higham28Exact.lean), [`Higham28Probability.lean`](../NumStability/Algorithms/TestMatrices/Higham28Probability.lean), [`Higham28Asymptotics.lean`](../NumStability/Algorithms/TestMatrices/Higham28Asymptotics.lean), [`Higham28GinibreMeasure.lean`](../NumStability/Algorithms/TestMatrices/Higham28GinibreMeasure.lean), [`Higham28GinibreIncidence.lean`](../NumStability/Algorithms/TestMatrices/Higham28GinibreIncidence.lean), [`Higham28GinibreExpectationGlue.lean`](../NumStability/Algorithms/TestMatrices/Higham28GinibreExpectationGlue.lean), [`Higham28RandsvdNorm.lean`](../NumStability/Algorithms/TestMatrices/Higham28RandsvdNorm.lean), [`Higham28Stewart.lean`](../NumStability/Algorithms/TestMatrices/Higham28Stewart.lean), [`Higham28Pascal.lean`](../NumStability/Algorithms/TestMatrices/Higham28Pascal.lean), [`Higham28PascalCondition.lean`](../NumStability/Algorithms/TestMatrices/Higham28PascalCondition.lean), [`Higham28ToeplitzGeneral.lean`](../NumStability/Algorithms/TestMatrices/Higham28ToeplitzGeneral.lean), [`Higham28ToeplitzCondition.lean`](../NumStability/Algorithms/TestMatrices/Higham28ToeplitzCondition.lean), [`Higham28Companion.lean`](../NumStability/Algorithms/TestMatrices/Higham28Companion.lean), [`Higham28CompanionSpectral.lean`](../NumStability/Algorithms/TestMatrices/Higham28CompanionSpectral.lean) | [`chapter28/CHAPTER28_FORMALIZATION_REPORT.md`](chapter28/CHAPTER28_FORMALIZATION_REPORT.md) |
 
 Chapter 27 Problem 27.6 is available from
-`NumStability.Source.Higham.Chapter27.Problem06`. Its exact Halley
+`ComputationalMathematics.Source.Higham.Chapter27.Problem06`. Its exact Halley
 specialization, scaled recurrence, invariant, monotone enclosure, and cubic
 error identity/bound are proved; only the machine-dependent MATLAB stopping
 claim remains deferred.
@@ -6446,7 +6446,7 @@ Current reusable declarations:
 
 ## Higham Chapter 17: Stationary Iterative Methods — infinite-series surfaces
 
-Canonical module family: `NumStability/Source/Higham/Chapter17.lean` (the historical `Algorithms/StationaryIterationSeries.lean` path remains an import-only wrapper).
+Canonical module family: `ComputationalMathematics/Source/Higham/Chapter17.lean` (the historical `Algorithms/StationaryIterationSeries.lean` path remains an import-only wrapper).
 
 | Topic | Declarations |
 |---|---|

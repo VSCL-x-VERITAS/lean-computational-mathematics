@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities
 
 /-!
-# NumStability.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities`.
+Declaration names and mathematical terminology are unchanged.
 -/

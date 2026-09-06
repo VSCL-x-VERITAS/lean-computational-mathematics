@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion`. -/
+
+#check NumStability.higham14_problem14_3_left_residual_eq_mul_right_residual
+#check NumStability.higham14_problem14_3_max_residual_ratio_infNorm_le_kappa
+#check NumStability.higham14_problem14_3_right_residual_eq_mul_left_residual

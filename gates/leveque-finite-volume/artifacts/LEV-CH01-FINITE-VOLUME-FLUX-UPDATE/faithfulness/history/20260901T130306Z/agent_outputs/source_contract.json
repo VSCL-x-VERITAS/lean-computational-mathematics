@@ -1,0 +1,110 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Section 1.2 says the values are modified in each time step by edge fluxes, but does not write indices, time levels, cell-volume factors, or a delta-t/delta-x formula.",
+      "impact": "A formal theorem may instantiate the conservative principle with a standard flux-difference formula, but its exact indexing, scaling, and boundary conventions are additional structure not fixed here.",
+      "issue": "No explicit discrete update equation is displayed in the cited passage."
+    },
+    {
+      "evidence": "The source asks for numerical flux functions that approximate the correct fluxes 'reasonably well' without a consistency, stability, or error inequality in this paragraph.",
+      "impact": "No quantitative accuracy, CFL, monotonicity, or convergence condition may be attributed to this introductory claim alone.",
+      "issue": "The quality requirement for a 'good' numerical flux is qualitative."
+    },
+    {
+      "evidence": "The paragraph after (1.11) says solving the Riemann problem yields information for a flux, while the next page notes that exact solutions can be too expensive and approximate Riemann solvers are often used.",
+      "impact": "Requiring an exact solver would be narrower than the finite-volume update principle stated by the source.",
+      "issue": "The source does not commit to an exact versus approximate Riemann solver here."
+    }
+  ],
+  "batch_source_contract_sha256": "7b946c2a9794a673acc69e1d657a4e46f99d38880d0bf9cd1652eb49ee59a332",
+  "contract_plain_english": "A finite-volume time step changes each cell average by the fluxes through that cell's edges. Those numerical edge fluxes are built from the available approximate cell averages - often through neighboring-state Riemann problems - and must represent the conservative physical flux balance.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Equation (1.10) and the sentence immediately following it",
+      "location": "raw PDF page 26; printed Chapter 1 page 4",
+      "observation": "The integral conservation law states that the total conserved quantity between two endpoints changes only through flux at those endpoints, with left-end flux minus right-end flux in (1.10)."
+    },
+    {
+      "anchor": "Section 1.2 sentence beginning 'These values are modified in each time step'",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "Cell-average values are modified during each time step by flux through grid-cell edges."
+    },
+    {
+      "anchor": "Remainder of the same Section 1.2 sentence",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "The central numerical task is to construct numerical flux functions that reasonably approximate the correct fluxes using the approximate cell averages, which are the only available data."
+    },
+    {
+      "anchor": "Paragraph immediately following equation (1.11)",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "At an interface between neighboring cell averages Q_{i-1} and Q_i, solving a Riemann problem with q_l = Q_{i-1} and q_r = Q_i supplies information used to compute a numerical flux and update the cell averages over a time step."
+    }
+  ],
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "statement": {
+    "binders": [
+      "Approximate cell averages on a finite-volume grid at the beginning of a time step.",
+      "Numerical fluxes associated with the edges of each grid cell.",
+      "A positive time-step interval over which the cell averages are updated."
+    ],
+    "conclusions": [
+      "Each cell average is modified over a time step by the fluxes through the edges of that cell.",
+      "The update follows the conservative balance principle that change in a cell's total quantity is determined by incoming and outgoing boundary fluxes.",
+      "Riemann-problem information at an interface can be used to compute the numerical flux needed for this cell-average update."
+    ],
+    "definitions_and_conventions": [
+      "A numerical flux is an approximation to the correct physical flux through a cell edge.",
+      "Approximate cell averages are the only data assumed available in this introductory finite-volume description.",
+      "The integral law (1.10) supplies the orientation: in one dimension the left endpoint contributes inflow and the right endpoint contributes outflow under the displayed convention.",
+      "Neighboring averages Q_{i-1} and Q_i provide left and right states at their shared edge."
+    ],
+    "hypotheses": [
+      "The numerical flux at an edge is computed from available approximate cell-average data and is intended to approximate the correct physical flux through that edge.",
+      "For a one-dimensional interface between cells i-1 and i, the neighboring averages may be used as Riemann states q_l = Q_{i-1} and q_r = Q_i."
+    ],
+    "implicit_context": [
+      "The method is conservative because a shared edge flux transfers quantity between neighboring cells rather than creating an independent source.",
+      "The passage describes the update principle qualitatively and does not display a fully indexed time-discrete formula.",
+      "Exact and approximate Riemann solvers are both compatible with the stated principle so long as their information is used to form an adequate numerical flux.",
+      "The discussion targets discontinuous solutions and therefore relies on integral rather than pointwise differential balance."
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "A cell's change is governed by flux through its boundary edges, consistent with the integral conservation law."
+        ],
+        "topic": "conservative balance"
+      },
+      {
+        "details": [
+          "Numerical flux construction is based on approximate cell averages, not exact pointwise solution values."
+        ],
+        "topic": "available data"
+      },
+      {
+        "details": [
+          "Adjacent cell averages become left/right Riemann states used to obtain an interface flux."
+        ],
+        "topic": "interface coupling"
+      },
+      {
+        "details": [
+          "The computed edge fluxes modify cell averages over each time step."
+        ],
+        "topic": "time advancement"
+      }
+    ]
+  },
+  "task_id": "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE",
+  "undebatable_constraints": [
+    "The updated quantities are cell averages, not point samples.",
+    "The update is driven by flux through cell edges during each time step.",
+    "Numerical fluxes must approximate the correct physical fluxes.",
+    "The flux construction uses approximate cell averages as the available data.",
+    "At a one-dimensional interface, neighboring cell averages may serve as q_l and q_r in a Riemann problem used to compute the numerical flux.",
+    "The update must respect the integral conservation principle of boundary-flux balance.",
+    "The source passage does not require an exact Riemann solution or prescribe a particular numerical flux formula."
+  ]
+}

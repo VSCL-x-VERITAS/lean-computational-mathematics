@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Equation35.HymanBlockFactorization
+import ComputationalMathematics.Source.Higham.Chapter14.Equation35
 
 /-!
-# NumStability.Source.Higham.Chapter14.Equation35
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Equation35`.
+Declaration names and mathematical terminology are unchanged.
 -/

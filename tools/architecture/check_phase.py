@@ -33,17 +33,24 @@ except ModuleNotFoundError:  # Support import as tools.architecture.check_phase.
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_PHASE_DIR = Path(
-    "docs/architecture/phases/2026-08-repository-reorganization"
-)
+PHASES_ROOT = Path("docs/architecture/phases")
+ACTIVE_PHASE_POINTER = PHASES_ROOT / "active-phase.json"
+LEGACY_DEFAULT_PHASE_DIR = PHASES_ROOT / "2026-08-repository-reorganization"
 
 SCHEMA_VERSION = 1
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 SHA256_RE = re.compile(r"^[0-9A-Fa-f]{64}$")
 ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]*$")
 CHECKPOINT_ID_RE = re.compile(r"^C[0-9]{4}$")
+RECORD_FILE_RE = {
+    "branches": re.compile(r"^B[0-9]{4}\.json$"),
+    "checkpoints": re.compile(r"^C[0-9]{4}\.json$"),
+    "projections": re.compile(r"^P[0-9]{4}\.json$"),
+    "requests": re.compile(r"^R[0-9]{4}[A-Z]?\.json$"),
+}
 
 PHASE_STATUSES = {"draft", "active", "integration", "closed", "superseded", "cancelled"}
+TERMINAL_PHASE_STATUSES = {"closed", "superseded", "cancelled"}
 MILESTONE_STATUSES = {"planned", "ready", "accepted", "superseded", "cancelled"}
 BRANCH_STATUSES = {
     "planned",
@@ -63,6 +70,13 @@ REQUEST_STATUSES = {
     "expired",
     "withdrawn",
 }
+INTEGRATION_AMENDMENT_KIND = "integration_amendment"
+INTEGRATION_AMENDMENT_MANIFEST_HEADER = (
+    "path",
+    "preimage_blob_oid",
+    "preimage_sha256",
+    "postimage_sha256",
+)
 PROJECTION_STATUSES = {"active", "retired", "superseded"}
 GATE_STATUSES = {"PASS", "FAIL", "NOT_RUN", "NOT_APPLICABLE"}
 COMPLETION_STATUSES = {"incomplete", "complete"}
@@ -425,7 +439,13 @@ class PhaseValidator:
             self.problems.violation(context, "path rules must be sorted by match and path")
         return result
 
-    def patch_paths(self, artifact: Artifact | None, context: str) -> list[str]:
+    def patch_paths(
+        self,
+        artifact: Artifact | None,
+        context: str,
+        *,
+        require_sorted: bool = True,
+    ) -> list[str]:
         if artifact is None:
             return []
         path = self.resolve_repo_path(artifact.path, f"{context}.path")
@@ -465,7 +485,7 @@ class PhaseValidator:
             self.problems.malformed(context, "patch contains no `diff --git` file header")
         if len(changed) != len(set(changed)):
             self.problems.malformed(context, "patch repeats a file diff")
-        if changed != sorted(changed):
+        if require_sorted and changed != sorted(changed):
             self.problems.violation(context, "file diffs must be sorted by path")
         return changed
 
@@ -539,7 +559,11 @@ class PhaseValidator:
         if not self.commit_exists(commit, context):
             return None
         raw = self.run_git(
-            ["ls-tree", "-r", "-z", commit, "--", "NumStability.lean", "NumStability"],
+            [
+                "ls-tree", "-r", "-z", commit, "--",
+                "NumStability.lean", "NumStability",
+                "ComputationalMathematics.lean", "ComputationalMathematics",
+            ],
             context,
         )
         if raw is None:
@@ -564,7 +588,8 @@ class PhaseValidator:
         layout = self.git_json_at(commit, "docs/architecture/layout-exceptions.json", context)
         if tiers is None or layout is None:
             return None
-        if tiers.get("schema_version") != 1:
+        # TIER-01: schema 2 keeps the exact/prefixes/tiers keys this reader uses.
+        if tiers.get("schema_version") not in (1, 2):
             self.problems.malformed(context, "historical tiers.json must use schema_version 1")
             return None
         allowed_tiers = tiers.get("tiers")
@@ -1352,7 +1377,17 @@ class PhaseValidator:
         if not directory.is_dir():
             self.problems.malformed(self.relative_context(directory), "required record directory is missing")
             return []
-        return sorted(directory.glob("*.json"), key=lambda path: path.name)
+        pattern = RECORD_FILE_RE.get(name)
+        if pattern is None:
+            self.problems.malformed(
+                self.relative_context(directory),
+                f"unknown record directory {name!r}",
+            )
+            return []
+        return sorted(
+            (path for path in directory.glob("*.json") if pattern.fullmatch(path.name)),
+            key=lambda path: path.name,
+        )
 
     def load_checkpoint_records(self) -> None:
         for path in self.json_files("checkpoints"):
@@ -1604,10 +1639,10 @@ class PhaseValidator:
                 obj.get("destination_prefixes"), f"{context}.destination_prefixes"
             )
             for rule in obj["_destination_rules"]:
-                if rule.match != "prefix":
+                if rule.match not in {"prefix", "exact"}:
                     self.problems.malformed(
                         f"{context}.destination_prefixes",
-                        "destination rules must all use match 'prefix'",
+                        "destination rules must use match 'prefix' or 'exact'",
                     )
             obj["_forbidden_rules"] = self.path_rules(obj.get("forbidden_paths"), f"{context}.forbidden_paths")
             sorted_unique_strings(obj.get("shared_request_ids"), f"{context}.shared_request_ids", self.problems)
@@ -1659,6 +1694,9 @@ class PhaseValidator:
             context = self.relative_context(path)
             record = self.read_json_file(path, context)
             if record is None:
+                continue
+            if record.get("record_kind") == INTEGRATION_AMENDMENT_KIND:
+                self.load_integration_amendment_record(path, context, record)
                 continue
             required = {
                 "schema_version", "record_kind", "phase_id", "request_id", "lane_id", "wave_id",
@@ -1752,6 +1790,535 @@ class PhaseValidator:
                 self.problems.malformed(context, f"duplicate request_id {request_id}")
             obj["_context"] = context
             self.requests[request_id] = obj
+
+    def load_integration_amendment_record(
+        self, path: Path, context: str, record: dict[str, Any]
+    ) -> None:
+        """Load a reviewed repair rooted in an in-flight integration index.
+
+        Unlike a ``shared_file_request``, an integration amendment is not
+        falsely projected back onto an accepted checkpoint.  Its exact
+        preimages live in the hash-pinned postimage manifest, and its target
+        commit records the HEAD whose staged index the amendment repaired.
+        """
+
+        required = {
+            "schema_version",
+            "record_kind",
+            "phase_id",
+            "request_id",
+            "lane_id",
+            "requester_id",
+            "created_at",
+            "target_branch",
+            "target_head_sha",
+            "target_index_staged_paths",
+            "paths",
+            "preimage_blobs",
+            "rationale",
+            "patch",
+            "postimages",
+            "predecessor_postimages",
+            "review",
+            "approval",
+            "depends_on",
+            "blocks",
+            "status",
+            "supersedes",
+            "superseded_by",
+            "resolution",
+        }
+        obj = require_keys(record, context, self.problems, required)
+        if obj is None:
+            return
+        if obj.get("schema_version") != SCHEMA_VERSION:
+            self.problems.malformed(context, f"expected schema_version {SCHEMA_VERSION}")
+        if obj.get("phase_id") != self.phase_id:
+            self.problems.violation(context, "phase_id does not match phase.json")
+        request_id = required_string(obj, "request_id", context, self.problems)
+        if request_id is None:
+            return
+        if not ID_RE.fullmatch(request_id) or path.stem != request_id:
+            self.problems.malformed(
+                context, "request_id must be a slug matching the filename stem"
+            )
+        for key in (
+            "lane_id",
+            "requester_id",
+            "created_at",
+            "target_branch",
+            "target_head_sha",
+            "rationale",
+        ):
+            required_string(obj, key, context, self.problems)
+        if isinstance(obj.get("created_at"), str) and not is_rfc3339(obj["created_at"]):
+            self.problems.malformed(
+                f"{context}.created_at", "expected an RFC3339 timestamp with timezone"
+            )
+        target_head = obj.get("target_head_sha")
+        if isinstance(target_head, str):
+            self.commit_exists(target_head, f"{context}.target_head_sha")
+        staged_paths = obj.get("target_index_staged_paths")
+        if not isinstance(staged_paths, int) or isinstance(staged_paths, bool) or staged_paths < 1:
+            self.problems.malformed(
+                f"{context}.target_index_staged_paths", "expected a positive integer"
+            )
+
+        paths = sorted_unique_strings(
+            obj.get("paths"), f"{context}.paths", self.problems, allow_empty=False
+        )
+        for affected in paths:
+            if not is_repo_path(affected):
+                self.problems.malformed(
+                    f"{context}.paths", f"invalid repository-relative path {affected!r}"
+                )
+        preimages = obj.get("preimage_blobs")
+        if not isinstance(preimages, list):
+            self.problems.malformed(f"{context}.preimage_blobs", "expected a list")
+            preimages = []
+        parsed_preimages: dict[str, str] = {}
+        preimage_order: list[str] = []
+        for index, preimage_value in enumerate(preimages):
+            item_context = f"{context}.preimage_blobs[{index}]"
+            preimage = require_keys(
+                preimage_value, item_context, self.problems, {"path", "blob_oid"}
+            )
+            if preimage is None:
+                continue
+            preimage_path = required_string(preimage, "path", item_context, self.problems)
+            blob = preimage.get("blob_oid")
+            if not isinstance(blob, str) or not SHA1_RE.fullmatch(blob):
+                self.problems.malformed(
+                    f"{item_context}.blob_oid",
+                    "integration-amendment preimages require a lowercase 40-hex blob OID",
+                )
+                continue
+            if preimage_path is not None:
+                if preimage_path in parsed_preimages:
+                    self.problems.malformed(
+                        item_context, f"duplicate preimage path {preimage_path}"
+                    )
+                parsed_preimages[preimage_path] = blob
+                preimage_order.append(preimage_path)
+        if preimage_order != sorted(preimage_order):
+            self.problems.violation(
+                f"{context}.preimage_blobs", "preimage rows must be sorted by path"
+            )
+        if set(parsed_preimages) != set(paths):
+            self.problems.violation(
+                f"{context}.preimage_blobs",
+                "preimage paths must exactly equal amendment paths",
+            )
+        obj["_preimages"] = parsed_preimages
+
+        obj["_patch"] = self.artifact(obj.get("patch"), f"{context}.patch")
+        obj["_postimages_artifact"] = self.artifact(
+            obj.get("postimages"), f"{context}.postimages"
+        )
+        obj["_review_artifact"] = self.artifact(obj.get("review"), f"{context}.review")
+        obj["_approval_artifact"] = self.artifact(
+            obj.get("approval"), f"{context}.approval"
+        )
+        predecessor_values = obj.get("predecessor_postimages")
+        if not isinstance(predecessor_values, list):
+            self.problems.malformed(
+                f"{context}.predecessor_postimages", "expected a list"
+            )
+            predecessor_values = []
+        predecessor_artifacts = [
+            self.artifact(value, f"{context}.predecessor_postimages[{index}]")
+            for index, value in enumerate(predecessor_values)
+        ]
+        predecessor_paths = [
+            artifact.path
+            for artifact in predecessor_artifacts
+            if artifact is not None
+        ]
+        if predecessor_paths != sorted(set(predecessor_paths)):
+            self.problems.violation(
+                f"{context}.predecessor_postimages",
+                "artifacts must be unique and sorted by path",
+            )
+        request_prefix = self.relative_context(self.phase_dir / "requests") + "/"
+        own_manifest = self.relative_context(
+            self.phase_dir / "requests" / f"{request_id}-postimages.tsv"
+        )
+        for index, artifact in enumerate(predecessor_artifacts):
+            if artifact is not None and (
+                not artifact.path.startswith(request_prefix)
+                or not artifact.path.endswith("-postimages.tsv")
+                or artifact.path == own_manifest
+            ):
+                self.problems.violation(
+                    f"{context}.predecessor_postimages[{index}].path",
+                    "must name a different request postimage manifest in this phase",
+                )
+        obj["_predecessor_postimages_artifacts"] = predecessor_artifacts
+        expected_artifact_paths = {
+            "_patch": self.relative_context(
+                self.phase_dir / "requests" / f"{request_id}.patch"
+            ),
+            "_postimages_artifact": self.relative_context(
+                self.phase_dir / "requests" / f"{request_id}-postimages.tsv"
+            ),
+            "_review_artifact": self.relative_context(
+                self.phase_dir / "requests" / f"{request_id}-review.md"
+            ),
+            "_approval_artifact": self.relative_context(
+                self.phase_dir / "requests" / f"{request_id}-approval.md"
+            ),
+        }
+        for key, expected in expected_artifact_paths.items():
+            artifact = obj.get(key)
+            if isinstance(artifact, Artifact) and artifact.path != expected:
+                self.problems.violation(
+                    f"{context}.{key.removeprefix('_').removesuffix('_artifact')}.path",
+                    f"artifact must be {expected}",
+                )
+        changed_paths = self.patch_paths(
+            obj.get("_patch"), f"{context}.patch", require_sorted=False
+        )
+        if len(changed_paths) != len(paths) or set(changed_paths) != set(paths):
+            self.problems.violation(
+                f"{context}.patch",
+                "patch paths must uniquely and exactly equal amendment paths: "
+                f"expected {paths}, found {changed_paths}",
+            )
+        obj["_postimages"], preimage_digests = self.validate_integration_amendment_manifest(
+            obj.get("_postimages_artifact"),
+            context,
+            paths,
+            parsed_preimages,
+            obj.get("status"),
+            (
+                obj.get("resolution", {}).get("commit_sha")
+                if isinstance(obj.get("resolution"), dict)
+                else None
+            ),
+        )
+        self.validate_integration_amendment_predecessors(
+            predecessor_artifacts,
+            context,
+            obj.get("target_head_sha"),
+            paths,
+            parsed_preimages,
+            preimage_digests,
+        )
+
+        for key in ("depends_on", "blocks"):
+            obj[f"_{key}"] = sorted_unique_strings(
+                obj.get(key), f"{context}.{key}", self.problems, allow_empty=False
+            )
+        if obj.get("status") not in REQUEST_STATUSES:
+            self.problems.malformed(
+                f"{context}.status", f"expected one of {sorted(REQUEST_STATUSES)}"
+            )
+        required_string(obj, "supersedes", context, self.problems, nullable=True)
+        required_string(obj, "superseded_by", context, self.problems, nullable=True)
+        resolution = require_keys(
+            obj.get("resolution"),
+            f"{context}.resolution",
+            self.problems,
+            {
+                "commit_sha",
+                "checkpoint_id",
+                "resolved_at",
+                "resolved_by",
+                "validation_evidence",
+                "reason",
+            },
+        )
+        if resolution is not None:
+            for key in ("commit_sha", "checkpoint_id", "resolved_at", "resolved_by", "reason"):
+                required_string(
+                    resolution,
+                    key,
+                    f"{context}.resolution",
+                    self.problems,
+                    nullable=True,
+                )
+            if resolution.get("resolved_at") is not None and not is_rfc3339(
+                resolution["resolved_at"]
+            ):
+                self.problems.malformed(
+                    f"{context}.resolution.resolved_at",
+                    "expected an RFC3339 timestamp with timezone",
+                )
+            evidence = resolution.get("validation_evidence")
+            if not isinstance(evidence, list):
+                self.problems.malformed(
+                    f"{context}.resolution.validation_evidence", "expected a list"
+                )
+                evidence = []
+            resolution["_evidence"] = [
+                self.artifact(item, f"{context}.resolution.validation_evidence[{index}]")
+                for index, item in enumerate(evidence)
+            ]
+        if request_id in self.requests:
+            self.problems.malformed(context, f"duplicate request_id {request_id}")
+        obj["_context"] = context
+        self.requests[request_id] = obj
+
+    def validate_integration_amendment_manifest(
+        self,
+        artifact: Artifact | None,
+        context: str,
+        expected_paths: list[str],
+        expected_preimages: dict[str, str],
+        status: Any,
+        resolution_commit: Any,
+    ) -> tuple[dict[str, str], dict[str, str]]:
+        if artifact is None:
+            return {}, {}
+        manifest_path = self.resolve_repo_path(
+            artifact.path, f"{context}.postimages.path"
+        )
+        if manifest_path is None or not manifest_path.is_file():
+            return {}, {}
+        try:
+            raw = manifest_path.read_bytes()
+        except OSError as error:
+            self.problems.malformed(
+                f"{context}.postimages", f"cannot read postimage manifest: {error}"
+            )
+            return {}, {}
+        if b"\r" in raw:
+            self.problems.violation(
+                f"{context}.postimages", "postimage manifest must use LF line endings"
+            )
+        if raw and not raw.endswith(b"\n"):
+            self.problems.violation(
+                f"{context}.postimages", "postimage manifest must end with a newline"
+            )
+        try:
+            reader = csv.DictReader(
+                raw.decode("utf-8-sig").splitlines(), delimiter="\t", strict=True
+            )
+            header = tuple(reader.fieldnames or ())
+            rows = [dict(row) for row in reader]
+        except (UnicodeError, csv.Error) as error:
+            self.problems.malformed(
+                f"{context}.postimages", f"cannot parse postimage manifest: {error}"
+            )
+            return {}, {}
+        if header != INTEGRATION_AMENDMENT_MANIFEST_HEADER:
+            self.problems.malformed(
+                f"{context}.postimages",
+                "header must be exactly: "
+                + "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER),
+            )
+        if any(None in row or any(value is None for value in row.values()) for row in rows):
+            self.problems.malformed(
+                f"{context}.postimages", "malformed row or wrong column count"
+            )
+        manifest_paths = [row.get("path", "") for row in rows]
+        if manifest_paths != expected_paths:
+            self.problems.violation(
+                f"{context}.postimages",
+                "manifest rows must be sorted, unique, and exactly equal amendment paths",
+            )
+        postimages: dict[str, str] = {}
+        preimage_digests: dict[str, str] = {}
+        for index, row in enumerate(rows):
+            row_context = f"{context}.postimages[{index}]"
+            affected_value = row.get("path", "")
+            oid_value = row.get("preimage_blob_oid", "")
+            pre_digest_value = row.get("preimage_sha256", "")
+            post_digest_value = row.get("postimage_sha256", "")
+            affected = affected_value if isinstance(affected_value, str) else ""
+            oid = oid_value if isinstance(oid_value, str) else ""
+            pre_digest = (
+                pre_digest_value if isinstance(pre_digest_value, str) else ""
+            )
+            post_digest = (
+                post_digest_value if isinstance(post_digest_value, str) else ""
+            )
+            if oid != expected_preimages.get(affected):
+                self.problems.violation(
+                    f"{row_context}.preimage_blob_oid",
+                    "manifest preimage OID must equal the request record",
+                )
+            if not SHA256_RE.fullmatch(pre_digest):
+                self.problems.malformed(
+                    f"{row_context}.preimage_sha256", "expected 64 hexadecimal characters"
+                )
+            elif affected:
+                preimage_digests[affected] = pre_digest.upper()
+            if not SHA256_RE.fullmatch(post_digest):
+                self.problems.malformed(
+                    f"{row_context}.postimage_sha256", "expected 64 hexadecimal characters"
+                )
+            if affected and SHA256_RE.fullmatch(post_digest):
+                postimages[affected] = post_digest.upper()
+                source: str | None = None
+                source_label: str | None = None
+                if status == "active":
+                    source = f":{affected}"
+                    source_label = "current index"
+                elif (
+                    status == "applied"
+                    and isinstance(resolution_commit, str)
+                    and SHA1_RE.fullmatch(resolution_commit)
+                ):
+                    source = f"{resolution_commit}:{affected}"
+                    source_label = f"resolution commit {resolution_commit}"
+                if source is not None and source_label is not None:
+                    payload = self.run_git(
+                        ["show", source], f"{row_context}.postimage_sha256"
+                    )
+                    if payload is not None:
+                        actual = hashlib.sha256(payload).hexdigest().upper()
+                        if actual != post_digest.upper():
+                            self.problems.violation(
+                                f"{row_context}.postimage_sha256",
+                                f"{source_label} hashes to {actual}, not "
+                                f"{post_digest.upper()}",
+                            )
+        return postimages, preimage_digests
+
+    def validate_integration_amendment_predecessors(
+        self,
+        artifacts: list[Artifact | None],
+        context: str,
+        target_head: Any,
+        expected_paths: list[str],
+        expected_preimages: dict[str, str],
+        expected_preimage_sha256: dict[str, str],
+    ) -> None:
+        """Prove each amendment preimage from HEAD or a pinned predecessor."""
+
+        predecessor_overlaps: set[str] = set()
+        chained: set[str] = set()
+        for artifact_index, artifact in enumerate(artifacts):
+            if artifact is None:
+                continue
+            predecessor_context = (
+                f"{context}.predecessor_postimages[{artifact_index}]"
+            )
+            path = self.resolve_repo_path(
+                artifact.path, f"{predecessor_context}.path"
+            )
+            if path is None or not path.is_file():
+                continue
+            try:
+                raw = path.read_bytes()
+                reader = csv.DictReader(
+                    raw.decode("utf-8-sig").splitlines(), delimiter="\t", strict=True
+                )
+                header = tuple(reader.fieldnames or ())
+                rows = [dict(row) for row in reader]
+            except (OSError, UnicodeError, csv.Error) as error:
+                self.problems.malformed(
+                    predecessor_context,
+                    f"cannot parse predecessor manifest: {error}",
+                )
+                continue
+            if b"\r" in raw or (raw and not raw.endswith(b"\n")):
+                self.problems.violation(
+                    predecessor_context,
+                    "predecessor manifest must use LF and end with a newline",
+                )
+            if header != INTEGRATION_AMENDMENT_MANIFEST_HEADER:
+                self.problems.malformed(
+                    predecessor_context,
+                    "header must be exactly: "
+                    + "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER),
+                )
+            if any(
+                None in row or any(value is None for value in row.values())
+                for row in rows
+            ):
+                self.problems.malformed(
+                    predecessor_context, "malformed row or wrong column count"
+                )
+            predecessor_paths = [
+                value if isinstance(value := row.get("path", ""), str) else ""
+                for row in rows
+            ]
+            if predecessor_paths != sorted(set(predecessor_paths)):
+                self.problems.violation(
+                    predecessor_context, "rows must be unique and sorted by path"
+                )
+            artifact_chains = 0
+            for row_index, row in enumerate(rows):
+                affected_value = row.get("path", "")
+                affected = (
+                    affected_value if isinstance(affected_value, str) else ""
+                )
+                if affected not in expected_paths:
+                    continue
+                artifact_chains += 1
+                row_context = f"{predecessor_context}[{row_index}]"
+                if affected in predecessor_overlaps:
+                    self.problems.violation(
+                        row_context,
+                        "amendment path appears in more than one predecessor manifest",
+                    )
+                predecessor_overlaps.add(affected)
+                predecessor_post_value = row.get("postimage_sha256", "")
+                predecessor_post = (
+                    predecessor_post_value.upper()
+                    if isinstance(predecessor_post_value, str)
+                    else ""
+                )
+                expected_pre = expected_preimage_sha256.get(affected)
+                if (
+                    not SHA256_RE.fullmatch(predecessor_post)
+                    or predecessor_post != expected_pre
+                ):
+                    self.problems.violation(
+                        f"{row_context}.postimage_sha256",
+                        "predecessor postimage must equal amendment preimage SHA-256",
+                    )
+                else:
+                    chained.add(affected)
+            if artifact_chains == 0:
+                self.problems.violation(
+                    predecessor_context,
+                    "pinned predecessor manifest does not chain any amendment path",
+                )
+
+        if not isinstance(target_head, str) or not SHA1_RE.fullmatch(target_head):
+            return
+        for affected in expected_paths:
+            output = self.run_git(
+                ["rev-parse", f"{target_head}:{affected}"],
+                f"{context}.preimage_blobs[{affected}]",
+            )
+            actual = (
+                output.decode("ascii", errors="replace").strip()
+                if output is not None
+                else None
+            )
+            expected_oid = expected_preimages.get(affected)
+            if actual == expected_oid:
+                if affected in predecessor_overlaps:
+                    self.problems.violation(
+                        f"{context}.preimage_blobs[{affected}]",
+                        "target-HEAD preimage must not also be claimed from a "
+                        "predecessor manifest",
+                    )
+                payload = self.run_git(
+                    ["show", f"{target_head}:{affected}"],
+                    f"{context}.preimage_blobs[{affected}]",
+                )
+                expected_digest = expected_preimage_sha256.get(affected)
+                if payload is not None and expected_digest is not None:
+                    actual_digest = hashlib.sha256(payload).hexdigest().upper()
+                    if actual_digest != expected_digest:
+                        self.problems.violation(
+                            f"{context}.preimage_blobs[{affected}]",
+                            "target-HEAD blob hashes to "
+                            f"{actual_digest}, not {expected_digest}",
+                        )
+                continue
+            if affected not in chained:
+                self.problems.violation(
+                    f"{context}.preimage_blobs[{affected}]",
+                    "preimage must equal the target-HEAD blob or chain from an "
+                    "exact pinned predecessor postimage; "
+                    f"target HEAD has {actual!r}, amendment records {expected_oid!r}",
+                )
 
     def validate_cross_references(self) -> None:
         if not self.phase:
@@ -2099,15 +2666,22 @@ class PhaseValidator:
                 branch_names[name] = branch_id
             lane_id = branch.get("lane_id")
             lane = self.lanes.get(lane_id)
+            branch_operators = branch.get("operator_ids", [])
+            for operator in branch_operators:
+                if operator not in self.principals:
+                    self.problems.violation(
+                        context, f"operator {operator} is an unknown principal"
+                    )
             if lane is None:
                 self.problems.violation(context, f"unknown lane_id {lane_id}")
             else:
                 if branch.get("owner_id") != lane.get("owner_id"):
                     self.problems.violation(context, "owner_id must equal the lane owner")
-                allowed_operators = set(lane.get("operator_ids", []))
-                for operator in branch.get("operator_ids", []):
-                    if operator not in allowed_operators:
-                        self.problems.violation(context, f"operator {operator} is not authorized for lane {lane_id}")
+                if status in live_statuses:
+                    allowed_operators = set(lane.get("operator_ids", []))
+                    for operator in branch_operators:
+                        if operator not in allowed_operators:
+                            self.problems.violation(context, f"operator {operator} is not authorized for lane {lane_id}")
             if branch.get("wave_id") not in known_waves:
                 self.problems.violation(context, f"unknown wave_id {branch.get('wave_id')}")
             wave_rows = [
@@ -2164,7 +2738,42 @@ class PhaseValidator:
                 for row in scope_rows
                 if row["path"] not in {wave_row["path"] for wave_row in wave_rows}
             ]
+            # An exact destination rule authorizes creating exactly one new
+            # file, which is strictly narrower than any prefix rule. To keep it
+            # from ever claiming an existing module it must name a path that is
+            # absent at the branch's base commit.
+            base_sha_for_destinations = branch.get("base_sha")
             for destination in destinations:
+                if destination.match == "exact":
+                    if not isinstance(base_sha_for_destinations, str) or not SHA1_RE.fullmatch(
+                        base_sha_for_destinations
+                    ):
+                        self.problems.malformed(
+                            f"{context}.destination_prefixes",
+                            "exact destination rules require a valid base_sha to"
+                            " prove the path is new",
+                        )
+                    else:
+                        probe = subprocess.run(
+                            [
+                                "git",
+                                "cat-file",
+                                "-e",
+                                f"{base_sha_for_destinations}:{destination.path}",
+                            ],
+                            cwd=self.root,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            check=False,
+                        )
+                        if probe.returncode == 0:
+                            self.problems.violation(
+                                context,
+                                "exact destination "
+                                f"{destination.path} already exists at base "
+                                f"{base_sha_for_destinations}; exact destination"
+                                " rules may only create new files",
+                            )
                 for own in owned:
                     if destination.intersects(own):
                         self.problems.violation(
@@ -2309,7 +2918,11 @@ class PhaseValidator:
 
     def validate_requests(self, current_id: str) -> None:
         for request_id, request in sorted(self.requests.items()):
+            if request.get("record_kind") == INTEGRATION_AMENDMENT_KIND:
+                self.validate_integration_amendment(request_id, request)
+                continue
             context = request.get("_context", f"request {request_id}")
+            status = request.get("status")
             lane_id = request.get("lane_id")
             lane = self.lanes.get(lane_id)
             if lane is None:
@@ -2327,7 +2940,14 @@ class PhaseValidator:
             if request.get("valid_through_checkpoint_id") != target_id:
                 self.problems.violation(context, "valid_through_checkpoint_id must equal target_checkpoint_id; refresh by superseding the request")
             for path in request.get("paths", []):
-                if not any(rule.matches(path) for rule in self.shared_paths):
+                # Shared ownership is a live reservation, not a permanent claim.
+                # Terminal requests preserve their historical contract through
+                # immutable preimages, the hash-pinned patch, and resolution
+                # evidence, while allowing a later checkpoint to release the
+                # path to a new branch owner.
+                if status in {"draft", "active"} and not any(
+                    rule.matches(path) for rule in self.shared_paths
+                ):
                     self.problems.violation(context, f"requested path is not integrator-owned shared state: {path}")
                 if isinstance(request.get("target_base_sha"), str):
                     actual = self.blob_at(request["target_base_sha"], path, context)
@@ -2349,7 +2969,6 @@ class PhaseValidator:
             for wave in request.get("blocks", []):
                 if wave not in known_waves:
                     self.problems.violation(context, f"blocks names unknown wave {wave}")
-            status = request.get("status")
             if status in {"draft", "active"} and target_id != current_id:
                 self.problems.violation(
                     context,
@@ -2393,8 +3012,161 @@ class PhaseValidator:
                 request = self.requests.get(request_id)
                 if request is None:
                     self.problems.violation(f"branch {branch_id}", f"unknown shared request {request_id}")
+                elif request.get("record_kind") != "shared_file_request":
+                    self.problems.violation(
+                        f"branch {branch_id}",
+                        f"shared_request_ids may name only shared_file_request records, not {request_id}",
+                    )
                 elif request.get("lane_id") != branch.get("lane_id") or request.get("wave_id") != branch.get("wave_id"):
                     self.problems.violation(f"branch {branch_id}", f"shared request {request_id} belongs to another lane or wave")
+
+    def validate_integration_amendment(
+        self, request_id: str, request: dict[str, Any]
+    ) -> None:
+        context = request.get("_context", f"request {request_id}")
+        status = request.get("status")
+        lane_id = request.get("lane_id")
+        lane = self.lanes.get(lane_id)
+        if lane is None:
+            self.problems.violation(context, f"unknown lane_id {lane_id}")
+        else:
+            allowed = {lane.get("owner_id"), *lane.get("operator_ids", [])}
+            if request.get("requester_id") not in allowed:
+                self.problems.violation(
+                    context, "requester is not the lane owner or an authorized operator"
+                )
+        authority = self.phase.get("authority", {})
+        if lane_id != "integration-lane":
+            self.problems.violation(
+                context, "integration amendments must use integration-lane"
+            )
+        if request.get("requester_id") != authority.get("integration_authority_id"):
+            self.problems.violation(
+                context, "integration amendment must be issued by integration authority"
+            )
+        if request.get("requester_id") not in authority.get(
+            "shared_path_authority_ids", []
+        ):
+            self.problems.violation(
+                context, "integration amendment issuer must also hold shared-path authority"
+            )
+        target_head = request.get("target_head_sha")
+        if isinstance(target_head, str) and self.commit_exists(
+            target_head, f"{context}.target_head_sha"
+        ):
+            current = self.run_git(["rev-parse", "HEAD"], f"{context}.target_head_sha")
+            if current is not None:
+                current_sha = current.decode("ascii", errors="replace").strip()
+                if SHA1_RE.fullmatch(current_sha) and not self.is_ancestor(
+                    target_head, current_sha, f"{context}.target_head_sha"
+                ):
+                    self.problems.violation(
+                        context, "target_head_sha must remain an ancestor of current HEAD"
+                    )
+        for dependency in request.get("_depends_on", []):
+            dependency_record = self.requests.get(dependency)
+            if dependency_record is None:
+                self.problems.violation(
+                    context, f"unknown dependency request {dependency}"
+                )
+            elif dependency_record.get("status") not in {"active", "applied"}:
+                self.problems.violation(
+                    context,
+                    f"dependency request {dependency} must be active or applied",
+                )
+        known_waves = {
+            wave
+            for milestone in self.milestones.values()
+            for wave in milestone.get("wave_ids", [])
+        }
+        for wave in request.get("_blocks", []):
+            if wave not in known_waves:
+                self.problems.violation(context, f"blocks names unknown wave {wave}")
+        expected_evidence_paths = {
+            self.relative_context(
+                self.phase_dir / "requests" / f"{request_id}{suffix}"
+            )
+            for suffix in (
+                ".json",
+                ".patch",
+                "-postimages.tsv",
+                "-review.md",
+                "-approval.md",
+            )
+        }
+        blocked_waves = set(request.get("_blocks", []))
+        for branch_id, branch in sorted(self.branches.items()):
+            evidence = (branch.get("refresh") or {}).get("_evidence", [])
+            evidence_paths = [
+                artifact.path for artifact in evidence if artifact is not None
+            ]
+            counts = {
+                path: evidence_paths.count(path) for path in expected_evidence_paths
+            }
+            if branch.get("wave_id") in blocked_waves:
+                for path, count in sorted(counts.items()):
+                    if count != 1:
+                        self.problems.violation(
+                            f"branch {branch_id}.refresh.evidence",
+                            f"blocked branch must hash-pin exactly one {path}",
+                        )
+            elif any(counts.values()):
+                self.problems.violation(
+                    f"branch {branch_id}.refresh.evidence",
+                    f"non-blocked branch must not pin {request_id} amendment artifacts",
+                )
+        supersedes = request.get("supersedes")
+        superseded_by = request.get("superseded_by")
+        if supersedes is not None and supersedes not in self.requests:
+            self.problems.violation(context, f"unknown superseded request {supersedes}")
+        if status == "superseded":
+            if superseded_by is None or superseded_by not in self.requests:
+                self.problems.violation(
+                    context, "superseded amendment must name an existing successor"
+                )
+            elif self.requests[superseded_by].get("supersedes") != request_id:
+                self.problems.violation(
+                    context, "superseding request does not point back through supersedes"
+                )
+        elif superseded_by is not None:
+            self.problems.violation(
+                context, "only superseded amendments may name superseded_by"
+            )
+        resolution = request.get("resolution", {})
+        resolution_values = [
+            resolution.get("commit_sha"),
+            resolution.get("checkpoint_id"),
+            resolution.get("resolved_at"),
+            resolution.get("resolved_by"),
+        ]
+        if status in {"draft", "active"}:
+            if (
+                any(value is not None for value in resolution_values)
+                or resolution.get("reason") is not None
+                or resolution.get("_evidence")
+            ):
+                self.problems.violation(
+                    context, f"{status} amendment must have an empty resolution"
+                )
+        elif status == "applied":
+            if any(value is None for value in resolution_values) or not resolution.get(
+                "_evidence"
+            ):
+                self.problems.malformed(
+                    context,
+                    "applied amendment requires commit, checkpoint, timestamp, resolver, and validation evidence",
+                )
+            self.validate_request_resolution(request, context, require_commit=True)
+        else:
+            if (
+                resolution.get("resolved_at") is None
+                or resolution.get("resolved_by") is None
+                or resolution.get("reason") is None
+            ):
+                self.problems.malformed(
+                    context, f"{status} amendment requires resolver, timestamp, and reason"
+                )
+            self.validate_request_resolution(request, context, require_commit=False)
 
     def validate_request_resolution(self, request: dict[str, Any], context: str, *, require_commit: bool) -> None:
         resolution = request.get("resolution", {})
@@ -2540,7 +3312,7 @@ def run_self_test() -> int:
             metadata, path_raw = entry.split(b"\t", 1)
             blobs[path_raw.decode()] = metadata.decode().split()[2]
 
-        phase_rel = DEFAULT_PHASE_DIR
+        phase_rel = LEGACY_DEFAULT_PHASE_DIR
         phase_dir = root / phase_rel
         for name in (
             "baselines",
@@ -2661,7 +3433,16 @@ def run_self_test() -> int:
                 "branch_registry_authority_ids": ["integrator"],
                 "build_lock_name": "self-test-lock",
                 "lanes": [
-                    {"lane_id": "lane-a", "owner_id": "integrator", "operator_ids": ["worker"]}
+                    {
+                        "lane_id": "integration-lane",
+                        "owner_id": "integrator",
+                        "operator_ids": ["integrator"],
+                    },
+                    {
+                        "lane_id": "lane-a",
+                        "owner_id": "integrator",
+                        "operator_ids": ["worker"],
+                    },
                 ],
             },
             "shared_paths": [{"match": "exact", "path": "NumStability.lean"}],
@@ -2767,7 +3548,15 @@ def run_self_test() -> int:
             "base_sha": commit,
             "owned_paths": [{"match": "exact", "path": "NumStability/Foo.lean"}],
             "destination_prefixes": [
-                {"match": "prefix", "path": "NumStability/FooCanonical/"}
+                {"match": "prefix", "path": "NumStability/FooCanonical/"},
+                {
+                    "match": "prefix",
+                    "path": "NumStabilityTest/Reorganization/W1/",
+                },
+                {
+                    "match": "prefix",
+                    "path": "docs/architecture/deliveries/W1/",
+                },
             ],
             "forbidden_paths": [{"match": "exact", "path": "NumStability.lean"}],
             "baseline_projection_id": "P0001",
@@ -2817,6 +3606,13 @@ def run_self_test() -> int:
             },
         }
         write_json(phase_dir / "requests/R0001.json", request)
+        for sidecar in (
+            phase_dir / "branches/B0001-overlap-review.json",
+            phase_dir / "checkpoints/C0000-acceptance-control-ci.json",
+            phase_dir / "projections/P0001-review.json",
+            phase_dir / "requests/R0001-render-review.json",
+        ):
+            write_json(sidecar, {"record_kind": "evidence_sidecar"})
 
         valid = PhaseValidator(root, phase_dir)
         valid_result = valid.validate()
@@ -2824,6 +3620,102 @@ def run_self_test() -> int:
             valid_result.render()
             print("self-test failure: valid synthetic contract was rejected", file=sys.stderr)
             return 1
+
+        # Current lane membership governs live execution authority. Terminal
+        # records retain the operator attribution that was valid during their
+        # execution epoch even if the lane's current operator set has changed.
+        branch["operator_ids"] = ["integrator"]
+        write_json(phase_dir / "branches/B0001.json", branch)
+        unauthorized_live_operator = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "operator integrator is not authorized for lane lane-a" in message
+            for message in unauthorized_live_operator.contract_errors
+        ):
+            unauthorized_live_operator.render()
+            print(
+                "self-test failure: unauthorized live branch operator was accepted",
+                file=sys.stderr,
+            )
+            return 1
+        branch["status"] = "cancelled"
+        projection["status"] = "retired"
+        write_json(phase_dir / "branches/B0001.json", branch)
+        write_json(phase_dir / "projections/P0001.json", projection)
+        terminal_historical_operator = PhaseValidator(root, phase_dir).validate()
+        if not terminal_historical_operator.ok:
+            terminal_historical_operator.render()
+            print(
+                "self-test failure: terminal branch historical operator attribution was rejected",
+                file=sys.stderr,
+            )
+            return 1
+        branch["operator_ids"] = ["unknown-terminal-operator"]
+        write_json(phase_dir / "branches/B0001.json", branch)
+        unknown_terminal_operator = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "operator unknown-terminal-operator is an unknown principal" in message
+            for message in unknown_terminal_operator.contract_errors
+        ):
+            unknown_terminal_operator.render()
+            print(
+                "self-test failure: terminal branch accepted an unknown operator principal",
+                file=sys.stderr,
+            )
+            return 1
+        branch["operator_ids"] = ["worker"]
+        branch["status"] = "planned"
+        projection["status"] = "active"
+        write_json(phase_dir / "branches/B0001.json", branch)
+        write_json(phase_dir / "projections/P0001.json", projection)
+
+        # A live request must retain its current shared-path reservation, but
+        # an applied request is historical evidence and must not prevent a
+        # later checkpoint from assigning that path to a branch owner.
+        phase["shared_paths"] = []
+        write_json(phase_dir / "phase.json", phase)
+        released_live = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "requested path is not integrator-owned shared state" in message
+            for message in released_live.contract_errors
+        ):
+            released_live.render()
+            print(
+                "self-test failure: a live request without a shared-path reservation was accepted",
+                file=sys.stderr,
+            )
+            return 1
+        request["status"] = "applied"
+        request["resolution"] = {
+            "commit_sha": commit,
+            "checkpoint_id": "C0000",
+            "resolved_at": "2026-08-01T00:01:00Z",
+            "resolved_by": "integrator",
+            "validation_evidence": [artifact(patch_path)],
+            "reason": "Self-test terminal shared-path release.",
+        }
+        write_json(phase_dir / "requests/R0001.json", request)
+        released_terminal = PhaseValidator(root, phase_dir).validate()
+        if not released_terminal.ok:
+            released_terminal.render()
+            print(
+                "self-test failure: an applied request retained a permanent shared-path reservation",
+                file=sys.stderr,
+            )
+            return 1
+        phase["shared_paths"] = [
+            {"match": "exact", "path": "NumStability.lean"}
+        ]
+        request["status"] = "active"
+        request["resolution"] = {
+            "commit_sha": None,
+            "checkpoint_id": None,
+            "resolved_at": None,
+            "resolved_by": None,
+            "validation_evidence": [],
+            "reason": None,
+        }
+        write_json(phase_dir / "phase.json", phase)
+        write_json(phase_dir / "requests/R0001.json", request)
 
         queue_text = unclassified_queue_path.read_text(encoding="utf-8")
         unclassified_queue_path.write_text(
@@ -2905,7 +3797,15 @@ def run_self_test() -> int:
             )
             return 1
         branch["destination_prefixes"] = [
-            {"match": "prefix", "path": "NumStability/FooCanonical/"}
+            {"match": "prefix", "path": "NumStability/FooCanonical/"},
+            {
+                "match": "prefix",
+                "path": "NumStabilityTest/Reorganization/W1/",
+            },
+            {
+                "match": "prefix",
+                "path": "docs/architecture/deliveries/W1/",
+            },
         ]
         write_json(phase_dir / "branches/B0001.json", branch)
 
@@ -2991,6 +3891,566 @@ def run_self_test() -> int:
         phase["completion"]["bounded_phase"]["evidence_checkpoint_id"] = None
         write_json(phase_dir / "phase.json", phase)
 
+        # Exercise integration amendments end to end.  One preimage comes
+        # from target HEAD; the other exists only as a SHA-256-chained
+        # predecessor postimage, so the fixture also protects clean-clone
+        # validation from accidentally requiring a loose predecessor blob.
+        amendment_patch_path = phase_dir / "requests/R0002.patch"
+        amendment_postimages_path = phase_dir / "requests/R0002-postimages.tsv"
+        amendment_review_path = phase_dir / "requests/R0002-review.md"
+        amendment_approval_path = phase_dir / "requests/R0002-approval.md"
+        predecessor_postimages_path = phase_dir / "requests/R0001-postimages.tsv"
+        amendment_record_path = phase_dir / "requests/R0002.json"
+        root_path = root / "NumStability.lean"
+        foo_path = root / "NumStability/Foo.lean"
+        base_root = subprocess.check_output(
+            ["git", "show", f"{commit}:NumStability.lean"], cwd=root
+        )
+        base_foo = subprocess.check_output(
+            ["git", "show", f"{commit}:NumStability/Foo.lean"], cwd=root
+        )
+        predecessor_root = (
+            b"/-! Test root after predecessor. -/\nimport NumStability.Foo\n"
+        )
+        final_root = b"/-! Test root after amendment. -/\nimport NumStability.Foo\n"
+        final_foo = (
+            b"/-! Test leaf after amendment. -/\n"
+            b"theorem foo : True := by trivial\n"
+        )
+
+        def blob_oid(payload: bytes) -> str:
+            header = f"blob {len(payload)}\0".encode("ascii")
+            return hashlib.sha1(header + payload).hexdigest()
+
+        predecessor_root_oid = blob_oid(predecessor_root)
+        # Deliberately do not write predecessor_root_oid into the object
+        # database.  A portable validator must prove it from the pinned
+        # predecessor SHA-256 chain instead of `git cat-file`.
+        if subprocess.run(
+            ["git", "cat-file", "-e", predecessor_root_oid],
+            cwd=root,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        ).returncode == 0:
+            print(
+                "self-test failure: predecessor-only blob unexpectedly exists",
+                file=sys.stderr,
+            )
+            return 1
+
+        predecessor_postimages_path.write_text(
+            "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER)
+            + "\n"
+            + "\t".join(
+                (
+                    "NumStability.lean",
+                    blobs["NumStability.lean"],
+                    hashlib.sha256(base_root).hexdigest().upper(),
+                    hashlib.sha256(predecessor_root).hexdigest().upper(),
+                )
+            )
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        predecessor_postimages_bytes = predecessor_postimages_path.read_bytes()
+        amendment_postimages_path.write_text(
+            "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER)
+            + "\n"
+            + "\t".join(
+                (
+                    "NumStability.lean",
+                    predecessor_root_oid,
+                    hashlib.sha256(predecessor_root).hexdigest().upper(),
+                    hashlib.sha256(final_root).hexdigest().upper(),
+                )
+            )
+            + "\n"
+            + "\t".join(
+                (
+                    "NumStability/Foo.lean",
+                    blobs["NumStability/Foo.lean"],
+                    hashlib.sha256(base_foo).hexdigest().upper(),
+                    hashlib.sha256(final_foo).hexdigest().upper(),
+                )
+            )
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment_postimages_bytes = amendment_postimages_path.read_bytes()
+        amendment_patch_path.write_text(
+            "diff --git a/NumStability.lean b/NumStability.lean\n"
+            "--- a/NumStability.lean\n"
+            "+++ b/NumStability.lean\n"
+            "@@ -1 +1 @@\n"
+            "-/-! Test root after predecessor. -/\n"
+            "+/-! Test root after amendment. -/\n"
+            "diff --git a/NumStability/Foo.lean b/NumStability/Foo.lean\n"
+            "--- a/NumStability/Foo.lean\n"
+            "+++ b/NumStability/Foo.lean\n"
+            "@@ -1 +1 @@\n"
+            "-/-! Test leaf. -/\n"
+            "+/-! Test leaf after amendment. -/\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment_review_path.write_text(
+            "# Reviewed self-test amendment\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment_approval_path.write_text(
+            "# Approved self-test amendment\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        delivery_test_path = (
+            root / "NumStabilityTest/Reorganization/W1/Smoke.lean"
+        )
+        delivery_report_path = root / "docs/architecture/deliveries/W1/DELIVERY.md"
+        delivery_scope_path = (
+            root / "docs/architecture/deliveries/W1/CHANGED_PATHS.md"
+        )
+        delivery_test_path.parent.mkdir(parents=True, exist_ok=True)
+        delivery_report_path.parent.mkdir(parents=True, exist_ok=True)
+        delivery_test_path.write_text(
+            "import NumStability.Foo\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        delivery_report_path.write_text(
+            "# Self-test delivery\n", encoding="utf-8", newline="\n"
+        )
+        delivery_scope_path.write_text(
+            "# Self-test changed paths\n", encoding="utf-8", newline="\n"
+        )
+        subprocess.run(
+            [
+                "git",
+                "add",
+                "--",
+                "NumStabilityTest/Reorganization/W1/Smoke.lean",
+                "docs/architecture/deliveries/W1/DELIVERY.md",
+                "docs/architecture/deliveries/W1/CHANGED_PATHS.md",
+            ],
+            cwd=root,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "commit", "-qm", "self-test worker evidence"],
+            cwd=root,
+            check=True,
+        )
+        delivery_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=root, text=True
+        ).strip()
+        cross_wave_test_path = (
+            root / "NumStabilityTest/Reorganization/W2/Intrusion.lean"
+        )
+        cross_wave_test_path.parent.mkdir(parents=True, exist_ok=True)
+        cross_wave_test_path.write_text(
+            "import NumStability.Foo\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        subprocess.run(
+            [
+                "git",
+                "add",
+                "--",
+                "NumStabilityTest/Reorganization/W2/Intrusion.lean",
+            ],
+            cwd=root,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "commit", "-qm", "self-test cross-wave intrusion"],
+            cwd=root,
+            check=True,
+        )
+        cross_wave_delivery_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=root, text=True
+        ).strip()
+        root_path.write_bytes(final_root)
+        foo_path.write_bytes(final_foo)
+        subprocess.run(
+            ["git", "add", "--", "NumStability.lean", "NumStability/Foo.lean"],
+            cwd=root,
+            check=True,
+        )
+        amendment = {
+            "schema_version": 1,
+            "record_kind": INTEGRATION_AMENDMENT_KIND,
+            "phase_id": phase["phase_id"],
+            "request_id": "R0002",
+            "lane_id": "integration-lane",
+            "requester_id": "integrator",
+            "created_at": "2026-08-01T00:02:00Z",
+            "target_branch": "main",
+            "target_head_sha": commit,
+            "target_index_staged_paths": 2,
+            "paths": ["NumStability.lean", "NumStability/Foo.lean"],
+            "preimage_blobs": [
+                {
+                    "path": "NumStability.lean",
+                    "blob_oid": predecessor_root_oid,
+                },
+                {
+                    "path": "NumStability/Foo.lean",
+                    "blob_oid": blobs["NumStability/Foo.lean"],
+                },
+            ],
+            "rationale": "Exercise reviewed integration-amendment provenance.",
+            "patch": artifact(amendment_patch_path),
+            "postimages": artifact(amendment_postimages_path),
+            "predecessor_postimages": [artifact(predecessor_postimages_path)],
+            "review": artifact(amendment_review_path),
+            "approval": artifact(amendment_approval_path),
+            "depends_on": ["R0001"],
+            "blocks": ["W1"],
+            "status": "active",
+            "supersedes": None,
+            "superseded_by": None,
+            "resolution": {
+                "commit_sha": None,
+                "checkpoint_id": None,
+                "resolved_at": None,
+                "resolved_by": None,
+                "validation_evidence": [],
+                "reason": None,
+            },
+        }
+
+        amendment_evidence_paths = (
+            amendment_approval_path,
+            amendment_postimages_path,
+            amendment_review_path,
+            amendment_record_path,
+            amendment_patch_path,
+        )
+
+        def write_amendment_and_branch() -> None:
+            write_json(amendment_record_path, amendment)
+            branch["refresh"]["evidence"] = [
+                artifact(path)
+                for path in sorted(
+                    amendment_evidence_paths,
+                    key=lambda candidate: candidate.relative_to(root).as_posix(),
+                )
+            ]
+            write_json(phase_dir / "branches/B0001.json", branch)
+
+        write_amendment_and_branch()
+        active_amendment = PhaseValidator(root, phase_dir).validate()
+        if not active_amendment.ok:
+            active_amendment.render()
+            print(
+                "self-test failure: valid active integration amendment was rejected",
+                file=sys.stderr,
+            )
+            return 1
+
+        foo_path.write_text(
+            "/-! Divergent live index. -/\ntheorem foo : True := by trivial\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        subprocess.run(
+            ["git", "add", "--", "NumStability/Foo.lean"], cwd=root, check=True
+        )
+        wrong_active_postimage = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "current index hashes to" in message
+            for message in wrong_active_postimage.contract_errors
+        ):
+            wrong_active_postimage.render()
+            print(
+                "self-test failure: active amendment ignored current-index drift",
+                file=sys.stderr,
+            )
+            return 1
+        foo_path.write_bytes(final_foo)
+        subprocess.run(
+            ["git", "add", "--", "NumStability/Foo.lean"], cwd=root, check=True
+        )
+
+        predecessor_postimages_path.write_text(
+            predecessor_postimages_bytes.decode("utf-8").replace(
+                hashlib.sha256(predecessor_root).hexdigest().upper(), "0" * 64
+            ),
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment["predecessor_postimages"] = [
+            artifact(predecessor_postimages_path)
+        ]
+        write_amendment_and_branch()
+        broken_predecessor = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "predecessor postimage must equal amendment preimage" in message
+            for message in broken_predecessor.contract_errors
+        ):
+            broken_predecessor.render()
+            print(
+                "self-test failure: broken amendment predecessor chain was accepted",
+                file=sys.stderr,
+            )
+            return 1
+        predecessor_postimages_path.write_bytes(predecessor_postimages_bytes)
+        amendment["predecessor_postimages"] = [
+            artifact(predecessor_postimages_path)
+        ]
+        write_amendment_and_branch()
+
+        amendment["depends_on"] = None
+        amendment["blocks"] = None
+        write_amendment_and_branch()
+        malformed_lists = PhaseValidator(root, phase_dir).validate()
+        if not all(
+            any(f"R0002.json.{key}" in message for message in malformed_lists.format_errors)
+            for key in ("depends_on", "blocks")
+        ):
+            malformed_lists.render()
+            print(
+                "self-test failure: malformed amendment lists were not diagnosed",
+                file=sys.stderr,
+            )
+            return 1
+        amendment["depends_on"] = ["R0001"]
+        amendment["blocks"] = ["W1"]
+        write_amendment_and_branch()
+
+        amendment_postimages_path.write_text(
+            "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER)
+            + "\nNumStability.lean\t"
+            + predecessor_root_oid
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment["postimages"] = artifact(amendment_postimages_path)
+        write_amendment_and_branch()
+        malformed_postimages = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "malformed row or wrong column count" in message
+            for message in malformed_postimages.format_errors
+        ):
+            malformed_postimages.render()
+            print(
+                "self-test failure: malformed amendment postimages were not diagnosed",
+                file=sys.stderr,
+            )
+            return 1
+        amendment_postimages_path.write_bytes(amendment_postimages_bytes)
+        amendment["postimages"] = artifact(amendment_postimages_path)
+        write_amendment_and_branch()
+
+        predecessor_postimages_path.write_text(
+            "\t".join(INTEGRATION_AMENDMENT_MANIFEST_HEADER)
+            + "\nNumStability.lean\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        amendment["predecessor_postimages"] = [
+            artifact(predecessor_postimages_path)
+        ]
+        write_amendment_and_branch()
+        malformed_predecessor = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "malformed row or wrong column count" in message
+            for message in malformed_predecessor.format_errors
+        ):
+            malformed_predecessor.render()
+            print(
+                "self-test failure: malformed predecessor rows were not diagnosed",
+                file=sys.stderr,
+            )
+            return 1
+        predecessor_postimages_path.write_bytes(predecessor_postimages_bytes)
+        amendment["predecessor_postimages"] = [
+            artifact(predecessor_postimages_path)
+        ]
+        write_amendment_and_branch()
+
+        # Commit the reviewed postimages, then advance the synthetic phase so
+        # the amendment can be validated as applied.  A deliberately divergent
+        # current index below must not affect this historical check.
+        subprocess.run(
+            ["git", "commit", "-qm", "self-test amendment postimages"],
+            cwd=root,
+            check=True,
+        )
+        applied_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=root, text=True
+        ).strip()
+        applied_blobs = {
+            path: subprocess.check_output(
+                ["git", "rev-parse", f"{applied_commit}:{path}"],
+                cwd=root,
+                text=True,
+            ).strip()
+            for path in ("NumStability.lean", "NumStability/Foo.lean")
+        }
+        inventory_c1_path = phase_dir / "checkpoints/C0001-inventory.tsv"
+        with inventory_c1_path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
+            writer.writerow(SCOPE_HEADER)
+            writer.writerows(
+                [
+                    [
+                        "NumStability",
+                        "NumStability.lean",
+                        applied_blobs["NumStability.lean"],
+                        "aggregate",
+                        "-",
+                        "already_complete",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                    ],
+                    [
+                        "NumStability.Foo",
+                        "NumStability/Foo.lean",
+                        applied_blobs["NumStability/Foo.lean"],
+                        "unclassified",
+                        "unclassified_modules",
+                        "in_scope",
+                        "lane-a",
+                        "W1",
+                        "migrate",
+                        "bounded self-test wave",
+                    ],
+                ]
+            )
+        baseline_c1_path = phase_dir / "baselines/C0001-combined.json"
+        write_json(
+            baseline_c1_path,
+            {
+                "schema_version": 1,
+                "metadata": {
+                    "commit": applied_commit,
+                    "library_source_clean": True,
+                    "library_source_dirty_paths": [],
+                },
+                "declarations": {"format_version": DECLARATION_FORMAT_VERSION},
+            },
+        )
+        baseline_c1_summary_path = phase_dir / "baselines/C0001-combined.md"
+        baseline_c1_summary_path.write_text(
+            f"# Self-test successor baseline\n\n- Commit: `{applied_commit}`\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        checkpoint_c1 = json.loads(json.dumps(checkpoint))
+        checkpoint_c1.update(
+            {
+                "checkpoint_id": "C0001",
+                "parent_checkpoint_id": "C0000",
+                "commit_sha": applied_commit,
+                "accepted_at": "2026-08-01T00:03:00Z",
+                "milestones_satisfied": ["M1"],
+                "inventory": artifact(inventory_c1_path),
+                "combined_baseline": {
+                    "format_version": 2,
+                    "artifact": artifact(baseline_c1_path),
+                    "summary_artifact": artifact(baseline_c1_summary_path),
+                    "generation_command": "self-test successor baseline",
+                },
+            }
+        )
+        for gate in checkpoint_c1["gates"]:
+            gate["commit_sha"] = applied_commit
+        write_json(phase_dir / "checkpoints/C0001.json", checkpoint_c1)
+        phase["current_checkpoint_id"] = "C0001"
+        phase["milestones"][0]["status"] = "accepted"
+        phase["milestones"][0]["accepted_checkpoint_id"] = "C0001"
+        write_json(phase_dir / "phase.json", phase)
+        projection["status"] = "retired"
+        write_json(phase_dir / "projections/P0001.json", projection)
+        request["status"] = "applied"
+        request["resolution"] = {
+            "commit_sha": applied_commit,
+            "checkpoint_id": "C0001",
+            "resolved_at": "2026-08-01T00:03:00Z",
+            "resolved_by": "integrator",
+            "validation_evidence": [artifact(patch_path)],
+            "reason": "Applied in the synthetic successor checkpoint.",
+        }
+        write_json(phase_dir / "requests/R0001.json", request)
+        branch["status"] = "accepted"
+        branch["delivery"] = {
+            "commit_sha": delivery_commit,
+            "report": artifact(delivery_report_path),
+            "scope_evidence": artifact(delivery_scope_path),
+        }
+        branch["integration"] = {
+            "method": "merge",
+            "accepted_checkpoint_id": "C0001",
+            "accepted_sha": applied_commit,
+        }
+        amendment["status"] = "applied"
+        amendment["resolution"] = {
+            "commit_sha": applied_commit,
+            "checkpoint_id": "C0001",
+            "resolved_at": "2026-08-01T00:03:00Z",
+            "resolved_by": "integrator",
+            "validation_evidence": [artifact(amendment_approval_path)],
+            "reason": "Applied in the synthetic successor checkpoint.",
+        }
+        write_amendment_and_branch()
+        foo_path.write_text(
+            "/-! Later live-index edit. -/\ntheorem foo : True := by trivial\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        subprocess.run(
+            ["git", "add", "--", "NumStability/Foo.lean"], cwd=root, check=True
+        )
+        applied_amendment = PhaseValidator(root, phase_dir).validate()
+        if not applied_amendment.ok:
+            applied_amendment.render()
+            print(
+                "self-test failure: applied amendment remained coupled to live index",
+                file=sys.stderr,
+            )
+            return 1
+
+        branch["delivery"]["commit_sha"] = cross_wave_delivery_commit
+        write_amendment_and_branch()
+        cross_wave_delivery = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            "delivery changed unowned path "
+            "NumStabilityTest/Reorganization/W2/Intrusion.lean" in message
+            for message in cross_wave_delivery.contract_errors
+        ):
+            cross_wave_delivery.render()
+            print(
+                "self-test failure: cross-wave delivery evidence was accepted",
+                file=sys.stderr,
+            )
+            return 1
+        branch["delivery"]["commit_sha"] = delivery_commit
+        write_amendment_and_branch()
+
+        amendment["resolution"]["commit_sha"] = commit
+        write_amendment_and_branch()
+        wrong_applied_postimage = PhaseValidator(root, phase_dir).validate()
+        if not any(
+            f"resolution commit {commit} hashes to" in message
+            for message in wrong_applied_postimage.contract_errors
+        ):
+            wrong_applied_postimage.render()
+            print(
+                "self-test failure: applied amendment ignored resolution-commit drift",
+                file=sys.stderr,
+            )
+            return 1
+        amendment["resolution"]["commit_sha"] = applied_commit
+        write_amendment_and_branch()
+
         patch_path.write_text("tampered\n", encoding="utf-8", newline="\n")
         tampered = PhaseValidator(root, phase_dir).validate()
         if not any("SHA-256 mismatch" in message for message in tampered.contract_errors):
@@ -2998,11 +4458,113 @@ def run_self_test() -> int:
             print("self-test failure: artifact tampering was not rejected", file=sys.stderr)
             return 1
 
+        fleet_root = Path(temporary) / "fleet"
+        fleet_phases = fleet_root / PHASES_ROOT
+        pred_dir = fleet_phases / "2026-01-alpha"
+        succ_dir = fleet_phases / "2026-02-beta"
+        review_relative = "docs/architecture/reviews/fleet-decision.md"
+        review_path = fleet_root / Path(*PurePosixPath(review_relative).parts)
+        review_path.parent.mkdir(parents=True, exist_ok=True)
+        review_path.write_text("fleet fixture decision review\n", encoding="utf-8", newline="\n")
+        write_json(pred_dir / "phase.json", {"phase_id": "alpha-phase", "status": "active"})
+        write_json(succ_dir / "phase.json", {"phase_id": "beta-phase", "status": "active"})
+
+        def fleet_record(**overrides: object) -> dict[str, Any]:
+            record: dict[str, Any] = {
+                "decided_at": "2026-08-30T20:00:00Z",
+                "decision_review": review_relative,
+                "effective_status": "superseded",
+                "phase_id": "alpha-phase",
+                "preserved_phase_sha256": sha256_file(pred_dir / "phase.json"),
+                "record_kind": "phase_supersession",
+                "reviewer": "primary-human",
+                "schema_version": 1,
+                "successor_phase_id": "beta-phase",
+                "successor_path": (succ_dir.relative_to(fleet_root)).as_posix(),
+            }
+            record.update(overrides)
+            return record
+
+        fleet_dirs = [pred_dir, succ_dir]
+
+        def fleet_case(expected: str | None, label: str) -> bool:
+            result = validate_all_phases(fleet_root, fleet_dirs, succ_dir.resolve())
+            if expected is None:
+                if result.ok:
+                    return True
+                result.render()
+                print(f"self-test failure: {label}", file=sys.stderr)
+                return False
+            if any(expected in message for message in result.contract_errors):
+                return True
+            result.render()
+            print(f"self-test failure: {label}", file=sys.stderr)
+            return False
+
+        write_json(pred_dir / "supersession.json", fleet_record())
+        if not fleet_case(None, "valid supersession fleet rejected"):
+            return 1
+        (pred_dir / "supersession.json").unlink()
+        if not fleet_case(
+            "exactly one retained phase must be effectively active",
+            "two effectively active phases accepted",
+        ):
+            return 1
+        write_json(pred_dir / "supersession.json", fleet_record())
+        pointer_result = validate_all_phases(fleet_root, fleet_dirs, pred_dir.resolve())
+        if not any(
+            "must select the effectively active phase" in message
+            for message in pointer_result.contract_errors
+        ):
+            pointer_result.render()
+            print("self-test failure: pointer to terminal phase accepted", file=sys.stderr)
+            return 1
+        write_json(
+            pred_dir / "supersession.json",
+            fleet_record(successor_phase_id="gamma-phase", successor_path="docs/architecture/phases/2026-03-gamma"),
+        )
+        if not fleet_case(
+            "existing distinct successor",
+            "missing supersession successor accepted",
+        ):
+            return 1
+        write_json(pred_dir / "supersession.json", fleet_record())
+        write_json(
+            succ_dir / "supersession.json",
+            fleet_record(
+                phase_id="beta-phase",
+                preserved_phase_sha256=sha256_file(succ_dir / "phase.json"),
+                successor_phase_id="alpha-phase",
+                successor_path=(pred_dir.relative_to(fleet_root)).as_posix(),
+            ),
+        )
+        if not fleet_case("supersession cycle includes", "successor cycle accepted"):
+            return 1
+        (succ_dir / "supersession.json").unlink()
+        write_json(
+            pred_dir / "supersession.json",
+            fleet_record(preserved_phase_sha256="0" * 64),
+        )
+        if not fleet_case(
+            "preserved_phase_sha256 must match the live phase.json bytes",
+            "preserved-hash mismatch accepted",
+        ):
+            return 1
+        write_json(pred_dir / "supersession.json", fleet_record())
+        if not fleet_case(None, "restored supersession fleet rejected"):
+            return 1
+
     print(
         "phase contract self-test passed: valid fixture accepted; queue drift, semantic "
         "status mismatch, wrong ownership, destination overlap, stale baseline metadata, "
         "unpassed gates, projection count drift, cycle, premature unblock, premature "
-        "completion, and hash tampering rejected"
+        "completion, unauthorized live operator, live shared-path release, and hash "
+        "tampering and unknown terminal operators rejected; known terminal historical "
+        "operator attribution and terminal shared-path release accepted; integration "
+        "amendment active-index, applied-commit, predecessor-chain, approval, and "
+        "malformed-input lifecycle cases verified; supersession fleet single-active, "
+        "pointer-agreement, terminal-nonpointer, missing-successor, successor-cycle, "
+        "and preserved-hash cases verified"
     )
     return 0
 
@@ -3012,11 +4574,16 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument(
         "--phase-dir",
         type=Path,
-        default=DEFAULT_PHASE_DIR,
+        default=None,
         help=(
             "phase contract directory, absolute or repository-relative "
-            f"(default: {DEFAULT_PHASE_DIR.as_posix()})"
+            f"(default: path named by {ACTIVE_PHASE_POINTER.as_posix()})"
         ),
+    )
+    parser.add_argument(
+        "--all-phases",
+        action="store_true",
+        help="validate every retained phase directory and the active-phase pointer",
     )
     parser.add_argument(
         "--self-test",
@@ -3026,11 +4593,333 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def active_phase_dir() -> tuple[Path | None, list[str]]:
+    """Resolve and validate the repository's explicit active-phase pointer."""
+
+    pointer_path = ROOT / ACTIVE_PHASE_POINTER
+    errors: list[str] = []
+    if not pointer_path.is_file():
+        if (ROOT / LEGACY_DEFAULT_PHASE_DIR).is_dir():
+            errors.append(
+                f"missing active-phase pointer: {ACTIVE_PHASE_POINTER.as_posix()}"
+            )
+        return None, errors
+    try:
+        pointer = json.loads(
+            pointer_path.read_text(encoding="utf-8"),
+            object_pairs_hook=duplicate_safe_object,
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, DuplicateKeyError) as error:
+        return None, [f"cannot read active-phase pointer: {error}"]
+    required = {"schema_version", "record_kind", "phase_id", "path"}
+    if not isinstance(pointer, dict):
+        return None, ["active-phase pointer must be a JSON object"]
+    missing = sorted(required - set(pointer))
+    unexpected = sorted(set(pointer) - required)
+    if missing:
+        errors.append("active-phase pointer missing key(s): " + ", ".join(missing))
+    if unexpected:
+        errors.append(
+            "active-phase pointer has unexpected key(s): " + ", ".join(unexpected)
+        )
+    if pointer.get("schema_version") != 1:
+        errors.append("active-phase pointer schema_version must be 1")
+    if pointer.get("record_kind") != "active_reorganization_phase":
+        errors.append(
+            "active-phase pointer record_kind must be 'active_reorganization_phase'"
+        )
+    phase_id = pointer.get("phase_id")
+    if not isinstance(phase_id, str) or not ID_RE.fullmatch(phase_id):
+        errors.append("active-phase pointer phase_id must be a stable slug")
+    relative = pointer.get("path")
+    if not isinstance(relative, str) or not is_repo_path(relative):
+        errors.append("active-phase pointer path must be a repository-relative directory")
+        return None, errors
+    phase_dir = (ROOT / relative).resolve()
+    phases_root = (ROOT / PHASES_ROOT).resolve()
+    try:
+        phase_dir.relative_to(phases_root)
+    except ValueError:
+        errors.append("active-phase pointer escapes docs/architecture/phases")
+        return None, errors
+    phase_path = phase_dir / "phase.json"
+    if not phase_path.is_file():
+        errors.append(f"active-phase pointer target lacks phase.json: {relative}")
+        return phase_dir, errors
+    try:
+        phase = json.loads(
+            phase_path.read_text(encoding="utf-8"),
+            object_pairs_hook=duplicate_safe_object,
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, DuplicateKeyError) as error:
+        errors.append(f"cannot read active phase.json: {error}")
+    else:
+        if not isinstance(phase, dict) or phase.get("phase_id") != phase_id:
+            errors.append("active-phase pointer phase_id differs from target phase.json")
+    return phase_dir, errors
+
+
+SUPERSESSION_REQUIRED_KEYS = {
+    "decided_at",
+    "decision_review",
+    "effective_status",
+    "phase_id",
+    "preserved_phase_sha256",
+    "record_kind",
+    "reviewer",
+    "schema_version",
+    "successor_phase_id",
+    "successor_path",
+}
+
+
+def load_phase_identity(
+    phase_dir: Path, context: str, problems: Problems
+) -> tuple[str | None, str | None]:
+    """Read (phase_id, stored status) from one retained phase.json."""
+
+    try:
+        phase = json.loads(
+            (phase_dir / "phase.json").read_text(encoding="utf-8"),
+            object_pairs_hook=duplicate_safe_object,
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, DuplicateKeyError) as error:
+        problems.malformed(context, f"cannot read phase.json: {error}")
+        return None, None
+    phase_id = phase.get("phase_id") if isinstance(phase, dict) else None
+    status = phase.get("status") if isinstance(phase, dict) else None
+    if not isinstance(phase_id, str) or not ID_RE.fullmatch(phase_id):
+        problems.malformed(context, "phase.json phase_id must be a stable slug")
+        phase_id = None
+    if status not in PHASE_STATUSES:
+        problems.malformed(context, "phase.json status is not a known phase status")
+        status = None
+    return phase_id, status
+
+
+def validate_all_phases(
+    root: Path, phase_dirs: Sequence[Path], active_dir: Path | None
+) -> Problems:
+    """Enforce the retained-phase fleet invariants.
+
+    A phase's stored status is overridden only by a valid terminal
+    supersession record (supersession.json beside its phase.json): exactly
+    one phase is effectively active, the active-phase pointer selects it,
+    every other retained phase is effectively terminal, each supersession
+    names an existing successor, successor chains are acyclic and reach the
+    active phase, and the preserved-phase hash matches the live phase.json.
+    """
+
+    problems = Problems()
+    effective: dict[str, str] = {}
+    successors: dict[str, str] = {}
+    dirs_by_id: dict[str, Path] = {}
+    for phase_dir in phase_dirs:
+        context = phase_dir.relative_to(root).as_posix()
+        phase_id, status = load_phase_identity(phase_dir, context, problems)
+        if phase_id is None or status is None:
+            continue
+        if phase_id in dirs_by_id:
+            problems.violation(context, f"duplicate retained phase_id {phase_id}")
+            continue
+        dirs_by_id[phase_id] = phase_dir
+        record_path = phase_dir / "supersession.json"
+        if not record_path.is_file():
+            effective[phase_id] = status
+            continue
+        record_context = f"{context}/supersession.json"
+        try:
+            record = json.loads(
+                record_path.read_text(encoding="utf-8"),
+                object_pairs_hook=duplicate_safe_object,
+            )
+        except (OSError, UnicodeError, json.JSONDecodeError, DuplicateKeyError) as error:
+            problems.malformed(record_context, f"cannot read supersession record: {error}")
+            effective[phase_id] = status
+            continue
+        if not isinstance(record, dict):
+            problems.malformed(record_context, "supersession record must be a JSON object")
+            effective[phase_id] = status
+            continue
+        missing = sorted(SUPERSESSION_REQUIRED_KEYS - set(record))
+        unexpected = sorted(set(record) - SUPERSESSION_REQUIRED_KEYS)
+        if missing:
+            problems.malformed(record_context, "missing key(s): " + ", ".join(missing))
+        if unexpected:
+            problems.malformed(record_context, "unexpected key(s): " + ", ".join(unexpected))
+        valid = not missing and not unexpected
+        if valid and record.get("schema_version") != SCHEMA_VERSION:
+            problems.malformed(record_context, "schema_version must be 1")
+            valid = False
+        if valid and record.get("record_kind") != "phase_supersession":
+            problems.malformed(record_context, "record_kind must be 'phase_supersession'")
+            valid = False
+        if valid and record.get("effective_status") != "superseded":
+            problems.violation(
+                record_context,
+                "a stored status is overridden only by a terminal supersession "
+                "record with effective_status 'superseded'",
+            )
+            valid = False
+        if valid and record.get("phase_id") != phase_id:
+            problems.violation(record_context, "supersession phase_id differs from phase.json")
+            valid = False
+        if valid and not (
+            isinstance(record.get("decided_at"), str) and is_rfc3339(record["decided_at"])
+        ):
+            problems.malformed(record_context, "decided_at must be an RFC 3339 instant")
+            valid = False
+        if valid and not (
+            isinstance(record.get("reviewer"), str) and record["reviewer"]
+        ):
+            problems.malformed(record_context, "reviewer must be a nonempty string")
+            valid = False
+        if valid:
+            review = record.get("decision_review")
+            if not (
+                isinstance(review, str)
+                and is_repo_path(review)
+                and (root / Path(*PurePosixPath(review).parts)).is_file()
+            ):
+                problems.violation(
+                    record_context, "decision_review must name an existing repository file"
+                )
+                valid = False
+        if valid:
+            pinned = record.get("preserved_phase_sha256")
+            if not (
+                isinstance(pinned, str)
+                and SHA256_RE.fullmatch(pinned)
+                and pinned.upper() == sha256_file(phase_dir / "phase.json")
+            ):
+                problems.violation(
+                    record_context,
+                    "preserved_phase_sha256 must match the live phase.json bytes",
+                )
+                valid = False
+        if valid:
+            successor_id = record.get("successor_phase_id")
+            successor_path = record.get("successor_path")
+            successor_ok = (
+                isinstance(successor_id, str)
+                and ID_RE.fullmatch(successor_id)
+                and successor_id != phase_id
+                and isinstance(successor_path, str)
+                and is_repo_path(successor_path)
+                and (root / Path(*PurePosixPath(successor_path).parts) / "phase.json").is_file()
+            )
+            if not successor_ok:
+                problems.violation(
+                    record_context,
+                    "supersession must name an existing distinct successor phase",
+                )
+                valid = False
+            else:
+                successors[phase_id] = successor_id
+        effective[phase_id] = "superseded" if valid else status
+    active_ids = sorted(
+        phase_id for phase_id, status in effective.items() if status == "active"
+    )
+    fleet_context = PHASES_ROOT.as_posix()
+    if len(active_ids) != 1:
+        problems.violation(
+            fleet_context,
+            "exactly one retained phase must be effectively active, found "
+            + (", ".join(active_ids) if active_ids else "none"),
+        )
+    active_id = active_ids[0] if len(active_ids) == 1 else None
+    if active_id is not None and active_dir is not None:
+        if dirs_by_id.get(active_id, Path()).resolve() != active_dir:
+            problems.violation(
+                fleet_context,
+                "the active-phase pointer must select the effectively active phase",
+            )
+    for phase_id, status in sorted(effective.items()):
+        if phase_id == active_id:
+            continue
+        if status not in TERMINAL_PHASE_STATUSES:
+            problems.violation(
+                fleet_context,
+                f"retained nonpointer phase {phase_id} must be effectively "
+                f"terminal, found status {status}",
+            )
+    for phase_id in sorted(successors):
+        successor_id = successors[phase_id]
+        if successor_id not in dirs_by_id:
+            problems.violation(
+                fleet_context,
+                f"supersession successor {successor_id} is not a retained phase",
+            )
+            continue
+        visited = {phase_id}
+        cursor = successor_id
+        while cursor in successors:
+            if cursor in visited:
+                problems.violation(
+                    fleet_context, f"supersession cycle includes {cursor}"
+                )
+                break
+            visited.add(cursor)
+            cursor = successors[cursor]
+        else:
+            if active_id is not None and cursor != active_id:
+                problems.violation(
+                    fleet_context,
+                    f"supersession chain from {phase_id} ends at {cursor}, "
+                    "not the effectively active phase",
+                )
+    return problems
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
     if args.self_test:
         return run_self_test()
-    phase_dir = args.phase_dir if args.phase_dir.is_absolute() else ROOT / args.phase_dir
+    if args.phase_dir is not None and args.all_phases:
+        print("error: --phase-dir and --all-phases are mutually exclusive", file=sys.stderr)
+        return 2
+
+    active_dir, pointer_errors = active_phase_dir()
+    if pointer_errors and args.phase_dir is None:
+        for error in pointer_errors:
+            print(f"phase contract malformed: {error}", file=sys.stderr)
+        return 2
+
+    if args.all_phases:
+        phase_root = ROOT / PHASES_ROOT
+        phase_dirs = sorted(
+            path for path in phase_root.iterdir()
+            if path.is_dir() and (path / "phase.json").is_file()
+        )
+        if not phase_dirs:
+            print("phase contract malformed: no retained phase directories found", file=sys.stderr)
+            return 2
+        exit_code = 0
+        for phase_dir in phase_dirs:
+            validator = PhaseValidator(ROOT, phase_dir)
+            problems = validator.validate()
+            if problems.ok:
+                marker = " [active]" if active_dir == phase_dir.resolve() else ""
+                print(validator.summary() + marker)
+                continue
+            print(f"phase validation failed: {phase_dir.relative_to(ROOT).as_posix()}", file=sys.stderr)
+            problems.render()
+            exit_code = max(exit_code, 2 if problems.format_errors else 1)
+        fleet = validate_all_phases(ROOT, phase_dirs, active_dir)
+        if not fleet.ok:
+            print("phase fleet validation failed", file=sys.stderr)
+            fleet.render()
+            exit_code = max(exit_code, 2 if fleet.format_errors else 1)
+        return exit_code
+
+    phase_dir = args.phase_dir
+    if phase_dir is None:
+        if active_dir is None:
+            print("phase contract malformed: active phase could not be resolved", file=sys.stderr)
+            return 2
+        phase_dir = active_dir
+    elif not phase_dir.is_absolute():
+        phase_dir = ROOT / phase_dir
     validator = PhaseValidator(ROOT, phase_dir)
     problems = validator.validate()
     if problems.ok:

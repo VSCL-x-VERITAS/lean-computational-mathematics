@@ -1,0 +1,110 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "The source says the solve yields information 'that can be used to compute a numerical flux' but supplies no formula in this paragraph.",
+      "impact": "Godunov, approximate, fluctuation-based, or other interface constructions may instantiate the claim; fixing one is a specialization.",
+      "issue": "The map from Riemann-solution information to numerical flux is not specified."
+    },
+    {
+      "evidence": "The source says the flux updates cell averages over a time step without displaying delta-t, cell-volume, left/right flux-difference, or boundary formulas.",
+      "impact": "A formal update theorem must add these indexing and scaling conventions and cannot attribute them verbatim to the cited paragraph.",
+      "issue": "The full conservative update and orientation conventions are deferred."
+    },
+    {
+      "evidence": "The following page says exact nonlinear Riemann solutions can be too expensive and approximate solvers are used, without a consistency or error condition here.",
+      "impact": "The source supports approximate solvers but does not certify every approximation as a good numerical flux or provide a quantitative bound.",
+      "issue": "The exact-versus-approximate solver accuracy requirement is qualitative."
+    }
+  ],
+  "batch_source_contract_sha256": "bddda9768531429c363af90d5c05ed2bfc848979a985ecdf5d08386318ecab93",
+  "contract_plain_english": "At the shared interface of neighboring finite-volume cells, use the left average Q_{i-1} and right average Q_i as Riemann data. The interface solve - exact or suitably approximate - supplies information for a numerical flux that advances the cell averages through the time step.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Section 1.2 sentence describing numerical flux functions",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "Finite-volume cell averages are modified each time step by flux through cell edges, and numerical flux functions approximate the correct fluxes using approximate cell averages, the only available data."
+    },
+    {
+      "anchor": "Equation (1.11) and the paragraph immediately following it",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "At the interface between neighboring cells with averages Q_{i-1} and Q_i, the source sets the local Riemann states q_l = Q_{i-1} and q_r = Q_i."
+    },
+    {
+      "anchor": "Continuation of the paragraph after equation (1.11)",
+      "location": "raw PDF page 27; printed Chapter 1 page 5",
+      "observation": "Solving that Riemann problem provides information used to compute a numerical flux and update the cell averages over a time step."
+    },
+    {
+      "anchor": "Riemann-solution description and the following computational paragraph",
+      "location": "raw PDF pages 27-28; printed Chapter 1 pages 5-6",
+      "observation": "Riemann solutions are typically self-similar wave decompositions; exact solutions may be too expensive for nonlinear problems, so approximate Riemann solvers are used in numerical implementations."
+    }
+  ],
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "statement": {
+    "binders": [
+      "Two neighboring finite-volume grid cells indexed i-1 and i with approximate cell averages Q_{i-1} and Q_i.",
+      "Their shared cell interface, represented in local coordinates as x = 0.",
+      "A Riemann solver and the numerical flux computed for that interface."
+    ],
+    "conclusions": [
+      "Information from solving the interface Riemann problem is used to compute a numerical flux at the shared cell edge.",
+      "That numerical flux is used to update the cell averages over a time step.",
+      "An approximate Riemann solver may be used when an exact solution is computationally too expensive."
+    ],
+    "definitions_and_conventions": [
+      "The left cell average Q_{i-1} supplies q_l and the right cell average Q_i supplies q_r; reversing them changes the local Riemann problem.",
+      "The numerical flux is an approximation to the correct physical flux through the shared interface.",
+      "The interface location x = 0 is a local-coordinate convention inherited from equation (1.11).",
+      "Riemann-solution information may consist of waves and speeds rather than only a pointwise state."
+    ],
+    "hypotheses": [
+      "The interface Riemann problem uses the left state q_l = Q_{i-1} and the right state q_r = Q_i.",
+      "The available input data is the neighboring approximate cell averages."
+    ],
+    "implicit_context": [
+      "The passage does not display a closed numerical-flux formula or a complete indexed update equation.",
+      "The Riemann solver can be exact or approximate; the essential input ordering and use in the flux/update remain the same.",
+      "The computed interface flux is part of a conservative finite-volume time step in the conservation-law setting.",
+      "No reconstruction beyond piecewise-constant cell averages is specified in this introductory description."
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "Adjacent cell averages become the ordered left and right states of a local Riemann problem."
+        ],
+        "topic": "interface state construction"
+      },
+      {
+        "details": [
+          "The Riemann solution supplies information from which a numerical interface flux is computed."
+        ],
+        "topic": "flux extraction"
+      },
+      {
+        "details": [
+          "The interface flux contributes to updating cell averages over the time step."
+        ],
+        "topic": "time update"
+      },
+      {
+        "details": [
+          "Approximate Riemann solvers are permitted when exact nonlinear solves are too costly."
+        ],
+        "topic": "solver flexibility"
+      }
+    ]
+  },
+  "task_id": "LEV-CH01-RIEMANN-INTERFACE-FLUX",
+  "undebatable_constraints": [
+    "The left Riemann state is q_l = Q_{i-1} and the right state is q_r = Q_i.",
+    "Q_{i-1} and Q_i are approximate cell averages in neighboring cells.",
+    "The Riemann problem is solved at their shared interface to obtain information for a numerical flux.",
+    "The resulting numerical flux is used in a cell-average update over a time step.",
+    "The numerical flux must approximate the correct interface flux using the available cell-average data.",
+    "The source permits approximate Riemann solvers and does not require an exact nonlinear solution.",
+    "No particular numerical-flux functional, reconstruction, limiter, or time integrator is fixed by this passage."
+  ]
+}

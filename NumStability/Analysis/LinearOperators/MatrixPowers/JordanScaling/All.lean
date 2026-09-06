@@ -1,9 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling.Complex
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealDiagonal
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealJordan
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.JordanScaling.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

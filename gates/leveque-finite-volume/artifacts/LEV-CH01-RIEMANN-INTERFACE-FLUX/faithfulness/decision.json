@@ -1,0 +1,70 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-stronger",
+  "completed_at_utc": "2026-09-01T13:14:12.606545+00:00",
+  "findings": [
+    {
+      "category": "genuine-certification-strength",
+      "impact": "This is a substantive, nonvacuous strengthening of the exact-solution branch, supporting faithful-stronger rather than equivalence.",
+      "lean_evidence": "Every method solve returns a CertifiedHyperbolicRiemannSolution whose field has Equation (1.11) data and satisfies the integral conservation law.",
+      "severity": "note",
+      "source_evidence": "The selected paragraph says that solving the adjacent Riemann problem yields information usable for flux and update, while nearby context allows exact solutions or arbitrarily good approximations."
+    },
+    {
+      "category": "approximate-solver-applicability",
+      "impact": "The theorem does not cover the source's practical approximate-solver branch; this limits applicability but does not invalidate the faithfully represented exact branch.",
+      "lean_evidence": "RiemannInterfaceFluxMethod requires a total exact certified solution for every problem and has no approximation or error interface.",
+      "severity": "minor",
+      "source_evidence": "The next paragraph states that exact Riemann solutions are often too expensive and approximate Riemann solvers are used computationally."
+    },
+    {
+      "category": "explicit-consistency-and-update-strength",
+      "impact": "These exact downstream laws are genuine additional conclusions/structure and are source-compatible finite-volume strengthening.",
+      "lean_evidence": "The method is constant-state consistent for every state and updatedCellAverages equal Q_i-(dt/dx_i)(F_{i+1}-F_i) for every i.",
+      "severity": "note",
+      "source_evidence": "The source says the information can be used to compute a numerical flux and update averages, without stating a universal constant-state law or a formula in the focal sentence."
+    },
+    {
+      "category": "analytic-source-compatible-strengthening",
+      "impact": "The result applies to a more structured class of hyperbolic conservation laws and solvers while retaining the source operation.",
+      "severity": "note",
+      "source_evidence": "The source identifies a hyperbolic Riemann problem but does not formalize differentiability, diagonalizability, or the solution certificate in this scoped sentence.",
+      "translation_evidence": "The translation requires a differentiable physical flux with a represented real-diagonalizable Jacobian and certified interval-conservation solutions."
+    },
+    {
+      "category": "explicit-update-specialization",
+      "impact": "The exact formula is additional source-compatible structure and is not presented as uniquely dictated by the source.",
+      "severity": "note",
+      "source_evidence": "The source leaves the numerical-flux extraction and cell-update formulas unspecified.",
+      "translation_evidence": "The translation selects an abstract information readout with equal-state consistency and the standard nonuniform flux-difference update."
+    },
+    {
+      "category": "abstract-information-semantics",
+      "impact": "The abstraction preserves the source's deliberate freedom about what solver information is used.",
+      "severity": "note",
+      "source_evidence": "The source says only that the Riemann solution provides information usable for a numerical flux.",
+      "translation_evidence": "Information remains abstract, but it is explicitly extracted from a certified solution and passed to the numerical-flux readout."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "Any instance of the Lean target has genuine neighboring cell averages Q_{i-1}, Q_i, solves their law-indexed Riemann problem with precisely those left and right data, extracts information from that solution, computes the corresponding numerical flux, and uses the edge-flux family in an explicit conservative timestep update. Thus it realizes every stage asserted in the selected source passage.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "The source's claim and inherited context do not entail the target's total certified exact solver, global integral-conservation certificate for every returned solution, constant-state numerical-flux consistency for every state, or the particular explicit conservative update equality. The source also expressly allows arbitrarily good approximations and practical approximate Riemann solvers, which need not inhabit the exact certified method type.",
+      "verdict": "no"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-stronger",
+    "roundtrip": "faithful-stronger"
+  },
+  "rationale": "The repaired target is operationally faithful: it uses genuine normalized cell averages on a positive contiguous grid; forms, for each interface, the exact Riemann problem with left state Q_{i-1} and right state Q_i; obtains a problem-indexed certified solution with Equation (1.11) initial data and the integral conservation law; extracts information from that same solution; computes the numerical flux from that same information; and consumes the resulting edge fluxes in an explicit conservative update. The construction is therefore substantive and Lean implies the selected source claim. The converse fails for genuine additional semantic content, not merely naming or vacuity: the source does not require a total exact certified solver, a global integral-law certificate for every solve, universal constant-state consistency, or the exact update equality, and its inherited context expressly includes approximate solvers. Those differences are compatible strengthening of the exact branch, so the classification is faithful-stronger and accepted, with no unresolved evidence requiring adjudication.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "LEV-CH01-RIEMANN-INTERFACE-FLUX"
+}

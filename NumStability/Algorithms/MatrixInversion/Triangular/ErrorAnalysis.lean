@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixInversion.Triangular.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.ErrorAnalysis
 
 /-!
-# NumStability.Algorithms.MatrixInversion.Triangular.ErrorAnalysis
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixInversion.Triangular.ErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/

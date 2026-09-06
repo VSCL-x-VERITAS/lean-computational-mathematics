@@ -1,0 +1,44 @@
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.BackwardError.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.AttainedMinima
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.AutomaticBounds
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.GeneralizedEquations.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm
+import ComputationalMathematics.Source.Higham.Chapter16.Foundations.Core
+import ComputationalMathematics.Source.Higham.Chapter16.HessenbergSchur.Results
+import ComputationalMathematics.Source.Higham.Chapter16.HessenbergSchur.Rounded
+import ComputationalMathematics.Source.Higham.Chapter16.Minimizers.Results
+import ComputationalMathematics.Source.Higham.Chapter16.Problem02
+import ComputationalMathematics.Source.Higham.Chapter16.Problem02.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Solve
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Sylvester
+import ComputationalMathematics.Source.Higham.Chapter16.Section01.SylvesterEquation
+import ComputationalMathematics.Source.Higham.Chapter16.Section01.SylvesterEquation.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.RealSchurDecomposition.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AutomaticBounds.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.All
+import ComputationalMathematics.Source.Higham.Chapter16.Spectrum.Minimizers
+import ComputationalMathematics.Source.Higham.Chapter16.Spectrum.Results
+import ComputationalMathematics.Source.Higham.Chapter16.VecNorm.Results
+import ComputationalMathematics.Source.Higham.Chapter16.VecPermutation.Notes
+
+/-!
+# Sylvester-equation family
+
+Complete discovery aggregate for the historical Sylvester implementation and
+Higham Chapter 16 correspondence modules. This is a mixed family surface;
+implementation modules should prefer the narrowest leaf import they need.
+-/

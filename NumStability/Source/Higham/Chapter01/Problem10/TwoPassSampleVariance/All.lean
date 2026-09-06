@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.Bounds
+import ComputationalMathematics.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.All
 
 /-!
-# Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

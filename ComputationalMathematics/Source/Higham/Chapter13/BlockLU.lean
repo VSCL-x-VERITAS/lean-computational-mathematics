@@ -1,0 +1,92 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Algorithm01
+import ComputationalMathematics.Source.Higham.Chapter13.Algorithm03
+import ComputationalMathematics.Source.Higham.Chapter13.Algorithm04
+import ComputationalMathematics.Source.Higham.Chapter13.Equation01
+import ComputationalMathematics.Source.Higham.Chapter13.Equation02
+import ComputationalMathematics.Source.Higham.Chapter13.Equation03
+import ComputationalMathematics.Source.Higham.Chapter13.Equation18
+import ComputationalMathematics.Source.Higham.Chapter13.Equation19
+import ComputationalMathematics.Source.Higham.Chapter13.Equation20
+import ComputationalMathematics.Source.Higham.Chapter13.Equation21
+import ComputationalMathematics.Source.Higham.Chapter13.Equation22
+import ComputationalMathematics.Source.Higham.Chapter13.Equation23
+import ComputationalMathematics.Source.Higham.Chapter13.Equation23.PointRowGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Equation24
+import ComputationalMathematics.Source.Higham.Chapter13.Equation25
+import ComputationalMathematics.Source.Higham.Chapter13.Equation25.Factorization
+import ComputationalMathematics.Source.Higham.Chapter13.Equation25.Families
+import ComputationalMathematics.Source.Higham.Chapter13.Equation26
+import ComputationalMathematics.Source.Higham.Chapter13.Lemma09
+import ComputationalMathematics.Source.Higham.Chapter13.Lemma10.ConditionNumber
+import ComputationalMathematics.Source.Higham.Chapter13.Lemma10.SchurComplement
+import ComputationalMathematics.Source.Higham.Chapter13.Problem01
+import ComputationalMathematics.Source.Higham.Chapter13.Problem02
+import ComputationalMathematics.Source.Higham.Chapter13.Problem03
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveStageBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveStageProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveTailProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.BlockInverseBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ComparisonChains
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.DeterminantChainProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationExistence
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts.ComparisonUpdates
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts.DeterminantBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts.InverseBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts.LocalComparisons
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts.LowerBlockBudgets
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.ActiveSuffix
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.DiagonalUpdate
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.TailChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.HistoryEnvelope
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.InfNormGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.InverseRatioChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LocalGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LocalNormBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LowerComparisonChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStageHistory
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStages
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.OneStepProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ProductBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.RecursiveBudgetChains
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ScalarGrowthBridge
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.StageHistory
+import ComputationalMathematics.Source.Higham.Chapter13.Problem05
+import ComputationalMathematics.Source.Higham.Chapter13.Problem06
+import ComputationalMathematics.Source.Higham.Chapter13.Problem07
+import ComputationalMathematics.Source.Higham.Chapter13.Problem08
+import ComputationalMathematics.Source.Higham.Chapter13.Problem09
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.NormConventions
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.OperationModelFamilies
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.OperationModels
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.StandardFactorization
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.ArbitraryNormDominance
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.ColumnDominanceClosure
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.RowDominanceClosure
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.SchurStageAnalysis
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.SPDFactorBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Table01
+import ComputationalMathematics.Source.Higham.Chapter13.Table01.Families
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem02.Factorization
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem02.Uniqueness
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem02.VaryingBlocks
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05.ErrorAnalysis
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05.FamilyErrorAnalysis
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05.Recurrences
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem06.AssumptionModel
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem06.Computation
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem06.FactorAndSolve
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem07.OneStep
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem07.PivotExistence
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem08.OneStep
+
+/-!
+# Higham Chapter 13: BlockLU
+
+Declaration-free aggregate with an exact 82-member direct-import surface:
+81 declaration-bearing Chapter 13 BlockLU owners and the declaration-free
+`Theorem02.VaryingBlocks` locator. The 287 declarations from the ten historical
+sibling paths moved into semantic destinations, while those paths remain
+available as compatibility wrappers.
+-/

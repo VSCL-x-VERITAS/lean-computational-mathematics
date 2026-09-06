@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter08.Section04.FanInCore.AllOrdersEnvelope
-import NumStability.Source.Higham.Chapter08.Section04.FanInCore.Factors
-import NumStability.Source.Higham.Chapter08.Section04.FanInCore.ResidualForwardBounds
+import ComputationalMathematics.Source.Higham.Chapter08.Section04.FanInCore.All
 
 /-!
-# Source.Higham.Chapter08.Section04.FanInCore.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter08.Section04.FanInCore.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

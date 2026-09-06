@@ -1,13 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation22
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation23
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation24
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation25
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation26
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation27
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.LyapunovSolutions
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All
 
 /-!
-# Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

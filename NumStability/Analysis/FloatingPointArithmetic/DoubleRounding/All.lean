@@ -1,8 +1,8 @@
-import NumStability.Analysis.FloatingPointArithmetic.DoubleRounding.FiniteNormalRange
-import NumStability.Analysis.FloatingPointArithmetic.DoubleRounding.ToyBinary
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.DoubleRounding.All
 
 /-!
-# Analysis.FloatingPointArithmetic.DoubleRounding.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Analysis.FloatingPointArithmetic.DoubleRounding.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

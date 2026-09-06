@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.RowScalingInvariance
+import ComputationalMathematics.Source.Higham.Chapter21.RowScalingInvariance
 
 /-!
 # Historical Higham Chapter 21 row-scaling import

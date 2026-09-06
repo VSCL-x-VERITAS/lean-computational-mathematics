@@ -1,0 +1,15 @@
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.ConstructiveFactorization.Existence
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Endpoints
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Existence
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.PivotingAndScaling.Results
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.QuadraticFormBounds.WeightedNorm
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.SchurComplement
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Termination
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.TrailingTermination.Bound
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.WNormBound
+
+/-!
+# Source Higham Chapter10 Section03 PositiveSemidefinite
+
+Declaration-free aggregate for the canonical modules in this semantic family.
+-/

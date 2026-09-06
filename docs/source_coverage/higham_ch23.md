@@ -28,3 +28,12 @@ Use `import NumStability.Source.Higham.Chapter23` for the complete canonical
 chapter surface, or import a semantic leaf below that path. The six
 `NumStability.Algorithms.FastMatMul.Higham23*` modules are retained only as
 import-only compatibility wrappers.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter23` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

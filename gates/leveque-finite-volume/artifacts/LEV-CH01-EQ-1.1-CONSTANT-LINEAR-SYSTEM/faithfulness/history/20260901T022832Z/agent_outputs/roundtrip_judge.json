@@ -1,0 +1,172 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-EQ-1.1-CONSTANT-LINEAR-SYSTEM",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "57f5efa7c965a8c255b30a137dfbf1cf14d68bcdb23e171c621285e0126ba8d1",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The locator identifies Equation (1.1) on raw PDF page 23 together with the surrounding explanation of q, A, and derivative subscripts; the rendered page contains exactly that material.",
+      "translation_evidence": "The translation addresses a real vector-valued function q, a fixed real square coefficient matrix, its x- and t-derivatives, and the equation with zero.",
+      "reasoning": "The selected passage and the mathematical subject of the translation coincide."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "The source gives q : R x R -> R^m, variables x and t, and a constant real m x m matrix A.",
+      "translation_evidence": "The binders use q : R -> R -> (Fin m -> R), real x and t, and a Matrix (Fin m) (Fin m) R coefficient.",
+      "reasoning": "Currying and Fin-indexed vectors/matrices preserve the source types and object dimensions; the possible zero-dimensional case is assessed separately."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "Equation (1.1) specifies the differential equation satisfied by the unknown vector q as a function of x and t.",
+      "translation_evidence": "The translation universally quantifies arbitrary q, coefficient, x, and t, then asserts only that LocalDef001 holds if and only if its existential expansion holds.",
+      "reasoning": "The source's PDE condition is not asserted at the quantified points; it appears only on one side of an equivalence with a predicate defined to mean that same condition."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The source states that A is constant and explains q_t and q_x as partial derivatives; it says separately that additional matrix properties are needed only to call the problem hyperbolic.",
+      "translation_evidence": "The coefficient is a fixed matrix parameter and the expanded predicate requires the two relevant one-variable derivatives at the chosen point.",
+      "reasoning": "The side conditions inherent in the displayed constant-coefficient equation are represented; the top-level failure to require the predicate is handled by other checks."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The source's displayed conclusion is the homogeneous system q_t(x,t) + A q_x(x,t) = 0.",
+      "translation_evidence": "The translated conclusion is an equivalence between LocalDef001 and the existence of derivative vectors satisfying the displayed vector equation.",
+      "reasoning": "The equation occurs inside a characterization, but the translation never concludes that the equation or its derivative witnesses actually hold."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source uses q_t and q_x for partial derivatives and A q_x for real matrix-vector multiplication.",
+      "translation_evidence": "The translation interprets the partials as derivatives of the separately fixed-variable maps and interprets coefficient.mulVec componentwise as a finite matrix-vector product.",
+      "reasoning": "The nontrivial analytic and algebraic operators in the local equation have the intended meanings."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source presents an equality to the zero vector as the governing PDE.",
+      "translation_evidence": "At top level the translation presents an if-and-only-if; its equality to zero is nested inside the existential right-hand side.",
+      "reasoning": "Replacing the governing equality by a definitional equivalence changes the logical relation and makes the translated proposition strictly weaker as an assertion about q."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes the unknown vector q, its two partial derivatives, and the constant coefficient matrix A.",
+      "translation_evidence": "The translation keeps q and coefficient distinct and uses separate witnesses qt and qx for the t- and x-derivatives.",
+      "reasoning": "The mathematical objects and their roles in the local equation are not conflated."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "A is a constant real m x m matrix acting on the m-component derivative q_x.",
+      "translation_evidence": "coefficient has both indices in Fin m, is independent of x and t, and its product has components sum_j coefficient_ij qx_j.",
+      "reasoning": "Coefficient constancy, matrix dimensions, component indexing, and the zero right-hand side match."
+    },
+    {
+      "id": "C10",
+      "status": "unclear",
+      "source_evidence": "The source describes q as a vector with m components but does not state in this passage whether m may be zero.",
+      "translation_evidence": "The translation explicitly quantifies m over all natural numbers, including zero.",
+      "reasoning": "For positive m the domains agree, but the evidence does not resolve whether the zero-dimensional extension is intended."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "The passage does not discuss a zero-component system or other degenerate dimension.",
+      "translation_evidence": "At m = 0, the vector and matrix types are empty-dimensional and all derivative and component equations degenerate.",
+      "reasoning": "The translation handles m = 0 consistently internally, but the source does not establish whether that exceptional case belongs to the claimed system."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "Equation (1.1) is a substantive differential condition on the unknown functions q.",
+      "translation_evidence": "LocalDef001 abbreviates exactly the existential condition on the right, so the top-level equivalence is true by definition even when no derivative witnesses exist and the PDE is not satisfied.",
+      "reasoning": "The translated conclusion is non-informative for the source claim and succeeds for the unintended trivial reason that a definition equals its own expansion."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "Equation (1.1) is a continuous PDE model and the cited passage contains no algorithm, recurrence, discretization, or execution process.",
+      "translation_evidence": "The translation contains only derivatives and a matrix-vector equation, with no algorithmic construction.",
+      "reasoning": "There is no algorithm or numerical process whose linkage could be checked."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "The source equation is vector-valued, with an m-component q and an m x m matrix product.",
+      "translation_evidence": "The translation uses Fin m -> R vectors and explicitly gives the component equation qt_i + sum_j coefficient_ij qx_j = 0.",
+      "reasoning": "The relevant componentwise semantics match; no norm, seminorm, or metric occurs in either statement."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The cited passage states a PDE form and does not state an error, conditioning, residual, truncation, or numerical stability notion.",
+      "translation_evidence": "The translation contains no error or stability predicate.",
+      "reasoning": "No competing numerical error or stability notion is present."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "All quantities in Equation (1.1) are exact mathematical functions, derivatives, and a matrix.",
+      "translation_evidence": "All translated quantities are exact; none is rounded, perturbed, iterated, approximate, or computed.",
+      "reasoning": "There is no exact-versus-computed distinction to preserve."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The source equation contains no limit, asymptotic regime, Big-O term, or higher-order remainder.",
+      "translation_evidence": "The translation is an exact equivalence and exact vector equation with no asymptotic term.",
+      "reasoning": "No asymptotic or higher-order semantics occur."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The cited Equation (1.1) passage specifies the form of the system but makes no existence, uniqueness, invertibility, or well-posedness claim.",
+      "translation_evidence": "The translation makes no solution existence, uniqueness, rank, invertibility, or well-posedness claim.",
+      "reasoning": "Those properties are outside the selected source claim and its translation."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "The definitional equivalence holds for arbitrary q and coefficient, including cases where the partial derivatives do not exist or their equation is nonzero, so it does not entail the source PDE condition."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "Whenever the source PDE condition holds, the translated equivalence still holds; indeed the equivalence is definitionally true independently of whether the PDE condition holds."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "critical",
+      "category": "claim-shape-and-vacuity",
+      "source_evidence": "The source presents q_t(x,t) + A q_x(x,t) = 0 as the governing differential equation.",
+      "translation_evidence": "The translation proves only that a local predicate is equivalent to the condition that defines it.",
+      "impact": "The translated proposition can be true while q does not satisfy the source equation, so it is strictly weaker and does not state the selected result."
+    },
+    {
+      "severity": "major",
+      "category": "scope-of-the-PDE-condition",
+      "source_evidence": "The source describes q as the unknown function of x and t governed by Equation (1.1).",
+      "translation_evidence": "For each arbitrary point, the translation characterizes when LocalDef001 holds but never asserts that it holds at that point or throughout R x R.",
+      "impact": "The local derivative equation is represented semantically but is not imposed anywhere by the translated conclusion."
+    },
+    {
+      "severity": "minor",
+      "category": "zero-dimensional-generalization",
+      "source_evidence": "The source refers to an m-component vector and does not address m = 0.",
+      "translation_evidence": "The translation explicitly includes m = 0, where all component conditions are empty-dimensional.",
+      "impact": "This adds a degenerate case whose intended inclusion cannot be settled from the selected passage."
+    }
+  ],
+  "rationale": "The translation accurately reconstructs the local analytic expression and its matrix/component semantics, but the proposition it states is only a definitional unfolding of a local predicate. It therefore does not require the source PDE to hold for q at any point, whereas any source instance is compatible with the always-true definitional equivalence. The correct implication pattern is source-implies-translation but not translation-implies-source, yielding not-faithful-weaker. Adjudication is requested because the source passage does not resolve whether the translation's explicit m = 0 case is intended."
+}

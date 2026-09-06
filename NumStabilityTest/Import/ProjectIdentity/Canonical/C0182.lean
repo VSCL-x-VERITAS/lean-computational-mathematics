@@ -1,0 +1,9 @@
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.Givens.Rounded.Core
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.Givens.Rounded.Core`. -/
+
+#check NumStability.higham21_q_method_fixed_accumulation_rowwise_backward_stable
+#check NumStability.higham21_theorem21_4_givens_stored_replay_omegaR_le
+#check NumStability.higham21_theorem21_4_givens_stored_replay_omegaR_le_of_bridge
+#check NumStability.higham21_theorem21_4_givens_stored_replay_rowwise_backward_stable
+#check NumStability.higham21_theorem21_4_givens_stored_replay_rowwise_of_bridge

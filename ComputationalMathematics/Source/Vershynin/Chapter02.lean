@@ -1,0 +1,32 @@
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation12
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation18.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.ExponentialMarkov
+import ComputationalMathematics.Source.Vershynin.Chapter02.IndependentSumMGF
+import ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Definition01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Theorem06
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise05
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Definition06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08B
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise05A.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Lemma08
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Proposition01
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example12.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
+
+/-!
+# Vershynin Chapter 02 source contracts
+
+Complete source entry point for the migrated signatures and checked contracts
+from Vershynin's *High-Dimensional Probability*, Chapter 02.
+-/

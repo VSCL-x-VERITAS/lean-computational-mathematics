@@ -1,9 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Perturbation.Basic
-import NumStability.Algorithms.MatrixEquations.Sylvester.Perturbation.SeparationBounds
-import NumStability.Algorithms.MatrixEquations.Sylvester.Perturbation.Vectorization
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Perturbation.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

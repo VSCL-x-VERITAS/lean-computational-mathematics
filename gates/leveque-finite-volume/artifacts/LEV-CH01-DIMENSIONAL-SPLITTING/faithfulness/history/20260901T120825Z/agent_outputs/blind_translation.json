@@ -1,0 +1,79 @@
+{
+  "schema_version":"formalization-faithfulness-1",
+  "role":"blind-translation",
+  "dossier_sha256":"739d77caa34adcaa90bc8570a17b854e52c6b3b3e264c58cb40303cc23fccd94",
+  "dependency_coverage":[
+    {"id":"D001","name":"LocalDef001","meaning":"A directional step object containing a direction, a real time fraction with bounds, and a State-to-State one-dimensional solver.","effect_on_target":"The list steps consists of these objects; their directions establish coverage and their solvers form the sequential state update.","status":"understood"},
+    {"id":"D002","name":"LocalDef002","meaning":"The projection extracting a step's Direction value.","effect_on_target":"It is compared with each requested coordinate direction in the coverage condition.","status":"understood"},
+    {"id":"D003","name":"LocalDef003","meaning":"The projection extracting a step's oneDimensionalSolve function of type State → State.","effect_on_target":"It is mapped over steps to obtain the operator list used in the sequential fold.","status":"understood"},
+    {"id":"D004","name":"LocalDef004","meaning":"A two-constructor grid-geometry type.","effect_on_target":"The conclusion classifies gridGeometry as equal to one of its two constructors.","status":"understood"},
+    {"id":"D005","name":"LocalDef005","meaning":"One constructor of the grid-geometry type.","effect_on_target":"It is one of the two exhaustive geometry alternatives in the conclusion.","status":"understood"},
+    {"id":"D006","name":"LocalDef006","meaning":"The other constructor of the grid-geometry type.","effect_on_target":"It is one of the two exhaustive geometry alternatives in the conclusion.","status":"understood"},
+    {"id":"D007","name":"LocalDef007","meaning":"The aggregate step update, defined by extracting each step's one-dimensional solver and passing the resulting operator list and initial state to LocalDef008.","effect_on_target":"The final equality identifies this aggregate update with its defining mapped-fold expression.","status":"understood"},
+    {"id":"D008","name":"LocalDef008","meaning":"Sequential application of a list of State → State operators using a left fold, starting from the supplied state.","effect_on_target":"It is the explicit right-hand side of the aggregate-update equality.","status":"understood"},
+    {"id":"D009","name":"LocalDef009","meaning":"The step constructor taking a direction, a real time fraction satisfying 0 < timeFraction and timeFraction ≤ 1, and a State → State solver.","effect_on_target":"It supplies the semantic structure and built-in time-fraction restrictions of each LocalDef001 step.","status":"understood"},
+    {"id":"D010","name":"And","meaning":"Logical conjunction.","effect_on_target":"It combines geometry classification, repeated direction coverage, and update equality.","status":"understood"},
+    {"id":"D011","name":"Eq","meaning":"Propositional equality.","effect_on_target":"It compares step directions, classifies gridGeometry, and equates the two update expressions.","status":"understood"},
+    {"id":"D012","name":"Exists","meaning":"Existential quantification.","effect_on_target":"It expresses that every listed coordinate direction has at least one matching step in steps.","status":"understood"},
+    {"id":"D013","name":"List","meaning":"A finite ordered list.","effect_on_target":"Coordinate directions and directional steps are supplied as lists, and step order determines solver application order.","status":"understood"},
+    {"id":"D014","name":"List.instMembership","meaning":"The membership relation for lists.","effect_on_target":"It interprets membership in coordinateDirections and steps in the coverage clauses.","status":"understood"},
+    {"id":"D015","name":"List.map","meaning":"Elementwise mapping of a function over a list while preserving order.","effect_on_target":"It converts steps into the ordered list of their one-dimensional solver functions.","status":"understood"},
+    {"id":"D016","name":"Membership.mem","meaning":"Generic membership notation through a Membership instance.","effect_on_target":"It states that a direction belongs to coordinateDirections and that a matching step belongs to steps.","status":"understood"},
+    {"id":"D017","name":"Or","meaning":"Logical disjunction.","effect_on_target":"It expresses that gridGeometry is either LocalDef006 or LocalDef005.","status":"understood"},
+    {"id":"D018","name":"List.foldl","meaning":"A left fold over a list with an accumulator.","effect_on_target":"It applies the extracted solvers successively from left to right to the evolving state.","status":"understood"},
+    {"id":"D019","name":"LE.le","meaning":"Generic less-than-or-equal comparison.","effect_on_target":"It expresses the constructor restriction timeFraction ≤ 1 on every packaged step.","status":"understood"},
+    {"id":"D020","name":"LT.lt","meaning":"Generic strict less-than comparison.","effect_on_target":"It expresses the constructor restriction 0 < timeFraction on every packaged step.","status":"understood"},
+    {"id":"D021","name":"OfNat.ofNat","meaning":"Interpretation of a natural-number literal in a target type.","effect_on_target":"It interprets the real numerals 0 and 1 in the step constructor's time-fraction bounds.","status":"understood"},
+    {"id":"D022","name":"One.toOfNat1","meaning":"The numeral-one instance induced by a One structure.","effect_on_target":"It supplies the real value 1 used as the upper bound on a step's time fraction.","status":"understood"},
+    {"id":"D023","name":"Real","meaning":"The real numbers.","effect_on_target":"Each step's timeFraction is real-valued.","status":"understood"},
+    {"id":"D024","name":"Real.instLE","meaning":"The less-than-or-equal relation on real numbers.","effect_on_target":"It interprets timeFraction ≤ 1 in the step constructor.","status":"understood"},
+    {"id":"D025","name":"Real.instLT","meaning":"The strict less-than relation on real numbers.","effect_on_target":"It interprets 0 < timeFraction in the step constructor.","status":"understood"},
+    {"id":"D026","name":"Real.instOne","meaning":"The multiplicative-one value on real numbers.","effect_on_target":"It supplies the upper-bound value 1 in the step constructor.","status":"understood"},
+    {"id":"D027","name":"Real.instZero","meaning":"The zero value on real numbers.","effect_on_target":"It supplies the lower-bound value 0 in the step constructor.","status":"understood"},
+    {"id":"D028","name":"Zero.toOfNat0","meaning":"The numeral-zero instance induced by a Zero structure.","effect_on_target":"It interprets the literal 0 in the strict positivity requirement on timeFraction.","status":"understood"}
+  ],
+  "translation":{
+    "binders":[
+      "Arbitrary types Direction and State.",
+      "A gridGeometry value in a two-constructor geometry type.",
+      "A finite ordered list coordinateDirections of directions.",
+      "A finite ordered list steps of directional step objects, each carrying a direction, an admissible real time fraction, and a State → State one-dimensional solver."
+    ],
+    "hypotheses":[
+      "For every direction occurring in coordinateDirections, there exists at least one step occurring in steps whose direction field equals that direction."
+    ],
+    "conclusions":[
+      "For every state, gridGeometry equals either LocalDef006 or LocalDef005.",
+      "For every state, the original direction-coverage condition still holds.",
+      "For every state, LocalDef007 steps state equals LocalDef008 applied to the list of oneDimensionalSolve functions extracted from steps and to that state."
+    ],
+    "mathematical_definitions":[
+      "A LocalDef001 step packages a direction d, a real time fraction τ satisfying 0 < τ ≤ 1, and an operator S : State → State.",
+      "LocalDef008([S₁,…,Sₙ],x) applies the operators successively in list order: Sₙ(…S₂(S₁(x))…). For an empty list it returns x.",
+      "LocalDef007(steps,x) is defined exactly as LocalDef008(map oneDimensionalSolve steps,x).",
+      "Direction coverage means that each occurrence-value d represented in coordinateDirections has some member step of steps with step.direction = d; uniqueness and exact correspondence are not required.",
+      "LocalDef004 has exactly the two constructors LocalDef005 and LocalDef006."
+    ],
+    "proposition_plain_english":"If every listed coordinate direction is represented by at least one directional step, then for every initial state the grid geometry is one of the two possible geometry constructors, the same coverage property holds, and the aggregate update from the step list is exactly the left-to-right sequential application of the steps' one-dimensional solver functions."
+  },
+  "restrictions_and_vacuity_risks":[
+    "The implication is vacuous whenever the direction-coverage hypothesis is false.",
+    "If coordinateDirections is empty, the coverage hypothesis and its repeated conclusion are vacuously true, regardless of steps.",
+    "If State is empty, the final universal quantification over states is vacuous.",
+    "Coverage requires only at least one matching step per listed direction; it does not require uniqueness, distinctness, equal list lengths, absence of extra steps, or coverage of directions not listed.",
+    "Duplicate coordinate directions impose no stronger requirement than repeated satisfaction by an existing matching step.",
+    "The geometry disjunction is an exhaustive case split on a two-constructor type and therefore places no substantive additional restriction on gridGeometry.",
+    "The update equality is definitional because LocalDef007 is defined by the exact expression on the right-hand side.",
+    "The conclusion repeats the coverage hypothesis unchanged rather than deriving a stronger coverage property.",
+    "The time-fraction constraints 0 < τ ≤ 1 are stored in each constructed step, but the proposition imposes no relation among different steps' fractions, such as summing to one.",
+    "Solver order matters: no commutativity, permutation invariance, or independence of the steps is asserted.",
+    "When steps is empty, the aggregate update is the identity on State; coverage can then hold only when no coordinate direction requires a matching step."
+  ],
+  "ambiguities":[
+    "No semantic interpretation is supplied for the two geometry constructors LocalDef005 and LocalDef006 beyond their being the exhaustive alternatives.",
+    "The oneDimensionalSolve functions are arbitrary State → State maps; no analytic, numerical, or dimensional property is imposed by the type itself.",
+    "The term coordinate direction denotes an arbitrary value of Direction, with no vector-space, basis, or dimensional structure specified.",
+    "The proposition does not relate gridGeometry to coordinateDirections, steps, time fractions, or solver behavior.",
+    "The name oneDimensionalSolve suggests an intended interpretation not otherwise formalized in the dependency definitions."
+  ]
+}

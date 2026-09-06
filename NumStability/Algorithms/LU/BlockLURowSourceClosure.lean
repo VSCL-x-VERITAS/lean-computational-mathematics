@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter13.Section03.RowDominanceClosure
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.RowDominanceClosure
 
 /-!
 # Historical row-dominance Block LU compatibility import

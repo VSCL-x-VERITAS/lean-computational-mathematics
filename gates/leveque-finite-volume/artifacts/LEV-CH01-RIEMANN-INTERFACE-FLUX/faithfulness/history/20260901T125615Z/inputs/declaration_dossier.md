@@ -1,0 +1,1850 @@
+# Declaration dossier for LEV-CH01-RIEMANN-INTERFACE-FLUX
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_riemannInterfaceFlux_sourceContract
+    {m : ℕ} {Information : Type*} (hm : 0 < m)
+    (cellAverages : ℤ → (Fin m → ℝ))
+    (valueAtOrigin : ℤ → (Fin m → ℝ))
+    (solve : (Fin m → ℝ) → (Fin m → ℝ) → Information)
+    (fluxFromInformation : Information → (Fin m → ℝ))
+    (physicalInterfaceFlux :
+      (Fin m → ℝ) → (Fin m → ℝ) → (Fin m → ℝ))
+    (fluxScale : ℝ) (hfluxScale : 0 < fluxScale)
+    (hexactFlux : ∀ left right,
+      fluxFromInformation (solve left right) =
+        physicalInterfaceFlux left right) :
+    0 < m ∧ 0 < fluxScale ∧
+      ∃ updatedCellAverages : ℤ → (Fin m → ℝ),
+        (∀ i,
+          leveque01Equation11RiemannData
+            (adjacentCellRiemannData cellAverages
+              (valueAtOrigin i) i)
+            (cellAverages (i - 1)) (cellAverages i)) ∧
+        (∀ i,
+          fluxFromInformation
+              (solve (cellAverages (i - 1)) (cellAverages i)) =
+            physicalInterfaceFlux
+              (cellAverages (i - 1)) (cellAverages i)) ∧
+        ∀ i,
+          updatedCellAverages i =
+            conservativeFluxDifferenceUpdateInt fluxScale cellAverages
+              (fun j =>
+                fluxFromInformation
+                  (solve (cellAverages (j - 1)) (cellAverages j))) i
+```
+
+## Elaborated target type
+
+```lean
+∀ {m : Nat} {Information : Type u_1},
+  instLTNat.lt 0 m →
+    ∀ (cellAverages valueAtOrigin : Int → Fin m → Real) (solve : (Fin m → Real) → (Fin m → Real) → Information)
+      (fluxFromInformation : Information → Fin m → Real)
+      (physicalInterfaceFlux : (Fin m → Real) → (Fin m → Real) → Fin m → Real) (fluxScale : Real),
+      Real.instLT.lt 0 fluxScale →
+        (∀ (left right : Fin m → Real),
+            Eq (fluxFromInformation (solve left right)) (physicalInterfaceFlux left right)) →
+          And (instLTNat.lt 0 m)
+            (And (Real.instLT.lt 0 fluxScale)
+              (Exists fun updatedCellAverages =>
+                And
+                  (∀ (i : Int),
+                    NumStability.leveque01Equation11RiemannData
+                      (NumStability.adjacentCellRiemannData cellAverages (valueAtOrigin i) i)
+                      (cellAverages (instHSub.hSub i 1)) (cellAverages i))
+                  (And
+                    (∀ (i : Int),
+                      Eq (fluxFromInformation (solve (cellAverages (instHSub.hSub i 1)) (cellAverages i)))
+                        (physicalInterfaceFlux (cellAverages (instHSub.hSub i 1)) (cellAverages i)))
+                    (∀ (i : Int),
+                      Eq (updatedCellAverages i)
+                        (NumStability.conservativeFluxDifferenceUpdateInt fluxScale cellAverages
+                          (fun j => fluxFromInformation (solve (cellAverages (instHSub.hSub j 1)) (cellAverages j)))
+                          i)))))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {m : Nat} {Information : Type u_1}
+  (hm : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m)
+  (cellAverages valueAtOrigin : Int → Fin m → Real) (solve : (Fin m → Real) → (Fin m → Real) → Information)
+  (fluxFromInformation : Information → Fin m → Real)
+  (physicalInterfaceFlux : (Fin m → Real) → (Fin m → Real) → Fin m → Real) (fluxScale : Real)
+  (hfluxScale :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) fluxScale)
+  (hexactFlux :
+    ∀ (left right : Fin m → Real),
+      @Eq.{1} (Fin m → Real) (fluxFromInformation (solve left right)) (physicalInterfaceFlux left right)),
+  And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m)
+    (And
+      (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+        fluxScale)
+      (@Exists.{1} (Int → Fin m → Real) fun (updatedCellAverages : Int → Fin m → Real) =>
+        And
+          (∀ (i : Int),
+            @NumStability.leveque01Equation11RiemannData m
+              (@NumStability.adjacentCellRiemannData.{0} (Fin m → Real) cellAverages (valueAtOrigin i) i)
+              (cellAverages
+                (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) i
+                  (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+              (cellAverages i))
+          (And
+            (∀ (i : Int),
+              @Eq.{1} (Fin m → Real)
+                (fluxFromInformation
+                  (solve
+                    (cellAverages
+                      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) i
+                        (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+                    (cellAverages i)))
+                (physicalInterfaceFlux
+                  (cellAverages
+                    (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) i
+                      (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+                  (cellAverages i)))
+            (∀ (i : Int),
+              @Eq.{1} (Fin m → Real) (updatedCellAverages i)
+                (@NumStability.conservativeFluxDifferenceUpdateInt.{0} (Fin m → Real)
+                  (@Pi.addCommGroup.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) => Real.instAddCommGroup)
+                  (@Pi.Function.module.{0, 0, 0} (Fin m) Real Real Real.semiring
+                    (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+                      (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                        (@Semiring.toNonUnitalSemiring.{0} Real (@Ring.toSemiring.{0} Real Real.instRing))))
+                    (@Semiring.toModule.{0} Real Real.semiring))
+                  fluxScale cellAverages
+                  (fun (j : Int) =>
+                    fluxFromInformation
+                      (solve
+                        (cellAverages
+                          (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) j
+                            (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+                        (cellAverages j)))
+                  i)))))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface`, `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference`, `NumStability.Source.LeVeque.Chapter01.Equation11`
+- `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface` imports: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` imports: `Mathlib.Algebra.BigOperators.Module`, `Mathlib.Data.Real.Basic`, `Mathlib.Tactic.Module`
+- `NumStability.Source.LeVeque.Chapter01.Equation11` imports: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.adjacentCellRiemannData`
+
+- Role: `local`
+- Owner module: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `521570cd17b2211c2961b02e506645aa669796f4385b5f1fbc0ee66caab7025a`
+
+Type:
+
+```lean
+{State : Type u_1} → (Int → State) → State → Int → Real → State
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (cellAverages : Int → State) → (valueAtOrigin : State) → (i : Int) → Real → State
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} cellAverages valueAtOrigin i =>
+  NumStability.riemannData (cellAverages (instHSub.hSub i 1)) valueAtOrigin (cellAverages i)
+```
+
+### D002: `NumStability.conservativeFluxDifferenceUpdateInt`
+
+- Role: `local`
+- Owner module: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `790ab7035414f0cd156bde75a2a24deb32ab243371caadac108f16dbd6a4a554`
+
+Type:
+
+```lean
+{E : Type u_1} → [inst : AddCommGroup E] → [Module Real E] → Real → (Int → E) → (Int → E) → Int → E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_1} →
+  [inst : AddCommGroup.{u_1} E] →
+    [@Module.{0, u_1} Real E Real.semiring (@AddCommGroup.toAddCommMonoid.{u_1} E inst)] →
+      (timeStepOverCellWidth : Real) → (cellAverages edgeFlux : Int → E) → (i : Int) → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [AddCommGroup E] [Module Real E] timeStepOverCellWidth cellAverages edgeFlux i =>
+  instHSub.hSub (cellAverages i)
+    (instHSMul.hSMul timeStepOverCellWidth (instHSub.hSub (edgeFlux (instHAdd.hAdd i 1)) (edgeFlux i)))
+```
+
+### D003: `NumStability.leveque01Equation11RiemannData`
+
+- Role: `local`
+- Owner module: `NumStability.Source.LeVeque.Chapter01.Equation11`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `b978b1cc10be2f972be9fb6e49823139cd6e2661461c71d413daa940c16f399d`
+
+Type:
+
+```lean
+{m : Nat} → (Real → Fin m → Real) → (Fin m → Real) → (Fin m → Real) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{m : Nat} → (initialState : Real → Fin m → Real) → (leftState rightState : Fin m → Real) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {m} initialState leftState rightState => NumStability.IsRiemannData initialState leftState rightState
+```
+
+### D004: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `58b9dfa376d4406a8d4dc526e48a9f62b8f14ef7da7e393be3aae2a0d1ead02a`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D005: `NumStability.riemannData`
+
+- Role: `local`
+- Owner module: `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `fb57c54bf2e75c766e17efb76800f3dfb03b090dd84815b2084d7a10d5f48b36`
+
+Type:
+
+```lean
+{State : Type u_1} → State → State → State → Real → State
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (leftState valueAtOrigin rightState : State) → Real → State
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} leftState valueAtOrigin rightState x =>
+  ite (Real.instLT.lt x 0) leftState (ite (Real.instLT.lt 0 x) rightState valueAtOrigin)
+```
+
+### D006: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D007: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D008: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D009: `Fin`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `59788903be5da78a88e4dc3844df38effdaabdfa82bb364602790d2271da7fda`
+
+Type:
+
+```lean
+Nat → Type
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) → Type
+```
+
+### D010: `HSub.hSub`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `98025b38d523c0eadea77ba4961a20b2a913b23c079c4bfeba24a7bfaa24a4bc`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSub α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HSub.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSub α β γ] => self.1
+```
+
+### D011: `Int`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Int.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `257bf50f640447b541733c8fd9c6bcca584fc9dd85c221eb4f37888655c88e08`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D012: `Int.instSub`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Int.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `cdec027f4b1a52ca9841248e8efbabc901ed4e9b4220aa4074044d4c9537c68c`
+
+Type:
+
+```lean
+Sub Int
+```
+
+Fully explicit type:
+
+```lean
+Sub.{0} Int
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ sub := Int.sub }
+```
+
+### D013: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D014: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D015: `NonUnitalNonAssocSemiring.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Ring.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fc6b0a41257a855dbb5b09cfe7e3150884caf2b0f898b30e688420784d3b6e76`
+
+Type:
+
+```lean
+{α : Type u} → [self : NonUnitalNonAssocSemiring α] → AddCommMonoid α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : NonUnitalNonAssocSemiring.{u} α] → AddCommMonoid.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : NonUnitalNonAssocSemiring α] => self.1
+```
+
+### D016: `NonUnitalSemiring.toNonUnitalNonAssocSemiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Ring.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `240f532586ad43548ebc46dcbda3efacdb04f947093d623a575ee7a0a49b9e32`
+
+Type:
+
+```lean
+{α : Type u} → [self : NonUnitalSemiring α] → NonUnitalNonAssocSemiring α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : NonUnitalSemiring.{u} α] → NonUnitalNonAssocSemiring.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : NonUnitalSemiring α] => self.1
+```
+
+### D017: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D018: `Pi.Function.module`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Pi`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `921742a1effe7c5d653ed6512c1187064090ee805009644177b1646ce2ee15b1`
+
+Type:
+
+```lean
+(I : Type u) →
+  (α : Type u_1) → (β : Type u_2) → [inst : Semiring α] → [inst_1 : AddCommMonoid β] → [Module α β] → Module α (I → β)
+```
+
+Fully explicit type:
+
+```lean
+(I : Type u) →
+  (α : Type u_1) →
+    (β : Type u_2) →
+      [inst : Semiring.{u_1} α] →
+        [inst_1 : AddCommMonoid.{u_2} β] →
+          [@Module.{u_1, u_2} α β inst inst_1] →
+            @Module.{u_1, max u u_2} α (I → β) inst
+              (@Pi.addCommMonoid.{u, u_2} I (fun (a : I) => β) fun (i : I) => inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun I α β [Semiring α] [AddCommMonoid β] [Module α β] => Pi.module I (fun a => β) α
+```
+
+### D019: `Pi.addCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Pi.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `1ff5ab7097969c98627adc1250432bd9fa32995632035a4346ce1d770c552153`
+
+Type:
+
+```lean
+{I : Type u} → {f : I → Type v₁} → [(i : I) → AddCommGroup (f i)] → AddCommGroup ((i : I) → f i)
+```
+
+Fully explicit type:
+
+```lean
+{I : Type u} → {f : I → Type v₁} → [(i : I) → AddCommGroup.{v₁} (f i)] → AddCommGroup.{max u v₁} ((i : I) → f i)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {I} {f} [(i : I) → AddCommGroup (f i)] =>
+  let __src := Pi.addGroup;
+  have __src_1 := Pi.addCommMonoid;
+  { toAddGroup := __src, add_comm := ⋯ }
+```
+
+### D020: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D021: `Real.instAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `b34bb82f0825ba57903ab69349a17976c5b261082b1e5dd3b28e8c2a96ee46cc`
+
+Type:
+
+```lean
+AddCommGroup Real
+```
+
+Fully explicit type:
+
+```lean
+AddCommGroup.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D022: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D023: `Real.instRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84`
+
+Type:
+
+```lean
+Ring Real
+```
+
+Fully explicit type:
+
+```lean
+Ring.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D024: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D025: `Real.semiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
+
+Type:
+
+```lean
+Semiring Real
+```
+
+Fully explicit type:
+
+```lean
+Semiring.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D026: `Ring.toSemiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Ring.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `167479b8a8bd861d283398cd7ed47b3bc2699266c1cebddbc243ee2ac503a88e`
+
+Type:
+
+```lean
+{R : Type u} → [self : Ring R] → Semiring R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u} → [self : Ring.{u} R] → Semiring.{u} R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R [self : Ring R] => self.1
+```
+
+### D027: `Semiring.toModule`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ff102bae4edee1f1bb819368914caf0ac2ec810b7e80210cd357fd643729a472`
+
+Type:
+
+```lean
+{R : Type u_1} → [inst : Semiring R] → Module R R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_1} →
+  [inst : Semiring.{u_1} R] →
+    @Module.{u_1, u_1} R R inst
+      (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_1} R
+        (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{u_1} R (@Semiring.toNonAssocSemiring.{u_1} R inst)))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} [Semiring R] =>
+  { toMulAction := (MonoidWithZero.toMulActionWithZero R).toMulAction, smul_zero := ⋯, smul_add := ⋯, add_smul := ⋯,
+    zero_smul := ⋯ }
+```
+
+### D028: `Semiring.toNonUnitalSemiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Ring.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `0a8a55914b4c4681e0b76728e731a700196986460aa03a9048377aa35a373323`
+
+Type:
+
+```lean
+{α : Type u} → [self : Semiring α] → NonUnitalSemiring α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : Semiring.{u} α] → NonUnitalSemiring.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Semiring α] => self.1
+```
+
+### D029: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D030: `instHSub`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `aa782f2b5af3d068f4c5340de4b32b193fece2c659a45582cc3024a19b550c87`
+
+Type:
+
+```lean
+{α : Type u_1} → [Sub α] → HSub α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Sub.{u_1} α] → HSub.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Sub α] => { hSub := fun a b => inst.sub a b }
+```
+
+### D031: `instLTNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `4054f2341fdda887b2040c624c0867866ab56eabf3441d6ffc9451c94ae1663c`
+
+Type:
+
+```lean
+LT Nat
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Nat.lt }
+```
+
+### D032: `instOfNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Int.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `d01cf83431e28a96433c57a624e20a771e5e0ddc02355969c5044adf1ba168a5`
+
+Type:
+
+```lean
+{n : Nat} → OfNat Int n
+```
+
+Fully explicit type:
+
+```lean
+{n : Nat} → OfNat.{0} Int n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {n} => { ofNat := Int.ofNat n }
+```
+
+### D033: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) → OfNat.{0} Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```
+
+### D034: `AddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `087ff419a44ee7e835bedcf1beda5a1fee5971b4ef4f17124a5a63cd2b0beb30`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+Fully explicit type:
+
+```lean
+(G : Type u) → Type u
+```
+
+### D035: `AddCommGroup.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd`
+
+Type:
+
+```lean
+{G : Type u} → [self : AddCommGroup G] → AddCommMonoid G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : AddCommGroup.{u} G] → AddCommMonoid.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
+```
+
+### D036: `AddCommGroup.toAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729`
+
+Type:
+
+```lean
+{G : Type u} → [self : AddCommGroup G] → AddGroup G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : AddCommGroup.{u} G] → AddGroup.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : AddCommGroup G] => self.1
+```
+
+### D037: `AddGroup.toSubNegMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1`
+
+Type:
+
+```lean
+{A : Type u} → [self : AddGroup A] → SubNegMonoid A
+```
+
+Fully explicit type:
+
+```lean
+{A : Type u} → [self : AddGroup.{u} A] → SubNegMonoid.{u} A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun A [self : AddGroup A] => self.1
+```
+
+### D038: `AddMonoid.toAddZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddMonoid M] → AddZeroClass M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u} → [self : AddMonoid.{u} M] → AddZeroClass.{u} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add_zero := ⋯ }
+```
+
+### D039: `AddZero.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
+
+Type:
+
+```lean
+{M : Type u_2} → [self : AddZero M] → Zero M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_2} → [self : AddZero.{u_2} M] → Zero.{u_2} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZero M] => self.1
+```
+
+### D040: `AddZeroClass.toAddZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddZeroClass M] → AddZero M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u} → [self : AddZeroClass.{u} M] → AddZero.{u} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZeroClass M] => self.1
+```
+
+### D041: `DistribMulAction.toDistribSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
+
+Type:
+
+```lean
+{M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_1} →
+  {A : Type u_7} →
+    [inst : Monoid.{u_1} M] →
+      [inst_1 : AddMonoid.{u_7} A] →
+        [@DistribMulAction.{u_1, u_7} M A inst inst_1] →
+          @DistribSMul.{u_1, u_7} M A (@AddMonoid.toAddZeroClass.{u_7} A inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
+  let __src := inst_2;
+  { toSMul := __src.toSMul, smul_zero := ⋯, smul_add := ⋯ }
+```
+
+### D042: `DistribSMul.toSMulZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_12} →
+  {A : Type u_13} →
+    {inst : AddZeroClass.{u_13} A} →
+      [self : @DistribSMul.{u_12, u_13} M A inst] →
+        @SMulZeroClass.{u_12, u_13} M A (@AddZero.toZero.{u_13} A (@AddZeroClass.toAddZero.{u_13} A inst))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : DistribSMul M A] => self.1
+```
+
+### D043: `HAdd.hAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HAdd.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HAdd α β γ] => self.1
+```
+
+### D044: `HSMul.hSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSMul α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HSMul.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSMul α β γ] => self.1
+```
+
+### D045: `Int.instAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Int.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `f3fe827ffb6fc81658773a6ada6451aeb9c1a54d32b216d8dede8eae9142825b`
+
+Type:
+
+```lean
+Add Int
+```
+
+Fully explicit type:
+
+```lean
+Add.{0} Int
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ add := Int.add }
+```
+
+### D046: `Module`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `132ed119db2ae117b4c85e91594e4fcde0e02a8fde0fb2ee5c57a7a9263c219c`
+
+Type:
+
+```lean
+(R : Type u) → (M : Type v) → [Semiring R] → [AddCommMonoid M] → Type (max u v)
+```
+
+Fully explicit type:
+
+```lean
+(R : Type u) → (M : Type v) → [Semiring.{u} R] → [AddCommMonoid.{v} M] → Type (max u v)
+```
+
+### D047: `Module.toDistribMulAction`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
+
+Type:
+
+```lean
+{R : Type u} →
+  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u} →
+  {M : Type v} →
+    {inst : Semiring.{u} R} →
+      {inst_1 : AddCommMonoid.{v} M} →
+        [self : @Module.{u, v} R M inst inst_1] →
+          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))
+            (@AddCommMonoid.toAddMonoid.{v} M inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R M {inst} {inst_1} [self : Module R M] => self.1
+```
+
+### D048: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Fully explicit type:
+
+```lean
+Monoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D049: `SMulZeroClass.toSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_12} →
+  {A : Type u_13} → {inst : Zero.{u_13} A} → [self : @SMulZeroClass.{u_12, u_13} M A inst] → SMul.{u_12, u_13} M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : SMulZeroClass M A] => self.1
+```
+
+### D050: `SubNegMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b`
+
+Type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid G] → AddMonoid G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid.{u} G] → AddMonoid.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : SubNegMonoid G] => self.1
+```
+
+### D051: `SubNegMonoid.toSub`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f60885ee7a5e97dbc3d343ecb54849b15ae9ca7cc989f350d3b7fee2d2d0724b`
+
+Type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid G] → Sub G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid.{u} G] → Sub.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : SubNegMonoid G] => self.3
+```
+
+### D052: `instHAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+
+Type:
+
+```lean
+{α : Type u_1} → [Add α] → HAdd α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Add.{u_1} α] → HAdd.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
+```
+
+### D053: `instHSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul.{u_1, u_2} α β] → HSMul.{u_1, u_2, u_2} α β β
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
+```
+
+### D054: `Real.decidableLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `def93575a13821d7d42b557cb9b973eede26ae12bbb8b60b1f0a302bf95a5a42`
+
+Type:
+
+```lean
+(a b : Real) → Decidable (Real.instLT.lt a b)
+```
+
+Fully explicit type:
+
+```lean
+(a b : Real) → Decidable (@LT.lt.{0} Real Real.instLT a b)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a b => inferInstance
+```
+
+### D055: `ite`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `3029bae29d2d16b5aeb879ad3c12a1b3c4e78998083bf1ab4614942fafdece0e`
+
+Type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → α → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → (t e : α) → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} c [h : Decidable c] t e => Decidable.casesOn h (fun x => e) fun x => t
+```
+
+## Complete local imported sources
+
+### `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+Path: `NumStability/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannData.lean`
+SHA-256: `35ab3a9c610ddbc90dec920888d39ff4bd36c54e7fe093e1bc4ace131950c3da`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Data.Real.Basic
+
+/-!
+# One-dimensional Riemann data
+
+Source-independent definitions for piecewise constant initial data with one
+jump at the origin.  The predicate intentionally imposes no condition at the
+origin, and `riemannData` exposes that free value as an explicit parameter.
+-/
+
+namespace NumStability
+
+/-- A field has left state `leftState` on `x < 0` and right state `rightState`
+on `x > 0`.  Its value at `x = 0` is deliberately unspecified. -/
+def IsRiemannData
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) : Prop :=
+  (∀ x : ℝ, x < 0 → data x = leftState) ∧
+    (∀ x : ℝ, 0 < x → data x = rightState)
+
+/-- Riemann data with an explicit, freely chosen value at the jump point. -/
+noncomputable def riemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    ℝ → State :=
+  fun x =>
+    if x < 0 then leftState
+    else if 0 < x then rightState
+    else valueAtOrigin
+
+/-- The parameterized construction satisfies the Riemann-data predicate. -/
+theorem riemannData_isRiemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    IsRiemannData
+      (riemannData leftState valueAtOrigin rightState)
+      leftState rightState := by
+  constructor
+  · intro x hx
+    simp [riemannData, hx]
+  · intro x hx
+    have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+    simp [riemannData, hx, hnotLeft]
+
+/-- The value of `riemannData` at the jump is exactly its free parameter. -/
+@[simp]
+theorem riemannData_zero
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    riemannData leftState valueAtOrigin rightState 0 = valueAtOrigin := by
+  simp [riemannData]
+
+/-- The Riemann-data predicate characterizes exactly the functions obtained by
+choosing an arbitrary value at the origin. -/
+theorem isRiemannData_iff_exists_valueAtOrigin
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) :
+    IsRiemannData data leftState rightState ↔
+      ∃ valueAtOrigin,
+        data = riemannData leftState valueAtOrigin rightState := by
+  constructor
+  · rintro ⟨hleft, hright⟩
+    refine ⟨data 0, funext ?_⟩
+    intro x
+    rcases lt_trichotomy x 0 with hx | hx | hx
+    · simpa [riemannData, hx] using hleft x hx
+    · subst x
+      simp
+    · have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+      simpa [riemannData, hx, hnotLeft] using hright x hx
+  · rintro ⟨valueAtOrigin, rfl⟩
+    exact riemannData_isRiemannData leftState valueAtOrigin rightState
+
+end NumStability
+```
+
+### `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface`
+
+Path: `NumStability/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannInterface.lean`
+SHA-256: `aa17e9dbc665799abd4d5897ea923322b3704a7e5956919babd42ce67379d3ea`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
+
+/-!
+# Riemann data and numerical fluxes at finite-volume interfaces
+
+The interface indexed by `i : ℤ` lies between cells `i - 1` and `i`.  Its
+Riemann problem uses exactly those two adjacent cell states.
+-/
+
+namespace NumStability
+
+/-- Chapter 1 permits either an exact Riemann solve or a suitably qualified
+approximation when the exact nonlinear solve is too expensive. -/
+inductive RiemannSolverMode where
+  | exact
+  | approximate
+deriving DecidableEq
+
+/-- Source-independent interface pipeline: ordered states are solved for
+interface information, which is then converted to a numerical flux.  The two
+predicates deliberately leave solver suitability and physical-flux accuracy
+to the chosen model. -/
+structure RiemannInterfaceFluxMethod
+    (State Information Flux : Type*) where
+  solverMode : RiemannSolverMode
+  solve : State → State → Information
+  fluxFromInformation : Information → Flux
+  isSuitableSolverInformation :
+    RiemannSolverMode → State → State → Information → Prop
+  isPhysicalFluxApproximation : State → State → Flux → Prop
+
+/-- Riemann initial data formed from the two cells adjacent to interface `i`.
+The value at the jump remains an explicit free parameter. -/
+noncomputable def adjacentCellRiemannData
+    {State : Type*} (cellAverages : ℤ → State)
+    (valueAtOrigin : State) (i : ℤ) : ℝ → State :=
+  riemannData (cellAverages (i - 1)) valueAtOrigin (cellAverages i)
+
+/-- The adjacent-cell construction has the intended left and right states. -/
+theorem adjacentCellRiemannData_isRiemannData
+    {State : Type*} (cellAverages : ℤ → State)
+    (valueAtOrigin : State) (i : ℤ) :
+    IsRiemannData (adjacentCellRiemannData cellAverages valueAtOrigin i)
+      (cellAverages (i - 1)) (cellAverages i) :=
+  riemannData_isRiemannData _ _ _
+
+/-- A numerical interface flux obtained by applying a Riemann-flux procedure
+to the two neighboring cell states. -/
+def riemannInterfaceFlux
+    {State Flux : Type*} (riemannFlux : State → State → Flux)
+    (cellAverages : ℤ → State) (i : ℤ) : Flux :=
+  riemannFlux (cellAverages (i - 1)) (cellAverages i)
+
+end NumStability
+```
+
+### `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference`
+
+Path: `NumStability/Analysis/PartialDifferentialEquations/FiniteVolume/FluxDifference.lean`
+SHA-256: `e44e135d4047068af4fc5498d3842c408607e352f09fa07b35eee0c4e493b190`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Algebra.BigOperators.Module
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Module
+
+/-!
+# Conservative finite-volume flux differences
+
+Source-independent data for a one-dimensional conservative update.  Interface
+flux `edgeFlux i` is the flux through the left edge of cell `i`, so the update
+subtracts the right-minus-left flux difference.  The finite-sum theorem makes
+the resulting boundary-flux conservation exact.
+-/
+
+open scoped BigOperators
+
+namespace NumStability
+
+/-- One conservative flux-difference update of cell `i`.
+
+`timeStepOverCellWidth` is the usual ratio `Δt / Δx`; keeping it abstract
+also covers non-dimensionalized updates. -/
+def conservativeFluxDifferenceUpdate
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (timeStepOverCellWidth : ℝ)
+    (cellAverages edgeFlux : ℕ → E) (i : ℕ) : E :=
+  cellAverages i -
+    timeStepOverCellWidth • (edgeFlux (i + 1) - edgeFlux i)
+
+/-- The same conservative edge-flux update on integer-indexed cells. -/
+def conservativeFluxDifferenceUpdateInt
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (timeStepOverCellWidth : ℝ)
+    (cellAverages edgeFlux : ℤ → E) (i : ℤ) : E :=
+  cellAverages i -
+    timeStepOverCellWidth • (edgeFlux (i + 1) - edgeFlux i)
+
+/-- Summing a conservative flux-difference update over the first `cellCount`
+cells cancels every interior interface flux.  Only the two boundary fluxes
+remain. -/
+theorem sum_conservativeFluxDifferenceUpdate
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (timeStepOverCellWidth : ℝ)
+    (cellAverages edgeFlux : ℕ → E) (cellCount : ℕ) :
+    ∑ i ∈ Finset.range cellCount,
+        conservativeFluxDifferenceUpdate
+          timeStepOverCellWidth cellAverages edgeFlux i =
+      (∑ i ∈ Finset.range cellCount, cellAverages i) -
+        timeStepOverCellWidth •
+          (edgeFlux cellCount - edgeFlux 0) := by
+  induction cellCount with
+  | zero => simp
+  | succ cellCount ih =>
+      rw [Finset.sum_range_succ, Finset.sum_range_succ, ih]
+      simp only [conservativeFluxDifferenceUpdate]
+      module
+
+/-- If the two boundary fluxes agree, a finite block's total cell average is
+unchanged by the conservative update. -/
+theorem sum_conservativeFluxDifferenceUpdate_of_boundaryFlux_eq
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (timeStepOverCellWidth : ℝ)
+    (cellAverages edgeFlux : ℕ → E) (cellCount : ℕ)
+    (hboundary : edgeFlux cellCount = edgeFlux 0) :
+    ∑ i ∈ Finset.range cellCount,
+        conservativeFluxDifferenceUpdate
+          timeStepOverCellWidth cellAverages edgeFlux i =
+      ∑ i ∈ Finset.range cellCount, cellAverages i := by
+  rw [sum_conservativeFluxDifferenceUpdate, hboundary, sub_self,
+    smul_zero, sub_zero]
+
+end NumStability
+```
+
+### `NumStability.Source.LeVeque.Chapter01.Equation11`
+
+Path: `NumStability/Source/LeVeque/Chapter01/Equation11.lean`
+SHA-256: `4d1c8cd725a0868619ef46473408fe45d3b1abd2ec358e6766226ae0421335d3`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
+
+/-!
+# LeVeque Chapter 1, Equation (1.11)
+
+Randall J. LeVeque, *Finite Volume Methods for Hyperbolic Problems*, Chapter 1,
+printed page 5 (raw PDF page 27), equation (1.11).  The displayed Riemann data
+specifies `q_l` for `x < 0` and `q_r` for `x > 0`; it does not choose a value at
+the jump point `x = 0`.
+-/
+
+namespace NumStability
+
+/-- Equation (1.11) as a predicate on an `m`-component initial state.  There is
+intentionally no condition at `x = 0`. -/
+abbrev leveque01Equation11RiemannData {m : ℕ}
+    (initialState : ℝ → (Fin m → ℝ))
+    (leftState rightState : Fin m → ℝ) : Prop :=
+  IsRiemannData initialState leftState rightState
+
+/-- For every freely chosen value at the origin, the parameterized initial
+state has the two branches printed in equation (1.11), and takes precisely that
+chosen value at `x = 0`. -/
+theorem leveque01_equation11_riemannData {m : ℕ}
+    (leftState valueAtOrigin rightState : Fin m → ℝ) :
+    leveque01Equation11RiemannData
+        (riemannData leftState valueAtOrigin rightState)
+        leftState rightState ∧
+      riemannData leftState valueAtOrigin rightState 0 = valueAtOrigin := by
+  exact ⟨riemannData_isRiemannData leftState valueAtOrigin rightState,
+    riemannData_zero leftState valueAtOrigin rightState⟩
+
+/-- Equation (1.11) permits exactly one free datum: the value at the origin. -/
+theorem leveque01_equation11_characterization {m : ℕ}
+    (initialState : ℝ → (Fin m → ℝ))
+    (leftState rightState : Fin m → ℝ) :
+    leveque01Equation11RiemannData initialState leftState rightState ↔
+      ∃ valueAtOrigin,
+        initialState = riemannData leftState valueAtOrigin rightState :=
+  isRiemannData_iff_exists_valueAtOrigin initialState leftState rightState
+
+end NumStability
+```

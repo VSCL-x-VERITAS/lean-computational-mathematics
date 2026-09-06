@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Equation10.AbstractModel
-import NumStability.Source.Higham.Chapter04.Equation10.FiniteFormat
-import NumStability.Source.Higham.Chapter04.Equation10.Neumaier.All
+import ComputationalMathematics.Source.Higham.Chapter04.Equation10
 
 /-!
-# Higham Chapter 4, equation (4.10)
+Historical import path retained for compatibility.
 
-Canonical declaration-free entry point for the alternative compensated-
-summation backward-error result and its source-specific model analysis.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Equation10`.
+Declaration names and mathematical terminology are unchanged.
 -/

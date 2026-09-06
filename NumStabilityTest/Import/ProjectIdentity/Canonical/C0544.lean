@@ -1,0 +1,8 @@
+import ComputationalMathematics.Analysis.FunctionalCalculus.OperatorLog.Monotonicity
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.FunctionalCalculus.OperatorLog.Monotonicity`. -/
+
+#check NumStability.complex_realContinuousFunctionalCalculus
+#check NumStability.finiteComplexCStarMatrix
+#check NumStability.finiteComplexCStarMatrix_add_pos_smul_one_isStrictlyPositive_of_finitePSD
+#check NumStability.finiteComplexCStarMatrix_add_smul_one_le_of_finiteLoewnerLe

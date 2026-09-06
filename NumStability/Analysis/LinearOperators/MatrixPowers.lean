@@ -1,15 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds
-import NumStability.Analysis.LinearOperators.MatrixPowers.Gautschi
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling
-import NumStability.Analysis.LinearOperators.MatrixPowers.Kreiss
-import NumStability.Analysis.LinearOperators.MatrixPowers.Laszlo
-import NumStability.Analysis.LinearOperators.MatrixPowers.LpBounds
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers`.
+Declaration names and mathematical terminology are unchanged.
 -/

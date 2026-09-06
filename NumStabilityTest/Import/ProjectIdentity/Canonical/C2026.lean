@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter21.Equation10.Closure
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter21.Equation10.Closure`. -/
+
+#check NumStability.higham21_givens_actual_rounded_action_error

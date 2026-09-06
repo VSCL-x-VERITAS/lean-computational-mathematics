@@ -4,10 +4,10 @@ import Mathlib.Data.Nat.Log
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.Summation.Insertion.ActiveList
-import NumStability.Algorithms.Summation.Recursive.Core
-import NumStability.Algorithms.Summation.Tree.Core
-import NumStability.Source.Higham.Chapter04.Equation05.OrderingExamples.Basic
+import ComputationalMathematics.Algorithms.Summation.Insertion.ActiveList
+import ComputationalMathematics.Algorithms.Summation.Recursive.Core
+import ComputationalMathematics.Algorithms.Summation.Tree.Core
+import ComputationalMathematics.Source.Higham.Chapter04.Equation05.OrderingExamples.Basic
 
 /-!
 # OrderingExamples (compatibility module)

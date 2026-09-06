@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Gautschi.Bounds
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Gautschi.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.Gautschi.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Gautschi.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

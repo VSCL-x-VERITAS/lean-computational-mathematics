@@ -1,0 +1,3 @@
+import NumStability.Source.Vershynin.Chapter02.Section07.Example12.Contract
+
+#check NumStability.HDP.Contract.hdp_02_hexample_h2_d7_d12__contract_type

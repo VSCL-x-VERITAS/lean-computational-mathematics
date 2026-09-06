@@ -1,5 +1,5 @@
-import NumStability.Algorithms.Summation.Tree.ArbitraryOrderError.PivotNormalized
-import NumStability.Source.Higham.Chapter08.Section03.TriangularSystems.ArbitraryOrder
+import ComputationalMathematics.Algorithms.Summation.Tree.ArbitraryOrderError.PivotNormalized
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.ArbitraryOrder
 
 /-!
 # Algorithms.TriangularArbitraryOrder compatibility facade

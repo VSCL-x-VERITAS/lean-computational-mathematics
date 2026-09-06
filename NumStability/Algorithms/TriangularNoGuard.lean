@@ -1,7 +1,7 @@
-import NumStability.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardBackward
-import NumStability.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardForward
-import NumStability.Source.Higham.Chapter08.Problem01.NoGuardSubstitution.BackwardSubstitution
-import NumStability.Source.Higham.Chapter08.Problem01.NoGuardSubstitution.ForwardSubstitution
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardBackward
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardForward
+import ComputationalMathematics.Source.Higham.Chapter08.Problem01.NoGuardSubstitution.BackwardSubstitution
+import ComputationalMathematics.Source.Higham.Chapter08.Problem01.NoGuardSubstitution.ForwardSubstitution
 
 /-!
 # Algorithms.TriangularNoGuard compatibility facade

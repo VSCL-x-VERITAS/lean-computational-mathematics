@@ -1,0 +1,179 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "a4ca0fb48066e8a14daf3f130bf11836a80794252f2e39cb218cee14cf2555c1",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The selected source claim concerns modifying finite-volume cell averages over a time step through conservative fluxes at cell edges.",
+      "translation_evidence": "The translation constructs a one-step edge-flux-difference update and proves a telescoping boundary-flux balance.",
+      "reasoning": "The translation targets the correct general update and conservation topic."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "The source binders are approximate cell averages on a finite-volume grid, numerical edge fluxes, and a positive time-step interval.",
+      "translation_evidence": "The translation supplies an arbitrary real module, arbitrary natural-indexed sequences called cell averages and physical fluxes, a global sequence-to-flux operator, and a positive scalar, but no grid, cell regions, cell volumes, time variable, or time-step interval.",
+      "reasoning": "The source's finite-volume and time-advancement binders retain only suggestive names and an algebraic indexing skeleton."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "A numerical edge flux is required to approximate the correct physical flux using available approximate cell averages.",
+      "translation_evidence": "Exact equality between numericalFluxFromCellAverages(U,edge) and an arbitrary physicalEdgeFlux(edge) is assumed for every edge and repeated in the conclusion.",
+      "reasoning": "The flux-quality requirement is presupposed as exact equality to a function with no formal physical-flux semantics rather than represented as approximation to the conservation-law flux."
+    },
+    {
+      "id": "C04",
+      "status": "fail",
+      "source_evidence": "The available inputs are finite-volume cell averages, and neighboring averages may provide left and right states for an interface Riemann problem.",
+      "translation_evidence": "The numerical-flux operator may inspect the entire arbitrary sequence, with no locality, neighboring-state orientation, Riemann construction, consistency law, or equation-dependent flux.",
+      "reasoning": "The translation does not preserve the source's finite-volume interface-coupling semantics."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "A cell's change is governed by incoming and outgoing boundary fluxes according to the integral conservation principle.",
+      "translation_evidence": "Each updated value is U_i - fluxScale(F_{i+1} - F_i), and summing over a finite prefix cancels internal fluxes and leaves only F_N - F_0.",
+      "reasoning": "The translated update and telescoping identity genuinely realize the conservative boundary-flux balance in the chosen indexing convention."
+    },
+    {
+      "id": "C06",
+      "status": "fail",
+      "source_evidence": "Numerical fluxes approximate correct physical edge fluxes and may be obtained from neighboring-state Riemann information.",
+      "translation_evidence": "physicalEdgeFlux is arbitrary, numericalFluxFromCellAverages has no physical, local, consistent, or Riemann-solver law, and agreement is required only for one fixed input sequence.",
+      "reasoning": "The dependencies do not enforce the numerical-flux meaning required by the source."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source gives a qualitative conservative update principle while leaving the discrete formula and approximation quality unquantified.",
+      "translation_evidence": "The translation weakens physical and finite-volume semantics but strengthens the claim to exact flux equality, a particular pointwise formula, and a finite-prefix identity.",
+      "reasoning": "The translated proposition contains simultaneous semantic weakenings and unsupported strengthenings."
+    },
+    {
+      "id": "C08",
+      "status": "fail",
+      "source_evidence": "Approximate cell averages, numerical interface fluxes, correct physical flux, cell edges, and the time step have linked roles in the source method.",
+      "translation_evidence": "The arbitrary state sequence has no averaging or grid relation, the arbitrary physical-flux sequence has no conservation-law relation, and fluxScale has no connection to time-step duration, cell width, or cell volume.",
+      "reasoning": "The essential source object relationships are not represented."
+    },
+    {
+      "id": "C09",
+      "status": "fail",
+      "source_evidence": "The source fixes the inflow/outflow conservation orientation but explicitly does not fix indices, scaling, boundary conventions, or a delta-t/delta-x formula.",
+      "translation_evidence": "The translation fixes natural-number indexing, edge i and edge i+1, finite prefixes starting at cell 0, and the exact coefficient fluxScale.",
+      "reasoning": "The orientation is compatible, but the exact half-line indexing and scaling conventions are additional structure not entailed by the scoped source."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The claim applies to a finite-volume grid and fluxes intended to approximate those of a physical conservation law.",
+      "translation_evidence": "The statement applies to every real module, including the trivial module, and to arbitrary global flux operators and arbitrary flux sequences on a half-infinite lattice.",
+      "reasoning": "The translation overgeneralizes beyond finite-volume physical states while specializing the grid to a particular unsupported index topology."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Conservative balance leaves boundary fluxes as the only contributions after internal edge cancellation.",
+      "translation_evidence": "For every finite prefix, including the empty prefix, the identity retains F_0 and F_N as explicit boundary terms and does not falsely claim invariance unless they agree.",
+      "reasoning": "The algebraic boundary and empty-prefix cases are handled correctly within the translated specialization."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source makes a substantive conservation claim about internal flux cancellation and boundary-driven change.",
+      "translation_evidence": "Although the updated sequence is defined directly and flux agreement is repeated, the finite-prefix telescoping balance is a genuine consequence of the local update.",
+      "reasoning": "The conservative algebra is nontrivial and nonvacuous, even though the surrounding physical semantics are insufficient."
+    },
+    {
+      "id": "N01",
+      "status": "pass",
+      "source_evidence": "The one-dimensional conservation orientation treats the left edge as inflow and the right edge as outflow.",
+      "translation_evidence": "Cell i uses left edge i and right edge i+1, and summing cells 0 through N-1 leaves right boundary F_N minus left boundary F_0.",
+      "reasoning": "The discrete edge indexing, signs, and telescoping cancellation are internally consistent."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no norm, metric, or inner-product assertion.",
+      "translation_evidence": "The translation requires additive and real-module operations but no norm, metric, or inner product.",
+      "reasoning": "There is no norm-related semantic facet to compare."
+    },
+    {
+      "id": "N03",
+      "status": "fail",
+      "source_evidence": "The source requires numerical fluxes to approximate correct physical fluxes reasonably well but supplies no exactness or quantitative error condition.",
+      "translation_evidence": "The translation assumes exact equality to a purported physical flux and provides no approximation, consistency, or error semantics.",
+      "reasoning": "A qualitative approximation role is replaced by an exact but semantically ungrounded premise."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "The source does not distinguish floating-point implementation from exact mathematical flux computation.",
+      "translation_evidence": "The translation contains no rounding or finite-precision assertion.",
+      "reasoning": "No computation-versus-exact-semantics comparison is required."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The scoped source claim contains no asymptotic rate, mesh-refinement limit, or convergence quantifier.",
+      "translation_evidence": "The translation proves finite-prefix identities but no asymptotic or limiting result.",
+      "reasoning": "There is no asymptotic claim to compare."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The source states that cell averages are updated but makes no uniqueness or analytical well-posedness claim for the discrete step.",
+      "translation_evidence": "The translation explicitly constructs an updated sequence through a pointwise formula and does not assert stability, convergence, or analytical solvability.",
+      "reasoning": "Existence of the algebraic update is represented without an unsupported analytical existence claim."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "The translated algebra can hold for an arbitrary real-module sequence, arbitrary global flux operator, and arbitrary sequence named physicalEdgeFlux, including cases with no finite-volume grid, cell averages, conservation-law flux, time step, or Riemann interface information. Its exact-agreement premise therefore does not establish the source's numerical approximation to the correct physical edge flux."
+    },
+    "source_implies_translation": {
+      "verdict": "no",
+      "reasoning": "The source does not entail exact numerical/physical flux equality for every edge, the fixed natural-number half-line indexing, the formula U_i - fluxScale(F_{i+1} - F_i), or the finite-prefix identity with boundary edges 0 and N. It expressly leaves those formula, scaling, and boundary conventions unspecified."
+    }
+  },
+  "classification": "not-faithful-different",
+  "accepted": false,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "ungrounded-physical-flux-semantics",
+      "source_evidence": "The numerical flux must approximate the correct physical flux through a finite-volume cell edge.",
+      "translation_evidence": "physicalEdgeFlux is an arbitrary E-valued sequence, and exact equality with it is merely assumed for one fixed cell-average sequence.",
+      "impact": "The proposition can satisfy its flux premise without representing any physical conservation-law flux or numerical approximation."
+    },
+    {
+      "severity": "major",
+      "category": "erased-finite-volume-and-time-semantics",
+      "source_evidence": "The updated quantities are volume-normalized cell integrals on a finite-volume grid, changed over a positive time-step interval by edge fluxes.",
+      "translation_evidence": "U is an arbitrary module-valued sequence, no grid or cell volumes are present, and fluxScale is not related to a time step or spatial scale.",
+      "impact": "The algebraic update need not be a finite-volume time advancement of cell averages."
+    },
+    {
+      "severity": "major",
+      "category": "missing-interface-flux-construction",
+      "source_evidence": "Numerical flux construction uses available approximate cell averages, with neighboring states optionally supplying Riemann information at an interface.",
+      "translation_evidence": "The numerical-flux operator may depend on the entire sequence and has no locality, neighboring-state, Riemann-solver, or consistency condition.",
+      "impact": "The translated flux need not have the source's interface-coupling role."
+    },
+    {
+      "severity": "minor",
+      "category": "unsupported-discrete-specialization",
+      "source_evidence": "The scoped source does not fix a fully indexed update, scaling, or boundary convention.",
+      "translation_evidence": "The translation fixes a natural-indexed half-line, one flux-difference formula, and balances only finite prefixes beginning at cell 0.",
+      "impact": "The conservative formula is source-compatible, but the source does not entail this exact specialization."
+    }
+  ],
+  "rationale": "The translation proves a correct algebraic flux-difference update and finite-prefix conservation identity, but it does not preserve the source's finite-volume, time-step, physical-flux, or neighboring-interface semantics. Exact agreement with an arbitrary sequence is assumed rather than expressing approximation to a correct physical flux, while the source does not imply the translation's exact formula and half-line conventions. Consequently neither direction of implication holds."
+}

@@ -1,5 +1,5 @@
-import NumStability.Analysis.FloatingPointArithmetic.MidpointRounding.DecimalTieExamples
-import NumStability.Source.Higham.Chapter02.Problem08.MidpointRounding.Counterexample
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.MidpointRounding.DecimalTieExamples
+import ComputationalMathematics.Source.Higham.Chapter02.Problem08.MidpointRounding.Counterexample
 
 /-!
 # Analysis.Midpoint compatibility facade

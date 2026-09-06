@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Lemma11.PivotSequenceStability.Endpoints
-import NumStability.Source.Higham.Chapter10.Lemma11.PivotSequenceStability.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma11.PivotSequenceStability
 
 /-!
-# Source Higham Chapter10 Lemma11 PivotSequenceStability
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Lemma11.PivotSequenceStability`.
+Declaration names and mathematical terminology are unchanged.
 -/

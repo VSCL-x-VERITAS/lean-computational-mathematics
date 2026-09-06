@@ -1,8 +1,8 @@
 import Mathlib.Data.List.GetD
 import Mathlib.Data.List.MinMax
 import Mathlib.Tactic
-import NumStability.Algorithms.Horner
-import NumStability.Source.Higham.Chapter05.Problem04.LejaOrdering.Basic
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Source.Higham.Chapter05.Problem04.LejaOrdering.Basic
 
 /-!
 # Ch5LejaProducer (compatibility module)

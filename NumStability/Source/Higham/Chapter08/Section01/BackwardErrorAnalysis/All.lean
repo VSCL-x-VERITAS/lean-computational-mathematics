@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter08.Section01.BackwardErrorAnalysis.Core
+import ComputationalMathematics.Source.Higham.Chapter08.Section01.BackwardErrorAnalysis.All
 
 /-!
-# Source.Higham.Chapter08.Section01.BackwardErrorAnalysis.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter08.Section01.BackwardErrorAnalysis.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

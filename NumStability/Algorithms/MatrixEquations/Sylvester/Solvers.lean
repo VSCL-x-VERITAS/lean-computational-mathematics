@@ -1,11 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers
 
 /-!
-# NumStability.Algorithms.MatrixEquations.Sylvester.Solvers
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers`.
+Declaration names and mathematical terminology are unchanged.
 -/

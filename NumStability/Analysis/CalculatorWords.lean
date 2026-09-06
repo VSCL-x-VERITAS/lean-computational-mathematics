@@ -1,6 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Tactic.NormNum
-import NumStability.Source.Higham.Chapter01.Problem06.CalculatorWords.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Problem06.CalculatorWords.Basic
 
 /-!
 # CalculatorWords (compatibility module)

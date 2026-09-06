@@ -5,15 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import NumStability.Source.Higham.Chapter26.MultidirectionalSearch.Execution
-import NumStability.Source.Higham.Chapter26.MultidirectionalSearch.InitialSimplexGeometry
-import NumStability.Source.Higham.Chapter26.MultidirectionalSearch.RegularSimplex
-import NumStability.Source.Higham.Chapter26.MultidirectionalSearch.RightAngledSimplex
-import NumStability.Source.Higham.Chapter26.MultidirectionalSearch.Simplex
 
-/-! # Higham Chapter 26: Multidirectional Search
+import ComputationalMathematics.Source.Higham.Chapter26.MultidirectionalSearch
 
-Complete canonical entry point for the simplex representation, execution semantics, and both initial-simplex constructions from Section 26.2.
+/-!
+Historical import path retained for compatibility.
 
-This is a declaration-free complete aggregate for the documented family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter26.MultidirectionalSearch`.
+Declaration names and mathematical terminology are unchanged.
 -/

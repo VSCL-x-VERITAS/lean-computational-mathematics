@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter23.ThreeMStrassen.ExactMajorant
-import NumStability.Source.Higham.Chapter23.ThreeMStrassen.Execution
-import NumStability.Source.Higham.Chapter23.ThreeMStrassen.FirstOrder
+import ComputationalMathematics.Source.Higham.Chapter23.ThreeMStrassen
 
 /-!
-# Higham Chapter 23: combined 3M--Strassen multiplication
+Historical import path retained for compatibility.
 
-Complete source-facing entry point for the combined complex 3M construction
-using recursively rounded Strassen multiplication.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter23.ThreeMStrassen`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Algorithm04.Execution.GaussJordanSourceClosure
-import NumStability.Source.Higham.Chapter14.Algorithm04.Execution.GJEActualDoolittleAdapter
-import NumStability.Source.Higham.Chapter14.Algorithm04.Execution.GJEFinalDivisionClosure
-import NumStability.Source.Higham.Chapter14.Algorithm04.Execution.GJEOperationalBridge
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Execution
 
 /-!
-# NumStability.Source.Higham.Chapter14.Algorithm04.Execution
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Execution`.
+Declaration names and mathematical terminology are unchanged.
 -/

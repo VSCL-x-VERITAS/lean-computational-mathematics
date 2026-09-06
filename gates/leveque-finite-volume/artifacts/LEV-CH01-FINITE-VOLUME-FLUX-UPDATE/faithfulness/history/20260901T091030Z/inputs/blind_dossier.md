@@ -1,0 +1,895 @@
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1 : Module Real E]
+  (data : LocalDef002 E),
+  Iff (LocalDef001 data)
+    (And (Real.instLT.lt 0 data.fluxScale)
+      (And
+        (∀ (edge : Nat),
+          data.isPhysicalFluxApproximation (data.numericalFluxFromCellAverages data.cellAverages edge)
+            (data.physicalEdgeFlux edge))
+        (∀ (i : Nat),
+          Eq (data.updatedCellAverages i)
+            (LocalDef009 data.fluxScale data.cellAverages
+              (data.numericalFluxFromCellAverages data.cellAverages) i))))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {E : Type u_1} [inst : AddCommGroup.{u_1} E]
+  [inst_1 : @Module.{0, u_1} Real E Real.semiring (@AddCommGroup.toAddCommMonoid.{u_1} E inst)]
+  (data : LocalDef002.{u_1} E),
+  Iff (@LocalDef001.{u_1} E inst inst_1 data)
+    (And
+      (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+        (@LocalDef004.{u_1} E data))
+      (And
+        (∀ (edge : Nat),
+          @LocalDef005.{u_1} E data
+            (@LocalDef006.{u_1} E data
+              (@LocalDef003.{u_1} E data) edge)
+            (@LocalDef007.{u_1} E data edge))
+        (∀ (i : Nat),
+          @Eq.{u_1 + 1} E (@LocalDef008.{u_1} E data i)
+            (@LocalDef009.{u_1} E inst inst_1
+              (@LocalDef004.{u_1} E data)
+              (@LocalDef003.{u_1} E data)
+              (@LocalDef006.{u_1} E data
+                (@LocalDef003.{u_1} E data))
+              i))))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `LocalDef001`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `b53ffb343d4ed3d20900e9efec549d047cbcd27143dc1dc3f2cca82a1f6d869e`
+
+Type:
+
+```lean
+{E : Type u_1} → [inst : AddCommGroup E] → [Module Real E] → LocalDef002 E → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [AddCommGroup E] [Module Real E] data =>
+  And (Real.instLT.lt 0 data.fluxScale)
+    (And
+      (∀ (edge : Nat),
+        data.isPhysicalFluxApproximation (data.numericalFluxFromCellAverages data.cellAverages edge)
+          (data.physicalEdgeFlux edge))
+      (∀ (i : Nat),
+        Eq (data.updatedCellAverages i)
+          (LocalDef009 data.fluxScale data.cellAverages
+            (data.numericalFluxFromCellAverages data.cellAverages) i)))
+```
+
+### D002: `LocalDef002`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `ce0260e4b7e04b70be054baeb0746e4a6430de4ee3a7094a753b9f8e3c6a85e5`
+
+Type:
+
+```lean
+Type u_1 → Type u_1
+```
+
+### D003: `LocalDef003`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6b57bdc5c8c7f2703d4d2e9316a8ce4dc7008f1edabfc0314a394dce0c9eb22c`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → Nat → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.1
+```
+
+### D004: `LocalDef004`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `0e8b9923b181d5c080374cd105e182c7d82a8c626b2abc30265de792a8dc5434`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.5
+```
+
+### D005: `LocalDef005`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `7039aeeff359669d1106fc56748dc0df35b2cc7f4e294f9e54b3ebb96e689851`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → E → E → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.4
+```
+
+### D006: `LocalDef006`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `7b1f26e40c1a1b94f9198636a1edf6b02a030195a4eeec970e4305c19d7e8af5`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → (Nat → E) → Nat → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.3
+```
+
+### D007: `LocalDef007`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `9867052b066a0ba112b6807266a5ced1d8fc596941e3a6857b351ee47a20a45c`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → Nat → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.2
+```
+
+### D008: `LocalDef008`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `381a61ebc4bf8896353ca95b21acee38665ac16f01a9a587c47f51a9e2f1bc39`
+
+Type:
+
+```lean
+{E : Type u_1} → LocalDef002 E → Nat → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E self => self.6
+```
+
+### D009: `LocalDef009`
+
+- Role: `local`
+- Owner module: `LocalImport002`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `4b8334148a30ee079386cf09e1581b8d61570643264df0416b8e158b5f2343fc`
+
+Type:
+
+```lean
+{E : Type u_1} → [inst : AddCommGroup E] → [Module Real E] → Real → (Nat → E) → (Nat → E) → Nat → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [AddCommGroup E] [Module Real E] timeStepOverCellWidth cellAverages edgeFlux i =>
+  instHSub.hSub (cellAverages i)
+    (instHSMul.hSMul timeStepOverCellWidth (instHSub.hSub (edgeFlux (instHAdd.hAdd i 1)) (edgeFlux i)))
+```
+
+### D010: `LocalDef010`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `68f1193ac3183c1b1123fa63915f2b76026fef21b5a704402eafc94d5b855531`
+
+Type:
+
+```lean
+{E : Type u_1} →
+  (Nat → E) →
+    (Nat → E) →
+      ((Nat → E) → Nat → E) → (E → E → Prop) → Real → (Nat → E) → LocalDef002 E
+```
+
+### D011: `AddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `087ff419a44ee7e835bedcf1beda5a1fee5971b4ef4f17124a5a63cd2b0beb30`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+### D012: `AddCommGroup.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd`
+
+Type:
+
+```lean
+{G : Type u} → [self : AddCommGroup G] → AddCommMonoid G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
+```
+
+### D013: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D014: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D015: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D016: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D017: `Module`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `132ed119db2ae117b4c85e91594e4fcde0e02a8fde0fb2ee5c57a7a9263c219c`
+
+Type:
+
+```lean
+(R : Type u) → (M : Type v) → [Semiring R] → [AddCommMonoid M] → Type (max u v)
+```
+
+### D018: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Type:
+
+```lean
+Type
+```
+
+### D019: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D020: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+### D021: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D022: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D023: `Real.semiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
+
+Type:
+
+```lean
+Semiring Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D024: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D025: `AddCommGroup.toAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729`
+
+Type:
+
+```lean
+{G : Type u} → [self : AddCommGroup G] → AddGroup G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : AddCommGroup G] => self.1
+```
+
+### D026: `AddGroup.toSubNegMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1`
+
+Type:
+
+```lean
+{A : Type u} → [self : AddGroup A] → SubNegMonoid A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun A [self : AddGroup A] => self.1
+```
+
+### D027: `AddMonoid.toAddZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddMonoid M] → AddZeroClass M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add_zero := ⋯ }
+```
+
+### D028: `AddZero.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
+
+Type:
+
+```lean
+{M : Type u_2} → [self : AddZero M] → Zero M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZero M] => self.1
+```
+
+### D029: `AddZeroClass.toAddZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddZeroClass M] → AddZero M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZeroClass M] => self.1
+```
+
+### D030: `DistribMulAction.toDistribSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
+
+Type:
+
+```lean
+{M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
+  let __src := inst_2;
+  { toSMul := __src.toSMul, smul_zero := ⋯, smul_add := ⋯ }
+```
+
+### D031: `DistribSMul.toSMulZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : DistribSMul M A] => self.1
+```
+
+### D032: `HAdd.hAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HAdd α β γ] => self.1
+```
+
+### D033: `HSMul.hSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSMul α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSMul α β γ] => self.1
+```
+
+### D034: `HSub.hSub`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `98025b38d523c0eadea77ba4961a20b2a913b23c079c4bfeba24a7bfaa24a4bc`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSub α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSub α β γ] => self.1
+```
+
+### D035: `Module.toDistribMulAction`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
+
+Type:
+
+```lean
+{R : Type u} →
+  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R M {inst} {inst_1} [self : Module R M] => self.1
+```
+
+### D036: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D037: `SMulZeroClass.toSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : SMulZeroClass M A] => self.1
+```
+
+### D038: `SubNegMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b`
+
+Type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid G] → AddMonoid G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : SubNegMonoid G] => self.1
+```
+
+### D039: `SubNegMonoid.toSub`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f60885ee7a5e97dbc3d343ecb54849b15ae9ca7cc989f350d3b7fee2d2d0724b`
+
+Type:
+
+```lean
+{G : Type u} → [self : SubNegMonoid G] → Sub G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : SubNegMonoid G] => self.3
+```
+
+### D040: `instAddNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `a1534bcd3e1888406ac787d30eeff8a284cb6688c23f5e8de09351dda91a280c`
+
+Type:
+
+```lean
+Add Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ add := Nat.add }
+```
+
+### D041: `instHAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+
+Type:
+
+```lean
+{α : Type u_1} → [Add α] → HAdd α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
+```
+
+### D042: `instHSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
+```
+
+### D043: `instHSub`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `aa782f2b5af3d068f4c5340de4b32b193fece2c659a45582cc3024a19b550c87`
+
+Type:
+
+```lean
+{α : Type u_1} → [Sub α] → HSub α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Sub α] => { hSub := fun a b => inst.sub a b }
+```
+
+### D044: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```

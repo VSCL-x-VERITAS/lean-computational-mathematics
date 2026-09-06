@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Theorem05.ErrorAnalysis
-import NumStability.Source.Higham.Chapter13.Theorem05.FamilyErrorAnalysis
-import NumStability.Source.Higham.Chapter13.Theorem05.Recurrences
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05
 
 /-!
-# Higham Theorem 13.5
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the source-owned Theorem 13.5 recurrence and
-error-analysis family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Theorem05`.
+Declaration names and mathematical terminology are unchanged.
 -/

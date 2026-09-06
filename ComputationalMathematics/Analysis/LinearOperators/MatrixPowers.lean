@@ -1,0 +1,15 @@
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Gautschi
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Kreiss
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Laszlo
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.LpBounds
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker
+
+/-!
+# NumStability.Analysis.LinearOperators.MatrixPowers
+
+Declaration-free W06 discovery aggregate.
+-/

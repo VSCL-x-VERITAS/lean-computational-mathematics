@@ -1,0 +1,9 @@
+import NumStability.Source.LeVeque.Chapter01.Equation03AdvectedProfile
+
+#check NumStability.leveque01_equation03_profilePropagates
+#check NumStability.leveque01_equation03_scalarAdvection
+#check NumStability.leveque01_equation03_advectedProfile
+
+#print axioms NumStability.leveque01_equation03_profilePropagates
+#print axioms NumStability.leveque01_equation03_scalarAdvection
+#print axioms NumStability.leveque01_equation03_advectedProfile

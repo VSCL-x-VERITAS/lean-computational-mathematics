@@ -191,3 +191,12 @@ Chapter 1 is the repository's foundation layer; later chapters consume:
   (Chapter 4 summation, Chapter 5 polynomials, Chapter 9 GE, Chapter 19 QR)
   as motivating instances; their Chapter 1 obligations are closed here
   independently.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter01` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

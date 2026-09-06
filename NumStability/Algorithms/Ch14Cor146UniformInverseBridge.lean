@@ -1,175 +1,116 @@
-import NumStability.Algorithms.Ch14Corollary147SourceClosure
-import NumStability.Algorithms.Ch14GJEFinalDivisionClosure
-import NumStability.Source.Higham.Chapter07.Corollary06.LinearSystemsConditioning.Results
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.UniformInverseBridge
+import Mathlib.Analysis.Asymptotics.Lemmas
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.Matrix.Orthogonal
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.BackSubstitution
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ForwardSubstitution
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.LU.LUSolve
+import ComputationalMathematics.Algorithms.MatMul
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.Methods.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Residuals.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.Specifications.MatrixInversion
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.TestMatrices.UpperTriangularStress
+import ComputationalMathematics.Analysis.Error.MatrixProducts.Contracts.MatrixInversion
+import ComputationalMathematics.Analysis.Error.RoundingProducts.Core
+import ComputationalMathematics.Analysis.ForwardError
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.HadamardDeterminant
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Wedin
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation35.HymanBlockFactorization.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation36.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem04.ResidualCounterexample.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem07.OnesVector.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem08.ComplexInverseRealBlock.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem10.EntryPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem11.HadamardCondition.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.ConditionNumberExamples.StressAndPeiMatrices
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.HadamardExamples.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem13.GEJBound.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem14.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem15.DeterminantPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.ForwardErrorEndpoint
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.ForwardErrorEndpoint
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.ScaledPerturbationEndpoints.ForwardError
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1.ForwardErrorEndpoint
+import ComputationalMathematics.Analysis.FirstOrder.MatrixFamilies.AsymptoticFamilies
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.AsymptoticFamilies
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.AsymptoticFamilies
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.ComposedCoefficientFamilies.RemainderAsymptotics
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1.AsymptoticFamilies
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.InverseBoundsPrelude
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.SecondStage.GaussJordanStep
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Accumulation.GaussJordanAccumulation
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.SecondStage.GaussJordanQConstruction
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GaussJordanQConstruction
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Closure
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Concrete
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.EliminationFamilies.CoefficientAsymptotics
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GJEAsymptoticFamilies
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.WeakFamily
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.WeakDominanceFamilies.ResidualAndForwardBounds
+import Mathlib.Algebra.Order.AbsoluteValue.Basic
+import Mathlib.Data.Finset.Max
+import Mathlib.GroupTheory.Perm.Basic
+import Mathlib.Logic.Equiv.Basic
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Pivoting.GaussJordanPivoting
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Execution.GaussJordanSourceClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Accumulation.GJESourceAccumulationBridge
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.PrintedTraceFamilies.ResidualAndForwardEndpoints
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseAbsolute.Basic
+import ComputationalMathematics.Source.Higham.Chapter10.Equation07.AbsoluteFactorNorm.Endpoints
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD.GaussJordanSPDCorollary
+import ComputationalMathematics.Source.Higham.Chapter14.Problem15
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD.Concrete
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD.Closure
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GJEPrintedEnvelopeClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.PrintedEnvelopes.CorrectionBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GJETheorem145SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.PrintedTrace.VanishingEndpoints
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Execution.GJEOperationalBridge
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Execution.GJEFinalDivisionClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.FinalDivisionStage.FinalizedErrorFamilies
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GJEFinalDivisionClosure
+import ComputationalMathematics.Source.Higham.Chapter07.Corollary06.LinearSystemsConditioning.Results
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.FinalizedRunRegularity.UniformInverseRegularity
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD.UniformInverseBridge
 
 /-!
 # Ch14Cor146UniformInverseBridge (compatibility module)
 
-Historical path, retained so existing imports of `NumStability.Algorithms.Ch14Cor146UniformInverseBridge`
-keep resolving. Most of its declarations moved unchanged to the
-canonical modules imported above.
-
-The declarations still defined below are private declarations and
-their users. Lean mangles a private name to
-`_private.<module>.<n>.<name>`, so relocating one renames it and
-breaks the frozen declaration graph; anything referring to one must
-therefore stay with it. This module is a declaration-bearing facade,
-not a pure import shim.
+Import-only module retained so existing imports of `NumStability.Algorithms.Ch14Cor146UniformInverseBridge` keep
+resolving. Every declaration moved unchanged to `NumStability.Source.Higham.Chapter14.Corollary06.FinalizedRunRegularity.UniformInverseRegularity`.
+The module's own original imports are re-stated so consumers reaching an
+identifier transitively through this path still see the same surface.
 -/
-
-open Filter Asymptotics
-open scoped BigOperators Topology
-open NumStability
-
-namespace NumStability
-
-namespace Ch14Ext
-
-/-- The inverse regularity required by the Corollary 14.6 family endpoint is
-not an independent conclusion-shaped hypothesis.  It follows from:
-
-* the actual finalized GJE family's LU backward certificate;
-* the positive-pivot symmetric factor relation, which identifies the
-  perturbed matrix with `R_hat^T R_hat`;
-* a two-sided inverse of the scaled computed upper factor `R_hat`;
-* a source inverse certificate.
-
-In particular, both the repository `nonsingInv` identity for the perturbed
-matrix and the entrywise `O(u)` perturbation are proved here. -/
-theorem ch14ext_cor146_uniformInverseRegularity_of_finalizedGJE
-    {I : Type*} {l : Filter I} {n : Nat}
-    {A A_inv : Fin n -> Fin n -> Real} {b : Fin n -> Real}
-    (F : Ch14GJEFinalizedFamily I l n A b)
-    (R_inv : I -> Fin n -> Fin n -> Real)
-    (hSPD : IsSymPosDef n A)
-    (hpiv : forall t i, 0 < (F.initial t).matrix i i)
-    (hsym : forall t i j,
-      (F.initial t).matrix i j =
-        (F.initial t).matrix i i * F.L_hat t j i)
-    (hRinv : forall t,
-      IsInverse n (ch14ext_cor146_scaledUpper n (F.initial t).matrix)
-        (R_inv t))
-    (hAinv : IsInverse n A A_inv) :
-    Ch14Cor146UniformInverseRegularity l n A A_inv F.model F.L_hat
-      (fun t => (F.initial t).matrix) := by
-  let U : I -> Fin n -> Fin n -> Real := fun t => (F.initial t).matrix
-  let R : I -> Fin n -> Fin n -> Real := fun t =>
-    ch14ext_cor146_scaledUpper n (F.initial t).matrix
-  have hGram : forall t,
-      ch14ext_cor146ClosureAhat n A F.L_hat U t =
-        matMul n (fun i j => R t j i) (R t) := by
-    intro t
-    have hstruct := ch14ext_cor146_positivePivot_cholesky_backward_error
-      n (F.model t) A (F.L_hat t) (U t) hSPD
-      (F.lu_certificate t) (hpiv t) (hsym t)
-    funext i j
-    simpa only [ch14ext_cor146ClosureAhat, U, R] using hstruct.2.1 i j
-  have hNonsing : forall t,
-      nonsingInv n (ch14ext_cor146ClosureAhat n A F.L_hat U t) =
-        matMul n (R_inv t) (fun i j => R_inv t j i) := by
-    intro t
-    rw [hGram t]
-    simpa [rectMatMul, finiteTranspose, matMul] using
-      (nonsingInv_rectMatMul_transpose_self_of_IsInverse (hRinv t))
-  have hPerturbedInv : forall t,
-      IsInverse n (ch14ext_cor146ClosureAhat n A F.L_hat U t)
-        (nonsingInv n (ch14ext_cor146ClosureAhat n A F.L_hat U t)) := by
-    intro t
-    have hNonsingGram := hNonsing t
-    rw [hGram t] at hNonsingGram
-    rw [hGram t, hNonsingGram]
-    simpa [ch7CholeskyInverseGram, matTranspose] using
-      (corollary7_6_cholesky_inverse_gram_isInverse
-        (R t) (R_inv t) (hRinv t))
-  have hPerturbation : forall i j,
-      (fun t => ch14ext_cor146ClosureAhat n A F.L_hat U t i j - A i j)
-        =O[l] (fun t => (F.model t).u) := by
-    have hres := ch14ext_luBackward_productResidual_isBigO
-      F.model A F.L_hat U F.unit_tendsto_zero F.lu_certificate F.valid_n
-        F.L_hat_isBigO_one F.U_hat_isBigO_one
-    intro i j
-    convert hres i j using 1
-    funext t
-    simp only [ch14ext_cor146ClosureAhat,
-      ch14ext_cor146_symmetricGEDelta, U]
-    ring
-  have hAhat_tendsto : Tendsto
-      (fun t => ch14ext_cor146ClosureAhat n A F.L_hat U t) l
-      (nhds A) := by
-    apply tendsto_pi_nhds.mpr
-    intro i
-    apply tendsto_pi_nhds.mpr
-    intro j
-    have hd := (hPerturbation i j).trans_tendsto F.unit_tendsto_zero
-    simpa only [sub_add_cancel, zero_add] using hd.add_const (A i j)
-  have hPerturbedInv_one : Ch14Cor146ClosureMatrixFamilyIsBigOOne l
-      (fun t =>
-        nonsingInv n (ch14ext_cor146ClosureAhat n A F.L_hat U t)) :=
-    ch14ext_nonsingInv_family_isBigOOne_of_tendsto hAhat_tendsto
-      (isSymPosDef_det_ne_zero A hSPD)
-  exact
-    { source_inverse := hAinv
-      perturbed_inverse := hPerturbedInv
-      perturbed_inverse_family_isBigO_one := hPerturbedInv_one
-      perturbation_family_isBigO_u := hPerturbation }
-
-/-- Build a `Ch14Cor146FinalizedRunFamily` without accepting its bundled
-`uniform_inverse` field.  The field is derived by
-`ch14ext_cor146_uniformInverseRegularity_of_finalizedGJE` from the actual
-finalized GJE/LU run.  The inverse of the scaled computed upper factor is
-itself the canonical inverse, justified here by triangularity and the
-strictly positive computed pivots. -/
-noncomputable def ch14ext_cor146FinalizedRunFamily_of_computedFactors
-    {I : Type*} {l : Filter I} {n : Nat}
-    {A A_inv : Fin n -> Fin n -> Real}
-    {b x : Fin n -> Real}
-    (gje : Ch14GJEFinalizedFamily I l n A b)
-    (spd : IsSymPosDef n A)
-    (exact_solution_nonzero : 0 < vecNorm2 x)
-    (computed_pivots_pos : forall t i, 0 < (gje.initial t).matrix i i)
-    (symmetric_factor_relation : forall t i j,
-      (gje.initial t).matrix i j =
-        (gje.initial t).matrix i i * gje.L_hat t j i)
-    (gamma_small : forall t, (n : Real) * gamma (gje.model t) n < 1)
-    (source_inverse : IsInverse n A A_inv)
-    (exact_solution : forall i, matMulVec n A x i = b i) :
-    Ch14Cor146FinalizedRunFamily I l n A A_inv b x := by
-  let R : I -> Fin n -> Fin n -> Real := fun t =>
-    ch14ext_cor146_scaledUpper n (gje.initial t).matrix
-  let R_inv : I -> Fin n -> Fin n -> Real := fun t => nonsingInv n (R t)
-  have hRupper : forall t i j, j.val < i.val -> R t i j = 0 := by
-    intro t i j hji
-    simp [R, ch14ext_cor146_scaledUpper,
-      (gje.lu_certificate t).U_lower_zero i j hji]
-  have hRdiag : forall t i, R t i i ≠ 0 := by
-    intro t i
-    apply div_ne_zero
-    · exact ne_of_gt (computed_pivots_pos t i)
-    · exact ne_of_gt (Real.sqrt_pos.2 (computed_pivots_pos t i))
-  have hRinv : forall t, IsInverse n (R t) (R_inv t) := by
-    intro t
-    exact isInverse_nonsingInv_of_det_ne_zero n (R t)
-      (det_ne_zero_of_upper_triangular_diag_ne_zero n (R t)
-        (hRupper t) (hRdiag t))
-  refine {
-  gje := gje
-  R_inv := R_inv
-  spd := spd
-  exact_solution_nonzero := exact_solution_nonzero
-  computed_pivots_pos := computed_pivots_pos
-  symmetric_factor_relation := symmetric_factor_relation
-  scaled_upper_inverse := by
-    intro t
-    simpa only [R] using hRinv t
-  gamma_small := gamma_small
-  exact_solution := exact_solution
-  uniform_inverse :=
-    ch14ext_cor146_uniformInverseRegularity_of_finalizedGJE gje R_inv spd
-      computed_pivots_pos symmetric_factor_relation (by
-        intro t
-        simpa only [R] using hRinv t) source_inverse
-  }
-
-end Ch14Ext
-end NumStability

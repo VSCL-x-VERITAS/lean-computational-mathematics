@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07.NoGuardCounterexample
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation07.NoGuardCounterexample`. -/
+
+#check NumStability.noGuardCorrectionFormulaCounterexample_model
+#check NumStability.noGuardCorrectionFormulaCounterexample_toCorrectionFormulaTrace_not_exact

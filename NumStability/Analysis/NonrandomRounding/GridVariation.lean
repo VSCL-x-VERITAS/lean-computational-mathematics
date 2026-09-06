@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter01.Section17.GridVariation
+import ComputationalMathematics.Source.Higham.Chapter01.Section17.GridVariation
 
 /-!
 # Historical nonrandom-rounding grid-variation import

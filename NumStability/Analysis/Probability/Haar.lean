@@ -1,8 +1,8 @@
-import NumStability.Analysis.Probability.Haar.HomogeneousSpaceUniqueness
+import ComputationalMathematics.Analysis.Probability.Haar
 
 /-!
-# Haar probability analysis
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for reusable results about Haar probability
-measures and homogeneous spaces.
+The implementation is provided by `ComputationalMathematics.Analysis.Probability.Haar`.
+Declaration names and mathematical terminology are unchanged.
 -/

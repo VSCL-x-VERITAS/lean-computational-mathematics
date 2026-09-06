@@ -1,9 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.EndToEnd
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.ResidualAssembly
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.RoundedSolve
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.TriangularBartelsStewart.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

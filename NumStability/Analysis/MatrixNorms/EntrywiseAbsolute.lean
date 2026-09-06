@@ -1,7 +1,8 @@
-import NumStability.Analysis.MatrixNorms.EntrywiseAbsolute.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseAbsolute
 
 /-!
-# Analysis MatrixNorms EntrywiseAbsolute
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.MatrixNorms.EntrywiseAbsolute`.
+Declaration names and mathematical terminology are unchanged.
 -/

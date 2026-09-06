@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Section01.InsertionExamples
-import NumStability.Source.Higham.Chapter04.Section01.PairwiseSixTerm
+import ComputationalMathematics.Source.Higham.Chapter04.Section01
 
 /-!
-# Higham Chapter 4, §4.1: summation methods
+Historical import path retained for compatibility.
 
-Canonical source-facing entry point for §4.1 material migrated into this tree.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Section01`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enforce the NumStability layout contract with an explicit legacy ratchet."""
+"""Enforce the production layout contract with an explicit legacy ratchet."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ FULL_LOCATOR_RE = re.compile(
     r"^(?:Theorem|Lemma|Equation|Corollary|Problem|Algorithm|Example|Table)(\d+)(.*)$"
 )
 PLACEHOLDER_RE = re.compile(
-    r"\b(?:sorry|admit)\b|^\s*axiom\b",
+    r"\b(?:sorry|admit)\b|^\s*(?:axiom|constant)\b(?!\s*[:=])",
     re.MULTILINE,
 )
 PROCESS_WORDS = (
@@ -96,7 +96,9 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def tier_assignments(modules: Iterable[SourceModule]) -> tuple[dict[str, str], set[str]]:
     manifest = load_json(TIERS)
-    if manifest.get("schema_version") != 1:
+    # Schema 1 and 2 share the `exact`/`prefixes`/`tiers` keys this reader uses;
+    # schema 2 adds reviewed rule records alongside them (TIER-01).
+    if manifest.get("schema_version") not in (1, 2):
         raise LayoutError("unsupported tier manifest schema")
     exact = manifest.get("exact")
     prefixes = manifest.get("prefixes")
@@ -154,10 +156,10 @@ def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
     parts = module.name.split(".")[1:]
     if any(not UPPER_CAMEL_RE.fullmatch(part) for part in parts):
         return True
-    if module.name == "NumStability.Source" or module.name.startswith("NumStability.Source."):
+    if parts and parts[0] == "Source":
         if any("_" in part for part in parts):
             return True
-        if module.name == "NumStability.Source":
+        if len(parts) == 1:
             return False
         if len(parts) >= 2 and parts[:2] == ["Source", "Higham"]:
             if len(parts) == 2:
@@ -262,7 +264,7 @@ def placeholder_failures(modules: list[SourceModule]) -> list[str]:
         text = path.read_text(encoding="utf-8-sig", errors="replace")
         if PLACEHOLDER_RE.search(remove_lean_comments(text)):
             findings.append(path.relative_to(ROOT).as_posix())
-    return ["proof placeholders or axiom commands: " + ", ".join(findings)] if findings else []
+    return ["proof placeholders or axiom/constant commands: " + ", ".join(findings)] if findings else []
 
 
 def current_debt(
@@ -387,7 +389,11 @@ def check() -> int:
             expected = {
                 name
                 for name in by_name
-                if name.startswith(contract) and name not in structural
+                if (
+                    name.startswith(contract)
+                    and name not in structural
+                    and assignment.get(name) != "internal"
+                )
             }
         elif (
             isinstance(contract, list)
@@ -472,7 +478,7 @@ def main() -> int:
             raise LayoutError("refusing to baseline tracked generated artifacts")
         complete_aggregates: dict[str, Any] = {}
         direct_import_ceilings: dict[str, Any] = {
-            "NumStability.Algorithms": {"NumStability.Analysis.": 45}
+            "ComputationalMathematics.Algorithms": {"ComputationalMathematics.Analysis.": 45}
         }
         if BASELINE.is_file():
             existing = load_json(BASELINE)

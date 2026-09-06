@@ -1,68 +1,98 @@
-import NumStability.Analysis.MatrixPowersSpijkerPlanarAnalysis
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.DerivIntegrable
+import Mathlib.MeasureTheory.Integral.Prod
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarAnalysis
+import Mathlib.Algebra.Polynomial.Reverse
+import Mathlib.Algebra.Polynomial.Roots
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarAlgebra
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.Rational
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
+import Mathlib.Analysis.CStarAlgebra.CStarMatrix
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Data.Matrix.Block
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonal
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonalCompression
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPair
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairPinching
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeProjection
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeReflection
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteDimensional
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteMatrixOrder
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealEmbedding
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealOrder
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ProjectionReflection
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularCompression
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularMultiplication
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ReflectionAverage
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.StrictPositivity
+import ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent.Analyticity
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.DistanceToInstability
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Kreiss.ResolventBound
+import ComputationalMathematics.Analysis.MatrixNorms.Basic
+import ComputationalMathematics.Analysis.SingularValues.Basic
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ArcLengthPowerBounds.FiniteDimension
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ResolventCoefficients.Analytic
+import ComputationalMathematics.Analysis.Conditioning.DistanceToSingularity
+import Mathlib.Analysis.Complex.ExponentialBounds
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.StabilityRadius
+import Mathlib.MeasureTheory.Integral.CircleIntegral
+import ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent.DunfordResidue
+import Mathlib.Analysis.Calculus.FDeriv.Mul
+import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Normed.Algebra.GelfandFormula
+import Mathlib.Analysis.Normed.Algebra.Spectrum
+import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.FieldSimp
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.Model
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.MatrixNorms
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealDiagonal
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealDiagonal
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComputedIteration
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealCases
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealJordan
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Complex
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.Complex
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComplexSimilarity
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.ComplexJordan
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation.Definitions
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralRadius
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.PseudospectralPackaging
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation.ConvergenceCriterion
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.PseudospectralCriterion
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Resolvent.LowerBounds
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.PowerBounds.Contour
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PowerBound
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BaiDemmelGu
+import Mathlib.Analysis.Complex.Exponential
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.Kreiss
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerKreiss
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarCrossingBounds.Polynomial
+import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.Periodic
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ProjectionIntegral
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarArcLength.Variation
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds.Kreiss
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerKreissUnconditional.Bounds
 
 /-!
-# Analysis.MatrixPowersSpijkerClosure
+# Analysis.MatrixPowersSpijkerClosure (compatibility wrapper)
 
-Historical declaration-bearing facade. Genuine-private and ambient-context retention closure remains here with its original identity.
+Import-only historical R07 path. Its declaration block moved to `NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds.Kreiss`, `NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerKreissUnconditional.Bounds`, imported above. The exact C0005 direct import sequence remains available so existing imports preserve their supported public surface. This module declares nothing.
 -/
-
-/-
-# Unconditional finite-dimensional Kreiss endpoints
-
-This small public endpoint module applies the proved Spijker arc-length
-theorem from `MatrixPowersSpijkerPlanarAnalysis` to the interface results in
-`MatrixPowersKreissSpijker`.
--/
-
-
-
-namespace NumStability
-
-open scoped Real Topology ComplexOrder
-open Complex Metric Set MeasureTheory
-
-noncomputable section
-
-/-- Unconditional pointwise sharp reverse Kreiss estimate. -/
-theorem norm_pow_le_exp_mul_dim_proved
-    {n : ℕ} [Nonempty (Fin n)]
-    (A : CStarMatrix (Fin n) (Fin n) ℂ) {K : ℝ}
-    (hK : KreissResolventBound A K) (k : ℕ) :
-    ‖A ^ k‖ ≤ Real.exp 1 * n * K :=
-  norm_pow_le_exp_mul_dim_of_spijker
-    (spijkerArcLengthBound_proved n) A hK k
-
-/-- Unconditional uniform power bound from the sharp Spijker theorem. -/
-theorem powerBound_exp_mul_dim_proved
-    {n : ℕ} [Nonempty (Fin n)]
-    (A : CStarMatrix (Fin n) (Fin n) ℂ) {K : ℝ}
-    (hK : KreissResolventBound A K) :
-    PowerBound A (Real.exp 1 * n * K) :=
-  powerBound_exp_mul_dim_of_spijker
-    (spijkerArcLengthBound_proved n) A hK
-
-/-- Unconditional literal upper endpoint in Higham's notation. -/
-theorem higham18_kreiss_upper_proved
-    {n : ℕ} [Nonempty (Fin n)]
-    (A : CStarMatrix (Fin n) (Fin n) ℂ)
-    (hres : ∀ z : ℂ, 1 < ‖z‖ → z ∈ resolventSet ℂ A)
-    (hbdd : BddAbove (kreissResolventValueSet A)) :
-    matrixPowerNormSup A ≤
-      Real.exp 1 * n * kreissConstant A :=
-  higham18_kreiss_upper_of_spijker
-    (spijkerArcLengthBound_proved n) A hres hbdd
-
-/-- Unconditional two-sided finite-dimensional Kreiss theorem, closing the
-Chapter 18 Spijker dependency. -/
-theorem higham18_kreiss_two_sided_proved
-    {n : ℕ} [Nonempty (Fin n)]
-    (A : CStarMatrix (Fin n) (Fin n) ℂ)
-    (hres : ∀ z : ℂ, 1 < ‖z‖ → z ∈ resolventSet ℂ A)
-    (hbdd : BddAbove (kreissResolventValueSet A)) :
-    kreissConstant A ≤ matrixPowerNormSup A ∧
-      matrixPowerNormSup A ≤ Real.exp 1 * n * kreissConstant A :=
-  higham18_kreiss_two_sided_of_spijker
-    (spijkerArcLengthBound_proved n) A hres hbdd
-
-end
-end NumStability

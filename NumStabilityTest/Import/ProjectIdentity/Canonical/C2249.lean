@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenvectors
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenvectors`. -/
+
+#check NumStability.higham9_sineMatrix_isOrthogonal
+#check NumStability.symmetricToeplitz_orthogonal_diagonalization
+#check NumStability.symmetricToeplitz_scaled_sine_eigenpair
+#check NumStability.symmetricToeplitz_sine_eigenpair
+#check NumStability.toeplitzSineVector_ne_zero

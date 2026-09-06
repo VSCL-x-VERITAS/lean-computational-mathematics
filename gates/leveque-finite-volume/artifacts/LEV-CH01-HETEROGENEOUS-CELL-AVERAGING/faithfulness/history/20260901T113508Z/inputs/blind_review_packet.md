@@ -1,0 +1,1504 @@
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {Point : Type u_2} {Parameter : Type u_3} [inst : MeasurableSpace Point]
+  [inst_1 : NormedAddCommGroup Parameter] [inst_2 : NormedSpace Real Parameter]
+  (grid : LocalDef003 Cell Point) (volumeMeasure : MeasureTheory.Measure Point)
+  (materialParameters : Point → Parameter),
+  (∀ (cell : Cell), Ne (MeasureTheory.Measure.instFunLike.coe volumeMeasure (grid.cellRegion cell)) 0) →
+    (∀ (cell : Cell),
+        Ne (MeasureTheory.Measure.instFunLike.coe volumeMeasure (grid.cellRegion cell)) instTopENNReal.top) →
+      (∀ (cell : Cell), MeasureTheory.IntegrableOn materialParameters (grid.cellRegion cell) volumeMeasure) →
+        (Exists fun cell₁ =>
+            Exists fun cell₂ =>
+              Ne (LocalDef006 volumeMeasure (grid.cellRegion cell₁) materialParameters)
+                (LocalDef006 volumeMeasure (grid.cellRegion cell₂) materialParameters)) →
+          Exists fun assignedCellProperties =>
+            And
+              (∀ (cell : Cell),
+                LocalDef005 volumeMeasure (grid.cellRegion cell) materialParameters
+                  (assignedCellProperties cell).averagedParameter)
+              (Exists fun cell₁ => Exists fun cell₂ => Ne (assignedCellProperties cell₁) (assignedCellProperties cell₂))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {Point : Type u_2} {Parameter : Type u_3} [inst : MeasurableSpace.{u_2} Point]
+  [inst_1 : NormedAddCommGroup.{u_3} Parameter]
+  [inst_2 :
+    @NormedSpace.{0, u_3} Real Parameter Real.normedField
+      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1)]
+  (grid : @LocalDef003.{u_1, u_2} Cell Point inst)
+  (volumeMeasure : @MeasureTheory.Measure.{u_2} Point inst) (materialParameters : Point → Parameter)
+  (hpositive :
+    ∀ (cell : Cell),
+      @Ne.{1} ENNReal
+        (@DFunLike.coe.{u_2 + 1, u_2 + 1, 1} (@MeasureTheory.Measure.{u_2} Point inst) (Set.{u_2} Point)
+          (fun (x : Set.{u_2} Point) => ENNReal) (@MeasureTheory.Measure.instFunLike.{u_2} Point inst) volumeMeasure
+          (@LocalDef004.{u_1, u_2} Cell Point inst grid cell))
+        (@OfNat.ofNat.{0} ENNReal (nat_lit 0) (@Zero.toOfNat0.{0} ENNReal instZeroENNReal)))
+  (hfinite :
+    ∀ (cell : Cell),
+      @Ne.{1} ENNReal
+        (@DFunLike.coe.{u_2 + 1, u_2 + 1, 1} (@MeasureTheory.Measure.{u_2} Point inst) (Set.{u_2} Point)
+          (fun (x : Set.{u_2} Point) => ENNReal) (@MeasureTheory.Measure.instFunLike.{u_2} Point inst) volumeMeasure
+          (@LocalDef004.{u_1, u_2} Cell Point inst grid cell))
+        (@Top.top.{0} ENNReal instTopENNReal))
+  (hintegrable :
+    ∀ (cell : Cell),
+      @MeasureTheory.IntegrableOn.{u_2, u_3} Point Parameter inst
+        (@UniformSpace.toTopologicalSpace.{u_3} Parameter
+          (@PseudoMetricSpace.toUniformSpace.{u_3} Parameter
+            (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} Parameter
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} Parameter
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} Parameter
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1)))
+        materialParameters (@LocalDef004.{u_1, u_2} Cell Point inst grid cell)
+        volumeMeasure)
+  (hdifferentCellAverages :
+    @Exists.{u_1 + 1} Cell fun (cell₁ : Cell) =>
+      @Exists.{u_1 + 1} Cell fun (cell₂ : Cell) =>
+        @Ne.{u_3 + 1} Parameter
+          (@LocalDef006.{u_2, u_3} Point Parameter inst inst_1 inst_2 volumeMeasure
+            (@LocalDef004.{u_1, u_2} Cell Point inst grid cell₁)
+            materialParameters)
+          (@LocalDef006.{u_2, u_3} Point Parameter inst inst_1 inst_2 volumeMeasure
+            (@LocalDef004.{u_1, u_2} Cell Point inst grid cell₂)
+            materialParameters)),
+  @Exists.{max (u_1 + 1) (u_3 + 1)} (Cell → LocalDef001.{u_3} Parameter)
+    fun (assignedCellProperties : Cell → LocalDef001.{u_3} Parameter) =>
+    And
+      (∀ (cell : Cell),
+        @LocalDef005.{u_2, u_3} Point Parameter inst inst_1 inst_2 volumeMeasure
+          (@LocalDef004.{u_1, u_2} Cell Point inst grid cell) materialParameters
+          (@LocalDef002.{u_3} Parameter (assignedCellProperties cell)))
+      (@Exists.{u_1 + 1} Cell fun (cell₁ : Cell) =>
+        @Exists.{u_1 + 1} Cell fun (cell₂ : Cell) =>
+          @Ne.{u_3 + 1} (LocalDef001.{u_3} Parameter) (assignedCellProperties cell₁)
+            (assignedCellProperties cell₂))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `LocalDef001`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3127a24cb66b8cfeb64d8758c113bb032f5f9bde2818f81077227a75f8b33fdf`
+
+Type:
+
+```lean
+Type u_1 → Type u_1
+```
+
+### D002: `LocalDef002`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `3b70abf26b2bc4825c6a510c8db0879703c3e27ec4092ce4d545d53d24ec1d76`
+
+Type:
+
+```lean
+{Parameter : Type u_1} → LocalDef001 Parameter → Parameter
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun Parameter self => self.1
+```
+
+### D003: `LocalDef003`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `541ff72eb500f2f48d4d8c6c3232a3e3b60e8177b3d5bbbddde2e2791cebff03`
+
+Type:
+
+```lean
+Type u_1 → (Point : Type u_2) → [MeasurableSpace Point] → Type (max u_1 u_2)
+```
+
+### D004: `LocalDef004`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `d0c5faafb12ba37fe6caa6161268436881416f82881f38a2a4b79e450af0089e`
+
+Type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace Point] → LocalDef003 Cell Point → Cell → Set Point
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun Cell Point [MeasurableSpace Point] self => self.2
+```
+
+### D005: `LocalDef005`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `21cd05067505b36e256af0d1c214a5dcc2f714d4a719ef199a54075de31db284`
+
+Type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] →
+        [NormedSpace Real E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] μ region field average =>
+  And (Ne (MeasureTheory.Measure.instFunLike.coe μ region) 0)
+    (And (Ne (MeasureTheory.Measure.instFunLike.coe μ region) instTopENNReal.top)
+      (And (MeasureTheory.IntegrableOn field region μ) (Eq average (LocalDef006 μ region field))))
+```
+
+### D006: `LocalDef006`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `cf2e2e0d30c189de5352968f5369b343f70aa5ca34fa6e1ffb0e90675c639914`
+
+Type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] → [NormedSpace Real E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] μ region field =>
+  instHSMul.hSMul (Real.instInv.inv (MeasureTheory.Measure.instFunLike.coe μ region).toReal)
+    (MeasureTheory.integral (μ.restrict region) fun point => field point)
+```
+
+### D007: `LocalDef007`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `5c804a5d7cd09bffdc8bdb11dfdc722c6f46e7397086d638f679f51b665e693e`
+
+Type:
+
+```lean
+{Parameter : Type u_1} → Parameter → LocalDef001 Parameter
+```
+
+### D008: `LocalDef008`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `70af43774fd5d6cca8bcbb4d47e87ca7c602c3cd2ed577cb1ccdab58fb896810`
+
+Type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      (domain : Set Point) →
+        (cellRegion : Cell → Set Point) →
+          Nonempty Cell →
+            (∀ (cell : Cell), MeasurableSet (cellRegion cell)) →
+              (∀ {cell₁ cell₂ : Cell}, Ne cell₁ cell₂ → Disjoint (cellRegion cell₁) (cellRegion cell₂)) →
+                (∀ (point : Point),
+                    Iff (Set.instMembership.mem domain point)
+                      (Exists fun cell => Set.instMembership.mem (cellRegion cell) point)) →
+                  LocalDef003 Cell Point
+```
+
+### D009: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D010: `DFunLike.coe`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.FunLike.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `9db5c150b3c86d10b50e19602d0c0af9e5012dfe5f13b0d7b57925729f2478f0`
+
+Type:
+
+```lean
+{F : Sort u_1} → {α : outParam (Sort u_2)} → {β : outParam (α → Sort u_3)} → [self : DFunLike F α β] → F → (a : α) → β a
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun F {α} {β} [self : DFunLike F α β] => self.1
+```
+
+### D011: `ENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `5b8f4d61311ebccecf6a54ceca44191d394e0108c8596129a77f03c15a7e457f`
+
+Type:
+
+```lean
+Type
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop NNReal
+```
+
+### D012: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+### D013: `MeasurableSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `6825e55082259c6be2028d5ee0624c796293eccdd78af118da4583180067d196`
+
+Type:
+
+```lean
+Type u_7 → Type u_7
+```
+
+### D014: `MeasureTheory.IntegrableOn`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Integral.IntegrableOn`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `dabc1688ef0e599a1f54ac0aa2c596e2bf70ce60ba22c33b537a76452e7cb6ed`
+
+Type:
+
+```lean
+{α : Type u_1} →
+  {ε : Type u_3} →
+    {mα : MeasurableSpace α} →
+      [inst : TopologicalSpace ε] →
+        [ContinuousENorm ε] →
+          (α → ε) → Set α → autoParam (MeasureTheory.Measure α) MeasureTheory.IntegrableOn._auto_1 → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ε} {mα} [TopologicalSpace ε] [ContinuousENorm ε] f s μ => MeasureTheory.Integrable f (μ.restrict s)
+```
+
+### D015: `MeasureTheory.Measure`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `ba8c23c70f3135407096406cee0b4d7d9f02d088e8b1d1a1e105071821a3a51b`
+
+Type:
+
+```lean
+(α : Type u_6) → [MeasurableSpace α] → Type u_6
+```
+
+### D016: `MeasureTheory.Measure.instFunLike`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `94b2becf9230ce3d438e9b668f79f08e69dbe28c937b1aaca32d96e94b64a5b2`
+
+Type:
+
+```lean
+{α : Type u_1} → [inst : MeasurableSpace α] → FunLike (MeasureTheory.Measure α) (Set α) ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [MeasurableSpace α] =>
+  { coe := fun μ => MeasureTheory.OuterMeasure.instFunLikeSetENNReal.coe μ.toOuterMeasure, coe_injective' := ⋯ }
+```
+
+### D017: `Ne`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6`
+
+Type:
+
+```lean
+{α : Sort u} → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} a b => Not (Eq a b)
+```
+
+### D018: `NormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741`
+
+Type:
+
+```lean
+Type u_8 → Type u_8
+```
+
+### D019: `NormedAddCommGroup.toSeminormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be`
+
+Type:
+
+```lean
+{E : Type u_5} → [NormedAddCommGroup E] → SeminormedAddCommGroup E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : NormedAddCommGroup E] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D020: `NormedSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960`
+
+Type:
+
+```lean
+(𝕜 : Type u_6) → (E : Type u_7) → [NormedField 𝕜] → [SeminormedAddCommGroup E] → Type (max u_6 u_7)
+```
+
+### D021: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D022: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D023: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+### D024: `Real.normedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b`
+
+Type:
+
+```lean
+NormedField Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+let __src := Real.normedAddCommGroup;
+let __src_1 := Real.instField;
+{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,
+  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,
+  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,
+  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,
+  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,
+  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,
+  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,
+  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,
+  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,
+  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,
+  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,
+  toDiv := __src_1.toDiv, div_eq_mul_inv := ⋯, zpow := __src_1.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯,
+  toNontrivial := ⋯, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := ⋯,
+  inv_zero := ⋯, nnratCast_def := ⋯, nnqsmul := __src_1.nnqsmul, nnqsmul_def := ⋯, ratCast_def := ⋯,
+  qsmul := __src_1.qsmul, qsmul_def := ⋯, toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul := ⋯ }
+```
+
+### D025: `SeminormedAddCommGroup.toPseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126`
+
+Type:
+
+```lean
+{E : Type u_8} → [self : SeminormedAddCommGroup E] → PseudoMetricSpace E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E [self : SeminormedAddCommGroup E] => self.3
+```
+
+### D026: `SeminormedAddCommGroup.toSeminormedAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8cf35215f509cdee10a3a95158cbaadd3c5fb584bc0d1f4fad6ecfc69b1bd205`
+
+Type:
+
+```lean
+{E : Type u_5} → [SeminormedAddCommGroup E] → SeminormedAddGroup E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : SeminormedAddCommGroup E] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddGroup := __src.toAddGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D027: `SeminormedAddGroup.toContinuousENorm`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `17a83cbf3059dd0bbaefd43c93ce329f1d6b760d440889322b3582a18b23a141`
+
+Type:
+
+```lean
+{E : Type u_4} → [inst : SeminormedAddGroup E] → ContinuousENorm E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [SeminormedAddGroup E] => { toENorm := NNNorm.toENorm, continuous_enorm := ⋯ }
+```
+
+### D028: `Set`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6e551515032966c16e4f42e4548ff1854c2dce05ffe51e98b66943caecc78ec`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α => α → Prop
+```
+
+### D029: `Top.top`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Notation`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `32c978930b5eb9164add86b32aeacdc99d2d10df09b4b1989d12a6e346774504`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : Top α] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Top α] => self.1
+```
+
+### D030: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D031: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D032: `instTopENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `fc363bb86fd9c29e754e22d842cff17acbad13559cb0e03d31f4863045cd3c07`
+
+Type:
+
+```lean
+Top ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop.top
+```
+
+### D033: `instZeroENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `6e5878abb65d5809d3258e569c8ff0f08b39804b377a07fec18d700b4e3fea86`
+
+Type:
+
+```lean
+Zero ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop.zero
+```
+
+### D034: `AddMonoid.toAddZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddMonoid M] → AddZeroClass M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add_zero := ⋯ }
+```
+
+### D035: `AddZero.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
+
+Type:
+
+```lean
+{M : Type u_2} → [self : AddZero M] → Zero M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZero M] => self.1
+```
+
+### D036: `AddZeroClass.toAddZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddZeroClass M] → AddZero M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZeroClass M] => self.1
+```
+
+### D037: `DistribMulAction.toDistribSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
+
+Type:
+
+```lean
+{M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
+  let __src := inst_2;
+  { toSMul := __src.toSMul, smul_zero := ⋯, smul_add := ⋯ }
+```
+
+### D038: `DistribSMul.toSMulZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : DistribSMul M A] => self.1
+```
+
+### D039: `ENNReal.toReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `1aa070f54e8aff7a6558c977220472990963777ddc5f04c5284f49422c06b41f`
+
+Type:
+
+```lean
+ENNReal → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a => a.toNNReal.toReal
+```
+
+### D040: `ENormedAddCommMonoid.toESeminormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ENormedAddCommMonoid E] → ESeminormedAddCommMonoid E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ENormedAddCommMonoid E] => self.1
+```
+
+### D041: `ESeminormedAddCommMonoid.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220`
+
+Type:
+
+```lean
+{E : Type u_8} → [inst : TopologicalSpace E] → [self : ESeminormedAddCommMonoid E] → AddCommMonoid E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
+```
+
+### D042: `ESeminormedAddCommMonoid.toESeminormedAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddCommMonoid E] → ESeminormedAddMonoid E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1
+```
+
+### D043: `ESeminormedAddMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddMonoid E] → AddMonoid E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ESeminormedAddMonoid E] => self.2
+```
+
+### D044: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D045: `HSMul.hSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSMul α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSMul α β γ] => self.1
+```
+
+### D046: `Inv.inv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `c3aea3c6e2edd31a7b2cf071814315808ef7d84fd01d8c9b719313846ebca438`
+
+Type:
+
+```lean
+{α : Type u} → [self : Inv α] → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Inv α] => self.1
+```
+
+### D047: `MeasureTheory.Measure.restrict`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.Restrict`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `63c4446a3ae02833cbb1104dcc4f2ea534c0eae36f5642bfa8858a6593aa11e8`
+
+Type:
+
+```lean
+{α : Type u_2} → {_m0 : MeasurableSpace α} → MeasureTheory.Measure α → Set α → MeasureTheory.Measure α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {_m0} μ s => LinearMap.instFunLike.coe (MeasureTheory.Measure.restrictₗ s) μ
+```
+
+### D048: `MeasureTheory.integral`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Integral.Bochner.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `428563f3d6b771605a3267457bf33b62ec2efa91a42b57b96121b85c0269a9ab`
+
+Type:
+
+```lean
+{α : Type u_6} →
+  {G : Type u_7} →
+    [inst : NormedAddCommGroup G] →
+      [NormedSpace Real G] → {x : MeasurableSpace α} → MeasureTheory.Measure α → (α → G) → G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+MeasureTheory.wrapped✝.1
+```
+
+### D049: `Module.toDistribMulAction`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
+
+Type:
+
+```lean
+{R : Type u} →
+  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R M {inst} {inst_1} [self : Module R M] => self.1
+```
+
+### D050: `NormedAddCommGroup.toENormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb`
+
+Type:
+
+```lean
+{E : Type u_4} → [inst : NormedAddCommGroup E] → ENormedAddCommMonoid E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : NormedAddCommGroup E] =>
+  let __spread.0 := NormedAddGroup.toENormedAddMonoid;
+  have __spread.1 := inst;
+  { toESeminormedAddMonoid := __spread.0.toESeminormedAddMonoid, add_comm := ⋯, enorm_eq_zero := ⋯ }
+```
+
+### D051: `NormedSpace.toModule`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4`
+
+Type:
+
+```lean
+{𝕜 : Type u_6} →
+  {E : Type u_7} → {inst : NormedField 𝕜} → {inst_1 : SeminormedAddCommGroup E} → [self : NormedSpace 𝕜 E] → Module 𝕜 E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun 𝕜 E {inst} {inst_1} [self : NormedSpace 𝕜 E] => self.1
+```
+
+### D052: `Real.instInv`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `8996fd673a1e2289aaf761085a60a161bdafebda8cdd48d1efb3c89da1382980`
+
+Type:
+
+```lean
+Inv Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ inv := Real.inv'✝ }
+```
+
+### D053: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D054: `Real.semiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
+
+Type:
+
+```lean
+Semiring Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D055: `SMulZeroClass.toSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : SMulZeroClass M A] => self.1
+```
+
+### D056: `instHSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
+```
+
+### D057: `CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `3a25d65eea18eac65c870b595439bf5f5b25e6d990cea7e3a635eb81bad4a258`
+
+Type:
+
+```lean
+{α : Type u} → [self : CompleteAtomicBooleanAlgebra α] → CompleteBooleanAlgebra α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteAtomicBooleanAlgebra α] => self.1
+```
+
+### D058: `CompleteBooleanAlgebra.toCompleteDistribLattice`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5b7b6334d9d65401dbf1e65d1fba2f464f54b88cbfb541ea9f6fe64419b9d357`
+
+Type:
+
+```lean
+{α : Type u} → [CompleteBooleanAlgebra α] → CompleteDistribLattice α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : CompleteBooleanAlgebra α] =>
+  let __spread.0 := inst;
+  let __spread.1 := BooleanAlgebra.toBiheytingAlgebra;
+  { toCompleteLattice := __spread.0.toCompleteLattice, toHImp := __spread.0.toHImp, le_himp_iff := ⋯,
+    toCompl := __spread.0.toCompl, himp_bot := ⋯, toSDiff := __spread.0.toSDiff, sdiff_le_iff := ⋯,
+    toHNot := __spread.1.toHNot, top_sdiff := ⋯ }
+```
+
+### D059: `CompleteBooleanAlgebra.toCompleteLattice`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `ef39a255ef10c0230be1cee558369fc7eb1b981c98d0e640e56097b98344a675`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : CompleteBooleanAlgebra α] → CompleteLattice α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteBooleanAlgebra α] => self.1
+```
+
+### D060: `CompleteDistribLattice.toFrame`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `9575e3922b928b13137e39541f6916c83a8c3d846f283ef286612bada2e926b1`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : CompleteDistribLattice α] → Order.Frame α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteDistribLattice α] => self.1
+```
+
+### D061: `CompleteLattice.instOmegaCompletePartialOrder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.OmegaCompletePartialOrder`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `a588686a2b08b742c60791d874ae481ba89fc2f75533682f87dbe461bb89639e`
+
+Type:
+
+```lean
+{α : Type u_2} → [CompleteLattice α] → OmegaCompletePartialOrder α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : CompleteLattice α] =>
+  { toPartialOrder := inst.toCompleteSemilatticeInf.toPartialOrder,
+    ωSup := fun c => iSup fun i => OmegaCompletePartialOrder.Chain.instFunLikeNat.coe c i, le_ωSup := ⋯, ωSup_le := ⋯ }
+```
+
+### D062: `Disjoint`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Disjoint`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `b3c1a3f72029bdabf392b01ef59e09df14985ee45c8304a6e3013b31345ac3bb`
+
+Type:
+
+```lean
+{α : Type u_1} → [inst : PartialOrder α] → [OrderBot α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : PartialOrder α] [inst_1 : OrderBot α] a b => ∀ ⦃x : α⦄, inst.le x a → inst.le x b → inst.le x inst_1.bot
+```
+
+### D063: `HeytingAlgebra.toOrderBot`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Heyting.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `2ee82a12c7227f6741bb957fb8033ec6bd4dc5696e0118ba976cd5cc433ce74c`
+
+Type:
+
+```lean
+{α : Type u_4} → [self : HeytingAlgebra α] → OrderBot α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : HeytingAlgebra α] => self.2
+```
+
+### D064: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D065: `MeasurableSet`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `2e9235174f4747f2e37b86692acc96182e23810c202fe6e159a326c4a72cf4ff`
+
+Type:
+
+```lean
+{α : Type u_1} → [MeasurableSpace α] → Set α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : MeasurableSpace α] s => inst.MeasurableSet' s
+```
+
+### D066: `Membership.mem`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `941ea3346e809f919727c21bfcdeea342714a6b83f1cf871d648aa2cb14d6e9e`
+
+Type:
+
+```lean
+{α : outParam (Type u)} → {γ : Type v} → [self : Membership α γ] → γ → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} γ [self : Membership α γ] => self.1
+```
+
+### D067: `Nonempty`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `37c79de378d44cb9dc334502b161bb140da0544579086aded2cf83ff99c462c7`
+
+Type:
+
+```lean
+Sort u → Prop
+```
+
+### D068: `OmegaCompletePartialOrder.toPartialOrder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.OmegaCompletePartialOrder`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `04c999d7f177b80a86d128413a961873b394ba8a928e9f40ec1711b6050fc2de`
+
+Type:
+
+```lean
+{α : Type u_6} → [self : OmegaCompletePartialOrder α] → PartialOrder α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : OmegaCompletePartialOrder α] => self.1
+```
+
+### D069: `Order.Frame.toHeytingAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `d4cf848cdacfde27a40baabeb09bc470dcfcc4d195ff7dedbad201a5ff6a03ab`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : Order.Frame α] → HeytingAlgebra α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α self =>
+  { toLattice := self.toLattice, toOrderTop := self.toOrderTop, toHImp := self.toHImp, le_himp_iff := ⋯,
+    toOrderBot := self.toOrderBot, toCompl := self.toCompl, himp_bot := ⋯ }
+```
+
+### D070: `Set.instCompleteAtomicBooleanAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.BooleanAlgebra`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5ebef163c77bbddf9cd7439ed0b00fe337f343e5a1bbb203a126211604f9e398`
+
+Type:
+
+```lean
+{α : Type u_1} → CompleteAtomicBooleanAlgebra (Set α)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} =>
+  let __src := Set.instBooleanAlgebra;
+  { toLattice := __src.toLattice, toSupSet := Set.instSupSet, le_sSup := ⋯, sSup_le := ⋯, toInfSet := Set.instInfSet,
+    sInf_le := ⋯, le_sInf := ⋯, toTop := __src.toTop, le_top := ⋯, toBot := __src.toBot, bot_le := ⋯, le_sup_inf := ⋯,
+    toCompl := __src.toCompl, toSDiff := __src.toSDiff, toHImp := __src.toHImp, inf_compl_le_bot := ⋯,
+    top_le_sup_compl := ⋯, sdiff_eq := ⋯, himp_eq := ⋯, iInf_iSup_eq := ⋯ }
+```
+
+### D071: `Set.instMembership`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5858be77d319c5a0e238602f16818ed6fb2e2b52a81ff7edb07bc219d652f201`
+
+Type:
+
+```lean
+{α : Type u} → Membership α (Set α)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} => { mem := Set.Mem }
+```

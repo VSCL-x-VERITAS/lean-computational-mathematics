@@ -1,6 +1,6 @@
 # Canonical module naming and layout
 
-This document defines the target organization for NumStability. It applies to
+This document defines the target organization for Lean Computational Mathematics. It applies to
 new and touched canonical modules immediately. Historical compatibility modules
 are listed in [`COMPATIBILITY.md`](COMPATIBILITY.md). Other pre-migration debt
 is grandfathered only when named in
@@ -8,13 +8,28 @@ is grandfathered only when named in
 the exact reviewed set to be updated whenever debt decreases and rejects any
 unreviewed addition.
 
+## Project identity and mathematical terminology
+
+The project name describes the whole library. Preserve names that describe
+stability as a mathematical subject, property or result, including source
+titles and identifiers. Do not globally replace `stability` or `stable`.
+Package names, module roots and namespaces require an exact migration map and
+an explicit compatibility policy; a repository rename alone does not decide
+those interfaces. The [identity migration report](../migrations/lean-computational-mathematics/README.md)
+records their current status.
+
+Canonical implementation modules now use `ComputationalMathematics`; old
+`NumStability` modules are forwarding interfaces. Authored declaration names
+remain in their existing namespaces. Module-path spelling is not permission
+to change a theorem's fully qualified declaration name.
+
 ## Organizing principle
 
 The public filesystem describes mathematics, not the order in which a proof
 was discovered.
 
 ```text
-NumStability/
+ComputationalMathematics/
   FloatingPoint/
     Format/
     IEEE/
@@ -98,10 +113,10 @@ closest owner.
 Higham correspondence uses exactly this dialect:
 
 ```text
-NumStability.Source.Higham.Chapter02.Problem10
-NumStability.Source.Higham.Chapter08.Lemma08Discrepancy
-NumStability.Source.Higham.Chapter10.Theorem07
-NumStability.Source.Higham.Chapter13.Table01
+ComputationalMathematics.Source.Higham.Chapter02.Problem11
+ComputationalMathematics.Source.Higham.Chapter08.Lemma08Discrepancy
+ComputationalMathematics.Source.Higham.Chapter10.Theorem07
+ComputationalMathematics.Source.Higham.Chapter13.Table01
 ```
 
 - Use two-digit `ChapterNN` directories.

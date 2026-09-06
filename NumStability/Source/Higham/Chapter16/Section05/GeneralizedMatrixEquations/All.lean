@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.Equation30
-import NumStability.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.Equation31
-import NumStability.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.Equation32
+import ComputationalMathematics.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.All
 
 /-!
-# Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

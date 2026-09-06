@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.Factorization.Spec
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Factorization
 
 /-!
-# Algorithms LinearSystems Cholesky Factorization
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Factorization`.
+Declaration names and mathematical terminology are unchanged.
 -/

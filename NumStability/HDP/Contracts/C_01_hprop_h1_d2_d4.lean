@@ -1,21 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Proposition04.Contract
 
-/-! Stable Chapter 1 forwarding declaration for Markov's inequality. -/
+/-!
+# Compatibility import for an HDP source contract
 
-noncomputable section
-
-open MeasureTheory
-
-namespace NumStability.HDP.Contract
-
-theorem hdp_01_hprop_h1_d2_d4
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X)
-    (hNonneg : ∀ᵐ ω ∂μ, 0 ≤ X ω)
-    {t : ℝ} (ht : 0 < t) :
-    μ (X ⁻¹' Set.Ici t) ≤
-      (∫⁻ ω, ENNReal.ofReal (X ω) ∂μ) / ENNReal.ofReal t :=
-  NumStability.HDP.Scalar.Preliminaries.markovInequalityExtended hX hNonneg ht
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter01.Section02.Proposition04.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

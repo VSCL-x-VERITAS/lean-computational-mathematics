@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section03
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section03`. -/
+
+#check NumStability.continuous_matrixDet
+#check NumStability.measurable_gaussianQRQ
+#check NumStability.orthogonalFirstRow_stewartFirstSection_of_ne_zero
+#check NumStability.randsvdMatrix_isInverse
+#check NumStability.rectangularDiagonal_gram_apply
+#check NumStability.singleHouseholder_randsvd_correction_rank_le_two
+#check NumStability.stewartRawFiberLaw
+#check NumStability.stewartTheorem28_1HaarConclusion_iff_isHaarMeasure

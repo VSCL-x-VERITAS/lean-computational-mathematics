@@ -1,0 +1,10 @@
+import ComputationalMathematics.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.BoydUniqueness
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.BoydUniqueness`. -/
+
+#check NumStability.Ch15.boydCarrier_fixedPoint_isMax_rawPower
+#check NumStability.Ch15.boydCarrier_fixedPoint_unique
+#check NumStability.Ch15.boydRawAdjoint_coord_eq_objective_mul_rpow_of_fixed
+#check NumStability.Ch15.boydSimplexTangentCoeff_eq_objective_mul_rpow_of_fixed
+#check NumStability.Ch15.boydSimplexTangent_sum_eq_objective_of_fixed
+#check NumStability.Ch15.rect_general_zof_coord_eq_norm_mul_rpow_of_fixed

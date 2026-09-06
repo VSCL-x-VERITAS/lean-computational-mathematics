@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter03.Problem02.ProductBounds.PositiveFactors
+import ComputationalMathematics.Source.Higham.Chapter03.Problem02.ProductBounds.All
 
 /-!
-# Source.Higham.Chapter03.Problem02.ProductBounds.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter03.Problem02.ProductBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

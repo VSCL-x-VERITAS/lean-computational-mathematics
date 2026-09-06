@@ -1,8 +1,8 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem02.VaryingBlocks
 
 /-!
-# Higham Chapter 13, Theorem 13.2: unequal block orders
+Historical import path retained for compatibility.
 
-This declaration-free source locator exposes the reusable unequal-block LU
-API associated with Theorem 13.2.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Theorem02.VaryingBlocks`.
+Declaration names and mathematical terminology are unchanged.
 -/

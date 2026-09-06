@@ -1,0 +1,82 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "LEV-CH01-EQ-1.1-CONSTANT-LINEAR-SYSTEM",
+  "trigger": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item N06 unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "The proof-carrying structure is lossless as a representation of certified solutions, but that representational equivalence does not make this audited theorem equivalent to the source equation. Writing P_A(q,x,t) for the derivative-and-residual condition, the structure binder expands to a state q together with h : forall x t, P_A(q,x,t), while the theorem concludes P_A(q,x,t) only after h has already been supplied. The constructor proves that a source solution can be packaged; it does not make the projection theorem impose P_A on the source's independently presented unknown q. Therefore Lean-to-source is no, source-to-Lean is yes, and the classification is not-faithful-weaker.",
+      "primary_evidence": "On raw PDF page 23 / printed Chapter 1 page 1, the source says the homogeneous first-order system 'has the form' q_t(x,t) + A q_x(x,t) = 0 and then identifies q as the unknown vector and A as a constant real matrix. In the direct and blind dossiers, D001-D004 show that ConstantCoefficientLinearSystemSolution/LocalDef001 already contains a state plus a global proof of exactly the conclusion repeated by the target."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "The structure premise is satisfiable and supports genuine nonconstant states, so empty-type vacuity is not the defect. For every A the zero state is certified; for m > 0, q(x,t) = x v - t(A v) has q_x = v and q_t = -A v and is nonconstant when v is nonzero. Nevertheless, every application of the audited theorem still requires the complete all-points equation certificate in advance. Nonemptiness therefore does not repair the circular logical role, and the round-trip request is resolved in favor of not-faithful-weaker.",
+      "primary_evidence": "The source equation on raw PDF page 23 is satisfied by the displayed zero and affine examples by direct differentiation. D003 accepts any state together with a proof of D004 at all x,t, and D004 is exactly the two derivative witnesses plus q_t + A q_x = 0."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C10 unclear",
+      "resolution": "For every ordinary positive dimension, Fin m -> Real and Matrix (Fin m) (Fin m) Real are lossless coordinate presentations of R^m and real m by m matrices. Lean also admits m = 0. That extra endpoint is a well-defined degenerate extension, not a nonvacuous generalization of the PDE, and it neither causes nor cures the theorem-level weakening.",
+      "primary_evidence": "The source on raw PDF page 23 types q : R x R -> R^m, calls m the component count, and explicitly discusses m = 1 without specifying a lower bound. D015, D016, D021, and D022 identify Fin m coordinates and ordinary finite matrix-vector multiplication; D027 identifies m as Nat, including zero."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C11 unclear",
+      "resolution": "At m = 0 the Lean types and operations are defined: Fin 0 is empty, vectors and the square matrix have unique empty-function behavior, the derivative witnesses are empty vectors, and the residual equality is componentwise vacuous. The source does not say whether zero components are allowed, so this convention remains source-ambiguous, but it is only a degenerate boundary note and is not classification-driving.",
+      "primary_evidence": "Raw PDF page 23 describes an m-component vector and an m by m matrix and then treats m = 1, but contains no m >= 1 clause. The dossier's D015, D016, D022, D027, and D047 fix the Lean m = 0 semantics."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item N06 unclear",
+      "resolution": "The selected source makes no existence, uniqueness, initial-value, boundary-value, rank, or well-posedness claim, and the Lean target makes none either. HasDerivAt on the two one-variable slices is a coherent pointwise classical interpretation of the source's explicitly named partial derivatives and does not require continuity of those derivatives. The passage does not discuss weak or distributional solutions, so the broader solution-concept convention remains unstated, but it is independent of the definite proof-carrying-premise defect.",
+      "primary_evidence": "Raw PDF page 23 explicitly says that the t and x subscripts denote partial derivatives and supplies no regularity or solution-existence statement. D018 gives the pointwise derivative semantics, while D001-D004 require those derivatives at every point as part of the supplied certificate."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "After expanding D001-D004, the theorem has the form: for every q already accompanied by a proof that P_A(q,x,t) holds for all x,t, P_A(q,x,t) holds at a selected point. It yields the source equation only for an already-certified state and cannot impose the source's PDE constraint on an independently supplied unknown q. The constructor and the external existence of certified examples cannot supply the missing certificate for an arbitrary candidate q."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Under the source passage's ordinary pointwise partial-derivative reading, a q satisfying q_t + A q_x = 0 at all relevant x,t supplies exactly D004 everywhere. D003 packages q with that global certificate as a D001 system, and the target then projects the same pointwise fact. The m = 0 conclusion is independently trivial and does not block this direction."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "remaining_uncertainties": [
+    "The source does not explicitly say whether the component count m may be zero; Lean includes the well-defined but componentwise-vacuous m = 0 endpoint.",
+    "The selected passage names partial derivatives but does not explicitly distinguish classical pointwise solutions from weak or distributional solution concepts."
+  ],
+  "findings": [
+    {
+      "severity": "critical",
+      "category": "source constraint moved into proof-carrying premise",
+      "evidence": "The source presents q_t + A q_x = 0 as the form constraining the unknown q. D001-D004 instead require a global proof of that same relation inside the type of system before the target conclusion is stated.",
+      "impact": "The target is a certificate-projection lemma. It does not imply the source constraint for an independently presented q, so it is strictly weaker as an audited proposition."
+    },
+    {
+      "severity": "major",
+      "category": "nonvacuous but circular conclusion",
+      "evidence": "Certified systems exist for every A, including the zero state, and for m > 0 the affine family q(x,t) = x v - t(A v) gives nonconstant examples; nonetheless D003 requires the exact global D004 certificate that the theorem later returns pointwise.",
+      "impact": "The premise is not impossible, but the theorem remains true for the unintended trivial reason that its conclusion is stored in its input."
+    },
+    {
+      "severity": "minor",
+      "category": "zero-dimensional extension",
+      "evidence": "Lean quantifies m : Nat and hence includes m = 0, while the source calls m a component count, discusses m = 1, and gives no explicit lower bound.",
+      "impact": "This is a source-ambiguous, componentwise-vacuous endpoint and does not determine the classification."
+    },
+    {
+      "severity": "note",
+      "category": "classical derivative choice",
+      "evidence": "The source says q_t and q_x are partial derivatives but specifies no regularity class; Lean uses HasDerivAt for each coordinate slice at every point.",
+      "impact": "The choice is a coherent minimal classical reading, though the selected passage does not settle broader weak/distributional conventions."
+    }
+  ],
+  "rationale": "The exact algebraic and analytic content of equation (1.1) is reconstructed correctly: q has two real arguments and m real components, A is one fixed real square matrix, the time and space slices have the intended derivatives, matrix multiplication acts only on q_x, and the residual is the zero vector. The decisive mismatch is logical rather than algebraic. ConstantCoefficientLinearSystemSolution A is essentially a state q paired with a proof of the complete all-points source equation. The audited theorem universally quantifies over that proof-carrying package and merely returns one instance of the stored proof. Constructor/projection equivalence shows that the package loses no certified solutions, but it does not show that this projection proposition states the source constraint: from the theorem one cannot obtain the equation for an independently supplied q, whereas a source q satisfying the equation can be packaged and hence implies the Lean conclusion. The premise is demonstrably inhabited, including by nonconstant affine states, so the failure is not empty-type vacuity; it is circular assumption of the source content. The m = 0 and solution-concept questions remain limited source ambiguities and do not change the two implication verdicts."
+}

@@ -1,7 +1,8 @@
-import NumStability.Analysis.FunctionalCalculus.Resolvent.Analyticity
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ResolventCalculus
 
 /-!
-# Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ResolventCalculus
+Historical import path retained for compatibility.
 
-Higham source locator for reusable W06 content. Projection-pinned historical declarations are intentionally not imported through this canonical path.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ResolventCalculus`.
+Declaration names and mathematical terminology are unchanged.
 -/

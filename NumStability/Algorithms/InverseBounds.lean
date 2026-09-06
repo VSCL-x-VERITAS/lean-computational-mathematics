@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Triangular.InverseBounds
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.InverseBounds
 
 /-!
 # Historical triangular inverse-bounds import

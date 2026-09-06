@@ -1,6 +1,6 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.NormNum
-import NumStability.Source.Higham.Chapter01.Problem02.NearIntegerTable.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Problem02.NearIntegerTable.Basic
 
 /-!
 # NearInteger (compatibility module)

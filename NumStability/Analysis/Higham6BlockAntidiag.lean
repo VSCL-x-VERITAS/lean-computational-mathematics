@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter06.BlockAntidiagonalNorm.InducedLp
+import ComputationalMathematics.Source.Higham.Chapter06.BlockAntidiagonalNorm.InducedLp
 
 /-!
 # Historical Higham Chapter 6 block-antidiagonal import

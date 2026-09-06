@@ -2,14 +2,11 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.Analysis.LeadingDigits.Decimal
-import NumStability.Analysis.LeadingDigits.DecimalPowers
-import NumStability.Analysis.LeadingDigits.Empirical
-import NumStability.Analysis.LeadingDigits.LogarithmicDistribution
+import ComputationalMathematics.Analysis.LeadingDigits
 
 /-!
-# Leading-digit analysis
+Historical import path retained for compatibility.
 
-Reusable decimal predicates, empirical distributions, logarithmic laws, and
-power-sequence reductions for leading significant digits.
+The implementation is provided by `ComputationalMathematics.Analysis.LeadingDigits`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Real.Triangularization.SplitCharpoly
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Real.Triangularization.All
 
 /-!
-# Analysis.LinearOperators.Schur.Real.Triangularization.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Schur.Real.Triangularization.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

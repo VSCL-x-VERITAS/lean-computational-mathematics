@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem12.HadamardExamples
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem12
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem12`.
+Declaration names and mathematical terminology are unchanged.
 -/

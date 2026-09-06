@@ -1,0 +1,26 @@
+import ComputationalMathematics.Source.Higham.Chapter05.Algorithm01.ComplexHorner.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Equation14.MatrixPolynomialForms.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Problem01.DifferentiatedHorner.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Problem02.PowerBuilding.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Problem03.EvenOddSplitting.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Problem04.LejaOrdering.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Problem06.MatrixPolynomialHorner.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section01.Horner.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section01.RelativeError.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeError.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeEvaluation.Bidiagonal
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeEvaluation.SyntheticDivision
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.DividedDifferences.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.LejaOrdering.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.NewtonEvaluation.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.NewtonEvaluation.HornerBasis
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.ResidualUnwind.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Basic
+
+/-!
+# Higham Chapter 5
+
+Declaration-free aggregate for Chapter 5 polynomial-evaluation source correspondence.
+-/

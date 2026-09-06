@@ -1,0 +1,696 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-ADVECTION-WAVE-IDENTITY",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "41c1ee1c2a9d2b08c0e401ea14104c20a0ea7e53f599d4f93900e2539cbc2176",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.leveque01_equation02_scalarAdvectionAt",
+      "interpretation": "This abbreviation applies IsLinearAdvectionSolutionAt to a real scalar field q, a constant speed, and a point (x,t).",
+      "effect_on_target": "It is the left side of the target biconditional and supplies the pointwise specification used for equation (1.2).",
+      "source_match": "It matches the source's scalar constant-speed advection equation q_t + speed q_x = 0 at a point.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.leveque01_equation04_oneWayWaveAt",
+      "interpretation": "This abbreviation applies the same IsLinearAdvectionSolutionAt predicate to a real scalar wave field w, coefficient c, and point (x,t).",
+      "effect_on_target": "It is the right side of the biconditional and is definitionally the same predicate as D001 after renaming q to w and speed to c.",
+      "source_match": "It matches the source's one-way wave equation w_t + c w_x = 0 at a point.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.IsLinearAdvectionSolutionAt",
+      "interpretation": "For a field q it asserts the existence of time and space derivative values qt and qx at (x,t), together with the residual equation qt + speed * qx = 0; scalar multiplication on reals is ordinary multiplication.",
+      "effect_on_target": "Both compared equation abbreviations reduce to this identical pointwise derivative-and-residual proposition.",
+      "source_match": "This is a faithful pointwise semantics for the source notation q_t(x,t) + speed q_x(x,t) = 0.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.IsLinearAdvectionSolutionAt._proof_1",
+      "interpretation": "This generated declaration supplies the standard ContinuousSMul instance for a real normed vector space used while elaborating derivatives.",
+      "effect_on_target": "It discharges structure needed by HasDerivAt and adds no explicit premise or independent conclusion to the audited proposition.",
+      "source_match": "It is implementation infrastructure for ordinary real differentiation and does not alter the PDE identity.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "Iff",
+      "interpretation": "Iff is logical equivalence between two propositions.",
+      "effect_on_target": "It requires each pointwise equation specification to imply the other.",
+      "source_match": "A biconditional is the appropriate logical relation for the source statement that the equations are mathematically identical.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "LT.lt",
+      "interpretation": "LT.lt is the strict-order relation selected by an LT instance.",
+      "effect_on_target": "With the real-order instance it forms the premise 0 < speed.",
+      "source_match": "This represents the source's explicit c > 0 condition for the right-going wave.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "OfNat.ofNat",
+      "interpretation": "OfNat.ofNat interprets a natural numeral in the selected type.",
+      "effect_on_target": "It interprets the numeral 0 as a real number in the positivity premise.",
+      "source_match": "It gives the standard real zero used in c > 0 and introduces no mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "Real",
+      "interpretation": "Real is the type of real numbers.",
+      "effect_on_target": "The field values, speed, spatial coordinate, time coordinate, and derivative witnesses are real-valued.",
+      "source_match": "The source places x,t, the scalar unknowns, and constant coefficients in the real scalar setting.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "Real.instLT",
+      "interpretation": "This is the standard strict order on the real numbers.",
+      "effect_on_target": "It makes 0 < speed the usual real positivity condition.",
+      "source_match": "It matches the ordinary meaning of the source condition c > 0.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "Real.instZero",
+      "interpretation": "This is the standard zero element of the real numbers.",
+      "effect_on_target": "It supplies zero in both the positivity premise and the PDE residual equation.",
+      "source_match": "It matches the source's ordinary real zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "Zero.toOfNat0",
+      "interpretation": "This declaration turns a Zero instance into the interpretation of numeral 0.",
+      "effect_on_target": "It connects the written numeral 0 to Real.instZero.",
+      "source_match": "This is elaboration infrastructure for the same zero used in the source equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "A normed field carries its canonical normed-space structure over itself.",
+      "effect_on_target": "For the reals it provides scalar multiplication and analytic structure used in D003.",
+      "source_match": "It realizes ordinary real scalar multiplication and adds no source-level restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Real.normedAddCommGroup",
+      "interpretation": "This is the standard normed additive commutative group structure on the reals.",
+      "effect_on_target": "It supports real addition, zero, negation, topology, and derivative codomains in D003.",
+      "source_match": "These are the conventional real operations implicit in the source PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Real.normedField",
+      "interpretation": "This is the standard normed-field structure on the reals.",
+      "effect_on_target": "It supplies real arithmetic and analytic instances used by scalar multiplication and HasDerivAt.",
+      "source_match": "It implements the ordinary real scalar setting of the source without changing the claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "interpretation": "This derives the commutative subtraction structure from an additive commutative group.",
+      "effect_on_target": "It is typeclass plumbing beneath real additive and derivative structures.",
+      "source_match": "It contributes only standard real subtraction semantics and no extra condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "AddCommMagma.toAdd",
+      "interpretation": "This projection extracts the addition operation from an additive commutative magma.",
+      "effect_on_target": "It ultimately supplies the addition in qt + speed * qx.",
+      "source_match": "The resulting operation is ordinary real addition as used in the source residual.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "AddCommMonoid.toAddCommSemigroup",
+      "interpretation": "This projects an additive commutative semigroup from an additive commutative monoid.",
+      "effect_on_target": "It is algebraic instance plumbing for real addition in D003.",
+      "source_match": "It does not alter the ordinary additive semantics of the source equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "AddCommSemigroup.toAddCommMagma",
+      "interpretation": "This projects the commutative binary addition layer from an additive commutative semigroup.",
+      "effect_on_target": "It participates in resolution of the real addition operation.",
+      "source_match": "It is standard algebraic infrastructure with no independent source-level effect.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "AddMonoid.toAddZeroClass",
+      "interpretation": "This projects addition and zero, with their identity laws, from an additive monoid.",
+      "effect_on_target": "It supports addition and the residual zero in D003.",
+      "source_match": "It realizes the standard real operations written in the source PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "AddZero.toZero",
+      "interpretation": "This projection extracts the zero element from a structure containing addition and zero.",
+      "effect_on_target": "It supplies the zero used in the residual equation through typeclass resolution.",
+      "source_match": "It is ordinary real zero and introduces no mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "AddZeroClass.toAddZero",
+      "interpretation": "This projection extracts the addition-and-zero operations from an AddZeroClass.",
+      "effect_on_target": "It is instance plumbing for the operations in D003.",
+      "source_match": "It preserves conventional real addition and zero semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "And",
+      "interpretation": "And is logical conjunction.",
+      "effect_on_target": "Inside D003 it requires both partial-derivative facts and the zero-residual equation together.",
+      "source_match": "Satisfaction of the displayed PDE presupposes the stated derivatives and residual simultaneously.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "interpretation": "This derives a nontrivially normed field from a densely normed field.",
+      "effect_on_target": "It supplies analytic field structure required by HasDerivAt over the reals.",
+      "source_match": "It is library infrastructure for standard real differentiation and adds no theorem hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "DistribMulAction.toDistribSMul",
+      "interpretation": "This derives distributive scalar multiplication from a distributive multiplicative action.",
+      "effect_on_target": "It helps resolve the scalar action used for speed times qx.",
+      "source_match": "For reals this is ordinary multiplication distributing over addition, as implicit in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "DistribSMul.toSMulZeroClass",
+      "interpretation": "This projects a scalar action preserving zero from distributive scalar multiplication.",
+      "effect_on_target": "It is typeclass infrastructure for the scalar product speed * qx.",
+      "source_match": "It introduces no nonstandard interpretation of the source coefficient product.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "interpretation": "This projects the extended-seminormed additive commutative monoid structure from the normed version.",
+      "effect_on_target": "It lies in the standard hierarchy supporting real addition and topology.",
+      "source_match": "It is analytic infrastructure and imposes no source-level restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "interpretation": "This derives the underlying additive commutative monoid from an extended-seminormed one.",
+      "effect_on_target": "It helps supply ordinary addition and zero for derivative values.",
+      "source_match": "It matches the conventional additive structure of real-valued derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "interpretation": "This projects the noncommutative extended-seminormed additive layer from its commutative version.",
+      "effect_on_target": "It is structure plumbing beneath real normed addition.",
+      "source_match": "It has no independent effect on the source-level PDE identity.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "interpretation": "This extracts the underlying additive monoid from an extended-seminormed additive monoid.",
+      "effect_on_target": "It supports the addition used in the pointwise residual.",
+      "source_match": "It realizes ordinary real addition and adds no discrepancy.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "Eq",
+      "interpretation": "Eq is equality between two terms of the same type.",
+      "effect_on_target": "It requires the residual qt + speed * qx to equal real zero exactly.",
+      "source_match": "The source equations likewise set the residual exactly equal to zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "Exists",
+      "interpretation": "Exists is existential quantification.",
+      "effect_on_target": "D003 existentially binds the actual time and space derivative values qt and qx.",
+      "source_match": "This faithfully expresses that the partial derivatives appearing in the source PDE exist at the audited point.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "HAdd.hAdd",
+      "interpretation": "HAdd.hAdd selects the heterogeneous addition operation; here both operands and result are real.",
+      "effect_on_target": "It forms qt + speed * qx in the residual.",
+      "source_match": "Instance resolution makes it ordinary real addition, exactly as in the source equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "HSMul.hSMul",
+      "interpretation": "HSMul.hSMul selects scalar multiplication; here a real speed acts on the real derivative qx.",
+      "effect_on_target": "It forms the coefficient-times-spatial-derivative term in D003.",
+      "source_match": "For real scalars this is ordinary multiplication, matching u_bar q_x and c w_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "HasDerivAt",
+      "interpretation": "HasDerivAt f f' x states that the one-variable function f has derivative f' at x in the standard normed-field sense.",
+      "effect_on_target": "Applied to the time slice tau -> field x tau and space slice xi -> field xi t, it supplies the two source partial derivatives at (x,t).",
+      "source_match": "For real-valued fields this is the standard rigorous interpretation of the source's q_t and q_x notation.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "Module.toDistribMulAction",
+      "interpretation": "This projects the distributive scalar-action structure from a module.",
+      "effect_on_target": "It supports real scalar multiplication in D003 and analytic instances used by derivatives.",
+      "source_match": "It is standard structure behind coefficient multiplication and changes no source condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "NegZeroClass.toZero",
+      "interpretation": "This projection extracts zero from a structure with negation and zero.",
+      "effect_on_target": "It is typeclass plumbing for the zero of derivative codomains.",
+      "source_match": "It resolves to ordinary real zero and adds no mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "NormedAddCommGroup",
+      "interpretation": "NormedAddCommGroup is the structure of a commutative additive group equipped with a compatible norm.",
+      "effect_on_target": "D003 is generic over such codomains but the audited target instantiates it with Real.",
+      "source_match": "At the target instantiation this supplies exactly the ordinary normed additive real structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "interpretation": "This projection extracts the additive commutative group from a normed additive commutative group.",
+      "effect_on_target": "It supplies real additive algebra required by HasDerivAt and the residual.",
+      "source_match": "It is conventional real algebraic structure and imposes no extra condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "interpretation": "This derives the extended-normed additive commutative monoid structure from a normed additive commutative group.",
+      "effect_on_target": "It participates in the topology and norm hierarchy for real derivatives.",
+      "source_match": "It is implementation infrastructure for standard real analysis and does not narrow the source claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "interpretation": "This derives a seminormed additive commutative group from a normed one.",
+      "effect_on_target": "It supplies the topology and additive structure required by the normed-space instance.",
+      "source_match": "It is standard real analytic structure with no independent semantic discrepancy.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "NormedSpace",
+      "interpretation": "NormedSpace describes a scalar module compatible with norms.",
+      "effect_on_target": "D003 requires this structure for its codomain, instantiated canonically for Real over Real.",
+      "source_match": "It enables ordinary real scalar multiplication and differentiation and adds no explicit theorem hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "NormedSpace.toModule",
+      "interpretation": "This projection extracts the module structure from a normed space.",
+      "effect_on_target": "It supplies algebraic scalar multiplication used in the residual and derivative API.",
+      "source_match": "For Real over Real it is ordinary multiplication, matching the source coefficient term.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "This projection derives a uniform structure from a pseudometric structure.",
+      "effect_on_target": "It is part of the standard topology used to define real derivatives.",
+      "source_match": "It supplies conventional real topology and does not change the PDE statement.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Real.denselyNormedField",
+      "interpretation": "This is the standard densely normed field instance for the real numbers.",
+      "effect_on_target": "It supplies analytic field facts needed by HasDerivAt.",
+      "source_match": "It realizes standard real differentiation assumed by the source notation.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Real.instMonoid",
+      "interpretation": "This is the standard multiplicative monoid instance on the reals.",
+      "effect_on_target": "It supports real scalar multiplication through the algebra hierarchy.",
+      "source_match": "It is ordinary real multiplication and introduces no nonstandard semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Real.semiring",
+      "interpretation": "This is the standard semiring structure underlying real arithmetic.",
+      "effect_on_target": "It supports addition and multiplication used by the scalar residual.",
+      "source_match": "It implements the conventional arithmetic appearing in both source equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "SMulZeroClass.toSMul",
+      "interpretation": "This projection extracts scalar multiplication from a scalar action preserving zero.",
+      "effect_on_target": "It resolves the operation speed acting on qx.",
+      "source_match": "At the real instantiation it is ordinary coefficient multiplication as in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "interpretation": "This projection derives the pseudometric topology from a seminormed additive commutative group.",
+      "effect_on_target": "It supports the topology used in HasDerivAt.",
+      "source_match": "It is standard real analytic infrastructure and adds no source-level premise.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "interpretation": "This derives the negation-and-zero structure from a subtraction/negation/zero monoid.",
+      "effect_on_target": "It lies in the additive hierarchy supporting real zero and negation.",
+      "source_match": "It has no independent effect beyond conventional real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "interpretation": "This projects the subtraction monoid from its commutative refinement.",
+      "effect_on_target": "It is algebraic plumbing used by real analytic structures.",
+      "source_match": "It introduces no restriction or altered operator in the audited PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "interpretation": "This derives a subtraction, negation, and zero monoid from a subtraction monoid.",
+      "effect_on_target": "It supports the real additive hierarchy beneath derivative semantics.",
+      "source_match": "It is standard implementation structure and leaves the source meaning unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "This projection extracts a topology from a uniform-space structure.",
+      "effect_on_target": "It supplies the topology on real domains and codomains used in HasDerivAt.",
+      "source_match": "It is the conventional topology for real derivatives implicit in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "instHAdd",
+      "interpretation": "This builds homogeneous heterogeneous-addition syntax from an Add instance.",
+      "effect_on_target": "It makes qt + speed * qx use the resolved real addition operation.",
+      "source_match": "The operation is ordinary real addition, matching both displayed PDEs.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "instHSMul",
+      "interpretation": "This builds homogeneous heterogeneous-scalar-multiplication syntax from an SMul instance.",
+      "effect_on_target": "It makes the real coefficient act on the real spatial derivative.",
+      "source_match": "The operation reduces to ordinary real multiplication, matching the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "interpretation": "This projects an additive commutative monoid from an additive commutative group.",
+      "effect_on_target": "It provides additive structure for the real module and derivative codomain.",
+      "source_match": "It is standard real algebra and adds no independent semantic condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "AddCommGroup.toAddGroup",
+      "interpretation": "This projects an additive group from an additive commutative group.",
+      "effect_on_target": "It supports negation, subtraction, and addition used by the derivative infrastructure.",
+      "source_match": "It leaves the ordinary real PDE operations unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "AddGroup.toSubNegMonoid",
+      "interpretation": "This projects subtraction and negation structure from an additive group.",
+      "effect_on_target": "It participates in the algebra hierarchy required by real differentiation.",
+      "source_match": "It is standard real structure and creates no mismatch with the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "ContinuousSMul",
+      "interpretation": "ContinuousSMul states continuity of the scalar multiplication action.",
+      "effect_on_target": "It is an instance requirement of HasDerivAt, automatically supplied for real normed spaces rather than a target premise.",
+      "source_match": "For real-valued fields it is standard analytic infrastructure and does not restrict the selected source claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "DivisionSemiring.toSemiring",
+      "interpretation": "This projection extracts semiring structure from a division semiring.",
+      "effect_on_target": "It supports the real module and scalar-action hierarchy.",
+      "source_match": "It is conventional real arithmetic and has no independent source-level effect.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "Field.toSemifield",
+      "interpretation": "This derives the semifield interface from a field.",
+      "effect_on_target": "It participates in resolving the standard real field hierarchy used by derivatives.",
+      "source_match": "It adds no nonstandard operation or restriction to the real scalar PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "MonoidWithZero.toMonoid",
+      "interpretation": "This projects multiplicative monoid structure from a monoid with zero.",
+      "effect_on_target": "It is typeclass plumbing for real scalar multiplication.",
+      "source_match": "It preserves ordinary real multiplication and changes no source semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "NontriviallyNormedField.toNormedField",
+      "interpretation": "This projection extracts normed-field structure from a nontrivially normed field.",
+      "effect_on_target": "It supports the analytic structures used to define HasDerivAt.",
+      "source_match": "For Real it is the standard differentiable scalar setting assumed in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "NormedField.toField",
+      "interpretation": "This projection extracts field structure from a normed field.",
+      "effect_on_target": "It supplies ordinary real field arithmetic within derivative and module instances.",
+      "source_match": "It introduces no discrepancy with the source's real coefficients and derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "This is the standard pseudometric-space instance on the reals, based on absolute difference.",
+      "effect_on_target": "It supplies the topology used in the real derivative predicates.",
+      "source_match": "This is the conventional real topology implicit in partial differentiation.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Semifield.toDivisionSemiring",
+      "interpretation": "This projects division-semiring structure from a semifield.",
+      "effect_on_target": "It is part of resolving real field and module instances.",
+      "source_match": "It is ordinary algebraic infrastructure with no independent effect on the PDE identity.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Semiring.toMonoidWithZero",
+      "interpretation": "This projects multiplicative monoid-with-zero structure from a semiring.",
+      "effect_on_target": "It supports the scalar-action hierarchy used for the coefficient product.",
+      "source_match": "It preserves standard real multiplication and zero semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "SubNegMonoid.toAddMonoid",
+      "interpretation": "This projects additive monoid structure from a subtraction-and-negation monoid.",
+      "effect_on_target": "It completes additive instance resolution for the derivative codomain.",
+      "source_match": "It is conventional real algebra and introduces no extra source-level condition.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Raw PDF page 24, printed page 2, immediately after equation (1.4), explicitly says equations (1.2) and (1.4) are mathematically identical; raw page 23 supplies equation (1.2) and the scalar constant-coefficient context.",
+      "lean_evidence": "The target is leveque01_advectionWaveIdentity, and its two sides are the equation-(1.2) and equation-(1.4) abbreviations documented in D001 and D002.",
+      "reasoning": "The configured passage, surrounding definitions, and target declaration select the same identity claim."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "The source uses one spatial variable x, time t, real scalar fields q(x,t) and w(x,t), and scalar constant coefficients u_bar and c.",
+      "lean_evidence": "The binders are field : Real -> Real -> Real and speed x t : Real; D003 differentiates the second argument in time and the first argument in space.",
+      "reasoning": "The mathematical types and argument roles agree with the source's one-dimensional real scalar setting."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The source makes a structural identity claim between the two equation forms after renaming their field and coefficient symbols.",
+      "lean_evidence": "The theorem universally quantifies field, speed, x, and t, then asserts the pointwise biconditional under speed positivity.",
+      "reasoning": "Uniform pointwise equivalence for arbitrary field and point preserves the source's structural scope; there are no witnesses whose dependence is changed."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The wave paragraph introduces the right-going equation with c > 0; the derivative notation presupposes the relevant partial derivatives at points where the PDE is satisfied.",
+      "lean_evidence": "The target assumes 0 < speed. D003 makes existence of the two point derivatives part of each side's satisfaction predicate, identically on both sides.",
+      "reasoning": "The positive-speed premise retains the cited right-going-wave context. Derivative existence is not an asymmetric extra hypothesis and accurately makes the PDE notation rigorous."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected mathematical assertion is that equations (1.2) and (1.4) are identical; the following statement that this suggests similar techniques is explicitly motivational rather than a separately quantified theorem.",
+      "lean_evidence": "The conclusion is exactly an Iff between the two pointwise equation specifications.",
+      "reasoning": "The formal target captures the complete mathematical identity claim. It appropriately does not turn the source's methodological suggestion into a stronger formal theorem."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Both displayed equations have a time derivative plus a constant coefficient times a spatial derivative, equal to zero.",
+      "lean_evidence": "D001 and D002 both unfold to D003; D003 uses HasDerivAt for the time and space slices and the exact residual qt + speed • qx = 0. All D001-D067 dependencies were inspected.",
+      "reasoning": "Every nontrivial local definition and library operator resolves to the intended derivative, real addition, real coefficient multiplication, equality, and logical equivalence."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source says the equations are mathematically identical and both displayed residuals use a plus sign and equality to zero.",
+      "lean_evidence": "The main connective is Iff, and both sides reduce to the same exact equality qt + speed • qx = 0.",
+      "reasoning": "The logical relation, sign, and equality strength match exactly."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The physical variables q,u_bar and w,c are distinct, but the source calls the equations identical under a mathematical renaming rather than identifying the physical quantities.",
+      "lean_evidence": "The theorem supplies the same arbitrary field and speed to two context-named abbreviations; those names unfold to the same predicate.",
+      "reasoning": "Using one arbitrary field and coefficient on both sides implements alpha-renaming of the equation schema. It does not assert that contaminant concentration is physically the same object as an acoustic variable."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The coefficients u_bar and c each occur once multiplying the corresponding spatial derivative, with no indices or offsets.",
+      "lean_evidence": "The single real binder speed appears in the same coefficient position on both sides through D003.",
+      "reasoning": "Coefficient placement and parameter dependence are preserved under u_bar-to-c renaming."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The comparison is in the one-dimensional, scalar, real, homogeneous constant-coefficient setting.",
+      "lean_evidence": "The target specializes D003 to Real-valued fields on Real x Real and a real constant speed; x and t are arbitrary point coordinates.",
+      "reasoning": "The target uses exactly the selected scalar setting and neither changes dimension nor changes scalar field."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The cited one-way wave is explicitly right-going with c > 0; no division or other undefined operation occurs in equations (1.2) or (1.4).",
+      "lean_evidence": "The premise 0 < speed excludes zero and negative speeds for this right-going comparison, and D003 contains only total real addition, scalar multiplication, equality, and derivative predicates.",
+      "reasoning": "The relevant directional boundary case is handled consistently, and there are no hidden undefined operations."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "Positive sound speeds are part of the intended physical setting, and constant or differentiable translated profiles provide ordinary examples of the shared PDE form.",
+      "lean_evidence": "The premise is satisfiable, for example speed = 1; a constant real field has both derivatives zero and makes both D003 instances true.",
+      "reasoning": "Although the biconditional is definitional because the equation schemas are identical, that reflexivity is the intended structural fact, not vacuity from impossible premises."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected result compares two continuous PDE forms; it does not state an algorithm, recurrence, discretization, or execution rule. The mention of similar numerical techniques is only suggestive context.",
+      "lean_evidence": "The target is solely a biconditional between continuous pointwise PDE predicates.",
+      "reasoning": "There is no algorithm or process whose linkage must be preserved."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The identity statement contains no norm, seminorm, metric, or componentwise bound.",
+      "lean_evidence": "No norm or metric occurs in the elaborated target proposition; normed structures appear only as library infrastructure for derivatives.",
+      "reasoning": "No norm or metric convention is part of the selected claim."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The source sentence asserts an exact PDE-form identity, not an error, conditioning, or stability result.",
+      "lean_evidence": "The target contains no error or stability predicate.",
+      "reasoning": "No error or stability notion is being compared."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "Equations (1.2) and (1.4) concern exact fields and exact derivatives, with no computed or rounded quantities.",
+      "lean_evidence": "D003 uses exact real functions, derivative predicates, and exact equality.",
+      "reasoning": "There is no exact-versus-computed distinction in this result."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The source identity contains no asymptotic term, remainder, or limiting regime.",
+      "lean_evidence": "The target is an exact biconditional and contains no asymptotic construction.",
+      "reasoning": "No higher-order or asymptotic semantics apply."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence compares equation forms and does not assert existence, uniqueness, or well-posedness of solutions.",
+      "lean_evidence": "The target equates pointwise satisfaction predicates; it does not claim a solution exists or is unique.",
+      "reasoning": "Existence and uniqueness are outside the selected identity claim."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Unfolding D001 and D002 makes both sides exactly D003. Thus, for every real scalar field, positive speed, and point (x,t), Lean proves mutual implication between q_t + speed q_x = 0 viewed as equation (1.2) and the same specification viewed as equation (1.4). This is precisely the source's structural identity under q-to-w and u_bar-to-c renaming in the cited right-going c > 0 context."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source explicitly identifies the two scalar constant-coefficient PDE forms after renaming and supplies c > 0 for the right-going wave. Interpreting its derivative notation with D003, any arbitrary real field, positive coefficient, and point satisfies equation (1.2) exactly when it satisfies equation (1.4), yielding the Lean biconditional."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "scope-and-renaming",
+      "source_evidence": "The source distinguishes the physical meanings of q,u_bar and w,c while asserting identity of mathematical form, and its wave example assumes c > 0.",
+      "lean_evidence": "The target uses one arbitrary field and speed in two context-specific abbreviations and assumes 0 < speed.",
+      "impact": "This correctly implements structural renaming in the right-going-wave context; it does not identify the physical quantities or formalize the source's merely suggestive claim about technique transfer."
+    }
+  ],
+  "rationale": "The source's mathematical claim is an identity of scalar constant-coefficient PDE form after renaming the unknown and coefficient. The Lean target realizes that claim directly: D001 and D002 are abbreviations for the same D003 pointwise predicate, whose derivative witnesses and residual encode the two displayed PDEs. Universal quantification over the real field and point lifts the reflexive pointwise equivalence to the equation schema, while 0 < speed preserves the source's right-going c > 0 context. The premises are satisfiable and the definitional equivalence is the intended content rather than an unintended vacuity. Both implication directions therefore hold, with no unresolved dependency or semantic check."
+}

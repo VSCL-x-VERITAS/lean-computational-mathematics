@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError.GaussJordanQConstruction
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError.GJEAsymptoticFamilies
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError.GJEFinalDivisionClosure
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError.GJEPrintedEnvelopeClosure
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError.GJETheorem145SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError
 
 /-!
-# NumStability.Source.Higham.Chapter14.Theorem05.ForwardError
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError`.
+Declaration names and mathematical terminology are unchanged.
 -/

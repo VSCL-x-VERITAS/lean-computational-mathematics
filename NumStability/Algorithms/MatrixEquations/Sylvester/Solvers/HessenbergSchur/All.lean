@@ -1,6 +1,8 @@
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur.All
+Historical import path retained for compatibility.
 
-W06 reviewed empty destination entry point: all candidate declarations are projection-pinned or source-only.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

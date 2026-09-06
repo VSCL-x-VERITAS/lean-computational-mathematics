@@ -1,92 +1,87 @@
-import NumStability.Algorithms.TestMatrices.Higham28PascalOscillationCore
-import NumStability.Algorithms.TestMatrices.Higham28PascalDualFlag
+import Mathlib.Data.Fintype.Sort
+import Mathlib.Order.Interval.Finset.Fin
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.Analysis.SpecialFunctions.Stirling
+import Mathlib.Algebra.BigOperators.Intervals
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.Choose.Cast
+import Mathlib.Data.Nat.Choose.Sum
+import Mathlib.Data.Nat.Choose.Vandermonde
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.TestMatrices.Cauchy.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Companion.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Orthogonal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Toeplitz.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation04.HilbertCholeskyInverse.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Asymptotics
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.Asymptotics.Asymptotics
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.IdentityCubeRoot
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.Pascal
+import Mathlib.Algebra.Polynomial.Roots
+import Mathlib.MeasureTheory.Constructions.Pi
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.Probability.Distributions.Gaussian.Real
+import Mathlib.LinearAlgebra.UnitaryGroup
+import Mathlib.MeasureTheory.Measure.Haar.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.TrailingPanels
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderReflector
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.Stewart
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.StewartMeasurability
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.RandomSVD.SingleHouseholderRankTwo
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.HaarConclusion
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.Stewart
+import ComputationalMathematics.Analysis.Conditioning.LinearSystems.PerronFrobenius
+import ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMatrixLaw
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.Probability
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.ProductLaw
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.UniformPositive.PerronAlmostSure
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.RandomSVD.RandsvdNorm
+import ComputationalMathematics.Analysis.TestMatrices.Cauchy.Contracts
+import ComputationalMathematics.Analysis.TestMatrices.Companion.Contracts
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Contracts
+import ComputationalMathematics.Analysis.TestMatrices.Toeplitz.Contracts
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenvectors
+import ComputationalMathematics.Source.Higham.Chapter28.Section06.Companion.Nonderogatory
+import ComputationalMathematics.Analysis.MatrixSpectral
+import ComputationalMathematics.Analysis.PerturbationTheory
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.PascalSpectral
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.PascalSpectral
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.SingularizingPerturbation
+import Mathlib.LinearAlgebra.ExteriorPower.Basis
+import Mathlib.LinearAlgebra.Vandermonde
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.PascalTotalPositivity
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.TotalPositivity
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.PascalOscillation
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.OscillationEigenbasis
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.PascalOscillation
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.PascalDualFlag
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.PascalOscillationCore
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.OscillationSpectrum
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.SignChangeCount
 
-namespace NumStability
-
-open scoped BigOperators
-open Set
-
-/-- Every zero-compatible sign completion of the rank-`i` Pascal eigenvector
-has at least `i` adjacent sign changes. -/
-theorem pascalSortedEigenvector_signChangeCount_ge
-    {n : ℕ} (i : Fin (n + 1)) (s : Fin (n + 1) → Bool)
-    (hs : IsSignCompletion (pascalSortedEigenvector (n + 1) i) s) :
-    i.val ≤ boolSignChangeCount s := by
-  by_cases hi : i.val = 0
-  · omega
-  · obtain ⟨q, hq⟩ := Nat.exists_eq_succ_of_ne_zero hi
-    have hqn : q ≤ n := by omega
-    obtain ⟨l, hn⟩ := Nat.exists_eq_add_of_le hqn
-    subst n
-    have hiq : i = (⟨q + 1, by omega⟩ : Fin (q + l + 1)) := by
-      apply Fin.ext
-      exact hq
-    rw [hiq] at hs ⊢
-    have hl : 0 < l := by omega
-    let Q := pascalSortedEigenvectorMatrix (q + l + 1)
-    have hQ : Q.transpose * Q = 1 :=
-      pascalSortedEigenvectorMatrix_transpose_mul_self (q + l + 1)
-    have hk : 0 < q + 1 := by omega
-    have hkn : q + 1 ≤ q + l + 1 := by omega
-    obtain ⟨ε, _hε, hminorLeading⟩ :=
-      pascalOscillation_pascalLeadingPlucker_same_sign hk hkn
-    have hlead : ∃ ε : ℝ,
-        ∀ (u : Fin (q + 1) → Fin (q + l + 1)), StrictMono u →
-          0 < ε * Matrix.det (fun a b : Fin (q + 1) =>
-            Q (u a) (pascalOscillationLeadingColumn b)) := by
-      refine ⟨ε, ?_⟩
-      intro u hu
-      let su : Set.powersetCard (Fin (q + l + 1)) (q + 1) :=
-        Set.powersetCard.ofFinEmbEquiv (OrderEmbedding.ofStrictMono u hu)
-      have hp := hminorLeading su
-      have heq : Matrix.det (fun a b : Fin (q + 1) =>
-          Q (u a) (pascalOscillationLeadingColumn b)) =
-          pascalLeadingPlucker (q + l + 1) (q + 1) hkn su := by
-        rw [pascalLeadingPlucker, compoundMatrix_apply]
-        congr 1
-        funext a b
-        simp [Q, su, initialPowerset, pascalOscillationLeadingColumn]
-      rwa [heq]
-    let B : Fin (q + l + 1) → Fin l → ℝ := fun r c =>
-      (-1 : ℝ) ^ r.val * Q r (pascalOscillationTrailingColumn c)
-    have hlocal : ∀ (f : Fin (l + 1) → Fin (q + l + 1)), StrictMono f →
-        ∃ η : ℝ, ∀ r : Fin (l + 1),
-          0 < η * Matrix.det (fun a b : Fin l =>
-            B (f (r.succAbove a)) b) := by
-      intro f hf
-      simpa [B] using pascalOscillation_checkerTrailing_local_orientation Q hQ hlead f hf
-    let c : Fin l := ⟨0, hl⟩
-    have hcol : (fun r => B r c) =
-        pascalOscillationCheckerVector
-          (pascalSortedEigenvector (q + l + 1)
-            (⟨q + 1, by omega⟩ : Fin (q + l + 1))) := by
-      funext r
-      simp only [B, c, pascalOscillationCheckerVector]
-      change (-1 : ℝ) ^ r.val *
-          pascalSortedEigenvectorMatrix (q + l + 1) r
-            (pascalOscillationTrailingColumn (⟨0, hl⟩ : Fin l)) = _
-      rw [pascalSortedEigenvectorMatrix_apply]
-      congr 2
-    have hscheck : IsSignCompletion (fun r => B r c) (pascalOscillationCheckerBool s) := by
-      rw [hcol]
-      exact pascalOscillationCheckerBool_isSignCompletion hs
-    have hlt := pascalOscillation_tSystem_column_signChangeCount_lt_local
-      B c hlocal (pascalOscillationCheckerBool s) hscheck
-    have hsum := pascalOscillationCheckerBool_count_add s
-    omega
-
-/-- Higham, Section 28.4, p. 520: the eigenvector belonging to the `i`-th
-strictly decreasing Pascal eigenvalue has exactly `i` sign changes, with zero
-entries assigned either neighboring sign. -/
-theorem pascalSortedEigenvector_hasExactlySignChanges
-    {n : ℕ} (i : Fin (n + 1)) :
-    HasExactlySignChanges (pascalSortedEigenvector (n + 1) i) i.val := by
-  constructor
-  · obtain ⟨s, hs⟩ := pascalOscillation_exists_signCompletion
-      (pascalSortedEigenvector (n + 1) i)
-    exact ⟨s, hs, pascalSortedEigenvector_signChangeCount_ge i s hs⟩
-  · rintro ⟨s, hs, hmore⟩
-    have hle := pascalSortedEigenvector_signChangeCount_le i s hs
-    omega
-
-end NumStability
+/-!
+Historical owner retained as an import-only compatibility wrapper; its declarations were relocated under the R09/R10 completion waves per the reviewed route ledger.
+-/

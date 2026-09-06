@@ -1,0 +1,8 @@
+import ComputationalMathematics.Algorithms.NeumaierCompensatedFiniteFormat
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.NeumaierCompensatedFiniteFormat`. -/
+
+#check NumStability.NeumaierFFStepTrace
+#check NumStability.NeumaierFiniteStepTrace
+#check NumStability.fl_partialSums_localCorrections_abs_le_exactPrefix_add_runningError
+#check NumStability.fl_recursiveResidualCorrectedSum_backward_error_higham410

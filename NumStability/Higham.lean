@@ -1,4 +1,4 @@
-import NumStability.Source.Higham
+import ComputationalMathematics.Source.Higham
 
 /-!
 # Compatibility entry point for Higham correspondence

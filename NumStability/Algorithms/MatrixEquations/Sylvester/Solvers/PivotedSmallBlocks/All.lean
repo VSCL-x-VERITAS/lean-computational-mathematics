@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.CompletePivot
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Pseudospectra.Resolvent.All
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Resolvent
 
 /-!
-# NumStability.Analysis.LinearOperators.Pseudospectra.Resolvent
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Resolvent`.
+Declaration names and mathematical terminology are unchanged.
 -/

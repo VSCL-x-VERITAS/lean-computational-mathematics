@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.RoundedFactorization.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.RoundedFactorization
 
 /-!
-# Algorithms LinearSystems Cholesky RoundedFactorization
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky.RoundedFactorization`.
+Declaration names and mathematical terminology are unchanged.
 -/

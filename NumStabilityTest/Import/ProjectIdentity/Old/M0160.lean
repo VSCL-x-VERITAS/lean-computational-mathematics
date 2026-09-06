@@ -1,0 +1,23 @@
+import NumStability.Analysis.Perturbation.LeastSquares
+
+/-! Isolated API witness for `NumStability.Analysis.Perturbation.LeastSquares`; authored declaration names are retained. -/
+
+#check @NumStability.higham20Theorem20_4TotalLeftWitness_nonneg
+#check @NumStability.higham20_alternative_bound_of_componentwise_fixed_point
+#check @NumStability.lsScaledAugmentedDiagonalBranch_ne_zero_of_alpha_eq_div_sqrt_two
+#check @NumStability.LSQRSolveBackwardError.result
+#check @NumStability.ls_qr_forward_error
+#check @NumStability.higham20_lambdaStar_neg_of_leftNull_residual_pairing
+#check @NumStability.Theorem20_7.rowScaleCounter_pivot0
+#check @NumStability.Theorem20_8.kktLocalSmallnessCoeff_ge_one
+#check @NumStability.Theorem20_10PartAPerturbationCertificate.hB
+#check @NumStability.lseWeightedResidual_eq
+#check @NumStability.theorem20_7_beta_permuteRows
+#check @NumStability.lsScaledAugmentedMatrix_kappa2_bounds_of_rightGram_basis_branch_data
+#check @NumStability.lsMinimumNormBackwardErrorValuesF.bddBelow
+#check @NumStability.GramVecError.bound
+#check @NumStability.lsNormwiseBackwardErrorCostF_sq
+#check @NumStability.higham20_lemma20_12_rangeProjection_finrank_eq_matrixRank
+#check @NumStability.higham20_qr_norm_bounds_to_componentwise
+#check @NumStability.WedinPerturbationBound.solution
+#check @NumStability.lseWeightedMinimizer_energy_le_lagrange

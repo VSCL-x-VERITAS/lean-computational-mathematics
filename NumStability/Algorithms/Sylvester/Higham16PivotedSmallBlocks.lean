@@ -1,7 +1,10 @@
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.CompletePivot
-import NumStability.Algorithms.Sylvester.Higham16QuasiQuasiSylvester
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.PivotedSmallBlocks
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.PivotedSmallBlocks.CompletePivot
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.QuasiQuasiSolve
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.SmallSystemRounding
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Sylvester
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiSylvester
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.PivotedSmallBlocks
 
 /-!
 # Algorithms.Sylvester.Higham16PivotedSmallBlocks

@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Theorem07.OneStep
-import NumStability.Source.Higham.Chapter13.Theorem07.PivotExistence
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem07
 
 /-!
-# Higham Chapter 13: Theorem07
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Theorem07` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Theorem07`.
+Declaration names and mathematical terminology are unchanged.
 -/

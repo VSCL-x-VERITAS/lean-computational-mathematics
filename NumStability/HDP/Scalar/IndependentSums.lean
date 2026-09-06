@@ -1,13 +1,8 @@
-import NumStability.HDP.Scalar.IndependentSums.Bernstein
-import NumStability.HDP.Scalar.IndependentSums.Chernoff
-import NumStability.HDP.Scalar.IndependentSums.GraphDegreeLaw
-import NumStability.HDP.Scalar.IndependentSums.Hoeffding
+import ComputationalMathematics.HDP.Scalar.IndependentSums
 
 /-!
-# Concentration for sums of independent random variables
+Historical import path retained for compatibility.
 
-Reusable entry point for the scalar independent-sum theory behind Vershynin,
-*High-Dimensional Probability*, Chapter 2: Hoeffding-type moment generating
-function bounds, Chernoff's inequality, and the random-graph degree laws that
-Section 2.4 applies them to.
+The implementation is provided by `ComputationalMathematics.HDP.Scalar.IndependentSums`.
+Declaration names and mathematical terminology are unchanged.
 -/

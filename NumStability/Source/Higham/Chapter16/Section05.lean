@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section05.GeneralizedMatrixEquations.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section05
 
 /-!
-# Source Higham Chapter16 Section05
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section05`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.All
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.All`. -/
+
+#check NumStability.FloatingPointFormat.problem2_10_ieeeDouble_midpoint_below_two_pow_rounds_to_two_pow
+#check NumStability.FloatingPointFormat.problem2_10_ieeeDouble_signed_thirtytwo_thirds_times_three

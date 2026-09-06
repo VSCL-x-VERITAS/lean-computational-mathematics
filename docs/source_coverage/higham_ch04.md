@@ -195,3 +195,12 @@ Chapter 4 is load-bearing infrastructure for essentially every later chapter:
   (`FastTwoSumFiniteCertificate`, correction-formula exactness) are the
   foundation for any future compensated-arithmetic work (Ch5 compensated
   Horner, extended-precision iterative refinement in Ch12).
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter04` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

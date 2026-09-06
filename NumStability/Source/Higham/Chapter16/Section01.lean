@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section01.SylvesterEquation
+import ComputationalMathematics.Source.Higham.Chapter16.Section01
 
 /-!
-# Source Higham Chapter16 Section01
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section01`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockTriInverse
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.Method1BWhole
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B`.
+Declaration names and mathematical terminology are unchanged.
 -/

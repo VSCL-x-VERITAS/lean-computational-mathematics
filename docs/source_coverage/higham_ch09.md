@@ -435,3 +435,12 @@ surfaces rather than closed by assuming their conclusions.
   `higham9_11_banded_GEPPUTrace_growthFactorEntry_le_bohteBound`: banded GEPP growth
   `<= 2^(2p-1) - (p-1)·2^(p-2)`, independent of `n`. With M27's near-attainability witness (>= 115 at `n = 9`,
   `p = 4` vs bound 116), both claims of the printed theorem are discharged. Axiom-clean.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter09` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

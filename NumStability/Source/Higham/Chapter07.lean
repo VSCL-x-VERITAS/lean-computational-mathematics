@@ -1,13 +1,8 @@
-import NumStability.Source.Higham.Chapter07.Corollary06.Equilibration.Basic
-import NumStability.Source.Higham.Chapter07.Corollary06.LinearSystemsConditioning.All
-import NumStability.Source.Higham.Chapter07.Equation25.InverseConditioning.All
-import NumStability.Source.Higham.Chapter07.Equation25.SourceEndpoint.Basic
-import NumStability.Source.Higham.Chapter07.Equation26.ComponentwiseDistance.Basic
-import NumStability.Source.Higham.Chapter07.Equation26.RumpCycle.Basic
-import NumStability.Source.Higham.Chapter07.LinearSystemsConditioning.All
+import ComputationalMathematics.Source.Higham.Chapter07
 
 /-!
-# Higham Chapter 7
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the accepted Chapter 7 source-correspondence families.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter07`.
+Declaration names and mathematical terminology are unchanged.
 -/

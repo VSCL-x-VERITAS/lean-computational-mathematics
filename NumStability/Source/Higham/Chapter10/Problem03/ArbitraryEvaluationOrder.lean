@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder.Basic
+import ComputationalMathematics.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder
 
 /-!
-# Source Higham Chapter10 Problem03 ArbitraryEvaluationOrder
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder`.
+Declaration names and mathematical terminology are unchanged.
 -/

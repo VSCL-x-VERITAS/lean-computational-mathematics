@@ -1,0 +1,61 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item N06 unclear"
+  ],
+  "classification": "not-faithful-weaker",
+  "completed_at_utc": "2026-09-01T02:59:32.432177+00:00",
+  "findings": [
+    {
+      "category": "source constraint moved into proof-carrying premise",
+      "evidence": "The source presents q_t + A q_x = 0 as the form constraining the unknown q. D001-D004 instead require a global proof of that same relation inside the type of system before the target conclusion is stated.",
+      "impact": "The target is a certificate-projection lemma. It does not imply the source constraint for an independently presented q, so it is strictly weaker as an audited proposition.",
+      "severity": "critical"
+    },
+    {
+      "category": "nonvacuous but circular conclusion",
+      "evidence": "Certified systems exist for every A, including the zero state, and for m > 0 the affine family q(x,t) = x v - t(A v) gives nonconstant examples; nonetheless D003 requires the exact global D004 certificate that the theorem later returns pointwise.",
+      "impact": "The premise is not impossible, but the theorem remains true for the unintended trivial reason that its conclusion is stored in its input.",
+      "severity": "major"
+    },
+    {
+      "category": "zero-dimensional extension",
+      "evidence": "Lean quantifies m : Nat and hence includes m = 0, while the source calls m a component count, discusses m = 1, and gives no explicit lower bound.",
+      "impact": "This is a source-ambiguous, componentwise-vacuous endpoint and does not determine the classification.",
+      "severity": "minor"
+    },
+    {
+      "category": "classical derivative choice",
+      "evidence": "The source says q_t and q_x are partial derivatives but specifies no regularity class; Lean uses HasDerivAt for each coordinate slice at every point.",
+      "impact": "The choice is a coherent minimal classical reading, though the selected passage does not settle broader weak/distributional conventions.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "After expanding D001-D004, the theorem has the form: for every q already accompanied by a proof that P_A(q,x,t) holds for all x,t, P_A(q,x,t) holds at a selected point. It yields the source equation only for an already-certified state and cannot impose the source's PDE constraint on an independently supplied unknown q. The constructor and the external existence of certified examples cannot supply the missing certificate for an arbitrary candidate q.",
+      "verdict": "no"
+    },
+    "source_implies_lean": {
+      "reasoning": "Under the source passage's ordinary pointwise partial-derivative reading, a q satisfying q_t + A q_x = 0 at all relevant x,t supplies exactly D004 everywhere. D003 packages q with that global certificate as a D001 system, and the target then projects the same pointwise fact. The m = 0 conclusion is independently trivial and does not block this direction.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "not-faithful-weaker"
+  },
+  "rationale": "The exact algebraic and analytic content of equation (1.1) is reconstructed correctly: q has two real arguments and m real components, A is one fixed real square matrix, the time and space slices have the intended derivatives, matrix multiplication acts only on q_x, and the residual is the zero vector. The decisive mismatch is logical rather than algebraic. ConstantCoefficientLinearSystemSolution A is essentially a state q paired with a proof of the complete all-points source equation. The audited theorem universally quantifies over that proof-carrying package and merely returns one instance of the stored proof. Constructor/projection equivalence shows that the package loses no certified solutions, but it does not show that this projection proposition states the source constraint: from the theorem one cannot obtain the equation for an independently supplied q, whereas a source q satisfying the equation can be packaged and hence implies the Lean conclusion. The premise is demonstrably inhabited, including by nonconstant affine states, so the failure is not empty-type vacuity; it is circular assumption of the source content. The m = 0 and solution-concept questions remain limited source ambiguities and do not change the two implication verdicts.",
+  "remaining_uncertainties": [
+    "The source does not explicitly say whether the component count m may be zero; Lean includes the well-defined but componentwise-vacuous m = 0 endpoint.",
+    "The selected passage names partial derivatives but does not explicitly distinguish classical pointwise solutions from weak or distributional solution concepts."
+  ],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "LEV-CH01-EQ-1.1-CONSTANT-LINEAR-SYSTEM"
+}

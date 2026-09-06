@@ -5,15 +5,15 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LinearSystems.Cholesky.Solve.Basic
-import NumStability.Algorithms.Cholesky.CholeskySpec
-import NumStability.Algorithms.LinearSystems.LeastSquares.NormalEquations
-import NumStability.Algorithms.MatMul
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.Perturbation.LeastSquares.NormalEquations
-import NumStability.Analysis.PerturbationTheory
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Solve.Basic
+import ComputationalMathematics.Algorithms.Cholesky.CholeskySpec
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.NormalEquations
+import ComputationalMathematics.Algorithms.MatMul
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.NormalEquations
+import ComputationalMathematics.Analysis.PerturbationTheory
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
 
 /-!
 # LSNormalEquations (historical compatibility wrapper)

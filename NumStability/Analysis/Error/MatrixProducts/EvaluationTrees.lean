@@ -1,7 +1,8 @@
-import NumStability.Analysis.Error.MatrixProducts.EvaluationTrees.ProductErrorNotation
+import ComputationalMathematics.Analysis.Error.MatrixProducts.EvaluationTrees
 
 /-!
-# NumStability.Analysis.Error.MatrixProducts.EvaluationTrees
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.Error.MatrixProducts.EvaluationTrees`.
+Declaration names and mathematical terminology are unchanged.
 -/

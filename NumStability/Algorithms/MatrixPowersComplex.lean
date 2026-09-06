@@ -6,12 +6,26 @@ import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.MatrixPowersJordan
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Complex
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling.Complex
-import NumStability.Analysis.MatrixNorms.Basic
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComplexSimilarity
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.ComplexJordan
+import Mathlib.Analysis.Complex.ExponentialBounds
+import Mathlib.Tactic.FieldSimp
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.Model
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.MatrixNorms
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealDiagonal
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealDiagonal
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComputedIteration
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealCases
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealJordan
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Complex
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.Complex
+import ComputationalMathematics.Analysis.MatrixNorms.Basic
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComplexSimilarity
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.ComplexJordan
 
 /-!
 # Algorithms.MatrixPowersComplex

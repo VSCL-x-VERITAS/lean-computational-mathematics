@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter13.Equation25.Families
+import ComputationalMathematics.Source.Higham.Chapter13.Equation25.Families
 
 /-!
 # Historical BlockLU compatibility import

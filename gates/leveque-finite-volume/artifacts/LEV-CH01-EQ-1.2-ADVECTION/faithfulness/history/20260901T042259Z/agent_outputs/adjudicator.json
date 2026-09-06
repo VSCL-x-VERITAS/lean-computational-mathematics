@@ -1,0 +1,53 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "LEV-CH01-EQ-1.2-ADVECTION",
+  "trigger": [
+    "judge classifications differ"
+  ],
+  "resolved_items": [
+    {
+      "item": "Whether the target's iff is the selected scalar-specialization result or a vacuously weaker substitute for an affirmative solution claim.",
+      "resolution": "The iff is the mathematical scalar-specialization claim selected by the passage. Its universal q, speed, x, and t binders govern an extensional equivalence between two pointwise PDE predicates; they do not assert that either predicate holds for every q. Cases in which both predicates are false therefore do not make the iff vacuous: agreement on false cases is part of exact predicate equivalence, and the predicates also have intended satisfying instances such as q(x,t) = 0 and q(x,t) = x - speed*t.",
+      "primary_evidence": "LeVeque, raw PDF page 23 / printed Chapter 1 page 1, immediately after equation (1.1), states that in the constant-coefficient scalar case m = 1 and A reduces to a scalar, then displays equation (1.2) as q_t(x,t) + ubar q_x(x,t) = 0. The exact formal proposition is: forall (q : Real -> Real -> Real) (speed x t : Real), leveque01_equation01_constantLinearSystemAt (scalarAsOneComponentSystem q) (constantCoefficientScalarMatrix speed) x t iff leveque01_equation02_scalarAdvectionAt q speed x t. D001-D006 expand the two sides to the same derivative-existence and zero-residual condition under the singleton-component identification."
+    },
+    {
+      "item": "Whether the source's concentration/density and pipe-advection context is a mathematical hypothesis missing from Lean.",
+      "resolution": "It is an illustrative physical interpretation, not an additional mathematical hypothesis on q. The passage introduces it with 'For example' and states no nonnegativity, units, normalization, conservation, or predicate characterizing a concentration or density. The mathematical restrictions actually stated are a real scalar field, one spatial dimension, and a constant real velocity, all of which the target preserves.",
+      "primary_evidence": "LeVeque, raw PDF page 23 / printed Chapter 1 page 1, uses the example of contaminant transport in a one-dimensional pipe and calls q its concentration or density, while the displayed equation and preceding scalar-specialization paragraph provide the mathematical content. The exact Lean binders q : Real -> Real -> Real and speed x t : Real, together with D001 and D004, preserve the scalar field, constant scalar coefficient, and one-component embedding without adding an unstated physical-value restriction."
+    },
+    {
+      "item": "Which judge's implication analysis correctly respects the source and target quantifier scopes.",
+      "resolution": "The direct judge's two-way analysis is correct. The round-trip counterexample q(x,t) = t with speed = 0 only shows that this q is not a solution; it does not refute the source's scalar-specialization identity or the target's iff. Reading the source's model sentence as a theorem that arbitrary q satisfies the PDE changes the source scope and is not supported by the passage.",
+      "primary_evidence": "The source first presents equation (1.1) as the form of the system and explicitly identifies m = 1 with scalar A before giving equation (1.2). The target likewise states an iff of pointwise solution predicates, not leveque01_equation02_scalarAdvectionAt q speed x t unconditionally. D005 and D006 show that each predicate includes its own derivative witnesses and zero-residual clause."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Expanding the authorized declarations, the left predicate is equation (1.1) for the singleton field i |-> q(x,t) and the 1-by-1 matrix with entry speed. Its unique residual component is exactly q_t(x,t) + speed*q_x(x,t) = 0, which is the right scalar-advection predicate and equation (1.2). Thus the Lean iff directly entails the selected claim that equation (1.2) is the m = 1 scalar form of equation (1.1). It is not required to assert that every q is a solution, because neither the source scalar-specialization claim nor an equation specification has that scope."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source says that in the scalar case m = 1 the matrix A reduces to a scalar and displays the resulting scalar equation. Under the standard singleton encoding supplied by D001, D004, and Matrix.mulVec in D043, scalar derivative witnesses lift to unique Fin 1 derivative vectors and vector witnesses project back to scalars. Hence the one-component equation-(1.1) predicate and the equation-(1.2) predicate hold in exactly the same cases, giving both directions of the target iff."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "note",
+      "category": "physical-context-is-illustrative",
+      "evidence": "Raw PDF page 23 / printed Chapter 1 page 1 introduces the pipe-contaminant setting with 'For example' and supplies no formal constraint on concentration or density beyond the displayed scalar field and constant velocity equation.",
+      "impact": "Omitting a physical-role predicate, nonnegativity, units, or normalization is not a faithfulness defect for this selected scalar-specialization proposition."
+    },
+    {
+      "severity": "note",
+      "category": "iff-nonvacuity",
+      "evidence": "The exact target relates two satisfiable pointwise predicates; q(x,t) = 0 satisfies both, and q(x,t) = x - speed*t supplies a nonconstant satisfying family. False/false cases are also correctly shared by equivalent predicates.",
+      "impact": "The iff is an extensional equality of the system and scalar PDE conditions, not an unintended truth caused by impossible premises or an empty domain."
+    }
+  ],
+  "rationale": "The authoritative page contains a scalar-specialization claim and then a physical example. Mathematically, the selected relationship is that setting m = 1 in equation (1.1), identifying the one component with q, and replacing the 1-by-1 constant matrix by the real scalar velocity yields equation (1.2). The exact Lean proposition states precisely that the corresponding pointwise solution predicates are equivalent. Its universal q binder does not say that every real function solves advection; it says that, for every candidate field, the one-component system condition and scalar condition agree. That distinction defeats the round-trip judge's vacuity objection. The concentration/density wording is illustrative source context rather than an unstated mathematical premise. Both implication directions therefore hold, the result is nonvacuous, and the classification is faithful-equivalent."
+}

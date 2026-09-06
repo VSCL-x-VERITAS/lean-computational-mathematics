@@ -1,0 +1,14 @@
+import ComputationalMathematics.Source.Higham.Chapter06.BlockAntidiagonalNorm.InducedLp
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter06.BlockAntidiagonalNorm.InducedLp`. -/
+
+#check NumStability.ch6aside_blockAntidiagLpCLM
+#check NumStability.ch6aside_blockAntidiagLpCLM_components
+#check NumStability.ch6aside_blockAntidiag_lp_eq
+#check NumStability.ch6aside_matrixLpCLM
+#check NumStability.ch6aside_matrixLpCLM_apply
+#check NumStability.ch6aside_matrixLpCLM_isComplexMatrixLpNormValue
+#check NumStability.ch6aside_matrixLpCLM_norm_eq
+#check NumStability.ch6aside_withLpBlockSwapCLM
+#check NumStability.ch6aside_withLpBlockSwapCLM_apply
+#check NumStability.ch6aside_withLpBlockSwapCLM_norm

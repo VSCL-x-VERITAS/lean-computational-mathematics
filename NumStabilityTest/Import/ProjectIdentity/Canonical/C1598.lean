@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.ProductErrorNotation.ProductErrorNotation
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Section01.ProductErrorNotation.ProductErrorNotation`. -/
+
+#check NumStability.Ch14RectProductTree.exists_productDelta_gamma_operationBudget
+#check NumStability.Ch14RectProductTree.productDelta_abs_le_gamma_operationBudget
+#check NumStability.Ch14RectProductTree.roundedEval_MatProdError_gamma_operationBudget

@@ -1,88 +1,88 @@
-import NumStability.Algorithms.Ch14Problem142
-import NumStability.Algorithms.MatrixInversionMethod2BInstance
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.Method2B
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.DotProduct
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ForwardSubstitution
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.LinearAlgebra.Matrix.Orthogonal
+import Mathlib.Tactic.FieldSimp
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.BackSubstitution
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.LU.LUSolve
+import ComputationalMathematics.Algorithms.MatMul
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.Methods.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Residuals.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.Specifications.MatrixInversion
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.TestMatrices.UpperTriangularStress
+import ComputationalMathematics.Analysis.Error.MatrixProducts.Contracts.MatrixInversion
+import ComputationalMathematics.Analysis.Error.RoundingProducts.Core
+import ComputationalMathematics.Analysis.ForwardError
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.HadamardDeterminant
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Wedin
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation35.HymanBlockFactorization.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation36.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem04.ResidualCounterexample.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem07.OnesVector.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem08.ComplexInverseRealBlock.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem10.EntryPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem11.HadamardCondition.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.ConditionNumberExamples.StressAndPeiMatrices
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.HadamardExamples.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem13.GEJBound.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem14.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem15.DeterminantPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockTriInverse
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockResidual.WholeMatrixBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.Method1BWhole
+import Mathlib.Tactic.LinearCombination
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.BlockResidual.LeftResidualBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2C
+import ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2.Method2Loop
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2CWhole
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.FirstOrderModels
+import ComputationalMathematics.Analysis.FirstOrder.FixedPrecision
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseMaximum
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.Basic
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFirstOrder.Derivations
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.OperationModels
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversionMethod2BInstance
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.Method2B
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockMethod2B.FirstOrderBound
 
 /-!
 # Ch14Problem142Method2B (compatibility module)
 
-Historical path, retained so existing imports of `NumStability.Algorithms.Ch14Problem142Method2B`
-keep resolving. Most of its declarations moved unchanged to the
-canonical modules imported above.
-
-The declarations still defined below are private declarations and
-their users. Lean mangles a private name to
-`_private.<module>.<n>.<name>`, so relocating one renames it and
-breaks the frozen declaration graph; anything referring to one must
-therefore stay with it. This module is a declaration-bearing facade,
-not a pure import shim.
+Import-only module retained so existing imports of `NumStability.Algorithms.Ch14Problem142Method2B` keep
+resolving. Every declaration moved unchanged to `NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockMethod2B.FirstOrderBound`.
+The module's own original imports are re-stated so consumers reaching an
+identifier transitively through this path still see the same surface.
 -/
-
-namespace NumStability
-
-namespace Ch14Ext
-
-/-- Two-block integration with the recursive composer from
-`Ch14Problem142`.  The diagonal and off-diagonal estimates are operation
-derived; only the trailing recursive estimate is supplied. -/
-theorem higham14_problem14_2_method2B_twoBlock_left_firstOrder
-    {r m : ℕ}
-    (hr : 0 < r) (hm : 0 < m)
-    (u cFirst cSecond cDiag leading22 : ℝ)
-    (L11 X11 Delta11 : Matrix (Fin r) (Fin r) ℝ)
-    (L21 X21 : Matrix (Fin m) (Fin r) ℝ)
-    (L22 X22 : Matrix (Fin m) (Fin m) ℝ)
-    (That Phat DeltaFirst DeltaSecond : Matrix (Fin m) (Fin r) ℝ)
-    (hStep : Higham14Problem142Method2BStepSpec hr hm u cFirst cSecond
-      X22 L21 X11 That Phat X21 DeltaFirst DeltaSecond)
-    (hDiag : RightTriangularSolveFirstOrderSpec u cDiag
-      (maxEntryNormRect hr hr L11) (maxEntryNormRect hr hr X11)
-      (maxEntryNormRect hr hr Delta11)
-      L11 (1 : Matrix (Fin r) (Fin r) ℝ) Delta11 X11)
-    (h22 : FirstOrderLe u leading22
-      (maxEntryNormRect hm hm
-        (X22 * L22 - (1 : Matrix (Fin m) (Fin m) ℝ))))
-    (hu0 : 0 ≤ u) (hu1 : u ≤ 1)
-    (hcFirst : 0 ≤ cFirst) (hcSecond : 0 ≤ cSecond)
-    (hcDiag : 0 ≤ cDiag) :
-    FirstOrderLe u
-      (max
-        (cDiag * u * maxEntryNormRect hr hr L11 *
-          maxEntryNormRect hr hr X11)
-        (max
-          (higham14_problem14_2_method2B_uncontrolledLeading (r := r) (m := m)
-            u cFirst cSecond cDiag
-            (maxEntryNormRect hm hm X22) (maxEntryNormRect hm hr L21)
-            (maxEntryNormRect hr hr X11) (maxEntryNormRect hr hr L11))
-          leading22))
-      (maxEntryNormRect (Nat.add_pos_left hr m) (Nat.add_pos_left hr m)
-        (higham14_problem14_2_lowerBlock X11 X21 X22 *
-          higham14_problem14_2_lowerBlock L11 L21 L22 -
-            (1 : Matrix (Fin (r + m)) (Fin (r + m)) ℝ))) := by
-  have h11 : FirstOrderLe u
-      (cDiag * u * maxEntryNormRect hr hr L11 *
-        maxEntryNormRect hr hr X11)
-      (maxEntryNormRect hr hr
-        (X11 * L11 - (1 : Matrix (Fin r) (Fin r) ℝ))) := by
-    have hEq : X11 * L11 - (1 : Matrix (Fin r) (Fin r) ℝ) = Delta11 := by
-      rw [hDiag.equation]
-      abel
-    rw [hEq]
-    exact hDiag.norm_bound
-  have h21 := hStep.offdiag_residual_firstOrder hDiag hu0 hu1
-    hcFirst hcSecond hcDiag
-  rw [higham14_problem14_2_lowerBlock_mul_sub_one]
-  exact higham14_problem14_2_lowerBlock_residual_firstOrder hr hm u
-    (cDiag * u * maxEntryNormRect hr hr L11 *
-      maxEntryNormRect hr hr X11)
-    (higham14_problem14_2_method2B_uncontrolledLeading (r := r) (m := m)
-      u cFirst cSecond cDiag
-      (maxEntryNormRect hm hm X22) (maxEntryNormRect hm hr L21)
-      (maxEntryNormRect hr hr X11) (maxEntryNormRect hr hr L11))
-    leading22
-    (X11 * L11 - (1 : Matrix (Fin r) (Fin r) ℝ))
-    (X21 * L11 + X22 * L21)
-    (X22 * L22 - (1 : Matrix (Fin m) (Fin m) ℝ))
-    h11 h21 h22
-
-end Ch14Ext
-end NumStability

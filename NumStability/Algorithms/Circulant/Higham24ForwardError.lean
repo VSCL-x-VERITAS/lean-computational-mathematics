@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.CirculantForwardError
+import ComputationalMathematics.Source.Higham.Chapter24.CirculantForwardError
 
 /-!
 # Historical Chapter 24 circulant forward-error import

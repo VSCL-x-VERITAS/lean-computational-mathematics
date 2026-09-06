@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.DoublyCompensated
+import ComputationalMathematics.Algorithms.Summation.DoublyCompensated
 
 /-!
 # Doubly compensated summation compatibility import

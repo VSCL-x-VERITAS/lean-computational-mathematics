@@ -1,0 +1,11 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan`. -/
+
+#check NumStability.KahanAffineCoeffStep
+#check NumStability.KahanCoupledCoeffStep
+#check NumStability.finiteKahanState
+#check NumStability.fl_kahanFinalCorrectedSum_exactWithUnitRoundoff
+#check NumStability.fl_kahanSum
+#check NumStability.fl_kahanSum_backward_error_source_bound_of_finiteRoundToEven_base2_tail_order_range
+#check NumStability.kahanFF_kahan_correctionSub_exact

@@ -1,0 +1,60 @@
+{
+  "schema_version":"formalization-faithfulness-1",
+  "role":"source-contract",
+  "task_id":"LEV-CH01-RIEMANN-INTERFACE-FLUX",
+  "source_sha256":"b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "batch_source_contract_sha256":"45b44b76351bbde2fdb6838f07c921232e2ef38eb9b518faedba89f8350b075d",
+  "source_evidence":[
+    {"location":"raw PDF page 27; printed Chapter 1 page 5","anchor":"Opening paragraph of Section 1.2, “Finite Volume Methods”","observation":"The finite-volume method represents q by cell averages, defined as cell integrals divided by cell volume; these values are modified over a time step by flux through cell edges, and numerical flux functions are based on the available approximate cell averages."},
+    {"location":"raw PDF page 27; printed Chapter 1 page 5","anchor":"Section 1.2.1 definition and equation (1.11)","observation":"A Riemann problem is the hyperbolic equation with piecewise-constant initial data having a single jump at x=0, with q_l on x<0 and q_r on x>0."},
+    {"location":"raw PDF page 27; printed Chapter 1 page 5","anchor":"First sentence of the paragraph immediately following equation (1.11)","observation":"When Q_{i-1} and Q_i are cell averages in neighboring finite-volume cells, solving the Riemann problem with q_l=Q_{i-1} and q_r=Q_i provides information usable to compute a numerical flux and update the cell averages over a time step."}
+  ],
+  "statement":{
+    "binders":[
+      "A hyperbolic equation used to form a Riemann problem.",
+      "A finite-volume grid with two neighboring cells indexed i-1 and i.",
+      "The cell averages Q_{i-1} and Q_i of those neighboring cells.",
+      "A time step over which cell averages are to be updated."
+    ],
+    "hypotheses":[
+      "Q_{i-1} and Q_i are the cell averages in two neighboring finite-volume grid cells.",
+      "The Riemann problem is posed with left state q_l=Q_{i-1} and right state q_r=Q_i."
+    ],
+    "conclusions":[
+      "Solving this Riemann problem provides information that can be used both to compute a numerical flux and to update the cell averages over a time step."
+    ],
+    "definitions_and_conventions":[
+      "A cell average is the integral of q over a grid cell divided by the volume of that cell.",
+      "A Riemann problem consists of the hyperbolic equation together with piecewise-constant initial data having one jump at x=0.",
+      "The Riemann convention is q_l for x<0 and q_r for x>0.",
+      "In the surrounding finite-volume description, a numerical flux is intended to approximate the correct flux using the approximate cell averages available."
+    ],
+    "implicit_context":[
+      "The finite-volume quantities being supplied as Riemann states are cell averages rather than pointwise values.",
+      "The assignment is oriented: the i-1 cell supplies the left state and the i cell supplies the right state.",
+      "The phrase “can be used” states an operational role for the Riemann information; it does not identify that information with a unique flux value or update formula."
+    ],
+    "semantic_facets":[
+      {"topic":"Neighboring-cell inputs","details":["The two inputs are cell averages from neighboring finite-volume cells.","The cell indices are i-1 and i."]},
+      {"topic":"Left-right orientation","details":["Q_{i-1} is assigned to q_l.","Q_i is assigned to q_r."]},
+      {"topic":"Riemann construction","details":["The selected neighboring cell averages become the two constant states of the Riemann problem.","The Riemann data have their jump at x=0 under the stated convention."]},
+      {"topic":"Numerical role","details":["Solving the Riemann problem yields information for computing a numerical flux.","The same information is usable for updating cell averages over a time step."]},
+      {"topic":"Claim strength","details":["The passage asserts availability of usable information.","It does not prescribe a particular numerical-flux extraction or cell-update formula."]}
+    ]
+  },
+  "undebatable_constraints":[
+    "Q_{i-1} and Q_i must be cell averages from two neighboring finite-volume cells.",
+    "The left Riemann state must be q_l=Q_{i-1}.",
+    "The right Riemann state must be q_r=Q_i.",
+    "The Riemann problem with those states must be solved to obtain the asserted information.",
+    "The asserted information must support numerical-flux computation.",
+    "The asserted information must also support updating cell averages over a time step.",
+    "The source does not fix a particular numerical-flux formula or a particular cell-update formula in this scoped statement."
+  ],
+  "ambiguities":[
+    {"issue":"The passage does not specify how the Riemann information is converted into a numerical flux.","evidence":"At raw PDF page 27, printed Chapter 1 page 5, the first sentence after equation (1.11) says only that the information “can be used to compute a numerical flux” and supplies no extraction formula.","impact":"No particular flux evaluation, wave contribution, or interface sampling rule is determined by the scoped source object."},
+    {"issue":"The cell-average update rule is unspecified.","evidence":"At raw PDF page 27, printed Chapter 1 page 5, the first sentence after equation (1.11) says the information can update cell averages “over a time step” but gives no stencil, coefficient, sign convention, or timestep formula.","impact":"The contract requires an update role but cannot require a particular discrete update equation or identify exactly which surrounding cell averages are changed."},
+    {"issue":"The relation between the canonical jump location x=0 and a physical grid-interface coordinate is implicit.","evidence":"At raw PDF page 27, printed Chapter 1 page 5, equation (1.11) places the jump at x=0 and the next paragraph supplies neighboring cell averages, without writing a coordinate translation to their shared grid edge.","impact":"A specific physical-interface coordinate or rescaling convention is not fixed by the scoped passage."}
+  ],
+  "contract_plain_english":"Take the averages in two neighboring finite-volume cells as the left and right states of a Riemann problem: q_l=Q_{i-1} and q_r=Q_i. Solving that problem supplies information that can be used to compute a numerical flux and update cell averages over a time step. The source fixes the neighboring inputs and their left-right roles but does not specify the flux-extraction or update formula."
+}

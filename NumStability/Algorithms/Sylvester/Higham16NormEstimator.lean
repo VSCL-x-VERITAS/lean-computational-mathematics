@@ -1,8 +1,8 @@
-import NumStability.Algorithms.CondEstimation
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalErrorBounds
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.OneNorm
-import NumStability.Algorithms.NormEstimation.OneNorm.GeneralIndex
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.NormEstimator.Equation29
+import ComputationalMathematics.Algorithms.CondEstimation
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalErrorBounds
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.OneNorm
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.GeneralIndex
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.NormEstimator.Equation29
 
 /-!
 # Algorithms.Sylvester.Higham16NormEstimator

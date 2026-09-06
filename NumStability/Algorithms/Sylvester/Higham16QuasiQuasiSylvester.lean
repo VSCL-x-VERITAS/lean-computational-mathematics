@@ -1,6 +1,7 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.QuasiQuasiSolve
-import NumStability.Algorithms.Sylvester.Higham16QuasiQuasiRounded
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiSylvester
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.QuasiQuasiSolve
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.SmallSystemRounding
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Sylvester
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiSylvester
 
 /-!
 # Algorithms.Sylvester.Higham16QuasiQuasiSylvester

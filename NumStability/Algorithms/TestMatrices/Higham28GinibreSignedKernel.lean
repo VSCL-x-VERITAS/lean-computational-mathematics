@@ -1,100 +1,70 @@
-/-
-Copyright (c) 2026 QED. All rights reserved.
-Released under Apache 2.0 license as described in LICENSES/Apache-2.0.txt.
-SPDX-License-Identifier: Apache-2.0
-See LICENSES/Apache-2.0.txt.
-Authors: QED
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.UnitaryGroup
+import Mathlib.MeasureTheory.Constructions.Pi
+import Mathlib.Probability.Distributions.Gaussian.CharFun
+import Mathlib.Probability.Distributions.Gaussian.HasGaussianLaw.Independence
+import Mathlib.Probability.Distributions.Gaussian.Real
+import ComputationalMathematics.Analysis.TestMatrices.Gaussian.GaussianOrthogonal
+import Mathlib.Analysis.SpecialFunctions.Gaussian.PoissonSummation
+import Mathlib.MeasureTheory.Integral.Gamma
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Nat.Choose.Sum
+import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.MeasureTheory.Integral.Pi
+import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import Mathlib.Analysis.SpecialFunctions.OrdinaryHypergeometric
+import Mathlib.Analysis.SpecialFunctions.Stirling
+import Mathlib.Algebra.BigOperators.Intervals
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.Choose.Cast
+import Mathlib.Data.Nat.Choose.Vandermonde
+import Mathlib.LinearAlgebra.Matrix.Block
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.TestMatrices.Cauchy.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Companion.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Orthogonal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Toeplitz.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation04.HilbertCholeskyInverse.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Asymptotics
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.Asymptotics.Asymptotics
+import Mathlib.Algebra.Polynomial.Roots
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.TrailingPanels
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderReflector
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.Stewart
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.StewartMeasurability
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.RandomSVD.SingleHouseholderRankTwo
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.HaarConclusion
+import ComputationalMathematics.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.Stewart
+import ComputationalMathematics.Analysis.Conditioning.LinearSystems.PerronFrobenius
+import ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMatrixLaw
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.Probability
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.ProductLaw
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.UniformPositive.PerronAlmostSure
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.FiniteExpectation.ClosedFormAsymptotics
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.FiniteExpectation.Ginibre
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.RootMeasurability.EigenvalueCounts
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.GinibreMeasure
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.LebesgueMomentDensities
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.FiniteExpectation.CharacteristicProductMoments
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.FiniteExpectation.GinibreCharacteristicProduct
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.SignedIncidence.GinibreSignedScalar
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.SignedIncidence.GinibreSignedGaussian
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.SignedIncidence.GinibreSignedKernel
+
+/-!
+Historical owner retained as an import-only compatibility wrapper; its declarations were relocated under the R09/R10 completion waves per the reviewed route ledger.
 -/
-import NumStability.Algorithms.TestMatrices.Higham28GinibreSignedGaussian
-
-/-! # Higham Chapter 28: ordered characteristic-kernel moment
-
-The twice-applied signed incidence formula produces an ordered two-Gaussian
-integral of the characteristic-product kernel.  This file proves that the
-two-step difference of those kernel moments is exactly the scalar signed
-moment already evaluated in `Higham28GinibreSignedGaussian`.
--/
-
-namespace NumStability
-
-open MeasureTheory ProbabilityTheory Set
-
-noncomputable section
-
-/-- Ordered two-Gaussian integrand of the characteristic-product kernel. -/
-def ginibreOrderedGaussianKernelIntegrand (m : ℕ) (p : ℝ × ℝ) : ℝ :=
-  (p.1 - p.2) *
-    ginibreCharacteristicProductKernel m (p.1 * p.2)
-
-theorem integrable_ginibreOrderedGaussianKernelIntegrand (m : ℕ) :
-    Integrable (ginibreOrderedGaussianKernelIntegrand m)
-      ((gaussianReal 0 1).prod (gaussianReal 0 1)) := by
-  have hsum : Integrable (fun p : ℝ × ℝ =>
-      ∑ k ∈ Finset.range (m + 1),
-        ((m.factorial : ℝ) / (k.factorial : ℝ)) *
-          ((p.1 - p.2) * (p.1 * p.2) ^ k))
-      ((gaussianReal 0 1).prod (gaussianReal 0 1)) := by
-    apply integrable_finset_sum
-    intro k hk
-    exact (integrable_ginibreSignedGaussianMonomial k).const_mul
-      ((m.factorial : ℝ) / (k.factorial : ℝ))
-  apply hsum.congr
-  filter_upwards with p
-  unfold ginibreOrderedGaussianKernelIntegrand
-    ginibreCharacteristicProductKernel
-  rw [Finset.mul_sum, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro k hk
-  ring
-
-/-- Ordered-root moment of the finite characteristic-product kernel. -/
-def ginibreOrderedGaussianKernelMoment (m : ℕ) : ℝ :=
-  ∫ p : ℝ × ℝ in ginibreOrderedGaussianRegion,
-    ginibreOrderedGaussianKernelIntegrand m p
-    ∂((gaussianReal 0 1).prod (gaussianReal 0 1))
-
-theorem integrableOn_ginibreOrderedGaussianKernelIntegrand (m : ℕ) :
-    IntegrableOn (ginibreOrderedGaussianKernelIntegrand m)
-      ginibreOrderedGaussianRegion
-      ((gaussianReal 0 1).prod (gaussianReal 0 1)) :=
-  (integrable_ginibreOrderedGaussianKernelIntegrand m).integrableOn
-
-/-- Exact kernel-moment recurrence, including the two vanishing-prefactor
-base cases through natural subtraction. -/
-theorem ginibreOrderedGaussianKernelMoment_eq_sub_two_add_signedMoment
-    (m : ℕ) :
-    ginibreOrderedGaussianKernelMoment m =
-      (m : ℝ) * ((m - 1 : ℕ) : ℝ) *
-          ginibreOrderedGaussianKernelMoment (m - 2) +
-        ginibreOrderedGaussianSignedMoment m := by
-  unfold ginibreOrderedGaussianKernelMoment
-  rw [show (fun p : ℝ × ℝ => ginibreOrderedGaussianKernelIntegrand m p) =
-      fun p =>
-        (m : ℝ) * ((m - 1 : ℕ) : ℝ) *
-            ginibreOrderedGaussianKernelIntegrand (m - 2) p +
-          ginibreOrderedGaussianSignedIntegrand m p by
-    funext p
-    unfold ginibreOrderedGaussianKernelIntegrand
-      ginibreOrderedGaussianSignedIntegrand
-    rw [ginibreCharacteristicProductKernel_eq_sub_two_add_tail]
-    ring]
-  rw [integral_add
-    ((integrableOn_ginibreOrderedGaussianKernelIntegrand (m - 2)).const_mul
-      ((m : ℝ) * ((m - 1 : ℕ) : ℝ)))
-    ((integrable_ginibreOrderedGaussianSignedIntegrand m).integrableOn),
-    integral_const_mul]
-  rfl
-
-/-- Evaluated difference form used by the pair-expectation recurrence. -/
-theorem ginibreOrderedGaussianKernelMoment_sub_eq (m : ℕ) :
-    ginibreOrderedGaussianKernelMoment m -
-      (m : ℝ) * ((m - 1 : ℕ) : ℝ) *
-        ginibreOrderedGaussianKernelMoment (m - 2) =
-      -Real.Gamma ((m : ℝ) + 1 / 2) / Real.pi := by
-  rw [ginibreOrderedGaussianKernelMoment_eq_sub_two_add_signedMoment,
-    ginibreOrderedGaussianSignedMoment_eq]
-  ring
-
-end
-
-end NumStability

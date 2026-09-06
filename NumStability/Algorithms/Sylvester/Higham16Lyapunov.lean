@@ -1,10 +1,33 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.StructuredLyapunov
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Diagonal
-import NumStability.Algorithms.Sylvester.Higham16
-import NumStability.Algorithms.Sylvester.SylvesterPerturbation
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation26
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation27
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation28
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.StructuredLyapunov
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.Diagonal
+import ComputationalMathematics.Source.Higham.Chapter16.Foundations.Core
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.FirstOrder
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation.Basic
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.BackwardError.Specification
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.Basic
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.Lyapunov
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation10
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation11
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation12
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation21
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.LyapunovDefinition
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation22
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation23
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation24
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation25
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation27
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.Equation26
+
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation28
 
 /-!
 # Algorithms.Sylvester.Higham16Lyapunov

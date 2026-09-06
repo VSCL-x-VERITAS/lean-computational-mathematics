@@ -1,0 +1,6 @@
+import NumStability.Source.Vershynin.Chapter02.Section02.Theorem06
+
+/-! Isolated API witness for `NumStability.Source.Vershynin.Chapter02.Section02.Theorem06`; authored declaration names are retained. -/
+
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d2_d3
+#check @NumStability.HDP.Contract.hdp_02_hthm_h2_d2_d6__contract_type

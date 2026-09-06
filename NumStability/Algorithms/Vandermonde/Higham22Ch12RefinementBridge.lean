@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter22.Section03.RealRefinement
+import ComputationalMathematics.Source.Higham.Chapter22.Section03.RealRefinement
 
 /-!
 # Compatibility import for real Vandermonde refinement

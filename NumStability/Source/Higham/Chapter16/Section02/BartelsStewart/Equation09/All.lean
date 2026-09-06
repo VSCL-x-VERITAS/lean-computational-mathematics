@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.Assembly
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.EndToEnd
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.All
 
 /-!
-# Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

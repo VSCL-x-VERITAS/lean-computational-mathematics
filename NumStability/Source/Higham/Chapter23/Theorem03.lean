@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter23.Theorem03.Certificates
-import NumStability.Source.Higham.Chapter23.Theorem03.ErrorBound
-import NumStability.Source.Higham.Chapter23.Theorem03.ExactMajorant
-import NumStability.Source.Higham.Chapter23.Theorem03.Execution
+import ComputationalMathematics.Source.Higham.Chapter23.Theorem03
 
 /-!
-# Higham Chapter 23, Theorem 23.3
+Historical import path retained for compatibility.
 
-Complete source-facing entry point for the recursively rounded
-Winograd--Strassen evaluator and its exact and first-order error bounds.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter23.Theorem03`.
+Declaration names and mathematical terminology are unchanged.
 -/

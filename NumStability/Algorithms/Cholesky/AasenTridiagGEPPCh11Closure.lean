@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.AasenTridiagGEPP
+import ComputationalMathematics.Source.Higham.Chapter11.AasenTridiagGEPP
 
 /-!
 Compatibility facade for the canonical Chapter 11 owner(s).

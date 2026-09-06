@@ -1,23 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation18.Contract
 
-/-! Stable Chapter 2 forwarding declaration for the Gaussian sum law. -/
+/-!
+# Compatibility import for an HDP source contract
 
-noncomputable section
-
-open MeasureTheory
-open ProbabilityTheory
-open scoped BigOperators
-open scoped NNReal
-
-namespace NumStability.HDP.Contract
-
-theorem hdp_02_heq_h2_d18 {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : ι → Ω → ℝ} {σ : ι → ℝ≥0} (a : ι → ℝ)
-    (hLaw : ∀ i, HasLaw (X i) (gaussianReal 0 (σ i)) μ)
-    (hIndep : iIndepFun X μ) :
-    HasLaw (fun ω => ∑ i, a i * X i ω)
-      (gaussianReal 0 (∑ i, Real.toNNReal ((a i) ^ 2) * σ i)) μ :=
-  NumStability.HDP.Scalar.SubGaussian.independentGaussianWeightedSumLaw a hLaw hIndep
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Equation18.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

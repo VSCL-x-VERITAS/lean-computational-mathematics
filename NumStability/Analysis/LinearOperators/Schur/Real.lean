@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Real.Triangularization
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Real
 
 /-!
-# NumStability.Analysis.LinearOperators.Schur.Real
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Schur.Real`.
+Declaration names and mathematical terminology are unchanged.
 -/

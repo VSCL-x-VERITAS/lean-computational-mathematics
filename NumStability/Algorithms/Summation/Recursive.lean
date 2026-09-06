@@ -1,11 +1,8 @@
-import NumStability.Algorithms.Summation.Recursive.Core
-import NumStability.Source.Higham.Chapter04.Problem03
+import ComputationalMathematics.Algorithms.Summation.Recursive
 
 /-!
-# Recursive summation
+Historical import path retained for compatibility.
 
-Complete supported family entry point for recursive summation. Reusable code should
-import `NumStability.Algorithms.Summation.Recursive.Core`; the numbered Higham
-Problem 4.3 results are canonical in
-`NumStability.Source.Higham.Chapter04.Problem03`.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Recursive`.
+Declaration names and mathematical terminology are unchanged.
 -/

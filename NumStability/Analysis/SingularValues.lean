@@ -1,11 +1,8 @@
-import NumStability.Analysis.SingularValues.Basic
-import NumStability.Analysis.SingularValues.InverseBounds
-import NumStability.Analysis.SingularValues.Realification
-import NumStability.Analysis.SingularValues.WeylMirsky
+import ComputationalMathematics.Analysis.SingularValues
 
 /-!
-# Singular-value analysis
+Historical import path retained for compatibility.
 
-This declaration-free aggregate exposes the complete canonical singular-value
-analysis family currently reviewed for downstream use.
+The implementation is provided by `ComputationalMathematics.Analysis.SingularValues`.
+Declaration names and mathematical terminology are unchanged.
 -/

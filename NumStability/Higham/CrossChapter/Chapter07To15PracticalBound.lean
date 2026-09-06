@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.CrossChapter.PracticalConditionBound
+import ComputationalMathematics.Source.Higham.CrossChapter.PracticalConditionBound
 
 /-!
 # Compatibility import for Higham Chapters 7 and 15

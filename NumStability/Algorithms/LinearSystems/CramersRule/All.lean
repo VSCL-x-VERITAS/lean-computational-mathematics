@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.CramersRule.Core
+import ComputationalMathematics.Algorithms.LinearSystems.CramersRule.All
 
 /-!
-# Algorithms.LinearSystems.CramersRule.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.CramersRule.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

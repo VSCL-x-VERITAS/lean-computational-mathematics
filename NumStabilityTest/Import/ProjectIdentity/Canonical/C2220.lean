@@ -1,0 +1,10 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.UniformPositive.PerronAlmostSure
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section02.UniformPositive.PerronAlmostSure`. -/
+
+#check NumStability.UniformPositivePerronAlmostSure
+#check NumStability.uniformPositivePerronAlmostSure
+#check NumStability.uniformPositivePerronAlmostSure_of_boundary_null_of_perron
+#check NumStability.uniformUnitIntervalMatrixMeasure
+#check NumStability.uniformUnitIntervalMatrixMeasure_strictlyPositive
+#check NumStability.uniformUnitIntervalMatrixMeasure_univ

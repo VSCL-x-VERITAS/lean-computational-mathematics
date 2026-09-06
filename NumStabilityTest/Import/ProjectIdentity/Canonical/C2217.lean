@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.SignedIncidence.GinibreSignedRankTransfer
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.SignedIncidence.GinibreSignedRankTransfer`. -/
+
+#check NumStability.ginibreIncidenceRankPieceBelow
+#check NumStability.sum_fin_ite_lt_eq_ginibreAlternatingCount
+#check NumStability.sum_fin_ite_lt_eq_ginibreAlternatingPairCount

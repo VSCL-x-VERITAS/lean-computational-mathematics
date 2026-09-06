@@ -1,15 +1,8 @@
-import NumStability.HDP.ContractSignatures.C_02_hprop_h2_d6_d1
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Proposition01.Contract
 
-/-! Stable Chapter 2 contract module for the finite independent
-    sub-Gaussian sum proposition. -/
+/-!
+# Compatibility import for an HDP source contract
 
-namespace NumStability.HDP.Contract
-
-theorem hdp_02_hprop_h2_d6_d1__contract
-    : hdp_02_hprop_h2_d6_d1__contract_type := by
-  intro ι Ω instι instΩ μ instμ X K hX hIndep hEnergy
-  exact NumStability.HDP.Contract.hdp_02_hprop_h2_d6_d1
-    hX hIndep hEnergy
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section06.Proposition01.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

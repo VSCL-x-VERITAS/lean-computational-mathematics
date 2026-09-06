@@ -1,0 +1,14 @@
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.GrowthBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.GrowthBounds`. -/
+
+#check NumStability.blockMaxNorm_le_growthFactorEntry_mul_of_le_maxEntryNorm
+#check NumStability.growthFactorEntry_le_of_growth_le_of_base_le
+#check NumStability.growthFactorEntry_mul_maxEntryNormRect_eq_maxEntryNorm
+#check NumStability.growthFactorEntry_sq_kappa_budget_le_of_growth_le_base_inverse
+#check NumStability.growthFactorEntry_sq_kappa_budget_le_of_growth_le_inv_ratio
+#check NumStability.invOf_entry_bound_of_reindex_eq
+#check NumStability.maxEntryNormRect_inverse_ratio_of_base_le_and_inverse_le
+#check NumStability.maxEntryNormRect_le_growthFactorEntry_mul_of_le_maxEntryNorm
+#check NumStability.maxEntryNorm_const_nonneg
+#check NumStability.maxEntryNorm_le_growthFactorEntry_mul_of_le_maxEntryNorm

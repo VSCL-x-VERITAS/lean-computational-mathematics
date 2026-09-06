@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.Hermitian
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.PowerTwo
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.All
 
 /-!
-# Analysis.LinearOperators.NumericalRadius.Berger.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

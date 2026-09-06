@@ -1,0 +1,766 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-EQ-1.1-CONSTANT-LINEAR-SYSTEM",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "5c7daa39171ce7e8d9e8ce5a62adf9f04d6729c9d1a147918a7614ac83542514",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.leveque01_equation01_constantLinearSystemAt",
+      "interpretation": "An abbreviation for the pointwise constant-coefficient linear-system solution predicate with the same q, coefficient, x, and t.",
+      "effect_on_target": "It is the left side of the equivalence and denotes a condition at one point; it is not an assertion that the condition holds.",
+      "source_match": "It matches the pointwise condition underlying equation (1.1), from which a global solution condition can be formed by universal quantification over x and t.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.IsConstantCoefficientLinearSystemSolutionAt",
+      "interpretation": "It asserts existence of time- and space-derivative vectors at a fixed point and the residual equation qt + coefficient.mulVec qx = 0.",
+      "effect_on_target": "Unfolding it gives exactly the right side of the target equivalence.",
+      "source_match": "This is the source PDE q_t + A q_x = 0 with its two partial derivatives made explicit at (x,t).",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.IsConstantCoefficientLinearSystemSolutionAt._proof_1",
+      "interpretation": "It supplies continuous real scalar multiplication on the function space used as the derivative codomain.",
+      "effect_on_target": "It discharges analytic typeclass infrastructure for HasDerivAt and adds no proposition-level hypothesis.",
+      "source_match": "It is standard background needed to formalize derivatives of real component vectors and does not change the source equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "AddCommMonoid.toAddMonoid",
+      "interpretation": "It forgets commutativity from an additive commutative monoid.",
+      "effect_on_target": "It is typeclass infrastructure for vector addition and zero.",
+      "source_match": "It preserves the standard additive semantics of real vectors used in the source residual.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "It requires both derivative assertions and the residual equality together.",
+      "source_match": "All three conditions are jointly required to interpret the displayed PDE at a point.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "ContinuousMul.to_continuousSMul",
+      "interpretation": "It derives continuous self-scalar-multiplication from continuous multiplication.",
+      "effect_on_target": "It supports the continuous scalar action used by vector-valued differentiation.",
+      "source_match": "It adds no mathematical restriction beyond the ordinary topology and multiplication on the reals.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "interpretation": "It derives the nontrivially normed field structure required by differentiation.",
+      "effect_on_target": "It supplies the scalar-field instance for HasDerivAt over Real.",
+      "source_match": "This is standard real-analysis infrastructure and does not alter the source's real scalar field.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "DistribMulAction.toMulAction",
+      "interpretation": "It extracts a multiplicative action from a distributive multiplicative action.",
+      "effect_on_target": "It participates in the pointwise real scalar-action instance chain.",
+      "source_match": "It leaves the ordinary real vector-space semantics unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "DivisionSemiring.toSemiring",
+      "interpretation": "It extracts semiring operations from a division semiring.",
+      "effect_on_target": "It supplies arithmetic structure used by modules and matrix-vector multiplication.",
+      "source_match": "It implements ordinary real arithmetic used in q_t + A q_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "Eq",
+      "interpretation": "Equality of two values of the same type.",
+      "effect_on_target": "It states that the vector residual is exactly the zero vector.",
+      "source_match": "It matches the equality to zero in equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "Exists",
+      "interpretation": "Existential quantification.",
+      "effect_on_target": "It binds derivative values qt and qx whose existence is certified by HasDerivAt.",
+      "source_match": "This makes the source's derivative notation explicit without imposing global regularity.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Field.toSemifield",
+      "interpretation": "It extracts a semifield structure from a field.",
+      "effect_on_target": "It is inherited scalar-field infrastructure for real differentiation.",
+      "source_match": "It has no independent semantic effect on the source PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Fin",
+      "interpretation": "Fin m is the finite index type with m coordinates.",
+      "effect_on_target": "Fin m indexes the components of q and both axes of the m by m coefficient matrix.",
+      "source_match": "It is the standard formal representation of R^m and an m by m matrix.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Fin.fintype",
+      "interpretation": "It provides the canonical finite enumeration of Fin m.",
+      "effect_on_target": "It makes the finite sum in Matrix.mulVec available, including for m = 0.",
+      "source_match": "It implements the usual finite-dimensional matrix-vector product; the m = 0 convention is a harmless degenerate extension not explicitly excluded by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "HAdd.hAdd",
+      "interpretation": "The addition operation selected through HAdd.",
+      "effect_on_target": "It denotes addition of the derivative vector qt and the matrix-vector product.",
+      "source_match": "It is the plus sign in q_t + A q_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "HasDerivAt",
+      "interpretation": "HasDerivAt f f' a states that a one-real-variable map has Fréchet derivative value f' at a.",
+      "effect_on_target": "Applied with one variable fixed at a time, it expresses the time and space partial derivatives at (x,t).",
+      "source_match": "For the finite-dimensional real codomain Fin m -> Real, it is the standard pointwise meaning of the source's partial-derivative notation.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "Iff",
+      "interpretation": "Logical equivalence.",
+      "effect_on_target": "It characterizes the named pointwise predicate by its expanded derivative-and-residual condition.",
+      "source_match": "This is an appropriate definitional presentation of the class of systems having form (1.1); it does not claim that every q satisfies the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "IsTopologicalRing.toIsTopologicalSemiring",
+      "interpretation": "It forgets additive inverses from a topological ring to obtain topological semiring structure.",
+      "effect_on_target": "It is topology infrastructure for continuous multiplication on Real.",
+      "source_match": "It adds no source-level condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "IsTopologicalSemiring.toContinuousMul",
+      "interpretation": "It obtains continuity of multiplication from topological semiring structure.",
+      "effect_on_target": "It supports continuous real scalar multiplication needed by HasDerivAt.",
+      "source_match": "It is standard real-analysis infrastructure with no change to the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "Matrix",
+      "interpretation": "Matrix m n alpha is the function type m -> n -> alpha.",
+      "effect_on_target": "The coefficient is an m by m real array indexed by Fin m in each coordinate.",
+      "source_match": "It exactly represents the source's constant real m by m matrix A.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "Matrix.mulVec",
+      "interpretation": "It multiplies a matrix by a vector by taking each row's finite dot product with the vector.",
+      "effect_on_target": "It denotes A q_x and returns a Fin m-indexed real vector.",
+      "source_match": "It is the standard matrix-vector multiplication in equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "Module.toDistribMulAction",
+      "interpretation": "It extracts the distributive scalar action from a module.",
+      "effect_on_target": "It supports real scalar multiplication in derivative codomains.",
+      "source_match": "It preserves ordinary real vector-space semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "Monoid.toSemigroup",
+      "interpretation": "It extracts semigroup multiplication from a monoid.",
+      "effect_on_target": "It is inherited action infrastructure.",
+      "source_match": "It has no independent effect on the source claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "MonoidWithZero.toMonoid",
+      "interpretation": "It extracts a monoid from a monoid with zero.",
+      "effect_on_target": "It is inherited real scalar-action infrastructure.",
+      "source_match": "It does not modify the real arithmetic in the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "MulAction.toSemigroupAction",
+      "interpretation": "It extracts a semigroup action from a monoid action.",
+      "effect_on_target": "It participates in constructing pointwise scalar multiplication.",
+      "source_match": "It adds no source-level restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "Nat",
+      "interpretation": "The type of natural numbers, including zero.",
+      "effect_on_target": "It is the type of the component count m.",
+      "source_match": "It covers every positive source dimension and additionally the conventional degenerate dimension m = 0, which the source does not explicitly exclude.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "interpretation": "It forgets associativity while retaining nonunital commutative-ring operations.",
+      "effect_on_target": "It supplies minimal algebra required by Matrix.mulVec over Real.",
+      "source_match": "It preserves standard real addition and multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "interpretation": "It forgets multiplication commutativity from a nonunital nonassociative commutative ring.",
+      "effect_on_target": "It is algebraic instance infrastructure for the matrix-vector product.",
+      "source_match": "It adds no source-level content.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "interpretation": "It extracts the underlying nonunital nonassociative semiring from a ring.",
+      "effect_on_target": "It provides addition, zero, and multiplication to Matrix.mulVec.",
+      "source_match": "It implements ordinary real matrix arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "interpretation": "It extracts the additive commutative monoid from a nonunital nonassociative semiring.",
+      "effect_on_target": "It supplies addition and zero for residual vectors.",
+      "source_match": "It matches the standard additive structure of R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "interpretation": "It forgets the norm from a nonunital normed commutative ring.",
+      "effect_on_target": "It supplies underlying real ring operations for Matrix.mulVec.",
+      "source_match": "It leaves the real matrix semantics unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "It forgets multiplication commutativity from a nonunital seminormed commutative ring.",
+      "effect_on_target": "It is inherited analytic and algebraic infrastructure.",
+      "source_match": "It imposes no additional condition on q or A.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "It extracts a seminormed additive commutative group from a nonunital seminormed ring.",
+      "effect_on_target": "It supplies the additive topology needed for real-valued differentiation.",
+      "source_match": "It is standard background for the source's real partial derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "NonUnitalSemiring.toNonUnitalNonAssocSemiring",
+      "interpretation": "It forgets multiplication associativity from a nonunital semiring.",
+      "effect_on_target": "It provides the minimal structure expected by Matrix.mulVec.",
+      "source_match": "It does not alter matrix-vector multiplication over Real.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "NontriviallyNormedField.toNormedField",
+      "interpretation": "It extracts normed-field structure from a nontrivially normed field.",
+      "effect_on_target": "It is part of the scalar-field instance chain for HasDerivAt.",
+      "source_match": "It is standard real-analysis infrastructure.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "interpretation": "It forgets the multiplicative identity from a normed commutative ring.",
+      "effect_on_target": "It supplies a structure used by the real matrix operations.",
+      "source_match": "It preserves ordinary real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "It forgets norm definiteness from a normed commutative ring.",
+      "effect_on_target": "It participates in the topology and algebra instance chain on Real.",
+      "source_match": "It has no proposition-level effect.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "NormedField.toField",
+      "interpretation": "It extracts a field from a normed field.",
+      "effect_on_target": "It supplies real field arithmetic used by derivative and matrix instances.",
+      "source_match": "It matches the source's real scalar arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "NormedField.toNormedCommRing",
+      "interpretation": "It derives a normed commutative ring from a normed field.",
+      "effect_on_target": "It supports both real analysis and Matrix.mulVec.",
+      "source_match": "It does not change the PDE's algebra.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "A normed field is canonically a normed space over itself.",
+      "effect_on_target": "It equips Real with its standard scalar normed-space structure.",
+      "source_match": "It supports the ordinary derivative interpretation over R.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "NormedSpace.toModule",
+      "interpretation": "It extracts the module structure from a normed space.",
+      "effect_on_target": "It supplies linear scalar multiplication needed by HasDerivAt.",
+      "source_match": "It is standard vector-space infrastructure for R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "OfNat.ofNat",
+      "interpretation": "It interprets a numeric literal in a type with an OfNat instance.",
+      "effect_on_target": "It elaborates the literal zero on the right side of the vector equality.",
+      "source_match": "The resulting value is the zero vector required by equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "Pi.Function.module",
+      "interpretation": "It gives a function space its pointwise module structure.",
+      "effect_on_target": "Fin m -> Real becomes a real vector space suitable as a derivative codomain.",
+      "source_match": "This is the standard coordinatewise vector-space structure on R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Pi.addCommGroup",
+      "interpretation": "It gives a dependent function space pointwise additive commutative-group structure.",
+      "effect_on_target": "It supplies addition, negation, and zero on Fin m-indexed vectors.",
+      "source_match": "It matches componentwise addition in R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Pi.instAdd",
+      "interpretation": "It defines addition of functions pointwise.",
+      "effect_on_target": "The residual sum is computed coordinate by coordinate.",
+      "source_match": "It is the usual vector addition in q_t + A q_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Pi.instZero",
+      "interpretation": "It defines the zero function pointwise.",
+      "effect_on_target": "Zero in the residual equality is the all-zero Fin m-indexed vector.",
+      "source_match": "It matches the zero vector on the right of equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "Pi.topologicalSpace",
+      "interpretation": "It equips a function space with the product topology induced by coordinate evaluations.",
+      "effect_on_target": "It determines the topology used by HasDerivAt on Fin m -> Real.",
+      "source_match": "For finite Fin m, this is the standard finite-dimensional topology underlying derivatives in R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "It extracts the uniform space induced by a pseudometric.",
+      "effect_on_target": "It supplies topology infrastructure for real and vector-valued differentiation.",
+      "source_match": "It adds no source-level restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "Real",
+      "interpretation": "The type of real numbers.",
+      "effect_on_target": "It is the domain for x and t and the scalar type for q and coefficient entries.",
+      "source_match": "It exactly matches the source domains R x R, codomain R^m, and real matrix A.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "Real.denselyNormedField",
+      "interpretation": "The standard densely normed field structure on Real.",
+      "effect_on_target": "It supplies the analytic scalar-field assumptions for HasDerivAt.",
+      "source_match": "It is the standard formal real-analysis structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "Real.instAdd",
+      "interpretation": "The standard addition operation on Real.",
+      "effect_on_target": "It induces componentwise addition on derivative vectors.",
+      "source_match": "It is ordinary real addition in the source residual.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "Real.instAddCommGroup",
+      "interpretation": "The standard additive commutative-group structure on Real.",
+      "effect_on_target": "It supplies additive structure for Real and Fin m-indexed real functions.",
+      "source_match": "It matches ordinary real vector addition.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "Real.instMul",
+      "interpretation": "The standard multiplication operation on Real.",
+      "effect_on_target": "It is used in the row dot products of Matrix.mulVec and scalar actions.",
+      "source_match": "It is ordinary multiplication in A q_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "Real.instRing",
+      "interpretation": "The standard ring structure on Real.",
+      "effect_on_target": "It supplies real addition, multiplication, negation, and zero to the elaborated expression.",
+      "source_match": "It matches standard real matrix and vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "Real.instZero",
+      "interpretation": "The standard zero element of Real.",
+      "effect_on_target": "It induces the zero vector on the right side of the residual equality.",
+      "source_match": "It is the source equation's zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "Real.normedCommRing",
+      "interpretation": "The standard normed commutative-ring structure on Real.",
+      "effect_on_target": "It supports both matrix arithmetic and real topology.",
+      "source_match": "It adds no nonstandard convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "Real.normedField",
+      "interpretation": "The standard normed-field structure on Real.",
+      "effect_on_target": "It provides the scalar field and topology used by HasDerivAt.",
+      "source_match": "It is the standard setting for the source's real partial derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "The standard real pseudometric space with distance induced by absolute difference.",
+      "effect_on_target": "It supplies the topology used for real differentiation.",
+      "source_match": "It matches ordinary real analysis.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "Ring.toSemiring",
+      "interpretation": "It extracts a semiring from a ring.",
+      "effect_on_target": "It is real arithmetic infrastructure for modules and matrices.",
+      "source_match": "It has no independent effect on the PDE semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "Semifield.toDivisionSemiring",
+      "interpretation": "It extracts a division semiring from a semifield.",
+      "effect_on_target": "It is inherited scalar-field infrastructure for HasDerivAt.",
+      "source_match": "It does not alter the source statement.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "SemigroupAction.toSMul",
+      "interpretation": "It extracts scalar multiplication from a semigroup action.",
+      "effect_on_target": "It supplies the underlying real scalar action on function spaces.",
+      "source_match": "It preserves ordinary coordinatewise scalar multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "It forgets the multiplicative identity from a seminormed commutative ring.",
+      "effect_on_target": "It participates in real normed-ring instance construction.",
+      "source_match": "It has no proposition-level effect.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "interpretation": "It forgets multiplication commutativity from a seminormed commutative ring.",
+      "effect_on_target": "It is topology and ring infrastructure on Real.",
+      "source_match": "It adds no restriction or alternate convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "interpretation": "It extracts a pseudometric space from a seminormed ring.",
+      "effect_on_target": "It supplies the real topology used by differentiation.",
+      "source_match": "It matches standard real analysis.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Semiring.toMonoidWithZero",
+      "interpretation": "It extracts multiplication, one, and zero structure from a semiring.",
+      "effect_on_target": "It supports scalar actions and matrix multiplication.",
+      "source_match": "It implements ordinary real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Semiring.toNonUnitalSemiring",
+      "interpretation": "It forgets the multiplicative identity from a semiring.",
+      "effect_on_target": "It supplies the minimal semiring interface for Matrix.mulVec.",
+      "source_match": "It leaves A q_x with its standard meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "It extracts the topology induced by a uniform space.",
+      "effect_on_target": "It supplies the topology required by HasDerivAt.",
+      "source_match": "It is standard real-analysis infrastructure.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Zero.toOfNat0",
+      "interpretation": "It interprets the numeral 0 as the distinguished zero of a type.",
+      "effect_on_target": "It elaborates zero as the pointwise zero vector.",
+      "source_match": "It matches the zero right-hand side of equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "instContinuousSMulForall",
+      "interpretation": "It gives a function space continuous scalar multiplication when each component has it.",
+      "effect_on_target": "It equips Fin m -> Real with the continuous real scalar action needed for HasDerivAt.",
+      "source_match": "For finite real component vectors, this is the standard analytic structure on R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "instHAdd",
+      "interpretation": "It turns ordinary same-type addition into the HAdd operation.",
+      "effect_on_target": "It makes qt + coefficient.mulVec qx ordinary pointwise vector addition.",
+      "source_match": "It matches the source plus operation.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "instIsTopologicalRingReal",
+      "interpretation": "The standard proposition that Real is a topological ring.",
+      "effect_on_target": "It supplies continuity facts used by scalar and function-space derivative instances.",
+      "source_match": "It adds no extra hypothesis because it is a canonical fact about Real.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "Fintype",
+      "interpretation": "A typeclass recording a finite enumeration of a type.",
+      "effect_on_target": "It permits finite summation in matrix-vector multiplication.",
+      "source_match": "The source's m-component system is finite-dimensional.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "ContinuousSMul",
+      "interpretation": "The property that scalar multiplication is continuous in both arguments.",
+      "effect_on_target": "It is a typeclass prerequisite for vector-valued HasDerivAt and is supplied canonically, not assumed as a new source hypothesis.",
+      "source_match": "It is standard background for finite-dimensional real differentiation.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "Pi.instSMul",
+      "interpretation": "It defines scalar multiplication on function spaces pointwise.",
+      "effect_on_target": "It makes the derivative codomain Fin m -> Real a real vector space componentwise.",
+      "source_match": "It is the standard scalar action on R^m.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Raw PDF page 23, printed Chapter 1 page 1, introduces the one-dimensional homogeneous first-order system and displays q_t(x,t) + A q_x(x,t) = 0 as equation (1.1), then types q and A and explains the subscripts.",
+      "lean_evidence": "The target is the proof-free equivalence between leveque01_equation01_constantLinearSystemAt q coefficient x t and explicit time/space derivative witnesses satisfying qt + coefficient.mulVec qx = 0.",
+      "reasoning": "The exact cited edition, page, displayed equation, and immediately surrounding typing and derivative-notation sentences are the selected source, and the target addresses that equation rather than the later scalar or hyperbolicity results."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "The source gives q : R x R -> R^m, an m-component unknown vector, and A as a constant real m by m matrix, evaluated at real x and t.",
+      "lean_evidence": "q : Real -> Real -> (Fin m -> Real), coefficient : Matrix (Fin m) (Fin m) Real, and x t : Real; D020 and D013 give the expected matrix and component index types.",
+      "reasoning": "Currying R x R is type-equivalent to the source product-domain function, and Fin m -> Real is the standard coordinate representation of R^m."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The source writes the equation at (x,t) over domain R x R without an explicit quantifier and uses it to specify the form of the system, not to claim that every candidate q is a solution.",
+      "lean_evidence": "Lean universally binds q, coefficient, x, and t outside an Iff whose left side is the predicate ...SolutionAt and whose right side expands that predicate; derivative witnesses qt and qx are existential inside the pointwise condition.",
+      "reasoning": "The theorem is a universally available pointwise characterization. It does not assert ...SolutionAt for arbitrary q. A global solution condition is obtained by requiring the pointwise predicate for every x and t, so the pointwise factorization preserves rather than confuses scope."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The source requires the displayed partial derivatives but states no formal regularity class, initial data, boundary data, or hyperbolicity assumption as part of equation (1.1); A itself is constant.",
+      "lean_evidence": "The right side requires HasDerivAt only for the two one-variable slices at the selected point, and coefficient is a fixed matrix value rather than a function of x or t.",
+      "reasoning": "Lean makes derivative existence explicit pointwise without adding global differentiability, data, or eigenstructure hypotheses. Hyperbolicity is correctly not asserted by this equation-only target."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Equation (1.1) contains the time partial derivative, the matrix applied to the space partial derivative, their sum, and the zero right-hand side.",
+      "lean_evidence": "The target contains HasDerivAt for tau -> q x tau, HasDerivAt for xi -> q xi t, and qt + coefficient.mulVec qx = 0.",
+      "reasoning": "Every element of the selected displayed equation is represented, and no initial, boundary, existence, uniqueness, or hyperbolicity conclusion is spuriously added."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source defines subscripts as partial derivatives and uses ordinary real matrix-vector multiplication and vector addition.",
+      "lean_evidence": "D001 unfolds to D002; D016 supplies pointwise derivatives, D021 is row-dot-product matrix-vector multiplication, and D045/D046 provide pointwise vector addition and zero.",
+      "reasoning": "All nontrivial operators and the imported local predicate were read from their declarations and have the conventional meanings required by the source."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source residual is exactly equal to zero.",
+      "lean_evidence": "The expanded predicate uses an Eq to the zero vector and conjunctions joining both derivative facts with that equality; the outer Iff is a definitional characterization.",
+      "reasoning": "The equality, logical conjunction, and zero residual have the same strength as the source. The Iff does not turn the characterization into an assertion that all q satisfy the residual equation."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes the unknown q, coefficient A, time derivative q_t, space derivative q_x, and the variables x and t.",
+      "lean_evidence": "The binders q, coefficient, x, and t are distinct, and the witnesses qt and qx occur in the corresponding time and space HasDerivAt clauses before being combined in the residual.",
+      "reasoning": "No source object or role is conflated; in particular, the order of the curried q arguments remains x then t."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "A is a fixed m by m real matrix and q has m components.",
+      "lean_evidence": "coefficient is not parameterized by x or t, both matrix axes and vector components use Fin m, and mulVec sums over that same finite index.",
+      "reasoning": "Coefficient constancy, dimension agreement, and coordinate ranges are preserved without an index offset or dependence mismatch."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The source uses real x and t, real-valued m-component states, and a finite real m by m coefficient matrix on all of R x R.",
+      "lean_evidence": "Lean uses Real for both independent variables and components, Fin m for the finite coordinate type, and no restricted spatial or temporal domain.",
+      "reasoning": "There is no scalar-field or domain specialization. Lean's inclusion of m = 0 is a degenerate conventional extension; it does not change the positive-dimensional cases described by the source."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The source does not explicitly say m > 0, although its physical language and later statement that m = 1 is the simplest scalar case focus on positive dimensions.",
+      "lean_evidence": "The natural-number binder permits m = 0; Fin 0 -> Real and Matrix (Fin 0) (Fin 0) Real are empty, so the derivative witnesses and residual equation reduce to the unique empty-vector case.",
+      "reasoning": "The m = 0 case is well-defined and trivial rather than inconsistent or undefined. Because the source contains no explicit exclusion, this convention is a note-worthy boundary extension, not a failure on the source's intended m >= 1 domain."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source presents a genuine PDE class: for positive m there are both functions that satisfy the equation and functions that fail it.",
+      "lean_evidence": "D002 is a substantive pointwise predicate for m >= 1; for example constant q satisfies it, while a differentiable q with nonzero residual can fail it. The target Iff is intentionally its definitional expansion.",
+      "reasoning": "The encoded solution predicate is nonvacuous in the intended positive-dimensional setting. The theorem's reflexive definitional nature is appropriate for specifying the PDE form and is not evidence that arbitrary q solves it."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "Equation (1.1) is a continuous PDE form, not an algorithm, recurrence, discretization, or execution process.",
+      "lean_evidence": "The target contains only derivative predicates and an exact residual equation, with no algorithmic state or iteration.",
+      "reasoning": "There is no process linkage to preserve."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "The source treats q_t, q_x, and zero as vectors in R^m and A q_x as the usual matrix-vector product.",
+      "lean_evidence": "Fin m -> Real has pointwise algebra and the product topology, while Matrix.mulVec uses row dot products over Fin m.",
+      "reasoning": "The component and induced finite-dimensional semantics match. No norm or squared-norm expression appears whose convention could differ."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected source passage states an exact PDE and no error, residual estimate, conditioning, or stability notion.",
+      "lean_evidence": "The target asserts only exact equality of the PDE residual to zero inside the predicate expansion.",
+      "reasoning": "No numerical error or stability notion is present to compare."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "The source passage has no computed, rounded, approximate, or perturbed quantities.",
+      "lean_evidence": "All quantities in the target are exact real functions, derivatives, a matrix, and equality.",
+      "reasoning": "There is no exact-versus-computed role distinction in this result."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "Equation (1.1) contains no limit, Big-O term, truncation, approximation, or asymptotic regime.",
+      "lean_evidence": "The target is an exact pointwise equivalence with no higher-order term.",
+      "reasoning": "There is no asymptotic content to preserve."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage specifies the PDE form but makes no solution-existence, uniqueness, invertibility, or well-posedness claim.",
+      "lean_evidence": "The target only characterizes the pointwise solution predicate; existential qt and qx are derivative witnesses, not a claim that a solution q exists.",
+      "reasoning": "Existence and uniqueness of PDE solutions are outside the selected claim; pointwise derivative existence is already assessed under C04."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Read at the level of the source's classification statement, the Lean equivalence says exactly that the named pointwise constant-linear-system condition means existence of q_t and q_x at (x,t) with q_t + A q_x = 0. The outer universal binders make this characterization available for every point but do not assert the predicate for every q. Thus it entails the source's stated PDE form and typing conventions."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's q : R x R -> R^m, constant real m by m A, partial-derivative notation, and zero residual translate directly to the right side of the Lean Iff. Naming that pointwise condition by the audited D001/D002 predicate adds no content, so the source characterization yields the Lean characterization."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "pointwise-versus-global-scope",
+      "source_evidence": "Equation (1.1) is conventionally a condition across the domain R x R, although the displayed passage has no explicit universal point quantifier.",
+      "lean_evidence": "The theorem universally characterizes an ...At predicate for arbitrary x and t but does not assert that predicate; global satisfaction would be expressed as forall x t, ...At q coefficient x t.",
+      "impact": "This is a sound pointwise factorization of the PDE definition, not a weakening and not the false claim that every q satisfies the PDE. Users must add the global forall when asserting that a particular q is a solution everywhere."
+    },
+    {
+      "severity": "note",
+      "category": "degenerate-zero-dimension",
+      "source_evidence": "The source calls q an m-component vector and does not formally require m > 0; its physical discussion centers on m >= 1.",
+      "lean_evidence": "The binder m : Nat permits m = 0, where Fin 0-indexed vectors and matrices are empty and the pointwise PDE condition is trivially satisfied.",
+      "impact": "This is a well-defined but physically degenerate extension. It does not alter any positive-dimensional source case and is not genuine nonvacuous strengthening."
+    },
+    {
+      "severity": "note",
+      "category": "pointwise-regularity",
+      "source_evidence": "The source uses q_t and q_x but supplies no global differentiability class.",
+      "lean_evidence": "HasDerivAt is required separately for the time and space slices only at the selected point.",
+      "impact": "Lean makes exactly the local derivative existence needed to read the displayed equation and does not narrow applicability by demanding global smoothness."
+    }
+  ],
+  "rationale": "The audited target is an explicit, universally available unfolding of a named pointwise PDE predicate. D001 reduces to D002, whose two HasDerivAt witnesses are the time and space partial derivatives and whose residual is exactly qt + A qx = 0 in Fin m -> Real using standard matrix-vector multiplication. The theorem must not be misread as saying every q satisfies equation (1.1): it asserts only an Iff between the predicate and its definition, so both sides may be false for a nonsolution. This matches the source's role for (1.1) as the form defining the constant-coefficient linear system. Universal x and t binders provide the characterization at every point, while actual global solutionhood remains the universal closure of the pointwise predicate. The source gives no explicit m > 0 restriction; Lean's m = 0 case is a well-defined trivial extension and does not affect the intended positive-dimensional statement. No unresolved dependency or semantic mismatch remains, so both implication directions hold and adjudication is unnecessary."
+}

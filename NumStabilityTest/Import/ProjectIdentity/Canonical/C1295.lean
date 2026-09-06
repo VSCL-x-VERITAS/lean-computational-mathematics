@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.SuccessThreshold.Factorization
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter10.Theorem07.SuccessThreshold.Factorization`. -/
+
+#check NumStability.higham10_7_fl_cholesky_success
+#check NumStability.higham10_7_fl_cholesky_success_sharp
+#check NumStability.higham10_7_success_factorization
+#check NumStability.higham10_7_success_factorization_min_eig
+#check NumStability.higham10_7_success_factorization_spectral

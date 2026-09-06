@@ -4,7 +4,7 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Source.Higham.Chapter01.Problem08.MullerRecurrence.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Problem08.MullerRecurrence.Basic
 
 /-!
 # MullerRecurrence (compatibility module)

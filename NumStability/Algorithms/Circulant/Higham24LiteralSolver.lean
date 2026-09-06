@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.RoundedCirculantSolver
+import ComputationalMathematics.Source.Higham.Chapter24.RoundedCirculantSolver
 
 /-!
 # Historical Chapter 24 rounded circulant-solver import

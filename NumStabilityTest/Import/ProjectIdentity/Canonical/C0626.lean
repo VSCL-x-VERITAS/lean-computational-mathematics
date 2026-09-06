@@ -1,0 +1,17 @@
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ResolventCoefficients.Analytic
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ResolventCoefficients.Analytic`. -/
+
+#check NumStability.cstarMatrixEuclideanCoefficientCLM
+#check NumStability.cstarMatrixEuclideanCoefficientCLM_apply
+#check NumStability.cstarMatrixEuclideanCoefficientCLM_circleIntegral
+#check NumStability.cstarMatrixEuclideanCoefficientLinear
+#check NumStability.hasDerivAt_spijkerPowerAntiderivative
+#check NumStability.spijkerResolventCoefficient
+#check NumStability.spijkerResolventCoefficientCurve
+#check NumStability.spijkerResolventCoefficientCurve_deriv_continuous
+#check NumStability.spijkerResolventCoefficientCurve_deriv_intervalIntegrable
+#check NumStability.spijkerResolventCoefficientCurve_differentiableAt
+#check NumStability.spijkerResolventCoefficientCurve_hasDerivAt
+#check NumStability.spijkerResolventCoefficient_pow_eq_circleIntegral
+#check NumStability.spijkerResolventCoefficient_pow_eq_intervalIntegral

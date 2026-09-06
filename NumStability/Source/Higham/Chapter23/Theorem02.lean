@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter23.Theorem02.ErrorBound
-import NumStability.Source.Higham.Chapter23.Theorem02.ErrorRelations
-import NumStability.Source.Higham.Chapter23.Theorem02.ExactMajorant
-import NumStability.Source.Higham.Chapter23.Theorem02.Execution
-import NumStability.Source.Higham.Chapter23.Theorem02.RecursiveMatrix
+import ComputationalMathematics.Source.Higham.Chapter23.Theorem02
 
 /-!
-# Higham Chapter 23, Theorem 23.2
+Historical import path retained for compatibility.
 
-Complete source-facing entry point for the recursively rounded Strassen
-evaluator and its exact and first-order error bounds.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter23.Theorem02`.
+Declaration names and mathematical terminology are unchanged.
 -/

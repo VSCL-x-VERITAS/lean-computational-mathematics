@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter01.Section17
+import ComputationalMathematics.Source.Higham.Chapter01.Section17
 
 /-!
 # Nonrandom rounding compatibility import

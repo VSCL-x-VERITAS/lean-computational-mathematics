@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Laszlo.All
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Laszlo
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Laszlo
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Laszlo`.
+Declaration names and mathematical terminology are unchanged.
 -/

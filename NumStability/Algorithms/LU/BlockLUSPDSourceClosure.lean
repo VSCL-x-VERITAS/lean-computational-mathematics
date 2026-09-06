@@ -1,7 +1,7 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.PositiveDefinite
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.PositiveDefiniteFactorBounds
-import NumStability.Source.Higham.Chapter13.Equation25.Factorization
-import NumStability.Source.Higham.Chapter13.Section03.SPDFactorBounds
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.PositiveDefinite
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.PositiveDefiniteFactorBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Equation25.Factorization
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.SPDFactorBounds
 
 /-!
 # Historical BlockLU compatibility import

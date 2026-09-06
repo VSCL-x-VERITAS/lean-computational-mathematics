@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation.LowerBounds
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PseudospectralLowerBound
 
 /-!
-# Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PseudospectralLowerBound
+Historical import path retained for compatibility.
 
-Higham source locator for reusable W06 content. Projection-pinned historical declarations are intentionally not imported through this canonical path.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PseudospectralLowerBound`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,16 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky
-import NumStability.Algorithms.LinearSystems.CramersRule.All
-import NumStability.Algorithms.LinearSystems.GaussJordan
-import NumStability.Algorithms.LinearSystems.IterativeRefinement.All
-import NumStability.Algorithms.LinearSystems.LeastSquares
-import NumStability.Algorithms.LinearSystems.LU
-import NumStability.Algorithms.LinearSystems.QR
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite
-import NumStability.Algorithms.LinearSystems.Triangular
+import ComputationalMathematics.Algorithms.LinearSystems
 
 /-!
-# Linear systems
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical linear-system algorithm families,
-including the reviewed Chapter 11 source-backed symmetric-indefinite surface.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems`.
+Declaration names and mathematical terminology are unchanged.
 -/

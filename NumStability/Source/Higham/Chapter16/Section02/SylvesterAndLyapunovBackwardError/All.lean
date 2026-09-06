@@ -1,17 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation09
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation10
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation11
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation12
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation13
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation15
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation16
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation18
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation19
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation21
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.LyapunovDefinition
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.All
 
 /-!
-# Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

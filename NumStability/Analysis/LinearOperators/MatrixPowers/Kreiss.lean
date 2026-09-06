@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Kreiss.All
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Kreiss
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Kreiss
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Kreiss`.
+Declaration names and mathematical terminology are unchanged.
 -/

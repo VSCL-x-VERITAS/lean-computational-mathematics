@@ -1,0 +1,37 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "LEV-CH01-ADVECTION-LINEAR-FLUX",
+  "trigger": [
+    "judge classifications differ"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "The correct classification is not-faithful-weaker. The round-trip judge correctly identifies that the Lean theorem assumes the local scalar advection equation and derives only a local conservative residual plus the algebraic flux identity; it does not capture the selected source's conservation-of-contaminant-mass premise or derive advection from that conservation setting.",
+      "primary_evidence": "The immutable source paragraph says that the advection equation for contaminant density arises as a conservation law for total contaminant mass and that its flux is f(q) = u_bar*q, with source terms needed when mass is not conserved. The Lean target instead has hadvection as a premise and concludes a pointwise Fin 1 conservation-law predicate together with F(state) = speed*state; it contains no interval mass balance, no no-creation-or-destruction premise, and no conclusion establishing the scalar advection equation."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "The exact componentwise flux identity is present, but the other conjunct is only hadvection -> localConservationResidual. Because the advection law is assumed rather than obtained from conserved contaminant mass and the identified physical flux, the Lean proposition cannot recover the source's conservation-to-flux-to-advection claim or its no-source interpretation."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "In the source's smooth constant-velocity, mass-conserved setting, f(q) = u_bar*q and q_t + u_bar*q_x = 0. Those facts supply the Lean advection premise, the derivative witnesses for the one-component conservation-law conclusion, and the universal componentwise identity for F(state) = [speed]state."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "major",
+      "category": "missing-conservation-to-advection-semantics",
+      "evidence": "The source derives the no-source advection model for a conserved contaminant from total-mass balance and the physical flux f(q) = u_bar*q. The Lean theorem assumes leveque01_equation02_scalarAdvectionAt q speed x t and proves only a pointwise conservation residual and an algebraic Fin 1 flux identity.",
+      "impact": "The target can be true without expressing that q is conserved contaminant density or that an interval mass balance yields the advection equation, so it is only a consequence of the selected source claim. To close the current locator, retain the flux identity but add a declaration whose premises encode the no-creation interval conservation law, constant velocity, and sufficient smoothness and whose conclusion derives the local advection PDE (or an appropriate equivalence). Alternatively, narrow the source locator and contract to the purely algebraic constant-linear-flux consequence."
+    }
+  ],
+  "rationale": "Unlike the equation-(1.2) specialization task, this locator selects the contaminant-mass paragraph itself. Its physical conservation premise and the direction from conservation plus f(q) = u_bar*q to the advection PDE are substantive parts of the selected claim. A generic algebraic theorem may validly cover the physical instance, but this theorem does not merely generalize it: it moves the source's PDE conclusion into a premise and omits the integral conservation semantics that justify the no-source model. The exact flux conjunct prevents a different-claim classification, while the missing implication direction makes the result strictly weaker. The existing declaration therefore does not close this selected claim."
+}

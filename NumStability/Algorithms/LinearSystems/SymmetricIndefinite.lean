@@ -1,10 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Aasen
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite
 
 /-!
-# Symmetric-indefinite linear systems
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the reusable symmetric-indefinite families.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite`.
+Declaration names and mathematical terminology are unchanged.
 -/

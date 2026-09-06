@@ -1,0 +1,29 @@
+import ComputationalMathematics.Algorithms.Cholesky.CholeskyFl
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.ErrorAnalysis.Certificates
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.ErrorAnalysis.PositivePivots.Certificate
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Factorization.Spec
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.KahanTelescope.Identity
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.ScaledStage
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.StageEmbedding.InteriorMass
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.RoundedFactorization.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseAbsolute.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralExtrema.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralExtrema.PrincipalSubmatrices.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma13.KahanSharpness.UnboundedGrowth.Construction
+import ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth.PositivePivots.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Section01.Factorization.ExistenceUniqueness.Results
+import ComputationalMathematics.Source.Higham.Chapter10.Section02.ErrorAnalysis.FactorizationAndSolve.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.PivotingAndScaling.Results
+import ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.SchurStages.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.Core.Results
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.SuccessThreshold.Factorization
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.RoundedErrorAnalysis.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SuccessfulRun.StageBounds
+
+/-!
+# Theorem07
+
+Declaration-free source aggregate after wave R04. Every declaration
+moved unchanged to its routed child; this module imports the canonical
+children so existing imports keep resolving.
+-/

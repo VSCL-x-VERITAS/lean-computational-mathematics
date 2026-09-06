@@ -1,0 +1,3 @@
+import NumStability.Source.Vershynin.Chapter01.CauchySchwarz.Signature
+
+#check NumStability.HDP.Contract.hdp_01_hthm_hcauchy_hschwarz__contract_type

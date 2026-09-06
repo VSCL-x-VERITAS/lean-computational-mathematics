@@ -270,3 +270,12 @@ smallness. The source-facing row-wise endpoint consumes both derived facts.
   **PASS**, with only `[propext, Classical.choice, Quot.sound]`.
 - The Chapter 21 selected-scope gate is **PASS**: all 21 selected rows are
   source-closed, with six intentional exclusions recorded separately.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter21` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

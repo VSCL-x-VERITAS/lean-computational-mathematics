@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem23
+import ComputationalMathematics.Source.Higham.Chapter02.Problem23
 
 /-!
 # Compatibility import

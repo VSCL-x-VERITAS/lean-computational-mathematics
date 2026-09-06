@@ -1,5 +1,5 @@
-import NumStability.Analysis.FloatingPointArithmetic
-import NumStability.Source.Higham.Chapter02.Problem19.GradualUnderflowExactness.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem19.GradualUnderflowExactness.Basic
 
 /-!
 # HighamChapter2GradualUnderflowExact (compatibility module)

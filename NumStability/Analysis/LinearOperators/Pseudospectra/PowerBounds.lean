@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Pseudospectra.PowerBounds.All
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.PowerBounds
 
 /-!
-# NumStability.Analysis.LinearOperators.Pseudospectra.PowerBounds
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.PowerBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

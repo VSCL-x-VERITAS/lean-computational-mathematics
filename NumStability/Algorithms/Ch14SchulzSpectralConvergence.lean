@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter14.Section05.SpectralConvergence
+import ComputationalMathematics.Source.Higham.Chapter14.Section05.SpectralConvergence
 
 /-!
 # Historical Chapter 14 Schulz spectral-convergence import

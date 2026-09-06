@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.NormEstimator.Equation29
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.NormEstimator.Equation29`. -/
+
+#check NumStability.NormEstimator.H16_eq16_29_sylvester_practical_error_bound_with_norm1_estimator

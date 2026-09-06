@@ -1,0 +1,25 @@
+import ComputationalMathematics.Source.Higham.Chapter10.Equation07.AbsoluteFactorNorm
+import ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias
+import ComputationalMathematics.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma11.PivotSequenceStability
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma13.KahanSharpness
+import ComputationalMathematics.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries
+import ComputationalMathematics.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder
+import ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth
+import ComputationalMathematics.Source.Higham.Chapter10.Problem08.LeadingMinorsCounterexample
+import ComputationalMathematics.Source.Higham.Chapter10.Section01.Factorization
+import ComputationalMathematics.Source.Higham.Chapter10.Section02.ErrorAnalysis
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite
+import ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem06.RoundedCholesky
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.FailureVacuity
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.NormwiseDiscrepancy
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD
+
+/-!
+# Higham Chapter 10 source correspondence
+
+Complete import-only surface for the migrated Chapter 10 source results.
+-/

@@ -1,0 +1,3 @@
+import NumStability.HDP.ContractSignatures.C_02_hex_h2_d5_d5a
+
+#check NumStability.HDP.Contract.hdp_02_hex_h2_d5_d5a__contract_type

@@ -5,12 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import NumStability.Source.Higham.Chapter26.AlternatingDirections.CrudeLineSearch
-import NumStability.Source.Higham.Chapter26.AlternatingDirections.ExactExecution
 
-/-! # Higham Chapter 26: Alternating Directions
+import ComputationalMathematics.Source.Higham.Chapter26.AlternatingDirections
 
-Complete canonical entry point for the exact and crude alternating-directions search surfaces from Section 26.2.
+/-!
+Historical import path retained for compatibility.
 
-This is a declaration-free complete aggregate for the documented family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter26.AlternatingDirections`.
+Declaration names and mathematical terminology are unchanged.
 -/

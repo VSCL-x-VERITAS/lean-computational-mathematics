@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter08.Equation02.TriangularSubstitution.RelativeInfinityNormBounds.Theorems
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter08.Equation02.TriangularSubstitution.RelativeInfinityNormBounds.Theorems`. -/
+
+#check NumStability.higham8_2_backSub_anyOrder_relative_infNorm_bound
+#check NumStability.higham8_2_backSub_relative_infNorm_bound
+#check NumStability.higham8_2_forwardSub_anyOrder_relative_infNorm_bound
+#check NumStability.higham8_2_forwardSub_relative_infNorm_bound

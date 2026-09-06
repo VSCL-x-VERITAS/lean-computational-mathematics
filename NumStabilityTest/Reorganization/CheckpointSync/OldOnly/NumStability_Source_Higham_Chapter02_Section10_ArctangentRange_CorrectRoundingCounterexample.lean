@@ -1,0 +1,10 @@
+import NumStability.Source.Higham.Chapter02.Section10.ArctangentRange.CorrectRoundingCounterexample
+
+/-!
+# C3 checkpoint historical-only import test
+
+Imports exactly the retained checkpoint alias and checks representative public
+declarations supplied by its one canonical target.
+-/
+
+#check @NumStability.higham2_arctan_two_pow_thirty_correct_rounding_exceeds_pi_div_two

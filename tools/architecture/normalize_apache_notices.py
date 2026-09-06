@@ -7,8 +7,10 @@ import argparse
 from pathlib import Path
 
 
+from project_roots import production_paths
+
+
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_ROOT = ROOT / "NumStability"
 APACHE_MARKER = "Released under Apache 2.0"
 BROKEN_POINTER = (
     "Released under Apache 2.0 license as described in the file LICENSE."
@@ -56,7 +58,7 @@ def main() -> int:
     args = parser.parse_args()
 
     changed: list[Path] = []
-    for path in sorted(SOURCE_ROOT.rglob("*.lean")):
+    for path in production_paths(ROOT):
         original = path.read_text(encoding="utf-8")
         normalized = normalize_text(original)
         if normalized == original:

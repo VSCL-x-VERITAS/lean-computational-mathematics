@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.CrossChapter.LUSolverWeights.Doolittle
-import NumStability.Source.Higham.CrossChapter.LUSolverWeights.Factorization
+import ComputationalMathematics.Source.Higham.CrossChapter.LUSolverWeights
 
 /-!
-# Higham cross-chapter LU solver weights
+Historical import path retained for compatibility.
 
-Complete source-correspondence import surface for the rounded Doolittle and
-generic or pivoted LU solver-weight results connecting Chapters 9 and 12.
+The implementation is provided by `ComputationalMathematics.Source.Higham.CrossChapter.LUSolverWeights`.
+Declaration names and mathematical terminology are unchanged.
 -/

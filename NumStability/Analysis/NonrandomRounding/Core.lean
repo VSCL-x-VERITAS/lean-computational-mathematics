@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter01.Section17.HornerEvaluation
+import ComputationalMathematics.Source.Higham.Chapter01.Section17.HornerEvaluation
 
 /-!
 # Historical nonrandom-rounding core import

@@ -5,16 +5,16 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLT
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLTStep
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.Predicates
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.SkewSymmetric
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Basic
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Tridiagonal
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter11.Theorem07.TridiagonalTwoByTwoResidual.Basic
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLT
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLTStep
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.Predicates
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.SkewSymmetric
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Tridiagonal
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter11.Theorem07.TridiagonalTwoByTwoResidual.Basic
 
 /-!
 # CholeskyIndefinite (compatibility module)

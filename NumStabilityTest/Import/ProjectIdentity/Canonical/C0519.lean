@@ -1,0 +1,5 @@
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.DoubleRounding.FiniteNormalRange
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.FloatingPointArithmetic.DoubleRounding.FiniteNormalRange`. -/
+
+#check NumStability.FloatingPointFormat.binaryT2DoubleRounding_21_16_finiteNormalRange

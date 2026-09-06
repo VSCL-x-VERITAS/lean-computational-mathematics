@@ -1,7 +1,8 @@
-import NumStability.Analysis.CStarMatrices.Trace.All
+import ComputationalMathematics.Analysis.CStarMatrices.Trace
 
 /-!
-# NumStability.Analysis.CStarMatrices.Trace
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.CStarMatrices.Trace`.
+Declaration names and mathematical terminology are unchanged.
 -/

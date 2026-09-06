@@ -3441,3 +3441,12 @@ The other eight named results (Theorems 20.1, 20.2, 20.4, 20.5, 20.9 and Lemmas
 20.6, 20.11, 20.12) were confirmed PASS at their inventoried APIs and are not
 re-litigated here. This log remains append-only; the authoritative row-by-row
 verdicts are in `CHAPTER20_SOURCE_INVENTORY.md`.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter20` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

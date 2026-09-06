@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter25.NonlinearSystems
+import ComputationalMathematics.Source.Higham.Chapter25.NonlinearSystems
 
 /-!
 # Compatibility import for Higham Chapter 25 nonlinear systems

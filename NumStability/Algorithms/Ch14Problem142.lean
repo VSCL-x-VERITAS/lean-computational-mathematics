@@ -1,219 +1,84 @@
-import NumStability.Algorithms.Ch14Method1BWhole
-import NumStability.Algorithms.Ch14Method2CWhole
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.FirstOrderModels
-import NumStability.Analysis.FirstOrder.FixedPrecision
-import NumStability.Analysis.MatrixNorms.EntrywiseMaximum
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.Basic
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.DotProduct
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ForwardSubstitution
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.LinearAlgebra.Matrix.Orthogonal
+import Mathlib.Tactic.FieldSimp
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.BackSubstitution
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.LU.LUSolve
+import ComputationalMathematics.Algorithms.MatMul
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors.Methods.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Residuals.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.ErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.Specifications.MatrixInversion
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.TestMatrices.UpperTriangularStress
+import ComputationalMathematics.Analysis.Error.MatrixProducts.Contracts.MatrixInversion
+import ComputationalMathematics.Analysis.Error.RoundingProducts.Core
+import ComputationalMathematics.Analysis.ForwardError
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.HadamardDeterminant
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Wedin
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation35.HymanBlockFactorization.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation36.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem04.ResidualCounterexample.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem07.OnesVector.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem08.ComplexInverseRealBlock.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem10.EntryPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem11.HadamardCondition.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.ConditionNumberExamples.StressAndPeiMatrices
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.HadamardExamples.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem13.GEJBound.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem14.HymanDeterminant.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem15.DeterminantPerturbation.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockTriInverse
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockResidual.WholeMatrixBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.Method1BWhole
+import Mathlib.Tactic.LinearCombination
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.BlockResidual.LeftResidualBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2C
+import ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2.Method2Loop
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2CWhole
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.FirstOrderModels
+import ComputationalMathematics.Analysis.FirstOrder.FixedPrecision
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseMaximum
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.Basic
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFirstOrder.Derivations
 
 /-!
 # Ch14Problem142 (compatibility module)
 
-Historical path, retained so existing imports of `NumStability.Algorithms.Ch14Problem142`
-keep resolving. Most of its declarations moved unchanged to the
-canonical modules imported above.
-
-The declarations still defined below are private declarations and
-their users. Lean mangles a private name to
-`_private.<module>.<n>.<name>`, so relocating one renames it and
-breaks the frozen declaration graph; anything referring to one must
-therefore stay with it. This module is a declaration-bearing facade,
-not a pure import shim.
+Import-only module retained so existing imports of `NumStability.Algorithms.Ch14Problem142` keep
+resolving. Every declaration moved unchanged to `NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFirstOrder.Derivations`.
+The module's own original imports are re-stated so consumers reaching an
+identifier transitively through this path still see the same surface.
 -/
-
-open scoped BigOperators
-
-namespace NumStability
-
-namespace Ch14Ext
-
-private theorem higham14_problem14_2_castAdd_ne_natAdd {r m : ℕ}
-    (i : Fin r) (j : Fin m) :
-    (Fin.castAdd m i : Fin (r + m)) ≠ Fin.natAdd r j := by
-  intro h
-  have hval := congrArg Fin.val h
-  simp at hval
-  omega
-
-private theorem higham14_problem14_2_natAdd_ne_castAdd {r m : ℕ}
-    (i : Fin m) (j : Fin r) :
-    (Fin.natAdd r i : Fin (r + m)) ≠ Fin.castAdd m j :=
-  Ne.symm (higham14_problem14_2_castAdd_ne_natAdd j i)
-
-/-- The lower-block constructor maps block identities to the full identity. -/
-theorem higham14_problem14_2_lowerBlock_one {r m : ℕ} :
-    higham14_problem14_2_lowerBlock
-        (1 : Matrix (Fin r) (Fin r) ℝ)
-        (0 : Matrix (Fin m) (Fin r) ℝ)
-        (1 : Matrix (Fin m) (Fin m) ℝ) =
-      (1 : Matrix (Fin (r + m)) (Fin (r + m)) ℝ) := by
-  ext i j
-  refine Fin.addCases ?_ ?_ i
-  · intro a
-    refine Fin.addCases ?_ ?_ j
-    · intro b
-      simp [Matrix.one_apply]
-    · intro d
-      simp [higham14_problem14_2_castAdd_ne_natAdd]
-  · intro c
-    refine Fin.addCases ?_ ?_ j
-    · intro b
-      simp [higham14_problem14_2_natAdd_ne_castAdd]
-    · intro d
-      simp [Matrix.one_apply]
-
-/-- The residual of two lower block matrices is assembled from the two
-    diagonal residuals and the off-diagonal residual. -/
-theorem higham14_problem14_2_lowerBlock_mul_sub_one {r m : ℕ}
-    (A11 B11 : Matrix (Fin r) (Fin r) ℝ)
-    (A21 B21 : Matrix (Fin m) (Fin r) ℝ)
-    (A22 B22 : Matrix (Fin m) (Fin m) ℝ) :
-    (higham14_problem14_2_lowerBlock A11 A21 A22 :
-        Matrix (Fin (r + m)) (Fin (r + m)) ℝ) *
-        higham14_problem14_2_lowerBlock B11 B21 B22 - 1 =
-      higham14_problem14_2_lowerBlock
-        (A11 * B11 - (1 : Matrix (Fin r) (Fin r) ℝ))
-        (A21 * B11 + A22 * B21)
-        (A22 * B22 - (1 : Matrix (Fin m) (Fin m) ℝ)) := by
-  rw [higham14_problem14_2_lowerBlock_mul]
-  ext i j
-  refine Fin.addCases ?_ ?_ i
-  · intro a
-    refine Fin.addCases ?_ ?_ j
-    · intro b
-      simp [Matrix.one_apply]
-    · intro d
-      simp [higham14_problem14_2_castAdd_ne_natAdd]
-  · intro c
-    refine Fin.addCases ?_ ?_ j
-    · intro b
-      simp [higham14_problem14_2_natAdd_ne_castAdd]
-    · intro d
-      simp [Matrix.one_apply]
-
-/-- Method 1B right residual for an arbitrary split.  The diagonal estimates
-    may come from a leaf solve or from recursively composed block partitions;
-    the off-diagonal estimate is derived from (13.4)/(13.5). -/
-theorem higham14_problem14_2_method1B_twoBlock_right_firstOrder {r m : ℕ}
-    (hr : 0 < r) (hm : 0 < m) (u cMul cSolve leading11 leading22 : ℝ)
-    (L11 X11 : Matrix (Fin r) (Fin r) ℝ)
-    (L21 X21 : Matrix (Fin m) (Fin r) ℝ)
-    (L22 X22 : Matrix (Fin m) (Fin m) ℝ)
-    (That DeltaMul DeltaSolve : Matrix (Fin m) (Fin r) ℝ)
-    (h11 : FirstOrderLe u leading11
-      (maxEntryNormRect hr hr
-        (L11 * X11 - (1 : Matrix (Fin r) (Fin r) ℝ))))
-    (h22 : FirstOrderLe u leading22
-      (maxEntryNormRect hm hm
-        (L22 * X22 - (1 : Matrix (Fin m) (Fin m) ℝ))))
-    (hstep : Higham14Problem142Method1BStepSpec hr hm u cMul cSolve
-      L21 L22 X11 X21 That DeltaMul DeltaSolve) :
-    FirstOrderLe u
-      (max leading11
-        (max
-          (cMul * u * maxEntryNormRect hm hr L21 * maxEntryNormRect hr hr X11 +
-            cSolve * u * maxEntryNormRect hm hm L22 * maxEntryNormRect hm hr X21)
-          leading22))
-      (maxEntryNormRect (Nat.add_pos_left hr m) (Nat.add_pos_left hr m)
-        (higham14_problem14_2_lowerBlock L11 L21 L22 *
-          higham14_problem14_2_lowerBlock X11 X21 X22 -
-            (1 : Matrix (Fin (r + m)) (Fin (r + m)) ℝ))) := by
-  rw [higham14_problem14_2_lowerBlock_mul_sub_one]
-  exact higham14_problem14_2_lowerBlock_residual_firstOrder hr hm u
-    leading11
-    (cMul * u * maxEntryNormRect hm hr L21 * maxEntryNormRect hr hr X11 +
-      cSolve * u * maxEntryNormRect hm hm L22 * maxEntryNormRect hm hr X21)
-    leading22
-    (L11 * X11 - (1 : Matrix (Fin r) (Fin r) ℝ))
-    (L21 * X11 + L22 * X21)
-    (L22 * X22 - (1 : Matrix (Fin m) (Fin m) ℝ))
-    h11 hstep.offdiag_firstOrder h22
-
-/-- Method 2C left residual for an arbitrary split, with the same recursive
-    interface and operation-derived off-diagonal block. -/
-theorem higham14_problem14_2_method2C_twoBlock_left_firstOrder {r m : ℕ}
-    (hr : 0 < r) (hm : 0 < m) (u cMul cSolve leading11 leading22 : ℝ)
-    (L11 X11 : Matrix (Fin r) (Fin r) ℝ)
-    (L21 X21 : Matrix (Fin m) (Fin r) ℝ)
-    (L22 X22 : Matrix (Fin m) (Fin m) ℝ)
-    (That DeltaMul DeltaSolve : Matrix (Fin m) (Fin r) ℝ)
-    (h11 : FirstOrderLe u leading11
-      (maxEntryNormRect hr hr
-        (X11 * L11 - (1 : Matrix (Fin r) (Fin r) ℝ))))
-    (h22 : FirstOrderLe u leading22
-      (maxEntryNormRect hm hm
-        (X22 * L22 - (1 : Matrix (Fin m) (Fin m) ℝ))))
-    (hstep : Higham14Problem142Method2CStepSpec hr hm u cMul cSolve
-      L11 L21 X21 X22 That DeltaMul DeltaSolve) :
-    FirstOrderLe u
-      (max leading11
-        (max
-          (cMul * u * maxEntryNormRect hm hm X22 * maxEntryNormRect hm hr L21 +
-            cSolve * u * maxEntryNormRect hr hr L11 * maxEntryNormRect hm hr X21)
-          leading22))
-      (maxEntryNormRect (Nat.add_pos_left hr m) (Nat.add_pos_left hr m)
-        (higham14_problem14_2_lowerBlock X11 X21 X22 *
-          higham14_problem14_2_lowerBlock L11 L21 L22 -
-            (1 : Matrix (Fin (r + m)) (Fin (r + m)) ℝ))) := by
-  rw [higham14_problem14_2_lowerBlock_mul_sub_one]
-  exact higham14_problem14_2_lowerBlock_residual_firstOrder hr hm u
-    leading11
-    (cMul * u * maxEntryNormRect hm hm X22 * maxEntryNormRect hm hr L21 +
-      cSolve * u * maxEntryNormRect hr hr L11 * maxEntryNormRect hm hr X21)
-    leading22
-    (X11 * L11 - (1 : Matrix (Fin r) (Fin r) ℝ))
-    (X21 * L11 + X22 * L21)
-    (X22 * L22 - (1 : Matrix (Fin m) (Fin m) ℝ))
-    h11 hstep.offdiag_firstOrder h22
-
-/-- Recursive Problem 14.2 conclusion for Method 1B over any partition encoded
-    by `Higham14Problem142Method1BDerivation`. -/
-theorem Higham14Problem142Method1BDerivation.right_residual_firstOrder
-    {u : ℝ} {n : ℕ} {L X : Matrix (Fin n) (Fin n) ℝ} {leading : ℝ}
-    (h : Higham14Problem142Method1BDerivation u L X leading) :
-    ∀ hn : 0 < n,
-      FirstOrderLe u leading
-        (maxEntryNormRect hn hn
-          (L * X - (1 : Matrix (Fin n) (Fin n) ℝ))) := by
-  induction h with
-  | leaf hn cSolve L X Delta solve =>
-      intro hn'
-      have heq : L * X - (1 : Matrix _ _ ℝ) = Delta := by
-        rw [solve.equation]
-        abel
-      rw [heq]
-      simpa using solve.norm_bound
-  | split hr hm cMul cSolve leading11 leading22 L11 X11 L21 X21 L22 X22
-      That DeltaMul DeltaSolve head tail step ihHead ihTail =>
-      intro _hsum
-      exact higham14_problem14_2_method1B_twoBlock_right_firstOrder
-        hr hm u cMul cSolve leading11 leading22
-        L11 X11 L21 X21 L22 X22 That DeltaMul DeltaSolve
-        (ihHead hr) (ihTail hm) step
-
-/-- Recursive Problem 14.2 conclusion for Method 2C over an arbitrary finite
-    binary block partition. -/
-theorem Higham14Problem142Method2CDerivation.left_residual_firstOrder
-    {u : ℝ} {n : ℕ} {L X : Matrix (Fin n) (Fin n) ℝ} {leading : ℝ}
-    (h : Higham14Problem142Method2CDerivation u L X leading) :
-    ∀ hn : 0 < n,
-      FirstOrderLe u leading
-        (maxEntryNormRect hn hn
-          (X * L - (1 : Matrix (Fin n) (Fin n) ℝ))) := by
-  induction h with
-  | leaf hn cSolve L X Delta solve =>
-      intro hn'
-      have heq : X * L - (1 : Matrix _ _ ℝ) = Delta := by
-        rw [solve.equation]
-        abel
-      rw [heq]
-      simpa using solve.norm_bound
-  | split hr hm cMul cSolve leading11 leading22 L11 X11 L21 X21 L22 X22
-      That DeltaMul DeltaSolve head tail step ihHead ihTail =>
-      intro _hsum
-      exact higham14_problem14_2_method2C_twoBlock_left_firstOrder
-        hr hm u cMul cSolve leading11 leading22
-        L11 X11 L21 X21 L22 X22 That DeltaMul DeltaSolve
-        (ihHead hr) (ihTail hm) step
-
-end Ch14Ext
-end NumStability

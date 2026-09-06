@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter04.Equation08.FiniteFamily
+import ComputationalMathematics.Source.Higham.Chapter04.Equation08.FiniteFamily
 
 /-!
 # Compatibility import for the Higham Chapter 4 finite Kahan family

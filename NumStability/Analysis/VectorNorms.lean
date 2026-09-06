@@ -1,10 +1,8 @@
-import NumStability.Analysis.VectorNorms.Attainment
-import NumStability.Analysis.VectorNorms.Basic
-import NumStability.Analysis.VectorNorms.Duality
-import NumStability.Analysis.VectorNorms.Interpolation
+import ComputationalMathematics.Analysis.VectorNorms
 
 /-!
-# Vector norms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical vector-norm family.
+The implementation is provided by `ComputationalMathematics.Analysis.VectorNorms`.
+Declaration names and mathematical terminology are unchanged.
 -/

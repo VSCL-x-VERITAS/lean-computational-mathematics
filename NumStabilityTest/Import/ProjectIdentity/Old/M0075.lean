@@ -1,0 +1,30 @@
+import NumStability.Algorithms.RandomizedLinearAlgebra
+
+/-! Isolated API witness for `NumStability.Algorithms.RandomizedLinearAlgebra`; authored declaration names are retained. -/
+
+#check @NumStability.hitCount_eq_sum_indicator
+#check @NumStability.frobNormRect_const_square
+#check @NumStability.sqMagTraceProbMass_snoc
+#check @NumStability.rowOuterGramSample_symmetric
+#check @NumStability.rowSqNormTraceProbMass_snoc
+#check @NumStability.uniformRowTraceProbMass_snoc
+#check @NumStability.euclideanVec_apply
+#check @NumStability.rowSampleLSResidualWithBasisScale_eq_coord
+#check @NumStability.rectRightGram_finitePSD
+#check @NumStability.finCardIndex_le
+#check @NumStability.countSketchHashProbability_eventProb_pairCollision_eq_inv
+#check @NumStability.countSketchProbability_eventProb_flSparseGramDot_rowGram_frob_error_le_ge_one_sub
+#check @NumStability.countSketchProbability_expectationReal_rowGram_frob_error_sq_le
+#check @NumStability.countSketchHashProbability_eventProb_injective_ge_one_sub_pair_sum
+#check @NumStability.rademacherSign_sq
+#check @NumStability.countSketchUniformRowTraceProbability
+#check @NumStability.countSketchUniformRowTraceProbability_eventProb_uniformRowSampleGram_rowGram_frob_error_le_ge_one_sub
+#check @NumStability.sqMagProb_nonneg
+#check @NumStability.leverageRightGramCongruence_neg
+#check @NumStability.rowGram_eq_id_of_orthonormal_columns
+#check @NumStability.rowNormSq_nonneg
+#check @NumStability.rowNormSq_sq_eq_sum_pair
+#check @NumStability.uniformRowProb_nonneg
+#check @NumStability.rightGramCongruence_add
+#check @NumStability.uniformRowTraceProbability_eventProb_fl_uniformRowSampleGramDot_rowGram_frob_error_le_ge_one_sub
+#check @NumStability.uniformRowTraceProbMass_marginal_two_ne

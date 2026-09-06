@@ -5,23 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import NumStability.Source.Higham.Chapter26.CubicRoots.MonicCubic
 
-namespace NumStability
+import ComputationalMathematics.Source.Higham.Chapter26.Equation07
 
-open scoped BigOperators
+/-!
+Historical import path retained for compatibility.
 
-/-! # Higham Chapter 26, Equation 26.7
-
-The normalized backward-residual objective for three computed cubic roots.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter26.Equation07`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-/-- Higham, 2nd ed., Section 26.3.3, p. 481, equation (26.7): normalized
-backward-residual objective for three computed roots. -/
-noncomputable def cubicRootResidualMeasure (a b c : ℝ) (z : Fin 3 → ℂ) : ℝ :=
-  ‖fun i =>
-    ‖monicCubic a b c (z i)‖ /
-      (max (max (max |a| |b|) |c|) 1 *
-        (∑ j : Fin 4, ‖z i ^ (j : ℕ)‖))‖
-
-end NumStability

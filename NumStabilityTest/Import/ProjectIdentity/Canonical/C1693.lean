@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.ConstrainedLagrangian.Differentiation
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.ConstrainedLagrangian.Differentiation`. -/
+
+#check NumStability.Ch15.boydConstrainedLagrangianFirst_hasDerivAt
+#check NumStability.Ch15.boydConstrainedLagrangianLine_hasDerivAt
+#check NumStability.Ch15.boydConstrainedSecondVariation_is_second_derivative

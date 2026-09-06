@@ -1,0 +1,21 @@
+import NumStability.Analysis.PartialDifferentialEquations.ConservationLaw
+import NumStability.Analysis.PartialDifferentialEquations.ConstantCoefficientLinearSystem
+import NumStability.Analysis.PartialDifferentialEquations.EigenmodeWaves
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.LocalFluxBalance
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
+import NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface
+import NumStability.Analysis.PartialDifferentialEquations.Hyperbolicity
+import NumStability.Analysis.PartialDifferentialEquations.IntegralConservationLaw
+import NumStability.Analysis.PartialDifferentialEquations.LinearAcoustics
+import NumStability.Analysis.PartialDifferentialEquations.LinearAcousticsWaveEquation
+import NumStability.Analysis.PartialDifferentialEquations.LinearAdvection
+import NumStability.Analysis.PartialDifferentialEquations.LinearAdvectionGlobal
+import NumStability.Analysis.PartialDifferentialEquations.OperatorSplitting
+
+/-! Isolated import smoke test for the reusable PDE layer used by LeVeque. -/
+
+#check NumStability.IsConservationLawSolutionAt
+#check NumStability.FiniteVolumeCellPartition
+#check NumStability.CoordinateSweepExecution

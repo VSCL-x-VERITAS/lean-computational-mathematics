@@ -1,638 +1,443 @@
-# NumStability
+# Lean Computational Mathematics
 
-A Lean 4 library for formally verified floating-point error analysis, following
-Nicholas J. Higham's *Accuracy and Stability of Numerical Algorithms*
-(2nd ed., SIAM, 2002), together with a randomized numerical linear algebra
-(RandNLA) case study.
+[![Lean CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/workflows/lean_action_ci.yml/badge.svg?branch=main)](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/workflows/lean_action_ci.yml)
+[![Lean](https://img.shields.io/badge/Lean-4.29.0--rc3-blue)](lean-toolchain)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-The library contains machine-checked material from **all 28 chapters** of
-Higham. The tree contains **no `sorry` or `admit`, and no source-level `axiom`
-or `constant` commands**. Sampled headline theorems depend only on the standard
-`[propext, Classical.choice, Quot.sound]` axioms. The fresh audit makes every
-selected core row terminal: precise claims are proved at source strength,
-false claims have theorem-level counterexamples and faithful corrections, and
-source text that does not determine a proposition is explicitly deferred.
+Lean Computational Mathematics is a Lean 4 library of formalized results in
+computational mathematics and its mathematical foundations, developed from
+books and research papers. It contains reusable mathematics for floating-point
+error analysis, numerical stability, matrix algorithms, finite-volume methods,
+hyperbolic partial differential equations, and high-dimensional probability,
+together with source-correspondence modules.
+
+> **Active development repository:**
+> [`VSCL-x-VERITAS/lean-computational-mathematics`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics).
+> The [`AlexGeorgantzas` repository](https://github.com/AlexGeorgantzas/lean-numerical-stability)
+> is the upstream project history; new development, branches, and pull requests for
+> this continuation should target the VSCL-x-VERITAS repository.
+
+The broader project name reflects these multiple source developments;
+numerical stability remains in scope. The canonical repository slug is
+`lean-computational-mathematics`. The
+[migration report](docs/migrations/lean-computational-mathematics/README.md)
+records the verified GitHub cutover state and package/import compatibility.
+The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
+records the validated source revision, preserved interfaces and publication status.
+
+The principal source developments currently cover:
+
+- all 28 chapters of Nicholas J. Higham's *Accuracy and Stability of Numerical
+  Algorithms* (2nd ed.), within a selected audited scope;
+- Chapter 1 of Randall J. LeVeque's *Finite Volume Methods for Hyperbolic
+  Problems*, backed by reusable PDE and finite-volume foundations;
+- Chapters 1, 2, and 5 of Roman Vershynin's *High-Dimensional Probability*,
+  backed by reusable scalar-probability and concentration modules; and
+- a randomized numerical linear algebra case study based on work by Petros
+  Drineas and Michael W. Mahoney.
+
+Source coverage is deliberately not described as “the whole book.” Audits
+distinguish formalized claims, corrected discrepancies, claims ready for more
+work, and statements that are too narrative or underspecified to formalize
+faithfully.
+
+## Current repository status
+
+The source-only figures below compare the clean publishing base
+`718beac641a8094611dc249c3508a2f5415381a3` with the repaired integration tree
+captured during the passing source-gate run on 2026-09-06, 08:19:11–08:26:38 UTC.
+The capture preceded its commit; that exact repaired source is now published in
+candidate `51c5540984780b0011f41739b9ddaf8e505b7c93`, including the explicit
+public-instance name. These figures are not a build or full-interface-preservation claim.
+Its normalized source-tree SHA-256 is
+`915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
+
+| Metric | Clean base | Migrated tree |
+|---|---:|---:|
+| Production Lean modules, including compatibility | 3,198 | **5,599** |
+| Canonical implementation / aggregate modules | 2,401 | **2,401** |
+| Retained old import forwarders | 797 | **3,198** |
+| Nonblank Lean source lines | 1,475,097 | **1,503,619** |
+| Direct imports | 31,987 | **47,223** |
+| Internal / external direct imports | 20,049 / 11,938 | **32,152 / 15,071** |
+| Import cycles / unresolved project imports | 0 / 0 | **0 / 0** |
+| Classified modules | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
+| Modules with module documentation | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
+| Aggregate modules | 443 | **443** |
+| Reusable / source / internal / upstream modules | 593 / 1,355 / 5 / 5 | **593 / 1,355 / 5 / 5** |
+| Mixed or unclassified modules | 0 | **0** |
+| Forbidden reusable-to-source import paths | 0 | **0** |
+
+The additional files preserve existing import interfaces; they add no new
+mathematical results. The migrated compatibility map contains all 3,198 old
+paths, 2,401 unique canonical targets and 14,552 forwarding edges. The checks
+found no canonical production imports of historical paths, no `sorry` or
+`admit`, and no unreviewed project axiom declaration. Five attributed upstream
+modules and 264 Apache-2.0-marked production files, including retained
+forwarding notices, are covered by the provenance gate.
+
+Canonical modules use `ComputationalMathematics`. The package remains
+`numStability`, the test root remains `NumStabilityTest`, and authored
+declarations remain in their existing `NumStability` namespaces. The
+[validation record](docs/migrations/lean-computational-mathematics/validation.md)
+records passing source, clean build/test/diagnostic, downstream and strict
+compiled-comparison checks for the validated source revision. The
+[live tier manifest](docs/architecture/tiers.json) and
+[compatibility map](docs/architecture/COMPATIBILITY.md) describe the mapped tree.
+
+The bounded 2026-08 repository-reorganization phase is accepted at checkpoint
+[`C0008`](docs/architecture/phases/2026-08-repository-reorganization-completion/checkpoints/C0008-gates.md),
+whose evidence commit is `897557779a2102aa0e23b0b2f63edeb35b06bc68`.
+Current `main` contains later work, including the LeVeque, MatrixPowers,
+PolynomialEvaluation, Higham Chapter 2, and high-dimensional-probability
+developments. Bounded-phase completion is recorded; repository-wide completion
+is not claimed. See the
+[`active phase registry`](docs/architecture/phases/2026-08-repository-reorganization-completion/README.md)
+and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
+
+### CI status
+
+Validated source commit [`51c5540984780b0011f41739b9ddaf8e505b7c93`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/51c5540984780b0011f41739b9ddaf8e505b7c93)
+passed [clean CI run 34021942176](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/34021942176)
+on 2026-09-06 at 12:45:10 UTC. All three libraries, `lake test`, warning/lint
+enforcement and the independent 13-fixture consumer passed. Authenticated
+compiled comparison preserved all 58,420 declarations and their signature/body
+edges, with zero differences; seven representative axiom sets also matched.
+Actual Git dependency resolution and all nine dependency pins were verified.
+
+CI checks architecture, compatibility, provenance and source policy. Manual
+`clean_project=true` builds fresh project artifacts; the recorded run skipped
+project cache restore/save while using the permitted Mathlib cache. It captures
+the compiled graph, axiom reports and canonical/old/mixed consumer build with
+exact source/fixture/pin checks. Artifacts are retained for 14 days; ordinary
+push/PR cache behavior is unchanged.
+
+The badge tracks `main`. The validated source commit and any later documentation
+publication commit are distinct; a run certifies its own SHA. The
+[validation record](docs/migrations/lean-computational-mathematics/validation.md)
+contains exact evidence, preserved attempt history and platform/scope limits.
+The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
+records the implementation and separate publication verification.
 
 ## Floating-point model
 
-The library uses an **abstract** floating-point model
-([`FloatingPoint/Model.lean`](NumStability/FloatingPoint/Model.lean)), not a concrete IEEE-754
-representation. An `FPModel` carries a unit roundoff `u` and rounding operations
-`fl_add / fl_sub / fl_mul / fl_div / fl_sqrt`, each satisfying the standard model
+The core library uses an
+[abstract real-arithmetic model](ComputationalMathematics/FloatingPoint/Model.lean), not a
+concrete IEEE-754 implementation. An `FPModel` supplies a nonnegative unit
+roundoff `u` and rounded addition, subtraction, multiplication, division, and
+square root. For the binary operations, the central relative-error law is
 
+```text
+fl(x ◦ y) = (x ◦ y)(1 + δ),    |δ| ≤ u.
 ```
-fl(x ∘ y) = (x ∘ y)(1 + δ),   |δ| ≤ u
-```
 
-Because everything is parametric over `u` and the rounding operations, results
-hold for **any** arithmetic satisfying the standard model. A concrete instance
-`FPModel.exactWithUnitRoundoff` (operations exact, `δ = 0`, formal `u ≥ 0`) is
-used to *prove obstructions* — for example, to refute overly strong norm or
-factor-identification claims before replacing them with faithful statements.
+Division carries a nonzero-denominator condition, square root a
+nonnegative-input condition, and the model assumes `fl_add 0 x = x`.
+Individual theorems state additional guards, such as bounds ensuring that
+`γ(n)` is defined.
 
-## What's covered
+Results are parameterized by this model. The exact-arithmetic instance
+`FPModel.exactWithUnitRoundoff` is useful for proving that an overly strong
+claim cannot follow from the abstract assumptions alone. Exact algebra and
+matrix norms come from Mathlib. New APIs use Mathlib's `Matrix` and norm
+interfaces directly; older function-shaped matrix APIs remain available
+through compatibility wrappers.
 
-Higham chapters 1–28, plus the RandNLA case study. Per-chapter status is tracked
-in the ledgers under [`docs/source_coverage/`](docs/source_coverage/). The
-authoritative from-scratch audit is the fresh PDF-first source-strength audit
-[`docs/source_coverage/AUDIT_ch01-28_PDF_FIRST_2026-07-21.md`](docs/source_coverage/AUDIT_ch01-28_PDF_FIRST_2026-07-21.md).
-It froze remote `main` at
-`2bb76d004b7dddd0e6dfb61f84c0be8e6816fa19`, re-read all 28 chapter PDFs
-(513 pages; corpus fingerprint recorded in the report), inventoried 165 named
-body results and 585 numbered body equations, and then checked declaration
-types and 60 exact-label producer-to-consumer chapter pairs independently of the
-ledger conclusions. It distinguishes source-strength proofs, compiled source
-counterexamples, undefined source statements, and external-citation deferrals.
-Older reports are retained as historical records but are superseded by this
-rerun, which found additional source-strength and traceability gaps.
+## Formalized source areas
 
-| Ch | Topic | Strict gate |
-|----|-------|-------------|
-| 1  | Principles of finite precision | PASS |
-| 2  | Floating point arithmetic | PASS |
-| 3  | Basics (dot products, `γ(n)`) | PASS |
-| 4  | Summation | PASS |
-| 5  | Polynomials (Horner) | PASS |
-| 6  | Norms | PASS / SOURCE-DISCREPANCY |
-| 7  | Perturbation theory for linear systems | PASS / SOURCE-DISCREPANCY |
-| 8  | Triangular systems | PASS / SOURCE-DISCREPANCY / DEFER |
-| 9  | LU factorization and linear equations | PASS |
-| 10 | Cholesky factorization | PASS / SOURCE-DISCREPANCY |
-| 11 | Symmetric indefinite / skew-symmetric systems | PASS / SOURCE-DISCREPANCY |
-| 12 | Iterative refinement | PASS / DEFER |
-| 13 | Block LU factorization | PASS |
-| 14 | Matrix inversion | PASS / SOURCE-DISCREPANCY / DEFER |
-| 15 | Condition number estimation | PASS / SOURCE-DISCREPANCY / DEFER |
-| 16 | The Sylvester equation | PASS / DEFER |
-| 17 | Stationary iterative methods | PASS |
-| 18 | Matrix powers | PASS / DEFER |
-| 19 | QR factorization | PASS / SOURCE-DISCREPANCY / DEFER (explicit domain) |
-| 20 | The least squares problem | PASS / SOURCE-DISCREPANCY / DEFER (explicit domain) |
-| 21 | Underdetermined systems | PASS / SOURCE-DISCREPANCY |
-| 22 | Vandermonde systems | PASS / SOURCE-DISCREPANCY |
-| 23 | Fast matrix multiplication | PASS / DEFER |
-| 24 | The FFT and applications | PASS |
-| 25 | Nonlinear systems and Newton's method | PASS / SOURCE-DISCREPANCY / DEFER |
-| 26 | Automatic error analysis | PASS / SOURCE-DISCREPANCY / DEFER |
-| 27 | Software issues in floating point | PASS / SOURCE-DISCREPANCY / DEFER |
-| 28 | A gallery of test matrices | PASS / SOURCE-DISCREPANCY / DEFER |
+### Higham: numerical stability
 
-Fresh result: **28 chapters terminal, 0 unresolved precise core rows**.
-The explicit `DEFER` entries are source-level indeterminacy or external-citation
-boundaries, not hidden proof holes.
+All 28 Higham chapter rows are terminal under the selected audit rules. In the
+table, **Closed** means compiled at source strength, **Discrepancy** means the
+printed claim has a compiled counterexample and a faithful correction, and
+**Defer** records an imprecise source statement or external citation rather
+than a Lean proof hole. Detailed evidence lives in the
+[`source_coverage` ledgers](docs/source_coverage/) and the
+[`PDF-first audit`](docs/source_coverage/AUDIT_ch01-28_PDF_FIRST_2026-07-21.md).
 
-`PASS` means every precise selected theorem, lemma, equation, and
-implementation-facing claim is terminal under the audit rules. A
-`SOURCE-DISCREPANCY` qualification means the printed statement is false and the
-library contains both a theorem-level counterexample and a faithful correction;
-it does not mean that the source formula was made provable by adding a hidden
-hypothesis. Unparameterized higher-order notation, qualitative observations,
-visual tables, and unspecified algorithms are explicitly inventoried and
-deferred rather than converted into arbitrary propositions.
+| Ch. | Topic | Audit result |
+|---:|---|---|
+| 1 | Principles of finite precision | Closed |
+| 2 | Floating-point arithmetic | Closed |
+| 3 | Basics (dot products, `γ(n)`) | Closed |
+| 4 | Summation | Closed |
+| 5 | Polynomials and Horner's method | Closed |
+| 6 | Norms | Discrepancy |
+| 7 | Perturbation theory for linear systems | Discrepancy |
+| 8 | Triangular systems | Discrepancy · Defer |
+| 9 | LU factorization and linear equations | Closed |
+| 10 | Cholesky factorization | Discrepancy |
+| 11 | Symmetric indefinite and skew-symmetric systems | Discrepancy |
+| 12 | Iterative refinement | Closed · Defer |
+| 13 | Block LU factorization | Closed |
+| 14 | Matrix inversion | Closed · Discrepancy · Defer |
+| 15 | Condition-number estimation | Discrepancy · Defer |
+| 16 | The Sylvester equation | Closed · Defer |
+| 17 | Stationary iterative methods | Closed |
+| 18 | Matrix powers | Closed · Defer |
+| 19 | QR factorization | Closed · Discrepancy · Defer |
+| 20 | The least-squares problem | Discrepancy · Defer |
+| 21 | Underdetermined systems | Discrepancy |
+| 22 | Vandermonde systems | Discrepancy |
+| 23 | Fast matrix multiplication | Closed · Defer |
+| 24 | The FFT and applications | Closed |
+| 25 | Nonlinear systems and Newton's method | Discrepancy · Defer |
+| 26 | Automatic error analysis | Discrepancy · Defer |
+| 27 | Software issues in floating point | Discrepancy · Defer |
+| 28 | A gallery of test matrices | Discrepancy · Defer |
 
-- **Chapter 11:** A bounded-search exact rook trace now constructs its schedule,
-  permutations, `L`, and block-diagonal `D`, and proves the printed multiplier,
-  pivot-block, growth, and Theorem 11.4 product bounds without caller-supplied
-  rook certificates. Two compiled examples show why that exact growth statement
-  cannot be attached unchanged to the present rounded mixed-pivot executor: its
-  terminal `2 x 2` predicate is too weak, and even an aligned legal division
-  rounding can exceed the exact bound. Theorem 11.8 is separately false as
-  printed at `n=1`; the actual scalar Aasen execution and sharp corrected bound
-  close that discrepancy. For Algorithm 11.1 complete pivoting, the new
-  block-atomic sharp analysis proves Bunch's printed
-  `3.07 (n-1)^0.446` comparison with the Chapter 9 (9.14) bound, exposes its
-  separate order-one defect, and now closes the strict source-to-result route.
-  Every symmetric nonsingular source matrix constructs an exact complete-
-  search/symmetric-permutation/Schur trace; selected principal-minor
-  determinant recurrences identify every whole-block pivot product, and
-  Hadamard's inequality is derived for every contiguous whole-block segment.
-  Thus
-  `higham11_1_exists_exactBunchTrace_all_stageRatio_le_maxEntryNorm` returns
-  the all-stage sharp ratio bound without caller-supplied trace, determinant,
-  Hadamard, growth, or target certificates. Displayed equation (11.7) is also
-  composed from the actual mixed block-LDLT/triangular-solve executor into the
-  Chapter 9 (9.23) forward-error route.
-- **Chapter 9:** the corrected 15-item PDF inventory includes the previously
-  omitted Theorem 9.7. Its exact real extremal classification now starts from
-  a constructed leading-row-on-ties GEPP trace and uses the full reduced-matrix
-  growth history. Equation (9.14) likewise now bounds the supremum over the
-  original matrix and every actual recursively generated GECP reduced stage,
-  rather than only the exposed final upper factor. Theorems 9.8--9.11 now also have their printed complex-domain
-  endpoints, including genuine complex GEPP traces and a full no-pivot
-  diagonal-dominance history for Theorem 9.9.
-- **Chapters 19 and 20:** literal rounded MGS and pivoted stored-QR / least-
-  squares executors close their source-rate endpoints. Theorem 19.10 now starts
-  from the canonical Givens matrix stage-fold and constructs orthogonal `Q`,
-  `Rhat`, and `DeltaA` with the PDF's `m+n-2` columnwise coefficient. Computed
-  nonbreakdown is stated only where it is the natural domain implicit in the
-  source's “computed matrices” and “computed solution” language, not assumed as
-  an error budget. Theorem 19.5 is now genuinely columnwise for the actual QR
-  solve, (19.14) exposes its hidden inverse domain, and the Section 19.7
-  componentwise residual is obtained by a direct Chapter 6 Lemma 6.6 bridge.
-- **Chapters 10, 25, 26, and 28:** false printed formulas remain visible as checked
-  source discrepancies with corrected theorems. Chapter 10 now includes the
-  literal pivoted-Cholesky success/error chain, the premise-free Mathias
-  completion theorem for (10.29), and an internally constructed complex
-  no-pivot LU trace with exact growth `< 3`. The following unquantified
-  qualitative backward-stability sentence is deferred, and a compiled complex
-  `γ_n` counterexample prevents substituting a stronger real-field claim.
-  Chapter 25's multiplicity-one bordered eigenproblem is closed. Chapter 26
-  constructs the complex cube roots in Cardano's formula and proves the
-  nonzero-branch handoff to the original cubic; a zero-branch counterexample
-  records the missing qualification in the sentence after (26.5). Chapter 28's
-  exact Hilbert rate and Gaussian-QR Haar law are otherwise closed.
-- **Chapters 4, 8, 14, 15, 20, and 22:** the fresh repairs add the missing
-  literal finite-format/executor, fan-in, finalized Gauss-Jordan, concrete
-  rectangular general-`p` calculus, pivoted least-squares, and monomial-stage
-  bridges instead of relying on target-bearing readiness or residual premises.
-  The Chapter 14 result now includes Algorithm 14.4's literal rounded
-  Doolittle phase, final divisions, derived uniform-inverse regularity, and
-  source-domain constructor. The Chapter 12-to-22 refinement bridge now starts
-  from the actual rounded real/complex differentiated-Horner residual instead
-  of assuming a contraction conclusion; a compiled counterexample terminates
-  the false literal (12.9) coefficient and the corrected route proves finite
-  (12.8)--(12.10).
-- **Cross-chapter bridges:** a second, exact-label projection corrected the
-  initial mixed bridge count and exposed five additional composition gaps.
-  The tree now gives the literal boundary-inclusive no-guard model (2.6) an
-  actual dot-product path to (3.3)--(3.5), composes the concrete (7.31) safety
-  vector with (15.1), connects
-  the Chapter 9 complete-pivoting and forward-error producers to the precise
-  Chapter 11 claims, gives the actual Chapter 9 LU solve a finite Chapter 12
-  forward-error handoff, and supplies the Chapter 13 matrix-product handoff used by
-  the block-WY analysis (19.17)--(19.22). Earlier-Problem and qualitative
-  references are listed separately in the audit instead of inflating the
-  exact-label graph.
+### LeVeque: hyperbolic PDEs and finite-volume methods
 
-The **RandNLA case study**
-([`NumStability/Algorithms/RandNLA/`](NumStability/Algorithms/RandNLA), 17 modules)
-formalizes the meta-algorithms of Drineas and Mahoney's CACM survey
-["RandNLA: Randomized Numerical Linear Algebra"](https://dl.acm.org/doi/10.1145/2842602)
-— row/elementwise/leverage-score sampling, matrix concentration, low-rank
-approximation, and least-squares preconditioning.
+Fifteen reusable modules under
+[`ComputationalMathematics/Analysis/PartialDifferentialEquations/`](ComputationalMathematics/Analysis/PartialDifferentialEquations/)
+provide conservation-law residuals, constant-coefficient systems,
+hyperbolicity, eigenmode waves, scalar advection, linear acoustics, integral
+conservation, finite-volume cell averages and flux differences, Riemann data,
+Riemann-interface adapters, and operator splitting.
 
-## Project statistics
+The 30-module LeVeque source surface begins at
+[`ComputationalMathematics.Source.LeVeque`](ComputationalMathematics/Source/LeVeque.lean); its
+[`Chapter01` subtree](ComputationalMathematics/Source/LeVeque/Chapter01/) connects those foundations
+to Chapter 1 equations and constructions. The machine-readable
+[`Chapter 1 gate`](gates/leveque-finite-volume/chapter-01.json) and its
+[`audit artifacts`](gates/leveque-finite-volume/artifacts/) record source
+inventory, declaration and axiom checks, focused builds, organization checks,
+and per-claim faithfulness decisions. Book and workflow limitations are kept
+under [`ledgers/leveque-finite-volume/`](ledgers/leveque-finite-volume/).
 
-Current accepted production-tree snapshot at checkpoint
-[`C0006`](docs/architecture/phases/2026-08-repository-reorganization/checkpoints/C0006-gates.md),
-after the W06 Chapter 16/18 remainder and W08 matrix-inversion/Chapter 14
-integration (accepted code commit `a32095e6e50189f7dcc39312bb4c6a36f421fab5`):
+### Vershynin: high-dimensional probability
 
-| Formalization size | Count |
-|---|---:|
-| Production Lean modules | **2,242** |
-| Physical Lean source lines (including comments, blanks, and relocation padding) | **3,275,409** |
-| Nonblank Lean source lines | **1,432,575** |
-| Lean source bytes | **72,841,048** |
-| Elaborated declarations | **56,903** |
-| Theorem declarations (including source `theorem` and `lemma` commands) | **43,173** |
-| Definition declarations | **11,978** |
-| Inductive / constructor / recursor declarations | **509 / 734 / 509** |
-| Public / private / internal declarations | **55,219 / 1,680 / 4** |
-| Direct imports (internal / external) | **16,654 (11,206 / 5,448)** |
-| Signature / body-or-proof / union declaration edges | **266,387 / 382,872 / 424,082** |
-| Full library and smoke-test build graph | **7,820 jobs** |
-| Proof placeholders / top-level axiom or constant commands | **0** |
+[`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
+probability entry point. Its semantic layer covers probability preliminaries,
+limit theorems, independent sums, Hoeffding and Chernoff bounds, random-graph
+degree laws, sub-Gaussian and sub-exponential variables, and metric-measure
+concentration.
 
-| Organization state | Count |
-|---|---:|
-| Import cycles | **0** |
-| Classified modules | **1,933 (86.218%)** |
-| Unclassified modules | **309** |
-| Source / aggregate / compatibility modules | **824 / 361 / 337** |
-| Reusable / internal / upstream / mixed modules | **395 / 2 / 5 / 9** |
-| Compatibility wrappers / direct targets | **337 / 685** |
-| Modules with documentation / missing module docs | **2,125 / 117** |
-| Noncanonical names under review | **261** |
-| Declaration-bearing umbrellas | **21** |
-| Reusable-to-Source reachability | **0** |
-| Provenance contract | **197 Apache files / 5 upstream modules** |
+[`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
+checked source contracts and frozen signatures for selected material in
+Chapters 1, 2, and 5 of *High-Dimensional Probability*. Historical
+`NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` paths
+remain supported through the compatibility map.
 
-The source, import, tier, and declaration figures come from the hash-pinned
-[`C0006 combined baseline`](docs/architecture/phases/2026-08-repository-reorganization/baselines/C0006-combined.json),
-generated by
-[`tools/architecture/generate_baseline.py`](tools/architecture/generate_baseline.py).
-Declaration counts are taken from Lean's elaborated format-2 graph, so theorem
-declarations include both source `theorem` and `lemma` commands. Physical lines
-include blank padding retained by byte-identical declaration relocation; the
-nonblank count is the more useful source-volume comparison. The placeholder
-result and live migration-debt values are enforced by
-[`tools/architecture/check_layout.py`](tools/architecture/check_layout.py),
-with compatibility and provenance checked separately.
+### Drineas–Mahoney: randomized numerical linear algebra
 
-The repository-reorganization phase remains in progress. C0006 accepts W06 and
-W08, so M06 and M08 are accepted; M04, M07, M09, and M11 are ready but have not
-been activated. After the C0006 acceptance-control commit passed Lean CI, the
-two exact W06/W08 remote delivery refs were retired at
-`2026-08-04T13:33:21Z`; local worker branches and worktrees remain preserved. The
-[`active phase registry`](docs/architecture/phases/2026-08-repository-reorganization/README.md)
-is the authoritative status record.
-
-Everything is proved against Mathlib; sampled headline theorems depend only on
-the standard `[propext, Classical.choice, Quot.sound]` axioms. The retained
-evidence includes the
-[`Phase 12 BlockLU semantic migration`](docs/architecture/migrations/2026-07-27-blocklu-semantic-phase12.md),
-the [`complete Chapter 9 reconciliation`](docs/architecture/migrations/worker-ch09-closure-tail-e-migration.md),
-the [`LSQ/Chapter 20 delivery`](docs/architecture/migrations/worker-lsq-ch20-delivery.md),
-the [`QR/Chapter 19 delivery`](docs/architecture/migrations/worker-qr-ch19-delivery.md),
-and the [`four-lane final integration`](docs/architecture/migrations/2026-07-31-four-lane-final-integration.md).
-Those historical records, together with the C0006 gate evidence, preserve the
-finer ownership, source-span, dependency, isolated import-test, and axiom-probe
-evidence behind the summary above.
+The RandNLA case study separates reusable algorithms and analysis under
+[`ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/`](ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/)
+from source correspondence under
+[`ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/`](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/).
+It covers sampling, matrix concentration, low-rank approximation,
+least-squares sketching, and randomized preconditioning. Historical
+`NumStability.Algorithms.RandNLA` imports remain available as compatibility
+paths.
 
 ## Building
 
-Requires [`elan`](https://github.com/leanprover/elan). The repository pins
-Lean/Lake in `lean-toolchain` (`leanprover/lean4:v4.29.0-rc3`) and pins Mathlib
-to the exact revision recorded in `lake-manifest.json`. From a clone:
+Install Git and [elan](https://github.com/leanprover/elan), then clone the
+active repository and select the validated source commit for reproduction:
 
 ```bash
-lake exe cache get   # download prebuilt Mathlib oleans — skipping this makes the build very slow
-lake build NumStability
+git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
+cd lean-computational-mathematics
+git checkout 51c5540984780b0011f41739b9ddaf8e505b7c93
+lake exe cache get
+lake build ComputationalMathematics NumStability NumStabilityTest
 lake test
 ```
 
-Build a single module, e.g.:
+`lake build` selects the canonical and retained legacy libraries; the explicit
+command above also includes the test library. `lake test` uses the retained
+`NumStabilityTest` driver.
+
+The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
+Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
+[`lakefile.toml`](lakefile.toml).
+
+To build one module, pass its Lean module name to Lake, for example:
 
 ```bash
-lake build NumStability.Algorithms.GaussJordan
+lake build ComputationalMathematics.FloatingPoint.Model
+lake build ComputationalMathematics.HDP.Scalar.SubGaussian
+lake build ComputationalMathematics.Source.LeVeque
 ```
 
-If a fresh build fails fetching ProofWidgets, drop its release build in place:
+## Key entry points
 
-```bash
-curl -L https://github.com/leanprover-community/ProofWidgets4/releases/download/v0.0.90/ProofWidgets4.tar.gz -o /tmp/pw.tar.gz
-mkdir -p .lake/build/packages/proofwidgets && tar xzf /tmp/pw.tar.gz -C .lake/build/packages/proofwidgets
-```
+Choose the narrowest import that supplies the declarations you need.
 
-## Library organization
+| Import | Purpose |
+|---|---|
+| `ComputationalMathematics.Core` | Small reusable foundation for the floating-point model and core error analysis |
+| `ComputationalMathematics.FloatingPoint` | Reusable floating-point foundations and IEEE-facing utilities |
+| `ComputationalMathematics.Analysis` | Broad historical analysis discovery surface; prefer a narrower family import |
+| `ComputationalMathematics.Algorithms` | Broad historical algorithm discovery surface; prefer a canonical family import |
+| `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
+| `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
+| `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 correspondence |
+| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1, 2, and 5 source contracts |
+| `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
+| `ComputationalMathematics.All` | Complete supported library surface |
+| `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
+| `NumStability` | Retained old entry point forwarding through the canonical root |
 
-Choose the narrowest entry point that matches the material you need:
-
-- `NumStability.Core` contains the foundational floating-point model and core
-  analysis infrastructure.
-- `NumStability.Algorithms.Arithmetic.DotProduct.NoGuard` is the reusable
-  no-guard dot-product surface; its `Core` and `Tree` leaves avoid importing
-  source-specific Higham correspondence.
-- `NumStability.Algorithms.Summation` is the public umbrella for the summation
-  algorithm family. Reusable recursive and pairwise consumers should choose
-  `Summation.Recursive.Core` or `Summation.Pairwise.Core`. Reusable insertion
-  consumers should choose `Insertion.ActiveList`, `Insertion.Executor`,
-  `Insertion.Schedule`, `Insertion.RunningError`, or
-  `Insertion.ScheduleExecution`; the broad family modules also preserve their
-  supported Chapter 4 source declarations.
-- `NumStability.Algorithms.LinearSystems.Triangular` is the reusable umbrella
-  for forward/back substitution and triangular-system error bounds.
-- `NumStability.Algorithms.LinearSystems.QR` is the reusable QR umbrella;
-  numbered Chapter 19 correspondence is under
-  `NumStability.Source.Higham.Chapter19`. The former `Algorithms.QR.*` paths
-  remain import-only compatibility shims.
-- Least-squares algorithms and perturbation analysis are organized under
-  `NumStability.Algorithms.LinearSystems.LeastSquares` and
-  `NumStability.Analysis.Perturbation.LeastSquares`, with numbered Chapter 20
-  material under `NumStability.Source.Higham.Chapter20`. Eleven tightly
-  source-coupled leaves are explicitly classified as source rather than being
-  hidden behind a reusable-family exemption.
-- Symmetric-indefinite reusable structure is exposed through
-  `NumStability.Algorithms.LinearSystems.SymmetricIndefinite`; Chapter 11
-  correspondence is split under `NumStability.Source.Higham.Chapter11`. The
-  historical `Algorithms.HighamChapter11` owner is now an import-only facade.
-- `NumStability.Analysis.Summation` is the complete summation-analysis umbrella;
-  `NumStability.Analysis.Summation.Signs` is its reusable sign/absolute-value
-  leaf, while `ErrorBounds` contains the reusable conditioning and rounded-fold
-  error theory.
-- `NumStability.Analysis.Equidistribution` is the reusable equidistribution
-  umbrella. Its `AddCircle` leaf provides finite-orbit measures, Fourier/Haar
-  convergence, and ball and half-open-arc frequency theorems.
-- `NumStability.Analysis.LeadingDigits` is the reusable leading-digit umbrella
-  over decimal predicates, decimal powers, empirical histograms, and the
-  logarithmic distribution.
-- The declaration-free reusable norm family entry points are
-  `NumStability.Analysis.Asymptotics`, `LinearOperators`, `OperatorNorms`,
-  `VectorNorms`, `MatrixNorms`, `SingularValues`, and `Conditioning`. Their
-  semantic leaves separate foundational definitions, attainment, duality,
-  interpolation, matrix comparisons and Lp norms, singular values,
-  realification, spectral-radius bounds, and perturbation conditioning.
-  `SingularValues.WeylMirsky` remains the independently extracted generic
-  all-index perturbation API used by Higham Chapter 14 Problem 14.15 and by
-  reusable least-squares analysis.
-- `NumStability.Analysis.Norms.Core` is now a declaration-free reusable
-  aggregate over the 20 Phase 11B1 reusable owners. The path remains importable
-  for the former reusable subset, but numbered Chapter 6 results now live under
-  `NumStability.Source.Higham.Chapter06`; the historical
-  `NumStability.Analysis.Norms` path remains an import-only two-target facade
-  over Core and `NumStability.Source.Higham.Chapter06.Norms`.
-- `NumStability.Analysis.Probability` is the reusable probability-analysis
-  umbrella. Its `Probability.Gaussian` aggregate exposes
-  `Probability.Gaussian.AbsoluteMoment`, the source-neutral Gaussian first-
-  absolute-moment API used by the Chapter 28 Ginibre development. Its
-  `Probability.Haar` aggregate exposes
-  `Probability.Haar.HomogeneousSpaceUniqueness`, the generic Haar-fiber and
-  invariant-probability uniqueness API used by the Chapter 28 Stewart proof.
-- `NumStability.Algorithms.MatrixEquations.Sylvester` is the reusable
-  Sylvester/Lyapunov entry point, with narrow equation, backward-error,
-  conditioning, perturbation, and generalized-equation families. Reusable
-  Schur and inverse-operator results live under
-  `NumStability.Analysis.LinearOperators.Schur` and
-  `NumStability.Analysis.SingularValues.InverseBounds`; numbered source
-  correspondence lives under `NumStability.Source.Higham.Chapter16` and
-  `Chapter18`. `NumStability.Algorithms.Sylvester` remains the complete
-  historical discovery surface during migration.
-- `NumStability.Algorithms.FastMatMul.Recurrences` is the reusable Strassen and
-  Winograd--Strassen recurrence API. `NumStability.Algorithms.FastMatMul` is the
-  complete historical family aggregate; unsupported declarations inherited
-  from that path live in `FastMatMul.Internal.LegacyBounds`.
-- `NumStability.Source` is the canonical umbrella for source-faithful material.
-- `NumStability.Source.Higham` collects Higham chapter results and explicit
-  cross-chapter bridges. The complete nonrandom-rounding correspondence is
-  `NumStability.Source.Higham.Chapter01.Section17`; its five semantic leaves
-  separate Horner evaluation, interval propagation, grid variation, stored
-  IEEE-double inputs, and the final error-spread result. The historical
-  `Analysis.NonrandomRounding*` paths are import-only compatibility shims. For
-  Chapter 2, Problem 2.2 is the canonical
-  `NumStability.Source.Higham.Chapter02.Problem02` leaf. Problem 2.11's source
-  samples are in `Chapter02.Problem11`, with reusable decimal and empirical
-  support under `Analysis.LeadingDigits`. The Section 2.7 power-frequency
-  conclusion is `Chapter02.Section07.PowerLeadingDigits`; its reusable
-  AddCircle and decimal-power development lives under `Analysis`. The
-  declaration-free `Chapter06.Norms` aggregate exposes Problems 6.1, 6.5,
-  6.9, and 6.10 together with the literal ambient-radius form of Theorem 6.4.
-  Phase 11B2 adds `Lemma06`, `Equation01`, and `Equation02`; four semantic
-  leaves below `Chapter06.Asides`; and the `BlockAntidiagonalNorm.InducedLp`
-  and `BlockAntidiagonalNorm.OperatorTwo` leaves. The declaration-free
-  `Asides` aggregate preserves the six-topic historical asides surface, while
-  `BlockAntidiagonalNorm` groups its two norm results. The declaration-free
-  `Chapter06` aggregate imports `Norms`, `Asides`, `BlockAntidiagonalNorm`,
-  `Equation02`, and `Lemma06`. The four former Algorithms/Analysis owners are
-  exact compatibility wrappers, not preferred declaration homes.
-  Chapter 14
-  contains `Problem13`, the canonical `Problem14` owner for Problem 14.14's
-  Hyman determinant result, `Problem15` for the source-specific determinant
-  bound and counterexample, and the declaration-free `Section05` Schulz family
-  aggregate. The generic singular-value perturbation support for Problem 14.15
-  lives in reusable `Analysis.SingularValues.WeylMirsky`; the former
-  `Algorithms.Chapter14Problem1415Weyl` path is an import-only wrapper. Chapter
-  21 now contains `RowScalingInvariance`, the declaration-free `Theorem03`
-  aggregate over `Theorem03.Attainment`, and the declaration-free `Theorem04`
-  aggregate over `Theorem04.RowwiseBackwardError`. The former
-  `Algorithms.Underdetermined.Higham21RowwiseMeasure` path is an import-only
-  wrapper. The comprehensive historical Chapter 21 discovery surface remains
-  `NumStability.Algorithms.Underdetermined.Higham21` during migration. Chapter
-  28 now has a declaration-free canonical aggregate; its `Equation02`
-  aggregate exposes the source-specific `RatioDiscrepancy` leaf, while the
-  former `Algorithms.TestMatrices.Higham28HilbertRatioDiscrepancy` path is an
-  import-only wrapper. That leaf deliberately still imports the historical
-  `Higham28HilbertAsymptotic` dependency until the wider Hilbert family moves.
-  The homogeneous-space uniqueness lemmas remain source-independent under
-  `Analysis.Probability.Haar`. These are dependency-contained frontiers, not
-  completed migrations of the broader chapter families. For
-  fast matrix multiplication, import
-  `NumStability.Source.Higham.Chapter23` or one of its semantic theorem,
-  equation, algorithm, or problem leaves. Chapters 12, 22, and 27 now have
-  complete declaration-free aggregates at
-  `NumStability.Source.Higham.Chapter12`,
-  `NumStability.Source.Higham.Chapter22`, and
-  `NumStability.Source.Higham.Chapter27`;
-  Chapter 22's real and complex refinement leaves are grouped by the
-  declaration-free `NumStability.Source.Higham.Chapter22.Section03` aggregate.
-  Reusable block-LU mathematics is published from
-  `NumStability.Algorithms.LinearSystems.LU.BlockLU`. Higham Chapter 13's
-  numbered block-LU correspondence is published from the declaration-free
-  `NumStability.Source.Higham.Chapter13.BlockLU` aggregate, with narrower
-  section, theorem, lemma, and Problem 13.4 family aggregates below it.
-  `NumStability.Source.Higham.Chapter13` combines that source surface with the
-  independent `DemmelSharpMultiplier` leaf. The historical
-  `NumStability.Algorithms.LU.BlockLU` path remains importable as a two-target
-  compatibility facade; new code should choose the reusable or source path
-  explicitly. The follow-on sibling migration also reduces the ten former
-  declaration-bearing `Algorithms.LU.BlockLU*` paths to tested compatibility
-  wrappers over 22 reusable and Chapter 13 semantic destinations.
-  Reusable Cholesky factorization, solve, perturbation, rounded-factorization,
-  positive-semidefinite, and error-analysis APIs are collected by
-  `NumStability.Algorithms.LinearSystems.Cholesky`; their numbered Chapter 10
-  counterparts are collected by `NumStability.Source.Higham.Chapter10`.
-- `NumStability.Higham` is the historical compatibility entry point; new code
-  should import `NumStability.Source.Higham`.
-- `NumStability.All` exposes the complete supported library surface.
-- `NumStability` currently remains a compatibility entry point for
-  `NumStability.All`.
-
-New code should import canonical semantic paths. Historical paths listed in
-the compatibility manifest are import-only shims, not preferred APIs; retained
-aggregates continue to provide their documented broad surfaces. See
-[`ARCHITECTURE.md`](ARCHITECTURE.md) for the layer contract,
-[`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) for naming and
-module-placement rules, [`CONTRIBUTING.md`](CONTRIBUTING.md) for the required
-checks,
-[`docs/architecture/MIGRATION.md`](docs/architecture/MIGRATION.md) for the
-evidence-gated migration sequence, and
-[`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md) for
-the old-to-new path map and removal policy. The
-[`docs/README.md`](docs/README.md) index distinguishes current policy from
-dated audit evidence.
-
-This is an enforced migration state, not a claim that the whole historical
-corpus is already Mathlib-style. The C0006 ratchet records 309 unclassified
-modules, 9 mixed modules, 117 missing module docs, 261 noncanonical names, and
-21 reviewed declaration-bearing umbrellas. CI enforces the per-prefix
-direct-import ceilings recorded in `docs/architecture/layout-exceptions.json`
-and prevents these queues from growing while each dependency-contained family
-is migrated. In particular, the Chapter 14, Chapter 21, and Chapter 28 moves
-above establish only their documented frontiers; their broader historical
-families remain in the migration queue.
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for API tiers and dependency rules.
+Historical imports and their canonical destinations are documented in
+[`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md).
 
 ## Use as a dependency
 
-Add to your `lakefile.toml`:
+For reproducing the validated source revision, retain package name
+`numStability` and pin its commit:
 
 ```toml
 [[require]]
 name = "numStability"
-git = "https://github.com/AlexGeorgantzas/lean-numerical-stability"
-rev = "main"
+git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
+rev = "51c5540984780b0011f41739b9ddaf8e505b7c93"
 ```
 
-For a narrow dependency, import the canonical family or leaf named above. The
-following deliberately uses `import NumStability`, the historical complete
-compatibility surface, to make all supported declarations available:
+Pin a reviewed commit when reproducibility is required. The inherited
+`v0.1.0` tag predates the current LeVeque/HDP work and the new module root;
+consumers of that tag use its original `NumStability` imports.
+
+A minimal current reusable import is:
 
 ```lean
-import NumStability
+import ComputationalMathematics.FloatingPoint.Model
+
 open NumStability
 
-variable (fp : FPModel) (n : ℕ)
-
-#check gamma fp n                -- γ(n) = nu / (1 - nu)
-#check dotProduct_error_bound    -- |fl(x·y) - x·y| ≤ γ(n)·Σ|xᵢ||yᵢ|
-#check backSub_backward_error    -- (U + ΔU)x̂ = b, |ΔU| ≤ γ(n)|U|
-#check lu_solve_backward_error   -- (A + ΔA)x̂ = b, |ΔA| ≤ (3γ(n)+γ(n)²)|L̂||Û|
+#check FPModel
+#check FPModel.exactWithUnitRoundoff
 ```
 
-## Project structure
+The import root and declaration namespace are different interfaces:
+`ComputationalMathematics.FloatingPoint.Model` still defines
+`NumStability.FPModel`. Existing old import paths are retained under the
+documented compatibility policy.
 
-```
-NumStability.lean              -- historical complete compatibility entry point
-NumStability/
-  Core.lean                    -- foundational reusable entry point
-  All.lean                     -- complete supported library surface
-  FloatingPoint.lean           -- floating-point foundations umbrella
-  FloatingPoint/
-    IEEE.lean                  -- IEEE-facing operations umbrella
-    IEEE/
-      NaiveMaximum.lean        -- reusable maximum/NaN comparison API
-    Model.lean                 -- the abstract floating-point model
-  Analysis.lean                -- complete analysis aggregate, including legacy work
-  Analysis/                    -- stability, perturbation theory, matrix algebra,
-                               --   norms, concentration, and probability
-    Asymptotics.lean           -- reusable asymptotic-bound umbrella
-    Conditioning.lean          -- reusable conditioning umbrella
-    Equidistribution.lean      -- reusable equidistribution umbrella
-    Equidistribution/
-      AddCircle.lean           -- Fourier/Haar orbit equidistribution API
-    LeadingDigits.lean         -- reusable leading-digit umbrella
-    LeadingDigits/
-      Decimal.lean             -- decimal leading-digit predicate
-      DecimalPowers.lean       -- powers, logarithms, and decimal arcs
-      Empirical.lean           -- finite empirical digit histograms
-      LogarithmicDistribution.lean -- logarithmic leading-digit law
-    LinearOperators.lean       -- reusable linear-operator umbrella
-    MatrixNorms.lean           -- reusable matrix-norm umbrella
-    Norms.lean                 -- historical two-target compatibility facade
-    Norms/
-      Core.lean                -- declaration-free legacy Core surface
-    OperatorNorms.lean         -- reusable operator-norm umbrella
-    Probability.lean           -- reusable probability-analysis umbrella
-    Probability/
-      Gaussian.lean            -- Gaussian-analysis umbrella
-      Gaussian/AbsoluteMoment.lean -- reusable Gaussian moment API
-      Haar.lean                -- reusable Haar-analysis umbrella
-      Haar/HomogeneousSpaceUniqueness.lean -- invariant-measure uniqueness
-    SingularValues.lean        -- reusable singular-value umbrella
-    Summation.lean             -- import-only summation-analysis umbrella
-    Summation/
-      Signs.lean               -- reusable sign and absolute-sum API
-      ErrorBounds.lean         -- reusable conditioning and error-bound layer
-    VectorNorms.lean           -- reusable vector-norm umbrella
-  Algorithms.lean              -- numerical-algorithm umbrella
-  Algorithms/                  -- algorithm formalizations, with clusters such as
-                               --   LU, QR, Cholesky, RandNLA, and TestMatrices
-    Arithmetic/DotProduct/
-      NoGuard.lean             -- reusable no-guard dot-product umbrella
-    Summation.lean             -- complete summation-family umbrella
-    Summation/
-      Insertion.lean           -- complete insertion-family umbrella
-      Insertion/               -- active list, executor, schedule, and error layers
-    FastMatMul.lean             -- complete historical fast-multiplication aggregate
-    FastMatMul/
-      Recurrences.lean         -- reusable recurrence API
-      Internal/LegacyBounds.lean -- unsupported historical bounds
-  Source.lean                  -- canonical source-faithful umbrella
-  Source/
-    Higham.lean                -- Higham source umbrella
-    Higham/
-      Chapter01/
-      Chapter02/
-        Problem11.lean         -- Problem 2.11 source samples and locator
-        Section07.lean         -- declaration-free Section 2.7 aggregate
-        Section07/PowerLeadingDigits.lean -- power-frequency source conclusion
-      Chapter04/
-      Chapter06.lean           -- complete current Chapter 6 aggregate
-      Chapter06/
-        Asides.lean            -- six-topic historical-asides aggregate
-        Asides/
-          ConditionNumberBounds.lean
-          EuclideanNormDifferentiability.lean
-          MaxNormInconsistency.lean
-          UnitaryInvariance.lean
-        BlockAntidiagonalNorm.lean -- induced-Lp/operator-2 family aggregate
-        BlockAntidiagonalNorm/
-          InducedLp.lean
-          OperatorTwo.lean
-        Equation01.lean        -- Hölder equality and endpoint witnesses
-        Equation02.lean        -- dual-of-dual source correspondence
-        Lemma06.lean           -- Lemma 6.6 parts (a), (c), and sharpness
-        Norms.lean             -- numbered norm-result aggregate
-        Problem01.lean         -- Problem 6.1 source closure
-        Problem05.lean         -- Problem 6.5 source closure
-        Problem09.lean         -- Problem 6.9 source closure
-        Problem10.lean         -- Problem 6.10 source closure
-        Theorem04.lean         -- literal ambient-radius Theorem 6.4
-      Chapter08/, Chapter10/
-      Chapter11.lean          -- declaration-free Chapter 11 aggregate
-      Chapter11/              -- symmetric-indefinite/skew source owners
-      Chapter12/, Chapter13/, Chapter17/
-      Chapter19.lean          -- declaration-free Chapter 19 QR aggregate
-      Chapter19/              -- numbered QR source owners
-      Chapter20.lean          -- declaration-free Chapter 20 LSQ aggregate
-      Chapter20/              -- numbered least-squares source owners
-      Chapter14/
-        Problem14.lean         -- Problem 14.14 Hyman determinant result
-      Chapter21/
-        Theorem03.lean         -- declaration-free Theorem 21.3 aggregate
-        Theorem03/Attainment.lean -- attainment and nonattainment boundary
-      Chapter22/, Chapter23/, Chapter24/, Chapter25/, Chapter26/, Chapter27/
-                               -- canonical numbered source correspondence
-      CrossChapter/            -- explicitly cross-chapter source bridges
-  Higham.lean                  -- historical import-only compatibility entry point
-docs/
-  source_coverage/            -- per-chapter coverage ledgers + fresh ch01–28 audit
-  chapterNN/                  -- detailed source inventories / proof ledgers
+## Repository layout
+
+The map emphasizes supported entry points and semantic boundaries rather than
+listing every theorem leaf.
+
+```text
+ComputationalMathematics.lean             canonical complete-tree entry point
+ComputationalMathematics/
+├── Core.lean                            small reusable foundation
+├── All.lean                             complete supported tree
+├── FloatingPoint.lean                   floating-point umbrella
+├── FloatingPoint/                       model, operation laws, FMA, and IEEE utilities
+├── Analysis.lean                        broad historical analysis aggregate
+├── Analysis/
+│   ├── Error/, Conditioning/, Perturbation/
+│   ├── MatrixNorms/, SingularValues/, Probability/
+│   └── PartialDifferentialEquations/    reusable PDE and finite-volume foundations
+├── Algorithms.lean                      broad historical algorithm aggregate
+├── Algorithms/
+│   ├── Arithmetic/, Summation/, PolynomialEvaluation/
+│   ├── LinearSystems/, MatrixEquations/, MatrixPowers/
+│   └── RandomizedLinearAlgebra/
+├── HDP.lean                              high-dimensional-probability entry point
+├── HDP/                                  scalar probability, concentration, and old contract paths
+├── Source.lean                           canonical source-correspondence entry point
+├── Source/
+│   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
+│   ├── LeVeque/                          finite-volume methods, Chapter 1
+│   ├── Vershynin/                        high-dimensional probability, Chapters 1, 2, and 5
+│   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
+└── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
+
+NumStability.lean                         retained original complete-tree import
+NumStability/                            retained old imports; no duplicate implementation
+└── Higham.lean and Higham/               earlier Higham compatibility paths
+
+NumStabilityTest.lean                     complete test-library entry point
+NumStabilityTest/
+├── Import/
+│   ├── Canonical/                        canonical and entry-point smoke tests
+│   └── Compatibility/                    forwarding-path regression tests
+├── Reorganization/                       migration and declaration-placement tests
+└── Worker/                               focused proof-audit and integration suites
+
+gates/                                    machine-readable formalization gates and evidence
+ledgers/                                  source/workflow issues, limitations, and inconsistencies
+docs/                                     architecture, source coverage, audits, and benchmarks
+tools/                                    architecture checks and benchmark tooling
+examples/                                 representative Lean lookup examples
+experiments/                              C/Python reproductions of selected source examples
 ```
 
-## Exact algebra and matrix norms
+## Verification and contribution
 
-Mathlib is the source of truth for exact algebra and norms; new APIs use Mathlib
-notation directly (e.g. `‖A‖` under the appropriate matrix-norm scope) and the
-alias `RMat m n := Matrix (Fin m) (Fin n) ℝ`. The legacy algorithm layer uses
-function-shaped matrices `RMatFn m n := Fin m → Fin n → ℝ` with documented
-compatibility wrappers (`frobNorm`, `infNorm`) that coerce through `Matrix.of`
-and reuse Mathlib's norms — they are not independent norm definitions.
+For a source-only architecture check, run:
+
+```bash
+python tools/architecture/check_phase.py --all-phases
+python tools/architecture/check_completion_phase.py
+python tools/architecture/check_layout.py
+python tools/architecture/check_tiers.py
+python tools/architecture/check_placeholders.py
+python tools/architecture/check_compatibility.py
+python tools/architecture/check_provenance.py
+python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
+```
+
+CI additionally compiles its Python tooling, runs the architecture and
+diagnostic checker self-tests, builds `ComputationalMathematics`, `NumStability`
+and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
+reviewed warning and lint baselines. Those
+baselines are review records and must not be regenerated merely to silence new
+findings. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains placement,
+compatibility, testing, and licensing requirements. Architecture changes
+follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
+
+## Documentation
+
+- The [identity migration report](docs/migrations/lean-computational-mathematics/README.md)
+  records the public name, interface mapping, GitHub cutover and validation.
+- [`docs/README.md`](docs/README.md) maps current policy and retained evidence.
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
+  and supported entry points.
+- [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) defines canonical
+  module names and placement.
+- [`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md)
+  records every supported historical import path.
+- [`docs/source_coverage/`](docs/source_coverage/) contains Higham's concise
+  chapter ledgers and PDF-first audits.
+- [`CHANGELOG.md`](CHANGELOG.md) records release-facing changes.
+
+## Roadmap
+
+The companion source catalogue lists six candidates whose formalization status
+is `not-started`: Greenbaum and Saad on iterative linear solvers, LeVeque on
+finite differences, Krüger and Succi on lattice Boltzmann methods, and Kettner
+et al. on robust geometric computation. The finite-difference source
+collection currently contains only Chapters 1–4. A kinetic-models and
+macroscopic-limits request still needs an authoritative source.
+
+These are candidate source materials, not completed library coverage. The
+[verified source inventory](docs/migrations/lean-computational-mathematics/source-scope.md)
+records exact titles, editions, source identifiers, catalogue status and the
+boundary between present developments and future work.
 
 ## References
 
 - N. J. Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed.,
   SIAM, 2002.
+- R. J. LeVeque, *Finite Volume Methods for Hyperbolic Problems*, Cambridge
+  University Press, 2002.
+- R. Vershynin, *High-Dimensional Probability: An Introduction with
+  Applications in Data Science*, Cambridge University Press.
 - P. Drineas and M. W. Mahoney,
-  ["RandNLA: Randomized Numerical Linear Algebra"](https://dl.acm.org/doi/10.1145/2842602),
+  [“RandNLA: Randomized Numerical Linear Algebra”](https://dl.acm.org/doi/10.1145/2842602),
   *Communications of the ACM* 59(6), 80–90, 2016.
 
-## Roadmap
+## License and citation
 
-The selected formalization core scope is closed; the repository-organization
-migration is not. Phase 11B1 split the transitional `Analysis.Norms.Core`
-owner, and Phase 11B2 moved the remaining audited Chapter 6 source owners.
-Phase 12 has now split the historical 82k-line `Algorithms.LU.BlockLU`
-declaration owner into reusable and 68-owner Chapter 13 source surfaces, then
-migrated all ten declaration-bearing BlockLU siblings into 22 semantic owners
-while preserving every old import as a compatibility facade. The completed
-parallel checkpoint physically split all 4,420 Chapter 9 declarations into 20
-canonical destinations, all 6,385 Chapter 11 declarations from 66 historical
-owners into 73 destinations, all 3,991 QR declarations into 60 destinations,
-and all 5,129 LSQ/Chapter 20 declarations into 73 destinations. The QR-to-LSQ
-ownership handoff is resolved and the strict classified graph has no reusable-
-to-source or reusable-to-mixed path. The first post-integration cleanup also
-classified 42 declaration-free Chapter 19 facades and normalized all production
-consumers to their canonical imports. C0005 subsequently accepted the W03 split
-of 26 Cholesky/Chapter 10 owners into 61 canonical production modules and the
-W05 split of 10 Sylvester/Schur owners into 79 canonical production modules,
-while retaining every projection-required historical declaration and import.
-C0006 then accepted the W06 split of 67 Chapter 16/18 owners into 176 canonical
-production modules and the W08 split of 42 matrix-inversion/Chapter 14 owners
-into 73 canonical production modules. M04, M07, M09, and M11 are ready but
-remain unactivated. Subsequent accepted batches must reduce the current 309
-unclassified modules, 261 noncanonical names, 117 missing module docs, and the
-remaining reviewed giant-file outliers. The
-sequence and safety gates are tracked in
-[`docs/architecture/MIGRATION.md`](docs/architecture/MIGRATION.md), with exact
-ownership, checkpoints, and wave dependencies in the active
-[`August 2026 phase contract`](docs/architecture/phases/2026-08-repository-reorganization/README.md).
-
-## License
-
-Except where an individual file states otherwise, NumStability is licensed
+Except where an individual file states otherwise, Lean Computational Mathematics is licensed
 under the [MIT License](LICENSE). Files carrying an Apache-2.0 notice are
 licensed under the [Apache License, Version 2.0](LICENSES/Apache-2.0.txt).
-Third-party attribution and upstream references are recorded in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Citation metadata is available in [`CITATION.cff`](CITATION.cff).
+Third-party attribution is recorded in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and citation metadata is
+available in [`CITATION.cff`](CITATION.cff).

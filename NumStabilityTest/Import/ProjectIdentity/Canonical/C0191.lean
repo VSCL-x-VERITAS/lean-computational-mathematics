@@ -1,0 +1,10 @@
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.ComputedOutput.Core
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.ComputedOutput.Core`. -/
+
+#check NumStability.Higham21SNEBackwardCoefficient_nonneg_of_gammaValid
+#check NumStability.gamma_le_Higham21SNEBackwardCoefficient
+#check NumStability.higham21SNEActualOutput
+#check NumStability.higham21SNEExactFormedOutput
+#check NumStability.higham21SNETransferredForwardEnvelope
+#check NumStability.higham21_sne_actual_output_formation_backward_error

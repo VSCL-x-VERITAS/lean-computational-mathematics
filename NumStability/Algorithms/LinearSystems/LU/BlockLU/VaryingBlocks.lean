@@ -1,12 +1,8 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks.Algebra
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks.Basic
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks.RecursiveFactorization
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks.SchurComplement
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks.Uniqueness
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks
 
 /-!
-# Unequal-block LU factorization
+Historical import path retained for compatibility.
 
-Reusable API for block LU factorizations whose diagonal blocks may have
-different positive orders.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks`.
+Declaration names and mathematical terminology are unchanged.
 -/

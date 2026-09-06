@@ -1,0 +1,5 @@
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.MidpointRounding.DecimalTieExamples
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.FloatingPointArithmetic.MidpointRounding.DecimalTieExamples`. -/
+
+#check NumStability.FloatingPointFormat.decimalOneDigitThreeExponentFormat_finiteSystem_one_half

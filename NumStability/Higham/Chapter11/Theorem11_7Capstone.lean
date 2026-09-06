@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Theorem07
+import ComputationalMathematics.Source.Higham.Chapter11.Theorem07
 
 /-!
 # Compatibility import for Higham Chapter 11, Theorem 11.7

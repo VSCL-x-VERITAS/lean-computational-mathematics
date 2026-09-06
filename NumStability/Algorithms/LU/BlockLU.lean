@@ -1,5 +1,5 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU
-import NumStability.Source.Higham.Chapter13.BlockLU
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU
+import ComputationalMathematics.Source.Higham.Chapter13.BlockLU
 
 /-!
 # Historical Block LU compatibility facade

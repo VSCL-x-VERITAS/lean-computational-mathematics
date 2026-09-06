@@ -7,16 +7,15 @@ transitive path from `reusable` into `source` or `mixed` as forbidden. This
 prevents aggregate, compatibility, internal, or not-yet-classified
 intermediate modules from hiding a dependency inversion.
 
-The inventory is intentionally partial during this migration. Large historical
-areas below `Algorithms/` and `Analysis/` still mix reusable mathematics,
-numbered-source correspondence, and proof support; assigning either directory
-one blanket tier would hide the problem. The generated baseline therefore
-reports both classification coverage and the complete unclassified queue.
+The inventory is complete. Since the R09/R10 integration, sustained after the
+R0014/R0015 landing, classification coverage is 100% with 0 unclassified and 0
+mixed modules. The generated baseline reports classification coverage together
+with the unclassified queue; that queue is empty.
 
 A zero forbidden-edge count is conclusive only when classification coverage is
-100% and no `mixed` modules remain. Until then, the physical-source-target gate
-is not satisfied, even when all currently classified reusable modules have zero
-source or mixed imports.
+100% and no `mixed` modules remain. That precondition now holds, so the strict
+source audit's forbidden-edge count is conclusive for the
+physical-source-target gate.
 
 When a module is reviewed:
 
@@ -34,13 +33,18 @@ more than one declaration tier; it is an explicit split queue, not a permanent
 architecture category.
 
 The Chapter 1 Section 1.17 migration uses exact `aggregate` rules for
-`NumStability.Source.Higham.Chapter01` and its `Section17` child. The five
-canonical leaves inherit `source` from the `NumStability.Source` prefix. The
+`ComputationalMathematics.Source.Higham.Chapter01` and its `Section17` child. The five
+canonical leaves inherit `source` from the `ComputationalMathematics.Source` prefix. The
 six historical `NumStability.Analysis.NonrandomRounding*` paths use exact
 `compatibility` rules; there is deliberately no source-tier prefix rule for
 that historical directory.
 
-Through Phase 11B2, reviewed source families cover the canonicalized Higham
+## Archived phase narratives
+
+The following paragraphs are retained phase-by-phase migration history; the
+normative current inventory is recorded under "Current inventory" below.
+
+Through Phase 11B2, reviewed source families covered the canonicalized Higham
 frontiers in Chapters 1, 2, 4, 6, 8, 10--14, 17, 20--28, and cross-chapter
 locators. Exact `aggregate` rules identify every declaration-free chapter and
 family umbrella; canonical leaves inherit `source` from the Source prefix and
@@ -100,17 +104,26 @@ the 17 source-owner identities required by `Theorem02.Factorization` and
 identities. Its ten historical modules are now exact import-only wrappers with
 isolated old-only tests.
 
-The completed Phase 12 ratchet classifies 562 of 1,154 production modules
-(48.700%): 231 as source, 104 as aggregate, 119 as compatibility, 101 as
-reusable, 2 as internal, and 5 as upstream. The explicit unclassified queue is
-592 modules, and no fully classified module is marked mixed. The
-`NumStability.Algorithms` direct-import ceilings are 435 imports below
-`NumStability`, including 43 below `NumStability.Analysis` and 15 below
-`NumStability.Source`. The remaining layout debt is 209 missing module
-docstrings and 392 noncanonical historical module names; the compatibility
-inventory contains 119 wrappers with 228 direct targets. Three reviewed source
-parents (`Equation23`, `Equation25`, and `Table01`) remain declaration-bearing
-while hosting semantic children.
+## Current inventory
+
+The pre-identity baseline `718beac641a8094611dc249c3508a2f5415381a3`
+classifies all 3,198 production modules: 1,355 source, 443 aggregate, 797
+compatibility, 593 reusable, 5 internal and 5 upstream. Its source checks
+found no unclassified or mixed modules. The approved identity map relocates
+the 2,401 non-compatibility modules under `ComputationalMathematics` and
+retains all 3,198 old imports as compatibility modules; those wrappers do not
+add mathematical results.
+
+Live canonical/compatibility counts and final validation outcomes are recorded
+by [`tiers.json`](tiers.json) and the
+[migration validation](../migrations/lean-computational-mathematics/validation.md).
+The `ComputationalMathematics.Algorithms` direct-import ceilings are read
+from `direct_import_ceilings` in
+[`layout-exceptions.json`](layout-exceptions.json), with no relaxation of the
+reviewed limits. The three
+formerly declaration-bearing source parents (`Equation23`, `Equation25`, and
+`Table01` under `ComputationalMathematics.Source.Higham.Chapter13`) are now
+declaration-free import umbrellas over their semantic children.
 
 Because structural aggregates do not themselves own declarations,
 `reusable_entrypoints` separately lists aggregates whose entire reachable

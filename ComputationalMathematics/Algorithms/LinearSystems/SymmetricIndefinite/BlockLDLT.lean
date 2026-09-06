@@ -1,0 +1,11 @@
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalFactorBound
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalGrowth
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalGrowthInvariant
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalSparseFactor
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalSparseSolve
+
+/-!
+# Symmetric-indefinite block LDLᵀ algorithms
+
+Declaration-free aggregate for the reusable block-pivoting interfaces.
+-/

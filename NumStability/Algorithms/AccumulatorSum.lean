@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Accumulator
+import ComputationalMathematics.Algorithms.Summation.Accumulator
 
 /-!
 # Accumulator summation compatibility import

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter06.Lemma06
+import ComputationalMathematics.Source.Higham.Chapter06.Lemma06
 
 /-!
 # Historical Higham Chapter 6, Lemma 6.6 import

@@ -5,19 +5,19 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import NumStability.Algorithms.FastMatMul.Internal.LegacyBounds
-import NumStability.Source.Higham.Chapter23.BalancedScaling
-import NumStability.Source.Higham.Chapter23.BilinearAlgorithm
-import NumStability.Source.Higham.Chapter23.BiniLotti
-import NumStability.Source.Higham.Chapter23.BlockAlgorithms
-import NumStability.Source.Higham.Chapter23.ConventionalMultiplication
-import NumStability.Source.Higham.Chapter23.Equation11
-import NumStability.Source.Higham.Chapter23.ErrorRecurrences
-import NumStability.Source.Higham.Chapter23.GammaAsymptotics
-import NumStability.Source.Higham.Chapter23.Theorem02
-import NumStability.Source.Higham.Chapter23.Theorem03
-import NumStability.Source.Higham.Chapter23.ThreeM
-import NumStability.Source.Higham.Chapter23.WinogradInnerProduct
+import ComputationalMathematics.Algorithms.FastMatMul.Internal.LegacyBounds
+import ComputationalMathematics.Source.Higham.Chapter23.BalancedScaling
+import ComputationalMathematics.Source.Higham.Chapter23.BilinearAlgorithm
+import ComputationalMathematics.Source.Higham.Chapter23.BiniLotti
+import ComputationalMathematics.Source.Higham.Chapter23.BlockAlgorithms
+import ComputationalMathematics.Source.Higham.Chapter23.ConventionalMultiplication
+import ComputationalMathematics.Source.Higham.Chapter23.Equation11
+import ComputationalMathematics.Source.Higham.Chapter23.ErrorRecurrences
+import ComputationalMathematics.Source.Higham.Chapter23.GammaAsymptotics
+import ComputationalMathematics.Source.Higham.Chapter23.Theorem02
+import ComputationalMathematics.Source.Higham.Chapter23.Theorem03
+import ComputationalMathematics.Source.Higham.Chapter23.ThreeM
+import ComputationalMathematics.Source.Higham.Chapter23.WinogradInnerProduct
 
 /-!
 # Historical Bini--Lotti Chapter 23 import

@@ -1,6 +1,6 @@
 import Mathlib.Tactic.NormNum
-import NumStability.Analysis.FloatingPointArithmetic
-import NumStability.Source.Higham.Chapter02.Problem06.IntegerRepresentability.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem06.IntegerRepresentability.Basic
 
 /-!
 # Problem2_6 (compatibility module)

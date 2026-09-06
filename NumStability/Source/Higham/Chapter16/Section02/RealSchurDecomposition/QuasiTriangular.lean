@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Real.QuasiTriangular.API
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.RealSchurDecomposition.QuasiTriangular
 
 /-!
-# Source.Higham.Chapter16.Section02.RealSchurDecomposition.QuasiTriangular
+Historical import path retained for compatibility.
 
-Source locator for Higham's numbered presentation; the formal content lives in reusable Schur modules.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.RealSchurDecomposition.QuasiTriangular`.
+Declaration names and mathematical terminology are unchanged.
 -/

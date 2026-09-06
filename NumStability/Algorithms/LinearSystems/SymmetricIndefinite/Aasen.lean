@@ -1,8 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Aasen.AasenCoupledFp
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Aasen.AasenFactorResidual
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Aasen
 
 /-!
-# Symmetric-indefinite Aasen algorithms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the reusable Aasen interfaces.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Aasen`.
+Declaration names and mathematical terminology are unchanged.
 -/

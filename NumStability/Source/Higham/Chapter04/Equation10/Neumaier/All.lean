@@ -1,10 +1,8 @@
-import NumStability.Algorithms.Summation.Compensated.Neumaier.All
-import NumStability.Source.Higham.Chapter04.Equation10.Neumaier.AdaptiveBound
-import NumStability.Source.Higham.Chapter04.Equation10.Neumaier.FiniteBound
-import NumStability.Source.Higham.Chapter04.Equation10.Neumaier.ResidualBound
+import ComputationalMathematics.Source.Higham.Chapter04.Equation10.Neumaier.All
 
 /-!
-# Source.Higham.Chapter04.Equation10.Neumaier.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Equation10.Neumaier.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

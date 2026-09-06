@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.Theorem99ComplexClosure
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem99ComplexClosure
 
 /-!
 # Historical HighamChapter9Theorem99ComplexClosure import

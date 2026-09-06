@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.ActiveSuffix
-import NumStability.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.DiagonalUpdate
-import NumStability.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.TailChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts
 
 /-!
-# Higham Chapter 13: Problem04.GlobalTableauProducts
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Problem04.GlobalTableauProducts` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts`.
+Declaration names and mathematical terminology are unchanged.
 -/

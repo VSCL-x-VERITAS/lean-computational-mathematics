@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.NormalizedResolvent.SourceBound
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.NormalizedResolvent.SourceBound`. -/
+
+#check NumStability.higham10_8_componentwise_source
+#check NumStability.higham10_8_componentwise_source_nonsingInv
+#check NumStability.higham10_8_componentwise_source_of_normalized_certificate
+#check NumStability.higham10_8_normalized_componentwise_resolvent

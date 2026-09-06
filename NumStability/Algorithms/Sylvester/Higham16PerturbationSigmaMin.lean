@@ -1,7 +1,7 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.SylvesterPerturbation
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SingularValue
-import NumStability.Algorithms.Sylvester.Higham16
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.SylvesterPerturbation
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.SylvesterPerturbation
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.SingularValue
+import ComputationalMathematics.Source.Higham.Chapter16.Foundations.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.SylvesterPerturbation
 
 /-!
 # Algorithms.Sylvester.Higham16PerturbationSigmaMin

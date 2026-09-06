@@ -1,0 +1,14 @@
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Assembly.Core
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Assembly.Core`. -/
+
+#check NumStability.DoolittleDenseLoopAbsBudgetCertificate.of_literal_doolittle_exact_target_gaps
+#check NumStability.DoolittleDenseLoopAbsBudgetCertificate.to_DoolittleLU
+#check NumStability.DoolittleDenseLoopAbsBudgetCertificate.to_LUBackwardError
+#check NumStability.DoolittleDenseLoopCertificate.to_DoolittleLU
+#check NumStability.DoolittleDenseLoopCertificate.to_LUBackwardError
+#check NumStability.DoolittleLU.to_LUBackwardError
+#check NumStability.doolittleLExactProductMargin_of_exactTarget_gap
+#check NumStability.doolittleLExactProductNumeratorMargin_of_exactTarget_gap
+#check NumStability.doolittleUExactProductMargin_of_exactTarget_gap
+#check NumStability.doolittle_backward_error

@@ -1,7 +1,8 @@
-import NumStability.Analysis.FunctionalCalculus.OperatorLog.All
+import ComputationalMathematics.Analysis.FunctionalCalculus.OperatorLog
 
 /-!
-# NumStability.Analysis.FunctionalCalculus.OperatorLog
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.FunctionalCalculus.OperatorLog`.
+Declaration names and mathematical terminology are unchanged.
 -/

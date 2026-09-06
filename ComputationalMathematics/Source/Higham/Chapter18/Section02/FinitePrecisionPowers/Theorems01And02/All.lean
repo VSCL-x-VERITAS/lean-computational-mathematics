@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.ComplexJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.PseudospectralCriterion
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.PseudospectralPackaging
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealCases
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.SpectralCriterion
+
+/-!
+# Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.All
+
+W06 reviewed discovery entry point.
+-/

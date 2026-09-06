@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.Closure
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.Concrete
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.GaussJordanSPDCorollary
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.SourceClosure
-import NumStability.Source.Higham.Chapter14.Corollary06.SPD.UniformInverseBridge
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD
 
 /-!
-# NumStability.Source.Higham.Chapter14.Corollary06.SPD
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Corollary06.SPD`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter23.BiniLotti.ExactMajorant
-import NumStability.Source.Higham.Chapter23.BiniLotti.Execution
-import NumStability.Source.Higham.Chapter23.BiniLotti.FirstOrder
-import NumStability.Source.Higham.Chapter23.BiniLotti.RecursiveAlgebra
+import ComputationalMathematics.Source.Higham.Chapter23.BiniLotti
 
 /-!
-# Higham Chapter 23: Bini--Lotti
+Historical import path retained for compatibility.
 
-Complete source-facing entry point for the recursive Bini--Lotti bilinear
-evaluator, its exact error majorant, and its first-order analysis.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter23.BiniLotti`.
+Declaration names and mathematical terminology are unchanged.
 -/

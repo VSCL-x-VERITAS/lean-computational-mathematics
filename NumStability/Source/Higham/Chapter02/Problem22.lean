@@ -1,15 +1,8 @@
-import NumStability.FloatingPoint.IEEE.NaiveMaximum
-import NumStability.Source.Higham.Chapter02.Problem23
+import ComputationalMathematics.Source.Higham.Chapter02.Problem22
 
 /-!
-# Higham Chapter 2, Problem 2.22
+Historical import path retained for compatibility.
 
-Canonical source locator for the naive maximum branch with IEEE NaN operands.
-The reusable implementation lives in
-`NumStability.FloatingPoint.IEEE.NaiveMaximum`.
-
-This module also temporarily re-exports the Heron Problem 2.23 surface. That
-surface was published from this path before the repository's historical
-one-place numbering offset was corrected. New code should import
-`NumStability.Source.Higham.Chapter02.Problem23` for those theorems.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Problem22`.
+Declaration names and mathematical terminology are unchanged.
 -/

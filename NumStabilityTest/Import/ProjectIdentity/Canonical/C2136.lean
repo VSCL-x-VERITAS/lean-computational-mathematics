@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter26.Equation05.CardanoRoots
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter26.Equation05.CardanoRoots`. -/
+
+#check NumStability.algebraicComplexCubeRoot
+#check NumStability.algebraicComplexCubeRoot_cube
+#check NumStability.algebraicComplexCubeRoot_ne_zero
+#check NumStability.higham26_5_minus_chosenCubeRoot_monicCubic
+#check NumStability.higham26_5_minus_every_nonzeroCubeRoot_monicCubic
+#check NumStability.higham26_5_plus_chosenCubeRoot_monicCubic
+#check NumStability.higham26_5_plus_every_nonzeroCubeRoot_monicCubic
+#check NumStability.vietaSubstitution_complex_root

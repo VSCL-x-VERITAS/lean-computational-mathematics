@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.Lyapunov
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.StructuredSylvester
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.SylvesterPerturbation
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.Vectorized
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.All
 
 /-!
-# Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

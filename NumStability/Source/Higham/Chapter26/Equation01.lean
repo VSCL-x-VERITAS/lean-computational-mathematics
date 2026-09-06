@@ -5,24 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import Mathlib.Data.Real.Basic
 
-namespace NumStability
+import ComputationalMathematics.Source.Higham.Chapter26.Equation01
 
-/-! # Higham Chapter 26, Equation 26.1
+/-!
+Historical import path retained for compatibility.
 
-The global-maximizer vocabulary associated with Higham, second edition, equation (26.1).
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter26.Equation01`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-/-- Higham, 2nd ed., Section 26.1, p. 472, equation (26.1): a point is a
-global maximizer of a real objective on the unconstrained search space. -/
-def IsGlobalMax {α : Type*} (f : α → ℝ) (x : α) : Prop :=
-  ∀ y, f y ≤ f x
-
-/-- Optional global-optimality postcondition for equation (26.1), retained as
-general vocabulary.  This is not an operational direct-search specification,
-and no Chapter 26 algorithm assumes or produces this certificate. -/
-def DirectSearchSpec {α : Type*} (search : (α → ℝ) → α) : Prop :=
-  ∀ f, IsGlobalMax f (search f)
-
-end NumStability

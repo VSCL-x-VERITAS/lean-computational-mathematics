@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.Perturbation.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Perturbation
 
 /-!
-# Algorithms LinearSystems Cholesky Perturbation
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Perturbation`.
+Declaration names and mathematical terminology are unchanged.
 -/
