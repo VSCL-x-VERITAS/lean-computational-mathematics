@@ -1,7 +1,7 @@
 # Stage C: authorized GitHub cutover
 
-**Status: repository rename executed and verified; candidate CI and publication
-to `main` remain pending.** See the [execution record](execution.md).
+**Status: POST_CUTOVER; repository rename and validated source publication verified; final
+documentation/main publication is recorded separately.** See the [execution record](execution.md).
 The owner explicitly requested execution of Stages B and C and publication to
 `main`. The initial Stage A-only limitation no longer describes that authority.
 This runbook preserves the sequencing and verification boundary: preparation,
@@ -22,8 +22,19 @@ Current documentation now uses the new repository, badge, clone, dependency,
 citation and current compare URLs. The historical inspection table and
 commands below deliberately retain old addresses where they record or verify
 the transition. They are not instructions to rename the repository again.
-Exact-candidate Linux CI, full validation and publication to `main` are still
-pending. Uninspected external settings remain unknown.
+Validated source commit `51c5540984780b0011f41739b9ddaf8e505b7c93`, tree
+`20298c7b62a6e75c6b4beba46c8b517d7d86f4fb`, passed
+[clean run 34021942176](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/34021942176),
+attempt 1/job 101456009191, at 12:45:10 UTC. Its complete source/build/test/
+diagnostic/downstream checks passed, followed by authenticated identity/axiom,
+strict graph and actual cache-log verification. The documented Git dependency
+also resolved at that exact revision. [Validation](validation.md) retains
+prior failed/canceled attempts and the separate native/external limits.
+
+The tested source revision is distinct from the final documentation revision.
+The publication procedure below requires a fresh remote check, non-force main
+update and separate exact-SHA verification; this report does not assert that
+those final publication steps have already occurred.
 
 ## Verified pre-cutover identity
 
@@ -85,9 +96,9 @@ live Lean CI badge; it must move with the active links after cutover.
 
 ## Recorded sequence and remaining steps
 
-1. Complete source-preservation, source/structural, build, compatibility and
-   diagnostic checks for the mapped implementation. Record the exact candidate
-   commit. Preserve the newer remote CI and the original dirty checkout.
+1. **Completed for 51c55409:** source preservation, structural, complete build,
+   compatibility, diagnostics and compiled comparison. Preserve the exact tested
+   source identity, evidence and original dirty checkout.
 2. Refresh canonical identity and target state. If the target already resolves
    to ID `1327134933`, continue from observed post-cutover state. If it resolves
    to another repository, stop dependent cutover actions and record the conflict.
@@ -110,7 +121,8 @@ live Lean CI badge; it must move with the active links after cutover.
    git remote set-url origin https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git
    ```
 
-6. Publish the gated work branch and dispatch the manual workflow with
+6. **Completed for the validated source:** publish the gated work branch and
+   dispatch the manual workflow with
    `clean_project=true` to compile project artifacts afresh on Linux while
    retaining the official Mathlib dependency cache. After the ordinary gates,
    this mode also captures the compiled graph/axiom evidence and builds the

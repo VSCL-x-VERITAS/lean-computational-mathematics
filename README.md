@@ -22,6 +22,8 @@ numerical stability remains in scope. The canonical repository slug is
 `lean-computational-mathematics`. The
 [migration report](docs/migrations/lean-computational-mathematics/README.md)
 records the verified GitHub cutover state and package/import compatibility.
+The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
+records the validated source revision, preserved interfaces and publication status.
 
 The principal source developments currently cover:
 
@@ -42,12 +44,13 @@ faithfully.
 ## Current repository status
 
 The source-only figures below compare the clean publishing base
-`718beac641a8094611dc249c3508a2f5415381a3` with the migrated integration tree
-captured on 2026-09-06 at 01:24:30 UTC by the strict baseline generator. The
-migration capture includes the uncommitted module-root transformation; it is
-not a measurement of the unchanged base commit or a successful build claim.
+`718beac641a8094611dc249c3508a2f5415381a3` with the repaired integration tree
+captured during the passing source-gate run on 2026-09-06, 08:19:11–08:26:38 UTC.
+The capture preceded its commit; that exact repaired source is now published in
+candidate `51c5540984780b0011f41739b9ddaf8e505b7c93`, including the explicit
+public-instance name. These figures are not a build or full-interface-preservation claim.
 Its normalized source-tree SHA-256 is
-`a345c00884ddea4def6c4892928ea70b7c4b566b5707844ce504c4ee77fe6aa5`.
+`915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
 
 | Metric | Clean base | Migrated tree |
 |---|---:|---:|
@@ -77,9 +80,8 @@ Canonical modules use `ComputationalMathematics`. The package remains
 `numStability`, the test root remains `NumStabilityTest`, and authored
 declarations remain in their existing `NumStability` namespaces. The
 [validation record](docs/migrations/lean-computational-mathematics/validation.md)
-separates the 18 passing migrated source gates, source-preservation and six
-representative clean-build results from the pending full build, consumer and
-diagnostic results. The
+records passing source, clean build/test/diagnostic, downstream and strict
+compiled-comparison checks for the validated source revision. The
 [live tier manifest](docs/architecture/tiers.json) and
 [compatibility map](docs/architecture/COMPATIBILITY.md) describe the mapped tree.
 
@@ -95,31 +97,27 @@ and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
 
 ### CI status
 
-The badge above is the authoritative live status of `main`. On every push to
-`main`, every pull request, and manual dispatch, Lean CI validates the recorded
-architecture phases, completion state, layout, tiers, placeholder and axiom
-policy, compatibility, provenance, and strict source graph. The migrated
-workflow builds `ComputationalMathematics`, `NumStability` and
-`NumStabilityTest`, runs `lake test`, and enforces the
-reviewed warning and lint baselines.
+Validated source commit [`51c5540984780b0011f41739b9ddaf8e505b7c93`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/51c5540984780b0011f41739b9ddaf8e505b7c93)
+passed [clean CI run 34021942176](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/34021942176)
+on 2026-09-06 at 12:45:10 UTC. All three libraries, `lake test`, warning/lint
+enforcement and the independent 13-fixture consumer passed. Authenticated
+compiled comparison preserved all 58,420 declarations and their signature/body
+edges, with zero differences; seven representative axiom sets also matched.
+Actual Git dependency resolution and all nine dependency pins were verified.
 
-The workflow has a 360-minute job ceiling to accommodate cold-cache builds.
-Manual dispatch can set `clean_project=true` to build fresh project artifacts
-without the restored lean-action project cache; the official Mathlib dependency
-cache remains available. After all ordinary checks pass, that manual mode also
-captures the existing format-2 compiled declaration graph, seven representative
-axiom reports, and an independent downstream package build using canonical,
-legacy and mixed imports. Its 13 consumer fixtures use the exact checked-out
-commit with the retained `numStability` package identity and verify all transitive
-dependency pins. The compressed graph and consumer logs are retained for 14
-days. Default push and pull-request cache behavior is unchanged.
-Warning and lint checks run independently so one diagnostic failure cannot
-hide the other. When the diagnostic stage is reached, the raw build and lint
-logs are retained as a 14-day workflow artifact, and a final enforcement step
-fails if either ratchet fails.
+CI checks architecture, compatibility, provenance and source policy. Manual
+`clean_project=true` builds fresh project artifacts; the recorded run skipped
+project cache restore/save while using the permitted Mathlib cache. It captures
+the compiled graph, axiom reports and canonical/old/mixed consumer build with
+exact source/fixture/pin checks. Artifacts are retained for 14 days; ordinary
+push/PR cache behavior is unchanged.
 
-A green badge means the exact `main` commit passed the complete workflow;
-passing only the structural checks or having no `sorry` is insufficient.
+The badge tracks `main`. The validated source commit and any later documentation
+publication commit are distinct; a run certifies its own SHA. The
+[validation record](docs/migrations/lean-computational-mathematics/validation.md)
+contains exact evidence, preserved attempt history and platform/scope limits.
+The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
+records the implementation and separate publication verification.
 
 ## Floating-point model
 
@@ -235,11 +233,12 @@ paths.
 ## Building
 
 Install Git and [elan](https://github.com/leanprover/elan), then clone the
-active repository:
+active repository and select the validated source commit for reproduction:
 
 ```bash
 git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
 cd lean-computational-mathematics
+git checkout 51c5540984780b0011f41739b9ddaf8e505b7c93
 lake exe cache get
 lake build ComputationalMathematics NumStability NumStabilityTest
 lake test
@@ -287,13 +286,14 @@ Historical imports and their canonical destinations are documented in
 
 ## Use as a dependency
 
-For the migrated development tree, retain the package name `numStability`:
+For reproducing the validated source revision, retain package name
+`numStability` and pin its commit:
 
 ```toml
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "main"
+rev = "51c5540984780b0011f41739b9ddaf8e505b7c93"
 ```
 
 Pin a reviewed commit when reproducibility is required. The inherited
@@ -384,8 +384,9 @@ python tools/architecture/generate_baseline.py --skip-declarations --strict-sour
 ```
 
 CI additionally compiles its Python tooling, runs the architecture and
-diagnostic checker self-tests, builds both Lean libraries, runs the literal
-`lake test` driver, and checks the reviewed warning and lint baselines. Those
+diagnostic checker self-tests, builds `ComputationalMathematics`, `NumStability`
+and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
+reviewed warning and lint baselines. Those
 baselines are review records and must not be regenerated merely to silence new
 findings. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains placement,
 compatibility, testing, and licensing requirements. Architecture changes
