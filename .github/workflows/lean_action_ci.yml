@@ -162,7 +162,8 @@ jobs:
           lake env lean "$evidence/Axioms.lean" > "$evidence/axioms.log" 2>&1
           (
             cd "$consumer"
-            lake --keep-toolchain update 2>&1 | tee "$evidence/consumer-update.log"
+            # Reuse the pinned dependencies already built above when resolving this consumer.
+            MATHLIB_NO_CACHE_ON_UPDATE=1 lake --keep-toolchain update 2>&1 | tee "$evidence/consumer-update.log"
             python - <<'PY'
           from pathlib import Path
           import json, os
