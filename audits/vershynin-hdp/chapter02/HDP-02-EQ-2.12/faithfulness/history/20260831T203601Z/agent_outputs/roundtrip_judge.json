@@ -1,0 +1,130 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "HDP-02-EQ-2.12",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "blind_translation_sha256": "1237bbc77b6d315653eaf52e38b2ddf674c16dc703c2d7d78e66ec23550722c8",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The source contract selects the first edition (2018), PDF page 13 / printed page 24, Equation (2.12), together with the preceding standard-normal context.",
+      "translation_evidence": "The blind translation reconstructs the displayed Gaussian integral identity rather than a neighboring concentration bound or a general Gaussian-parameter formula.",
+      "reasoning": "The selected passage and the reconstructed proposition concern the same MGF identity at Gaussian parameters 0 and 1."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "The source fixes a real-valued standard normal random variable X and quantifies an arbitrary real lambda.",
+      "translation_evidence": "The translation quantifies an arbitrary real lambda and replaces the random variable by integration over the real line against gaussianReal(0,1).",
+      "reasoning": "Representing a law-dependent expectation by integration against the corresponding canonical law is a binder-level reformulation; no parameter type, dimension, or index domain changes. Exact identification of the law is assessed separately in C06 and C08."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "Equation (2.12) states the equality for all real lambda, with zero and negative values included.",
+      "translation_evidence": "The translation has one unrestricted binder: lambda is an arbitrary real number.",
+      "reasoning": "The universal all-real scope and quantifier order are preserved."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The only law-specific condition is that X has distribution N(0,1); the source adds no restriction on lambda and no separately stated integrability hypothesis.",
+      "translation_evidence": "The translation has no explicit hypotheses and fixes the integration measure to gaussianReal(0,1), with no restriction on lambda.",
+      "reasoning": "Encoding the distributional condition by fixing the measure removes the need for a separate random-variable hypothesis and introduces no extra side condition. Whether that measure is exactly N(0,1) remains an operator-identity question under C06 and C08."
+    },
+    {
+      "id": "C05",
+      "status": "unclear",
+      "source_evidence": "The source's finite equality E[exp(lambda X)] = exp(lambda^2/2) includes existence and finiteness of the MGF for every real lambda.",
+      "translation_evidence": "The translation states equality of a real Bochner integral with exp(lambda squared divided by 2), but explicitly reports that the packet does not expose the integral's totalization behavior outside the integrable case.",
+      "reasoning": "The displayed equality is present, but without the hidden totalization semantics it cannot be established from the authorized packet alone that the translation carries precisely the source's implicit existence-and-finiteness content."
+    },
+    {
+      "id": "C06",
+      "status": "unclear",
+      "source_evidence": "The source operators are expectation under the N(0,1) law and the real exponential function.",
+      "translation_evidence": "The ledger identifies a real Bochner integral against gaussianReal(0,1), whose nonzero branch is real volume weighted by gaussianPDF(0,1), but gaussianPDF itself and the integral's nonintegrable-case behavior are not exposed.",
+      "reasoning": "The elementary real operations are fully aligned, but the authorized source-only reconstruction does not supply enough declaration semantics to prove that gaussianReal(0,1) is exactly the standard-normal probability law or that the total integral has exactly ordinary-expectation semantics in all relevant cases."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Equation (2.12) is an exact equality, not a bound or asymptotic relation.",
+      "translation_evidence": "The reconstructed proposition is an exact equality of the integral and exp(lambda squared divided by 2).",
+      "reasoning": "The relation and its strength match exactly."
+    },
+    {
+      "id": "C08",
+      "status": "unclear",
+      "source_evidence": "X is a standard normal random variable and lambda is the deterministic MGF parameter.",
+      "translation_evidence": "The random variable is represented canonically by the integration variable x under gaussianReal(0,1), while lambda retains its deterministic parameter role; the packet does not expose gaussianPDF's definition.",
+      "reasoning": "The object roles are otherwise preserved, but exact identity of the translated measure with the source's N(0,1) law cannot be certified from the source-only packet. The reported variance-versus-standard-deviation ambiguity is harmless at parameter 1, yet opacity of gaussianPDF leaves the full law identity unresolved."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The source has exp(lambda X) on the left and exp(lambda^2/2) on the right, with Gaussian parameters 0 and 1.",
+      "translation_evidence": "The translation has exp(lambda x), gaussianReal(0,1), and exp(lambda squared divided by the real number 2).",
+      "reasoning": "The constants 0, 1, and 2, the square, the factor one-half, and dependence on lambda all match."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The source claim is specifically about a standard normal real random variable rather than arbitrary Gaussian parameters.",
+      "translation_evidence": "The translation is specifically about the real measure gaussianReal(0,1) and explicitly notes that it does not generalize to arbitrary parameters.",
+      "reasoning": "No scalar-field, dimensional, parameter, or domain generalization or specialization is introduced beyond the canonical-law representation."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "All real lambda are included, and the source's equality to a finite exponential entails a finite expectation even at boundary-like values such as lambda = 0 and for negative lambda.",
+      "translation_evidence": "All real lambda are included, but the blind translation flags that the integral operation's fallback convention when a function is nonintegrable is not available in the packet.",
+      "reasoning": "There is no mismatch in parameter cases, but the unexposed behavior of the total integral prevents a complete source-only check of the exceptional nonintegrable case."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source uses the nonempty standard-normal setting and imposes no contradictory premise.",
+      "translation_evidence": "The translation is a direct universally quantified equality with no implication or premise, and the fixed Gaussian parameters are 0 and 1 with the nonzero branch selected.",
+      "reasoning": "There is no premise-based vacuity or unintended empty-domain mechanism."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "If gaussianReal(0,1) is exactly the N(0,1) probability law and the integral has the ordinary expectation semantics relevant here, the translated canonical-law identity yields the source statement for any random variable with that law. The authorized translation packet leaves gaussianPDF and the integral's totalization behavior opaque, so those premises cannot be certified in this role."
+    },
+    "source_implies_translation": {
+      "verdict": "unclear",
+      "reasoning": "If gaussianReal(0,1) is exactly the standard-normal law and its integral agrees with expectation for exp(lambda x), the source MGF formula specializes immediately to the translated integral equality. The same unexposed operator and measure semantics prevent establishing that identification from the permitted evidence alone."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "unresolved-measure-semantics",
+      "source_evidence": "The source requires the exact standard-normal law N(0,1).",
+      "translation_evidence": "The translation reaches gaussianReal(0,1) as volume weighted by gaussianPDF(0,1), but the packet does not expose gaussianPDF's definition.",
+      "impact": "Exact identity of the source distribution and translated measure cannot be established by the round-trip evidence path, leaving both implications unclear."
+    },
+    {
+      "severity": "major",
+      "category": "unresolved-integral-totalization",
+      "source_evidence": "The source equality expresses an existing finite expectation for every real lambda.",
+      "translation_evidence": "The translation uses a total Bochner integral and states that its behavior outside the integrable case is not recoverable from the packet.",
+      "impact": "The round-trip judge cannot certify that the translated equality has exactly the source's implicit existence and finiteness semantics."
+    },
+    {
+      "severity": "note",
+      "category": "aligned-formula",
+      "source_evidence": "For every real lambda, the source states E[exp(lambda X)] = exp(lambda^2/2).",
+      "translation_evidence": "For every real lambda, the translation states the gaussianReal(0,1) integral of exp(lambda x) equals exp(lambda squared divided by 2).",
+      "impact": "All visible binders, constants, parameter scope, and the exact displayed formula align; adjudication is needed only for the opaque measure and integral semantics."
+    }
+  ],
+  "rationale": "The source and translation visibly agree on an unrestricted real parameter, the integrand exp(lambda times the random value), exact equality, and the right-hand side exp(lambda squared divided by two). Replacing a standard-normal random variable by integration against its canonical law is normally an equivalent reformulation. However, this isolated source-only packet does not expose gaussianPDF, so it does not independently establish that gaussianReal(0,1) is exactly N(0,1), and it does not expose the total integral's nonintegrable-case semantics needed to compare the source's implicit finiteness claim. The protocol requires unresolved information to be marked unclear, making both implications and the overall classification undetermined and requiring adjudication."
+}

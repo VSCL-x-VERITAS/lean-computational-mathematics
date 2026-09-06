@@ -1,0 +1,121 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EXAMPLE-2.5.8A",
+  "trigger": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D027 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C05 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C08 unclear",
+    "round-trip judge left semantic_checklist item C09 unclear",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C12 unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "The direct judge's yes/yes result is sustained. The round-trip judge's undetermined result rests on identifiable semantic-frontier gaps, all of which are resolved by the current Lean and Mathlib definitions: the Gaussian parameter is variance, the identity map is the canonical random variable for a law, and a finite quantitative PsiTwoGauge bound entails sub-Gaussianity.",
+      "primary_evidence": "The current direct_judge.json gives faithful-equivalent with both implications yes; the current roundtrip_judge.json identifies only the Gaussian-parameter, canonical-law, and gauge-finiteness uncertainties resolved below."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "Adjudication was warranted because the blind packet stopped before the body and semantic API of gaussianPDF and therefore could not identify gaussianReal's scale parameter. Inspection of the imported Mathlib declaration and its characterization theorems supplies that missing evidence without changing the translated statement.",
+      "primary_evidence": ".lake/packages/mathlib/Mathlib/Probability/Distributions/Gaussian/Real.lean defines gaussianPDFReal with denominator 2*v, documents gaussianReal as parametrized by variance v, and proves variance_id_gaussianReal."
+    },
+    {
+      "item": "round-trip judge classification is undetermined",
+      "resolution": "The uncertainty is resolved in favor of faithful-equivalent. The source and Lean theorem use the same common absolute constant, standard and variance-sigma-squared Gaussian laws, and the same psi_2 infimum bound; the remaining difference is only a canonical law-based presentation.",
+      "primary_evidence": "The source contract for Example 2.5.8(a), the declaration in NumStability/HDP/Scalar/SubGaussian.lean, and the imported Gaussian and PsiTwoGauge definitions agree on all mathematical parameters and bounds."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D027 unclear",
+      "resolution": "D027 is resolved: the second argument v of gaussianReal is the variance, not the standard deviation or an unspecified scale. Consequently gaussianReal 0 1 is N(0,1), and gaussianReal 0 <sigma^2> is N(0,sigma^2).",
+      "primary_evidence": ".lake/packages/mathlib/Mathlib/Probability/Distributions/Gaussian/Real.lean:19-25,46-49,197-200 and 504-533 explicitly describe v as variance, give the density exp(-(x-mu)^2/(2*v)), and prove Var[id; gaussianReal mu v] = v."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C02 unclear",
+      "resolution": "The binders and domains match the source convention: one real C with C>0 is shared by both bounds, and the scaled statement quantifies over real sigma with sigma>=0. The source's arbitrary random variable X is represented canonically as id on its law, which is a change of probability-space coordinates rather than a binder loss.",
+      "primary_evidence": "NumStability/HDP/Scalar/SubGaussian.lean:4097-4105 quantifies one positive real C and all nonnegative real sigma; the source contract explicitly permits equivalent law-based formulations."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C05 unclear",
+      "resolution": "The conclusion is complete. PsiTwoGauge is exactly the extended-valued infimum in Definition 2.5.6, and each displayed upper bound has finite right-hand side. Therefore the gauge is finite; on a probability measure, psiTwoGauge_finite_iff supplies a positive exponential-square witness, and isSubGaussian_iff_psiTwoNorm_finite identifies this with sub-Gaussianity.",
+      "primary_evidence": "NumStability/HDP/Scalar/SubGaussian.lean:2666-2679 defines PsiTwoAdmissible, PsiTwoGauge, and PsiTwoNorm; lines 2696-2723 and 2761-2774 prove finiteness iff a positive square-point witness and iff IsSubGaussian."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C06 unclear",
+      "resolution": "All named objects have the intended meanings. PsiTwoGauge is the source's infimum of t>0 satisfying E exp(X^2/t^2)<=2, gaussianReal uses mean and variance, ENNReal.ofReal embeds the finite nonnegative real bounds, and id is the canonical real random variable under the displayed Gaussian measure.",
+      "primary_evidence": "The source's Definition 2.5.6 and Example 2.5.8(a), together with NumStability/HDP/Scalar/SubGaussian.lean:2666-2679 and Mathlib Gaussian/Real.lean:19-25,46-49,197-200, establish the definitions."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C08 unclear",
+      "resolution": "There is no object conflation. A measurable X with Gaussian law nu and id on (R,nu) have the same distribution. Since the psi_2 condition consists of measurability, integrability, and the integral of the Borel function x |-> exp(x^2/t^2), change of variables along the pushforward law gives the same admissible scales and the same gauge.",
+      "primary_evidence": "Mathlib's HasLaw interface represents equality of pushforward measures, and Gaussian/Real.lean:345-375 uses it for Gaussian random variables; PsiTwoAdmissible in NumStability/HDP/Scalar/SubGaussian.lean:2666-2669 depends only on these distributional integrals."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C09 unclear",
+      "resolution": "The quantitative scaling is exact: the Lean variance is sigma^2 and the upper bound is C*sigma for sigma>=0, matching the source's standard-deviation scaling. No hidden square or reciprocal factor is present.",
+      "primary_evidence": "Mathlib Gaussian/Real.lean:297-328 proves multiplication by c sends variance v to c^2*v; NumStability/HDP/Scalar/SubGaussian.lean:4101-4105 uses variance sigma^2 and right-hand side ENNReal.ofReal (C*sigma)."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C10 unclear",
+      "resolution": "The identity-map formulation is a harmless canonical specialization, not a reduction in mathematical applicability. Both the assertion of Gaussian law and the psi_2 norm are distributional, so the canonical law formulation transports to every random variable having that law and conversely is obtained by choosing the canonical identity random variable.",
+      "primary_evidence": "The source contract treats X~N(0,sigma^2) as a distributional condition; Mathlib's HasLaw definitions and Gaussian law lemmas identify this with the pushforward Gaussian measure used by the Lean statement."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C12 unclear",
+      "resolution": "The raw infimum does not make the theorem vacuous. If the admissible set were empty, its ENNReal infimum would be infinity, which cannot be bounded by ENNReal.ofReal of a real number. The library's psiTwoGauge_finite_iff proof explicitly handles this empty-set case, and the sigma=0 Gaussian is dirac 0 with gauge 0.",
+      "primary_evidence": "NumStability/HDP/Scalar/SubGaussian.lean:2701-2713 rules out an empty admissible set from PsiTwoGauge<infinity; lines 3822-3831 identify the zero-variance Gaussian with dirac 0 and prove its gauge is zero."
+    },
+    {
+      "item": "round-trip judge left implication translation_implies_source unclear",
+      "resolution": "Resolved yes. The translated Lean theorem gives both source quantitative bounds with one positive universal C. Each finite bound also yields the source's sub-Gaussian assertion, and transporting the canonical identity formulation along equality in law recovers the statement for any X with the stated Gaussian distribution.",
+      "primary_evidence": "The exact target at NumStability/HDP/Scalar/SubGaussian.lean:4097-4108, psiTwoGauge_finite_iff and isSubGaussian_iff_psiTwoNorm_finite, plus gaussianReal's verified variance semantics establish Lean-to-source implication."
+    },
+    {
+      "item": "round-trip judge left implication source_implies_translation unclear",
+      "resolution": "Resolved yes. Apply the source claim to the identity random variable on each canonical Gaussian measure. Definition 2.5.6 is exactly PsiTwoGauge/PsiTwoNorm, gaussianReal 0 1 and gaussianReal 0 <sigma^2> are the required laws, and nonnegativity of C*sigma makes ENNReal.ofReal the order-preserving embedding of the source bound.",
+      "primary_evidence": "The source contract and source PDF give one absolute C with the standard and general C*sigma bounds; the Lean target uses precisely those canonical measures and the exact infimum definition."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "The Lean bounds are the source's norm inequalities under the canonical Gaussian laws. Their finite right-hand sides force finite PsiTwoGauge, which is equivalent to IsSubGaussian on a probability measure. Equality in law transports the exponential-square integrals from id under gaussianReal to any random variable with that Gaussian law, so the source formulation follows."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Instantiate the source statement with id on the canonical measures gaussianReal 0 1 and gaussianReal 0 <sigma^2>. The verified variance parameter, the exact PsiTwoGauge definition, the shared positive C, and the nonnegative real-to-ENNReal embedding yield the Lean statement verbatim up to representation."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "note",
+      "category": "gaussian-parameter-semantics",
+      "evidence": "Mathlib defines gaussianReal mu v using variance v and proves variance_id_gaussianReal; the Lean theorem passes sigma^2.",
+      "impact": "This resolves the blind dependency-frontier ambiguity and confirms the source's N(0,sigma^2) law."
+    },
+    {
+      "severity": "note",
+      "category": "canonical-law-representation",
+      "evidence": "The target uses id under gaussianReal instead of quantifying over an arbitrary probability space and random variable with that law.",
+      "impact": "This is distributionally equivalent because every term in the psi_2 definition is determined by the pushforward law."
+    },
+    {
+      "severity": "note",
+      "category": "sub-gaussian-nonvacuity",
+      "evidence": "psiTwoGauge_finite_iff and isSubGaussian_iff_psiTwoNorm_finite show finite gauge exactly supplies the qualitative sub-Gaussian witness; the empty admissible-set case has infinite gauge.",
+      "impact": "The quantitative Lean inequalities already include the source's qualitative sub-Gaussian assertion and are not vacuous."
+    }
+  ],
+  "rationale": "The repaired declaration faithfully formalizes Example 2.5.8(a). The source asserts one absolute positive constant C such that a standard normal has psi_2 norm at most C and, uniformly for sigma>=0, N(0,sigma^2) has psi_2 norm at most C*sigma, with sub-Gaussianity included. The Lean declaration states exactly those two bounds for the identity random variable under canonical Gaussian laws. Imported Mathlib evidence fixes gaussianReal's second parameter as variance and confirms sigma^2 scaling. The local PsiTwoGauge is the source infimum in ENNReal; bounding it by a finite ofReal value both rules out an empty admissible set and entails sub-Gaussianity. Finally, replacing an arbitrary random variable by id on its law preserves all exponential-square integrals. Thus each formulation implies the other, with no unresolved semantic uncertainty or faithfulness defect."
+}

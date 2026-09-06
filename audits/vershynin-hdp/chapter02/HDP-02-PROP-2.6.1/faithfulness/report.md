@@ -5,7 +5,7 @@
 - Classification: `faithful-equivalent`
 - Accepted: `true`
 - Adjudicated: `false`
-- Target SHA-256: `2620b401c7f6619b349ba32385454afe4ba21c35b08f21ec2098b46126c187a3`
+- Target SHA-256: `a349af15a85f93cd9b9e459f90e8ce97e63ef5fa9caf31c4baed85a8839e8d08`
 - Source SHA-256: `ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a`
 
 The repaired target is directly faithful to Proposition 2.6.1. Its existential constant precedes every family and probability-space binder, hence is absolute; its assumptions are componentwise sub-gaussianity and centering plus mutual family independence; and its conjunctive conclusion contains both source claims. The quantitative clause is exactly the square of the intrinsic psi_2 gauge of the unweighted total sum bounded by C times the unweighted finite sum of squared intrinsic component gauges. IsSubGaussian supplies finite admissible scales for every component and, through the first conclusion, for the total sum, so ENNReal.toReal is lossless here. Arbitrary finite index types are reindexings of the source family, and the empty family is a coherent trivial endpoint. Both implications hold, so the fixed classification is faithful-equivalent, accepted, with no adjudication needed.
@@ -55,7 +55,7 @@ No remaining uncertainties were recorded.
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/agent_outputs/direct_judge.json` (`7054ff24fa882e0f88238a80c1a644f33ee992253f0ba5b986820d4c007fd19f`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/agent_outputs/roundtrip_judge.json` (`8f4a89e0852d18f342e484750dbdefc87c0fd779b86d900d876a9921e276d88e`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/agent_outputs/source_contract.json` (`984975a69dbce7a410977cff0d49962733bbbf67d403c6edc831996c07179f3e`)
-- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/decision.json` (`f7644af0f53738dd3742c3d53a128ec1119f857dc460f4784c74df8c37827757`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/decision.json` (`2fb9f09a9896a71ad385f590ae18c73d796d7b500ba4663704228938001bf347`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T080517Z/agent_outputs/adjudicator.json` (`61dcb32782c7db501087e85bb5fedf93a7f78bd05466f72a597a0cef841e2815`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T080517Z/agent_outputs/agent_runs.json` (`a37f64c6d88f20a8c97cb52254aaa66687328d8d804c48d13f07f5e0d95ec81c`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T080517Z/agent_outputs/blind_translation.json` (`a90b3ede9e14046b1eb2006228f1d0e43524365804725927e9f12467e2a29121`)
@@ -83,6 +83,19 @@ No remaining uncertainties were recorded.
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T101804Z/inputs/dependency_inventory.json` (`b880a0cc62fcda1f9e8727ab8d5824a1db5060fe7c542b047cb7c6c5f726a150`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T101804Z/inputs/direct_review_packet.md` (`4a52f2ef8debcaf9eb4b6aa8ebdf9355bf905e5d31f0175b72a52154ac8abfdf`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T101804Z/inputs/source_locator.json` (`9b575fa5b395cd20480d47fcea5fbe35345eb537699ae1aa92a522bbd2c678e6`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/agent_outputs/agent_runs.json` (`aafa0a22cd1440b8f4849a25e6b00e7bd1c6943518c32f3f51eef543e3076aa9`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/agent_outputs/blind_translation.json` (`c2aaf834bd831a8eb662897430f9a46933d808080c7c5120a806590fb44cca94`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/agent_outputs/direct_judge.json` (`7054ff24fa882e0f88238a80c1a644f33ee992253f0ba5b986820d4c007fd19f`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/agent_outputs/roundtrip_judge.json` (`8f4a89e0852d18f342e484750dbdefc87c0fd779b86d900d876a9921e276d88e`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/agent_outputs/source_contract.json` (`984975a69dbce7a410977cff0d49962733bbbf67d403c6edc831996c07179f3e`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/decision.json` (`f7644af0f53738dd3742c3d53a128ec1119f857dc460f4784c74df8c37827757`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/blind_dependency_inventory.json` (`bbaa20c0fd815ca0a559f4cabad0e29d469f2e34fd7fc81db7ffdfd42a7cffc2`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/blind_dossier.md` (`3e1b0787e78c8f4e88e20971943b08cdc47d3ee596bcb08c02afa739ccc8f26a`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/blind_review_packet.md` (`3e1b0787e78c8f4e88e20971943b08cdc47d3ee596bcb08c02afa739ccc8f26a`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/declaration_dossier.md` (`82c852eab404a00391c92057e8e3351bd693de4572591bf590638140ca03071f`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/dependency_inventory.json` (`b880a0cc62fcda1f9e8727ab8d5824a1db5060fe7c542b047cb7c6c5f726a150`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/direct_review_packet.md` (`4a52f2ef8debcaf9eb4b6aa8ebdf9355bf905e5d31f0175b72a52154ac8abfdf`)
+- `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/history/20260831T203240Z/inputs/source_locator.json` (`9b575fa5b395cd20480d47fcea5fbe35345eb537699ae1aa92a522bbd2c678e6`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/inputs/blind_dependency_inventory.json` (`bbaa20c0fd815ca0a559f4cabad0e29d469f2e34fd7fc81db7ffdfd42a7cffc2`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/inputs/blind_dossier.md` (`3e1b0787e78c8f4e88e20971943b08cdc47d3ee596bcb08c02afa739ccc8f26a`)
 - `lean-numerical-stability/audits/vershynin-hdp/chapter02/HDP-02-PROP-2.6.1/faithfulness/inputs/blind_review_packet.md` (`3e1b0787e78c8f4e88e20971943b08cdc47d3ee596bcb08c02afa739ccc8f26a`)

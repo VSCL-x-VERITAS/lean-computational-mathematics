@@ -1,0 +1,70 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D017 unclear",
+    "direct judge left dependency_coverage item D005 unclear",
+    "direct judge left dependency_coverage item D008 unclear",
+    "direct judge left dependency_coverage item D009 unclear",
+    "direct judge left dependency_coverage item D035 unclear",
+    "direct judge left dependency_coverage item D049 unclear",
+    "direct judge left semantic_checklist item C06 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C12 unclear",
+    "direct judge left implication lean_implies_source unclear",
+    "direct judge left implication source_implies_lean unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "classification": "undetermined",
+  "completed_at_utc": "2026-08-31T10:20:58.426850+00:00",
+  "findings": [
+    {
+      "category": "source-zero-gauge-boundary",
+      "evidence": "Printed page 27 defines ||X||_psi2 as an infimum over positive scales and states the normalized quotient for every sub-gaussian X without requiring ||X||_psi2 > 0 or defining 0/0; Lean assumes only a finite gauge and has a/0=0.",
+      "impact": "Both implication directions are clear on the positive-gauge subdomain but cannot be decided for the source's full stated domain, forcing an undetermined classification.",
+      "severity": "major"
+    },
+    {
+      "category": "dependency-semantics-resolved",
+      "evidence": "The primary declarations show IsProbabilityMeasure means mu(univ)=1 and D005/D009/D035/D049 route the quotient to total real division; D008 maps a zero ENNReal gauge to real zero.",
+      "impact": "There is no remaining uncertainty about Lean's probability or division semantics; the sole uncertainty belongs to the source convention.",
+      "severity": "note"
+    },
+    {
+      "category": "positive-gauge-equivalence",
+      "evidence": "For positive gauge, source and Lean use the same random variable, threshold-2 exponential-square infimum, endpoint scale, non-strict inequality, exact constant 2, and no mean-zero hypothesis.",
+      "impact": "No mismatch exists away from the degenerate zero-gauge boundary, and endpoint attainment is asserted by both statements rather than being a statement-level difference.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "When PsiTwoGauge mu X > 0, the target's finite-gauge hypothesis expresses the source sub-gaussian domain and its integrability-plus-integral conclusion is exactly the source expectation bound at the same infimum scale. When the gauge is zero, Lean's total real division makes every numerator divided by the squared zero denominator equal zero, so the integrand is constant one. Printed page 27 neither excludes this case nor defines the displayed 0/0. Because the source proposition is under-specified on a case included by its universal wording, Lean-to-source implication on the full domain is genuinely unclear rather than yes or no.",
+      "verdict": "unclear"
+    },
+    "source_implies_lean": {
+      "reasoning": "For positive psi_2 norm, the source's finite threshold-2 expectation gives the identical Lean integral inequality and the explicit Integrable conjunct, and its sub-gaussian premise provides a finite admissible scale. For zero norm, the source does not specify an exclusion, limiting interpretation, or division convention, so it does not unambiguously entail Lean's particular constant-one totalization. The full-domain implication therefore remains genuinely unclear.",
+      "verdict": "unclear"
+    }
+  },
+  "judge_classifications": {
+    "direct": "undetermined",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "The exact source hash matches the task locator. Independent inspection of printed page 27 confirms the threshold-2 infimum definition and the displayed endpoint inequality, but also confirms that no zero-norm exclusion or 0/0 convention is stated. Independent inspection of the Lean declaration evidence resolves every triggered dependency: IsProbabilityMeasure is normalization by mu(univ)=1, ENNReal.toReal sends zero to zero, and the HDiv/DivInvMonoid chain selects total real division with a/0=0. Hence the target's zero-gauge conclusion is the integrable constant-one function with integral 1, while the source boundary remains semantically unspecified. The two propositions agree on every positive-gauge case, the hypotheses are nonvacuous, and the explicit Lean integrability conjunct matches a finite source expectation. Nonetheless, exact full-domain implication in either direction cannot be asserted without choosing a source convention that the primary evidence does not choose. Both verdicts are therefore unclear, making undetermined the only classification consistent with the protocol; the task is not accepted.",
+  "remaining_uncertainties": [
+    "The immutable source does not say whether the normalized-square display excludes psi_2 norm zero, is intended by a limiting convention, or assigns any value to 0/0; therefore its zero-random-variable boundary cannot be compared definitively with Lean's total real division."
+  ],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-BODY-2.5-PSI2-SQUARE-POINT"
+}

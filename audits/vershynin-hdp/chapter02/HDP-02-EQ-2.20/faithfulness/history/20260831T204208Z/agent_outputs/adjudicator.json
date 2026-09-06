@@ -1,0 +1,59 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EQ-2.20",
+  "trigger": [
+    "blind translator left dependency_coverage item D019 unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "blind translator left dependency_coverage item D019 unclear",
+      "resolution": "D019 is Mathlib's Bochner integral. Its definition returns the L1 Bochner integral when the integrand is Integrable and returns 0 otherwise. The exceptional nonintegrable branch does not affect this target: IsSubGaussian unfolds to a positive square-exponential witness whose transform is explicitly Integrable, and on a probability measure that premise entails Integrable X. Therefore each target occurrence integral mu X is the ordinary expectation E_mu[X]. The exponential-moment uses of D019 in SubGaussianSquarePoint and PsiTwoAdmissible are themselves paired with explicit Integrable hypotheses.",
+      "primary_evidence": "Pinned first-edition PDF SHA-256 ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a, PDF page 19/printed page 30: Equation (2.20) is ||X-E X||_{psi_2} <= ||X||_{psi_2}+||E X||_{psi_2} under the sub-Gaussian premise. The exact elaborated target uses MeasureTheory.integral mu X in both the centered and constant functions. D019 has semantic SHA-256 428563f3d6b771605a3267457bf33b62ec2efa91a42b57b96121b85c0269a9ab and points to Mathlib/MeasureTheory/Integral/Bochner/Basic.lean, where integral is defined as the L1 integral for Integrable f and 0 otherwise, with integral_eq and integral_undef stating those branches. D001/D004 require a positive K and Integrable (exp (X^2/K^2)); NumStability.HDP.Scalar.SubGaussian.centeredSubGaussian derives Integrable X from the square-point property. A standalone Lean check of IsSubGaussian mu X -> Integrable X compiled successfully against the pinned repository environment."
+    },
+    {
+      "item": "both implication directions and classification",
+      "resolution": "Both implications hold. After resolving D019 as expectation on the in-scope integrable X and unfolding D001-D006, the Lean conclusion is exactly Equation (2.20). Conversely, the source's sub-Gaussian premise supplies the positive finite square-exponential scale represented by IsSubGaussian/PsiTwoAdmissible, and its displayed triangle inequality gives exactly the Lean inequality. The correct classification is faithful-equivalent, not faithful-stronger: explicit probability, measurability, integrability, ENNReal finiteness exclusions, and the constant-function embedding make inherited source semantics explicit rather than reduce applicability.",
+      "primary_evidence": "PDF page 19/printed page 30 explicitly says that the psi_2 functional is a norm and obtains Equation (2.20) by its triangle inequality. The source contract records the same three terms and no later constant-factor bound. The proof-free target and fully explicit target have the same universal probability-space binders, sub-Gaussian premise, centered function, non-strict inequality, and two right-hand psi_2 summands. D001-D006 define the source square-exponential scale and infimum with threshold 2."
+    },
+    {
+      "item": "nonvacuity",
+      "resolution": "The premise is satisfiable and the conclusion is not accepted because of an impossible hypothesis or D019's zero-by-convention branch. The zero random variable satisfies IsSubGaussian on every probability space, and, more substantively, the repository proves the standard Gaussian identity function has finite psi_2 gauge and hence satisfies IsSubGaussian. Since IsSubGaussian entails Integrable X, the expectation in every such instance is evaluated through the genuine integrable branch of the Bochner integral.",
+      "primary_evidence": "The pinned source treats Gaussian and bounded variables as standard nonempty sub-Gaussian examples. In the Lean environment, gaussianPsiTwoGauge_finite together with isSubGaussian_iff_psiTwoNorm_finite establishes IsSubGaussian (gaussianReal 0 1) id; a standalone Lean check compiled successfully. A separate compiled check constructs IsSubGaussian for the zero function under an arbitrary probability measure."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "For every Lean instance of the premise, the positive square-exponential witness entails Integrable X, so D019 denotes E_mu[X] rather than its nonintegrable fallback. PsiTwoNorm is the same positive-scale square-exponential infimum used by the source, and the target's centered and constant functions therefore turn verbatim into the three terms of Equation (2.20)."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "A source sub-Gaussian random variable satisfies the finite square-exponential condition at some positive scale and is integrable, giving the Lean IsSubGaussian premise and the same Bochner expectation. The source's triangle-inequality display then supplies exactly the target's ENNReal non-strict inequality, with E X explicitly embedded as a constant function."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "note",
+      "category": "resolved integral totalization",
+      "evidence": "MeasureTheory.integral is totalized to 0 outside Integrable, but D001/D004's square-exponential premise entails Integrable X, while D004/D006 explicitly guard their exponential integrals with Integrable.",
+      "impact": "D019 has the source meaning of expectation throughout the selected proposition; its exceptional branch introduces no semantic discrepancy."
+    },
+    {
+      "severity": "note",
+      "category": "explicit source conventions",
+      "evidence": "Lean makes the probability measure, measurability, positive finite admissible scales, and the constant-random-variable embedding of E X explicit.",
+      "impact": "These are faithful representations of inherited source context, not extra hypotheses that reduce applicability."
+    },
+    {
+      "severity": "note",
+      "category": "nonvacuity",
+      "evidence": "Both the zero function and the standard Gaussian identity satisfy the Lean sub-Gaussian premise in the pinned environment, and the latter is nonconstant.",
+      "impact": "Acceptance is not caused by an impossible premise or by the nonintegrable fallback of the totalized integral."
+    }
+  ],
+  "rationale": "Primary source and declaration evidence resolve the only trigger. On PDF page 19, Equation (2.20) is exactly the psi_2 triangle inequality for centering. The Lean target has the same binders, premise, centered function, constant expectation function, relation, and summands. D019 is the Bochner integral; although totalized outside Integrable, the sub-Gaussian square-exponential premise entails Integrable X, so its target value is the ordinary expectation. Both implications hold, the premise is nonvacuous, no uncertainty remains, and the statement is faithful-equivalent."
+}

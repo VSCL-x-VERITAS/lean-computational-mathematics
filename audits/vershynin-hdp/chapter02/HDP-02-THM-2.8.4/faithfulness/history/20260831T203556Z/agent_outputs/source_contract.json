@@ -1,0 +1,147 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Printed page 38: 'such that |X_i| <= K all i', with no positivity requirement on K.",
+      "impact": "K <= 0 forces all X_i = 0 a.s. (or is vacuous); the proof route via Exercise 2.8.5 needs K > 0 for the threshold 3/K. A formalization must supply it.",
+      "issue": "K > 0 is never stated"
+    },
+    {
+      "evidence": "Printed page 38: the exponent is - (t^2/2)/(sigma^2 + K t/3); at t = 0 with sigma^2 = 0 this reads 0/0.",
+      "impact": "A formalization must adopt a division convention or add a hypothesis; the source asserts the bound for every t >= 0 without comment.",
+      "issue": "Degenerate denominator when t = 0 and sigma^2 = 0"
+    },
+    {
+      "evidence": "Printed page 38: 'Here sigma^2 = sum_{i=1}^{N} E X_i^2 is the variance of the sum.'",
+      "impact": "The operative definition is the sum of second moments; the identification with Var(sum X_i) relies on independence and mean zero and should not be taken as the definition.",
+      "issue": "'is the variance of the sum' stated as an identification, not proved"
+    },
+    {
+      "evidence": "Printed page 38 writes 'such that |X_i| <= K all i' (the word 'for' is missing) with no almost-sure qualifier.",
+      "impact": "A formalization must choose an a.e. or pointwise reading of the bound and quantify over i = 1, ..., N explicitly.",
+      "issue": "Almost-sure versus pointwise boundedness, and the elided 'for'"
+    },
+    {
+      "evidence": "Printed page 38: 'Let X_1, ..., X_N be independent, mean zero random variables' with no constraint on N and no pairwise/joint distinction.",
+      "impact": "N = 0 is unaddressed, and joint independence (needed to factor the MGF in the Exercise 2.8.6 derivation) must be made explicit.",
+      "issue": "N never explicitly bound; 'independent' unqualified"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "For any N, any real bound K (implicitly positive), and any independent, mean-zero random variables X_1, ..., X_N satisfying the uniform bound |X_i| <= K for every i, set sigma^2 = E X_1^2 + ... + E X_N^2 (the sum of second moments, which equals the variance of the sum because the terms are independent and mean zero). Then for every real t >= 0, the probability that the ABSOLUTE VALUE of the plain sum X_1 + ... + X_N is at least t is at most 2 exp( - (t^2 / 2) / (sigma^2 + K t / 3) ). Unlike Theorems 2.8.1-2.8.3, this bound contains no absolute constant at all: the prefactor 2, the 1/2 in the numerator, and the 3 in the term K t / 3 are explicit numbers, and there is no minimum of two branches \u2014 a single fraction interpolates between a gaussian tail governed by the true variance and an exponential tail governed by K. Boundedness replaces sub-exponentiality here and is explicitly the stronger hypothesis; no proof is given in the text, it being delegated to Exercises 2.8.5 and 2.8.6.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Theorem 2.8.4 (Bernstein's inequality for bounded distributions), full statement including the definition of sigma^2",
+      "location": "PDF page 27; printed page 38",
+      "observation": "Rendered page reads: 'Let X_1, ..., X_N be independent, mean zero random variables, such that |X_i| <= K all i. Then, for every t >= 0, we have P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp( - (t^2/2) / (sigma^2 + K t / 3) ). Here sigma^2 = sum_{i=1}^{N} E X_i^2 is the variance of the sum.' The absolute-value bars around the sum are visible in the rendered page; the source wording 'such that |X_i| <= K all i' omits 'for'."
+    },
+    {
+      "anchor": "Paragraph introducing Theorem 2.8.4",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'Let us mention a strengthening of Bernstein's inequality that is sensitive to the variance of the sum. It holds under the stronger assumption that the random variables X_i are bounded.' \u2014 the boundedness hypothesis replaces sub-exponentiality and is explicitly described as stronger."
+    },
+    {
+      "anchor": "Sentence following Theorem 2.8.4",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'We leave the proof of this theorem to the next two exercises.' \u2014 no proof is given in the text; Exercises 2.8.5 and 2.8.6 supply it."
+    },
+    {
+      "anchor": "Proof of Theorem 2.8.1, definition of sigma^2 there",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'where sigma^2 = sum_{i=1}^{N} ||X_i||^2_{psi_1}' \u2014 a DIFFERENT sigma^2 from the one in Theorem 2.8.4, which is sum_{i=1}^{N} E X_i^2."
+    },
+    {
+      "anchor": "Theorem 2.8.1 trailing clause",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'where c > 0 is an absolute constant.' Theorem 2.8.4, by contrast, has NO absolute constant anywhere: its constants are the explicit 2 (prefactor), 1/2 (numerator) and 3 (denominator)."
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "N: the number of summands, implicitly a positive integer (never explicitly bound)",
+      "X_1, ..., X_N: random variables on a common probability space",
+      "K: a real bound, implicitly positive, with |X_i| <= K for all i",
+      "t: a real number, universally quantified by 'for every t >= 0'",
+      "sigma^2: not a free binder but an abbreviation fixed by 'Here sigma^2 = sum_{i=1}^{N} E X_i^2'"
+    ],
+    "conclusions": [
+      "P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp( - (t^2 / 2) / (sigma^2 + K t / 3) ), where sigma^2 = sum_{i=1}^{N} E X_i^2",
+      "The event is TWO-SIDED: absolute value of the unnormalized sum, non-strict '>= t'",
+      "The bound contains NO absolute constant: the prefactor 2, the 1/2 in the numerator and the 3 in K t / 3 are all explicit numbers",
+      "The exponent is a single fraction (t^2/2) / (sigma^2 + K t / 3) \u2014 no min of two branches"
+    ],
+    "definitions_and_conventions": [
+      "sigma^2 = sum_{i=1}^{N} E X_i^2, the sum of the second moments of the individual terms; the source adds that this 'is the variance of the sum' (true because the X_i are independent and mean zero)",
+      "The bound is unnormalized: the plain sum sum_{i=1}^{N} X_i, no 1/N and no weights",
+      "Constants: prefactor 2, numerator factor 1/2 (i.e. t^2/2), and denominator term K t / 3 \u2014 all explicit; the book's c/C absolute-constant convention is NOT used here",
+      "Boundedness |X_i| <= K is a uniform bound over i, not a per-i bound K_i"
+    ],
+    "hypotheses": [
+      "X_1, ..., X_N are independent",
+      "X_1, ..., X_N are mean zero: E X_i = 0 for each i",
+      "|X_i| <= K for all i \u2014 a single uniform bound K for the whole family (the source writes 'such that |X_i| <= K all i')",
+      "t >= 0",
+      "NO sub-exponentiality hypothesis is imposed; boundedness replaces it and is described as the stronger assumption"
+    ],
+    "implicit_context": [
+      "Presented as 'a strengthening of Bernstein's inequality that is sensitive to the variance of the sum', holding 'under the stronger assumption that the random variables X_i are bounded' (printed page 38)",
+      "Its proof is delegated to Exercises 2.8.5 and 2.8.6 (printed page 38)",
+      "Boundedness makes all moments finite, so sigma^2 and the relevant MGFs are automatically well defined",
+      "In the small-t regime the exponent behaves like -t^2/(2 sigma^2) (a gaussian tail with the true variance); in the large-t regime like -3t/(2K) (an exponential tail) \u2014 this variance sensitivity is the point of the strengthening relative to Theorems 2.8.1-2.8.3",
+      "All random variables live on one common probability space; no measurability hypothesis is stated"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "Two-sided: absolute value bars around sum_{i=1}^{N} X_i",
+          "Prefactor 2 is the price of the two-sidedness (from combining the two one-sided bounds, as in the proof of Theorem 2.8.1)"
+        ],
+        "topic": "Tail sidedness"
+      },
+      {
+        "details": [
+          "This theorem is entirely constant-explicit: 2, 1/2 and 3 are numbers",
+          "No c or C appears; a formalization that replaced them with absolute constants would be strictly weaker than the source"
+        ],
+        "topic": "Constant status"
+      },
+      {
+        "details": [
+          "For all N, all K, all independent mean-zero X_1, ..., X_N with |X_i| <= K for every i, and all t >= 0: the bound holds",
+          "No constant is existentially quantified anywhere in this statement"
+        ],
+        "topic": "Quantifier order"
+      },
+      {
+        "details": [
+          "Boundedness |X_i| <= K replaces sub-exponentiality and is explicitly called the stronger assumption",
+          "In exchange the bound becomes variance-sensitive: sigma^2 is the sum of true second moments, not a sum of squared psi_1 norms"
+        ],
+        "topic": "Hypothesis strength"
+      },
+      {
+        "details": [
+          "Here sigma^2 = sum_{i=1}^{N} E X_i^2 (second moments)",
+          "In the proof of Theorem 2.8.1 (printed page 36) sigma^2 = sum_{i=1}^{N} ||X_i||^2_{psi_1} (squared sub-exponential norms)",
+          "These must not be conflated"
+        ],
+        "topic": "Symbol collision on sigma^2"
+      }
+    ]
+  },
+  "task_id": "HDP-02-THM-2.8.4",
+  "undebatable_constraints": [
+    "The event is TWO-SIDED: absolute-value bars around sum_{i=1}^{N} X_i are present in the source display",
+    "The inequality inside the probability is non-strict: '>= t'",
+    "The right-hand prefactor is exactly 2 (an explicit number)",
+    "The exponent is exactly - (t^2 / 2) / (sigma^2 + K t / 3): numerator t^2/2, denominator sigma^2 + K t / 3; there is no min, no absolute constant, and the 2 and 3 are explicit numbers",
+    "sigma^2 is defined as sum_{i=1}^{N} E X_i^2, the sum of the individual SECOND MOMENTS \u2014 not a sum of squared sub-exponential norms and not Var of a single term",
+    "Hypotheses are exactly: independent, mean zero, and the uniform bound |X_i| <= K for all i; sub-exponentiality is NOT assumed",
+    "K is a single bound valid for every i (uniform in i), not a family of per-index bounds",
+    "The sum is unnormalized and unweighted (no 1/N, no 1/sqrt(N), no coefficients)",
+    "The bound is asserted for every t >= 0, t = 0 included",
+    "No absolute constant of the book's c/C kind may be introduced into the statement"
+  ]
+}

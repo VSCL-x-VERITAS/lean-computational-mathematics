@@ -1,0 +1,56 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-08-31T10:20:58.507358+00:00",
+  "findings": [
+    {
+      "category": "finite-extended-real-representation",
+      "impact": "This is a faithful totalized representation of the source norm's finite nonnegative value, not an enlargement to non-sub-gaussian variables.",
+      "lean_evidence": "PsiTwoNorm is ENNReal, but the audited clause is conditional on IsSubGaussian, asserts PsiTwoNorm<infinity, and infimizes over t!=0 and t!=infinity using t.toReal.",
+      "severity": "note",
+      "source_evidence": "Definition 2.5.6 defines the norm for sub-gaussian X by an infimum over real t>0."
+    },
+    {
+      "category": "explicit-finite-expectations",
+      "impact": "The extra-looking conjuncts prevent nonintegrable real integrals from becoming vacuous and preserve, rather than strengthen, the intended finite-expectation semantics.",
+      "lean_evidence": "The corresponding local predicates include Integrable before using the real Bochner integral.",
+      "severity": "note",
+      "source_evidence": "Properties (ii)-(iv) display finite upper bounds on moments or exponential moments."
+    },
+    {
+      "category": "explicit-formal-semantics",
+      "impact": "These are faithful formal encodings of the source conventions and do not change either implication.",
+      "severity": "note",
+      "source_evidence": "The source writes a random variable, an expectation, and an infimum over real t > 0 without spelling out measurability, integrability, or a totalized codomain.",
+      "translation_evidence": "The translation spells out measurability and integrability and implements the infimum in ENNReal with zero and infinity excluded, then proves finiteness on P(X)."
+    },
+    {
+      "category": "source-naming",
+      "impact": "Only labels are absent; the mathematical class and functional are reconstructed without semantic loss.",
+      "severity": "note",
+      "source_evidence": "The source names the class 'sub-gaussian' and the functional the psi_2 norm.",
+      "translation_evidence": "The blind translation conservatively calls them P(X) and rho(X) because anonymization does not expose conventional names, while reproducing their defining formulas."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "For a measurable real random variable on a probability space, D001 defines the named class by a positive property-(iv) witness, while the universally tagged Iff covers exactly tail, moment, square-window, and square-point and excludes only centered property (v). The conditional second conjunct gives the finite value of the named psi_2 quantity as the infimum over precisely the positive scales satisfying E exp(X^2/t^2)<=2. Thus the Lean proposition supplies both clauses of Definition 2.5.6 in its inherited Proposition 2.5.2 context.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "The source definition, together with the Proposition 2.5.2 equivalence it explicitly invokes, makes satisfaction of any one of (i)-(iv) equivalent to the named sub-gaussian class with independent positive witnesses. A property-(iv) witness makes the admissible set nonempty at a finite positive scale, so the infimum is finite; equation (2.13) is exactly the same infimum after identifying positive reals with finite nonzero ENNReal scales. Explicit measurability and integrability merely spell out what random-variable and finite-expectation notation already require.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
+  },
+  "rationale": "The repaired declaration faithfully captures Definition 2.5.6. Its measurable binder and probability-measure instance give the intended real random-variable setting. IsSubGaussian is explicitly a measurable positive-witness instance of property (iv), and the finite enumeration plus i!=linearMGF yields exactly the four uncentered properties (i)-(iv), with each branch preserving its own existential scale and internal quantifiers. PsiTwoNorm names the admissible-scale infimum; conditioning the equality and finiteness on IsSubGaussian keeps the ENNReal totalization within the source's sub-gaussian domain. Both implication directions hold, all 109 dependencies and 12 core checks are resolved, and no adjudication is needed.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-DEF-2.5.6"
+}

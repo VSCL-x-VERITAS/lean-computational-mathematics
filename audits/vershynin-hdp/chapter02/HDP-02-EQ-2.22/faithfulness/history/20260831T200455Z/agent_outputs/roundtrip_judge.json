@@ -1,0 +1,123 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "HDP-02-EQ-2.22",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "blind_translation_sha256": "15f43bf3f263d29be705a701415539022e65159d6d7093f3fce2c045e55b4961",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The source contract identifies display (2.22) on printed page 34, together with Lemma 2.7.7 and the immediately preceding normalization step.",
+      "translation_evidence": "The translation reconstructs the paired scale-one exponential-square integral bounds for X and Y.",
+      "reasoning": "The selected source display and its inherited proof-local context are sufficiently precise for this comparison."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "The source concerns two real-valued random variables X and Y on an implicit probability space.",
+      "translation_evidence": "The translation binds a measurable-space type Omega, a probability measure mu, and two real-valued functions X and Y; measurability is included in each scale-one premise.",
+      "reasoning": "The explicit measure-theoretic presentation faithfully realizes the source's implicit probability-space binders and real-valued objects."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "For the two variables in Lemma 2.7.7, the normalized hypotheses precede the conjunction of two bounds.",
+      "translation_evidence": "For arbitrary Omega, mu, X, and Y, two separate hypotheses precede the simultaneous conclusions for X and Y.",
+      "reasoning": "The universal scope and the separate roles of X and Y are preserved; there is no witness-dependence or quantifier reordering issue."
+    },
+    {
+      "id": "C04",
+      "status": "fail",
+      "source_evidence": "The inherited source hypotheses are that X and Y are sub-gaussian and satisfy ||X||_{psi_2} = ||Y||_{psi_2} = 1.",
+      "translation_evidence": "The translation instead assumes LocalDef001(mu, X, 1) and LocalDef001(mu, Y, 1), each of which already contains integrability and the corresponding integral-at-most-2 conclusion.",
+      "reasoning": "Exact unit psi_2 normalization is replaced by scale-one admissibility, and the desired bounds are moved into the premises. This is a consequential mismatch in hypotheses and side conditions."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Display (2.22) conjunctively states E exp(X^2) <= 2 and E exp(Y^2) <= 2.",
+      "translation_evidence": "The translation concludes both mu-integral bounds, explicitly stating that they hold simultaneously.",
+      "reasoning": "Neither conjunct is omitted, and no extra conclusion is substituted."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source uses expectation, real exponential, unscaled squares, and the psi_2 threshold 2.",
+      "translation_evidence": "The translation interprets the integral under the probability measure as expectation, uses Real.exp of the real square, and fully expands LocalDef001 at scale 1.",
+      "reasoning": "The relevant operators and the local predicate's contents are interpreted correctly; the defect is where that predicate is placed logically, not a mistaken definition."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Each source conclusion is a non-strict upper bound by 2, and the two inequalities are conjunctive.",
+      "translation_evidence": "Each translated conclusion is an integral less than or equal to 2, and the two are conjoined.",
+      "reasoning": "The conclusion inequalities, directions, strictness, and connective match exactly."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source has distinct variables X and Y and gives a separate bound for each.",
+      "translation_evidence": "The translation retains distinct functions X and Y, distinct hypotheses, and the corresponding separate conclusions.",
+      "reasoning": "No objects or roles are conflated."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The source exponents are exactly X^2 and Y^2 with no extra coefficient after normalization, and each threshold is exactly 2.",
+      "translation_evidence": "After simplifying the scale 1, the translated integrands are exp(X(omega)^2) and exp(Y(omega)^2), each bounded by 2.",
+      "reasoning": "The exponent, scale, constants, and absence of an extra coefficient all match."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The source specializes to sub-gaussian variables whose psi_2 norms are exactly 1.",
+      "translation_evidence": "The translation ranges over functions satisfying scale-one admissibility; that premise supplies an admissible scale but does not state exact equality of the psi_2 norm with 1.",
+      "reasoning": "The intended normalized class is changed. In particular, admissibility at scale 1 is not the same statement as exact unit norm, and its inclusion of the target bound makes the translated theorem a weaker conditional restatement."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The source's normalized scale is the positive finite value 1.",
+      "translation_evidence": "LocalDef001 explicitly requires the scale to be neither zero nor infinity and is instantiated at ENNReal 1.",
+      "reasoning": "The scale-one specialization creates no undefined division or boundary inconsistency."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The source asserts the two moment bounds as consequences of sub-gaussianity and exact unit psi_2 normalization.",
+      "translation_evidence": "Each LocalDef001 premise already has the corresponding moment bound as its final conjunct, so the translated conclusions follow by projection from the premises.",
+      "reasoning": "Although the premises are satisfiable, the translated claim is true for an unintended trivial reason and does not preserve the source's substantive inference."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "The translation proves the two bounds only after assuming scale-one predicates that already contain those bounds. It supplies no derivation of scale-one admissibility or of the bounds from the source hypotheses of sub-gaussianity and exact unit psi_2 norm, so the substantive source assertion cannot be recovered."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "The source makes the substantive assertion that the normalized variables have exactly the two bounds at issue. The translated conditional is strictly less informative: whenever its LocalDef001 premises hold, its conclusions are already conjuncts of those premises. Thus the source claim entails the weaker conditional content represented by the translation."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "critical",
+      "category": "circular-hypotheses",
+      "source_evidence": "Equation (2.22) presents E exp(X^2) <= 2 and E exp(Y^2) <= 2 as conclusions following the exact unit-psi_2 normalization.",
+      "translation_evidence": "LocalDef001 at scale 1 includes the corresponding integral-at-most-2 fact in each premise, and the translation then repeats those facts as its conclusions.",
+      "impact": "The source's substantive normalized moment assertion becomes a projection of assumptions, so the translation is materially weaker and unfaithful."
+    },
+    {
+      "severity": "major",
+      "category": "normalization-mismatch",
+      "source_evidence": "The inherited source context requires ||X||_{psi_2} = ||Y||_{psi_2} = 1 for sub-gaussian X and Y.",
+      "translation_evidence": "The translation assumes only scale-one admissibility for each function and never states exact psi_2 norm equality.",
+      "impact": "The translated domain and logical content do not represent the source's exact normalization hypothesis; scale-one admissibility can hold without asserting norm exactly 1."
+    }
+  ],
+  "rationale": "The blind translation accurately preserves the two objects, both conjunctive exponential-square bounds, the constants, and the probability-space interpretation. It is nevertheless not faithful to Equation (2.22) in context. The source derives the bounds for sub-gaussian variables normalized to exact psi_2 norm 1, whereas the translation assumes a scale-one predicate whose definition already contains those same bounds. Consequently the translation does not imply the substantive source assertion, while the source implies the translation's weaker, premise-projection content. The correct classification is not-faithful-weaker."
+}

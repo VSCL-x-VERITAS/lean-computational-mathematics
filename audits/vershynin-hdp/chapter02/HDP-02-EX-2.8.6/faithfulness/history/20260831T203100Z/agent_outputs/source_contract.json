@@ -1,0 +1,125 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Printed page 38: 'Exercise 2.8.6. Deduce Theorem 2.8.4 from the bound in Exercise 2.8.5.' plus 'Hint: Follow the proof of Theorem 2.8.1.'",
+      "impact": "Any formal target for this task must be recovered from Theorem 2.8.4; a formalization that merely restates Theorem 2.8.4 with a proof is the faithful reading, and there is no independent statement to check against.",
+      "issue": "The exercise states no mathematics of its own"
+    },
+    {
+      "evidence": "Theorem 2.8.4 (printed page 38) says only 'such that |X_i| <= K all i' with no positivity for K, and 'X_1, ..., X_N' with no constraint on N.",
+      "impact": "The deduction needs K > 0 for the admissible range |lambda| < 3/K to be non-degenerate; a formalization must supply it.",
+      "issue": "K > 0 and N >= 1 are never stated"
+    },
+    {
+      "evidence": "The target exponent is - (t^2/2)/(sigma^2 + K t/3) (printed page 38); at t = 0 with sigma^2 = 0 this is 0/0.",
+      "impact": "A formalization must decide the convention at that point (e.g. hypothesis sigma^2 > 0, or t > 0, or a division convention); the source is silent.",
+      "issue": "Degenerate denominator when t = 0 and sigma^2 = 0"
+    },
+    {
+      "evidence": "Printed page 38: 'Here sigma^2 = sum_{i=1}^{N} E X_i^2 is the variance of the sum.'",
+      "impact": "The defining formula is the sum of second moments; the identification with Var(sum X_i) is a consequence of independence and mean zero, and a formalization should take the sum of second moments as the definition.",
+      "issue": "'the variance of the sum' as a claim versus a definition"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "This exercise asks for a proof, not a new statement: derive Theorem 2.8.4 from the moment-generating-function bound of Exercise 2.8.5, following the proof template of Theorem 2.8.1. Concretely, for independent mean-zero random variables X_1, ..., X_N with |X_i| <= K for every i, and with sigma^2 defined as the sum of the second moments sum_{i=1}^{N} E X_i^2, one must obtain for every t >= 0 the two-sided bound P{ |X_1 + ... + X_N| >= t } <= 2 exp( - (t^2/2) / (sigma^2 + K t / 3) ). The route is: multiply by a parameter lambda, exponentiate, apply Markov's inequality, use independence to factor the MGF into a product, insert the Exercise 2.8.5 bound E exp(lambda X_i) <= exp( ((lambda^2/2)/(1 - |lambda| K/3)) E X_i^2 ) valid for |lambda| < 3/K, optimize over lambda, then repeat the argument for -X_i and combine the two one-sided bounds, which is what yields the prefactor 2. Every constant in the target (the 1/2 and the 3) is an explicit number, not an absolute constant.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Exercise 2.8.6, full statement and hint",
+      "location": "PDF page 27; printed page 38",
+      "observation": "Rendered page reads in full: 'Exercise 2.8.6. [two-hand difficulty marker] Deduce Theorem 2.8.4 from the bound in Exercise 2.8.5.' followed by 'Hint: Follow the proof of Theorem 2.8.1.' There is no display and no additional hypothesis."
+    },
+    {
+      "anchor": "Theorem 2.8.4 (Bernstein's inequality for bounded distributions), the target of the deduction",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'Let X_1, ..., X_N be independent, mean zero random variables, such that |X_i| <= K all i. Then, for every t >= 0, we have P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp( - (t^2/2) / (sigma^2 + K t / 3) ). Here sigma^2 = sum_{i=1}^{N} E X_i^2 is the variance of the sum.' Absolute-value bars around the sum are visible in the rendered page."
+    },
+    {
+      "anchor": "Exercise 2.8.5, the permitted input bound",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'E exp(lambda X) <= exp(g(lambda) E X^2) where g(lambda) = (lambda^2/2)/(1 - |lambda| K/3), provided that |lambda| < 3/K' for X mean zero with |X| <= K."
+    },
+    {
+      "anchor": "Proof of Theorem 2.8.1, displays (2.23) and (2.24) and the optimization step; continued on PDF page 26, printed page 37",
+      "location": "PDF page 25; printed page 36",
+      "observation": "The referenced proof template: (2.23) P{S >= t} <= e^{-lambda t} prod_{i=1}^{N} E exp(lambda X_i) (Markov/Chernoff plus independence, S = sum_{i=1}^{N} X_i); then bound each MGF for lambda in an admissible range; then 'minimize this expression in lambda subject to the constraint'; then 'Repeating this argument for -X_i instead of X_i, we obtain the same bound for P{-S >= t}. A combination of these two bounds completes the proof.' (this last combination is what produces the factor 2)."
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "N: the number of summands (implicitly a positive integer, never explicitly bound)",
+      "X_1, ..., X_N: random variables on a common probability space",
+      "K: a real bound with |X_i| <= K for all i (implicitly K > 0)",
+      "t: a real number, universally quantified with 'for every t >= 0'",
+      "lambda: an auxiliary real parameter introduced only inside the deduction (Chernoff parameter, admissible when |lambda| < 3/K)"
+    ],
+    "conclusions": [
+      "The conclusion to be deduced is exactly the statement of Theorem 2.8.4: P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp( - (t^2/2) / (sigma^2 + K t / 3) ), where sigma^2 = sum_{i=1}^{N} E X_i^2",
+      "The deduction must produce the two-sided bound (absolute value of the sum) with the explicit prefactor 2",
+      "No new constant is introduced: the target's constants 1/2 and 3 are explicit numbers"
+    ],
+    "definitions_and_conventions": [
+      "sigma^2 = sum_{i=1}^{N} E X_i^2, described by the source as 'the variance of the sum' (correct because the X_i are independent and mean zero)",
+      "S = sum_{i=1}^{N} X_i, the notation used in the proof of Theorem 2.8.1 that this exercise is told to follow",
+      "g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3), the function supplied by Exercise 2.8.5",
+      "Chernoff/Markov template (2.23): P{S >= t} <= e^{-lambda t} prod_{i=1}^{N} E exp(lambda X_i) for lambda > 0",
+      "Book convention that c, C denote absolute constants \u2014 NOT used in the target statement, which has only explicit numbers"
+    ],
+    "hypotheses": [
+      "X_1, ..., X_N are independent",
+      "X_1, ..., X_N are mean zero: E X_i = 0 for each i",
+      "|X_i| <= K for all i (uniform boundedness by a single K)",
+      "t >= 0",
+      "Available as an input to the deduction: the MGF bound of Exercise 2.8.5, i.e. E exp(lambda X) <= exp( ((lambda^2/2)/(1 - |lambda| K/3)) E X^2 ) for mean-zero X with |X| <= K and |lambda| < 3/K"
+    ],
+    "implicit_context": [
+      "This is the second of 'the next two exercises' to which the proof of Theorem 2.8.4 is delegated (printed page 38)",
+      "Difficulty marker: two 'hands' symbols",
+      "Following the proof of Theorem 2.8.1 means: exponentiate and apply Markov's inequality, use independence to factor the MGF, insert the per-term MGF bound, optimize over the admissible lambda, then repeat with -X_i to get the matching lower tail and combine the two one-sided bounds into the two-sided bound with prefactor 2",
+      "The optimization here differs from Theorem 2.8.1's: with g from Exercise 2.8.5 the optimal lambda yields the exact Bernstein denominator sigma^2 + K t / 3 rather than a min of two terms with absolute constants",
+      "Each -X_i is again mean zero with |-X_i| <= K, so Exercise 2.8.5 applies verbatim to the reflected variables"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "A derivation/implication task: the target statement is Theorem 2.8.4 verbatim; the input is the Exercise 2.8.5 MGF bound",
+          "Nothing new is asserted beyond Theorem 2.8.4; the exercise contributes the proof, not a different statement"
+        ],
+        "topic": "Task type"
+      },
+      {
+        "details": [
+          "The target is TWO-sided: absolute value bars around sum_{i=1}^{N} X_i",
+          "The prefactor 2 arises from combining the S >= t bound with the -S >= t bound, exactly as in the last paragraph of the proof of Theorem 2.8.1 (printed page 37)"
+        ],
+        "topic": "Tail sidedness"
+      },
+      {
+        "details": [
+          "The target has NO absolute constants: t^2/2 in the numerator and K t / 3 in the denominator are explicit",
+          "This distinguishes Theorem 2.8.4 from Theorems 2.8.1-2.8.3, whose bounds carry the unquantified c"
+        ],
+        "topic": "Constant status"
+      },
+      {
+        "details": [
+          "For all N, all K, all independent mean-zero X_1, ..., X_N with |X_i| <= K, and all t >= 0: the target bound holds",
+          "The Chernoff parameter lambda is existentially chosen inside the proof, subject to |lambda| < 3/K"
+        ],
+        "topic": "Quantifier order"
+      }
+    ]
+  },
+  "task_id": "HDP-02-EX-2.8.6",
+  "undebatable_constraints": [
+    "The statement to be established is exactly Theorem 2.8.4, with the two-sided event |sum_{i=1}^{N} X_i| >= t, the prefactor 2, and the exponent - (t^2/2) / (sigma^2 + K t / 3)",
+    "sigma^2 must be sum_{i=1}^{N} E X_i^2, i.e. the sum of the second moments of the individual terms",
+    "The hypotheses may not be strengthened beyond independent, mean zero, and |X_i| <= K for all i, and the bound must hold for every t >= 0",
+    "The permitted input is the MGF bound of Exercise 2.8.5 (not, e.g., a sub-exponential-norm bound), and the prescribed method is the proof of Theorem 2.8.1",
+    "The constants 1/2 and 3 in the target are explicit numbers; substituting absolute constants c or C would not satisfy the exercise",
+    "The exercise itself contains no display, no additional hypothesis, and no alternative conclusion: it is purely 'Deduce Theorem 2.8.4 from the bound in Exercise 2.8.5'"
+  ]
+}

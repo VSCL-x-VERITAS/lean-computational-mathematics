@@ -1,0 +1,77 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-stronger",
+  "completed_at_utc": "2026-08-31T10:04:55.042672+00:00",
+  "findings": [
+    {
+      "category": "weighted-generalization",
+      "impact": "This makes the Lean theorem strictly stronger, while the a_i=1 instance faithfully recovers the source.",
+      "lean_evidence": "The target universally quantifies a real family a and concludes the law of sum_i a_i X_i with variance sum_i a_i^2 sigma_i.",
+      "severity": "note",
+      "source_evidence": "Equation (2.18) sums X_i with implicit coefficient one and contains no weight family."
+    },
+    {
+      "category": "variance-reparameterization",
+      "impact": "The matching substitution is Lean sigma_i = source sigma_i^2; treating the two sigma symbols as the same unsquared quantity would be erroneous.",
+      "lean_evidence": "The target passes sigma_i : NNReal directly as gaussianReal's variance argument.",
+      "severity": "note",
+      "source_evidence": "The source input law uses N(0, sigma_i^2) and sums sigma_i^2 as variances."
+    },
+    {
+      "category": "boundary-generalization",
+      "impact": "The target adds coherent empty and degenerate cases; they do not make the source specialization vacuous.",
+      "lean_evidence": "Arbitrary Fintype includes the empty type, and gaussianReal explicitly maps variance zero to a Dirac law.",
+      "severity": "note",
+      "source_evidence": "The excerpt is silent about N=0 and zero variance."
+    },
+    {
+      "category": "arbitrary-weight-strengthening",
+      "impact": "This is genuine nonvacuous additional content. It preserves the source as the all-weights-one instance but is not implied by the selected source contract alone.",
+      "severity": "major",
+      "source_evidence": "Equation (2.18) contains only sum_i X_i and sum_i sigma_i squared, with no coefficient family.",
+      "translation_evidence": "The translation quantifies over arbitrary real a_i and concludes a law for sum_i a_i X_i with variance sum_i a_i squared sigma_i."
+    },
+    {
+      "category": "finite-domain-and-endpoint-extension",
+      "impact": "Ordinary nonempty finite source cases are recovered by reindexing. Empty and degenerate cases are coherent additional endpoints, not restrictions, but they extend what is explicit in the source.",
+      "severity": "minor",
+      "source_evidence": "The source uses the displayed range i = 1, ..., N and does not state the N = 0 or zero-variance conventions in the immediate passage.",
+      "translation_evidence": "The translation uses any finite type, explicitly including the empty type, and allows sigma_i = 0 with a degenerate Gaussian law."
+    },
+    {
+      "category": "variance-reparameterization",
+      "impact": "There is no variance-versus-standard-deviation mismatch: assigning the translation parameter the value denoted sigma_i squared in the source recovers the source variance exactly.",
+      "severity": "note",
+      "source_evidence": "The source denotes each variance by sigma_i squared and the output variance by their sum.",
+      "translation_evidence": "The translation names each direct nonnegative variance parameter sigma_i and sums a_i squared sigma_i."
+    },
+    {
+      "category": "independence-semantics",
+      "impact": "The independence premise matches and is neither weakened to pairwise independence nor omitted.",
+      "severity": "note",
+      "source_evidence": "The source says the X_i are independent, conventionally meaning mutual family independence.",
+      "translation_evidence": "The translation interprets iIndepFun as mutual independence of the whole indexed family under the common measure."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "Represent the displayed range 1 through N by a finite index type, choose every weight a_i=1, and set each Lean NNReal sigma_i to the source variance sigma_i^2. Then the target input laws and mutual-independence premise are the source premises, the weighted sum reduces to sum X_i, and sum toNNReal(1^2)*sigma_i reduces to sum sigma_i^2. This is a nonvacuous specialization for ordinary N and positive variances.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "Equation (2.18) itself asserts only the unweighted initial-segment case. It does not quantify over arbitrary real coefficients or assert the scalar-multiplication law needed to replace X_i by a_i X_i, and it does not state the arbitrary-Fintype, empty-family, or explicit degenerate-variance cases. Those additions cannot be obtained from the displayed source claim alone without extra Gaussian facts and reindexing results.",
+      "verdict": "no"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-stronger",
+    "roundtrip": "faithful-stronger"
+  },
+  "rationale": "The target preserves the source's exact distributional conclusion, zero center, summed variances, and mutual-independence premise. Its variance symbol is reparameterized: Lean sigma_i is already the nonnegative variance represented in the source by sigma_i^2. The extra real weights and arbitrary finite index type are legitimate extensions, because setting all weights to one on the source finite range exactly and nonvacuously recovers Equation (2.18). Conversely, the displayed unweighted source assertion alone does not state the weighted law or all added boundary and indexing cases. Under the fixed implication policy the result is therefore accepted as faithful-stronger.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EQ-2.18"
+}

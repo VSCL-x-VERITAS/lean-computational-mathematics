@@ -13,9 +13,11 @@ open NumStability.HDP.Scalar
 def hdp_02_heq_h2_d22__contract_type : Prop :=
   ∀ {Omega : Type*} [MeasurableSpace Omega]
     {mu : Measure Omega} [IsProbabilityMeasure mu] {X Y : Omega -> Real},
-    SubGaussian.PsiTwoAdmissible mu X 1 ->
-      SubGaussian.PsiTwoAdmissible mu Y 1 ->
-        (∫ omega, Real.exp (X omega ^ 2) ∂mu) ≤ 2 ∧
-          (∫ omega, Real.exp (Y omega ^ 2) ∂mu) ≤ 2
+    SubGaussian.IsSubGaussian mu X ->
+      SubGaussian.IsSubGaussian mu Y ->
+        SubGaussian.PsiTwoNorm mu X = 1 ->
+          SubGaussian.PsiTwoNorm mu Y = 1 ->
+            (∫ omega, Real.exp (X omega ^ 2) ∂mu) ≤ 2 ∧
+              (∫ omega, Real.exp (Y omega ^ 2) ∂mu) ≤ 2
 
 end NumStability.HDP.Contract

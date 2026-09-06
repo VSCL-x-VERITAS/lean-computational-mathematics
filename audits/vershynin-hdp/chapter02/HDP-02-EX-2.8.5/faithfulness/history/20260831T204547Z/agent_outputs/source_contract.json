@@ -1,0 +1,130 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Printed page 38: 'Let X be a mean-zero random variable such that |X| <= K' and 'provided that |lambda| < 3/K'; no sign or positivity condition on K appears.",
+      "impact": "K = 0 makes 3/K undefined (and forces X = 0 a.s.); a formalization must add K > 0 or handle the degenerate case explicitly.",
+      "issue": "K > 0 is never stated"
+    },
+    {
+      "evidence": "The source writes the bare inequality '|X| <= K' on a random variable, with no 'almost surely' qualifier (printed page 38).",
+      "impact": "A formalization must pick a.e. boundedness or pointwise boundedness; the mathematical content is unaffected but the formal hypothesis differs.",
+      "issue": "Almost-sure versus everywhere boundedness"
+    },
+    {
+      "evidence": "Printed page 38 writes 'g(lambda) = (lambda^2/2)/(1 - |lambda| K/3)', naming the function of lambda alone while K occurs in the formula.",
+      "impact": "If g is formalized as a standalone one-argument function, the K argument must be threaded in some way; otherwise the statement is ill-typed.",
+      "issue": "Suppressed K-dependence of g"
+    },
+    {
+      "evidence": "'Hint: Check the numeric inequalty e^z <= 1 + z + (z^2/2)/(1-|z|/3) that is valid provided |z| < 3' (printed page 38).",
+      "impact": "It is a proof device the reader is told to verify, not part of the statement to be formalized; a formalization may or may not expose it as a separate lemma.",
+      "issue": "Status of the hint's numeric inequality"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "Given a real bound K (implicitly positive) and a mean-zero random variable X with |X| <= K, then for every real lambda satisfying the strict inequality |lambda| < 3/K, the moment generating function obeys E exp(lambda X) <= exp( g(lambda) * E X^2 ), where g(lambda) = (lambda^2 / 2) / (1 - |lambda| K / 3). Here E X^2 is the raw second moment (equal to the variance because the mean is zero), and every numeric constant \u2014 the 1/2, the 3 in the denominator, and the 3 in the threshold 3/K \u2014 is explicit, with no absolute constant involved. The absolute value in the denominator is on lambda alone. The exercise asks for a proof; the supplied route is to verify the numeric inequality e^z <= 1 + z + (z^2/2)/(1 - |z|/3) for |z| < 3, apply it with z = lambda X, and take expectations.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Exercise 2.8.5 (A bound on MGF), full statement",
+      "location": "PDF page 27; printed page 38",
+      "observation": "Rendered page reads: 'Exercise 2.8.5 (A bound on MGF). [two-hand difficulty marker] Let X be a mean-zero random variable such that |X| <= K. Prove the following bound on the MGF of X: E exp(lambda X) <= exp( g(lambda) E X^2 )  where  g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3), provided that |lambda| < 3/K.'"
+    },
+    {
+      "anchor": "Exercise 2.8.5, Hint",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'Hint: Check the numeric inequalty e^z <= 1 + z + (z^2/2)/(1 - |z|/3) that is valid provided |z| < 3, apply it for z = lambda X, and take expectations on both sides.' (the source misspells 'inequality' as 'inequalty')."
+    },
+    {
+      "anchor": "Sentence preceding Exercise 2.8.5",
+      "location": "PDF page 27; printed page 38",
+      "observation": "'We leave the proof of this theorem [Theorem 2.8.4] to the next two exercises.' \u2014 Exercise 2.8.5 supplies the MGF bound used to prove Theorem 2.8.4."
+    },
+    {
+      "anchor": "Remark 2.7.9 (MGF near the origin)",
+      "location": "PDF page 23; printed page 34",
+      "observation": "'assume for simplicity that X is bounded. The MGF of X can be approximated using the first two terms of the Taylor expansion: E exp(lambda X) approx E[1 + lambda X + lambda^2 X^2/2 + o(lambda^2 X^2)] = 1 + lambda^2/2 approx e^{lambda^2/2}' \u2014 the g(lambda) of Exercise 2.8.5 is the rigorous, boundedness-corrected version of this lambda^2/2 heuristic."
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "K: a real number bounding |X|; implicitly K > 0 (needed for 3/K to make sense as a positive threshold), never explicitly constrained in the source",
+      "X: a random variable on an unnamed probability space",
+      "lambda: a real number, restricted by the proviso |lambda| < 3/K",
+      "g: the explicitly given real function g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3) \u2014 note that despite the notation g depends on K as well as on lambda"
+    ],
+    "conclusions": [
+      "E exp(lambda X) <= exp( g(lambda) * E X^2 ), where g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3)",
+      "The bound is one inequality on the moment generating function, valid for every admissible lambda (both signs of lambda are allowed since the proviso is on |lambda|)",
+      "The exponent on the right is the product of g(lambda) and the second moment E X^2 (which equals the variance of X because E X = 0)"
+    ],
+    "definitions_and_conventions": [
+      "MGF of X at lambda = E exp(lambda X)",
+      "g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3): numerator lambda^2/2, denominator 1 - |lambda| K / 3, with an absolute value on lambda in the denominator and the explicit divisor 3",
+      "E X^2 is the second moment (raw), not (E X)^2; since E X = 0 it coincides with Var(X)",
+      "All constants here (1/2 in the numerator, 3 in the denominator, and 3 in the proviso 3/K) are EXPLICIT numbers, not absolute constants of the c/C kind",
+      "The hint's auxiliary numeric inequality: e^z <= 1 + z + (z^2/2)/(1 - |z|/3) for real z with |z| < 3"
+    ],
+    "hypotheses": [
+      "X is mean zero: E X = 0",
+      "|X| <= K (the source writes this as a plain inequality on the random variable; the intended reading is that it holds almost surely / for every sample point)",
+      "|lambda| < 3/K (STRICT inequality), stated as the proviso 'provided that |lambda| < 3/K'"
+    ],
+    "implicit_context": [
+      "The exercise is one of the two exercises to which the proof of Theorem 2.8.4 is delegated ('We leave the proof of this theorem to the next two exercises.', printed page 38)",
+      "Difficulty marker: two 'hands' symbols, the book's medium-difficulty rating",
+      "Boundedness |X| <= K makes all moments finite, so E exp(lambda X) and E X^2 are automatically well defined and finite",
+      "Under |lambda| < 3/K the denominator 1 - |lambda| K / 3 is strictly positive, so g(lambda) >= 0 is well defined",
+      "Remark 2.7.9 (printed page 34) is the informal motivation: near the origin E exp(lambda X) behaves like exp(lambda^2/2) for a mean-zero unit-variance variable"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "A single upper bound on E exp(lambda X); no matching lower bound is claimed",
+          "Valid for negative as well as positive lambda, because the restriction is on |lambda| and the denominator uses |lambda|"
+        ],
+        "topic": "Directionality"
+      },
+      {
+        "details": [
+          "Every constant is explicit: 1/2, 3 (in |lambda| K / 3), 3 (in the threshold 3/K), and 3 in the hint's |z| < 3",
+          "No absolute constant c or C appears anywhere in this exercise"
+        ],
+        "topic": "Constant status"
+      },
+      {
+        "details": [
+          "For every K and every mean-zero X with |X| <= K, for every lambda with |lambda| < 3/K: the bound holds",
+          "The proviso |lambda| < 3/K couples lambda to the bound K; it is not a global smallness condition"
+        ],
+        "topic": "Quantifier order"
+      },
+      {
+        "details": [
+          "g is written as a function of lambda only, but its formula contains K; a faithful formalization must carry the K-dependence",
+          "E X^2 is the raw second moment; the mean-zero hypothesis is what makes it the variance"
+        ],
+        "topic": "Symbol dependence"
+      },
+      {
+        "details": [
+          "Step 1: verify the numeric inequality e^z <= 1 + z + (z^2/2)/(1 - |z|/3) for |z| < 3",
+          "Step 2: substitute z = lambda X (legitimate pointwise because |lambda X| <= |lambda| K < 3)",
+          "Step 3: take expectations, use E X = 0 to kill the linear term, then use 1 + u <= e^u"
+        ],
+        "topic": "Proof-method content (hint)"
+      }
+    ]
+  },
+  "task_id": "HDP-02-EX-2.8.5",
+  "undebatable_constraints": [
+    "The hypothesis is that X is mean zero AND bounded: E X = 0 and |X| <= K",
+    "The proviso is the STRICT inequality |lambda| < 3/K, with an absolute value on lambda",
+    "The conclusion is E exp(lambda X) <= exp( g(lambda) E X^2 ), with the second moment E X^2 (raw), not (E X)^2 and not a variance written any other way",
+    "g(lambda) = (lambda^2/2) / (1 - |lambda| K / 3): the numerator is lambda^2/2, the denominator is 1 minus |lambda| K over 3, and the absolute value in the denominator is on lambda (not on the whole product, not absent)",
+    "All numeric constants (1/2, the 3 in the denominator, the 3 in 3/K) are explicit numbers; no absolute constant of the c/C kind may be substituted",
+    "The task is to PROVE the bound (it is an exercise, difficulty two hands), and the hint's numeric inequality e^z <= 1 + z + (z^2/2)/(1 - |z|/3) for |z| < 3 is offered as the route, not as an extra hypothesis"
+  ]
+}

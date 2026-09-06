@@ -1,0 +1,60 @@
+{
+  "accepted": true,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D027 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C05 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C08 unclear",
+    "round-trip judge left semantic_checklist item C09 unclear",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C12 unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-08-31T10:21:05.206479+00:00",
+  "findings": [
+    {
+      "category": "gaussian-parameter-semantics",
+      "evidence": "Mathlib defines gaussianReal mu v using variance v and proves variance_id_gaussianReal; the Lean theorem passes sigma^2.",
+      "impact": "This resolves the blind dependency-frontier ambiguity and confirms the source's N(0,sigma^2) law.",
+      "severity": "note"
+    },
+    {
+      "category": "canonical-law-representation",
+      "evidence": "The target uses id under gaussianReal instead of quantifying over an arbitrary probability space and random variable with that law.",
+      "impact": "This is distributionally equivalent because every term in the psi_2 definition is determined by the pushforward law.",
+      "severity": "note"
+    },
+    {
+      "category": "sub-gaussian-nonvacuity",
+      "evidence": "psiTwoGauge_finite_iff and isSubGaussian_iff_psiTwoNorm_finite show finite gauge exactly supplies the qualitative sub-Gaussian witness; the empty admissible-set case has infinite gauge.",
+      "impact": "The quantitative Lean inequalities already include the source's qualitative sub-Gaussian assertion and are not vacuous.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "The Lean bounds are the source's norm inequalities under the canonical Gaussian laws. Their finite right-hand sides force finite PsiTwoGauge, which is equivalent to IsSubGaussian on a probability measure. Equality in law transports the exponential-square integrals from id under gaussianReal to any random variable with that Gaussian law, so the source formulation follows.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "Instantiate the source statement with id on the canonical measures gaussianReal 0 1 and gaussianReal 0 <sigma^2>. The verified variance parameter, the exact PsiTwoGauge definition, the shared positive C, and the nonnegative real-to-ENNReal embedding yield the Lean statement verbatim up to representation.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "The repaired declaration faithfully formalizes Example 2.5.8(a). The source asserts one absolute positive constant C such that a standard normal has psi_2 norm at most C and, uniformly for sigma>=0, N(0,sigma^2) has psi_2 norm at most C*sigma, with sub-Gaussianity included. The Lean declaration states exactly those two bounds for the identity random variable under canonical Gaussian laws. Imported Mathlib evidence fixes gaussianReal's second parameter as variance and confirms sigma^2 scaling. The local PsiTwoGauge is the source infimum in ENNReal; bounding it by a finite ofReal value both rules out an empty admissible set and entails sub-Gaussianity. Finally, replacing an arbitrary random variable by id on its law preserves all exponential-square integrals. Thus each formulation implies the other, with no unresolved semantic uncertainty or faithfulness defect.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EXAMPLE-2.5.8A"
+}

@@ -5023,7 +5023,7 @@ end NumStability.HDP.Contract
 ### `NumStability.HDP.Scalar.SubGaussian`
 
 Path: `lean-numerical-stability/NumStability/HDP/Scalar/SubGaussian.lean`
-SHA-256: `2620b401c7f6619b349ba32385454afe4ba21c35b08f21ec2098b46126c187a3`
+SHA-256: `a349af15a85f93cd9b9e459f90e8ce97e63ef5fa9caf31c4baed85a8839e8d08`
 
 ```lean
 import Mathlib.Probability.Distributions.Gaussian.Real
@@ -8996,6 +8996,276 @@ theorem independentCenteredSubGaussianSumPsiTwo :
         rw [show B * (A * Real.sqrt E) = (B * A) * Real.sqrt E by ring,
           mul_pow, hEsqrt]
 
+/-! Theorem 2.6.2 in its intrinsic `ψ₂`-norm form.  One positive absolute
+constant is quantified before every probability space and family.  The
+zero-energy and zero-sum-gauge branches retain the source's universal domain
+while making the displayed real quotient total in Lean. -/
+theorem independentCenteredSubGaussianTailPsiTwo :
+    ∃ c : ℝ, 0 < c ∧
+      ∀ {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
+        {μ : Measure Ω} [IsProbabilityMeasure μ]
+        {X : ι → Ω → ℝ},
+        (∀ i, IsSubGaussian μ (X i)) →
+        (∀ i, Integrable (X i) μ ∧ (∫ ω, X i ω ∂μ) = 0) →
+        iIndepFun X μ →
+        ∀ {t : ℝ}, 0 ≤ t →
+          μ.real {ω | |∑ i, X i ω| ≥ t} ≤
+            2 * Real.exp
+              (-(c * t ^ 2 /
+                ∑ i, (PsiTwoNorm μ (X i)).toReal ^ 2)) := by
+  rcases independentCenteredSubGaussianSumPsiTwo with ⟨C, hC, hSum⟩
+  have hCpos : 0 < C := lt_of_lt_of_le zero_lt_one hC
+  let c : ℝ := 1 / (4 * C)
+  have hc : 0 < c := by
+    dsimp [c]
+    positivity
+  refine ⟨c, hc, ?_⟩
+  intro ι Ω instι instΩ μ instμ X hSub hCenter hIndep t ht
+  let S : Ω → ℝ := fun ω => ∑ i, X i ω
+  let E : ℝ := ∑ i, (PsiTwoNorm μ (X i)).toReal ^ 2
+  obtain ⟨hSSub, hSBound⟩ := hSum hSub hCenter hIndep
+  have hSSub' : IsSubGaussian μ S := by
+    simpa [S] using hSSub
+  have hSFinite : PsiTwoGauge μ S < ∞ := by
+    have hNormFinite := (isSubGaussian_iff_psiTwoNorm_finite
+      (μ := μ) (X := S)).1 hSSub'
+    simpa [PsiTwoNorm] using hNormFinite
+  have hSBound' : (PsiTwoGauge μ S).toReal ^ 2 ≤ C * E := by
+    simpa [PsiTwoNorm, S, E] using hSBound
+  have hEnonneg : 0 ≤ E := by
+    dsimp [E]
+    exact Finset.sum_nonneg fun i _ => sq_nonneg _
+  have hProb (s : Set Ω) : μ.real s ≤ 1 := by
+    rw [Measure.real_def]
+    exact ENNReal.toReal_mono ENNReal.one_ne_top prob_le_one
+  by_cases hEzero : E = 0
+  · calc
+      μ.real {ω | |∑ i, X i ω| ≥ t} ≤ 1 := hProb _
+      _ ≤ 2 * Real.exp
+          (-(c * t ^ 2 /
+            ∑ i, (PsiTwoNorm μ (X i)).toReal ^ 2)) := by
+        simp [E, hEzero]
+  · have hEpos : 0 < E := lt_of_le_of_ne hEnonneg (Ne.symm hEzero)
+    by_cases hGaugeZero : PsiTwoGauge μ S = 0
+    · by_cases htZero : t = 0
+      · subst t
+        calc
+          μ.real {ω | |∑ i, X i ω| ≥ 0} ≤ 1 := hProb _
+          _ ≤ 2 * Real.exp
+              (-(c * 0 ^ 2 /
+                ∑ i, (PsiTwoNorm μ (X i)).toReal ^ 2)) := by norm_num
+      · have hSZero : S =ᵐ[μ] (fun _ : Ω => (0 : ℝ)) :=
+          (psiTwoGauge_eq_zero_iff_ae_eq_zero hSSub'.1).mp hGaugeZero
+        have hEvent : {ω | |S ω| ≥ t} =ᵐ[μ] (∅ : Set Ω) := by
+          filter_upwards [hSZero] with ω hω
+          change (t ≤ |S ω|) = False
+          rw [hω, abs_zero]
+          exact propext (iff_false_intro
+            (not_le_of_gt (lt_of_le_of_ne ht (Ne.symm htZero))))
+        have hZeroProb : μ.real {ω | |S ω| ≥ t} = 0 := by
+          rw [Measure.real_def, measure_congr hEvent]
+          simp
+        change μ.real {ω | |S ω| ≥ t} ≤
+          2 * Real.exp (-(c * t ^ 2 / E))
+        rw [hZeroProb]
+        positivity
+    · have hGaugeRealPos : 0 < (PsiTwoGauge μ S).toReal :=
+        ENNReal.toReal_pos hGaugeZero (ne_of_lt hSFinite)
+      have hTail := psiTwoGaugeToTail hSSub'.1 hSFinite ht
+      have hDenom :
+          (2 * (PsiTwoGauge μ S).toReal) ^ 2 ≤ 4 * C * E := by
+        nlinarith [hSBound']
+      have hRatio :
+          c * t ^ 2 / E ≤
+            t ^ 2 / (2 * (PsiTwoGauge μ S).toReal) ^ 2 := by
+        calc
+          c * t ^ 2 / E = t ^ 2 / (4 * C * E) := by
+            dsimp [c]
+            field_simp [ne_of_gt hCpos, ne_of_gt hEpos]
+          _ ≤ t ^ 2 / (2 * (PsiTwoGauge μ S).toReal) ^ 2 := by
+            exact div_le_div_of_nonneg_left (sq_nonneg t) (by positivity) hDenom
+      change μ.real {ω | |S ω| ≥ t} ≤
+        2 * Real.exp (-(c * t ^ 2 / E))
+      calc
+        μ.real {ω | |S ω| ≥ t} ≤
+            2 * Real.exp
+              (-t ^ 2 / (2 * (PsiTwoGauge μ S).toReal) ^ 2) := hTail
+        _ ≤ 2 * Real.exp (-(c * t ^ 2 / E)) := by
+          apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by norm_num)
+          calc
+            -t ^ 2 / (2 * (PsiTwoGauge μ S).toReal) ^ 2 =
+                -(t ^ 2 / (2 * (PsiTwoGauge μ S).toReal) ^ 2) := by ring
+            _ ≤ -(c * t ^ 2 / E) := neg_le_neg hRatio
+
+/-! The largest intrinsic `ψ₂` norm in a nonempty finite family, in the
+real-valued form used by Theorem 2.6.3. -/
+noncomputable def psiTwoNormMax
+    {ι Ω : Type*} [Fintype ι] [Nonempty ι] [MeasurableSpace Ω]
+    (μ : Measure Ω) (X : ι → Ω → ℝ) : ℝ :=
+  Finset.univ.sup' Finset.univ_nonempty
+    (fun i => (PsiTwoNorm μ (X i)).toReal)
+
+theorem psiTwoNorm_toReal_le_max
+    {ι Ω : Type*} [Fintype ι] [Nonempty ι] [MeasurableSpace Ω]
+    {μ : Measure Ω} {X : ι → Ω → ℝ} (i : ι) :
+    (PsiTwoNorm μ (X i)).toReal ≤ psiTwoNormMax μ X := by
+  exact Finset.le_sup' (fun j => (PsiTwoNorm μ (X j)).toReal)
+    (Finset.mem_univ i)
+
+theorem psiTwoNormMax_nonneg
+    {ι Ω : Type*} [Fintype ι] [Nonempty ι] [MeasurableSpace Ω]
+    {μ : Measure Ω} {X : ι → Ω → ℝ} :
+    0 ≤ psiTwoNormMax μ X := by
+  let i : ι := Classical.choice inferInstance
+  exact le_trans ENNReal.toReal_nonneg (psiTwoNorm_toReal_le_max (μ := μ) (X := X) i)
+
+/-! Theorem 2.6.3 in its intrinsic weighted `ψ₂`-norm form.  The nonempty
+index hypothesis matches the source's implicit positive integer `N`, and the
+zero weighted-scale branches retain every coefficient vector and threshold. -/
+theorem independentWeightedCenteredSubGaussianTailPsiTwo :
+    ∃ c : ℝ, 0 < c ∧
+      ∀ {ι Ω : Type*} [Fintype ι] [Nonempty ι] [MeasurableSpace Ω]
+        {μ : Measure Ω} [IsProbabilityMeasure μ]
+        {X : ι → Ω → ℝ},
+        (∀ i, IsSubGaussian μ (X i)) →
+        (∀ i, Integrable (X i) μ ∧ (∫ ω, X i ω ∂μ) = 0) →
+        iIndepFun X μ →
+        ∀ (a : ι → ℝ) {t : ℝ}, 0 ≤ t →
+          μ.real {ω | |∑ i, a i * X i ω| ≥ t} ≤
+            2 * Real.exp
+              (-(c * t ^ 2 /
+                ((psiTwoNormMax μ X) ^ 2 * ∑ i, a i ^ 2))) := by
+  rcases independentCenteredSubGaussianTailPsiTwo with ⟨c, hc, hTail⟩
+  refine ⟨c, hc, ?_⟩
+  intro ι Ω instι instNonempty instΩ μ instμ X hSub hCenter hIndep a t ht
+  let Y : ι → Ω → ℝ := fun i ω => a i * X i ω
+  let S : Ω → ℝ := fun ω => ∑ i, Y i ω
+  let K : ℝ := psiTwoNormMax μ X
+  let A : ℝ := ∑ i, a i ^ 2
+  let E : ℝ := ∑ i, (PsiTwoNorm μ (Y i)).toReal ^ 2
+  let D : ℝ := K ^ 2 * A
+  have hYSub : ∀ i, IsSubGaussian μ (Y i) := by
+    intro i
+    apply (isSubGaussian_iff_psiTwoNorm_finite (μ := μ) (X := Y i)).2
+    by_cases hai : a i = 0
+    · simp [Y, hai, PsiTwoNorm, psiTwoGauge_zero]
+    · have hXFinite :=
+        (isSubGaussian_iff_psiTwoNorm_finite (μ := μ) (X := X i)).1 (hSub i)
+      rw [PsiTwoNorm, show Y i = (fun ω => a i * X i ω) by rfl,
+        psiTwoGauge_smul_of_ne_zero hai]
+      exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top (by
+        simpa [PsiTwoNorm] using hXFinite)
+  have hYCenter : ∀ i, Integrable (Y i) μ ∧ (∫ ω, Y i ω ∂μ) = 0 := by
+    intro i
+    refine ⟨by simpa [Y] using (hCenter i).1.const_mul (a i), ?_⟩
+    simp [Y, integral_const_mul, (hCenter i).2]
+  have hIndepY : iIndepFun Y μ := by
+    have h := hIndep.comp (fun i x => a i * x) (fun i => by fun_prop)
+    simpa [Y, Function.comp_def] using h
+  have hYNorm (i : ι) :
+      (PsiTwoNorm μ (Y i)).toReal =
+        |a i| * (PsiTwoNorm μ (X i)).toReal := by
+    by_cases hai : a i = 0
+    · simp [Y, hai, PsiTwoNorm, psiTwoGauge_zero]
+    · rw [PsiTwoNorm, show Y i = (fun ω => a i * X i ω) by rfl,
+        psiTwoGauge_smul_of_ne_zero hai, ENNReal.toReal_mul,
+        ENNReal.toReal_ofReal (abs_nonneg (a i))]
+      rfl
+  have hKnonneg : 0 ≤ K := by
+    simpa [K] using (psiTwoNormMax_nonneg (μ := μ) (X := X))
+  have hEnonneg : 0 ≤ E := by
+    dsimp [E]
+    exact Finset.sum_nonneg fun i _ => sq_nonneg _
+  have hAnonneg : 0 ≤ A := by
+    dsimp [A]
+    exact Finset.sum_nonneg fun i _ => sq_nonneg _
+  have hDnonneg : 0 ≤ D := mul_nonneg (sq_nonneg K) hAnonneg
+  have hED : E ≤ D := by
+    dsimp [E, D, A]
+    calc
+      ∑ i, (PsiTwoNorm μ (Y i)).toReal ^ 2 ≤
+          ∑ i, K ^ 2 * a i ^ 2 := by
+        apply Finset.sum_le_sum
+        intro i _
+        have hi : (PsiTwoNorm μ (X i)).toReal ≤ K := by
+          simpa [K] using (psiTwoNorm_toReal_le_max (μ := μ) (X := X) i)
+        have hsq : (PsiTwoNorm μ (X i)).toReal ^ 2 ≤ K ^ 2 := by
+          nlinarith [ENNReal.toReal_nonneg (a := PsiTwoNorm μ (X i))]
+        calc
+          (PsiTwoNorm μ (Y i)).toReal ^ 2 =
+              a i ^ 2 * (PsiTwoNorm μ (X i)).toReal ^ 2 := by
+            rw [hYNorm, mul_pow, sq_abs]
+          _ ≤ a i ^ 2 * K ^ 2 :=
+            mul_le_mul_of_nonneg_left hsq (sq_nonneg (a i))
+          _ = K ^ 2 * a i ^ 2 := by ring
+      _ = K ^ 2 * ∑ i, a i ^ 2 := by rw [Finset.mul_sum]
+  have hProb (s : Set Ω) : μ.real s ≤ 1 := by
+    rw [Measure.real_def]
+    exact ENNReal.toReal_mono ENNReal.one_ne_top prob_le_one
+  change μ.real {ω | |∑ i, a i * X i ω| ≥ t} ≤
+    2 * Real.exp (-(c * t ^ 2 / D))
+  by_cases hDzero : D = 0
+  · calc
+      μ.real {ω | |∑ i, a i * X i ω| ≥ t} ≤ 1 := hProb _
+      _ ≤ 2 * Real.exp (-(c * t ^ 2 / D)) := by simp [hDzero]
+  · have hDpos : 0 < D := lt_of_le_of_ne hDnonneg (Ne.symm hDzero)
+    by_cases hEzero : E = 0
+    · have hYFinite : ∀ i, PsiTwoGauge μ (Y i) < ∞ := by
+        intro i
+        have := (isSubGaussian_iff_psiTwoNorm_finite
+          (μ := μ) (X := Y i)).1 (hYSub i)
+        simpa [PsiTwoNorm] using this
+      have hGaugeZero : ∀ i, PsiTwoGauge μ (Y i) = 0 := by
+        intro i
+        have hSqZero : (PsiTwoNorm μ (Y i)).toReal ^ 2 = 0 :=
+          (Finset.sum_eq_zero_iff_of_nonneg
+            (fun j _ => sq_nonneg (PsiTwoNorm μ (Y j)).toReal)).mp hEzero i
+              (Finset.mem_univ i)
+        have hRealZero : (PsiTwoNorm μ (Y i)).toReal = 0 := by
+          nlinarith [sq_nonneg (PsiTwoNorm μ (Y i)).toReal]
+        have hNormZero : PsiTwoNorm μ (Y i) = 0 :=
+          ((ENNReal.toReal_eq_zero_iff _).mp hRealZero).resolve_right
+            (ne_of_lt (by simpa [PsiTwoNorm] using hYFinite i))
+        simpa [PsiTwoNorm] using hNormZero
+      have hYZero : ∀ i, Y i =ᵐ[μ] (fun _ : Ω => (0 : ℝ)) := by
+        intro i
+        exact (psiTwoGauge_eq_zero_iff_ae_eq_zero (hYSub i).1).mp (hGaugeZero i)
+      have hAllZero : ∀ᵐ ω ∂μ, ∀ i ∈ (Finset.univ : Finset ι), Y i ω = 0 := by
+        rw [Filter.eventually_all_finset]
+        intro i _
+        exact hYZero i
+      have hSZero : S =ᵐ[μ] (fun _ : Ω => (0 : ℝ)) := by
+        filter_upwards [hAllZero] with ω hω
+        simp [S, hω]
+      by_cases htZero : t = 0
+      · subst t
+        calc
+          μ.real {ω | |∑ i, a i * X i ω| ≥ 0} ≤ 1 := hProb _
+          _ ≤ 2 * Real.exp (-(c * 0 ^ 2 / D)) := by norm_num
+      · have hEvent : {ω | |S ω| ≥ t} =ᵐ[μ] (∅ : Set Ω) := by
+          filter_upwards [hSZero] with ω hω
+          change (t ≤ |S ω|) = False
+          rw [hω, abs_zero]
+          exact propext (iff_false_intro
+            (not_le_of_gt (lt_of_le_of_ne ht (Ne.symm htZero))))
+        have hZeroProb : μ.real {ω | |S ω| ≥ t} = 0 := by
+          rw [Measure.real_def, measure_congr hEvent]
+          simp
+        change μ.real {ω | |S ω| ≥ t} ≤ 2 * Real.exp (-(c * t ^ 2 / D))
+        rw [hZeroProb]
+        positivity
+    · have hEpos : 0 < E := lt_of_le_of_ne hEnonneg (Ne.symm hEzero)
+      have hTailY := hTail hYSub hYCenter hIndepY ht
+      have hRatio : c * t ^ 2 / D ≤ c * t ^ 2 / E := by
+        exact div_le_div_of_nonneg_left (mul_nonneg hc.le (sq_nonneg t)) hEpos hED
+      calc
+        μ.real {ω | |∑ i, a i * X i ω| ≥ t} ≤
+            2 * Real.exp (-(c * t ^ 2 / E)) := by
+          simpa [Y, E] using hTailY
+        _ ≤ 2 * Real.exp (-(c * t ^ 2 / D)) := by
+          apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by norm_num)
+          exact neg_le_neg hRatio
+
 /-! The exact a.e.-quotient carrier for Exercise 2.5.7.  The carrier is a
 submodule of measurable finite-gauge representatives; quotienting by its
 null submodule makes the definiteness statement literal. -/
@@ -9652,8 +9922,10 @@ theorem hdp_02_hprop_h2_d6_d1 :
                   (X i)).toReal ^ 2 :=
   NumStability.HDP.Scalar.SubGaussian.independentCenteredSubGaussianSumPsiTwo
 
-/-! Stable Chapter 2 alias for Theorem 2.6.2. -/
-theorem hdp_02_hthm_h2_d6_d2
+/-! Compatibility alias for the earlier scale-parametric MGF formulation of
+Theorem 2.6.2.  The exact source-facing alias below uses intrinsic `ψ₂` norms
+and quantifies one universal positive constant before the family. -/
+theorem hdp_02_hthm_h2_d6_d2_mgfScale
     {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {X : ι → Ω → ℝ} {K : ι → ℝ}
@@ -9667,8 +9939,27 @@ theorem hdp_02_hthm_h2_d6_d2
   NumStability.HDP.Scalar.SubGaussian.independentCenteredSubGaussianTail
     hX hIndep hEnergy ht
 
-/-! Stable Chapter 2 alias for Theorem 2.6.3. -/
-theorem hdp_02_hthm_h2_d6_d3
+/-! Stable Chapter 2 alias for Theorem 2.6.2. -/
+theorem hdp_02_hthm_h2_d6_d2 :
+    ∃ c : ℝ, 0 < c ∧
+      ∀ {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
+        {μ : Measure Ω} [IsProbabilityMeasure μ]
+        {X : ι → Ω → ℝ},
+        (∀ i, NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ (X i)) →
+        (∀ i, Integrable (X i) μ ∧ (∫ ω, X i ω ∂μ) = 0) →
+        ProbabilityTheory.iIndepFun X μ →
+        ∀ {t : ℝ}, 0 ≤ t →
+          μ.real {ω | |∑ i, X i ω| ≥ t} ≤
+            2 * Real.exp
+              (-(c * t ^ 2 /
+                ∑ i,
+                  (NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+                    (X i)).toReal ^ 2)) :=
+  NumStability.HDP.Scalar.SubGaussian.independentCenteredSubGaussianTailPsiTwo
+
+/-! Compatibility alias for the earlier common-MGF-scale formulation of
+Theorem 2.6.3. -/
+theorem hdp_02_hthm_h2_d6_d3_mgfScale
     {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {X : ι → Ω → ℝ} {K : ℝ}
@@ -9683,6 +9974,23 @@ theorem hdp_02_hthm_h2_d6_d3
       2 * Real.exp (-t ^ 2 / (4 * K ^ 2 * ∑ i, a i ^ 2)) :=
   NumStability.HDP.Scalar.SubGaussian.independentWeightedCenteredSubGaussianTail
     hK hX hIndep hEnergy ht
+
+/-! Stable Chapter 2 alias for Theorem 2.6.3. -/
+theorem hdp_02_hthm_h2_d6_d3 :
+    ∃ c : ℝ, 0 < c ∧
+      ∀ {ι Ω : Type*} [Fintype ι] [Nonempty ι] [MeasurableSpace Ω]
+        {μ : Measure Ω} [IsProbabilityMeasure μ]
+        {X : ι → Ω → ℝ},
+        (∀ i, NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ (X i)) →
+        (∀ i, Integrable (X i) μ ∧ (∫ ω, X i ω ∂μ) = 0) →
+        ProbabilityTheory.iIndepFun X μ →
+        ∀ (a : ι → ℝ) {t : ℝ}, 0 ≤ t →
+          μ.real {ω | |∑ i, a i * X i ω| ≥ t} ≤
+            2 * Real.exp
+              (-(c * t ^ 2 /
+                ((NumStability.HDP.Scalar.SubGaussian.psiTwoNormMax μ X) ^ 2 *
+                  ∑ i, a i ^ 2))) :=
+  NumStability.HDP.Scalar.SubGaussian.independentWeightedCenteredSubGaussianTailPsiTwo
 
 /-! Stable Chapter 2 alias for Lemma 2.6.8. -/
 theorem hdp_02_hlem_h2_d6_d8

@@ -1,0 +1,62 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "round-trip judge classification is undetermined",
+    "direct judge left dependency_coverage item D020 unclear",
+    "direct judge left dependency_coverage item D044 unclear",
+    "direct judge left semantic_checklist item C04 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "direct judge left implication lean_implies_source unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "classification": "undetermined",
+  "completed_at_utc": "2026-08-31T10:21:00.968494+00:00",
+  "findings": [
+    {
+      "category": "source-silent-zero-denominator-boundary",
+      "evidence": "Equation (2.24) divides by K = max_i ||X_i||_{\u03c8\u2081} without assuming K > 0, while Lean explicitly guards its conclusion by 0 < K.",
+      "impact": "Lean is exact on the defined positive-K regime but makes no assertion for the all-zero family; the source supplies insufficient evidence to determine whether that omission matches its intended boundary behavior.",
+      "severity": "major"
+    },
+    {
+      "category": "positive-regime-exactness",
+      "evidence": "For K > 0, Lean uses |\u03bb| \u2264 c/K and the coordinate-wise bound exp(C \u03bb\u00b2 ||X_i||_{\u03c8\u2081}\u00b2), with K only in the denominator and the individual norm in the exponent.",
+      "impact": "There is no quantitative, indexing, strictness, or object-role discrepancy in the nondegenerate regime.",
+      "severity": "note"
+    },
+    {
+      "category": "absolute-constant-scope",
+      "evidence": "Lean quantifies positive c and C before every ambient probability space, family, index, and \u03bb, matching the source's absolute-constant convention.",
+      "impact": "The constants are genuinely uniform and cannot depend on the formalized data.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "The implication holds exactly on K > 0. At K = 0 the source quotient is undefined and the text does not say whether the case is excluded or should carry an extended all-\u03bb conclusion, whereas Lean's guarded statement asserts nothing. No source-silent convention may be selected to force a verdict.",
+      "verdict": "unclear"
+    },
+    "source_implies_lean": {
+      "reasoning": "On K > 0 the source supplies the exact guarded implication. At K = 0 Lean has a false 0 < K antecedent, so it demands nothing beyond any possible source treatment of the degenerate case.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "undetermined",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "The direct and round-trip evidence agree that the guarded Lean statement is exact for every K > 0 and correctly scopes the two absolute constants globally. Their uncertainty is resolved asymmetrically: the source implies Lean because Lean imposes no obligation at K = 0, but Lean-to-source cannot be decided without choosing between source interpretations of the undefined quotient. The audit therefore remains undetermined and unaccepted rather than silently introducing a division-by-zero convention.",
+  "remaining_uncertainties": [
+    "The immutable source does not specify whether c/0 excludes the all-zero family or denotes an unbounded admissible \u03bb range; this prevents deciding the global Lean-to-source implication."
+  ],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EQ-2.24"
+}

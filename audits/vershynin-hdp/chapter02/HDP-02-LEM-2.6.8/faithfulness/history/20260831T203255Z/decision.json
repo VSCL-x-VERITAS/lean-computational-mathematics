@@ -1,0 +1,49 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-08-31T11:10:19.503555+00:00",
+  "findings": [
+    {
+      "category": "constant-normalization",
+      "impact": "This is a harmless normalization, not a sharp-constant claim: any valid positive upper-bound factor can be enlarged to at least one, and the lower bound makes the coercion exact.",
+      "lean_evidence": "The target existentially quantifies C : Real with 1 <= C and uses ENNReal.ofReal C as the multiplicative factor.",
+      "severity": "note",
+      "source_evidence": "The source states an unspecified positive absolute constant C and separately notes that C = 1 is not valid in general."
+    },
+    {
+      "category": "constant-witness-normalization",
+      "impact": "This is logically harmless normalization, since a valid positive upper-bound constant can always be enlarged to max(C,1); it does not claim C = 1 or a sharp value.",
+      "severity": "note",
+      "source_evidence": "The source leaves C as an unspecified positive absolute constant and explicitly notes only that C = 1 is not valid in general.",
+      "translation_evidence": "The translation asks for an existential real C satisfying C >= 1."
+    },
+    {
+      "category": "extended-nonnegative-gauge-codomain",
+      "impact": "On the sub-gaussian variables covered by the premise and centered conclusion, admissible finite scales exist and the ENNReal infimum represents the same nonnegative value, including the possible zero norm of the zero variable.",
+      "severity": "note",
+      "source_evidence": "Equation (2.13) presents the psi_2 norm as an infimum over positive real scales.",
+      "translation_evidence": "The gauge is ENNReal-valued and takes the infimum over scales explicitly restricted to be finite and nonzero."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "Unfolding D001-D006, the Lean proposition gives one uniform real C >= 1 such that every real sub-gaussian random variable on every probability space remains sub-gaussian after subtraction of its Bochner expectation and satisfies the exact Equation (2.13) psi_2 bound. This directly supplies every clause of Lemma 2.6.8.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "The source's absolute constant is uniform over X and the implicit probability-space context. Its positive factor may be enlarged to max(C,1), after which ENNReal.ofReal is the exact nonnegative embedding. Definition 2.5.6/Equation (2.13) match D001-D006, so the source gives both Lean conjuncts for all quantified \u03a9, \u03bc, and X.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
+  },
+  "rationale": "Direct inspection of the cited source pages and every D001-D087 declaration shows that the Lean target states the same centering lemma. It uses the source's real probability-space setting, chooses one absolute constant before all random-variable binders, assumes only sub-gaussianity, centers by the real expectation, preserves sub-gaussianity, and gives the same psi_2 inequality. The local definitions realize the exact infimum over finite positive scales satisfying E exp(Y^2/t^2) <= 2. The condition C >= 1 with ENNReal.ofReal is an equivalent normalization of an unspecified positive existential factor. Both implication directions therefore hold, all configured checks pass, and no unresolved issue requires adjudication.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-LEM-2.6.8"
+}

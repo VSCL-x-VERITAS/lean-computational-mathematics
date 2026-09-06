@@ -1,0 +1,814 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "HDP-02-LEM-2.6.8",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "dossier_sha256": "abcf47b167ee39a0dd6fce9a76da10e3338737519dfa67a9327ce90a34254e8e",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.HDP.Scalar.SubGaussian.IsSubGaussian",
+      "interpretation": "A real-valued function is declared sub-gaussian when it is measurable and admits a real K > 0 for which SubGaussianSquarePoint holds; after unfolding D004 this is the measurable, integrable exponential-square condition with expectation at most 2.",
+      "effect_on_target": "This definition supplies both the sole antecedent on X and the first conclusion for the centered function.",
+      "source_match": "It realizes property (iv) used by Definition 2.5.6, including the random-variable measurability convention, so it matches the source notion on a probability space.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm",
+      "interpretation": "PsiTwoNorm is definitionally PsiTwoGauge and has values in the extended nonnegative reals.",
+      "effect_on_target": "It is the norm-like quantity on both the centered function and the original X in the quantitative conclusion.",
+      "source_match": "Together with D003 and D006 it has exactly the infimum-of-admissible-scales semantics of Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge",
+      "interpretation": "The gauge is the infimum in ENNReal of the set of scales satisfying PsiTwoAdmissible.",
+      "effect_on_target": "It determines the value compared on the two sides of the centering inequality.",
+      "source_match": "This is the source's infimum construction for the psi_2 norm; admissibility is supplied by D006.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.HDP.Scalar.SubGaussian.SubGaussianSquarePoint",
+      "interpretation": "For real K it requires measurability of X, K > 0, integrability of exp(X^2/K^2), and integral at most 2.",
+      "effect_on_target": "It fixes the exact exponential-moment property underlying both occurrences of IsSubGaussian.",
+      "source_match": "It matches property (iv) and the threshold 2 stated in Definition 2.5.6 and Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.HDP.Scalar.SubGaussian.EvenMomentBound._proof_1",
+      "interpretation": "This theorem is evidence that the natural number 1 + 1 is at least two.",
+      "effect_on_target": "It participates only in elaborating the numeral 2 used as an exponent or threshold in the local definitions.",
+      "source_match": "It preserves the literal number 2 and introduces no mathematical restriction or alternative meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.HDP.Scalar.SubGaussian.PsiTwoAdmissible",
+      "interpretation": "An ENNReal scale t is admissible when X is measurable, t is neither 0 nor infinity, exp(X^2/(t.toReal)^2) is integrable, and its integral is at most 2.",
+      "effect_on_target": "It specifies the set whose infimum is PsiTwoNorm, making every admitted scale finite and strictly positive.",
+      "source_match": "For finite nonzero ENNReal t this is exactly t > 0 together with E exp(X^2/t^2) <= 2, including the well-definedness condition implicit in the source expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "And",
+      "interpretation": "And is logical conjunction of two propositions.",
+      "effect_on_target": "It conjoins C >= 1 with uniformity and conjoins preservation of sub-gaussianity with the norm bound.",
+      "source_match": "The source has both conclusions and the Lean conjunction requires both, with no weakening.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "CommSemiring.toSemiring",
+      "interpretation": "This projection forgets commutativity while retaining the ENNReal semiring operations.",
+      "effect_on_target": "It is structural instance plumbing for multiplication on the right-hand side.",
+      "source_match": "The resulting operation remains ordinary nonnegative multiplication by C.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "Distrib.toMul",
+      "interpretation": "This projection extracts multiplication from a distributive structure.",
+      "effect_on_target": "It selects ENNReal multiplication for the constant-factor bound.",
+      "source_match": "It implements the multiplication in C times the original psi_2 norm.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "ENNReal",
+      "interpretation": "ENNReal is WithTop NNReal, the extended nonnegative real numbers.",
+      "effect_on_target": "It is the codomain of PsiTwoNorm and of the quantitative inequality.",
+      "source_match": "A psi_2 norm is nonnegative, and on the sub-gaussian objects in this theorem its value is finite; the extended codomain does not alter the asserted comparison.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "ENNReal.instCommSemiring",
+      "interpretation": "This is the standard commutative semiring structure inherited by ENNReal from WithTop NNReal.",
+      "effect_on_target": "It supplies multiplication of the embedded constant and PsiTwoNorm.",
+      "source_match": "The operation is the expected multiplication of nonnegative norm values.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "ENNReal.instPartialOrder",
+      "interpretation": "This is the standard partial order on ENNReal inherited from WithTop NNReal.",
+      "effect_on_target": "It interprets the less-than-or-equal relation in the norm estimate.",
+      "source_match": "The inequality direction and order agree with the source bound.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "ENNReal.ofReal",
+      "interpretation": "ofReal sends a real r to ENNReal through its nonnegative part r.toNNReal.",
+      "effect_on_target": "It embeds the real witness C before multiplying the ENNReal norm.",
+      "source_match": "Because the target separately requires 1 <= C, no truncation occurs, so this is exactly the source's positive absolute factor.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Exists",
+      "interpretation": "Exists expresses existence of a witness satisfying a predicate.",
+      "effect_on_target": "It quantifies the single global real constant C and the local scale K inside IsSubGaussian.",
+      "source_match": "The outer existence correctly represents one absolute constant uniform over all later choices.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "HMul.hMul",
+      "interpretation": "hMul dispatches to the multiplication operation supplied by its HMul instance.",
+      "effect_on_target": "It multiplies ENNReal.ofReal C by PsiTwoNorm mu X.",
+      "source_match": "This is precisely the constant multiple on the source inequality's right-hand side.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "HSub.hSub",
+      "interpretation": "hSub dispatches to the subtraction operation supplied by its HSub instance.",
+      "effect_on_target": "It forms X omega minus the integral of X.",
+      "source_match": "With the real subtraction instance this is exactly X - E X.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "InnerProductSpace.toNormedSpace",
+      "interpretation": "This projection obtains a normed-space structure from the real inner-product-space structure.",
+      "effect_on_target": "It supplies structure needed by the Bochner integral of a real-valued function.",
+      "source_match": "It changes no object and supports the standard real expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "LE.le",
+      "interpretation": "LE.le is the less-than-or-equal relation selected by a type's LE instance.",
+      "effect_on_target": "It interprets C >= 1 and the ENNReal norm inequality, as well as internal threshold bounds.",
+      "source_match": "The selected real and ENNReal orders preserve the source's non-strict inequality directions.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "MeasurableSpace",
+      "interpretation": "A MeasurableSpace supplies the measurable sets on the sample type.",
+      "effect_on_target": "The theorem ranges over arbitrary measurable sample spaces.",
+      "source_match": "This makes explicit the standard measurable-space context implicit in the phrase random variable.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "MeasureTheory.IsProbabilityMeasure",
+      "interpretation": "This proposition/typeclass asserts that the measure has total mass one.",
+      "effect_on_target": "It restricts every quantified measure mu to a probability measure.",
+      "source_match": "Expectation and random variables in the source are taken on a probability space.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "MeasureTheory.Measure",
+      "interpretation": "Measure is a countably additive measure on a specified measurable space.",
+      "effect_on_target": "It supplies mu for every expectation and sub-gaussian definition.",
+      "source_match": "It explicitly represents the probability law context of the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "MeasureTheory.integral",
+      "interpretation": "This is the Bochner integral of a function with respect to a measure.",
+      "effect_on_target": "For real X it forms the real number integral_mu X subtracted at every omega; it also forms exponential expectations inside local definitions.",
+      "source_match": "On the probability space and for the integrable sub-gaussian variables at issue it is the source expectation E X and the defining exponential expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "NonAssocSemiring.toNonUnitalNonAssocSemiring",
+      "interpretation": "This projection forgets the unit from a semiring structure while retaining multiplication and addition.",
+      "effect_on_target": "It is structural instance plumbing leading to ENNReal multiplication.",
+      "source_match": "It does not change the multiplication used in the constant-factor bound.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "NonUnitalNonAssocSemiring.toDistrib",
+      "interpretation": "This projection extracts distributive addition and multiplication data.",
+      "effect_on_target": "It supplies the multiplication instance used on ENNReal.",
+      "source_match": "It preserves ordinary multiplication and has no independent source-level restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "interpretation": "This projection forgets norm separation while preserving the additive and norm structures.",
+      "effect_on_target": "It supports the normed-space instance required for integrating real-valued X.",
+      "source_match": "It leaves the real integral and expectation unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "OfNat.ofNat",
+      "interpretation": "OfNat.ofNat interprets a natural numeral in a target type through its instance.",
+      "effect_on_target": "It interprets the constants 0, 1, and 2 appearing in bounds and powers.",
+      "source_match": "The instances shown give the ordinary numerical values required by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "One.toOfNat1",
+      "interpretation": "This constructs the numeral-one interpretation from a type's One instance.",
+      "effect_on_target": "It supplies real 1 in the condition 1 <= C.",
+      "source_match": "It denotes the ordinary number one; the lower bound is a harmless normalization of the positive source constant.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "PartialOrder.toPreorder",
+      "interpretation": "This projection obtains a preorder from a partial order.",
+      "effect_on_target": "It is part of selecting the ENNReal less-than-or-equal relation.",
+      "source_match": "It preserves the standard norm-value order.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "Preorder.toLE",
+      "interpretation": "This projection extracts the less-than-or-equal operation from a preorder.",
+      "effect_on_target": "It supplies the relation used for the ENNReal estimate.",
+      "source_match": "It is the standard <= relation used by the source inequality.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "RCLike.toInnerProductSpaceReal",
+      "interpretation": "For an RCLike scalar type this constructs its real inner-product-space structure.",
+      "effect_on_target": "Specialized to Real, it supports the normed-space argument of the Bochner integral.",
+      "source_match": "It is structural support for ordinary real expectation and introduces no different scalar semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "Real",
+      "interpretation": "Real is the type of real numbers.",
+      "effect_on_target": "The constant C, random variable values, integral, exponential, and scale K are real-valued.",
+      "source_match": "The selected lemma concerns scalar real random variables and a real numerical constant.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "Real.instLE",
+      "interpretation": "This instance supplies the ordinary real less-than-or-equal relation.",
+      "effect_on_target": "It interprets 1 <= C and internal integral <= 2 conditions.",
+      "source_match": "Both are ordinary real inequalities with the correct direction.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "Real.instOne",
+      "interpretation": "This instance supplies the ordinary multiplicative identity 1 in Real.",
+      "effect_on_target": "It provides the lower bound used to normalize C.",
+      "source_match": "Requiring the existential constant to be at least this value is harmless because a valid absolute factor may be enlarged.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "Real.instRCLike",
+      "interpretation": "This is the standard RCLike structure on Real.",
+      "effect_on_target": "It supplies analytic structure used when elaborating the real Bochner integral.",
+      "source_match": "It retains ordinary real analysis and expectation semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "Real.instSub",
+      "interpretation": "Real subtraction is addition of the real additive inverse.",
+      "effect_on_target": "It forms X omega - integral_mu X.",
+      "source_match": "This is exactly subtraction of the mean in the source centering operation.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "Real.normedAddCommGroup",
+      "interpretation": "This is the standard normed additive commutative group structure on Real.",
+      "effect_on_target": "It supplies the codomain structure required for integration.",
+      "source_match": "It makes the integral the ordinary real expectation and changes no source-level condition.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "Semiring.toNonAssocSemiring",
+      "interpretation": "This projection forgets associativity packaging while retaining semiring operations.",
+      "effect_on_target": "It is part of the instance path for ENNReal multiplication.",
+      "source_match": "It preserves the same multiplication by the absolute constant.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "instHMul",
+      "interpretation": "This constructs homogeneous multiplication from a type's Mul instance.",
+      "effect_on_target": "It selects ENNReal multiplication for the right-hand side.",
+      "source_match": "It implements C times the original psi_2 norm.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "instHSub",
+      "interpretation": "This constructs homogeneous subtraction from a type's Sub instance.",
+      "effect_on_target": "It selects real subtraction in the centered function.",
+      "source_match": "It implements X - E X exactly.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "LT.lt",
+      "interpretation": "LT.lt is the strict-order relation supplied by a type's LT instance.",
+      "effect_on_target": "It interprets positivity K > 0 inside IsSubGaussian.",
+      "source_match": "The source's exponential-square scale parameter is strictly positive.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Measurable",
+      "interpretation": "Measurable f means preimages of measurable sets under f are measurable.",
+      "effect_on_target": "It requires X and admissible centered variables to be genuine measurable random variables.",
+      "source_match": "This is the measurability implicit in the source term random variable.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "Real.instLT",
+      "interpretation": "This instance supplies the ordinary strict order on Real.",
+      "effect_on_target": "It makes the local scale condition 0 < K an ordinary real positivity requirement.",
+      "source_match": "It matches the source requirement that the sub-gaussian scale be positive.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "Real.instZero",
+      "interpretation": "This instance supplies the ordinary real zero.",
+      "effect_on_target": "It is the lower endpoint in the positivity condition 0 < K.",
+      "source_match": "It gives the exact strict positivity boundary in the source definition.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Real.measurableSpace",
+      "interpretation": "The measurable structure on Real is its Borel sigma-algebra.",
+      "effect_on_target": "It determines what measurability of the real-valued random variables means.",
+      "source_match": "This is the standard measurable structure used for real random variables.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Zero.toOfNat0",
+      "interpretation": "This constructs the numeral-zero interpretation from a type's Zero instance.",
+      "effect_on_target": "It supplies zero in scale positivity and ENNReal nonzero tests.",
+      "source_match": "It denotes the ordinary boundary value zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "CompleteLinearOrder.toConditionallyCompleteLinearOrderBot",
+      "interpretation": "This derives a conditionally complete linear order with bottom from a complete linear order.",
+      "effect_on_target": "It is part of the order infrastructure used to take infima in ENNReal.",
+      "source_match": "It supports the source's infimum operation without altering the admissible set.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "ConditionallyCompleteLattice.toConditionallyCompletePartialOrder",
+      "interpretation": "This derives the conditional partial-order infimum/supremum structure from a conditionally complete lattice.",
+      "effect_on_target": "It supplies the structure through which PsiTwoGauge obtains sInf.",
+      "source_match": "It implements an ordinary infimum of scales as in Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice",
+      "interpretation": "This projection obtains a conditionally complete lattice from a conditionally complete linear order.",
+      "effect_on_target": "It is structural support for the ENNReal infimum.",
+      "source_match": "It does not change the set or the infimum semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder",
+      "interpretation": "This projection forgets the distinguished bottom while retaining the conditionally complete linear order.",
+      "effect_on_target": "It is an intermediate instance used by the psi_2 infimum.",
+      "source_match": "The resulting infimum is the source's smallest admissible scale.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderInf",
+      "interpretation": "This extracts the infimum-bearing part of a conditionally complete partial order.",
+      "effect_on_target": "It provides the sInf operation used in PsiTwoGauge.",
+      "source_match": "It realizes the infimum in Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "ConditionallyCompletePartialOrderInf.toInfSet",
+      "interpretation": "This projection extracts the set-infimum operation.",
+      "effect_on_target": "It makes the admissible-scale set consumable by sInf.",
+      "source_match": "It preserves the exact infimum-of-scales construction.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "DivInvMonoid.toDiv",
+      "interpretation": "This projection extracts division from a division-inverse monoid.",
+      "effect_on_target": "It supplies real division in X^2/K^2 and X^2/(t.toReal)^2.",
+      "source_match": "It implements the quotient in the defining exponential moment.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "ENNReal.instCompleteLinearOrder",
+      "interpretation": "This is the complete linear order on ENNReal inherited from WithTop NNReal.",
+      "effect_on_target": "It supplies existence and ordering of the admissible-scale infimum.",
+      "source_match": "It faithfully supports taking the infimum of positive scales.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "HDiv.hDiv",
+      "interpretation": "hDiv dispatches to the division operation supplied by its HDiv instance.",
+      "effect_on_target": "It forms the quotient of the squared random-variable value by the squared scale.",
+      "source_match": "This is exactly Y^2/t^2 in Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "HPow.hPow",
+      "interpretation": "hPow dispatches to the power operation supplied by its HPow instance.",
+      "effect_on_target": "It squares the random-variable value and the scale.",
+      "source_match": "Both exponents are exactly 2 as in the source definition.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "InfSet.sInf",
+      "interpretation": "sInf returns the infimum of a set in a type with an InfSet instance.",
+      "effect_on_target": "It computes PsiTwoGauge from all admissible ENNReal scales.",
+      "source_match": "It directly matches the infimum in Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "MeasureTheory.Integrable",
+      "interpretation": "Integrable f requires strong a.e. measurability and finite integral norm.",
+      "effect_on_target": "It ensures the real exponential integrals in the sub-gaussian condition and admissible-scale set are well-defined finite expectations.",
+      "source_match": "The source inequality E exp(Y^2/t^2) <= 2 necessarily concerns a finite expectation, so this explicit condition is faithful.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "Monoid.toNatPow",
+      "interpretation": "This constructs natural-number powers from monoid multiplication.",
+      "effect_on_target": "It interprets the real squares occurring in the exponential-moment definitions.",
+      "source_match": "It gives the ordinary square used in Y^2/t^2.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "Nat",
+      "interpretation": "Nat is the type of natural numbers.",
+      "effect_on_target": "It is the exponent type and the source of the numeral 2.",
+      "source_match": "The power is the ordinary second power.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "This projection forgets commutativity while retaining seminormed-ring structure.",
+      "effect_on_target": "It contributes analytic structure used by real integrability.",
+      "source_match": "It leaves the real exponential expectation unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "This projection extracts the seminormed additive commutative group structure.",
+      "effect_on_target": "It supports the topology and norm used by Integrable for real functions.",
+      "source_match": "It is structural support for standard Lebesgue/Bochner expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "This projection forgets norm separation while retaining the commutative ring and seminorm.",
+      "effect_on_target": "It participates in the real analytic structures needed for integration.",
+      "source_match": "It introduces no different operation or restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "This projection obtains a uniform structure from a pseudometric space.",
+      "effect_on_target": "It contributes the topology used to define continuity of the extended norm in Integrable.",
+      "source_match": "It is structural infrastructure for ordinary real integrability.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "Real.exp",
+      "interpretation": "Real.exp is the usual real exponential, defined through the real part of complex exponential.",
+      "effect_on_target": "It is applied to Y^2/t^2 in both sub-gaussianity and norm admissibility.",
+      "source_match": "It is exactly the exponential in E exp(Y^2/t^2).",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Real.instDivInvMonoid",
+      "interpretation": "This is the standard division and inverse structure on Real.",
+      "effect_on_target": "It supplies real division for the exponential's argument.",
+      "source_match": "It gives ordinary division by the squared positive scale.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Real.instMonoid",
+      "interpretation": "This is the standard multiplicative monoid structure on Real.",
+      "effect_on_target": "It supplies natural powers used for squaring.",
+      "source_match": "It yields ordinary real squaring.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "Real.instNatCast",
+      "interpretation": "This casts natural numbers to their standard real values.",
+      "effect_on_target": "It contributes the real numeral 2 used in the threshold and exponent infrastructure.",
+      "source_match": "The numeral has its ordinary source value 2.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Real.normedCommRing",
+      "interpretation": "This is the standard normed commutative ring structure on Real.",
+      "effect_on_target": "It supplies algebraic, metric, and norm data needed by integration and powers.",
+      "source_match": "All operations remain the usual real ones appearing in the source formula.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "This is the standard real pseudometric structure with distance abs(x - y).",
+      "effect_on_target": "It supports the topology and integrability structure on real-valued functions.",
+      "source_match": "It has no effect beyond standard real analysis.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "interpretation": "This projection forgets additive commutativity packaging while preserving the seminormed additive group.",
+      "effect_on_target": "It supports construction of the continuous extended norm used in Integrable.",
+      "source_match": "It is structural infrastructure for the source expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "interpretation": "This constructs a continuous extended norm from a seminormed additive group.",
+      "effect_on_target": "It supplies an instance required by MeasureTheory.Integrable for real exponential functions.",
+      "source_match": "It makes finiteness of the defining expectation explicit without changing that expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "This constructs the nonunital seminormed commutative-ring view of a seminormed commutative ring.",
+      "effect_on_target": "It is part of the instance chain for real topology and integrability.",
+      "source_match": "It introduces no semantic deviation from standard real expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "This projection obtains a topology from a uniform space.",
+      "effect_on_target": "It supplies the topological structure used by Integrable.",
+      "source_match": "Specialized to Real it is the ordinary topology underlying the source expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "instHDiv",
+      "interpretation": "This constructs homogeneous division from a type's Div instance.",
+      "effect_on_target": "It selects real division in the exponential-square formula.",
+      "source_match": "It implements Y^2/t^2 exactly.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "instHPow",
+      "interpretation": "This constructs heterogeneous power from a type's Pow instance.",
+      "effect_on_target": "It selects real natural-number exponentiation for both squares.",
+      "source_match": "It implements the exact squared quantities in Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "instOfNatAtLeastTwo",
+      "interpretation": "Given a natural-cast structure and evidence n >= 2, this constructs the numeral n in the target type.",
+      "effect_on_target": "It supplies the real numeral 2 in exponential-moment conditions.",
+      "source_match": "It preserves the exact threshold 2.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "instOfNatNat",
+      "interpretation": "This interprets every natural numeral n as the same natural number n.",
+      "effect_on_target": "It supplies natural numerals used in 1 + 1 and exponent elaboration.",
+      "source_match": "It introduces no change to the literal exponent or threshold.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "setOf",
+      "interpretation": "setOf identifies a predicate with the set of elements satisfying it.",
+      "effect_on_target": "It forms the set of PsiTwoAdmissible scales whose infimum defines PsiTwoGauge.",
+      "source_match": "It is exactly the set-builder construction in the source norm definition.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "ENNReal.toReal",
+      "interpretation": "toReal maps an ENNReal to the real value of its NNReal component; infinity maps through the default NNReal component, but admissibility separately excludes infinity.",
+      "effect_on_target": "It converts an admissible ENNReal scale to the real denominator used in the exponential.",
+      "source_match": "Because D006 excludes both 0 and infinity, it yields exactly a finite positive real scale t as required by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "HAdd.hAdd",
+      "interpretation": "hAdd dispatches to the addition operation supplied by its HAdd instance.",
+      "effect_on_target": "It occurs in the elaboration of real subtraction and of the natural number 1 + 1 used for numeral evidence.",
+      "source_match": "It preserves ordinary addition and hence the intended subtraction and numeral 2.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "Nat.AtLeastTwo",
+      "interpretation": "Nat.AtLeastTwo is the proposition/typeclass asserting that a natural number is at least two.",
+      "effect_on_target": "It licenses the generic cast instance used to elaborate the numeral 2.",
+      "source_match": "It is elaboration support only and fixes the literal value 2.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "Ne",
+      "interpretation": "Ne a b is the negation of equality a = b.",
+      "effect_on_target": "It states that an admissible ENNReal scale is neither zero nor infinity.",
+      "source_match": "Those two exclusions are exactly finiteness and strict positivity of the source variable t.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "Top.top",
+      "interpretation": "Top.top is the greatest element supplied by a Top instance.",
+      "effect_on_target": "For ENNReal it denotes infinity in the admissibility exclusion t != top.",
+      "source_match": "Excluding it restricts norm scales to finite real t, matching Equation (2.13).",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "instAddNat",
+      "interpretation": "This is ordinary natural-number addition.",
+      "effect_on_target": "It evaluates 1 + 1 in the proof that the numeral used is at least two.",
+      "source_match": "It yields exactly 2.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "instHAdd",
+      "interpretation": "This constructs homogeneous addition from a type's Add instance.",
+      "effect_on_target": "It selects natural addition for 1 + 1 and real addition inside subtraction.",
+      "source_match": "Both are standard operations with no source-level deviation.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "instTopENNReal",
+      "interpretation": "This is the top element infinity of ENNReal inherited from WithTop.",
+      "effect_on_target": "It is explicitly excluded from admissible psi_2 scales.",
+      "source_match": "The source infimum ranges over finite real t > 0, so the exclusion is exact.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "instZeroENNReal",
+      "interpretation": "This is the zero element of ENNReal inherited from WithTop.",
+      "effect_on_target": "It is explicitly excluded from admissible psi_2 scales.",
+      "source_match": "The source infimum requires t > 0, so excluding zero is exact.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "PDF page 19 / printed page 30 contains Section 2.6.1 and the complete statement of Lemma 2.6.8; page 20 / printed page 31 finishes its proof and gives Exercise 2.6.9; PDF page 16 / printed page 27 gives Definition 2.5.6 and Equation (2.13).",
+      "lean_evidence": "The dossier identifies HDP-02-LEM-2.6.8 and gives the proof-free, readable elaborated, and fully explicit types for hdp_02_hlem_h2_d6_d8_exact.",
+      "reasoning": "The selected source passage is the centering lemma itself, and the only inherited definition needed for the proposition is the stated sub-gaussian/psi_2 definition on page 16."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Lemma 2.6.8 concerns a real scalar sub-gaussian random variable X on an implicit probability space and a numerical absolute constant C.",
+      "lean_evidence": "The target quantifies C : Real, arbitrary Ω with MeasurableSpace, μ : Measure Ω with IsProbabilityMeasure μ, and X : Ω -> Real.",
+      "reasoning": "The binder types make the source's probability-space and real-random-variable context explicit without specializing the sample space."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The phrase 'where C is an absolute constant' means one numerical factor independent of X; the lemma then applies to every sub-gaussian X.",
+      "lean_evidence": "The outer Exists C precedes the universal Ω, μ, and X binders, and X's centered value depends only on X and μ.",
+      "reasoning": "The Lean quantifier order correctly makes C uniform across all probability spaces, measures, and sub-gaussian random variables."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The lemma's only object-level hypothesis is that X is sub-gaussian; the source's definition uses a positive scale, and the context is a probability space.",
+      "lean_evidence": "The only premise on X is IsSubGaussian μ X; D001/D004 encode measurability and existence of K > 0 with the finite exponential-square expectation bound, while IsProbabilityMeasure μ supplies total mass one. The outer witness has 1 <= C.",
+      "reasoning": "No mean-zero, symmetry, boundedness, or independence hypothesis is added. The normalization C >= 1 is harmless for an existential upper-bound factor because any valid positive C can be enlarged to max(C,1)."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Lemma 2.6.8 asserts both that X - E X remains sub-gaussian and that its psi_2 norm is at most C times the original psi_2 norm.",
+      "lean_evidence": "The consequent is an And of IsSubGaussian μ (fun omega => X omega - integral μ X) and the corresponding PsiTwoNorm inequality.",
+      "reasoning": "Both source conclusions occur exactly once and concern the same centered function."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Equation (2.13) defines the psi_2 norm as inf {t > 0 : E exp(X^2/t^2) <= 2}, and Section 2.6.1 defines centering by subtracting the mean.",
+      "lean_evidence": "D002 unfolds to D003's sInf of D006 admissible finite nonzero ENNReal scales; D006 uses the real integral of exp(X^2/(t.toReal)^2) <= 2. D016/D035 give real subtraction and D022 gives the integral.",
+      "reasoning": "Every substantive local operator and definition has the source semantics, and the external instance frontier selects the standard real/ENNReal operations."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source conclusion is the non-strict upper bound ||X - E X||_{psi_2} <= C ||X||_{psi_2}.",
+      "lean_evidence": "The elaborated target uses ENNReal.instPartialOrder.le with the centered norm on the left and ENNReal.ofReal C times the original norm on the right.",
+      "reasoning": "The relation, direction, and multiplicative structure agree exactly; the simultaneous sub-gaussian conclusion is neither dropped nor weakened."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The centered object is X - E X, and the right-hand side retains the norm of the original uncentered X.",
+      "lean_evidence": "Both the preservation claim and left norm use fun omega => X omega - integral μ X, while the right norm is PsiTwoNorm μ X.",
+      "reasoning": "The original variable, its scalar mean, and its centered transform remain distinct and in their intended roles."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (2.13) has exponent 2, denominator t^2, threshold 2, and t > 0; Lemma 2.6.8 uses one unspecified absolute factor C, and Exercise 2.6.9 rules out fixing C = 1.",
+      "lean_evidence": "D004/D006 use powers 2 and an integral threshold 2; D006 excludes t = 0 and t = top; the theorem existentially chooses C with 1 <= C rather than fixing C to 1.",
+      "reasoning": "All constants, exponents, and dependencies match. The lower bound C >= 1 does not assert sharpness and remains compatible with the exercise."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The source result is stated for scalar real random variables without restricting the underlying probability space.",
+      "lean_evidence": "The target universally quantifies an arbitrary Type-valued sample space, arbitrary measurable structure, and arbitrary probability measure, with X real-valued.",
+      "reasoning": "There is no finite-dimensional, discrete, bounded, or fixed-space specialization, and no scalar-field generalization beyond the real source setting."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The source admissible scales satisfy t > 0 and the defining expectation is at most 2; its lemma applies also to degenerate sub-gaussian variables.",
+      "lean_evidence": "D006 excludes both zero and infinity before using t.toReal, and requires integrability; C >= 1 prevents ENNReal.ofReal from truncating the witness. Probability measures include degenerate cases.",
+      "reasoning": "Undefined zero/infinite denominators and infinite expectations are excluded consistently, while constant or zero variables remain in the intended domain."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "Page 16 lists bounded and Bernoulli random variables as sub-gaussian examples, and Lemma 2.6.8 addresses genuine nonzero-mean variables as well as degenerate ones.",
+      "lean_evidence": "D001/D004 are satisfiable, for example by the zero random variable on any probability space with K = 1, and they also admit nonconstant bounded examples. The conclusion gives a quantitative uniform comparison, not a tautology.",
+      "reasoning": "The hypotheses have intended models and the statement is nonvacuous; neither an impossible premise nor ENNReal coercion trivializes the inequality."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Unfolding D001-D006, the Lean proposition gives one uniform real C >= 1 such that every real sub-gaussian random variable on every probability space remains sub-gaussian after subtraction of its Bochner expectation and satisfies the exact Equation (2.13) psi_2 bound. This directly supplies every clause of Lemma 2.6.8."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's absolute constant is uniform over X and the implicit probability-space context. Its positive factor may be enlarged to max(C,1), after which ENNReal.ofReal is the exact nonnegative embedding. Definition 2.5.6/Equation (2.13) match D001-D006, so the source gives both Lean conjuncts for all quantified Ω, μ, and X."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "constant-normalization",
+      "source_evidence": "The source states an unspecified positive absolute constant C and separately notes that C = 1 is not valid in general.",
+      "lean_evidence": "The target existentially quantifies C : Real with 1 <= C and uses ENNReal.ofReal C as the multiplicative factor.",
+      "impact": "This is a harmless normalization, not a sharp-constant claim: any valid positive upper-bound factor can be enlarged to at least one, and the lower bound makes the coercion exact."
+    }
+  ],
+  "rationale": "Direct inspection of the cited source pages and every D001-D087 declaration shows that the Lean target states the same centering lemma. It uses the source's real probability-space setting, chooses one absolute constant before all random-variable binders, assumes only sub-gaussianity, centers by the real expectation, preserves sub-gaussianity, and gives the same psi_2 inequality. The local definitions realize the exact infimum over finite positive scales satisfying E exp(Y^2/t^2) <= 2. The condition C >= 1 with ENNReal.ofReal is an equivalent normalization of an unspecified positive existential factor. Both implication directions therefore hold, all configured checks pass, and no unresolved issue requires adjudication."
+}

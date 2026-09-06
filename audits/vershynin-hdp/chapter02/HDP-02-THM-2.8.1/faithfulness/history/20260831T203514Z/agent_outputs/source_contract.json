@@ -1,0 +1,171 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "Printed page 36: the min's arguments divide by sum_{i=1}^{N} ||X_i||^2_{psi_1} and by max_i ||X_i||_{psi_1}; nothing excludes all X_i = 0 a.s., making both denominators 0.",
+      "impact": "A formalization must add positivity (e.g. max_i ||X_i||_{psi_1} > 0) or adopt a division convention; the source does not address it.",
+      "issue": "Degenerate case of vanishing norms"
+    },
+    {
+      "evidence": "Printed page 36: 'Let X_1, ..., X_N be independent, mean zero, sub-exponential random variables' with no clause 'for every N >= 1'.",
+      "impact": "The empty-family case N = 0 is undefined in the source; a formalization must choose to exclude it or handle it.",
+      "issue": "N is never explicitly bound or constrained"
+    },
+    {
+      "evidence": "Printed page 36 says only 'independent', without distinguishing pairwise from joint independence.",
+      "impact": "The proof uses factorization of the MGF over the whole family, so joint independence is the intended reading; a formalization must state it explicitly.",
+      "issue": "'independent' left unqualified"
+    },
+    {
+      "evidence": "Printed page 36 uses c both in the theorem statement and in the constraint (2.24), and C both in the per-term MGF bound and in the intermediate exponents; footnote 8 further notes the K_5-versus-||X||_{psi_1} absolute-constant factor.",
+      "impact": "The c in (2.24) is not necessarily the c of the statement; a formalization should treat each occurrence as an independently chosen absolute constant.",
+      "issue": "Reuse of the letters c and C for different constants"
+    },
+    {
+      "evidence": "In the proof of Theorem 2.8.1 (printed page 36) sigma^2 = sum ||X_i||^2_{psi_1}, whereas in Theorem 2.8.4 (printed page 38) sigma^2 = sum E X_i^2.",
+      "impact": "The two sigma^2 are different objects; conflating them would misstate either theorem.",
+      "issue": "Overloaded symbol sigma^2"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "There is a single positive absolute constant c, fixed once and for all, such that: whenever X_1, ..., X_N are independent, mean-zero, sub-exponential random variables, then for every real t >= 0 the probability that the ABSOLUTE VALUE of the plain (unnormalized, unweighted) sum X_1 + ... + X_N is at least t is at most 2 exp( - c * min( t^2 / (||X_1||^2_{psi_1} + ... + ||X_N||^2_{psi_1}) , t / max_i ||X_i||_{psi_1} ) ), where ||X||_{psi_1} = inf{ t > 0 : E exp(|X|/t) <= 2 } is the sub-exponential norm. The crucial asymmetry is that the sub-gaussian branch divides t^2 by the SUM of squared norms while the sub-exponential branch divides t by the MAXIMUM norm. The prefactor 2 is explicit and comes from combining the upper and lower tails; c is an absolute constant with no numeric value and no dependence on N, on the X_i, or on t. The only hypotheses are independence, mean zero, and sub-exponentiality \u2014 no boundedness, no variance assumption \u2014 and the bound is asserted at t = 0 too.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Theorem 2.8.1 (Bernstein's inequality), full statement",
+      "location": "PDF page 25; printed page 36",
+      "observation": "Rendered page reads: 'Let X_1, ..., X_N be independent, mean zero, sub-exponential random variables. Then, for every t >= 0, we have P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp[ - c min( t^2 / (sum_{i=1}^{N} ||X_i||^2_{psi_1}) , t / (max_i ||X_i||_{psi_1}) ) ], where c > 0 is an absolute constant.' The absolute-value bars around the sum are visible in the rendered page (pdftotext drops them)."
+    },
+    {
+      "anchor": "Section 2.8 opening sentence",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'We are ready to state and prove a concentration inequality for sums of independent sub-exponential random variables.'"
+    },
+    {
+      "anchor": "Proof of Theorem 2.8.1, display (2.23)",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'Multiply both sides of the inequality S >= t by a parameter lambda, exponentiate, and then use Markov's inequality and independence. This leads to the bound (2.7), which is  P{S >= t} <= e^{-lambda t} prod_{i=1}^{N} E exp(lambda X_i).  (2.23)'  with S = sum_{i=1}^{N} X_i as introduced just above."
+    },
+    {
+      "anchor": "Proof of Theorem 2.8.1, display (2.24) and the surrounding sentences",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'To bound the MGF of each term X_i, we use property e in Proposition 2.7.1. It says that if lambda is small enough so that  |lambda| <= c / (max_i ||X_i||_{psi_1}),  (2.24)  then E exp(lambda X_i) <= exp( C lambda^2 ||X_i||^2_{psi_1} ). Substituting this into (2.23), we obtain P{S >= t} <= exp( - lambda t + C lambda^2 sigma^2 ), where sigma^2 = sum_{i=1}^{N} ||X_i||^2_{psi_1}.' Note that here sigma^2 is a sum of SQUARED SUB-EXPONENTIAL NORMS, not a sum of variances."
+    },
+    {
+      "anchor": "Proof of Theorem 2.8.1, optimization step and footnote 8",
+      "location": "PDF page 25; printed page 36",
+      "observation": "'Now we minimize this expression in lambda subject to the constraint (2.24). The optimal choice is lambda = min( t/(2 C sigma^2) , c/(max_i ||X_i||_{psi_1}) ), for which we obtain P{S >= t} <= exp[ - min( t^2/(4 C sigma^2) , c t / (2 max_i ||X_i||_{psi_1}) ) ].' Footnote 8: 'Recall that by Proposition 2.7.1 and definition of the sub-exponential norm, property e holds for a value of K_5 that is within an absolute constant factor of ||X||_{psi_1}.'"
+    },
+    {
+      "anchor": "Last paragraph of the proof of Theorem 2.8.1",
+      "location": "PDF page 26; printed page 37",
+      "observation": "'Repeating this argument for -X_i instead of X_i, we obtain the same bound for P{-S >= t}. A combination of these two bounds completes the proof.' \u2014 this is the origin of the two-sided event and the prefactor 2."
+    },
+    {
+      "anchor": "Definition 2.7.5 and display (2.21)",
+      "location": "PDF page 22; printed page 33",
+      "observation": "'The sub-exponential norm of X, denoted ||X||_{psi_1}, is defined to be the smallest K_3 in property 3. In other words, ||X||_{psi_1} = inf { t > 0 : E exp(|X|/t) <= 2 }.' (2.21)"
+    },
+    {
+      "anchor": "Proposition 2.7.1 (Sub-exponential properties), statement and properties a-e with footnote 7",
+      "location": "PDF page 21; printed pages 31-32",
+      "observation": "'Let X be a random variable. Then the following properties are equivalent; the parameters K_i > 0 appearing in these properties differ from each other by at most an absolute constant factor.' (a) P{|X| >= t} <= 2 exp(-t/K_1) for all t >= 0; (b) ||X||_{L^p} = (E|X|^p)^{1/p} <= K_2 p for all p >= 1; (c) E exp(lambda|X|) <= exp(K_3 lambda) for all lambda with 0 <= lambda <= 1/K_3; (d) E exp(|X|/K_4) <= 2. 'Moreover, if E X = 0 then properties a-d are also equivalent to the following one.' (e) E exp(lambda X) <= exp(K_5^2 lambda^2) for all lambda such that |lambda| <= 1/K_5. Footnote 7: 'There exists an absolute constant C such that property i implies property j with parameter K_j <= C K_i for any two properties i, j = 1, 2, 3, 4.'"
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "c: a positive absolute constant, existentially quantified OUTSIDE everything else \u2014 declared by the trailing clause 'where c > 0 is an absolute constant'",
+      "N: the number of summands, implicitly a positive integer (never explicitly bound)",
+      "X_1, ..., X_N: random variables on a common (unnamed) probability space",
+      "t: a real number, universally quantified by 'for every t >= 0'"
+    ],
+    "conclusions": [
+      "P{ |sum_{i=1}^{N} X_i| >= t } <= 2 exp[ - c min( t^2 / (sum_{i=1}^{N} ||X_i||^2_{psi_1}) , t / (max_i ||X_i||_{psi_1}) ) ]",
+      "The event is TWO-SIDED: absolute value of the (unnormalized) sum, with non-strict inequality '>= t'",
+      "The first argument of the min normalizes t^2 by the SUM of squared sub-exponential norms; the second normalizes t by the MAXIMUM of the sub-exponential norms \u2014 the two normalizations are different quantities",
+      "The prefactor is exactly 2 and the constant c multiplies the whole min inside the exponent"
+    ],
+    "definitions_and_conventions": [
+      "||X||_{psi_1} (sub-exponential norm) = inf { t > 0 : E exp(|X|/t) <= 2 } \u2014 Definition 2.7.5 / (2.21), printed page 33",
+      "'sub-exponential random variable' = satisfies one of the equivalent properties a-d of Proposition 2.7.1 (Definition 2.7.5)",
+      "S = sum_{i=1}^{N} X_i (notation introduced in the proof)",
+      "In the PROOF, sigma^2 := sum_{i=1}^{N} ||X_i||^2_{psi_1} \u2014 a sum of squared sub-exponential norms, NOT a sum of variances (contrast with sigma^2 in Theorem 2.8.4)",
+      "Book convention: lower-case c and upper-case C denote positive ABSOLUTE constants with no numeric value and no dependence on N, the X_i, or t; the same letter may denote different constants in different places",
+      "max_i ranges over i = 1, ..., N"
+    ],
+    "hypotheses": [
+      "X_1, ..., X_N are independent (jointly independent; the source says only 'independent')",
+      "X_1, ..., X_N are mean zero: E X_i = 0 for each i",
+      "X_1, ..., X_N are sub-exponential random variables (Definition 2.7.5), so each ||X_i||_{psi_1} is finite",
+      "t >= 0"
+    ],
+    "implicit_context": [
+      "Proposition 2.7.1 property e is the MGF ingredient: for mean-zero X, E exp(lambda X) <= exp(K_5^2 lambda^2) for all |lambda| <= 1/K_5, and by footnote 8 K_5 can be taken within an absolute constant factor of ||X||_{psi_1}",
+      "Proposition 2.7.1's parameters K_1, ..., K_5 are equivalent up to absolute constant factors (footnote 7: there is an absolute constant C with K_j <= C K_i)",
+      "Chernoff/Markov template (2.23) and the earlier bound (2.7) referenced from Section 2.2/2.3 (Theorems 2.2.2 and 2.3.1 are cited as the same pattern)",
+      "The two-sidedness and the prefactor 2 come from applying the one-sided argument to X_i and to -X_i and combining (printed page 37)",
+      "Interpretive remark (printed page 37): the bound is a mixture of a sub-gaussian tail for small deviations and a sub-exponential tail for large deviations, the latter produced by the single term with maximal sub-exponential norm, which alone has tail of magnitude exp(-c t / ||X_i||_{psi_1})",
+      "All random variables live on one common probability space; no measurability or integrability hypothesis is stated beyond mean zero and sub-exponentiality"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "The stated theorem is TWO-sided: |sum X_i| >= t",
+          "The proof establishes the one-sided P{S >= t} bound (without the factor 2) and then symmetrizes",
+          "The intermediate one-sided displays in the proof have prefactor 1, not 2"
+        ],
+        "topic": "Tail sidedness"
+      },
+      {
+        "details": [
+          "c is an unquantified positive absolute constant, sitting outside the min and inside the exponent: '- c min(...)'",
+          "2 is an explicit prefactor",
+          "In the proof, C is a different unquantified absolute constant, and the intermediate bound exp[-min(t^2/(4 C sigma^2), c t/(2 max_i ||X_i||_{psi_1}))] carries explicit 4 and 2 that are absorbed into the final c",
+          "No numeric value is ever attached to c or C"
+        ],
+        "topic": "Constant status and placement"
+      },
+      {
+        "details": [
+          "Exists an absolute constant c > 0 such that: for all N, all independent mean-zero sub-exponential X_1, ..., X_N, and all t >= 0, the bound holds",
+          "c must not depend on N, on the X_i, or on t",
+          "In the proof, lambda is chosen depending on t, sigma^2 and max_i ||X_i||_{psi_1}, subject to the constraint (2.24) |lambda| <= c / max_i ||X_i||_{psi_1}"
+        ],
+        "topic": "Quantifier order"
+      },
+      {
+        "details": [
+          "Sub-gaussian branch: t^2 divided by sum_{i=1}^{N} ||X_i||^2_{psi_1}",
+          "Sub-exponential branch: t divided by max_i ||X_i||_{psi_1}",
+          "Conflating these (e.g. using max in both, or sum in both) changes the theorem"
+        ],
+        "topic": "Two different normalizations"
+      },
+      {
+        "details": [
+          "(2.23): P{S >= t} <= e^{-lambda t} prod_{i=1}^{N} E exp(lambda X_i)",
+          "(2.24): admissible range |lambda| <= c / max_i ||X_i||_{psi_1}, under which E exp(lambda X_i) <= exp(C lambda^2 ||X_i||^2_{psi_1})",
+          "Substitution gives P{S >= t} <= exp(-lambda t + C lambda^2 sigma^2) with sigma^2 = sum ||X_i||^2_{psi_1}",
+          "Optimal lambda = min( t/(2 C sigma^2), c/(max_i ||X_i||_{psi_1}) ), giving P{S >= t} <= exp[-min(t^2/(4 C sigma^2), c t/(2 max_i ||X_i||_{psi_1}))]",
+          "Repeat for -X_i to bound P{-S >= t}; combine to get the two-sided bound with prefactor 2"
+        ],
+        "topic": "Proof structure"
+      }
+    ]
+  },
+  "task_id": "HDP-02-THM-2.8.1",
+  "undebatable_constraints": [
+    "The event is TWO-SIDED: absolute-value bars around sum_{i=1}^{N} X_i are present in the source display",
+    "The inequality inside the probability is non-strict: '>= t'",
+    "The right-hand prefactor is exactly 2",
+    "c is an unquantified positive absolute constant explicitly declared by 'where c > 0 is an absolute constant', quantified before N, the X_i and t; it may never be replaced by an explicit number",
+    "The two arguments of the min are exactly t^2 / (sum_{i=1}^{N} ||X_i||^2_{psi_1}) and t / (max_i ||X_i||_{psi_1}), in that order \u2014 a SUM of squared norms in the first, a MAX of norms in the second",
+    "c multiplies the entire min and sits inside the exponent after the minus sign",
+    "The sum is unnormalized (no 1/N and no 1/sqrt(N)) and unweighted (no coefficients a_i)",
+    "Hypotheses are exactly: independent, mean zero, sub-exponential; no boundedness and no variance hypothesis appears",
+    "||X||_{psi_1} is the sub-exponential norm inf{ t > 0 : E exp(|X|/t) <= 2 } (Definition 2.7.5 / (2.21))",
+    "The bound is asserted for every t >= 0, t = 0 included",
+    "In the proof, sigma^2 denotes sum_{i=1}^{N} ||X_i||^2_{psi_1} (squared sub-exponential norms), which is NOT the variance of the sum"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "accepted": true,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "round-trip judge left semantic_checklist item C05 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C08 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-08-31T10:20:59.713136+00:00",
+  "findings": [
+    {
+      "category": "canonical-law representation",
+      "evidence": "The source writes a random variable X ~ N(0,1), while the Lean target integrates directly against gaussianReal 0 1, whose defining density is the normalized mean-zero variance-one Gaussian density.",
+      "impact": "This is an equivalent law-based representation, not a specialization or change of object role.",
+      "severity": "note"
+    },
+    {
+      "category": "integral totalization resolved",
+      "evidence": "Mathlib's Bochner integral is zero for nonintegrable functions, but the target equates it to the strictly positive value exp(lam^2/2); Integrable.of_integral_ne_zero therefore yields integrability. Mathlib also proves integrable_exp_mul_gaussianReal for every real parameter.",
+      "impact": "The fallback convention cannot satisfy the target accidentally and causes no loss of the source's implicit finite-expectation content.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "The Lean equality is the MGF identity under the exact standard-normal probability law. Its positive right-hand side rules out the nonintegrable zero-totalization branch, so the integral is a finite ordinary expectation. Law invariance then gives the source formula for any X with distribution N(0,1).",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "The source formula applied to the canonical N(0,1) law gaussianReal 0 1 gives the target integral equality. The source's finite equality supplies the corresponding integrability, and the binder, integrand, constants, and all-real scope match exactly.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "Equation (2.12) and the Lean proposition are semantically equivalent. The Mathlib declaration evidence omitted from the isolated round-trip packet resolves its two concerns: gaussianReal takes mean and variance, and gaussianReal 0 1 is the standard-normal Borel probability measure; MeasureTheory.integral is exactly the integral used for expectation and MGF. Although the integral is totalized to zero outside the integrable case, the theorem's strictly positive right-hand side makes its left side nonzero and hence proves integrability, while the Gaussian library also establishes exponential integrability for all real parameters. Therefore C05, C06, C08, and C11 pass, both implication directions hold, the statement is nonvacuous, and the correct accepted classification is faithful-equivalent.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EQ-2.12"
+}

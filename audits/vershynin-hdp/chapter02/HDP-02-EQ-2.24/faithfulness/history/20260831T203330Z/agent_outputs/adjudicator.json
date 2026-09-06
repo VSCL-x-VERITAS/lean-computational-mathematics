@@ -1,0 +1,78 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EQ-2.24",
+  "trigger": [
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "round-trip judge classification is undetermined",
+    "direct judge left dependency_coverage item D020 unclear",
+    "direct judge left dependency_coverage item D044 unclear",
+    "direct judge left semantic_checklist item C04 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "direct judge left implication lean_implies_source unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "Source-to-Lean implication at K = 0",
+      "resolution": "The source implies the guarded Lean proposition. When K > 0, the source gives exactly Lean's implication. When K = 0, Lean's antecedent 0 < K is false and imposes no MGF obligation, so any source interpretation that either excludes the undefined quotient or supplies a substantive degenerate-case conclusion is sufficient for the guarded proposition.",
+      "primary_evidence": "The source contract records that Equation (2.24) writes c/K without defining K = 0, while the direct judgment records the exact Lean guard 0 < K before |λ| ≤ c/K."
+    },
+    {
+      "item": "Lean-to-source implication at K = 0",
+      "resolution": "This direction remains unclear. Lean proves no MGF assertion when K = 0. It would match a source reading that excludes the undefined quotient, but it would not by its stated conclusion cover a reading that extends c/K to an unbounded admissible λ range and requires the per-coordinate MGF estimate for every λ. Selecting either reading would add a convention absent from the immutable source.",
+      "primary_evidence": "The source contract identifies the all-zero denominator as undefined and offers no convention; both judgments observe that the Lean implication becomes vacuous when K = 0."
+    },
+    {
+      "item": "Scope of the absolute constants",
+      "resolution": "The global scope is faithful: positive witnesses c and C precede all probability spaces, finite families, indices, and λ, so neither constant can depend on task data.",
+      "primary_evidence": "The source contract describes c and C as positive absolute constants independent of N, X_i, i, and λ; both judgments report that Lean existentially quantifies c and C before every ambient binder."
+    },
+    {
+      "item": "Quantitative positive-K statement",
+      "resolution": "For K > 0, Lean reproduces the source exactly: the common condition is |λ| ≤ c/K, K is the maximum individual ψ₁ gauge, and every coordinate satisfies E exp(λX_i) ≤ exp(C λ² ||X_i||_{ψ₁}²). The denominator uses K while the exponent uses the individual coordinate norm.",
+      "primary_evidence": "Equation (2.24), its following sentence, and the two judgments agree on the non-strict restriction, maximum-norm denominator, individual squared norm, quadratic λ dependence, and per-coordinate quantification."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "The implication holds exactly on K > 0. At K = 0 the source quotient is undefined and the text does not say whether the case is excluded or should carry an extended all-λ conclusion, whereas Lean's guarded statement asserts nothing. No source-silent convention may be selected to force a verdict."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "On K > 0 the source supplies the exact guarded implication. At K = 0 Lean has a false 0 < K antecedent, so it demands nothing beyond any possible source treatment of the degenerate case."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "remaining_uncertainties": [
+    "The immutable source does not specify whether c/0 excludes the all-zero family or denotes an unbounded admissible λ range; this prevents deciding the global Lean-to-source implication."
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "category": "source-silent-zero-denominator-boundary",
+      "evidence": "Equation (2.24) divides by K = max_i ||X_i||_{ψ₁} without assuming K > 0, while Lean explicitly guards its conclusion by 0 < K.",
+      "impact": "Lean is exact on the defined positive-K regime but makes no assertion for the all-zero family; the source supplies insufficient evidence to determine whether that omission matches its intended boundary behavior."
+    },
+    {
+      "severity": "note",
+      "category": "positive-regime-exactness",
+      "evidence": "For K > 0, Lean uses |λ| ≤ c/K and the coordinate-wise bound exp(C λ² ||X_i||_{ψ₁}²), with K only in the denominator and the individual norm in the exponent.",
+      "impact": "There is no quantitative, indexing, strictness, or object-role discrepancy in the nondegenerate regime."
+    },
+    {
+      "severity": "note",
+      "category": "absolute-constant-scope",
+      "evidence": "Lean quantifies positive c and C before every ambient probability space, family, index, and λ, matching the source's absolute-constant convention.",
+      "impact": "The constants are genuinely uniform and cannot depend on the formalized data."
+    }
+  ],
+  "rationale": "The direct and round-trip evidence agree that the guarded Lean statement is exact for every K > 0 and correctly scopes the two absolute constants globally. Their uncertainty is resolved asymmetrically: the source implies Lean because Lean imposes no obligation at K = 0, but Lean-to-source cannot be decided without choosing between source interpretations of the undefined quotient. The audit therefore remains undetermined and unaccepted rather than silently introducing a division-by-zero convention."
+}

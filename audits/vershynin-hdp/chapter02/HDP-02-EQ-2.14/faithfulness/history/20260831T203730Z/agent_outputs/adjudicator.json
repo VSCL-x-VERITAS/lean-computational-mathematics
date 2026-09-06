@@ -1,0 +1,151 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EQ-2.14",
+  "trigger": [
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D016 unclear",
+    "blind translator left dependency_coverage item D060 unclear",
+    "direct judge left dependency_coverage item D001 unclear",
+    "direct judge left dependency_coverage item D007 unclear",
+    "direct judge left dependency_coverage item D009 unclear",
+    "direct judge left dependency_coverage item D030 unclear",
+    "direct judge left semantic_checklist item C01 unclear",
+    "direct judge left semantic_checklist item C07 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "direct judge left implication lean_implies_source unclear",
+    "round-trip judge left implication translation_implies_source unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "direct judge requested adjudication",
+      "resolution": "The request was warranted because the direct judge lacked the primary PDF passage and therefore could not resolve the source selection, zero-gauge boundary, or Lean-to-source implication. Rechecking the pinned PDF and the exact Lean environment resolves those issues and yields faithful-stronger.",
+      "primary_evidence": "The pinned PDF has SHA-256 ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a and printed page 27 states Definition 2.5.6, Equation (2.14), and that c > 0 is absolute. The prepared target type and current compiling declaration state the same tail bound with denominator (2 * PsiTwoGauge.toReal)^2."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "The request was warranted because the blind dossier stopped at the external frontier for probability normalization and integration and because the source is silent at zero gauge. The unblinded primary definitions and the source context resolve both dependencies and establish that the zero-gauge case is a conservative valid completion.",
+      "primary_evidence": "Mathlib's IsProbabilityMeasure has field measure_univ : mu univ = 1; its Bochner integral uses the L1 integral on Integrable functions; PsiTwoAdmissible explicitly assumes Integrable. The source includes every sub-gaussian X, including the zero variable, while Lean's zero-gauge right side is 2."
+    },
+    {
+      "item": "direct judge classification is undetermined",
+      "resolution": "Resolved to faithful-stronger and accepted. Lean implies Equation (2.14) with the uniform witness c = 1/4, whereas the source's existential unspecified absolute constant does not entail that particular coefficient. The refinement is quantitative conclusion strength, not reduced applicability.",
+      "primary_evidence": "For positive gauge S, -t^2/(2S)^2 = -(1/4)t^2/S^2. The source states only 'Here C, c > 0 are absolute constants.' The target retains every source variable and threshold and has satisfiable positive-gauge instances, such as nondegenerate Bernoulli variables."
+    },
+    {
+      "item": "round-trip judge classification is undetermined",
+      "resolution": "Resolved to faithful-stronger and accepted for the same directional reason: the translation supplies the source existential with c = 1/4, but the source statement does not supply that fixed witness. The dependency and boundary uncertainties that caused undetermined have been closed independently.",
+      "primary_evidence": "The blind translation gives the same probability space, exponential-square infimum S, nonnegative t, two-sided event, prefactor 2, and exponent -t^2/(4S^2). Primary Lean definitions establish its probability and integral meanings, and the zero-scale case is valid rather than vacuous."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D016 unclear",
+      "resolution": "D016 is understood: IsProbabilityMeasure mu means exactly that mu has total mass one. It supplies the probability normalization implicit in the source's P and E and imposes no unintended restriction.",
+      "primary_evidence": "Mathlib/MeasureTheory/Measure/Typeclasses/Probability.lean declares class IsProbabilityMeasure (mu : Measure alpha) : Prop with field measure_univ : mu univ = 1. The target uses this same mu for the event measure and exponential-square integral."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D060 unclear",
+      "resolution": "D060 is understood: it is Mathlib's real-valued Bochner integral. Because PsiTwoAdmissible separately requires the exponential-square integrand to be Integrable, D060 takes its ordinary L1-integral branch and represents the source expectation, not its zero fallback.",
+      "primary_evidence": "Bochner/Basic.lean defines integral as L1.integral (hf.toL1 f) when Integrable f mu and 0 otherwise. D002 requires Integrable (fun omega => exp(X omega ^ 2 / s.toReal ^ 2)) mu before comparing that integral with 2."
+    },
+    {
+      "item": "direct judge left dependency_coverage item D001 unclear",
+      "resolution": "D001 passes. PsiTwoGauge is the ENNReal infimum of exactly the finite nonzero scales satisfying the measurable, integrable exponential-square moment bound. Its finite part is the source psi_2 norm; allowing the infimum itself to be zero correctly includes the identically-zero random variable.",
+      "primary_evidence": "D001 is sInf {s | PsiTwoAdmissible mu X s}; D002 excludes s = 0 and s = infinity and requires integral exp(X^2/s^2) <= 2. Definition 2.5.6 defines the source norm as inf {s > 0 : E exp(X^2/s^2) <= 2}."
+    },
+    {
+      "item": "direct judge left dependency_coverage item D007 unclear",
+      "resolution": "D007 passes. ENNReal.toReal returns the ordinary finite nonnegative real value when the gauge is below infinity; it returns zero at gauge zero. The former is exactly the source scale conversion and the latter participates only in the separately resolved conservative boundary case.",
+      "primary_evidence": "D007 has body fun a => a.toNNReal.toReal, and hFinite is PsiTwoGauge mu X < infinity. Thus top is unreachable; the only exceptional finite value is zero, where the target's denominator is zero and the right side totalizes to 2."
+    },
+    {
+      "item": "direct judge left dependency_coverage item D009 unclear",
+      "resolution": "D009 passes. HDiv.hDiv is only the operation projection; in this target its instance is homogeneous real division. It agrees with the source quotient on positive gauge and routes the gauge-zero expression to Mathlib's total real division, whose task-level effect is resolved under C11.",
+      "primary_evidence": "The fully explicit target instantiates HDiv through instHDiv Real (DivInvMonoid.toDiv Real Real.instDivInvMonoid). Therefore both displayed quotients are real quotients and no heterogeneous coercion changes their values."
+    },
+    {
+      "item": "direct judge left dependency_coverage item D030 unclear",
+      "resolution": "D030 passes. Real.instDivInvMonoid supplies ordinary field division for nonzero denominators and has inverse zero equal to zero. Hence at gauge zero the exponent is zero and the right side is 2; this is a defined conservative extension, not an impossible premise or a hidden domain restriction.",
+      "primary_evidence": "Mathlib/Data/Real/Basic.lean builds the real Field from Real.instDivInvMonoid and proves inv_zero. In the exact target, (2 * 0)^2 = 0, -t^2 / 0 = 0, exp 0 = 1, and the bound is mu.real(event) <= 2."
+    },
+    {
+      "item": "direct judge left semantic_checklist item C01 unclear",
+      "resolution": "C01 passes. The selected immutable source, version, page, equation, enclosing definition, and absolute-constant sentence all match the configured locator and contract.",
+      "primary_evidence": "The PDF hash exactly matches the task hash. PDF page 16, printed page 27 contains Definition 2.5.6 and (2.13), then introduces the restatement of Proposition 2.5.2, displays (2.14), and immediately says C, c > 0 are absolute constants."
+    },
+    {
+      "item": "direct judge left semantic_checklist item C07 unclear",
+      "resolution": "C07 resolves as a documented quantitative strengthening. For positive gauge, Lean fixes c = 1/4, so its upper bound implies the source existential bound; the source's unspecified existence assertion does not imply the particular value 1/4. This is genuine relation strength rather than a changed inequality or restricted domain.",
+      "primary_evidence": "Algebraically, (2 * S)^2 = 4S^2. Lean quantifies over the same probability spaces, measurable finite-gauge X, and every t >= 0. Positive-gauge examples make the numerical refinement substantive and nonvacuous."
+    },
+    {
+      "item": "direct judge left semantic_checklist item C11 unclear",
+      "resolution": "C11 passes with a recorded source-boundary note. The source includes the zero random variable but leaves its displayed zero-norm quotient undefined. Lean's totalization gives the valid conservative bound by 2, agrees with the source on every positive gauge, and neither excludes nor falsifies the intended degenerate case.",
+      "primary_evidence": "Definition 2.5.6 gives the zero variable norm zero. From D001-D002, gauge zero supplies arbitrarily small admissible positive scales, whose exponential-square moment bounds force X = 0 almost everywhere; therefore for t > 0 the tail event has measure zero and for t = 0 it has probability one. Lean's right side 2 is valid in both cases."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C04 unclear",
+      "resolution": "C04 passes. IsProbabilityMeasure is exact probability normalization, Measurable X makes X a random variable, finite PsiTwoGauge is the source sub-gaussian condition, and t >= 0 is unchanged. No centering, independence, positivity-of-gauge, or other extra applicability condition is added.",
+      "primary_evidence": "The source defines a sub-gaussian random variable by the equivalent properties and its finite exponential-square scale. D001-D002 implement that scale; D016 is total mass one; the target hypotheses are hX, PsiTwoGauge < infinity, and 0 <= t only."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C06 unclear",
+      "resolution": "C06 passes. Resolving D016 and D060 shows that the translated measure is probability and the displayed integral is expectation on its explicitly integrable branch. D001-D002, Measure.real, absolute value, real exponential, squaring, and division therefore have exactly the required task-level meanings.",
+      "primary_evidence": "The primary declarations give mu univ = 1, event measure converted from a finite ENNReal probability, and an L1 Bochner integral for the Integrable exponential-square function. The complete dossiers show no alternative local operator hidden behind the notation."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C11 unclear",
+      "resolution": "C11 passes for the translation as the same conservative zero-gauge completion. The source omission is real and must be documented, but it does not create a counterexample or reduce applicability: the translated bound is valid at S = 0 and the nondegenerate formula is unchanged.",
+      "primary_evidence": "At S = 0 the translated right side is 2. A probability of any event is at most 1, and more specifically the exponential-square infimum can be zero only when X = 0 almost everywhere, giving tail probability zero for t > 0 and one for t = 0."
+    },
+    {
+      "item": "direct judge left implication lean_implies_source unclear",
+      "resolution": "Resolved yes. On positive gauge, choose the source's absolute constant c = 1/4 and the Lean conclusion is exactly Equation (2.14). At zero gauge, the source's printed quotient is incomplete, but Lean supplies a conservative valid completion of the source-included zero-variable case; this boundary defect does not defeat recovery of the intended source assertion.",
+      "primary_evidence": "The exact target has exponent -t^2/(2S)^2, hence -((1/4)t^2/S^2), with the same event and prefactor. At S = 0 the formal right side is 2 and PsiTwoGauge = 0 forces X = 0 almost everywhere, so every intended degenerate tail claim holds."
+    },
+    {
+      "item": "round-trip judge left implication translation_implies_source unclear",
+      "resolution": "Resolved yes. After unblinding only the disputed primitive meanings, the translation has the same semantics as the Lean target: it witnesses the source existential with c = 1/4 on positive scale and validly closes the source-silent zero-scale boundary.",
+      "primary_evidence": "The translation's denominator is explicitly 4S^2, its mu is a probability measure, and its integral is the expectation defining S. The source equation has identical binders, tail event, threshold range, prefactor, and quadratic scale, while its zero-scale omission has no contrary case."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "For every positive finite psi_2 gauge, the Lean bound is Equation (2.14) with the uniform positive absolute witness c = 1/4. The source's zero-gauge formula is undefined although it includes the zero random variable; Lean closes that boundary conservatively with a bound by 2, and gauge zero forces X = 0 almost everywhere, so the intended tail assertion is valid there as well."
+    },
+    "source_implies_lean": {
+      "verdict": "no",
+      "reasoning": "Equation (2.14) states only that some positive absolute constant c exists. That existential assertion does not entail the target's particular uniform coefficient c = 1/4. The zero-gauge completion is conservative in the source-to-Lean direction and is not the reason this implication fails."
+    }
+  },
+  "classification": "faithful-stronger",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "note",
+      "category": "fixed-absolute-constant",
+      "evidence": "The source leaves c as an unspecified positive absolute constant; Lean uniformly fixes c = 1/4 through the denominator (2 * PsiTwoGauge.toReal)^2.",
+      "impact": "This is genuine nonvacuous quantitative strength. Lean implies the source, but the source proposition does not imply the fixed coefficient, so the classification is faithful-stronger rather than faithful-equivalent."
+    },
+    {
+      "severity": "note",
+      "category": "zero-gauge-boundary-completion",
+      "evidence": "The source includes every sub-gaussian variable but does not interpret its quotient at norm zero. Lean totalizes the exponent to zero and the right side to 2; D001-D002's arbitrarily small admissible scales at gauge zero force X = 0 almost everywhere.",
+      "impact": "The formal case is a valid conservative completion: it changes no positive-gauge instance, excludes no source case, and remains true at the reachable degenerate boundary."
+    },
+    {
+      "severity": "note",
+      "category": "resolved-external-frontier",
+      "evidence": "IsProbabilityMeasure means mu(univ) = 1, and MeasureTheory.integral is the L1 Bochner integral under D002's explicit Integrable premise.",
+      "impact": "The probability and expectation operators match the source; the blind dependency uncertainties do not survive adjudication."
+    }
+  ],
+  "rationale": "The pinned PDF, exact locator, complete prepared dossiers, primary Lean definitions, and compiling target agree on the substantive theorem: every measurable real random variable with finite exponential-square psi_2 gauge and every t >= 0 satisfy the same two-sided tail bound with prefactor 2 and quadratic scale. The external dependency uncertainties are fully resolvable: mu is normalized to total mass one and the admissibility integral is the ordinary Bochner expectation because integrability is assumed. Lean fixes the source's unspecified positive absolute constant to c = 1/4. This does not restrict the domain and has positive-gauge examples, so it is genuine nonvacuous conclusion strength. The source's only defect is its unstated norm-zero convention. Lean's totalized value yields the conservative bound by 2, while gauge zero forces X = 0 almost everywhere; thus the completion is valid for t = 0 and t > 0 and does not obstruct Lean-to-source implication. Consequently Lean implies the source, the source does not imply the fixed coefficient, and the correct accepted classification is faithful-stronger."
+}

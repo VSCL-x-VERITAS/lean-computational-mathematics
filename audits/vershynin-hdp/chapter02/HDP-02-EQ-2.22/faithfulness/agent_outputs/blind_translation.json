@@ -1,458 +1,583 @@
 {
   "schema_version": "formalization-faithfulness-1",
   "role": "blind-translation",
-  "dossier_sha256": "860297e2bb0060600fbc79183d6c154382e0b98cd36e26527231abc4269bd846",
+  "dossier_sha256": "8cd41a622b29f6c0bb504b98d05c798c222b31b020f855a1abc2b89b2008df67",
   "dependency_coverage": [
     {
       "id": "D001",
       "name": "LocalDef001",
-      "meaning": "A predicate asserting that a real-valued function is measurable, that its ENNReal scale is neither zero nor infinity, that its scaled exponential-square transform is integrable, and that the integral of that transform is at most 2.",
-      "effect_on_target": "Each of the two hypotheses applies this predicate at scale 1; its final conjunct supplies the corresponding exponential-square integral bound after simplifying the scale.",
+      "meaning": "For a real-valued function Z, this predicate says that Z is measurable and that there exists a real K such that K > 0 and LocalDef004 mu Z K holds; after expanding LocalDef004, this is existence of a positive real scale K for which exp(Z^2/K^2) is integrable and has integral at most 2, with measurability and positivity repeated inside the witness condition.",
+      "effect_on_target": "It is assumed separately for X and Y, ensuring measurability and existence of at least one positive real scale satisfying the exponential-square integrability and integral bound.",
       "status": "understood"
     },
     {
       "id": "D002",
       "name": "LocalDef002",
-      "meaning": "A proof that the natural numeral represented by 1 + 1 is at least two.",
-      "effect_on_target": "Supports elaboration of the numeral 2 used as a real-valued upper bound.",
+      "meaning": "This is an alias for LocalDef003: it assigns to a real-valued function an extended nonnegative real scale defined by an infimum of admissible scales.",
+      "effect_on_target": "The target assumes that this infimum-defined scale equals the extended-nonnegative-real number 1 for both X and Y.",
       "status": "understood"
     },
     {
       "id": "D003",
-      "name": "AddCommMonoidWithOne.toAddMonoidWithOne",
-      "meaning": "Forgets commutativity from an additive commutative monoid-with-one structure.",
-      "effect_on_target": "Provides part of the instance chain used to interpret the ENNReal numeral 1 in the hypotheses.",
+      "name": "LocalDef003",
+      "meaning": "For Z, this is the infimum in ENNReal of the set of t such that LocalDef006 mu Z t holds.",
+      "effect_on_target": "It makes each normalization hypothesis an equality between 1 and the infimum of all finite, nonzero ENNReal scales satisfying the specified exponential-square condition.",
       "status": "understood"
     },
     {
       "id": "D004",
-      "name": "AddMonoidWithOne.toOne",
-      "meaning": "Extracts the distinguished multiplicative-one operation from an additive monoid-with-one structure.",
-      "effect_on_target": "Supports interpretation of the ENNReal scale value 1.",
+      "name": "LocalDef004",
+      "meaning": "LocalDef004 mu Z K means that Z is measurable, K is a positive real number, the function omega ↦ exp(Z(omega)^2 / K^2) is mu-integrable, and its mu-integral is at most 2.",
+      "effect_on_target": "It supplies the exact witness property occurring inside each LocalDef001 hypothesis, but it is not itself the infimum predicate used by LocalDef003 because its scale is real rather than ENNReal.",
       "status": "understood"
     },
     {
       "id": "D005",
-      "name": "And",
-      "meaning": "Logical conjunction of two propositions.",
-      "effect_on_target": "Combines the two requested integral inequalities and also structures the conditions inside LocalDef001.",
+      "name": "LocalDef005",
+      "meaning": "This theorem certifies that the natural number expression 1 + 1 is at least two.",
+      "effect_on_target": "It is numeral/typeclass support for interpreting the constant 2; it adds no mathematical premise to the proposition.",
       "status": "understood"
     },
     {
       "id": "D006",
-      "name": "ENNReal",
-      "meaning": "The extended nonnegative real numbers, represented as nonnegative reals with a top element.",
-      "effect_on_target": "It is the type of the scale argument of LocalDef001; the target specializes that scale to 1.",
+      "name": "LocalDef006",
+      "meaning": "For t in ENNReal, LocalDef006 mu Z t says that Z is measurable, t is neither 0 nor infinity, exp(Z^2/(t.toReal)^2) is mu-integrable, and its mu-integral is at most 2.",
+      "effect_on_target": "It defines the admissible ENNReal scales whose infimum is LocalDef002; exclusion of 0 and infinity makes t.toReal a positive finite real scale in the intended admissible cases.",
       "status": "understood"
     },
     {
       "id": "D007",
-      "name": "HPow.hPow",
-      "meaning": "Heterogeneous exponentiation selected through a typeclass instance.",
-      "effect_on_target": "Forms the real squares X(omega)^2 and Y(omega)^2 in the conclusion and the squared quantities in LocalDef001.",
+      "name": "AddCommMonoidWithOne.toAddMonoidWithOne",
+      "meaning": "This forgetful map extracts an additive monoid with one from an additive commutative monoid with one.",
+      "effect_on_target": "It is typeclass plumbing used to construct the ENNReal numeral 1 in the normalization equalities and has no additional semantic effect.",
       "status": "understood"
     },
     {
       "id": "D008",
-      "name": "InnerProductSpace.toNormedSpace",
-      "meaning": "Extracts a normed-space structure from an inner-product-space structure.",
-      "effect_on_target": "Supplies the real normed-space instance needed by the Bochner integral.",
+      "name": "AddMonoidWithOne.toOne",
+      "meaning": "This forgetful map extracts the distinguished element 1 from an additive monoid with one.",
+      "effect_on_target": "It supplies the ENNReal value 1 used in both scale-normalization hypotheses.",
       "status": "understood"
     },
     {
       "id": "D009",
-      "name": "LE.le",
-      "meaning": "The less-than-or-equal relation supplied by an LE instance.",
-      "effect_on_target": "Expresses that each integral is at most 2.",
+      "name": "And",
+      "meaning": "And is logical conjunction.",
+      "effect_on_target": "It combines the two required integral inequalities in the conclusion and also combines the component conditions in LocalDef001, LocalDef004, LocalDef006, and Integrable.",
       "status": "understood"
     },
     {
       "id": "D010",
-      "name": "MeasurableSpace",
-      "meaning": "A measurable-space structure on a type.",
-      "effect_on_target": "Equips Omega with the sigma-algebra needed to define the measure, measurability, and integration.",
+      "name": "ENNReal",
+      "meaning": "ENNReal is the type of nonnegative real numbers with an added top element infinity.",
+      "effect_on_target": "The infimum-defined scales and the normalization equalities live in this extended nonnegative domain.",
       "status": "understood"
     },
     {
       "id": "D011",
-      "name": "MeasureTheory.IsProbabilityMeasure",
-      "meaning": "The proposition that a measure has total mass one.",
-      "effect_on_target": "Assumes mu is a probability measure, allowing its integrals to be read as expectations.",
+      "name": "Eq",
+      "meaning": "Eq is propositional equality.",
+      "effect_on_target": "It states that each infimum-defined scale is exactly 1 and appears inside the nonzero conditions defining admissible scales.",
       "status": "understood"
     },
     {
       "id": "D012",
-      "name": "MeasureTheory.Measure",
-      "meaning": "The type of measures on a measurable space.",
-      "effect_on_target": "Provides the measure mu with respect to which all hypotheses and conclusions are stated.",
+      "name": "HPow.hPow",
+      "meaning": "This is heterogeneous exponentiation; with the instances shown it is ordinary natural-number powering of real values.",
+      "effect_on_target": "It forms X(omega)^2, Y(omega)^2, K^2, and (t.toReal)^2 in the exponential integrands.",
       "status": "understood"
     },
     {
       "id": "D013",
-      "name": "MeasureTheory.integral",
-      "meaning": "The Bochner integral of a function with respect to a measure.",
-      "effect_on_target": "Forms both real-valued exponential-square integrals bounded in the conclusion and those occurring in LocalDef001.",
+      "name": "InnerProductSpace.toNormedSpace",
+      "meaning": "This extracts a normed-space structure from an inner-product-space structure.",
+      "effect_on_target": "It provides the real normed-space instance needed to form the real-valued Bochner integrals; it imposes no extra quantified assumption.",
       "status": "understood"
     },
     {
       "id": "D014",
-      "name": "Monoid.toNatPow",
-      "meaning": "Constructs natural-number exponentiation from a monoid structure.",
-      "effect_on_target": "Provides real exponentiation by the natural exponent 2.",
+      "name": "LE.le",
+      "meaning": "This is the less-than-or-equal relation supplied by an LE instance.",
+      "effect_on_target": "It expresses every bound of an exponential-square integral by the real constant 2.",
       "status": "understood"
     },
     {
       "id": "D015",
-      "name": "Nat",
-      "meaning": "The type of natural numbers.",
-      "effect_on_target": "It is the exponent type for squaring and the source type of the numerals used during elaboration.",
+      "name": "MeasurableSpace",
+      "meaning": "A measurable-space structure specifies which subsets of a type are measurable.",
+      "effect_on_target": "The proposition is universally quantified over an arbitrary underlying type Omega equipped with such a structure.",
       "status": "understood"
     },
     {
       "id": "D016",
-      "name": "Nat.instAtLeastTwoHAddOfNat",
-      "meaning": "Produces evidence that n + 1 is at least two when n is nonzero.",
-      "effect_on_target": "Supports the typeclass evidence needed to interpret the real numeral 2.",
+      "name": "MeasureTheory.IsProbabilityMeasure",
+      "meaning": "This proposition/typeclass states that a measure is a probability measure.",
+      "effect_on_target": "It restricts mu to be a probability measure rather than an arbitrary measure.",
       "status": "understood"
     },
     {
       "id": "D017",
-      "name": "Nat.instNeZeroSucc",
-      "meaning": "Provides evidence that a successor natural number is nonzero.",
-      "effect_on_target": "Contributes to the elaboration evidence showing that the numeral 2 is at least two.",
+      "name": "MeasureTheory.Measure",
+      "meaning": "This is the type of measures on a measurable space.",
+      "effect_on_target": "It types the universally quantified measure mu with respect to which all integrability and integral statements are made.",
       "status": "understood"
     },
     {
       "id": "D018",
-      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
-      "meaning": "Forgets norm separation from a normed additive commutative group to obtain a seminormed one.",
-      "effect_on_target": "Participates in constructing the real normed-space data passed explicitly to the integral.",
+      "name": "MeasureTheory.integral",
+      "meaning": "This is the real-valued Bochner integral of a function with respect to a measure.",
+      "effect_on_target": "It forms both conclusion quantities ∫ exp(X^2) dmu and ∫ exp(Y^2) dmu, as well as the scaled integrals inside the admissibility predicates.",
       "status": "understood"
     },
     {
       "id": "D019",
-      "name": "OfNat.ofNat",
-      "meaning": "Interprets a natural numeral in a target type using an OfNat instance.",
-      "effect_on_target": "Interprets 1 in ENNReal and 2 in Nat and Real.",
+      "name": "Monoid.toNatPow",
+      "meaning": "This constructs natural-number exponentiation from a monoid's repeated multiplication operation.",
+      "effect_on_target": "It makes the powers by 2 in the real expressions ordinary squares.",
       "status": "understood"
     },
     {
       "id": "D020",
-      "name": "One.toOfNat1",
-      "meaning": "Builds the numeral-one interpretation from a One instance.",
-      "effect_on_target": "Makes the literal 1 denote the ENNReal scale one in both LocalDef001 hypotheses.",
+      "name": "Nat",
+      "meaning": "Nat is the type of natural numbers.",
+      "effect_on_target": "It is the exponent type for the squares and supports the literal numerals occurring in the proposition.",
       "status": "understood"
     },
     {
       "id": "D021",
-      "name": "RCLike.toInnerProductSpaceReal",
-      "meaning": "Gives an RCLike scalar type an inner-product-space structure over the reals.",
-      "effect_on_target": "For Real, it contributes the normed-space structure required to integrate real-valued functions.",
+      "name": "Nat.instAtLeastTwoHAddOfNat",
+      "meaning": "This theorem produces evidence that n + 1 is at least two when n is nonzero.",
+      "effect_on_target": "It is elaboration evidence for casting the numeral 2 into the reals and adds no substantive condition.",
       "status": "understood"
     },
     {
       "id": "D022",
-      "name": "Real",
-      "meaning": "The type of real numbers.",
-      "effect_on_target": "It is the codomain of X and Y, the domain and codomain of the exponential, and the value type of the integrals.",
+      "name": "Nat.instNeZeroSucc",
+      "meaning": "This theorem states that every natural successor n + 1 is nonzero.",
+      "effect_on_target": "It supports the typeclass derivation used for the real numeral 2 and has no independent mathematical effect.",
       "status": "understood"
     },
     {
       "id": "D023",
-      "name": "Real.exp",
-      "meaning": "The real exponential function.",
-      "effect_on_target": "Transforms each squared value into the integrand exp(X(omega)^2) or exp(Y(omega)^2).",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "meaning": "This forgets norm definiteness from a normed additive commutative group, retaining a seminormed additive commutative group.",
+      "effect_on_target": "It is structural instance plumbing for real integration and does not restrict X, Y, or mu.",
       "status": "understood"
     },
     {
       "id": "D024",
-      "name": "Real.instLE",
-      "meaning": "The standard order relation on the real numbers.",
-      "effect_on_target": "Interprets both conclusion inequalities as ordinary real inequalities.",
+      "name": "OfNat.ofNat",
+      "meaning": "This interprets a natural-number literal in a type carrying the corresponding OfNat instance.",
+      "effect_on_target": "It realizes the constants 1 and 2 in ENNReal, Real, and Nat at their occurrences.",
       "status": "understood"
     },
     {
       "id": "D025",
-      "name": "Real.instMonoid",
-      "meaning": "The multiplicative monoid structure on the real numbers.",
-      "effect_on_target": "Supplies natural powers on Real, in particular squaring.",
+      "name": "One.toOfNat1",
+      "meaning": "This converts a distinguished one operation into an interpretation of the numeral 1.",
+      "effect_on_target": "It constructs the ENNReal numeral 1 in the two normalization equalities.",
       "status": "understood"
     },
     {
       "id": "D026",
-      "name": "Real.instNatCast",
-      "meaning": "The canonical embedding of natural numbers into the real numbers.",
-      "effect_on_target": "Interprets the upper-bound numeral 2 as a real number.",
+      "name": "RCLike.toInnerProductSpaceReal",
+      "meaning": "This gives an RCLike scalar type, here Real itself, its canonical real inner-product-space structure.",
+      "effect_on_target": "It supplies the normed-space structure required for real-valued integration and carries no extra proposition-level content.",
       "status": "understood"
     },
     {
       "id": "D027",
-      "name": "Real.instRCLike",
-      "meaning": "The RCLike structure on the real numbers.",
-      "effect_on_target": "Supports construction of the real inner-product and normed-space instances required by integration.",
+      "name": "Real",
+      "meaning": "Real is the type of real numbers.",
+      "effect_on_target": "X and Y are real-valued, the auxiliary K is real, and all exponential integrals and their bounds are real-valued.",
       "status": "understood"
     },
     {
       "id": "D028",
-      "name": "Real.normedAddCommGroup",
-      "meaning": "The normed additive commutative group structure on Real.",
-      "effect_on_target": "Supplies the target-space structure required by the real-valued Bochner integral.",
+      "name": "Real.exp",
+      "meaning": "This is the real exponential function.",
+      "effect_on_target": "It is applied to squared values, optionally divided by squared scales, throughout the hypotheses and conclusion.",
       "status": "understood"
     },
     {
       "id": "D029",
-      "name": "instAddCommMonoidWithOneENNReal",
-      "meaning": "The additive commutative monoid-with-one structure on ENNReal.",
-      "effect_on_target": "Supports interpretation of the scale literal 1 as an ENNReal value.",
+      "name": "Real.instLE",
+      "meaning": "This is the standard less-than-or-equal order on the real numbers.",
+      "effect_on_target": "It gives the usual real interpretation to every integral bound by 2.",
       "status": "understood"
     },
     {
       "id": "D030",
-      "name": "instHPow",
-      "meaning": "Converts a homogeneous Pow instance into a heterogeneous HPow instance with the same base and result type.",
-      "effect_on_target": "Allows the notation underlying real squaring by the natural exponent 2.",
+      "name": "Real.instMonoid",
+      "meaning": "This is the multiplicative monoid structure on the real numbers.",
+      "effect_on_target": "It supplies repeated multiplication, so all powers with exponent 2 are real squares.",
       "status": "understood"
     },
     {
       "id": "D031",
-      "name": "instOfNatAtLeastTwo",
-      "meaning": "Interprets a natural numeral at least two in a type having a natural-number cast.",
-      "effect_on_target": "Interprets the numeral 2 in Real for the upper bounds.",
+      "name": "Real.instNatCast",
+      "meaning": "This is the canonical embedding of natural numbers into the real numbers.",
+      "effect_on_target": "It interprets the real bound 2 appearing in the integral inequalities.",
       "status": "understood"
     },
     {
       "id": "D032",
-      "name": "instOfNatNat",
-      "meaning": "Interprets every natural numeral as itself in Nat.",
-      "effect_on_target": "Interprets the exponent 2 and the natural-number evidence used to construct the real numeral 2.",
+      "name": "Real.instRCLike",
+      "meaning": "This equips the real numbers with their standard RCLike structure.",
+      "effect_on_target": "It underlies the real inner-product and normed-space instances used by the integral, without adding a hypothesis.",
       "status": "understood"
     },
     {
       "id": "D033",
-      "name": "DivInvMonoid.toDiv",
-      "meaning": "Extracts division from a division-inverse monoid.",
-      "effect_on_target": "Supports the real division appearing in the scaled exponential-square expression inside LocalDef001.",
+      "name": "Real.normedAddCommGroup",
+      "meaning": "This is the standard normed additive commutative group structure on the real numbers.",
+      "effect_on_target": "It supplies the codomain structure required to integrate real-valued exponential functions.",
       "status": "understood"
     },
     {
       "id": "D034",
-      "name": "ENNReal.toReal",
-      "meaning": "Converts an extended nonnegative real to a real through its nonnegative-real component.",
-      "effect_on_target": "Converts the LocalDef001 scale to the real denominator; at scale 1 this denominator is 1.",
+      "name": "instAddCommMonoidWithOneENNReal",
+      "meaning": "This is the additive commutative monoid-with-one structure on ENNReal.",
+      "effect_on_target": "It supplies the ENNReal numeral 1 used to normalize both infimum-defined scales.",
       "status": "understood"
     },
     {
       "id": "D035",
-      "name": "HDiv.hDiv",
-      "meaning": "Heterogeneous division selected through a typeclass instance.",
-      "effect_on_target": "Forms X(omega)^2 divided by scale.toReal^2 and the analogous expression for Y inside LocalDef001.",
+      "name": "instHPow",
+      "meaning": "This turns an ordinary power operation into the homogeneous heterogeneous-power interface.",
+      "effect_on_target": "It connects real natural-number powers to the notation used for all squares in the dossier.",
       "status": "understood"
     },
     {
       "id": "D036",
-      "name": "Measurable",
-      "meaning": "The property that inverse images of measurable sets are measurable.",
-      "effect_on_target": "LocalDef001 requires each of X and Y to be measurable.",
+      "name": "instOfNatAtLeastTwo",
+      "meaning": "This constructs a numeral in a type with a natural-number cast when the natural literal is at least two.",
+      "effect_on_target": "It constructs the real numeral 2 used as the common exponential-integral threshold.",
       "status": "understood"
     },
     {
       "id": "D037",
-      "name": "MeasureTheory.Integrable",
-      "meaning": "The conjunction of almost-everywhere strong measurability and finite integral norm.",
-      "effect_on_target": "LocalDef001 requires each scaled exponential-square integrand to be integrable.",
+      "name": "instOfNatNat",
+      "meaning": "This is the canonical interpretation of each natural-number literal as itself in Nat.",
+      "effect_on_target": "It supplies the Nat literals 0, 1, and 2 used in exponent and numeral elaboration, with no extra semantic restriction.",
       "status": "understood"
     },
     {
       "id": "D038",
-      "name": "Ne",
-      "meaning": "Inequality, defined as the negation of equality.",
-      "effect_on_target": "LocalDef001 requires its scale to be unequal to both zero and infinity.",
+      "name": "Exists",
+      "meaning": "Exists is existential quantification.",
+      "effect_on_target": "Within each LocalDef001 assumption it quantifies a real witness K whose positive scaled exponential moment is integrable and bounded by 2.",
       "status": "understood"
     },
     {
       "id": "D039",
-      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
-      "meaning": "Forgets multiplication commutativity from a nonunital seminormed commutative ring.",
-      "effect_on_target": "Participates indirectly in the instance chain furnishing Real with the analytic structures needed for integrability.",
+      "name": "LT.lt",
+      "meaning": "This is the strict-less-than relation supplied by an LT instance.",
+      "effect_on_target": "With the real instance it states 0 < K for each existential scale witness.",
       "status": "understood"
     },
     {
       "id": "D040",
-      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
-      "meaning": "Extracts a seminormed additive commutative group from a nonunital seminormed ring.",
-      "effect_on_target": "Participates indirectly in the real-valued integrability instance chain.",
+      "name": "Measurable",
+      "meaning": "A function is measurable when the preimage of every measurable set is measurable.",
+      "effect_on_target": "Both X and Y are required to be measurable, and this condition is repeated inside each scale-admissibility predicate.",
       "status": "understood"
     },
     {
       "id": "D041",
-      "name": "NormedCommRing.toSeminormedCommRing",
-      "meaning": "Forgets norm separation from a normed commutative ring to obtain a seminormed commutative ring.",
-      "effect_on_target": "Participates indirectly in deriving the structures used to state integrability of the real-valued transform.",
+      "name": "Real.instLT",
+      "meaning": "This is the standard strict order on the real numbers.",
+      "effect_on_target": "It gives 0 < K its usual real meaning in LocalDef001 and LocalDef004.",
       "status": "understood"
     },
     {
       "id": "D042",
-      "name": "PseudoMetricSpace.toUniformSpace",
-      "meaning": "Extracts a uniform-space structure from a pseudometric-space structure.",
-      "effect_on_target": "Contributes indirectly to the topology on Real needed by the definition of integrability.",
+      "name": "Real.instZero",
+      "meaning": "This is the distinguished real number zero.",
+      "effect_on_target": "It supplies the 0 in the positivity requirement 0 < K.",
       "status": "understood"
     },
     {
       "id": "D043",
-      "name": "Real.instDivInvMonoid",
-      "meaning": "The division-and-inversion monoid structure on Real.",
-      "effect_on_target": "Provides ordinary real division in the scaled integrands of LocalDef001.",
+      "name": "Real.measurableSpace",
+      "meaning": "This is the Borel measurable-space structure on the real numbers.",
+      "effect_on_target": "It makes measurability of X and Y mean measurability as real-valued Borel functions.",
       "status": "understood"
     },
     {
       "id": "D044",
-      "name": "Real.measurableSpace",
-      "meaning": "The Borel measurable-space structure on Real.",
-      "effect_on_target": "Determines the codomain measurable structure used when LocalDef001 requires X and Y to be measurable.",
+      "name": "Zero.toOfNat0",
+      "meaning": "This converts a zero operation into an interpretation of the numeral 0.",
+      "effect_on_target": "It supplies zero in the positivity and nonzero side conditions on scales.",
       "status": "understood"
     },
     {
       "id": "D045",
-      "name": "Real.normedCommRing",
-      "meaning": "The normed commutative ring structure on Real.",
-      "effect_on_target": "Supplies algebraic and normed structures used indirectly by the real-valued integrability condition.",
+      "name": "CompleteLinearOrder.toConditionallyCompleteLinearOrderBot",
+      "meaning": "This derives a conditionally complete linear order with a bottom element from a complete linear order.",
+      "effect_on_target": "It is part of the order-instance chain that makes the infimum of the ENNReal admissible-scale set well-defined.",
       "status": "understood"
     },
     {
       "id": "D046",
-      "name": "Real.pseudoMetricSpace",
-      "meaning": "The pseudometric-space structure on Real induced by absolute-value distance.",
-      "effect_on_target": "Supplies topology and uniformity used indirectly in the definition of real-valued integrability.",
+      "name": "ConditionallyCompleteLattice.toConditionallyCompletePartialOrder",
+      "meaning": "This extracts the conditionally complete partial-order structure from a conditionally complete lattice.",
+      "effect_on_target": "It provides order structure used by the ENNReal set infimum defining LocalDef003.",
       "status": "understood"
     },
     {
       "id": "D047",
-      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
-      "meaning": "Forgets additive commutativity from a seminormed additive commutative group.",
-      "effect_on_target": "Participates indirectly in constructing the continuous extended-norm structure on Real used by Integrable.",
+      "name": "ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice",
+      "meaning": "This forgetful map extracts a conditionally complete lattice from a conditionally complete linear order.",
+      "effect_on_target": "It is structural support for the ENNReal infimum and adds no separate mathematical condition.",
       "status": "understood"
     },
     {
       "id": "D048",
-      "name": "SeminormedAddGroup.toContinuousENorm",
-      "meaning": "Constructs a continuous extended-norm structure from a seminormed additive group.",
-      "effect_on_target": "Supplies a typeclass required to state integrability of the real-valued exponential-square functions.",
+      "name": "ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder",
+      "meaning": "This forgetful map removes the explicitly bundled bottom structure from a conditionally complete linear order with bottom.",
+      "effect_on_target": "It participates in the typeclass chain used to interpret the ENNReal infimum.",
       "status": "understood"
     },
     {
       "id": "D049",
-      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
-      "meaning": "Forgets the unit from a seminormed commutative ring.",
-      "effect_on_target": "Participates indirectly in the analytic instance chain for the real-valued integrability hypotheses.",
+      "name": "ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderInf",
+      "meaning": "This packages the infimum component of a conditionally complete partial order.",
+      "effect_on_target": "It supplies the InfSet structure used by LocalDef003 to take the admissible-scale infimum.",
       "status": "understood"
     },
     {
       "id": "D050",
-      "name": "Top.top",
-      "meaning": "The greatest element supplied by a Top instance.",
-      "effect_on_target": "Denotes infinity in the LocalDef001 condition that the scale is not top.",
+      "name": "ConditionallyCompletePartialOrderInf.toInfSet",
+      "meaning": "This extracts the set-infimum operation from a conditionally complete partial-order-with-infimum structure.",
+      "effect_on_target": "It provides the concrete set-infimum operation invoked in LocalDef003.",
       "status": "understood"
     },
     {
       "id": "D051",
-      "name": "UniformSpace.toTopologicalSpace",
-      "meaning": "Extracts a topology from a uniform-space structure.",
-      "effect_on_target": "Contributes indirectly to the topology on Real required by Integrable.",
+      "name": "DivInvMonoid.toDiv",
+      "meaning": "This extracts division from a division-and-inverse monoid structure.",
+      "effect_on_target": "It supplies ordinary real division in Z(omega)^2/K^2 and Z(omega)^2/(t.toReal)^2.",
       "status": "understood"
     },
     {
       "id": "D052",
-      "name": "Zero.toOfNat0",
-      "meaning": "Builds the numeral-zero interpretation from a Zero instance.",
-      "effect_on_target": "Interprets zero in ENNReal for the LocalDef001 nonzero-scale condition.",
+      "name": "ENNReal.instCompleteLinearOrder",
+      "meaning": "This is the complete linear order on ENNReal.",
+      "effect_on_target": "It ensures that the set of admissible ENNReal scales has a well-defined infimum, including edge cases such as unbounded or empty sets according to the complete-order convention.",
       "status": "understood"
     },
     {
       "id": "D053",
-      "name": "instHDiv",
-      "meaning": "Converts a homogeneous Div instance into a homogeneous heterogeneous-division instance.",
-      "effect_on_target": "Allows ordinary real division to appear through HDiv in the definition of LocalDef001.",
+      "name": "HDiv.hDiv",
+      "meaning": "This is heterogeneous division; with the displayed instances it is ordinary real division.",
+      "effect_on_target": "It divides squared function values by squared real scales in LocalDef004 and LocalDef006.",
       "status": "understood"
     },
     {
       "id": "D054",
-      "name": "instTopENNReal",
-      "meaning": "The top-element structure on ENNReal, whose top is infinity.",
-      "effect_on_target": "Interprets the infinite scale excluded by LocalDef001.",
+      "name": "InfSet.sInf",
+      "meaning": "This is the infimum of a set in a type carrying an InfSet structure.",
+      "effect_on_target": "It is the central operation defining the scale LocalDef002 as the infimum of all LocalDef006-admissible t.",
       "status": "understood"
     },
     {
       "id": "D055",
-      "name": "instZeroENNReal",
-      "meaning": "The zero structure on ENNReal.",
-      "effect_on_target": "Interprets the zero scale excluded by LocalDef001.",
+      "name": "MeasureTheory.Integrable",
+      "meaning": "A function is integrable when it is almost-everywhere strongly measurable and has finite integral norm.",
+      "effect_on_target": "It is explicitly required for every scaled exponential function admitted by LocalDef004 or LocalDef006, but it is not explicitly conjoined with either unscaled conclusion inequality.",
       "status": "understood"
     },
     {
       "id": "D056",
-      "name": "HAdd.hAdd",
-      "meaning": "Heterogeneous addition selected through a typeclass instance.",
-      "effect_on_target": "Used in the type-level arithmetic that establishes the numeral 2 is at least two.",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "meaning": "This forgets commutativity from a nonunital seminormed commutative ring.",
+      "effect_on_target": "It is instance plumbing used to obtain analytic structures on Real for integrability, with no proposition-level restriction.",
       "status": "understood"
     },
     {
       "id": "D057",
-      "name": "Nat.AtLeastTwo",
-      "meaning": "A proposition expressing that a natural number is at least two.",
-      "effect_on_target": "Provides the evidence required to interpret the numeral 2 in Real through its natural-number cast.",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "meaning": "This extracts a seminormed additive commutative group from a nonunital seminormed ring.",
+      "effect_on_target": "It supports the norm and extended norm structures used in the definition of real-valued integrability.",
       "status": "understood"
     },
     {
       "id": "D058",
-      "name": "instAddNat",
-      "meaning": "The standard addition operation on natural numbers.",
-      "effect_on_target": "Supports the natural-number computation 1 + 1 used in numeral-2 elaboration.",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "meaning": "This forgets norm definiteness from a normed commutative ring, retaining a seminormed commutative ring.",
+      "effect_on_target": "It is structural support for the analytic typeclasses behind Integrable and does not change the mathematical claim.",
       "status": "understood"
     },
     {
       "id": "D059",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "This extracts the uniform-space structure induced by a pseudometric space.",
+      "effect_on_target": "It contributes the topology on Real needed by Integrable, with no additional hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "Real.instDivInvMonoid",
+      "meaning": "This is the standard division-and-inverse monoid structure on Real.",
+      "effect_on_target": "It gives the scale quotients in the exponential arguments their ordinary real-division meaning.",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "Real.normedCommRing",
+      "meaning": "This is the standard normed commutative ring structure on Real.",
+      "effect_on_target": "It underlies multiplication, addition, norm, and continuity structures used in the squared exponential integrands and their integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "This is the standard pseudometric-space structure on Real, induced by absolute-value distance.",
+      "effect_on_target": "It supplies topology and uniformity needed for the analytic definitions appearing in Integrable.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "meaning": "This forgets additive commutativity from a seminormed additive commutative group.",
+      "effect_on_target": "It is typeclass support in the chain constructing the continuous extended norm used for integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "meaning": "This equips a seminormed additive group with its continuous extended norm.",
+      "effect_on_target": "It supplies the ContinuousENorm instance required by MeasureTheory.Integrable for the real exponential functions.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "meaning": "This forgets the unit from a seminormed commutative ring.",
+      "effect_on_target": "It is another structural step providing the analytic real instances used by Integrable.",
+      "status": "understood"
+    },
+    {
+      "id": "D066",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "This extracts the topology induced by a uniform space.",
+      "effect_on_target": "It supplies the standard topology on Real required in the definition of integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D067",
+      "name": "instHDiv",
+      "meaning": "This turns ordinary division on a type into the homogeneous heterogeneous-division interface.",
+      "effect_on_target": "It connects the real division structure to the quotient expressions inside the scaled exponential integrands.",
+      "status": "understood"
+    },
+    {
+      "id": "D068",
+      "name": "setOf",
+      "meaning": "This forms the set of all elements satisfying a predicate.",
+      "effect_on_target": "It forms the ENNReal set {t | LocalDef006 mu Z t} whose infimum defines LocalDef003.",
+      "status": "understood"
+    },
+    {
+      "id": "D069",
+      "name": "ENNReal.toReal",
+      "meaning": "This maps an extended nonnegative real to its underlying nonnegative real value, with the top case sent through the underlying WithTop conversion convention.",
+      "effect_on_target": "For an admissible t, which is required not to be infinity, it supplies the real denominator t.toReal used in exp(Z^2/(t.toReal)^2).",
+      "status": "understood"
+    },
+    {
+      "id": "D070",
+      "name": "HAdd.hAdd",
+      "meaning": "This is heterogeneous addition; for natural numbers here it is ordinary natural addition.",
+      "effect_on_target": "It appears in typeclass evidence that the natural expression 1 + 1 represents a numeral at least two.",
+      "status": "understood"
+    },
+    {
+      "id": "D071",
+      "name": "Nat.AtLeastTwo",
+      "meaning": "This proposition certifies that a natural number is at least two.",
+      "effect_on_target": "It is evidence permitting construction of the real numeral 2 and contributes no additional theorem hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D072",
+      "name": "Ne",
+      "meaning": "Ne a b means that a is not equal to b.",
+      "effect_on_target": "It excludes t = 0 and t = infinity from the ENNReal scales admitted by LocalDef006.",
+      "status": "understood"
+    },
+    {
+      "id": "D073",
+      "name": "Top.top",
+      "meaning": "This is the greatest element of a type with a Top instance.",
+      "effect_on_target": "For ENNReal it is infinity, which LocalDef006 explicitly excludes from admissible scales.",
+      "status": "understood"
+    },
+    {
+      "id": "D074",
+      "name": "instAddNat",
+      "meaning": "This is ordinary addition on natural numbers.",
+      "effect_on_target": "It interprets the addition used in numeral typeclass evidence such as 1 + 1, with no substantive effect on the claim.",
+      "status": "understood"
+    },
+    {
+      "id": "D075",
       "name": "instHAdd",
-      "meaning": "Converts a homogeneous Add instance into a homogeneous heterogeneous-addition instance.",
-      "effect_on_target": "Makes the natural-number addition used to construct evidence for the numeral 2 available through HAdd.",
+      "meaning": "This turns ordinary addition into the homogeneous heterogeneous-addition interface.",
+      "effect_on_target": "It connects natural addition to the elaboration evidence for the constant 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D076",
+      "name": "instTopENNReal",
+      "meaning": "This is the top element of ENNReal, namely infinity.",
+      "effect_on_target": "LocalDef006 requires every admissible ENNReal scale to differ from this infinity value.",
+      "status": "understood"
+    },
+    {
+      "id": "D077",
+      "name": "instZeroENNReal",
+      "meaning": "This is the zero element of ENNReal.",
+      "effect_on_target": "LocalDef006 requires every admissible ENNReal scale to be nonzero.",
       "status": "understood"
     }
   ],
   "translation": {
     "binders": [
       "An arbitrary type Omega equipped with a measurable-space structure.",
-      "A measure mu on Omega.",
-      "An assumption that mu is a probability measure.",
-      "Two arbitrary real-valued functions X and Y on Omega."
+      "A measure mu on Omega, equipped with the assumption that mu is a probability measure.",
+      "Two arbitrary functions X, Y : Omega → Real."
     ],
     "hypotheses": [
-      "LocalDef001 mu X 1 holds: X is measurable; the ENNReal scale 1 is neither zero nor infinity; omega ↦ exp(X(omega)^2 / (1.toReal)^2) is mu-integrable; and its mu-integral is at most 2.",
-      "LocalDef001 mu Y 1 holds: Y is measurable; the ENNReal scale 1 is neither zero nor infinity; omega ↦ exp(Y(omega)^2 / (1.toReal)^2) is mu-integrable; and its mu-integral is at most 2."
+      "X is measurable and there exists a real K_X > 0 such that omega ↦ exp(X(omega)^2 / K_X^2) is mu-integrable and has mu-integral at most 2.",
+      "Y is measurable and there exists a real K_Y > 0 such that omega ↦ exp(Y(omega)^2 / K_Y^2) is mu-integrable and has mu-integral at most 2.",
+      "The ENNReal infimum of all t such that X is measurable, t is neither 0 nor infinity, omega ↦ exp(X(omega)^2 / (t.toReal)^2) is mu-integrable, and its mu-integral is at most 2, is equal to 1.",
+      "The analogous ENNReal infimum of admissible scales for Y is equal to 1."
     ],
     "conclusions": [
       "The mu-integral of omega ↦ exp(X(omega)^2) is at most 2.",
-      "The mu-integral of omega ↦ exp(Y(omega)^2) is at most 2.",
-      "Both inequalities hold simultaneously."
+      "The mu-integral of omega ↦ exp(Y(omega)^2) is at most 2."
     ],
     "mathematical_definitions": [
-      "LocalDef001(mu, Z, t) means that Z is measurable, t is neither 0 nor infinity, omega ↦ exp(Z(omega)^2 / t.toReal^2) is mu-integrable, and the integral of that function is at most 2.",
-      "At t = 1, t.toReal = 1 and Z(omega)^2 / t.toReal^2 simplifies to Z(omega)^2.",
-      "Because mu is a probability measure, each displayed integral may equivalently be described as the expectation of the corresponding exponential-square random variable."
+      "For a real-valued measurable function Z and t in ENNReal, call t admissible when t ≠ 0, t ≠ infinity, exp(Z^2/(t.toReal)^2) is mu-integrable, and its mu-integral is at most 2.",
+      "Define the scale rho_mu(Z) as inf {t in ENNReal | t is admissible for Z}.",
+      "The auxiliary domain hypothesis on Z requires existence of a positive real K for which exp(Z^2/K^2) is mu-integrable and has integral at most 2."
     ],
-    "proposition_plain_english": "On any probability space, let X and Y be real-valued functions. If each function separately satisfies LocalDef001 at scale 1—meaning in particular that its exponential squared moment at that scale is integrable and has integral at most 2—then both unscaled exponential-square expectations are at most 2: the integral of exp(X^2) is at most 2 and the integral of exp(Y^2) is at most 2."
+    "proposition_plain_english": "On any probability space, let X and Y be real-valued functions that are measurable and each admit at least one positive real scale at which its exponential squared moment is integrable and at most 2. For each function, form the extended-nonnegative-real infimum of all nonzero finite scales t at which the same bound holds for exp(Z^2/(t.toReal)^2). If this infimum is exactly 1 for X and exactly 1 for Y, then both unscaled exponential-square integrals satisfy ∫ exp(X^2) dmu ≤ 2 and ∫ exp(Y^2) dmu ≤ 2."
   },
   "restrictions_and_vacuity_risks": [
-    "The result is conditional: it does not prove that X or Y satisfies LocalDef001; it assumes this separately for each function.",
-    "The hypotheses contain stronger information than the conclusions, including measurability, integrability, and valid-scale conditions.",
-    "The two requested bounds are already final conjuncts of the respective LocalDef001 hypotheses after specializing the scale to 1 and simplifying division by 1.",
-    "No independence, identical distribution, relationship between X and Y, or joint measurability assumption is required.",
-    "The probability-measure assumption is present in the proposition, although extracting the stated bounds from the two LocalDef001 hypotheses does not intrinsically require normalization of mu.",
-    "Lean's integral is a total operation, but the LocalDef001 hypotheses explicitly ensure integrability of the relevant scale-1 exponential-square functions.",
-    "The nonzero and non-infinite scale restrictions are automatically satisfied by the concrete ENNReal scale 1, but they remain embedded in each hypothesis."
+    "The measure is required to be a probability measure, and X and Y must satisfy the strong domain hypotheses encoded by LocalDef001; the proposition does not cover arbitrary real-valued functions.",
+    "Admissible infimum scales live in ENNReal but are explicitly restricted to be nonzero and finite before conversion to Real; the auxiliary existence witness in LocalDef001 instead has type Real.",
+    "Equality of an infimum to 1 does not, merely by the definition of infimum, assert that the scale 1 itself belongs to the admissible set or that the infimum is attained. The conclusion supplies a bound at scale 1 without an explicit attainment hypothesis.",
+    "The conclusion states only inequalities involving MeasureTheory.integral and does not explicitly assert Integrable (exp(X^2)) or Integrable (exp(Y^2)); scaled integrability is explicit only inside the antecedent predicates.",
+    "Because the integral operator is total, its behavior on nonintegrable functions may make a bare integral inequality weaker or vacuous unless integrability at scale 1 follows from other hypotheses; that behavior is not exposed by the one-level body supplied for MeasureTheory.integral.",
+    "X and Y are unrelated: no independence, identical-distribution, equality, sum, product, or other joint relationship is assumed or concluded. The theorem is a conjunction of two separate instances of the same unary statement.",
+    "No centering, zero-mean, symmetry, variance normalization, or tail-probability assertion is encoded."
   ],
   "ambiguities": [
-    "The packet gives the complete body of LocalDef001, so its mathematical content is unambiguous even though its name is intentionally non-descriptive.",
-    "No source-specific interpretation beyond the supplied proposition is justified.",
-    "The conclusion uses real squares directly, not absolute values; for real inputs these squares are nevertheless nonnegative.",
-    "The integrals are Bochner integrals with respect to mu; describing them as expectations relies on the explicit probability-measure assumption."
+    "The packet exposes MeasureTheory.integral only through an opaque wrapper body, so its exact totalization behavior on a nonintegrable unscaled exponential is not derivable from the packet alone.",
+    "The dossier defines the auxiliary existence condition using positive real scales and the infimum using finite nonzero ENNReal scales, but does not expose any theorem connecting those two formulations; the proposition simply assumes both relevant facts.",
+    "The normalization rho_mu(Z) = 1 alone does not reveal whether admissibility at the boundary is intended to be attained; the formal conclusion asserts the boundary inequality regardless."
   ]
 }

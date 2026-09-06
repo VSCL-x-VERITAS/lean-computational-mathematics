@@ -1,0 +1,130 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "HDP-02-EQ-2.14",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "blind_translation_sha256": "3e39c4d8e1b7fab0b9ca9a2bd103a41e28b66f19ea4925d181e09ea14f2258e9",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The contract selects Definition 2.5.6, Equation (2.13), and Equation (2.14) on PDF page 16 (printed page 27), including the immediately stated absolute-constant convention.",
+      "translation_evidence": "The translation describes the same exponential-square infimum scale and the two-sided tail inequality identified by the selected source contract.",
+      "reasoning": "Within the permitted evidence, the selected equation and inherited definition are specific and mutually consistent."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "X is a real-valued random variable, t is real with t >= 0, and probability and expectation are taken under the probability law of X.",
+      "translation_evidence": "The translation binds a measurable space Ω, a measure μ with an IsProbabilityMeasure instance, X : Ω -> Real, and t : Real.",
+      "reasoning": "The translation makes the ambient probability space explicit while preserving the types and roles of X and t. The constant-binder difference is assessed under quantifier scope and constants."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "There exists one positive absolute constant c that works uniformly for every sub-gaussian X and every t >= 0.",
+      "translation_evidence": "The translation has no c binder and instead uses the fixed coefficient c = 1/4 through the denominator (2*S.toReal)^2 for arbitrary X and t.",
+      "reasoning": "Uniformity in X and t is preserved, but an existential constant is specialized to a particular witness, so the quantifier/witness content is stronger than the source."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "The source assumes X is sub-gaussian in the sense of Definition 2.5.6 and t >= 0, with no centering or independence assumption.",
+      "translation_evidence": "The translation assumes X is measurable, its exponential-square infimum S is finite, t >= 0, and μ has an IsProbabilityMeasure instance; D016 leaves that instance's exact assertion unclear.",
+      "reasoning": "The displayed finite-scale condition matches the source's sub-gaussian hypothesis and adds no centering or independence condition, but the blind evidence does not fully expose the probability-measure side condition."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected statement's conclusion is the two-sided tail inequality P{|X| >= t} <= 2 exp(-c t^2 / ||X||_{psi_2}^2).",
+      "translation_evidence": "The translation concludes μ.real{|X| >= t} <= 2 exp(-t^2/(2*S.toReal)^2).",
+      "reasoning": "Every structural component of the selected equation's conclusion is present. The consequential coefficient mismatch is evaluated separately under relation strength, constants, and specialization."
+    },
+    {
+      "id": "C06",
+      "status": "unclear",
+      "source_evidence": "The source uses the infimum definition ||X||_{psi_2} = inf {s > 0 : E exp(X^2/s^2) <= 2}, ordinary probability, expectation, absolute value, and real exponential.",
+      "translation_evidence": "The ledger interprets S as the ENNReal infimum over finite nonzero admissible scales, μ.real as real conversion of event measure, and the absolute-value event correctly; D016 and D060 remain marked unclear.",
+      "reasoning": "The nontrivial scale, event, coercion, and arithmetic operators are consistently interpreted, but the exact IsProbabilityMeasure assertion and integral implementation are unresolved in the allowed dossier."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source gives an upper bound with an unspecified positive absolute coefficient c in the negative exponent.",
+      "translation_evidence": "The translation uses the same inequality direction and non-strict event but demands the particular coefficient 1/4.",
+      "reasoning": "The relation symbols agree, yet the translated upper bound is quantitatively stronger than the existential-constant claim and is not implied by it."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes the random variable X, its probability law, threshold t, and its psi_2 scale.",
+      "translation_evidence": "The translation distinguishes X, μ, t, the admissible-scale set, and its infimum S, using S only as the counterpart of the psi_2 scale.",
+      "reasoning": "No source object is conflated with a different mathematical object; the probability space and scale construction are merely made explicit."
+    },
+    {
+      "id": "C09",
+      "status": "fail",
+      "source_evidence": "The tail prefactor is exactly 2, the threshold is squared, the norm is squared, and c is an unspecified positive absolute constant independent of X and t.",
+      "translation_evidence": "The prefactor and powers are preserved, but squaring 2*S.toReal fixes the denominator at 4*S^2 and hence fixes c = 1/4.",
+      "reasoning": "The numerical structure matches except for the central constant: a fixed 1/4 is not the same data as an arbitrary existential positive absolute c."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The source claims existence of some universal positive c for all sub-gaussian variables and thresholds.",
+      "translation_evidence": "The translation specializes the universal coefficient to c = 1/4 while retaining arbitrary probability spaces, variables, and nonnegative thresholds.",
+      "reasoning": "This is a genuine nonvacuous strengthening in the conclusion, not an equivalent restatement; source-implies-translation fails on the evidence provided."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "The source states the formula for all t >= 0 but does not specify how to interpret the quotient when ||X||_{psi_2} = 0.",
+      "translation_evidence": "The translation permits S = 0; totalized real division then makes the exponent zero and the asserted upper bound equal to 2.",
+      "reasoning": "The translation assigns definite semantics to the degenerate zero-scale case while the source contract explicitly records that case as ambiguous."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source concerns sub-gaussian variables, a nonempty intended class that includes ordinary positive-scale examples and the degenerate zero variable.",
+      "translation_evidence": "The translation applies whenever the exponential-square infimum is finite and yields a substantive Gaussian tail bound for S > 0; empty admissible-scale sets fail the finiteness premise.",
+      "reasoning": "The hypothesis is satisfiable and the proposition is not globally true only for an unintended trivial reason. The special trivial bound at S = 0 is isolated under C11 rather than making the whole theorem vacuous."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "For S > 0 and under the conventional meanings of the probability and integral dependencies, the translation implies the source by choosing the absolute constant c = 1/4. The permitted source evidence does not define the source quotient at ||X||_{psi_2} = 0, while the translation assigns that case a totalized bound, and D016/D060 remain unresolved; therefore the implication cannot be certified for the full stated source domain."
+    },
+    "source_implies_translation": {
+      "verdict": "no",
+      "reasoning": "Even away from the zero-scale ambiguity, existence of an unspecified positive absolute c does not imply the particular coefficient c = 1/4 demanded by the translation. The source therefore does not entail the translation's quantitatively sharper bound."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "fixed-universal-constant",
+      "source_evidence": "Equation (2.14) asserts the bound for some positive absolute constant c without identifying its value.",
+      "translation_evidence": "The translated exponent -t^2/(2*S.toReal)^2 fixes c = 1/4.",
+      "impact": "The translation is quantitatively stronger; source-implies-translation fails."
+    },
+    {
+      "severity": "major",
+      "category": "zero-scale-semantics",
+      "source_evidence": "The contract explicitly records that the quotient is not interpreted when ||X||_{psi_2} = 0.",
+      "translation_evidence": "S may equal 0, and totalized real division then yields the trivial upper bound 2.",
+      "impact": "The two statements cannot be compared globally in the translation-implies-source direction without choosing a source convention for the degenerate case."
+    },
+    {
+      "severity": "minor",
+      "category": "unresolved-dependencies",
+      "source_evidence": "The source relies on probability and expectation under the law of X.",
+      "translation_evidence": "The dependency ledger marks D016 and D060 unclear.",
+      "impact": "The intended semantics appear aligned, but the allowed evidence does not fully close the probability-normalization and integral interpretations."
+    }
+  ],
+  "rationale": "The blind translation preserves the two-sided non-strict event, threshold domain, prefactor 2, exponential-square scale, and absence of centering or independence hypotheses. It replaces the source's existential positive absolute constant by the specific uniform choice c = 1/4, so the source does not imply the translation. Conversely, the translation would imply the source on positive scales under the conventional dependency meanings, but the source leaves the zero-norm quotient undefined while the translation gives it totalized semantics, and two pertinent dependencies remain unresolved. With one implication unclear and the other false, the required classification is undetermined, acceptance is false, and adjudication is required."
+}

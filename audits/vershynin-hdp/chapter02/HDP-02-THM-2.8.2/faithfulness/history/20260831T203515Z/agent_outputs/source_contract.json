@@ -1,0 +1,159 @@
+{
+  "ambiguities": [
+    {
+      "evidence": "A text scan of the chapter shows ||a||_inf occurring only inside the display of Theorem 2.8.2 (printed page 37); the chapter defines only ||g||_2 = (sum g_i^2)^{1/2} (printed page 31).",
+      "impact": "A formalization must supply the intended meaning max_i |a_i| from the book's global notation; this is not verifiable from Chapter 2 alone.",
+      "issue": "||a||_inf is never defined in this chapter"
+    },
+    {
+      "evidence": "Printed page 37 places ||a||_2^2 and ||a||_inf in denominators and defines K = max_i ||X_i||_{psi_1}, with no exclusion of a = 0 or of all X_i being 0 a.s.",
+      "impact": "Either degeneracy makes a denominator vanish; a formalization must add positivity hypotheses or a division convention.",
+      "issue": "Degenerate cases a = 0 and K = 0"
+    },
+    {
+      "evidence": "Theorem 2.8.2 ends only with 'where K = max_i ||X_i||_{psi_1}' (printed page 37); the clause 'where c > 0 is an absolute constant' appears only under Theorem 2.8.1 (printed page 36).",
+      "impact": "Whether this c is literally the constant of Theorem 2.8.1 or merely some absolute constant is unstated; the intended reading is 'some absolute constant'.",
+      "issue": "c is not re-declared"
+    },
+    {
+      "evidence": "Printed page 37: 'Let X_1, ..., X_N ... and a = (a_1, ..., a_N) in R^N' with no clause on N.",
+      "impact": "N = 0 is not addressed; a formalization must decide.",
+      "issue": "N never explicitly bound"
+    },
+    {
+      "evidence": "Printed page 37 states only 'independent'.",
+      "impact": "Joint independence is intended (the derivation factors the MGF over the whole family); it must be made explicit formally.",
+      "issue": "'independent' unqualified"
+    }
+  ],
+  "batch_source_contract_sha256": "31b331b7c5b1cdb0b3f95a487470c011c93663c2dc063252710933fefb9a303a",
+  "contract_plain_english": "There is a positive absolute constant c such that: whenever X_1, ..., X_N are independent, mean-zero, sub-exponential random variables, a = (a_1, ..., a_N) is ANY real vector in R^N, and K denotes max_i ||X_i||_{psi_1} (the largest sub-exponential norm, with ||X||_{psi_1} = inf{ t > 0 : E exp(|X|/t) <= 2 }), then for every real t >= 0 the probability that the ABSOLUTE VALUE of the weighted sum a_1 X_1 + ... + a_N X_N is at least t is at most 2 exp( - c * min( t^2 / (K^2 ||a||_2^2) , t / (K ||a||_inf) ) ). The two branches use different norms of the weight vector: the squared Euclidean norm ||a||_2^2 = sum a_i^2 paired with K^2 and t^2, and the sup-norm ||a||_inf = max_i |a_i| paired with K and t. The prefactor 2 is explicit; c is an unquantified absolute constant not re-declared in the statement; the weights are unrestricted in sign and size; and the bound is asserted for t = 0 as well. It is obtained from Theorem 2.8.1 by applying it to the variables a_i X_i.",
+  "role": "source-contract",
+  "schema_version": "formalization-faithfulness-1",
+  "source_evidence": [
+    {
+      "anchor": "Theorem 2.8.2 (Bernstein's inequality, weighted form), full statement",
+      "location": "PDF page 26; printed page 37",
+      "observation": "Rendered page reads: 'Let X_1, ..., X_N be independent, mean zero, sub-exponential random variables, and a = (a_1, ..., a_N) in R^N. Then, for every t >= 0, we have P{ |sum_{i=1}^{N} a_i X_i| >= t } <= 2 exp[ - c min( t^2 / (K^2 ||a||_2^2) , t / (K ||a||_inf) ) ]  where K = max_i ||X_i||_{psi_1}.' Absolute-value bars around the weighted sum are visible in the rendered page. Note there is no comma before 'where' and the statement does NOT re-declare c."
+    },
+    {
+      "anchor": "Sentence introducing Theorem 2.8.2",
+      "location": "PDF page 26; printed page 37",
+      "observation": "'To put Theorem 2.8.1 in a more convenient form, let us apply it for a_i X_i instead of X_i.' \u2014 Theorem 2.8.2 is obtained from Theorem 2.8.1 by substituting a_i X_i for X_i, using ||a_i X_i||_{psi_1} = |a_i| ||X_i||_{psi_1} <= |a_i| K."
+    },
+    {
+      "anchor": "Theorem 2.8.1 trailing clause 'where c > 0 is an absolute constant'",
+      "location": "PDF page 25; printed page 36",
+      "observation": "Theorem 2.8.2 does not repeat this clause; the c in Theorem 2.8.2 is governed by the book's convention that c denotes a positive absolute constant."
+    },
+    {
+      "anchor": "Section 2.7 opening, Euclidean norm display",
+      "location": "PDF page 20; printed page 31",
+      "observation": "'||g||_2 = ( sum_{i=1}^{N} g_i^2 )^{1/2}' \u2014 the chapter's usage of the Euclidean norm of a vector in R^N."
+    },
+    {
+      "anchor": "Only occurrence of ||a||_inf in the chapter",
+      "location": "PDF page 26; printed page 37",
+      "observation": "A text scan of the whole chapter shows ||a||_inf occurring only inside the display of Theorem 2.8.2; the chapter never defines it, relying on the book's global notation (sup-norm, max_i |a_i|)."
+    },
+    {
+      "anchor": "Definition 2.7.5 and (2.21)",
+      "location": "PDF page 22; printed page 33",
+      "observation": "'||X||_{psi_1} = inf { t > 0 : E exp(|X|/t) <= 2 }.'"
+    },
+    {
+      "anchor": "Normalized corollary display following the discussion of Theorem 2.8.2, with footnote 9",
+      "location": "PDF page 26; printed page 37",
+      "observation": "'P{ |(1/sqrt(N)) sum_{i=1}^{N} X_i| >= t } <= { 2 exp(-c t^2), t <= C sqrt(N); 2 exp(-t sqrt(N)), t >= C sqrt(N) }' with footnote 9 'For simplicity, we suppressed here the dependence on K by allowing the constants c, C depend on K.' \u2014 an illustrative consequence of Theorem 2.8.2, not part of its statement."
+    }
+  ],
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "statement": {
+    "binders": [
+      "c: a positive absolute constant, existentially quantified outside everything else (inherited from the book's c/C convention; not re-declared in this statement)",
+      "N: the number of summands and the dimension of a, implicitly a positive integer",
+      "X_1, ..., X_N: random variables on a common probability space",
+      "a = (a_1, ..., a_N) in R^N: a real coefficient vector, with NO sign, nonvanishing, or normalization restriction",
+      "t: a real number, universally quantified by 'for every t >= 0'",
+      "K: an abbreviation fixed by 'where K = max_i ||X_i||_{psi_1}', not a free binder"
+    ],
+    "conclusions": [
+      "P{ |sum_{i=1}^{N} a_i X_i| >= t } <= 2 exp[ - c min( t^2 / (K^2 ||a||_2^2) , t / (K ||a||_inf) ) ], where K = max_i ||X_i||_{psi_1}",
+      "The event is TWO-SIDED: absolute value of the weighted sum, non-strict '>= t'",
+      "The sub-gaussian branch is normalized by K^2 ||a||_2^2 (Euclidean norm squared) and the sub-exponential branch by K ||a||_inf (sup-norm) \u2014 a single scalar K in both, with different norms of a"
+    ],
+    "definitions_and_conventions": [
+      "||X||_{psi_1} = inf { t > 0 : E exp(|X|/t) <= 2 } (Definition 2.7.5 / (2.21), printed page 33)",
+      "K = max_i ||X_i||_{psi_1}, the maximum sub-exponential norm over i = 1, ..., N",
+      "||a||_2 = ( sum_{i=1}^{N} a_i^2 )^{1/2}, the Euclidean norm (chapter usage, printed page 31); ||a||_2^2 = sum_{i=1}^{N} a_i^2",
+      "||a||_inf = the sup-norm max_i |a_i| \u2014 used here but NOT defined in this chapter (book-level notation)",
+      "Book convention: c denotes a positive ABSOLUTE constant, no numeric value, no dependence on N, the X_i, a, or t"
+    ],
+    "hypotheses": [
+      "X_1, ..., X_N are independent",
+      "X_1, ..., X_N are mean zero: E X_i = 0 for each i",
+      "X_1, ..., X_N are sub-exponential (Definition 2.7.5), so each ||X_i||_{psi_1} is finite",
+      "a = (a_1, ..., a_N) in R^N (arbitrary real vector; no further hypothesis)",
+      "t >= 0"
+    ],
+    "implicit_context": [
+      "Derivation: apply Theorem 2.8.1 to a_i X_i, using that ||a_i X_i||_{psi_1} = |a_i| ||X_i||_{psi_1}, so sum_i ||a_i X_i||^2_{psi_1} <= K^2 ||a||_2^2 and max_i ||a_i X_i||_{psi_1} <= K ||a||_inf; hence the c of Theorem 2.8.2 need not equal that of Theorem 2.8.1",
+      "Theorem 2.8.1's bound is monotone-weakened by replacing the exact sum/max of the weighted norms with the K-based upper bounds, so this statement is formally weaker than a direct application of Theorem 2.8.1",
+      "Corollary 2.8.3 is the special case a_i = 1/N (printed page 37)",
+      "Proposition 2.7.1 and Definition 2.7.5 supply the sub-exponential machinery and the absolute-constant equivalences",
+      "All random variables live on one common probability space; no measurability or integrability hypothesis beyond mean zero and sub-exponentiality"
+    ],
+    "semantic_facets": [
+      {
+        "details": [
+          "Two-sided: absolute value bars around sum_{i=1}^{N} a_i X_i",
+          "Prefactor 2 as in Theorem 2.8.1, inherited from the symmetrization step"
+        ],
+        "topic": "Tail sidedness"
+      },
+      {
+        "details": [
+          "c is an unquantified positive absolute constant, not re-declared in this statement (inherited convention)",
+          "2 is explicit; the exponents 2 on t, on K and on ||a||_2 are explicit",
+          "K is a defined quantity (max of the psi_1 norms), not a free parameter and not an absolute constant"
+        ],
+        "topic": "Constant status"
+      },
+      {
+        "details": [
+          "Exists an absolute constant c > 0 such that: for all N, all independent mean-zero sub-exponential X_1, ..., X_N, all a in R^N, and all t >= 0, the bound holds",
+          "c may not depend on N, the X_i, a, or t"
+        ],
+        "topic": "Quantifier order"
+      },
+      {
+        "details": [
+          "Sub-gaussian branch denominator: K^2 ||a||_2^2 (squared Euclidean norm of the weights)",
+          "Sub-exponential branch denominator: K ||a||_inf (sup-norm of the weights)",
+          "The power of K matches the power of t in each branch: K^2 with t^2, K with t"
+        ],
+        "topic": "Which norm goes where"
+      },
+      {
+        "details": [
+          "a_i are arbitrary reals: they may be negative, zero, or unnormalized",
+          "No hypothesis ||a||_2 = 1 is imposed here (contrast the general Hoeffding proof earlier in the chapter, which normalizes ||a||_2 = 1 WLOG)"
+        ],
+        "topic": "Weight generality"
+      }
+    ]
+  },
+  "task_id": "HDP-02-THM-2.8.2",
+  "undebatable_constraints": [
+    "The event is TWO-SIDED: absolute-value bars around the weighted sum sum_{i=1}^{N} a_i X_i",
+    "The inequality inside the probability is non-strict: '>= t'",
+    "The right-hand prefactor is exactly 2",
+    "c is an unquantified positive absolute constant (book convention), quantified before N, the X_i, a and t; never an explicit number",
+    "The two arguments of the min are exactly t^2 / (K^2 ||a||_2^2) and t / (K ||a||_inf), in that order \u2014 squared Euclidean norm in the first, sup-norm in the second, with K^2 and K respectively",
+    "K is defined as max_i ||X_i||_{psi_1}, a single scalar appearing in BOTH branches",
+    "a is an arbitrary vector in R^N: no positivity, no nonvanishing, no normalization may be added",
+    "Hypotheses on the X_i are exactly: independent, mean zero, sub-exponential",
+    "The bound holds for every t >= 0, t = 0 included",
+    "||X||_{psi_1} is the sub-exponential norm inf{ t > 0 : E exp(|X|/t) <= 2 }"
+  ]
+}

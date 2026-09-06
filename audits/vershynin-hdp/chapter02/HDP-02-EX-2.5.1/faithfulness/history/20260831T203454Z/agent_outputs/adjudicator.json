@@ -1,0 +1,97 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EX-2.5.1",
+  "trigger": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D003 unclear",
+    "blind translator left dependency_coverage item D020 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "Resolve the disagreement as faithful-equivalent. Exercise 2.5.1 contains both the exact moment formula and the separately displayed O(sqrt(p)) deduction, while the Lean target states only the exact formula. This is not a semantic omission: the target quantifies the exact identity uniformly over all real p >= 1, and that identity entails the requested O(sqrt(p)) estimate by the standard Gamma/Stirling bound. Conversely, the source's exact identity yields the Lean equality after specializing to the canonical standard-Gaussian coordinate and regrouping positive real powers.",
+      "primary_evidence": "PDF pages 12-13 / printed pages 23-24, Exercise 2.5.1, gives the exact Gamma identity and then says 'Deduce that' before display (2.11). The direct dossier's target type universally quantifies p : Real with 1 <= p and states that same exact identity; the source's wording itself marks (2.11) as a consequence of the exact formula."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "The request is satisfied by resolving every underlying unclear item and implication from primary evidence. D003, D020, C02, C06, C10, C11, and source-implies-translation all resolve positively; no uncertainty remains that would require an undetermined decision.",
+      "primary_evidence": "The immutable source passage, the elaborated target and dependency declarations in both review packets, and the imported Mathlib declarations for ENNReal.toReal and gaussianReal jointly settle the request without majority voting."
+    },
+    {
+      "item": "round-trip judge classification is undetermined",
+      "resolution": "Replace undetermined with faithful-equivalent because both implication directions are yes. The exact Lean formula entails the source's derived asymptotic conclusion, and the source's exact formula entails the Lean presentation.",
+      "primary_evidence": "The source contract records the exact identity and O(sqrt(p)) as the two conclusions of one exercise; the source explicitly introduces the latter with 'Deduce that'. The target's universal exact identity supplies the premise from which that deduction follows."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D003 unclear",
+      "resolution": "D003 is understood and passes. ENNReal.toReal returns the finite value when its input is finite and returns 0 at infinity. The identity coordinate has finite moments under gaussianReal for every finite exponent, so for p >= 1 the eLpNorm' input to toReal is finite and the infinity convention cannot change the intended Lp norm.",
+      "primary_evidence": "D003 in both dossiers defines ENNReal.toReal through toNNReal. In the imported Lean environment, Mathlib/Data/ENNReal/Basic.lean documents that toReal returns its input when finite and 0 otherwise, with theorem toReal_top; Mathlib/Probability/Distributions/Gaussian/Real.lean proves memLp_id_gaussianReal for every finite p."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D020 unclear",
+      "resolution": "D020 is understood and passes. gaussianReal is parametrized by mean and variance; therefore gaussianReal 0 1 is exactly the centered variance-one, nondegenerate standard normal law N(0,1).",
+      "primary_evidence": "D020's supplied body chooses the density gaussianPDF(mu,v) when v != 0. The imported module Mathlib/Probability/Distributions/Gaussian/Real.lean explicitly describes gaussianReal as having mean mu and variance v, gives gaussianPDFReal(mu,v,x) = (sqrt(2*pi*v))^-1 exp(-(x-mu)^2/(2*v)), and proves variance_id_gaussianReal = v."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C02 unclear",
+      "resolution": "C02 passes. In the source's standard Lp notation, p is a real exponent; the continuous Gamma expression and the subsequent discussion of bounds for all p >= 1 reinforce that reading. Replacing an arbitrary X with law N(0,1) by the identity coordinate under gaussianReal 0 1 preserves this law-determined Lp norm.",
+      "primary_evidence": "Exercise 2.5.1 states the formula 'for each p >= 1' using Lp and Gamma((1+p)/2), without an integer restriction. The immediately following Proposition 2.5.2 again states Lp moment growth for all p >= 1, and its proof treats p through Gamma(p/2), consistent with real p. The direct dossier binds p : Real and fixes gaussianReal 0 1."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C06 unclear",
+      "resolution": "C06 passes. eLpNorm' is the extended-valued p-th absolute moment to the 1/p power, the standard Real norm supplies |x|, ENNReal.toReal is harmless because the Gaussian moment is finite, gaussianReal 0 1 is N(0,1), Real.Gamma is the ordinary Gamma function on the positive arguments used here, and Real.rpow gives the intended fractional powers. The source's big-O conclusion need not appear as an operator in the target because it is a mathematical consequence of the uniformly quantified exact formula.",
+      "primary_evidence": "D003, D010, D020, D023, D030, D033, and D035 in the complete dossiers provide the relevant declarations. The source's first display is the corresponding absolute-moment/Gamma identity and explicitly introduces (2.11) as a deduction."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C10 unclear",
+      "resolution": "C10 passes. The choice p : Real is the intended source domain, not an unsupported generalization, and using the canonical coordinate under the standard Gaussian measure is distributionally equivalent to quantifying over a random variable X with that law.",
+      "primary_evidence": "The source uses unrestricted Lp exponents p >= 1 and a Gamma formula valid on the real continuum; no integrality condition appears. D020 and the imported gaussianReal documentation identify gaussianReal 0 1 with mean zero and variance one."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C11 unclear",
+      "resolution": "C11 passes. The premise p >= 1 excludes zero and negative exponents; (1+p)/2 and 1/2 are positive, so the Gamma factors and reciprocal exponent are well-defined. The standard Gaussian has all finite moments, so eLpNorm' is finite and ENNReal.toReal never encounters the exceptional infinite case on the target domain.",
+      "primary_evidence": "The target hypothesis in the direct dossier is 1 <= p. Mathlib/Probability/Distributions/Gaussian/Real.lean proves memLp_id_gaussianReal for every finite p, and Mathlib/Data/ENNReal/Basic.lean states the finite/infinite behavior of ENNReal.toReal."
+    },
+    {
+      "item": "round-trip judge left implication source_implies_translation unclear",
+      "resolution": "The implication is yes. The source exact identity applies to real p >= 1 and any standard-normal X; choosing the identity coordinate under gaussianReal 0 1, identifying its Lp norm with eLpNorm', and using positivity-preserving real-power algebra yields precisely the blind translation and Lean target.",
+      "primary_evidence": "PDF page 13 / printed page 24, Exercise 2.5.1 first display, supplies the exact identity for every p >= 1. The direct and blind dossiers define eLpNorm', gaussianReal 0 1, Real.Gamma, and Real.rpow, and the imported Gaussian module confirms mean 0, variance 1, and finite moments."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "For every real p >= 1, the Lean target gives the standard-normal Lp norm by the exact Gamma formula. Positivity and real-power laws identify its placement of 2^(p/2) inside the outer 1/p power with the source's external sqrt(2) factor. The source's separately requested O(sqrt(p)) statement follows from this uniform exact formula by the standard Gamma/Stirling estimate, as the source's words 'Deduce that' indicate."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source exact identity, applied to the canonical identity random variable under gaussianReal 0 1, equals the toReal conversion of eLpNorm' because all standard-Gaussian moments at finite p >= 1 are finite. Regrouping the positive factors under Real.rpow gives exactly the Lean right-hand side."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [
+    {
+      "severity": "note",
+      "category": "derived-asymptotic-not-explicit",
+      "evidence": "Exercise 2.5.1 separately displays ||X||_{L^p} = O(sqrt(p)) after the exact formula, whereas the Lean target states only the uniformly quantified exact formula.",
+      "impact": "There is a syntactic omission but no semantic weakening: the exact formula entails the requested big-O deduction, so both implication directions still hold."
+    },
+    {
+      "severity": "note",
+      "category": "equivalent-canonical-and-algebraic-presentation",
+      "evidence": "Lean uses the identity coordinate under gaussianReal 0 1 and writes 2^(p/2) inside the outer 1/p real power; the source uses an arbitrary X with law N(0,1) and writes sqrt(2) outside.",
+      "impact": "The canonical measure has the same law, and positivity on p >= 1 makes the two real-power expressions equal; neither difference changes applicability or strength."
+    }
+  ],
+  "rationale": "Primary-source inspection confirms that the selected exercise includes both the exact formula and the separate O(sqrt(p)) deduction. The Lean target explicitly states only the exact formula, but it states it uniformly for every real p >= 1, and that exact Gamma identity mathematically entails the big-O conclusion. The converse uses the exact part of the source, the canonical N(0,1) coordinate, finiteness of Gaussian moments, and equivalent positive real-power algebra. The two unresolved dependencies and all four unclear semantic checks therefore pass, both implications are yes, and the faithful-equivalent classification is accepted."
+}
