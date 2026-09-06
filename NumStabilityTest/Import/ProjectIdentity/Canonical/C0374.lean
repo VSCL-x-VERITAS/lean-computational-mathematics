@@ -1,0 +1,10 @@
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Concentration.TraceMGF.LeverageScore
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Concentration.TraceMGF.LeverageScore`. -/
+
+#check NumStability.finiteComplexCStarMatrix
+#check NumStability.finiteComplexCStarMatrix_finiteIdMatrix
+#check NumStability.finiteComplexCStarMatrix_isSelfAdjoint_of_symmetric
+#check NumStability.finiteComplexCStarMatrix_le_of_finiteLoewnerLe
+#check NumStability.finiteComplexCStarMatrix_smul_finiteIdMatrix
+#check NumStability.leverageFlMulThenSqrtRowScaleDen

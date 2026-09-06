@@ -1,0 +1,13 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Theorem05`. -/
+
+#check NumStability.Higham13PartitionedLUFamilySpec
+#check NumStability.blockErrorDelta
+#check NumStability.blockErrorTheta
+#check NumStability.blockErrorTheta_le_cubic_of_quadratic_constants
+#check NumStability.dhs_block_lu_factorization_twoBudget_firstOrder
+#check NumStability.dhs_schur_update_firstOrder
+#check NumStability.higham13_eq13_10_from_subtraction_spec
+#check NumStability.higham13_eq13_11_from_matmul_subtraction_specs
+#check NumStability.higham13_theta_conventional_isBigO_cubic

@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MatrixInversion
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MethodDLeftResidual
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MethodDProductDischarge
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD.MethodDUpperCertificate
+import ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD`.
+Declaration names and mathematical terminology are unchanged.
 -/

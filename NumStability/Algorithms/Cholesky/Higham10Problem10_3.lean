@@ -2,9 +2,9 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.Summation.Tree.ArbitraryOrderError.PivotNormalized
-import NumStability.Source.Higham.Chapter08.Section03.TriangularSystems.ArbitraryOrder
-import NumStability.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder.Basic
+import ComputationalMathematics.Algorithms.Summation.Tree.ArbitraryOrderError.PivotNormalized
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.ArbitraryOrder
+import ComputationalMathematics.Source.Higham.Chapter10.Problem03.ArbitraryEvaluationOrder.Basic
 
 /-!
 # Higham10Problem10_3 (compatibility module)

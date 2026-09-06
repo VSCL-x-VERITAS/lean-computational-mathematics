@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.RoundedDiagonalSolve
+import ComputationalMathematics.Source.Higham.Chapter24.RoundedDiagonalSolve
 
 /-!
 # Historical Chapter 24 rounded diagonal-solve import

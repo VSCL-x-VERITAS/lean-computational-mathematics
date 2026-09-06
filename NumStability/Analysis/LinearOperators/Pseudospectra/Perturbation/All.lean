@@ -1,9 +1,8 @@
-import NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation.ConvergenceCriterion
-import NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation.Definitions
-import NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation.LowerBounds
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation.All
 
 /-!
-# Analysis.LinearOperators.Pseudospectra.Perturbation.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

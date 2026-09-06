@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.FourierTransform
+import ComputationalMathematics.Source.Higham.Chapter24.FourierTransform
 
 /-!
 # Historical Chapter 24 Fourier-transform import

@@ -1846,3 +1846,12 @@ Post-source-sep real-Schur update: `sylvester_realQuasiSchur_factors_twoBlockSpe
 
 - `chapter_splitting/` and `References/` are local-only policy/source artifacts and must remain unstaged.
 - Remaining local untracked file before this milestone: `.codex/config.toml`.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter16` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

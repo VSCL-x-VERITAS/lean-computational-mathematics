@@ -1,35 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02.Contract
 
-/-! Stable Chapter 1 forwarding module for the corrected form of
-    Exercise 1.2.2. -/
+/-!
+# Compatibility import for an HDP source contract
 
-noncomputable section
-
-namespace NumStability.HDP.Contract
-
-open MeasureTheory
-
-/-! Stable Chapter 1 alias for the corrected signed-tail statement and its
-standard-Cauchy obstruction in Exercise 1.2.2. -/
-theorem hdp_01_hex_h1_d2_d2
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X) :
-    (
-      (((∫⁻ ω, ENNReal.ofReal (max (X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (X ω) 0}) ∧
-      (∫⁻ ω, ENNReal.ofReal (max (-X ω) 0) ∂μ =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < max (-X ω) 0})) ∧
-      (∀ hInt : Integrable X μ,
-        (∫ ω, X ω ∂μ) =
-          (∫ t in Set.Ioi 0, μ.real {a | t < X a}) -
-            (∫ t in Set.Iio 0, μ.real {a | X a < t})))
-      ∧
-        ((∫⁻ t in Set.Ioi 0,
-          Probability.cauchyMeasure 0 1 {x | t < x}) = ⊤) ∧
-        ((∫⁻ t in Set.Iio 0,
-          Probability.cauchyMeasure 0 1 {x | x < t}) = ⊤)
-    ) := by
-  exact NumStability.HDP.Scalar.Preliminaries.exercise122CorrectedWithCauchy hX
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter01.Section02.Exercise02.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

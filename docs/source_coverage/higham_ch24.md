@@ -56,3 +56,12 @@ Evidence ledgers:
 - `docs/chapter24/CHAPTER24_FORMALIZATION_REPORT.md`
 - `docs/chapter24/CHAPTER24_NOT_PROVED_LEDGER.md`
 - `docs/chapter24/CHAPTER24_PROOF_SOURCE_LEDGER.md`
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter24` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

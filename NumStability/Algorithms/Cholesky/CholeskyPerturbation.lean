@@ -3,12 +3,12 @@ import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.Cholesky.CholeskySpec
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.LU.GrowthFactor
-import NumStability.Algorithms.LinearSystems.Cholesky.Perturbation.Basic
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
+import ComputationalMathematics.Algorithms.Cholesky.CholeskySpec
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Perturbation.Basic
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
 
 /-!
 # CholeskyPerturbation (compatibility module)

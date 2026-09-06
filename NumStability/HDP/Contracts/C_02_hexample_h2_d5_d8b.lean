@@ -1,3 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08B.Contract
 
-/-! Stable Chapter 2 contract re-export for Example 2.5.8(b). -/
+/-!
+# Compatibility import for an HDP source contract
+
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section05.Example08B.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

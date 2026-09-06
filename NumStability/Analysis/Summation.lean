@@ -1,9 +1,8 @@
-import NumStability.Analysis.Summation.ErrorBounds
-import NumStability.Analysis.Summation.Signs
+import ComputationalMathematics.Analysis.Summation
 
 /-!
-# Summation analysis
+Historical import path retained for compatibility.
 
-Complete aggregate for reusable finite-sum sign identities, summation
-conditioning, and floating-point error bounds.
+The implementation is provided by `ComputationalMathematics.Analysis.Summation`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter01.Section17.SourceInterval
+import ComputationalMathematics.Source.Higham.Chapter01.Section17.SourceInterval
 
 /-!
 # Historical nonrandom-rounding source-interval import

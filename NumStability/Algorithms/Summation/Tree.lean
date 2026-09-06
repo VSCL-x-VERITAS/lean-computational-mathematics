@@ -1,13 +1,8 @@
-import NumStability.Algorithms.Summation.Tree.ArbitraryOrderError.All
-import NumStability.Algorithms.Summation.Tree.Balanced
-import NumStability.Algorithms.Summation.Tree.Chain
-import NumStability.Algorithms.Summation.Tree.Core
+import ComputationalMathematics.Algorithms.Summation.Tree
 
 /-!
-# Summation-tree family umbrella
+Historical import path retained for compatibility.
 
-This is the canonical complete entry point for tree-based summation. New code
-may import `Tree.Core`, `Tree.Balanced`, or `Tree.Chain` when it needs
-a narrower dependency surface. The historical `Algorithms.SumTree` path
-forwards here.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Tree`.
+Declaration names and mathematical terminology are unchanged.
 -/

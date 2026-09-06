@@ -1,0 +1,11 @@
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularCompression
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularCompression`. -/
+
+#check NumStability.cstarMatrixCompressionCLM
+#check NumStability.cstarMatrixCompressionCLM_apply
+#check NumStability.cstarMatrix_compression_add
+#check NumStability.cstarMatrix_compression_one_of_conjTranspose_mul_self_eq_one
+#check NumStability.cstarMatrix_compression_real_smul
+#check NumStability.cstarMatrix_compression_smul
+#check NumStability.cstarMatrix_compression_sub

@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.DiagonalUpdate
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.DiagonalUpdate`. -/
+
+#check NumStability.higham13_algorithm13_3_firstSplitStageHistoryGrowthFactor_le_two_of_product_bound_diag_update

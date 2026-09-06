@@ -1,0 +1,8 @@
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.SchurComplement
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.SchurComplement`. -/
+
+#check NumStability.blockMatrixFirstSplit_schur_eq_blockMatrixFlatFin_blockSchur
+#check NumStability.blockSchur
+#check NumStability.det_ne_zero_blockMatrixFlatFin_blockSchur_of_first_split_invertible
+#check NumStability.maxEntryNorm_blockMatrixFlatFin_blockSchur_pos_of_first_split_invertible

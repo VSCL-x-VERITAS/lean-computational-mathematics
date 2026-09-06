@@ -1,8 +1,8 @@
-import NumStability.Source.Higham
+import ComputationalMathematics.Source
 
 /-!
-# NumStability source correspondence
+Historical import path retained for compatibility.
 
-Canonical entry point for modules tied to numbered books and papers. Reusable
-analysis and algorithms must not depend on this surface.
+The implementation is provided by `ComputationalMathematics.Source`.
+Declaration names and mathematical terminology are unchanged.
 -/

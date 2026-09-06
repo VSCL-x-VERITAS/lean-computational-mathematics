@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Equation08.FiniteFamily
-import NumStability.Source.Higham.Chapter04.Equation08.FiniteFormat
-import NumStability.Source.Higham.Chapter04.Equation08.FiniteRouteLimitations
-import NumStability.Source.Higham.Chapter04.Equation08.ModelStrength
-import NumStability.Source.Higham.Chapter04.Equation08.ReturnedSum
+import ComputationalMathematics.Source.Higham.Chapter04.Equation08
 
 /-!
-# Higham Chapter 4, equation (4.8)
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for source-specific audits of Kahan's
-ordinary returned-sum backward-error claim.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Equation08`.
+Declaration names and mathematical terminology are unchanged.
 -/

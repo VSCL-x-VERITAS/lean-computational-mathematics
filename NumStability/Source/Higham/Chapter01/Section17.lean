@@ -1,13 +1,8 @@
-import NumStability.Source.Higham.Chapter01.Section17.ErrorSpread
-import NumStability.Source.Higham.Chapter01.Section17.GridVariation
-import NumStability.Source.Higham.Chapter01.Section17.HornerEvaluation
-import NumStability.Source.Higham.Chapter01.Section17.SourceInterval
-import NumStability.Source.Higham.Chapter01.Section17.StoredGrid
+import ComputationalMathematics.Source.Higham.Chapter01.Section17
 
 /-!
-# Higham Section 1.17
+Historical import path retained for compatibility.
 
-Source correspondence for Kahan's nonrandom-rounding example: exact and
-rounded Horner evaluation, source-interval certificates, grid variation,
-stored IEEE-double inputs, and the certified error-spread conclusion.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter01.Section17`.
+Declaration names and mathematical terminology are unchanged.
 -/

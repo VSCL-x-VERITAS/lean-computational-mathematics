@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.LpBounds.ComplexDiagonal
-import NumStability.Analysis.LinearOperators.MatrixPowers.LpBounds.ComplexJordan
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.LpBounds.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.LpBounds.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.LpBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

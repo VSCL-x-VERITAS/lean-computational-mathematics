@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import NumStability.Source.Higham.Chapter27.Problem06
+import ComputationalMathematics.Source.Higham.Chapter27.Problem06
 
 /-!
 # Compatibility import for Higham Chapter 27 Problem 27.6

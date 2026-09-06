@@ -1,11 +1,8 @@
-import NumStability.FloatingPoint.FusedMultiplyAdd.All
-import NumStability.FloatingPoint.IEEE
-import NumStability.FloatingPoint.Model
-import NumStability.FloatingPoint.OperationLaws
+import ComputationalMathematics.FloatingPoint
 
 /-!
-# Floating-point foundations
+Historical import path retained for compatibility.
 
-Complete reusable entry point for floating-point models, IEEE-facing
-operations, and general operation laws.
+The implementation is provided by `ComputationalMathematics.FloatingPoint`.
+Declaration names and mathematical terminology are unchanged.
 -/

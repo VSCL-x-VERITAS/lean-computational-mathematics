@@ -1,7 +1,8 @@
-import NumStability.Algorithms.NormEstimation.OneNorm.GeneralIndex
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.All
 
 /-!
-# Algorithms.NormEstimation.OneNorm.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.OneNorm.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

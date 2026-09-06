@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Equation23.ProductBounds.PointRow
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Equation23.ProductBounds.PointRow`. -/
+
+#check NumStability.Higham13BlockLUBudgetChain.exists_blockLUFact_eq13_23_product
+#check NumStability.Higham13BlockLUBudgetChain.exists_blockLUFact_eq13_23_product_exact_kappa
+#check NumStability.higham13_eq13_23_point_row_from_growth

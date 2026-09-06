@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.AsymptoticFamilies
-import NumStability.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.ForwardErrorEndpoint
-import NumStability.Source.Higham.Chapter14.Section01.InverseErrorAnalysis.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section01.InverseErrorAnalysis
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section01.InverseErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/

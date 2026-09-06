@@ -1,4 +1,4 @@
-import NumStability.Analysis.LeadingDigits.LogarithmicDistribution
+import ComputationalMathematics.Analysis.LeadingDigits.LogarithmicDistribution
 
 /-!
 # Compatibility import for the logarithmic leading-digit distribution

@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter07.Equation25.InverseConditioning.ExactPerturbation
+import ComputationalMathematics.Source.Higham.Chapter07.Equation25.InverseConditioning.All
 
 /-!
-# Source.Higham.Chapter07.Equation25.InverseConditioning.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter07.Equation25.InverseConditioning.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

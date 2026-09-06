@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.LocalCancellationResults.Theorems
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.LocalCancellationResults.Theorems`. -/
+
+#check NumStability.higham8_14_local_envelope_not_relative_after_cancellation

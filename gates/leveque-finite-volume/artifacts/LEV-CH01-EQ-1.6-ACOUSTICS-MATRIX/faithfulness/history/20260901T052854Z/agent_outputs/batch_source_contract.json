@@ -1,0 +1,493 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "batch-source-contract",
+  "source_group": "leveque-chapter-01-acoustics-characteristics",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_locator_sha256": "c4ec2035a85a5a30a2333db6a44ef5e187a130ebcd7f86c4c718de479f693893",
+  "task_ids": [
+    "LEV-CH01-ACOUSTICS-EIGENVALUES",
+    "LEV-CH01-ACOUSTICS-LEFT-MODE",
+    "LEV-CH01-ACOUSTICS-RIGHT-MODE",
+    "LEV-CH01-ACOUSTICS-TWO-WAVE-DECOMPOSITION",
+    "LEV-CH01-EQ-1.6-ACOUSTICS-MATRIX",
+    "LEV-CH01-EQ-1.7-WAVE-EQUATION"
+  ],
+  "contracts": [
+    {
+      "task_id": "LEV-CH01-ACOUSTICS-EIGENVALUES",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equation (1.6) and the later definition c = sqrt(K/rho)",
+          "observation": "The acoustics state is q = (p,u)^T, its coefficient matrix is A = [[0,K],[1/rho,0]], and the sound speed used in the following characteristic variables is c = sqrt(K/rho)."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Sentence beginning 'For example, the acoustics matrix A of (1.6)'",
+          "observation": "The source explicitly states that this acoustics matrix has eigenvalues -c and +c and identifies them as the speeds at which acoustic waves travel in the one-dimensional medium."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Real material constants K (bulk modulus of compressibility) and rho (density).",
+          "The real sound speed c and the real 2 by 2 acoustics matrix A."
+        ],
+        "hypotheses": [
+          "A = [[0,K],[1/rho,0]].",
+          "c = sqrt(K/rho), with c the positive speed of sound in the physical setting of the passage."
+        ],
+        "conclusions": [
+          "The eigenvalues of A are -c and +c.",
+          "These two eigenvalues are the propagation speeds of the two one-dimensional acoustic waves."
+        ],
+        "definitions_and_conventions": [
+          "The state ordering in (1.6) is pressure first and particle velocity second: q = (p,u)^T.",
+          "K is the bulk modulus of compressibility, rho is density, and c is the speed of sound."
+        ],
+        "implicit_context": [
+          "The medium is one-dimensional and the material coefficients are constant.",
+          "The physical parameter regime makes 1/rho and the real positive square root sqrt(K/rho) meaningful."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "spectral data",
+            "details": [
+              "The spectrum consists of the signed sound speeds -c and +c for the particular matrix (1.6)."
+            ]
+          },
+          {
+            "topic": "physical interpretation",
+            "details": [
+              "The negative and positive eigenvalues encode left- and right-going acoustic propagation speeds."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The matrix must be exactly the acoustics matrix A = [[0,K],[1/rho,0]] from (1.6).",
+        "The symbol c must remain linked to c = sqrt(K/rho).",
+        "Both signed eigenvalues -c and +c must be present; an unsigned magnitude alone is insufficient.",
+        "The claim concerns eigenvalues of A, not merely roots of an unrelated polynomial."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The parameter domain is expressed physically rather than by displayed inequalities.",
+          "evidence": "The passage calls K a bulk modulus, rho a density, and c > 0 a speed of sound, but it does not separately quantify K > 0 and rho > 0 beside (1.5)-(1.6).",
+          "impact": "A formal rendering must make enough nonzero/positivity assumptions for 1/rho and a positive real c; it should not treat arbitrary real K and rho as equally intended."
+        },
+        {
+          "issue": "Eigenvalue multiplicities are not stated in words.",
+          "evidence": "The source says that the 2 by 2 matrix 'has eigenvalues -c and +c' without an explicit multiplicity clause.",
+          "impact": "In the intended c > 0 regime the two displayed eigenvalues are distinct and exhaust a 2 by 2 spectrum, but the contract should not invent an additional multiplicity theorem beyond that context."
+        }
+      ],
+      "contract_plain_english": "For the constant-coefficient one-dimensional acoustics matrix A = [[0,K],[1/rho,0]] with sound speed c = sqrt(K/rho) in the physical positive-parameter regime, the two eigenvalues are exactly -c and +c, and they are the two acoustic wave speeds."
+    },
+    {
+      "task_id": "LEV-CH01-ACOUSTICS-LEFT-MODE",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equations (1.5) and the definitions of p, u, K, and rho",
+          "observation": "The full one-dimensional acoustics system is p_t + K u_x = 0 and u_t + (1/rho) p_x = 0, with p the pressure perturbation, u the particle velocity, K the bulk modulus, and rho the density."
+        },
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Paragraph beginning 'On the other hand, the function'",
+          "observation": "The source defines w^2(x,t) = p(x,t) - rho*c*u(x,t), states w^2_t - c*w^2_x = 0, assigns propagation speed -c, and prints solutions of the form q^2(x,t) = q-tilde(x+ct) that model motion to the left at the speed of sound."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Sufficiently differentiable real-valued functions p(x,t) and u(x,t).",
+          "Real material constants K and rho, the sound speed c, and the scalar characteristic variable w^2(x,t)."
+        ],
+        "hypotheses": [
+          "p_t + K u_x = 0 and u_t + (1/rho) p_x = 0.",
+          "c = sqrt(K/rho) in the physical regime where c > 0 and rho is nonzero.",
+          "w^2 = p - rho*c*u."
+        ],
+        "conclusions": [
+          "w^2_t - c*w^2_x = 0.",
+          "This scalar equation has propagation speed -c and models an acoustic wave moving to the left at the speed of sound.",
+          "Profiles with argument x + ct, printed as q^2(x,t) = q-tilde(x+ct), are solutions of this one-way equation."
+        ],
+        "definitions_and_conventions": [
+          "Subscripts t and x denote partial derivatives.",
+          "The minus sign in w^2 = p - rho*c*u selects the left-going characteristic combination.",
+          "For c > 0, the scalar transport equation v_t - c v_x = 0 has propagation speed -c."
+        ],
+        "implicit_context": [
+          "The system is the one-dimensional constant-coefficient acoustic system (1.5).",
+          "The differentiability needed to form the displayed derivatives is assumed rather than quantified."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "characteristic variable",
+            "details": [
+              "The left mode is the specific linear combination p - rho*c*u."
+            ]
+          },
+          {
+            "topic": "propagation direction",
+            "details": [
+              "The PDE sign is negative, the transport speed is -c, and traveling profiles use x + ct."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The mode combination must use p - rho*c*u, not p + rho*c*u.",
+        "The scalar PDE must be w^2_t - c*w^2_x = 0.",
+        "The propagation speed is -c and the physical direction is left for c > 0.",
+        "The traveling-profile argument is x + ct, consistent with leftward propagation.",
+        "The mode equation is derived under the coupled acoustics system (1.5), not asserted for arbitrary unrelated p and u."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The traveling-profile sentence changes the mode symbol from w^2 to q^2.",
+          "evidence": "Immediately after defining w^2 and displaying its PDE, the printed text says 'solutions of the form q^2(x,t) = q-tilde(x+ct)'.",
+          "impact": "The direction and x + ct dependence are clear, but a formal statement should disclose whether it normalizes the apparent symbol mismatch to w^2 or preserves it as a generic scalar solution notation."
+        },
+        {
+          "issue": "Regularity and parameter inequalities are implicit.",
+          "evidence": "The source differentiates p and u and uses 1/rho and c = sqrt(K/rho) without a displayed smoothness class or explicit K > 0, rho > 0 hypotheses in this paragraph.",
+          "impact": "A formal version may state the analytically necessary regularity and physical admissibility assumptions, but those are inherited conditions rather than separately advertised conclusions."
+        },
+        {
+          "issue": "The source gives a family of traveling-profile solutions but does not explicitly claim a complete classification of all solutions.",
+          "evidence": "The wording is 'has solutions of the form', not 'every solution is of the form'.",
+          "impact": "The contract supports the displayed solution family and propagation interpretation, not an unqualified converse characterization without additional assumptions."
+        }
+      ],
+      "contract_plain_english": "Every sufficiently regular solution of the one-dimensional acoustics system has a left characteristic combination w^2 = p - rho*c*u satisfying w^2_t - c*w^2_x = 0; its x + ct profiles propagate left with speed -c."
+    },
+    {
+      "task_id": "LEV-CH01-ACOUSTICS-RIGHT-MODE",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equation (1.4) and the preceding sentence about a sound wave propagating to the right",
+          "observation": "For c > 0 the source identifies v_t + c v_x = 0 as a one-way wave equation modeling a sound wave propagating to the right with speed c."
+        },
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Paragraph beginning 'To connect this with the one-way wave equation (1.4)'",
+          "observation": "Under the acoustics system (1.5), the source sets w^1(x,t) = p(x,t) + rho*c*u(x,t), defines c = sqrt(K/rho), and states w^1_t + c*w^1_x = 0, thereby identifying c as the speed of sound."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Sufficiently differentiable real-valued functions p(x,t) and u(x,t).",
+          "Real material constants K and rho, the sound speed c, and the scalar characteristic variable w^1(x,t)."
+        ],
+        "hypotheses": [
+          "p_t + K u_x = 0 and u_t + (1/rho) p_x = 0.",
+          "c = sqrt(K/rho) in the physical regime where c > 0 and rho is nonzero.",
+          "w^1 = p + rho*c*u."
+        ],
+        "conclusions": [
+          "w^1_t + c*w^1_x = 0.",
+          "This is the right-going one-way wave equation with propagation speed +c, the speed of sound."
+        ],
+        "definitions_and_conventions": [
+          "Subscripts t and x denote partial derivatives.",
+          "The plus sign in w^1 = p + rho*c*u selects the right-going characteristic combination.",
+          "For c > 0, the scalar transport equation v_t + c v_x = 0 models propagation to the right."
+        ],
+        "implicit_context": [
+          "The system is the one-dimensional constant-coefficient acoustic system (1.5).",
+          "The differentiability needed to form the displayed derivatives is assumed rather than quantified."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "characteristic variable",
+            "details": [
+              "The right mode is the specific linear combination p + rho*c*u."
+            ]
+          },
+          {
+            "topic": "propagation direction",
+            "details": [
+              "The PDE sign is positive and the transport speed is +c, which the source associates with rightward travel."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The mode combination must use p + rho*c*u, not p - rho*c*u.",
+        "The scalar PDE must be w^1_t + c*w^1_x = 0.",
+        "The propagation speed is +c and the physical direction is right for c > 0.",
+        "The sound speed must satisfy c = sqrt(K/rho).",
+        "The mode equation is derived under the coupled acoustics system (1.5), not asserted for arbitrary unrelated p and u."
+      ],
+      "ambiguities": [
+        {
+          "issue": "Regularity and parameter inequalities are implicit.",
+          "evidence": "The source differentiates p and u and uses 1/rho and c = sqrt(K/rho); it states c > 0 in the one-way-wave discussion but does not display a full quantified admissibility block for K and rho.",
+          "impact": "A formal version may expose necessary smoothness and positivity/nonzero assumptions, but should preserve the same physical parameter regime and not detach the mode identity from it."
+        }
+      ],
+      "contract_plain_english": "Every sufficiently regular solution of the one-dimensional acoustics system has a right characteristic combination w^1 = p + rho*c*u satisfying w^1_t + c*w^1_x = 0, so it propagates right with sound speed +c."
+    },
+    {
+      "task_id": "LEV-CH01-ACOUSTICS-TWO-WAVE-DECOMPOSITION",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equations (1.5), followed by the definitions and equations for w^1 and w^2",
+          "observation": "The coupled pressure-velocity system yields the two scalar characteristic variables w^1 = p + rho*c*u and w^2 = p - rho*c*u, satisfying w^1_t + c*w^1_x = 0 and w^2_t - c*w^2_x = 0 respectively."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Opening paragraph, first sentence",
+          "observation": "The source concludes that system (1.5) can thus be decomposed into two scalar equations modeling two distinct acoustic waves moving in different directions."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Later sentence identifying the acoustics eigenvalues",
+          "observation": "The two directions have speeds -c and +c, which are also the eigenvalues of the acoustics matrix (1.6)."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Sufficiently differentiable real-valued pressure p(x,t) and particle velocity u(x,t).",
+          "Constant material parameters K and rho, sound speed c, and two scalar modes w^1 and w^2."
+        ],
+        "hypotheses": [
+          "p_t + K u_x = 0 and u_t + (1/rho) p_x = 0.",
+          "c = sqrt(K/rho) in the physical regime where c > 0 and rho is nonzero.",
+          "w^1 = p + rho*c*u and w^2 = p - rho*c*u."
+        ],
+        "conclusions": [
+          "The acoustic system decomposes into w^1_t + c*w^1_x = 0 and w^2_t - c*w^2_x = 0.",
+          "These are two distinct scalar acoustic waves moving in opposite directions, with speeds +c and -c respectively."
+        ],
+        "definitions_and_conventions": [
+          "The original state has components q = (p,u)^T.",
+          "The two characteristic combinations differ only in the sign of rho*c*u.",
+          "The scalar equations use the same positive sound-speed magnitude c."
+        ],
+        "implicit_context": [
+          "The equations are a constant-coefficient, one-dimensional, two-component acoustic system.",
+          "The physical parameter regime makes the two characteristic speeds distinct and the characteristic change of variables nondegenerate."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "decoupling",
+            "details": [
+              "A coupled two-equation system is represented by two independent scalar one-way equations."
+            ]
+          },
+          {
+            "topic": "mode count and directions",
+            "details": [
+              "There are exactly two displayed acoustic modes, one right-going and one left-going."
+            ]
+          },
+          {
+            "topic": "characteristic speed",
+            "details": [
+              "The signed speeds are +c for w^1 and -c for w^2."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The decomposition must retain both scalar modes w^1 and w^2.",
+        "The mode definitions are w^1 = p + rho*c*u and w^2 = p - rho*c*u.",
+        "The decoupled equations have opposite derivative signs and opposite speeds +c and -c.",
+        "The conclusion is about decomposition of the full acoustics system (1.5), not merely the existence of two unrelated scalar waves.",
+        "The two waves move in different directions in a one-dimensional medium."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The passage does not display the inverse reconstruction from w^1,w^2 back to p,u.",
+          "evidence": "It defines both characteristic combinations and says the system can be decomposed, while the following general hyperbolicity discussion mentions unique eigenvector decomposition but gives no explicit inverse formulas here.",
+          "impact": "The source clearly requires the two scalar mode equations; an additional formal assertion of a bijective coordinate transform should be justified from the nondegenerate physical parameter regime rather than attributed to an explicit displayed formula."
+        },
+        {
+          "issue": "Regularity and positivity assumptions are inherited rather than formally quantified.",
+          "evidence": "The source uses derivatives, 1/rho, c = sqrt(K/rho), and distinct speeds without a displayed hypothesis list.",
+          "impact": "Formal side conditions may make the intended smooth, positive-parameter setting explicit, but they change applicability if made stronger than analytically necessary."
+        }
+      ],
+      "contract_plain_english": "The coupled one-dimensional acoustics equations split into exactly two characteristic scalar equations: w^1 = p + rho*c*u travels right at +c and w^2 = p - rho*c*u travels left at -c."
+    },
+    {
+      "task_id": "LEV-CH01-EQ-1.6-ACOUSTICS-MATRIX",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 23; printed Chapter 1 page 1",
+          "anchor": "Equation (1.1) and its explanatory paragraph",
+          "observation": "The general constant-coefficient linear form is q_t(x,t) + A q_x(x,t) = 0, with q an m-component real vector and A a constant real m by m matrix; subscripts denote partial derivatives."
+        },
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equation (1.5) and the prose immediately following it",
+          "observation": "The acoustic unknowns are pressure perturbation p and particle velocity u, and they satisfy p_t + K u_x = 0 and u_t + (1/rho) p_x = 0 for constant material parameters K and rho."
+        },
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equation (1.6)",
+          "observation": "The source rewrites (1.5) as q_t + A q_x = 0 with q = (p,u)^T and A = [[0,K],[1/rho,0]]."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Real-valued unknown functions p(x,t) and u(x,t).",
+          "Constant real material parameters K and rho.",
+          "The two-component state q and constant 2 by 2 matrix A."
+        ],
+        "hypotheses": [
+          "p_t + K u_x = 0 and u_t + (1/rho) p_x = 0.",
+          "rho is admissible for the reciprocal 1/rho in the physical density setting."
+        ],
+        "conclusions": [
+          "With q = (p,u)^T and A = [[0,K],[1/rho,0]], the component equations (1.5) are written as q_t + A q_x = 0."
+        ],
+        "definitions_and_conventions": [
+          "p is pressure, more precisely perturbation from a background constant pressure.",
+          "u is particle velocity.",
+          "K is the bulk modulus of compressibility and rho is density.",
+          "The vector ordering is q_1 = p and q_2 = u; matrix rows and columns follow this ordering."
+        ],
+        "implicit_context": [
+          "The medium is one-dimensional and the system is homogeneous, linear, and constant-coefficient.",
+          "All matrix and state entries are real.",
+          "Enough differentiability is assumed for q_t and q_x to exist."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "state representation",
+            "details": [
+              "Pressure is the first component and particle velocity is the second component."
+            ]
+          },
+          {
+            "topic": "operator coefficients",
+            "details": [
+              "K occupies the pressure-equation coupling entry A_12 and 1/rho occupies the velocity-equation coupling entry A_21; diagonal entries are zero."
+            ]
+          },
+          {
+            "topic": "equivalence of forms",
+            "details": [
+              "Matrix multiplication of A by q_x reproduces exactly the two equations in (1.5)."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The state vector must be ordered q = (p,u)^T.",
+        "The matrix must be A = [[0,K],[1/rho,0]], with zero diagonal entries.",
+        "K must occupy the upper-right entry and 1/rho the lower-left entry.",
+        "The matrix form must be q_t + A q_x = 0 and must reproduce both equations in (1.5).",
+        "K and rho are material constants, so A is constant in this passage."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The source does not display a formal domain hypothesis for rho.",
+          "evidence": "rho is called density and appears as 1/rho in (1.5)-(1.6), but rho != 0 or rho > 0 is not written as a separate formula.",
+          "impact": "A formal matrix definition must at least make division by rho meaningful; positivity is physically intended but should be identified as inherited context."
+        },
+        {
+          "issue": "Function-space regularity is unstated.",
+          "evidence": "The source introduces unknown functions p(x,t), u(x,t) and their first partial derivatives without naming a regularity class.",
+          "impact": "A formal statement may need differentiability assumptions to state the PDE, but equation (1.6) itself primarily fixes the algebraic state and matrix representation."
+        }
+      ],
+      "contract_plain_english": "Equation (1.6) packages the pressure-velocity acoustics equations by taking q = (p,u)^T and the constant matrix A = [[0,K],[1/rho,0]], so that q_t + A q_x = 0 is exactly system (1.5)."
+    },
+    {
+      "task_id": "LEV-CH01-EQ-1.7-WAVE-EQUATION",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 24; printed Chapter 1 page 2",
+          "anchor": "Equation (1.5) and the definition c = sqrt(K/rho)",
+          "observation": "The pressure and particle velocity obey p_t + K u_x = 0 and u_t + (1/rho) p_x = 0, and the passage defines the sound speed by c = sqrt(K/rho)."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Equation (1.7)",
+          "observation": "The source displays the second-order pressure wave equation p_tt = c^2 p_xx."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Sentence immediately following equation (1.7)",
+          "observation": "The source derives (1.7) from (1.5) by differentiating the first equation with respect to t, differentiating the second with respect to x, and eliminating the u_xt terms."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Remainder of the paragraph containing equation (1.7)",
+          "observation": "The equation is called a second-order wave equation and is hyperbolic in the standard classification, while the book emphasizes that it is derived from the more physically fundamental first-order system."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Sufficiently differentiable real-valued pressure p(x,t) and particle velocity u(x,t).",
+          "Constant material parameters K and rho and the sound speed c."
+        ],
+        "hypotheses": [
+          "p_t + K u_x = 0 and u_t + (1/rho) p_x = 0.",
+          "c = sqrt(K/rho), hence c^2 = K/rho in the intended positive physical regime.",
+          "The mixed derivatives used in the elimination exist and agree."
+        ],
+        "conclusions": [
+          "The pressure satisfies p_tt = c^2 p_xx.",
+          "This pressure equation is the derived second-order wave equation (1.7)."
+        ],
+        "definitions_and_conventions": [
+          "p_tt is the second partial derivative of pressure with respect to time and p_xx is the second partial derivative with respect to space.",
+          "c is the speed of sound and c^2 = K/rho in this acoustic medium.",
+          "The eliminated term is the mixed derivative of particle velocity, written u_xt in the source."
+        ],
+        "implicit_context": [
+          "The acoustics model is one-dimensional, linear, homogeneous, and constant-coefficient.",
+          "The derivation presupposes second derivatives and interchange of the relevant mixed partials even though no formal smoothness class is named.",
+          "The source treats (1.7) as a consequence of (1.5), not as the primary first-order model used later in the book."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "differential order",
+            "details": [
+              "The conclusion is second order in both time and space and concerns pressure p."
+            ]
+          },
+          {
+            "topic": "derivation",
+            "details": [
+              "Differentiating the two first-order equations and eliminating the mixed u derivative yields the pressure wave equation."
+            ]
+          },
+          {
+            "topic": "wave speed",
+            "details": [
+              "The spatial second derivative is multiplied by c^2 = K/rho."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The dependent variable in (1.7) is pressure p.",
+        "The equation must be p_tt = c^2 p_xx, with second derivatives and the squared sound speed.",
+        "The conclusion is obtained from both equations of system (1.5) by mixed-derivative elimination.",
+        "The coefficient c must retain its acoustic definition c = sqrt(K/rho).",
+        "The source claim is a consequence for solutions of the first-order acoustics system, not an unconditional identity for arbitrary p."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The regularity needed for the derivation is not formally stated.",
+          "evidence": "The source instructs the reader to differentiate the first equation in t and the second in x and eliminate u_xt, but does not name a C^2 or weak-solution setting.",
+          "impact": "A formal theorem must choose a regularity framework and justify equality of mixed partials; this is an explicitization of a tacit source assumption."
+        },
+        {
+          "issue": "The positivity assumptions behind the real sound speed are physical rather than displayed as a quantified block.",
+          "evidence": "c is defined as sqrt(K/rho), K is a bulk modulus, and rho is density, but K > 0 and rho > 0 are not separately displayed here.",
+          "impact": "A formal statement should preserve the intended positive material regime or otherwise state exactly what assumptions make c real and c^2 = K/rho valid."
+        }
+      ],
+      "contract_plain_english": "A sufficiently smooth pressure-velocity solution of the first-order acoustics system necessarily has pressure satisfying the derived second-order wave equation p_tt = c^2 p_xx, where c = sqrt(K/rho); the derivation differentiates the two component equations and eliminates the mixed derivative of u."
+    }
+  ]
+}

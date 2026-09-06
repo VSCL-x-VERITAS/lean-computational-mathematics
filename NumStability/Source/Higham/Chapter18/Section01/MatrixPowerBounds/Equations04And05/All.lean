@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.Equation05Primary
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.LpDiagonal
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.LpJordan
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealDiagonal
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.All
 
 /-!
-# Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

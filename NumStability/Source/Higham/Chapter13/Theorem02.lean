@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Theorem02.Factorization
-import NumStability.Source.Higham.Chapter13.Theorem02.Uniqueness
-import NumStability.Source.Higham.Chapter13.Theorem02.VaryingBlocks
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem02
 
 /-!
-# Higham Chapter 13: Theorem02
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Theorem02` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Theorem02`.
+Declaration names and mathematical terminology are unchanged.
 -/

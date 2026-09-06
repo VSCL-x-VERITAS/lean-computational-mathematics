@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Jordan.NormalForm
+import ComputationalMathematics.Analysis.LinearOperators.Jordan
 
 /-!
-# NumStability.Analysis.LinearOperators.Jordan
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Jordan`.
+Declaration names and mathematical terminology are unchanged.
 -/

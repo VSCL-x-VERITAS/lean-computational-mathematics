@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter14.Problem14
+import ComputationalMathematics.Source.Higham.Chapter14.Problem14
 
 /-!
 # Historical Higham Chapter 14 Hyman-determinant import

@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur
 
 /-!
-# NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.HessenbergSchur`.
+Declaration names and mathematical terminology are unchanged.
 -/

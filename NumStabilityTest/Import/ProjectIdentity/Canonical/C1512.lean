@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary06.FinalizedRunRegularity.UniformInverseRegularity
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Corollary06.FinalizedRunRegularity.UniformInverseRegularity`. -/
+
+#check NumStability.Ch14Ext.ch14ext_cor146FinalizedRunFamily_of_computedFactors
+#check NumStability.Ch14Ext.ch14ext_cor146_uniformInverseRegularity_of_finalizedGJE

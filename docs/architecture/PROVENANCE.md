@@ -6,11 +6,19 @@ notice is instead governed by
 [`LICENSES/Apache-2.0.txt`](../../LICENSES/Apache-2.0.txt). Moving a file never
 changes its license, copyright holder, or authorship.
 
+The approved identity migration relocates canonical owners under
+`ComputationalMathematics`, including `ComputationalMathematics/Upstream/Lindemann`.
+The dated audit paths below identify their original snapshots. Current
+attribution and the source-preservation record retain the same authors,
+upstream commits and license notices through that relocation.
+
 ## Audited state
 
 The organization audit on 2026-07-22 found 148 production Lean files with
-Apache-2.0 notices. Five of those are evidenced Mathlib adaptations or
-backports under `NumStability/Upstream/Lindemann`; their exact pull requests,
+Apache-2.0 notices. The current executable re-measurement (2026-08-30) finds
+137 production Lean files with Apache-2.0 notices. Five of those are evidenced
+Mathlib adaptations or backports under `NumStability/Upstream/Lindemann`,
+unchanged since the audit; their exact pull requests,
 commit hashes, authors, and copyright holders are recorded in
 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
 

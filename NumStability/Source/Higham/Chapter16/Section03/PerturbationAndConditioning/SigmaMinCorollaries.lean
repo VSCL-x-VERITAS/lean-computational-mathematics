@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries`.
+Declaration names and mathematical terminology are unchanged.
 -/

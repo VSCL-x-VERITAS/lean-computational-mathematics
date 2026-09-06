@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.ConditionEstimate.Bounds
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.ConditionEstimate.Bounds`. -/
+
+#check NumStability.Higham15.H15_Algorithm15_4_condEstimate_le_kappaOne
+#check NumStability.Higham15.H15_Algorithm15_4_exact_ratio_witness
+#check NumStability.Higham15.H15_Algorithm15_4_lower_bound
+#check NumStability.Higham15.H15_Algorithm15_4_ratio_witness
+#check NumStability.Higham15.H15_Algorithm15_4_scaled_le_kappaOne

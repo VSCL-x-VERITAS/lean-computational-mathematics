@@ -1,0 +1,30 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Alternative
+import ComputationalMathematics.Algorithms.Summation.Compensated.CorrectionFormula
+import ComputationalMathematics.Algorithms.Summation.Compensated.FastTwoSum
+import ComputationalMathematics.Algorithms.Summation.Compensated.FiniteFormat
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan
+import ComputationalMathematics.Algorithms.Summation.Compensated.Neumaier.All
+import ComputationalMathematics.Algorithms.Summation.Compensated.NoGuard
+import ComputationalMathematics.Algorithms.Summation.Compensated.Priest.All
+import ComputationalMathematics.Source.Higham.Chapter04.Algorithm02.InitializationModelLimitations
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07.AbstractModelCounterexample
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07.NoGuardCounterexample
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07.SterbenzCounterexamples
+import ComputationalMathematics.Source.Higham.Chapter04.Equation08.FiniteRouteLimitations
+import ComputationalMathematics.Source.Higham.Chapter04.Equation08.ModelStrength
+import ComputationalMathematics.Source.Higham.Chapter04.Equation08.ReturnedSum
+import ComputationalMathematics.Source.Higham.Chapter04.Equation09.Correction
+import ComputationalMathematics.Source.Higham.Chapter04.Equation09.ModelStrength
+import ComputationalMathematics.Source.Higham.Chapter04.Equation10
+import ComputationalMathematics.Source.Higham.Chapter04.Problem10
+import ComputationalMathematics.Source.Higham.Chapter04.Section03.FiniteFormat
+import ComputationalMathematics.Source.Higham.Chapter04.Section03.NoGuardKahanCounterexample
+
+/-!
+# Compensated summation
+
+Declaration-free complete entry point for the reusable compensated-summation
+families and the source-correspondence declarations historically exported by
+this module. Reusable clients should import a narrow semantic family or leaf;
+the source imports here preserve the supported historical surface.
+-/

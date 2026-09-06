@@ -1,0 +1,49 @@
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm11.CGSRounded
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSClosure
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSNonbreakdown
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSPaddedClosure
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSRepair
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSRounded
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSSourceRate
+import ComputationalMathematics.Source.Higham.Chapter19.Core
+import ComputationalMathematics.Source.Higham.Chapter19.FormedQ
+import ComputationalMathematics.Source.Higham.Chapter19.Labels
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma01.Construction2
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma03.ActualSequence
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma07.Gamma4
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma09.DisjointSweep
+import ComputationalMathematics.Source.Higham.Chapter19.PolarNearest
+import ComputationalMathematics.Source.Higham.Chapter19.Problem06.ActualStep
+import ComputationalMathematics.Source.Higham.Chapter19.Problem09
+import ComputationalMathematics.Source.Higham.Chapter19.Problem10
+import ComputationalMathematics.Source.Higham.Chapter19.Sensitivity
+import ComputationalMathematics.Source.Higham.Chapter19.Sensitivity.Closure
+import ComputationalMathematics.Source.Higham.Chapter19.StoredLoop
+import ComputationalMathematics.Source.Higham.Chapter19.StoredLoop.AllPivots
+import ComputationalMathematics.Source.Higham.Chapter19.StoredLoop.StrongModel
+import ComputationalMathematics.Source.Higham.Chapter19.SunBischof
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem05.Nonbreakdown
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem05.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.ActualSource
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.ColumnPivot
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.ColumnPivotFull
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHigham
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamAssembly
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamConcrete
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamFull
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.Elementwise
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.ElementwiseEntry
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.ElementwisePackaged
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.Final
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.Pivoted
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.RowSpecific
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.StrongModel
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem10.ActualMatrix
+import ComputationalMathematics.Source.Higham.Chapter19.TurnbullAitken
+import ComputationalMathematics.Source.Higham.Chapter19.WYApplicationClosure
+
+/-!
+# Higham Chapter 19
+
+Canonical aggregate for the migrated Chapter 19 QR source correspondence.
+-/

@@ -1,14 +1,8 @@
-import NumStability.HDP.ContractSignatures.C_02_hthm_h2_d6_d3
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03.Contract
 
-/-! Stable Chapter 2 forwarding module for Theorem 2.6.3. -/
+/-!
+# Compatibility import for an HDP source contract
 
-noncomputable section
-
-namespace NumStability.HDP.Contract
-
-theorem hdp_02_hthm_h2_d6_d3__contract
-    : hdp_02_hthm_h2_d6_d3__contract_type := by
-  exact NumStability.HDP.Contract.hdp_02_hthm_h2_d6_d3
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section06.Theorem03.Contract`.
+Use the canonical Vershynin module in new imports.
+-/

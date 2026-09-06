@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Problem04.FactorizationProducts.ComparisonUpdates
-import NumStability.Source.Higham.Chapter13.Problem04.FactorizationProducts.DeterminantBounds
-import NumStability.Source.Higham.Chapter13.Problem04.FactorizationProducts.InverseBounds
-import NumStability.Source.Higham.Chapter13.Problem04.FactorizationProducts.LocalComparisons
-import NumStability.Source.Higham.Chapter13.Problem04.FactorizationProducts.LowerBlockBudgets
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts
 
 /-!
-# Higham Chapter 13: Problem04.FactorizationProducts
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Problem04.FactorizationProducts` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,5 @@
+import ComputationalMathematics.Analysis.SingularValues.InverseBounds.Rayleigh
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.SingularValues.InverseBounds.Rayleigh`. -/
+
+#check NumStability.rayleigh_lower_bound_of_le_finiteHermitianEigenvalues

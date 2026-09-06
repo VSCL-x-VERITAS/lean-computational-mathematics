@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.All
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

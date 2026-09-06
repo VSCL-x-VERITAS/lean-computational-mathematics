@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem27.KahanDeterminant.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem27.KahanDeterminant.Basic
 
 /-!
 # Problem2_25 (compatibility module)

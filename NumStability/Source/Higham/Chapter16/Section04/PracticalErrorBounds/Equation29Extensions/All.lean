@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.Minimizers
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.Spectrum
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.Vectorized
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.All
 
 /-!
-# Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,30 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveStageBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveStageProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ActiveTailProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.BlockInverseBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ComparisonChains
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.DeterminantChainProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationExistence
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.FactorizationProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.HistoryEnvelope
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.InfNormGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.InverseRatioChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LocalGrowth
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LocalNormBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.LowerComparisonChain
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStageHistory
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStages
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.OneStepProducts
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ProductBounds
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.RecursiveBudgetChains
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ScalarGrowthBridge
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.StageHistory
+
+/-!
+# Higham Chapter 13: Problem04
+
+Declaration-free source aggregate for the Chapter 13 `Problem04` family.
+-/

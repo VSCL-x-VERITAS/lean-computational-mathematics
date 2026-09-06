@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter13.Problem04.ScalarGrowthBridge
+import ComputationalMathematics.Source.Higham.Chapter13.Problem04.ScalarGrowthBridge
 
 /-!
 # Historical scalar-growth bridge compatibility import

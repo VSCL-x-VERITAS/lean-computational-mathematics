@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.StructuredMixedStability
+import ComputationalMathematics.Source.Higham.Chapter24.StructuredMixedStability
 
 /-!
 # Historical Chapter 24 structured mixed-stability import

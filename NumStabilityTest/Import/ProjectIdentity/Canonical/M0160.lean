@@ -1,0 +1,23 @@
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.Perturbation.LeastSquares`. -/
+
+#check NumStability.GramVecError.bound
+#check NumStability.LSQRSolveBackwardError.result
+#check NumStability.Theorem20_10PartAPerturbationCertificate.hB
+#check NumStability.Theorem20_7.rowScaleCounter_pivot0
+#check NumStability.Theorem20_8.kktLocalSmallnessCoeff_ge_one
+#check NumStability.WedinPerturbationBound.solution
+#check NumStability.higham20Theorem20_4TotalLeftWitness_nonneg
+#check NumStability.higham20_alternative_bound_of_componentwise_fixed_point
+#check NumStability.higham20_lambdaStar_neg_of_leftNull_residual_pairing
+#check NumStability.higham20_lemma20_12_rangeProjection_finrank_eq_matrixRank
+#check NumStability.higham20_qr_norm_bounds_to_componentwise
+#check NumStability.lsMinimumNormBackwardErrorValuesF.bddBelow
+#check NumStability.lsNormwiseBackwardErrorCostF_sq
+#check NumStability.lsScaledAugmentedDiagonalBranch_ne_zero_of_alpha_eq_div_sqrt_two
+#check NumStability.lsScaledAugmentedMatrix_kappa2_bounds_of_rightGram_basis_branch_data
+#check NumStability.ls_qr_forward_error
+#check NumStability.lseWeightedMinimizer_energy_le_lagrange
+#check NumStability.lseWeightedResidual_eq
+#check NumStability.theorem20_7_beta_permuteRows

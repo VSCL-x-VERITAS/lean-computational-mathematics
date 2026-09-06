@@ -1,9 +1,27 @@
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-import NumStability.Algorithms.MatrixPowers
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.SpectralRadius
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.SpectralCriterion
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.Model
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.MatrixNorms
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealDiagonal
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealDiagonal
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComputedIteration
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealCases
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.SpectralRadius
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.SpectralCriterion
 
 /-!
 # Algorithms.MatrixPowersSpectral

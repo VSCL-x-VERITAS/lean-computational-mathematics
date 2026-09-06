@@ -1,0 +1,28 @@
+import ComputationalMathematics.Source.Higham.Chapter09.CompletePivotSharpClosure
+import ComputationalMathematics.Source.Higham.Chapter09.ComplexClosure
+import ComputationalMathematics.Source.Higham.Chapter09.ComputedCorrection
+import ComputationalMathematics.Source.Higham.Chapter09.DoolittleClosure
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.Actual
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.DiagDominant
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.Primitive
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem15.Barrlund.Basic
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem15.Sun.Basic
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem97Classification
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem99Closure
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem99ComplexClosure
+
+/-!
+# Higham Chapter 9
+
+Declaration-free aggregate for Chapter 9 source correspondence.
+-/

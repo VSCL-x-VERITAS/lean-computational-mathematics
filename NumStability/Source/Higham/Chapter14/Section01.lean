@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section01.InverseErrorAnalysis
-import NumStability.Source.Higham.Chapter14.Section01.ProductErrorNotation
+import ComputationalMathematics.Source.Higham.Chapter14.Section01
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section01
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section01`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,65 @@
+import ComputationalMathematics.Source.Vershynin.Chapter01.CauchySchwarz.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.JensenInequality.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Proposition04.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation12.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation19.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation20.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation21.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation22.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.ExponentialMarkov.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.IndependentSumMGF.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.AsymptoticNotation.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.BinomialCentralMass.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Exercise04.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCountMoments.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.GaussianAtoms.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Theorem06.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise05.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08B.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise05A.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise09.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.ConstantPsiTwoNorm.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Lemma08.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Proposition01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Definition05.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise04.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSquareTail.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Proposition01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark14.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussianImpliesSubExponential.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequality.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Signature
+
+/-!
+# HDP source-contract signatures
+
+Stable historical family entry point for the proof-free contract signatures.
+Its imports now target the canonical Vershynin source hierarchy directly;
+individual historical locator paths remain compatibility wrappers.
+-/

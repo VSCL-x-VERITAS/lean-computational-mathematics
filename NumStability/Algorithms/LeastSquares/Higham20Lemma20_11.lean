@@ -1,7 +1,19 @@
-import NumStability.Algorithms.LeastSquares.LSPerturbation
-import NumStability.Algorithms.Underdetermined.UnderdeterminedSpec
-import NumStability.Analysis.SingularValues.WeylMirsky
-import NumStability.Source.Higham.Chapter20.Lemma11
+import Mathlib.Data.Real.Basic
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixSpectral
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Basic
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Wedin
+import ComputationalMathematics.Analysis.SingularValues.Realification
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma11.Support
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Pseudoinverse.UnderdeterminedSpec
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Solvers.UnderdeterminedSpec
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Specifications.UnderdeterminedSpec
+import ComputationalMathematics.Source.Higham.Chapter21.Equation04.UnderdeterminedSpec
+import ComputationalMathematics.Source.Higham.Chapter21.Equation05.UnderdeterminedSpec
+import ComputationalMathematics.Source.Higham.Chapter21.Lemma02.Symmetrization.UnderdeterminedSpec
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem01.ComponentwisePerturbation.UnderdeterminedSpec
+import ComputationalMathematics.Analysis.SingularValues.WeylMirsky
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma11
 
 /-!
 # Higham20Lemma20_11 (historical compatibility wrapper)

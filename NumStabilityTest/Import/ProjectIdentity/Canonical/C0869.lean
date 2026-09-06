@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.SampledGramOperatorNorm
+
+/-! Canonical import regression for `ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.SampledGramOperatorNorm`. -/
+
+#check NumStability.leverageTraceProbability_eventProb_fl_rowSampleGramDot_opNorm2_error_le_epsilon_add_budget
+#check NumStability.leverageTraceProbability_eventProb_rowSampleGram_opNorm2_error_le_epsilon

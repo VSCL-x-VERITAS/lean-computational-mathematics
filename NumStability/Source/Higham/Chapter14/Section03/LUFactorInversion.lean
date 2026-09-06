@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodB
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodC
-import NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion.MethodD
+import ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section03.LUFactorInversion
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section03.LUFactorInversion`.
+Declaration names and mathematical terminology are unchanged.
 -/

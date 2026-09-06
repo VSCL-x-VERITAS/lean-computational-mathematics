@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem08.LSE
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter20.Theorem08.LSE`. -/
+
+#check NumStability.theorem20_8AP_perturbed_reduced_higham_residual_orthogonal_of_lse_minimizer
+#check NumStability.theorem20_8_gram_AP_rectGram_det_zero_counterexample
+#check NumStability.theorem20_8_nullspace_reduced_wedinResidualRHS_le_of_lse_minimizers

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter13.Theorem06.Computation
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem06.Computation
 
 /-!
 # Historical BlockLU compatibility import

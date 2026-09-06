@@ -1,7 +1,8 @@
-import NumStability.Analysis.MatrixInequalities.LiebTrace.Concavity
+import ComputationalMathematics.Analysis.MatrixInequalities.LiebTrace.All
 
 /-!
-# Analysis.MatrixInequalities.LiebTrace.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.MatrixInequalities.LiebTrace.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

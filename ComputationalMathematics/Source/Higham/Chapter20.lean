@@ -1,0 +1,50 @@
+import ComputationalMathematics.Source.Higham.Chapter20.Equation32
+import ComputationalMathematics.Source.Higham.Chapter20.Equations
+import ComputationalMathematics.Source.Higham.Chapter20.Equations.WeightedLimit
+import ComputationalMathematics.Source.Higham.Chapter20.Examples.Condition
+import ComputationalMathematics.Source.Higham.Chapter20.Examples.CrossProduct
+import ComputationalMathematics.Source.Higham.Chapter20.Examples.GeneralRank
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma06
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma11
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma11.Support
+import ComputationalMathematics.Source.Higham.Chapter20.Lemma12
+import ComputationalMathematics.Source.Higham.Chapter20.MinimumNormBackwardError
+import ComputationalMathematics.Source.Higham.Chapter20.NormalEquations
+import ComputationalMathematics.Source.Higham.Chapter20.Problem03
+import ComputationalMathematics.Source.Higham.Chapter20.Problem05.MGSStability
+import ComputationalMathematics.Source.Higham.Chapter20.Prose
+import ComputationalMathematics.Source.Higham.Chapter20.Prose.MoorePenrose
+import ComputationalMathematics.Source.Higham.Chapter20.Prose.Quantitative
+import ComputationalMathematics.Source.Higham.Chapter20.Remaining
+import ComputationalMathematics.Source.Higham.Chapter20.Section02.Algorithms
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem01
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem02.AlternativeBound
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem03
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem03.QRSolve
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem03.ResidualQuality
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem03.ZeroDeltaB
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem04
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem04.Refinement
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualAssembly
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualBackSub
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualClosure
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualGrowth
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualRhs
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.ActualTrace
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.Contract
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.Elimination
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.QdR
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.RowPolicy
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.Runtime
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem07.SourceTrace
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem08
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem08.LSE
+import ComputationalMathematics.Source.Higham.Chapter20.Theorem10
+
+/-!
+# Higham Chapter 20
+
+Canonical aggregate for the migrated Chapter 20 least-squares source
+correspondence.
+-/

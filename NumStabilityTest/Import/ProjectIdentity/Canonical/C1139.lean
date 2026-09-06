@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem04
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem04`. -/
+
+#check NumStability.componentwise_forward_error_exact_relative_infNorm

@@ -1,8 +1,8 @@
-import NumStability.Analysis.FloatingPointArithmetic.DoubleRounding.All
-import NumStability.Source.Higham.Chapter02.Section03.DoubleRounding.Counterexample
+import ComputationalMathematics.Source.Higham.Chapter02.Section03.DoubleRounding.All
 
 /-!
-# Source.Higham.Chapter02.Section03.DoubleRounding.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Section03.DoubleRounding.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

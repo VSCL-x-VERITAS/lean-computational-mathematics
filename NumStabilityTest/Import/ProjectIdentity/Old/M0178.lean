@@ -1,0 +1,34 @@
+import NumStability.HDP.ContractSignatures
+
+/-! Isolated API witness for `NumStability.HDP.ContractSignatures`; authored declaration names are retained. -/
+
+#check @NumStability.HDP.Contract.hdp_01_hthm_hcauchy_hschwarz__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hthm_hjensen__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hcor_h1_d2_d5__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hex_h1_d2_d2__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hlem_h1_d2_d1__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hprop_h1_d2_d4__contract_type
+#check @NumStability.HDP.Contract.hdp_01_hthm_h1_d3_d1__contract_type
+#check @NumStability.HDP.Contract.hdp_02_heq_h2_d12__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hlem_hexponential_hmarkov__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hlem_hmgf_hindependent_hsum__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hthm_hpsi2_hnorm_hcharacterizations__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d2_d10b__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hthm_h2_d2_d6__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d3_d5__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hexample_h2_d5_d8b__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hexample_h2_d5_d8c__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d5_d1__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d5_d5a__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hprop_h2_d5_d2__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hrem_h2_d5_d3__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hex_h2_d6_d9__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hlem_h2_d6_d8__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hprop_h2_d6_d1__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hthm_h2_d6_d2__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hthm_h2_d6_d3__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hexample_h2_d7_d13__contract_type
+#check @NumStability.HDP.Contract.hdp_02_hrem_h2_d7_d9__contract_type
+#check @NumStability.HDP.Contract.hdp_05_hex_h5_d1_d13__contract_type
+#check @NumStability.HDP.Contract.hdp_05_hex_h5_d1_d14__contract_type
+#check @NumStability.HDP.Contract.hdp_05_hex_h5_d2_d11__contract_type

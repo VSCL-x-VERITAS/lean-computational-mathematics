@@ -139,3 +139,12 @@
   `#print axioms` on the local bound, final-diagonal/identity producer,
   recurrence bridge, (14.29), and (14.30a-c) reports only
   `[propext, Classical.choice, Quot.sound]`. Forbidden-token scan is clean.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter14` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

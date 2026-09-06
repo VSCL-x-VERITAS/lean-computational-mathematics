@@ -1,141 +1,109 @@
--- Algorithms/HighamChapter15BoydSourceSecondDerivative.lean
---
--- The constrained second variation used in Boyd's local convergence proof is
--- an actual second derivative on the exact composition domain of the literal
--- rectangular update.  In the nonsmooth range, a vanishing coordinate of
--- `A x` is allowed only when the corresponding row of `A` is identically
--- zero; that row then contributes the constant-zero function.
+import Mathlib.Analysis.Calculus.FDeriv.Extend
+import Mathlib.Analysis.Calculus.Deriv.Abs
+import Mathlib.Analysis.InnerProductSpace.Rayleigh
+import Mathlib.Analysis.Calculus.FDeriv.Comp
+import Mathlib.Analysis.Normed.Algebra.GelfandFormula
+import Mathlib.Analysis.Seminorm
+import Mathlib.Analysis.Calculus.FDeriv.Basic
+import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
+import Mathlib.Topology.MetricSpace.Contracting
+import Mathlib.Topology.Order.Compact
+import Mathlib.Order.Fin.Basic
+import Mathlib.Topology.MetricSpace.ProperSpace
+import Mathlib.Topology.Order.MonotoneConvergence
+import Mathlib.Topology.Sequences
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Convergence.ConvergenceStatements
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Duality.ConvergenceStatements
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.Calculus.Deriv.Add
+import Mathlib.Analysis.Calculus.LocalExtr.Basic
+import Mathlib.Analysis.InnerProductSpace.NormPow
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Square
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.Lp
+import ComputationalMathematics.Analysis.SingularValues.Realification
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Differentiation.PNormGeneral
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Duality.PNormGeneral
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.PowerMethod.PNormGeneral
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.PNormGeneral
+import ComputationalMathematics.Algorithms.CondEstimation
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Duality.PNormPowerMethod
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm01.PNormPowerMethod.PNormPowerMethod
+import ComputationalMathematics.Source.Higham.Chapter15.Equation02.Subgradient.PNormPowerMethod
+import ComputationalMathematics.Source.Higham.Chapter15.Equation03.GradientQuotient.PNormPowerMethod
+import ComputationalMathematics.Source.Higham.Chapter15.Equation04.NormalizedDualDiscrepancy.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Equation05.SubgradientInequality.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.PNormPowerMethod
+import ComputationalMathematics.Source.Higham.Chapter15.Equation02.Subgradient.PNormGeneral
+import ComputationalMathematics.Source.Higham.Chapter15.Equation03.GradientQuotient.PNormGeneral
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm01.PNormPowerMethod.ConvergenceStatements
+import ComputationalMathematics.Source.Higham.Chapter15.Equation03.GradientQuotient.ConvergenceStatements
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.Corrections.ConvergenceStatements
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.EndpointTermination.ConvergenceStatements
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.GlobalConvergence.ConvergenceStatements
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Carrier.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Differentiation.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.FixedPoints.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.LocalStability.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Convergence.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Duality.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.PowerMethod.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Rectangular
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.PNormRectangular
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm01.PNormPowerMethod.PNormRectangular
+import ComputationalMathematics.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.PNormRectangular
+import ComputationalMathematics.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.BoydInterface
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.GlobalConvergence.BoydInterface
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.BoydInterface
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.LocalStability.BoydLocalStability
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.Corrections.BoydLocalStability
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.BoydLocalStability
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Carrier.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Differentiation.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.FixedPoints.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.LocalStability.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Scalar.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.SecondVariation.BoydLocal
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.Corrections.BoydLocal
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.BoydLocal
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.BoydLocal
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.FixedPoints.BoydConcrete
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.LocalStability.BoydConcrete
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.SecondVariation.BoydConcrete
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Convergence.BoydConcrete
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.PowerMethod.BoydConcrete
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.Corrections.BoydConcrete
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.BoydConcrete
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.LocalConvergence.ConstrainedLagrangian.Differentiation
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.BoydConcrete
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Differentiation.BoydDomain
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Scalar.BoydDomain
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.BoydDomain
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.RowwiseDomain.Basic
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.Scalar.BoydRowwise
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.BoydRowwise
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.SecondDerivative.Rowwise
 
-import NumStability.Algorithms.HighamChapter15BoydRowwiseDomain
+/-!
+# HighamChapter15BoydSourceSecondDerivative (compatibility wrapper)
 
-namespace NumStability.Ch15
-
-open Filter Function Set
-open scoped BigOperators Topology
-
-private theorem hasDerivAt_gradientFactor_affine_of_two_le
-    {p a b : ℝ} (hp2 : 2 ≤ p) :
-    HasDerivAt
-      (fun t : ℝ => b * (|a + t * b| ^ (p - 2) * (a + t * b)))
-      (b * ((p - 1) * |a| ^ (p - 2) * b)) 0 := by
-  have hline : HasDerivAt (fun t : ℝ => a + t * b) b 0 := by
-    have h := (hasDerivAt_const (x := (0 : ℝ)) a).add
-      ((hasDerivAt_id (𝕜 := ℝ) 0).const_mul b)
-    convert h using 1
-    · funext t
-      simp only [Pi.add_apply, id_eq]
-      ring
-    · ring
-  have hfactor : HasDerivAt (fun u : ℝ => |u| ^ (p - 2) * u)
-      ((p - 1) * |a| ^ (p - 2)) (a + 0 * b) := by
-    simpa using hasDerivAt_abs_rpow_sub_two_mul_self_of_two_le p a hp2
-  have hbase := hfactor.comp 0 hline
-  simpa [Function.comp_def, mul_comm, mul_left_comm, mul_assoc] using
-    hbase.const_mul b
-
-private theorem hasDerivAt_gradientFactor_affine_of_ne
-    {p a b : ℝ} (ha : a ≠ 0) :
-    HasDerivAt
-      (fun t : ℝ => b * (|a + t * b| ^ (p - 2) * (a + t * b)))
-      (b * ((p - 1) * |a| ^ (p - 2) * b)) 0 := by
-  have hline : HasDerivAt (fun t : ℝ => a + t * b) b 0 := by
-    have h := (hasDerivAt_const (x := (0 : ℝ)) a).add
-      ((hasDerivAt_id (𝕜 := ℝ) 0).const_mul b)
-    convert h using 1
-    · funext t
-      simp only [Pi.add_apply, id_eq]
-      ring
-    · ring
-  have hfactor : HasDerivAt (fun u : ℝ => |u| ^ (p - 2) * u)
-      ((p - 1) * |a| ^ (p - 2)) (a + 0 * b) := by
-    simpa using hasDerivAt_abs_rpow_sub_two_mul_self p a ha
-  have hbase := hfactor.comp 0 hline
-  simpa [Function.comp_def, mul_comm, mul_left_comm, mul_assoc] using
-    hbase.const_mul b
-
-/-- The literal first-derivative formula has the advertised derivative on
-the exact rowwise source domain.  This includes both kinds of formerly
-missing zero coordinate: arbitrary zero coordinates when `2 ≤ p`, and
-constant zero rows when `1 < p < 2`. -/
-theorem boydConstrainedLagrangianFirst_hasDerivAt_rowwise_source_domain
-    {m n : ℕ} {p : ℝ}
-    (A : Fin m → Fin n → ℝ) (x h : Fin n → ℝ)
-    (hxcoord : ∀ j, x j ≠ 0)
-    (hsmooth : IsBoydInnerRowwiseSmoothDomain p A x) :
-    HasDerivAt (boydConstrainedLagrangianFirst p A x h)
-      (boydConstrainedSecondVariation p A x h) 0 := by
-  have hN : HasDerivAt
-      (fun t : ℝ => ∑ i : Fin m, p *
-        boydRectActionCLM A h i *
-          (|boydRectActionCLM A x i + t * boydRectActionCLM A h i| ^ (p - 2) *
-            (boydRectActionCLM A x i + t * boydRectActionCLM A h i)))
-      (∑ i : Fin m, p * (p - 1) *
-        |boydRectActionCLM A x i| ^ (p - 2) *
-        boydRectActionCLM A h i * boydRectActionCLM A h i) 0 := by
-    apply HasDerivAt.fun_sum
-    intro i _
-    rcases hsmooth with hp2 | hrowwise
-    · have hi := (hasDerivAt_gradientFactor_affine_of_two_le
-        (p := p) (a := boydRectActionCLM A x i)
-        (b := boydRectActionCLM A h i) hp2).const_mul p
-      convert hi using 1 <;> ring_nf
-    · rcases hrowwise i with hi | hzero
-      · have hderiv := (hasDerivAt_gradientFactor_affine_of_ne
-          (p := p) (a := boydRectActionCLM A x i)
-          (b := boydRectActionCLM A h i) hi).const_mul p
-        convert hderiv using 1 <;> ring_nf
-      · have hxzero : boydRectActionCLM A x i = 0 :=
-          boydRectActionCLM_apply_eq_zero_of_row_zero A x i hzero
-        have hhzero : boydRectActionCLM A h i = 0 :=
-          boydRectActionCLM_apply_eq_zero_of_row_zero A h i hzero
-        simpa [hxzero, hhzero] using
-          (hasDerivAt_const (x := (0 : ℝ)) (0 : ℝ))
-  have hD : HasDerivAt
-      (fun t : ℝ => ∑ j : Fin n, p *
-        h j * (|x j + t * h j| ^ (p - 2) * (x j + t * h j)))
-      (∑ j : Fin n, p * (p - 1) * |x j| ^ (p - 2) * h j * h j) 0 := by
-    apply HasDerivAt.fun_sum
-    intro j _
-    have hj := (hasDerivAt_gradientFactor_affine_of_ne
-      (p := p) (a := x j) (b := h j) (hxcoord j)).const_mul p
-    convert hj using 1 <;> ring_nf
-  have htot := hN.sub (hD.const_mul
-    (realLpPowerSum p (boydRectActionCLM A x)))
-  convert htot using 1
-  unfold boydConstrainedSecondVariation boydWeightedPair
-  have hout : (∑ i : Fin m, p * (p - 1) *
-      |boydRectActionCLM A x i| ^ (p - 2) *
-      boydRectActionCLM A h i * boydRectActionCLM A h i) =
-      p * (p - 1) * ∑ i : Fin m,
-        |boydRectActionCLM A x i| ^ (p - 2) *
-          boydRectActionCLM A h i * boydRectActionCLM A h i := by
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro i _
-    ring
-  have hin : (∑ j : Fin n,
-      p * (p - 1) * |x j| ^ (p - 2) * h j * h j) =
-      p * (p - 1) * ∑ j : Fin n, |x j| ^ (p - 2) * h j * h j := by
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro j _
-    ring
-  rw [hout, hin]
-  ring
-
-/-- Source-facing second-derivative certificate on every case admitted by
-`IsBoydInnerRowwiseSmoothDomain`.  No derivative identity is assumed. -/
-theorem boydConstrainedSecondVariation_is_second_derivative_rowwise_source_domain
-    {m n : ℕ} {p : ℝ} (hp : 1 < p)
-    (A : Fin m → Fin n → ℝ) (x h : Fin n → ℝ)
-    (hxcoord : ∀ j, x j ≠ 0)
-    (hsmooth : IsBoydInnerRowwiseSmoothDomain p A x) :
-    HasDerivAt (boydConstrainedLagrangianLine p A x h)
-        (boydConstrainedLagrangianFirst p A x h 0) 0 ∧
-      HasDerivAt (boydConstrainedLagrangianFirst p A x h)
-        (boydConstrainedSecondVariation p A x h) 0 :=
-  ⟨boydConstrainedLagrangianLine_hasDerivAt hp A x h,
-    boydConstrainedLagrangianFirst_hasDerivAt_rowwise_source_domain
-      A x h hxcoord hsmooth⟩
-
-end NumStability.Ch15
+Import-only historical path, retained so existing imports of `NumStability.Algorithms.HighamChapter15BoydSourceSecondDerivative`
+keep resolving. Its whole declaration block moved unchanged to
+`NumStability.Source.Higham.Chapter15.Section02.Boyd.SourceDomain.SecondDerivative.Rowwise`, which is imported above. The module's own original imports are
+re-stated so consumers that reached an identifier transitively through this
+path still see the same surface. This module declares nothing.
+-/

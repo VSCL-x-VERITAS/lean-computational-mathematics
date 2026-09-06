@@ -193,3 +193,12 @@ central definitions, and Problems 13.1–13.9 are VERIFIED. In particular,
 (13.22) constructs the arbitrary-matrix `nρₙ³κ(A)‖A‖` factor witness, and
 (13.23) constructs the point-row `8nκ(A)‖A‖` witness after deriving `ρₙ≤2`
 from the actual scalar no-pivot history. No MISSING, PARTIAL, or BLOCKED rows.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter13` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

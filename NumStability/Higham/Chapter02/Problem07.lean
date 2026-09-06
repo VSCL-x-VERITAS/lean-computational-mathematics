@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem07
+import ComputationalMathematics.Source.Higham.Chapter02.Problem07
 
 /-!
 # Compatibility import for Higham Problem 2.7

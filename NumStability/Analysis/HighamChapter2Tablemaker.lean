@@ -1,7 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.RingTheory.Algebraic.Basic
-import NumStability.Analysis.FloatingPointArithmetic
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Basic
 
 /-!
 # HighamChapter2Tablemaker (compatibility module)

@@ -1,8 +1,8 @@
-import NumStability.Analysis.OperatorNorms.Attainment
-import NumStability.Analysis.OperatorNorms.Basic
+import ComputationalMathematics.Analysis.OperatorNorms
 
 /-!
-# Operator norms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical operator-norm family.
+The implementation is provided by `ComputationalMathematics.Analysis.OperatorNorms`.
+Declaration names and mathematical terminology are unchanged.
 -/

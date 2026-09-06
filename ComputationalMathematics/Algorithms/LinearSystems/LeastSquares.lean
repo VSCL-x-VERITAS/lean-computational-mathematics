@@ -1,0 +1,21 @@
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.AugmentedSystem
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.GQR
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.KKT
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.GramBasis
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.MGS
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.NormalEquations
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.QRSolve
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.RankGeometry
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Refinement
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.RowSorting
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.StoredQR
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.TraceKernel
+
+/-!
+# Least squares
+
+Declaration-free aggregate for the canonical reusable least-squares
+algorithm and specification family.
+-/

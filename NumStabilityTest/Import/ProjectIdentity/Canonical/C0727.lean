@@ -1,0 +1,6 @@
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Conditioning
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.Perturbation.LeastSquares.Conditioning`. -/
+
+#check NumStability.higham20_fullColumn_range_projector_complement_complexMatrixOp2_eq_min_one_sub
+#check NumStability.higham20_lambdaStar_neg_of_leftNull_residual_pairing

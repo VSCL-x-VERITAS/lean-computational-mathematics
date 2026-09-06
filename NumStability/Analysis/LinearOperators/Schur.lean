@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.All
-import NumStability.Analysis.LinearOperators.Schur.Real
+import ComputationalMathematics.Analysis.LinearOperators.Schur
 
 /-!
-# Analysis LinearOperators Schur
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Schur`.
+Declaration names and mathematical terminology are unchanged.
 -/

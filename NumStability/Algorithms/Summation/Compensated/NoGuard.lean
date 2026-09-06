@@ -1,10 +1,8 @@
-import NumStability.Algorithms.Summation.Compensated.NoGuard.CorrectionFormula
-import NumStability.Algorithms.Summation.Compensated.NoGuard.Modified
-import NumStability.Algorithms.Summation.Compensated.NoGuard.Ordinary
+import ComputationalMathematics.Algorithms.Summation.Compensated.NoGuard
 
 /-!
-# Compensated summation without a guard digit
+Historical import path retained for compatibility.
 
-Declaration-free reusable entry point for the no-guard correction formula and
-the ordinary and modified Kahan execution variants.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Compensated.NoGuard`.
+Declaration names and mathematical terminology are unchanged.
 -/

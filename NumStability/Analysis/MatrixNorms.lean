@@ -1,17 +1,8 @@
-import NumStability.Analysis.MatrixNorms.Attainment
-import NumStability.Analysis.MatrixNorms.Basic
-import NumStability.Analysis.MatrixNorms.Comparisons
-import NumStability.Analysis.MatrixNorms.EntrywiseAbsolute
-import NumStability.Analysis.MatrixNorms.EntrywiseMaximum
-import NumStability.Analysis.MatrixNorms.Hadamard
-import NumStability.Analysis.MatrixNorms.HadamardDeterminant
-import NumStability.Analysis.MatrixNorms.Lp
-import NumStability.Analysis.MatrixNorms.SpectralExtrema
-import NumStability.Analysis.MatrixNorms.SpectralRadius
-import NumStability.Analysis.MatrixNorms.UnitarilyInvariant
+import ComputationalMathematics.Analysis.MatrixNorms
 
 /-!
-# Matrix norms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical matrix-norm family.
+The implementation is provided by `ComputationalMathematics.Analysis.MatrixNorms`.
+Declaration names and mathematical terminology are unchanged.
 -/

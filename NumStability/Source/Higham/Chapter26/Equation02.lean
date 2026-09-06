@@ -5,18 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 See LICENSES/Apache-2.0.txt.
 Authors: QED
 -/
-import Mathlib.Data.Real.Basic
 
-namespace NumStability
+import ComputationalMathematics.Source.Higham.Chapter26.Equation02
 
-/-! # Higham Chapter 26, Equation 26.2
+/-!
+Historical import path retained for compatibility.
 
-The relative-increase stopping predicate for alternating-directions search.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter26.Equation02`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-/-- Higham, 2nd ed., Section 26.2, p. 475, equation (26.2): the alternating-
-directions relative-increase stopping test. -/
-def adConverged (tol fPrev fNow : ℝ) : Prop :=
-  fNow - fPrev ≤ tol * |fPrev|
-
-end NumStability

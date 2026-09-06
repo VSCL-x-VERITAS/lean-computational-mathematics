@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Real.InvariantSubspace.Existence
-import NumStability.Analysis.LinearOperators.Schur.Real.InvariantSubspace.TwoByTwo
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.RealSchurDecomposition.InvariantSubspace
 
 /-!
-# Source.Higham.Chapter16.Section02.RealSchurDecomposition.InvariantSubspace
+Historical import path retained for compatibility.
 
-Source locator for Higham's numbered presentation; the formal content lives in reusable Schur modules.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.RealSchurDecomposition.InvariantSubspace`.
+Declaration names and mathematical terminology are unchanged.
 -/

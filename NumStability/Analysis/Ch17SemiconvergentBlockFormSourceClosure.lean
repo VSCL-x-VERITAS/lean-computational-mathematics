@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter17.Equation22
+import ComputationalMathematics.Source.Higham.Chapter17.Equation22
 
 /-!
 # Historical Chapter 17 semiconvergent block-form import

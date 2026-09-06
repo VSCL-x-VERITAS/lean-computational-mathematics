@@ -1,0 +1,14 @@
+import ComputationalMathematics.Analysis.LinearOperators.Basic
+import ComputationalMathematics.Analysis.LinearOperators.Jordan
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.All
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra
+import ComputationalMathematics.Analysis.LinearOperators.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Triangularization
+
+/-!
+# Linear operators
+
+Declaration-free aggregate for the canonical linear-operator family.
+-/

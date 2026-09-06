@@ -1,0 +1,9 @@
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.QuasiTriangularBlockForm
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.QuasiTriangularBlockForm`. -/
+
+#check NumStability.compBlock_blockContractive
+#check NumStability.compBlock_quasiLower
+#check NumStability.exists_diag_infNorm_conj_lt_one_of_quasiUpperTriangular
+#check NumStability.matPow_G_tendsto_oneEigenProjector_of_quasiTriangular_complement
+#check NumStability.semiconvergent_block_form_exists_of_quasiTriangular_complement

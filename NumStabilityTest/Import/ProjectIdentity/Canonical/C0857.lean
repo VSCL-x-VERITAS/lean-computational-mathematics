@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm03.RandomProjectionPreconditioning.UniformRows
+
+/-! Canonical import regression for `ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm03.RandomProjectionPreconditioning.UniformRows`. -/
+
+#check NumStability.uniformRowOuterGramSample_finiteLoewnerLe_of_leverageScoreProb_le

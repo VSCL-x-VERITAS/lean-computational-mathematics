@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Terminal
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Terminal`. -/
+
+#check NumStability.Higham11RoundedBunchKaufmanExecution.computedSolve_backward_error_normwise_forty_actual
+#check NumStability.Higham11RoundedBunchKaufmanExecution.computedSolve_backward_error_normwise_forty_actual_source

@@ -1,0 +1,75 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "LEV-CH01-EQ-1.1-CONSTANT-LINEAR-SYSTEM",
+  "trigger": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "The exact audited Lean proposition is not the displayed PDE condition; it is a universally quantified equivalence between a pointwise predicate and the expression that defines that predicate. The source passage presents q_t(x,t) + A q_x(x,t) = 0 as the governing system, without introducing or characterizing a named predicate. Therefore the definitional equivalence can hold when the source equation fails, and the round-trip judge's not-faithful-weaker classification is the consistent one.",
+      "primary_evidence": "Raw PDF page 23, printed Chapter 1 page 1, says that the system 'has the form' q_t(x,t) + A q_x(x,t) = 0 and calls q the unknown functions to determine. The proof-free Lean proposition is forall m q coefficient x t, leveque01_equation01_constantLinearSystemAt q coefficient x t iff there exist qt and qx satisfying the two HasDerivAt clauses and qt + coefficient.mulVec qx = 0. D001 abbreviates D002, and D002's body is literally that existential right-hand side. In the positive-dimensional case m = 1, taking coefficient = 0 and q(x,t) = t gives residual 1, so the source PDE condition fails while the audited iff remains true because both sides unfold to the same condition."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "The request is sustained after primary-evidence review. Lean-implies-source is no, because an unfolding theorem does not assert its unfolded predicate. Source-implies-Lean is yes, because the definitional equivalence holds independently of whether a particular q satisfies the PDE.",
+      "primary_evidence": "The source's displayed conclusion is the zero-residual PDE on raw PDF page 23. The complete direct dossier gives D001 as an abbreviation for D002 and gives D002 as exactly the existential derivative-and-residual predicate. Hence the audited theorem has logical shape S iff S, not logical shape S."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C10 unclear",
+      "resolution": "The change is an explicit dimension generalization: Lean quantifies m over Nat, including zero, whereas the source's mathematical and physical discussion treats m as a number of unknown component functions and calls m = 1 the simplest case. For every positive m the scalar field, domain, dimension, and matrix typing match. Whether the author literally intended to exclude m = 0 is not formally stated, but this ambiguity is immaterial to the decisive implication failure, which already occurs at m = 1.",
+      "primary_evidence": "Raw PDF page 23 types q : R x R -> R^m, describes q as an m-component vector representing unknown functions, and immediately says that the simplest scalar case has m = 1. The Lean target binds m : Nat; D026 confirms that Nat includes zero, while D013 and D020 use Fin m to index the vector and both matrix axes."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C11 unclear",
+      "resolution": "The m = 0 branch is internally well-defined but degenerate and vacuous: Fin 0 has no coordinates, its vector and square-matrix types are empty-dimensional, and the componentwise derivative and residual requirements have no components. It is not genuine nonvacuous strength and is not consequential for the final classification; at most it is a minor boundary extension beyond the source's ordinary positive-component setting.",
+      "primary_evidence": "D013 identifies Fin m as the component index type, D014 supplies its finite enumeration, D021 defines mulVec by row-wise finite dot products, and D045-D046 define vector addition and zero pointwise. At m = 0 there are no row or component indices. The source page contains no zero-component discussion and instead identifies m = 1 as the simplest case."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "Let S(q,A,x,t) be the existential partial-derivative condition with residual q_t + A q_x = 0. D001 and D002 make the Lean theorem the universally valid definitional equivalence S iff S. It therefore holds for nonsolutions. For example, within the source's positive-dimensional setting m = 1, A = 0 and q(x,t) = t have q_t = 1 and q_x = 0, so the source residual is nonzero even though the Lean equivalence is true."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Whenever the source PDE condition holds, the Lean equivalence also holds; indeed D001 unfolds through D002 to the exact right-hand side, so the equivalence is true regardless of the PDE's truth for the selected q and point."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "remaining_uncertainties": [
+    "The selected source passage does not formally quantify m or explicitly state m > 0, so literal authorial inclusion or exclusion of the zero-dimensional convention remains uncertain. The source's statement that m = 1 is the simplest case supports the ordinary positive-dimensional reading, and the uncertainty cannot affect the classification because the Lean-to-source counterexample uses m = 1."
+  ],
+  "findings": [
+    {
+      "severity": "critical",
+      "category": "claim-shape-and-vacuity",
+      "evidence": "The source displays q_t(x,t) + A q_x(x,t) = 0 as the governing system. The Lean theorem states only that a local predicate is equivalent to the existential derivative-and-residual expression that, by D001 and D002, is its own definition.",
+      "impact": "The theorem is true for q that do not satisfy the displayed PDE, so it does not state the selected source result and is strictly weaker."
+    },
+    {
+      "severity": "major",
+      "category": "pointwise-condition-not-asserted",
+      "evidence": "The Lean target universally binds x and t around an iff but never concludes either the named pointwise predicate or its expanded residual condition. The source passage presents the equation as the condition governing the unknown q on R x R.",
+      "impact": "Even before considering global versus pointwise scope, the PDE is not asserted at a single point; a global solution assertion would additionally require the pointwise predicate for all x and t."
+    },
+    {
+      "severity": "minor",
+      "category": "zero-dimensional-generalization",
+      "evidence": "Lean's m : Nat admits m = 0 and Fin 0-indexed vectors and matrices, while the source describes component unknowns and calls m = 1 the simplest case.",
+      "impact": "This is a vacuous boundary extension rather than genuine theorem strength, and it does not affect the decisive positive-dimensional mismatch."
+    },
+    {
+      "severity": "note",
+      "category": "local-expression-accuracy",
+      "evidence": "For m > 0, the expanded D002 condition uses separate real derivatives of the t- and x-slices, standard Fin m-indexed matrix-vector multiplication, pointwise vector addition, and equality to the zero vector.",
+      "impact": "The local mathematical expression faithfully encodes equation (1.1); the failure is the top-level theorem's failure to assert that expression."
+    }
+  ],
+  "rationale": "Adjudication turns on the exact proposition, not on the usefulness of the underlying definition or a presumed repository intent. The source passage introduces the constant-coefficient linear PDE by displaying the condition q_t(x,t) + A q_x(x,t) = 0 for the unknown vector q. The audited theorem instead proves that a named pointwise predicate is equivalent to its literal definition. That is a valid and accurate unfolding lemma, and its right-hand side correctly represents the source equation locally, but the lemma is true even when q is not a solution. Thus Lean does not imply the selected source claim, while the source claim implies the always-valid unfolding equivalence, giving not-faithful-weaker and accepted = false. The admitted m = 0 case is a vacuous, source-ambiguous boundary generalization; it is not genuine strength and cannot change the result because the implication failure is witnessed already at m = 1."
+}

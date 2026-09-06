@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
 
 /-!
 # Problem2_19 (compatibility module)

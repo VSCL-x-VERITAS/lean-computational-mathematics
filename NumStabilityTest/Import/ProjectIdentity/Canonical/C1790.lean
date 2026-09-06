@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.SylvesterPerturbation
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries.SylvesterPerturbation`. -/
+
+#check NumStability.H16_eq16_25_sylvester_perturbation_bound_of_sigmaMin

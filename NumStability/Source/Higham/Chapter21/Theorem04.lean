@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter21.Theorem04.RowwiseBackwardError
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem04
 
 /-!
-# Higham Chapter 21, Theorem 21.4
+Historical import path retained for compatibility.
 
-Complete canonical entry point for the currently migrated Theorem 21.4
-row-wise backward-error measure and its concrete Householder Q-method bound.
-The remaining Givens and source-closure developments stay on their historical
-paths while the Chapter 21 migration continues.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter21.Theorem04`.
+Declaration names and mathematical terminology are unchanged.
 -/

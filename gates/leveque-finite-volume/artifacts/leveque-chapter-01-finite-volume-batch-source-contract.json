@@ -1,0 +1,303 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "batch-source-contract",
+  "source_group": "leveque-chapter-01-finite-volume",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_locator_sha256": "0b272037292776c34f1e8ce621cd97c98da8f329dfed4995fa0bb0b41b55aa6f",
+  "task_ids": [
+    "LEV-CH01-EQ-1.11-RIEMANN-DATA",
+    "LEV-CH01-FINITE-VOLUME-CELL-AVERAGE",
+    "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE"
+  ],
+  "contracts": [
+    {
+      "task_id": "LEV-CH01-EQ-1.11-RIEMANN-DATA",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Section 1.2.1 opening paragraph before equation (1.11)",
+          "observation": "The source defines a Riemann problem as a hyperbolic equation together with special initial data that is piecewise constant with a single jump discontinuity, placed at x = 0."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Equation (1.11)",
+          "observation": "The initial data is q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0; the displayed cases contain no branch for x = 0."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Paragraph immediately following equation (1.11)",
+          "observation": "For neighboring finite-volume cell averages Q_{i-1} and Q_i, the source uses q_l = Q_{i-1} and q_r = Q_i as Riemann data to obtain information for a numerical flux and cell-average update."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A one-dimensional spatial coordinate x.",
+          "Two constant states q_l and q_r in the state space of the selected hyperbolic equation.",
+          "An initial state function x |-> q(x,0)."
+        ],
+        "hypotheses": [
+          "The Riemann problem consists of a hyperbolic equation supplied with piecewise-constant initial data having its interface at x = 0."
+        ],
+        "conclusions": [
+          "For x < 0, q(x,0) = q_l.",
+          "For x > 0, q(x,0) = q_r.",
+          "Equation (1.11) does not prescribe q(0,0)."
+        ],
+        "definitions_and_conventions": [
+          "q_l is the constant left state and q_r is the constant right state.",
+          "The subscripts l and r denote the sides of the jump, not derivatives.",
+          "The interface is placed at x = 0 by convention ('say x = 0'); a translated interface is not part of the displayed equation (1.11).",
+          "When used between neighboring finite-volume cells, the source sets q_l = Q_{i-1} and q_r = Q_i."
+        ],
+        "implicit_context": [
+          "The data is one-dimensional and is initial data at time t = 0.",
+          "The states may be scalar or vector-valued according to the underlying hyperbolic equation.",
+          "The value at the single interface point is immaterial to the piecewise-constant left/right specification used for conservation-law solutions, but the source simply leaves it unstated."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "piecewise-constant structure",
+            "details": [
+              "Each open half-line carries one constant state."
+            ]
+          },
+          {
+            "topic": "jump geometry",
+            "details": [
+              "The sole interface is at the origin, separating x < 0 from x > 0."
+            ]
+          },
+          {
+            "topic": "finite-volume use",
+            "details": [
+              "Adjacent cell averages supply the two states for an interface Riemann problem."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The left branch is q_l on the strict inequality x < 0.",
+        "The right branch is q_r on the strict inequality x > 0.",
+        "No x = 0 branch may be attributed to equation (1.11).",
+        "The data is initial data q(x,0), not a time-independent formula asserted for all t.",
+        "The states are constant on their respective half-lines.",
+        "The special data belongs together with a hyperbolic equation to form the Riemann problem."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The value at the jump point is unspecified.",
+          "evidence": "Equation (1.11) displays only x < 0 and x > 0 cases.",
+          "impact": "A total function in a formal system must choose or abstract over q(0,0); fixing it to q_l, q_r, or another value adds a convention not present in the displayed source data."
+        },
+        {
+          "issue": "A genuine jump is described in prose but q_l != q_r is not displayed as a hypothesis.",
+          "evidence": "The paragraph says 'a single jump discontinuity', while equation (1.11) does not state an inequality between q_l and q_r.",
+          "impact": "Requiring distinct states follows the generic discontinuity description but excludes the degenerate constant-data case admitted by the piecewise formula itself; a formalization should say which reading it adopts."
+        },
+        {
+          "issue": "The state type is inherited from the unspecified hyperbolic equation.",
+          "evidence": "Section 1.2.1 defines the Riemann problem generically and uses q_l and q_r without fixing scalar versus vector state in equation (1.11).",
+          "impact": "A formal specialization to one state space may be faithful for that equation but is narrower than the generic source formulation."
+        }
+      ],
+      "contract_plain_english": "Riemann initial data consists of a constant left state q_l for x < 0 and a constant right state q_r for x > 0 at t = 0, with a single interface at the origin and no source-prescribed value at x = 0."
+    },
+    {
+      "task_id": "LEV-CH01-FINITE-VOLUME-CELL-AVERAGE",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 26; printed Chapter 1 page 4",
+          "anchor": "Integral conservation law (1.10) and its following explanation",
+          "observation": "The source treats the integral of q over an interval as the total amount of the conserved quantity, changed only by flux through the endpoints."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Section 1.2 paragraph beginning 'Discontinuities lead to computational difficulties'",
+          "observation": "Finite volume methods are based on the integral conservation law (1.10), rather than the differential equation, because discontinuous solutions need not satisfy the PDE classically."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Sentence beginning 'Rather than pointwise approximations at grid points'",
+          "observation": "The domain is divided into grid cells, and the method approximates the total integral of q over each cell, or actually the cell average of q, defined as that integral divided by the volume of the cell."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A grid cell C with finite positive volume |C|.",
+          "A scalar- or vector-valued conserved-density field q that is integrable over C.",
+          "The cell average of q over C."
+        ],
+        "hypotheses": [
+          "The computational domain is partitioned into grid cells.",
+          "The integral of q over C and the positive cell volume |C| are defined."
+        ],
+        "conclusions": [
+          "The cell average over C is (1/|C|) times the integral of q over C.",
+          "Finite volume methods approximate this cell-integrated or cell-averaged quantity rather than a pointwise value at a grid point."
+        ],
+        "definitions_and_conventions": [
+          "The total integral over C represents the cell's total conserved quantity.",
+          "The cell average is the cell integral divided by the volume of the cell.",
+          "For a vector q, integration and averaging are componentwise.",
+          "In the one-dimensional setting of Chapter 1, cell volume is the cell's length, though the prose uses the dimension-independent word 'volume'."
+        ],
+        "implicit_context": [
+          "Finite-volume data is intended to remain meaningful when q has discontinuities, provided q is integrable.",
+          "The paragraph describes approximate numerical cell averages but gives no time index, grid index, quadrature rule, or reconstruction formula at this point.",
+          "A nonzero cell volume is implicit because the definition divides by that volume."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "normalization",
+            "details": [
+              "The integral is normalized by the full cell volume, not left as an unscaled total."
+            ]
+          },
+          {
+            "topic": "data representation",
+            "details": [
+              "The stored finite-volume quantity represents an average over a cell rather than a point sample."
+            ]
+          },
+          {
+            "topic": "conservation connection",
+            "details": [
+              "Cell integration matches the integral form of the conservation law that remains meaningful across discontinuities."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "A cell average is the integral of q over the entire grid cell divided by the volume of that cell.",
+        "The divisor must be the cell volume and must be nonzero.",
+        "The quantity is cell-based, not a pointwise approximation at a grid node.",
+        "The definition applies to the conserved-density field q and is componentwise when q is vector-valued.",
+        "The finite-volume motivation comes from the integral conservation law and its validity for discontinuous solutions."
+      ],
+      "ambiguities": [
+        {
+          "issue": "No explicit cell notation or averaging formula is displayed.",
+          "evidence": "Section 1.2 defines the average entirely in prose as the cell integral divided by cell volume.",
+          "impact": "A formalization may choose intervals, measurable sets, indexed cells, or another representation, but those choices must implement the same normalized integral and may restrict the generic prose."
+        },
+        {
+          "issue": "The word 'approximate' distinguishes numerical data from an exact analytical average but no error model is specified.",
+          "evidence": "The paragraph says finite volume methods approximate the total integral or cell average and later calls the stored values approximate cell averages.",
+          "impact": "The source fixes what quantity is represented, not a quantitative accuracy bound between a numerical value and the exact average."
+        },
+        {
+          "issue": "Integrability and positive cell volume are tacit.",
+          "evidence": "The prose invokes an integral and divides by cell volume without listing analytical hypotheses.",
+          "impact": "A formal definition must add the minimal measure/integrability conditions; substantially stronger smoothness would be contrary to the discontinuous-solution motivation."
+        }
+      ],
+      "contract_plain_english": "Finite volume methods represent q on a grid cell by its cell average: the integral of q over the whole cell divided by the cell's volume, rather than by a point value at a grid point."
+    },
+    {
+      "task_id": "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 26; printed Chapter 1 page 4",
+          "anchor": "Equation (1.10) and the sentence immediately following it",
+          "observation": "The integral conservation law states that the total conserved quantity between two endpoints changes only through flux at those endpoints, with left-end flux minus right-end flux in (1.10)."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Section 1.2 sentence beginning 'These values are modified in each time step'",
+          "observation": "Cell-average values are modified during each time step by flux through grid-cell edges."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Remainder of the same Section 1.2 sentence",
+          "observation": "The central numerical task is to construct numerical flux functions that reasonably approximate the correct fluxes using the approximate cell averages, which are the only available data."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Paragraph immediately following equation (1.11)",
+          "observation": "At an interface between neighboring cell averages Q_{i-1} and Q_i, solving a Riemann problem with q_l = Q_{i-1} and q_r = Q_i supplies information used to compute a numerical flux and update the cell averages over a time step."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "Approximate cell averages on a finite-volume grid at the beginning of a time step.",
+          "Numerical fluxes associated with the edges of each grid cell.",
+          "A positive time-step interval over which the cell averages are updated."
+        ],
+        "hypotheses": [
+          "The numerical flux at an edge is computed from available approximate cell-average data and is intended to approximate the correct physical flux through that edge.",
+          "For a one-dimensional interface between cells i-1 and i, the neighboring averages may be used as Riemann states q_l = Q_{i-1} and q_r = Q_i."
+        ],
+        "conclusions": [
+          "Each cell average is modified over a time step by the fluxes through the edges of that cell.",
+          "The update follows the conservative balance principle that change in a cell's total quantity is determined by incoming and outgoing boundary fluxes.",
+          "Riemann-problem information at an interface can be used to compute the numerical flux needed for this cell-average update."
+        ],
+        "definitions_and_conventions": [
+          "A numerical flux is an approximation to the correct physical flux through a cell edge.",
+          "Approximate cell averages are the only data assumed available in this introductory finite-volume description.",
+          "The integral law (1.10) supplies the orientation: in one dimension the left endpoint contributes inflow and the right endpoint contributes outflow under the displayed convention.",
+          "Neighboring averages Q_{i-1} and Q_i provide left and right states at their shared edge."
+        ],
+        "implicit_context": [
+          "The method is conservative because a shared edge flux transfers quantity between neighboring cells rather than creating an independent source.",
+          "The passage describes the update principle qualitatively and does not display a fully indexed time-discrete formula.",
+          "Exact and approximate Riemann solvers are both compatible with the stated principle so long as their information is used to form an adequate numerical flux.",
+          "The discussion targets discontinuous solutions and therefore relies on integral rather than pointwise differential balance."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "conservative balance",
+            "details": [
+              "A cell's change is governed by flux through its boundary edges, consistent with the integral conservation law."
+            ]
+          },
+          {
+            "topic": "available data",
+            "details": [
+              "Numerical flux construction is based on approximate cell averages, not exact pointwise solution values."
+            ]
+          },
+          {
+            "topic": "interface coupling",
+            "details": [
+              "Adjacent cell averages become left/right Riemann states used to obtain an interface flux."
+            ]
+          },
+          {
+            "topic": "time advancement",
+            "details": [
+              "The computed edge fluxes modify cell averages over each time step."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The updated quantities are cell averages, not point samples.",
+        "The update is driven by flux through cell edges during each time step.",
+        "Numerical fluxes must approximate the correct physical fluxes.",
+        "The flux construction uses approximate cell averages as the available data.",
+        "At a one-dimensional interface, neighboring cell averages may serve as q_l and q_r in a Riemann problem used to compute the numerical flux.",
+        "The update must respect the integral conservation principle of boundary-flux balance.",
+        "The source passage does not require an exact Riemann solution or prescribe a particular numerical flux formula."
+      ],
+      "ambiguities": [
+        {
+          "issue": "No explicit discrete update equation is displayed in the cited passage.",
+          "evidence": "Section 1.2 says the values are modified in each time step by edge fluxes, but does not write indices, time levels, cell-volume factors, or a delta-t/delta-x formula.",
+          "impact": "A formal theorem may instantiate the conservative principle with a standard flux-difference formula, but its exact indexing, scaling, and boundary conventions are additional structure not fixed here."
+        },
+        {
+          "issue": "The quality requirement for a 'good' numerical flux is qualitative.",
+          "evidence": "The source asks for numerical flux functions that approximate the correct fluxes 'reasonably well' without a consistency, stability, or error inequality in this paragraph.",
+          "impact": "No quantitative accuracy, CFL, monotonicity, or convergence condition may be attributed to this introductory claim alone."
+        },
+        {
+          "issue": "The source does not commit to an exact versus approximate Riemann solver here.",
+          "evidence": "The paragraph after (1.11) says solving the Riemann problem yields information for a flux, while the next page notes that exact solutions can be too expensive and approximate Riemann solvers are often used.",
+          "impact": "Requiring an exact solver would be narrower than the finite-volume update principle stated by the source."
+        }
+      ],
+      "contract_plain_english": "A finite-volume time step changes each cell average by the fluxes through that cell's edges. Those numerical edge fluxes are built from the available approximate cell averages - often through neighboring-state Riemann problems - and must represent the conservative physical flux balance."
+    }
+  ]
+}

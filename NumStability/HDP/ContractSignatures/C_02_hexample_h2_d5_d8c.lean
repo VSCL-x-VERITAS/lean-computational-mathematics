@@ -1,21 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C.Signature
 
-/-! Frozen proof-free signature for Example 2.5.8(c). -/
+/-!
+# Compatibility import for an HDP contract signature
 
-noncomputable section
-
-open MeasureTheory
-open scoped ENNReal
-
-namespace NumStability.HDP.Contract
-
-def hdp_02_hexample_h2_d5_d8c__contract_type : Prop :=
-  ∀ {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} {B : ℝ}
-    (hX : Measurable X) (hB : 0 < B)
-    (hBound : ∀ᵐ ω ∂μ, |X ω| ≤ B),
-    NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X ≤
-      ENNReal.ofReal (B / Real.sqrt (Real.log 2))
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section05.Example08C.Signature`.
+Use the canonical Vershynin module in new imports.
+-/

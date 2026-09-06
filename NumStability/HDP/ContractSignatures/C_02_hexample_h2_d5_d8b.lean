@@ -1,13 +1,8 @@
-import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08B.Signature
 
-/-! Proof-free type signature for Example 2.5.8(b). -/
+/-!
+# Compatibility import for an HDP contract signature
 
-namespace NumStability.HDP.Contract
-
-def hdp_02_hexample_h2_d5_d8b__contract_type : Prop :=
-  NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge
-      NumStability.HDP.Scalar.SubGaussian.rademacherPsiTwoLaw id =
-    ENNReal.ofReal (1 / Real.sqrt (Real.log 2))
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section05.Example08B.Signature`.
+Use the canonical Vershynin module in new imports.
+-/

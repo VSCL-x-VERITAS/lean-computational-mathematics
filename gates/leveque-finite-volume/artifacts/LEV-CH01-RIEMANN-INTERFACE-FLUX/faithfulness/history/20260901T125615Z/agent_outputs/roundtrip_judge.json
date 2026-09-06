@@ -1,0 +1,179 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-RIEMANN-INTERFACE-FLUX",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "f4881e48ce7d02bed76fe9f2da452a2dd6f79f011ca5d3f9a5ae3fbcd8aa76dd",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The selected source claim concerns neighboring finite-volume cell averages used as oriented left and right Riemann states, with resulting information used for flux computation and a cell-average update.",
+      "translation_evidence": "The translation constructs interface data from neighboring integer-indexed states, applies a left/right-state solver, extracts an interface flux, and defines an updated state sequence.",
+      "reasoning": "The translation targets the correct general subject and interface orientation."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "The source binders include a hyperbolic equation, a finite-volume grid with neighboring cells, cell averages defined by cell integrals divided by volume, and a time step.",
+      "translation_evidence": "The translation has a bi-infinite integer-indexed sequence of arbitrary real vectors, an arbitrary Information type and solver, arbitrary flux functions, and a positive scalar, but no hyperbolic equation, cell geometry, averaging operation, cell volume, or explicit time step.",
+      "reasoning": "Several source binders retain suggestive names but lose the mathematical structures that make them a Riemann problem and finite-volume cell averages."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "The source assumes neighboring cell averages are posed as Riemann states and concludes that solving that problem supplies usable information.",
+      "translation_evidence": "The translation assumes for every state pair that fluxFromInformation(solve(left,right)) already equals an arbitrary physicalInterfaceFlux and then specializes that premise at each interface.",
+      "reasoning": "The key operational consequence of the Riemann solve is moved into an exact universal premise rather than established from a represented Riemann solution."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "At interface i, Q_{i-1} is the left state on x < 0 and Q_i is the right state on x > 0, with the jump convention centered at x = 0.",
+      "translation_evidence": "The constructed datum uses U_{i-1} for x < 0 and U_i for x > 0, leaving only the irrelevant value at x = 0 unconstrained.",
+      "reasoning": "Neighbor selection, left-right orientation, and the two open half-line conventions are represented correctly."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The source conclusion requires information obtained by solving the Riemann problem to support both numerical-flux computation and updating cell averages over a time step.",
+      "translation_evidence": "The interface datum is constructed, but no time-dependent Riemann solution is produced; flux usability is assumed, and the update is directly defined by a separately fixed flux-difference formula.",
+      "reasoning": "The translation does not establish the source's causal chain from solving the Riemann problem to usable flux and update information."
+    },
+    {
+      "id": "C06",
+      "status": "fail",
+      "source_evidence": "The relevant information comes from solving a hyperbolic Riemann problem and is used to compute a numerical flux approximating the correct flux.",
+      "translation_evidence": "solve is an unrestricted function of two vectors, Information is arbitrary, and physicalInterfaceFlux is an unrestricted two-state vector function with no conservation-law, consistency, or physical-flux semantics.",
+      "reasoning": "The dependencies do not enforce either Riemann-solution semantics or numerical-flux semantics."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source makes a permissive operational claim and deliberately leaves the flux extraction and update formulas unspecified.",
+      "translation_evidence": "The translation weakens the Riemann-solution content to arbitrary functions while strengthening other parts to exact flux equality for every pair and one particular conservative flux-difference update.",
+      "reasoning": "The changes are mixed rather than a uniform faithful strengthening or weakening."
+    },
+    {
+      "id": "C08",
+      "status": "fail",
+      "source_evidence": "The hyperbolic equation, its Riemann solution, numerical-flux information, time step, and cell-average update have linked roles in the source.",
+      "translation_evidence": "The constructed interface datum is not passed as an object to solve, Information has no relation to a Riemann solution beyond an assumed readout equality, and fluxScale has no formal relation to a time step or cell size.",
+      "reasoning": "The source objects' essential semantic relationships are not preserved."
+    },
+    {
+      "id": "C09",
+      "status": "fail",
+      "source_evidence": "The source fixes the i-1/i orientation but explicitly supplies no flux-extraction formula, update stencil, coefficient, sign convention, or time-step formula.",
+      "translation_evidence": "The translation fixes U_i new = U_i - fluxScale(F_{i+1} - F_i), requires fluxScale > 0, and assumes exact equality with a purported physical interface flux.",
+      "reasoning": "Although the indexing is standard and correctly oriented, the exact formula and equality materially exceed what the scoped source fixes."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The source applies to neighboring cells in a finite-volume grid for a hyperbolic equation.",
+      "translation_evidence": "The translation specializes to a uniform bi-infinite integer lattice and finite-dimensional real vectors while simultaneously allowing arbitrary functions unrelated to any equation or finite-volume geometry.",
+      "reasoning": "Its domain is both unsupportedly specialized and semantically overgeneralized."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The Riemann convention constrains only x < 0 and x > 0, and the physical interface coordinate corresponding to x = 0 is left implicit.",
+      "translation_evidence": "The value at x = 0 is explicitly unconstrained and has no effect on the solver, flux, or update; integer predecessor and successor indices consistently represent adjacent interfaces.",
+      "reasoning": "The origin exception and local index boundary conventions are handled consistently with the source."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The source's substantive content is that solving the Riemann problem produces information usable by the finite-volume method.",
+      "translation_evidence": "The interface-specific flux equality merely repeats a universal hypothesis, the interface-data property is definitional, and the existential updated sequence is obtained by direct definition from a prescribed formula.",
+      "reasoning": "The proposition can be proved without showing that solve produces or encodes a Riemann solution."
+    },
+    {
+      "id": "N01",
+      "status": "pass",
+      "source_evidence": "The source orients interface i with left cell i-1 and right cell i and uses interface information in neighboring-cell updates.",
+      "translation_evidence": "F_i uses U_{i-1}, U_i, while cell i is updated with right-face flux F_{i+1} minus left-face flux F_i.",
+      "reasoning": "The discrete interface and cell indices are internally consistent and preserve the stated left-right orientation."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The scoped source claim contains no norm, metric, or inner-product assertion.",
+      "translation_evidence": "The translation uses componentwise vector algebra but no norm, metric, or inner product.",
+      "reasoning": "There is no norm-related semantic facet to compare."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The source states no error, stability, convergence, or accuracy bound in this scoped claim.",
+      "translation_evidence": "The translation states no error, stability, convergence, or accuracy estimate.",
+      "reasoning": "No quantitative estimate belongs to the selected claim."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "The source does not distinguish floating-point implementation from exact mathematical flux computation.",
+      "translation_evidence": "The translation contains no rounding or finite-precision assertion.",
+      "reasoning": "No computation-versus-exact-semantics comparison is required."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The source contains no asymptotic rate, limiting process, or mesh-refinement quantifier in the selected statement.",
+      "translation_evidence": "The translation contains no asymptotic or limiting assertion.",
+      "reasoning": "There is no asymptotic claim to compare."
+    },
+    {
+      "id": "N06",
+      "status": "fail",
+      "source_evidence": "The source presupposes that the stated hyperbolic Riemann problem is solved to obtain interface information.",
+      "translation_evidence": "An arbitrary total function named solve is supplied, but no equation, solution object, existence condition, entropy condition, or relation to the constructed initial datum is imposed.",
+      "reasoning": "The translation does not represent the relevant Riemann solvability or solution semantics."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "A model in which solve is an arbitrary encoding and physicalInterfaceFlux is an arbitrary function can satisfy the translation's exact-readout premise, definitional interface-data property, and prescribed update without solving any hyperbolic Riemann problem. The translation therefore does not entail that Riemann-solution information supports the flux and time-step update as required by the source."
+    },
+    "source_implies_translation": {
+      "verdict": "no",
+      "reasoning": "The source supplies neither exact equality to a physical interface-flux function for every state pair nor the fixed bi-infinite-lattice update U_i - fluxScale(F_{i+1} - F_i), positive fluxScale, finite-dimensional real state representation, or unconstrained arbitrary solver/readout framework. Its formula-free operational claim does not entail the translated proposition."
+    }
+  },
+  "classification": "not-faithful-different",
+  "accepted": false,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "missing-riemann-solution-semantics",
+      "source_evidence": "The asserted information must be obtained by solving the hyperbolic Riemann problem with neighboring cell averages as its states.",
+      "translation_evidence": "The translation constructs only initial data and applies an arbitrary two-state function; it constructs no Riemann solution, waves, wave speeds, or equation-dependent object.",
+      "impact": "The proposition can hold when no represented operation solves the source Riemann problem."
+    },
+    {
+      "severity": "major",
+      "category": "flux-role-assumed",
+      "source_evidence": "The source says Riemann information can be used to compute a numerical flux but does not assert exact physical-flux recovery.",
+      "translation_evidence": "Exact equality between the readout and an arbitrary purported physicalInterfaceFlux is assumed universally and merely repeated at neighboring states.",
+      "impact": "The central flux consequence is presupposed, and the arbitrary flux function carries no formal physical or numerical-flux meaning."
+    },
+    {
+      "severity": "major",
+      "category": "unsupported-fixed-update",
+      "source_evidence": "The scoped source object leaves the cell-average update formula, stencil, coefficient, and time-step relation unspecified.",
+      "translation_evidence": "The translation fixes a conservative flux-difference update with an arbitrary positive scalar that is not connected to a time step, cell width, or cell volume.",
+      "impact": "The translation adds a specific algebraic theorem that the selected source does not entail while failing to encode the source's time-step semantics."
+    },
+    {
+      "severity": "major",
+      "category": "erased-finite-volume-state-semantics",
+      "source_evidence": "Q_{i-1} and Q_i are cell integrals divided by their cell volumes in neighboring finite-volume cells.",
+      "translation_evidence": "cellAverages is an arbitrary integer-indexed sequence of real vectors with no grid, integration, or volume structure.",
+      "impact": "The translated states need not be finite-volume cell averages at all."
+    }
+  ],
+  "rationale": "The reconstruction gets the neighboring indices, left-right Riemann datum, and conservative flux-difference indexing right. However, it does not represent a solved hyperbolic Riemann problem or finite-volume cell-average semantics: the solver and physical flux are arbitrary, their exact relationship is assumed, and the update is imposed by a formula absent from the scoped source. These are simultaneous semantic weakenings and unsupported strengthenings, so neither implication holds."
+}

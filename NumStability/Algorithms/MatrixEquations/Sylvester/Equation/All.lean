@@ -1,12 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Basic
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Diagonal
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Lyapunov
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Rectangular
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.SchurCoordinates
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Vectorization
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Equation.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,20 @@
+import NumStability.Source.Higham.Chapter16
+
+/-! Isolated API witness for `NumStability.Source.Higham.Chapter16`; authored declaration names are retained. -/
+
+#check @NumStability.existsUnique_isSylvesterSolutionRect_and_HessenbergGEPPUTrace_growth_of_upperHessenberg_triangular_sigmaMin
+#check @NumStability.Wave17.H16_eq16_4_8_auto_realSchur_existsUnique_solution_of_no_common
+#check @NumStability.sylvester_practical_error_bound_fl
+#check @NumStability.Higham16Hurwitz.star
+#check @NumStability.higham16_hurwitz_exp_decay
+#check @NumStability.Wave15.fl_solve2x2_backward_error
+#check @NumStability.Wave15.sylvesterVecCoeff_quasiTriangular_blockBackSub_backward_error
+#check @NumStability.H16_eq16_1_matMulRect_square_eq_matMul
+#check @NumStability.real_peel_one_or_two
+#check @NumStability.Wave17.exists_lyapunovOp_sigmaMin_of_no_common_complex_right_eigenvalue
+#check @NumStability.H16_eq16_28_lyapunov_aposteriori_bound_diagonal
+#check @NumStability.H16_eq16_30_generalizedSylvesterAXB_CXD_residual_zero_iff_solution
+#check @NumStability.sylvester_practical_error_bound_fl_of_schurTriangular
+#check @NumStability.sylvester_triangular_column_equation
+#check @NumStability.sylvesterVecCoeff_mulVec_bijective_of_no_common_complex_eigenpair
+#check @NumStability.higham16_kronecker_mul_vecTransposePermutation

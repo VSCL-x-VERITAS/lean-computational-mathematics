@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem07.OnesVector.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem07.OnesVector
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem07.OnesVector
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem07.OnesVector`.
+Declaration names and mathematical terminology are unchanged.
 -/

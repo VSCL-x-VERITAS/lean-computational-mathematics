@@ -2,10 +2,11 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.FloatingPoint.IEEE.NaiveMaximum
+import ComputationalMathematics.FloatingPoint.IEEE
 
 /-!
-# IEEE-facing operations
+Historical import path retained for compatibility.
 
-Reusable operations and laws over the repository's IEEE value-level model.
+The implementation is provided by `ComputationalMathematics.FloatingPoint.IEEE`.
+Declaration names and mathematical terminology are unchanged.
 -/

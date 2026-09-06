@@ -1,7 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01.Contract
 
-/-! Stable Chapter 2 contract module for Exercise 2.5.1.
+/-!
+# Compatibility import for an HDP source contract
 
-The semantic module owns the value-level forwarding declaration; this module
-re-exports it under the contract import path used by the cross-split checks.
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.Section05.Exercise01.Contract`.
+Use the canonical Vershynin module in new imports.
 -/

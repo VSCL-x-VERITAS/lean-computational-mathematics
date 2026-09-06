@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.CharacteristicPolynomial
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SecondDifferenceCondition
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenpairs
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenvectors
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.ToeplitzCondition
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.ToeplitzGeneral
+
+/-!
+# Higham Chapter 28 Section05
+
+Declaration-free aggregate for the Higham Chapter 28 Section05 subtree.
+-/

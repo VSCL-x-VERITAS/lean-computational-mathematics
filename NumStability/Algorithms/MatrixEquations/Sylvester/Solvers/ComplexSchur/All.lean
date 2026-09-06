@@ -1,9 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.Existence
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.SpectralSolvability
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.VectorizedSolvability
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Solvers.ComplexSchur.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

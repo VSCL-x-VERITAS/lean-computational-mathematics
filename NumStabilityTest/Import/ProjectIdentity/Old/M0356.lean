@@ -1,0 +1,46 @@
+import NumStability.Source.Higham.Chapter19
+
+/-! Isolated API witness for `NumStability.Source.Higham.Chapter19`; authored declaration names are retained. -/
+
+#check @NumStability.flCGSAux_succ
+#check @NumStability.LiteralMGSAllOrdersCertificate.upper
+#check @NumStability.higham19MGSBreakdownA_injective
+#check @NumStability.vecNorm2_fin_single
+#check @NumStability.mgsRoundedLocalGramRepairColumnBudget_nonneg
+#check @NumStability.flMGSVectors_succ_later
+#check @NumStability.mgsSource_gamma_le
+#check @H19.Algorithm19_12.exact_state
+#check @NumStability.opNorm2_matDiff_le_frobNorm
+#check @NumStability.PairBlockSupported_frobNorm_le
+#check @NumStability.H19_Lemma19_1_construction2_backward_error
+#check @NumStability.higham19_lemma19_3_actual_stored_sequence_backward_error
+#check @NumStability.Wave13.gamma_two_le_half
+#check @NumStability.Wave13.sum_sq_pairRows
+#check @NumStability.Higham19PolarNearest.rectRightGramPolarH_finitePSD
+#check @NumStability.Wave19.householderConstructApplyMatrixRect_entrywise_le_rowGrowth
+#check @NumStability.higham19_problem19_9_sigmaMin_nonneg
+#check @NumStability.higham19_problem19_10_fp_u
+#check @NumStability.H19Sensitivity.diff_decompose
+#check @NumStability.H19Sensitivity.frobNormSqRect_sub_id_eq
+#check @NumStability.allPivots_stageCompactCoeff_le
+#check @NumStability.firstPivotSelfAnnihilatingReflector.beta_eq
+#check @NumStability.ch19SBAppendColumn_last
+#check @NumStability.fl_householderQR_R_diag_nonzero_of_source_small
+#check @NumStability.higham19_columnFrob_sub_le
+#check @NumStability.Theorem19_6.sourceConstructed_actual_closed_linearRate
+#check @NumStability.Wave20.ext0_succ
+#check @NumStability.Wave20.stageCoeff_mono
+#check @NumStability.Wave19.applyProd_succ
+#check @NumStability.Wave19.entrywise_recursive_cons
+#check @NumStability.Wave19.Qacc_orthogonal
+#check @NumStability.Wave19.panelStep_reflector_action_eq
+#check @NumStability.Wave18A.storedPanel_stepBudget_uniform_bound
+#check @NumStability.Wave18B.abs_dot_perturb_le
+#check @NumStability.Wave18C.sum_abs_le_sqrt_card_mul_vecNorm2
+#check @NumStability.Wave20.H19_Theorem19_6_final
+#check @NumStability.Wave13.pivotFirstColumn_max
+#check @NumStability.Wave18D.abs_le_rowInftyNorm
+#check @NumStability.Wave20.numerator_col_le
+#check @NumStability.Wave13.fl_givensQRTaskList_other_row
+#check @NumStability.higham19TurnbullAitken_mulVec_eq
+#check @NumStability.ch19ext_eq19_17_base

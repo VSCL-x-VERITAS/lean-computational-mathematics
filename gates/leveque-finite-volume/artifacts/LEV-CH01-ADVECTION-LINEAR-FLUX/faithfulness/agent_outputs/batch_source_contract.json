@@ -1,0 +1,400 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "batch-source-contract",
+  "source_group": "leveque-chapter-01-conservation",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_locator_sha256": "903d9a89b0834bb17300a6f194a89f28c332dc3313cccd3490dacc2520501bf5",
+  "task_ids": [
+    "LEV-CH01-ADVECTION-LINEAR-FLUX",
+    "LEV-CH01-EQ-1.9-QUASILINEAR-FORM",
+    "LEV-CH01-INTEGRAL-TO-DIFFERENTIAL-SMOOTH",
+    "LEV-CH01-LINEAR-FLUX-SPECIALIZATION"
+  ],
+  "contracts": [
+    {
+      "task_id": "LEV-CH01-ADVECTION-LINEAR-FLUX",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 23; printed Chapter 1 page 1",
+          "anchor": "Contaminant-transport paragraph and equations (1.2)--(1.3)",
+          "observation": "For a contaminant density q(x,t) carried through a one-dimensional pipe at constant velocity u_bar, the book states the scalar advection equation q_t(x,t) + u_bar q_x(x,t) = 0 and identifies it as constant-speed transport."
+        },
+        {
+          "location": "raw PDF page 26; printed Chapter 1 page 4",
+          "anchor": "Section 1.1.1, paragraph immediately after equation (1.10)",
+          "observation": "The advection equation (1.2) for contaminant density is derived from conservation of total contaminant mass, and its flux function is explicitly f(q) = u_bar q; failure of mass conservation would require source terms."
+        },
+        {
+          "location": "raw PDF page 38; printed Chapter 2 page 16",
+          "anchor": "Equations (2.3)--(2.6), especially equation (2.5)",
+          "observation": "Flux is velocity times density. When velocity is independent of x and t, u(x,t) = u_bar, the autonomous flux is f(q) = u_bar q, and the integral conservation law has endpoint flux difference f(q(x1,t)) - f(q(x2,t))."
+        },
+        {
+          "location": "raw PDF page 39; printed Chapter 2 page 17",
+          "anchor": "Section 2.1, equations (2.10)--(2.12)",
+          "observation": "For the flux f(q) = u_bar q, the differential conservation law becomes q_t + u_bar q_x = 0, which the book calls the advection equation."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A spatial coordinate x and time coordinate t in a one-dimensional space-time domain.",
+          "A scalar contaminant density q(x,t).",
+          "A constant real transport velocity u_bar.",
+          "An autonomous scalar flux function f."
+        ],
+        "hypotheses": [
+          "The fluid velocity is constant in both space and time: u(x,t) = u_bar.",
+          "The contaminant is neither created nor destroyed, so its total mass in an interval changes only through endpoint fluxes.",
+          "When the differential equation is used classically, q and the composed flux f(q) are sufficiently smooth for the conservation-law manipulations."
+        ],
+        "conclusions": [
+          "The contaminant flux is the linear function f(q) = u_bar q.",
+          "The associated differential conservation law q_t + partial_x(f(q)) = 0 specializes to q_t + u_bar q_x = 0, the scalar advection equation."
+        ],
+        "definitions_and_conventions": [
+          "q is concentration or density, measured in the one-dimensional model as mass per unit length.",
+          "Flux is the rate at which contaminant passes a fixed point; positive flux is rightward and negative flux is leftward.",
+          "An autonomous flux depends on q but not explicitly on x or t.",
+          "Subscripts t and x denote partial derivatives."
+        ],
+        "implicit_context": [
+          "This is the scalar, constant-coefficient case of the book's one-dimensional first-order systems.",
+          "There is no source term because the selected setting assumes contaminant mass conservation.",
+          "The sign of u_bar is not restricted by the statement; it determines the direction of transport."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "linearity and constancy",
+            "details": [
+              "The flux is exactly proportional to q, with coefficient u_bar.",
+              "The coefficient u_bar is independent of x, t, and q."
+            ]
+          },
+          {
+            "topic": "physical conservation",
+            "details": [
+              "The PDE is tied to conservation of total contaminant mass.",
+              "Creation or destruction would change the model by adding source terms."
+            ]
+          },
+          {
+            "topic": "differential specialization",
+            "details": [
+              "Because u_bar is constant, partial_x(u_bar q) = u_bar q_x in the smooth classical setting."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The selected flux must be f(q) = u_bar q, with no additive offset or nonlinear dependence on q.",
+        "u_bar is constant with respect to space and time.",
+        "q is scalar in the contaminant-advection example.",
+        "The conservation-law sign convention yields q_t + u_bar q_x = 0.",
+        "The no-source PDE represents the case in which contaminant mass is conserved."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The phrase 'sufficiently smooth' is not converted into a minimal regularity class in the cited discussion.",
+          "evidence": "Raw PDF page 39, printed Chapter 2 page 17, requires q(x,t) and f(q) to be sufficiently smooth before deriving the differential form.",
+          "impact": "A formal statement must choose concrete differentiability and integrability assumptions; stronger regularity than minimally necessary narrows applicability without changing the stated flux identity."
+        },
+        {
+          "issue": "The exact spatial and temporal domains are not fixed in the selected Chapter 1 statement.",
+          "evidence": "Equations (1.2) and the Chapter 1 flux paragraph use x and t generically, while Chapter 2 describes a one-dimensional pipe and arbitrary subintervals.",
+          "impact": "A formalization may select R or another interval as its domain, but that choice should not alter the constant linear flux or the local PDE."
+        }
+      ],
+      "contract_plain_english": "For a conserved scalar contaminant carried in one dimension by a fluid whose velocity is the constant u_bar, the physical flux is velocity times density, so f(q) = u_bar q. In the smooth classical setting, the conservation law therefore becomes the scalar advection equation q_t + u_bar q_x = 0."
+    },
+    {
+      "task_id": "LEV-CH01-EQ-1.9-QUASILINEAR-FORM",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Section 1.1, equations (1.8)--(1.9) and the sentence joining them",
+          "observation": "The one-dimensional conservation law q_t(x,t) + partial_x(f(q(x,t))) = 0 is rewritten in quasilinear form as q_t + f'(q) q_x = 0. The following sentence calls f'(q) the flux Jacobian matrix."
+        },
+        {
+          "location": "raw PDF page 23; printed Chapter 1 page 1",
+          "anchor": "Equation (1.1) and its explanatory paragraph",
+          "observation": "The chapter's system notation takes q: R x R -> R^m, uses an m by m real coefficient matrix in the linear case, and uses subscripts for partial derivatives with respect to t and x."
+        },
+        {
+          "location": "raw PDF page 26; printed Chapter 1 page 4",
+          "anchor": "Continuation of Section 1.1 immediately before Section 1.1.1",
+          "observation": "The book describes nonlinear conservation laws as having f(q) nonlinear in q, where q is a vector of conserved quantities."
+        },
+        {
+          "location": "raw PDF page 39; printed Chapter 2 page 17",
+          "anchor": "Equations (2.8)--(2.11)",
+          "observation": "The detailed derivation treats q and f as smooth and writes the differential conservation law as q_t + partial_x(f(q)) = 0, confirming that the rewrite is a classical smooth calculation."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A positive component count m.",
+          "A state q(x,t) with values in R^m on a one-dimensional space-time domain.",
+          "A differentiable flux f: R^m -> R^m.",
+          "The spatial coordinate x and time coordinate t."
+        ],
+        "hypotheses": [
+          "q and f are differentiable enough for the spatial chain rule to apply to f(q(x,t)).",
+          "The differential conservation law q_t(x,t) + partial_x(f(q(x,t))) = 0 is under consideration."
+        ],
+        "conclusions": [
+          "The chain rule gives partial_x(f(q(x,t))) = Df(q(x,t)) q_x(x,t).",
+          "Consequently the conservation law can be rewritten pointwise as q_t + f'(q) q_x = 0, where f'(q) is the flux Jacobian matrix."
+        ],
+        "definitions_and_conventions": [
+          "f'(q) denotes the Jacobian derivative Df(q); for m components it is an m by m matrix.",
+          "q_x is the spatial derivative vector and f'(q) q_x is matrix-vector multiplication.",
+          "Subscripts t and x denote partial derivatives.",
+          "'Quasilinear form' means that the highest-order derivatives q_t and q_x occur linearly, with a coefficient f'(q) that may depend on q."
+        ],
+        "implicit_context": [
+          "The selected equation is one-dimensional and homogeneous, with no source term.",
+          "The formula covers the scalar case m = 1 as well as systems.",
+          "The subsequent hyperbolicity discussion treats f'(q) as the state-dependent analogue of the constant matrix A."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "chain-rule equivalence",
+            "details": [
+              "Equation (1.9) is presented as a rewriting of equation (1.8), not as an additional dynamical assumption.",
+              "The equivalence is classical and depends on differentiability of q and f."
+            ]
+          },
+          {
+            "topic": "system typing",
+            "details": [
+              "For vector q, f'(q) is a Jacobian matrix acting on q_x.",
+              "The source does not restrict f to be linear in this task."
+            ]
+          },
+          {
+            "topic": "hyperbolicity context",
+            "details": [
+              "The text says the quasilinear form suggests hyperbolicity when f'(q) satisfies the earlier spectral conditions for A; this is contextual motivation rather than part of the chain-rule identity itself."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The coefficient multiplying q_x is the derivative/Jacobian f'(q), evaluated at the current state q.",
+        "In the system case, f'(q) q_x is matrix-vector multiplication with matching dimension m.",
+        "The rewrite must retain the sign and zero right-hand side: q_t + f'(q) q_x = 0.",
+        "The claim is a smooth chain-rule rewrite of partial_x(f(q)), not a claim that f is linear or that f'(q) is constant.",
+        "No eigenvalue condition is needed merely to establish the rewrite."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The exact differentiability assumptions needed for the chain rule are left implicit in the immediate equation (1.9) discussion.",
+          "evidence": "Raw PDF page 25 simply says 'Rewriting this,' while raw PDF page 39 later assumes q and f are smooth for the differential manipulations.",
+          "impact": "A formal statement must state pointwise or global differentiability hypotheses explicitly."
+        },
+        {
+          "issue": "The follow-on hyperbolicity sentence uses the cautious word 'suggests' rather than stating a fully quantified theorem.",
+          "evidence": "Raw PDF page 25, immediately after equation (1.9), says the equation is suggested to be hyperbolic if the flux Jacobian satisfies the earlier conditions for A.",
+          "impact": "The selected source claim should not be inflated into an iff characterization of nonlinear hyperbolicity; the contract's conclusion is the quasilinear rewrite."
+        }
+      ],
+      "contract_plain_english": "For a differentiable state q and differentiable flux f, the spatial derivative of the composite flux is its Jacobian times the spatial derivative of the state. Thus q_t + partial_x(f(q)) = 0 is the same classical equation as q_t + f'(q) q_x = 0."
+    },
+    {
+      "task_id": "LEV-CH01-INTEGRAL-TO-DIFFERENTIAL-SMOOTH",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 26; printed Chapter 1 page 4",
+          "anchor": "Equation (1.10) and the opening sentence of Section 1.1.2",
+          "observation": "The integral law is stated for any two points x1 and x2, and the text says the differential equation (1.8) can be derived from it by simple manipulations provided q and f(q) are sufficiently smooth."
+        },
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Continuation of Section 1.1.2 after the page break",
+          "observation": "At discontinuities the differential equation does not hold classically, whereas the integral conservation law is more fundamental and continues to hold."
+        },
+        {
+          "location": "raw PDF page 38; printed Chapter 2 page 16",
+          "anchor": "Equations (2.6)--(2.7)",
+          "observation": "For an autonomous flux, the integral conservation law is d/dt integral from x1 to x2 of q(x,t) dx = f(q(x1,t)) - f(q(x2,t)), equivalently the negative endpoint difference of f(q(x,t))."
+        },
+        {
+          "location": "raw PDF page 39; printed Chapter 2 page 17",
+          "anchor": "Paragraph beginning 'Once the flux function' and equations (2.8)--(2.11)",
+          "observation": "The identity is required on every interval for arbitrary x1 and x2. Assuming q and f are smooth, the book moves the time derivative inside, represents the endpoint flux difference as an integral of -partial_x f(q), obtains an integral of q_t + partial_x f(q) equal to zero for every interval, and concludes that the integrand is identically zero."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A one-dimensional spatial domain and time variable t.",
+          "Arbitrary endpoints x1 < x2 in the spatial domain.",
+          "A conserved state q(x,t), scalar or componentwise vector-valued.",
+          "An autonomous flux f depending on q."
+        ],
+        "hypotheses": [
+          "For every interval [x1,x2], d/dt integral_[x1,x2] q(x,t) dx = f(q(x1,t)) - f(q(x2,t)).",
+          "q and f(q) are sufficiently smooth to differentiate under the integral sign, apply the fundamental theorem of calculus to the flux, and infer pointwise vanishing from vanishing integrals on every interval."
+        ],
+        "conclusions": [
+          "The integrand q_t(x,t) + partial_x(f(q(x,t))) is identically zero.",
+          "Hence q satisfies the differential conservation law q_t(x,t) + partial_x(f(q(x,t))) = 0 in the classical pointwise sense."
+        ],
+        "definitions_and_conventions": [
+          "The integral of q over [x1,x2] is the total amount of the conserved quantity in that interval, componentwise for a system.",
+          "The endpoint sign convention is inflow at x1 minus outflow at x2: f(q(x1,t)) - f(q(x2,t)).",
+          "An autonomous flux depends on q but not explicitly on x or t.",
+          "The differential form is q_t + partial_x(f(q)) = 0."
+        ],
+        "implicit_context": [
+          "The statement is one-dimensional and homogeneous, with no interior source term.",
+          "The derivation is in the smooth classical regime and is explicitly not the framework for shock discontinuities.",
+          "The book treats the integral law as the more fundamental conservation statement."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "quantification over control intervals",
+            "details": [
+              "The integral identity must hold for every interval, not merely one fixed pair of endpoints.",
+              "This universal interval quantifier is what permits the conclusion that the integrand vanishes identically."
+            ]
+          },
+          {
+            "topic": "regularity",
+            "details": [
+              "Sufficient smoothness justifies differentiation under the integral sign and conversion of endpoint fluxes into an integral of a spatial derivative.",
+              "The conclusion is a classical pointwise PDE."
+            ]
+          },
+          {
+            "topic": "direction of implication",
+            "details": [
+              "The selected sentence asserts derivation of the differential equation from the integral equation.",
+              "The contract does not add a converse claim."
+            ]
+          },
+          {
+            "topic": "discontinuous solutions",
+            "details": [
+              "At a discontinuity the classical PDE need not hold, while the integral conservation law continues to be the governing statement."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The integral balance is universally quantified over spatial intervals [x1,x2].",
+        "The endpoint flux appears with the sign f(q(x1,t)) - f(q(x2,t)).",
+        "Sufficient smoothness is essential to the stated derivation.",
+        "The conclusion is the classical differential equation q_t + partial_x(f(q)) = 0.",
+        "The selected implication runs from the integral conservation law to the differential law.",
+        "The claim must not extend the classical pointwise conclusion across shock discontinuities."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The source does not state a minimal functional-analytic regularity class.",
+          "evidence": "Raw PDF pages 26 and 39 use 'sufficiently smooth' and 'smooth functions' without specifying C^1, absolute continuity, or conditions for differentiating under the integral sign.",
+          "impact": "A formal version must select explicit hypotheses strong enough for the three analytic steps; excess regularity narrows applicability."
+        },
+        {
+          "issue": "The spatial domain and treatment of endpoints are not formalized in the introductory statement.",
+          "evidence": "The source says the law holds for arbitrary x1 and x2 in a one-dimensional pipe but does not specify an open interval, all of R, or boundary regularity.",
+          "impact": "A formalization may choose a concrete domain, but it must retain arbitrary subintervals within that domain."
+        },
+        {
+          "issue": "The Chapter 2 derivation is written in scalar notation even though Chapter 1 discusses vector systems componentwise.",
+          "evidence": "Raw PDF page 26 states that each component of q is a conserved density, while raw PDF page 39 performs the integral calculation without separately indexing components.",
+          "impact": "For systems the derivation should be understood componentwise with dimension-compatible vector flux; a scalar-only formalization is a specialization."
+        }
+      ],
+      "contract_plain_english": "If the endpoint-flux balance holds for every spatial interval and q and f(q) are smooth enough for the standard calculus steps, then the integral of q_t + partial_x(f(q)) over every interval is zero. The integrand therefore vanishes pointwise, giving the classical differential conservation law. This conclusion is not asserted at discontinuities."
+    },
+    {
+      "task_id": "LEV-CH01-LINEAR-FLUX-SPECIALIZATION",
+      "source_evidence": [
+        {
+          "location": "raw PDF page 23; printed Chapter 1 page 1",
+          "anchor": "Equation (1.1) and its explanatory paragraph",
+          "observation": "The constant-coefficient linear system is q_t(x,t) + A q_x(x,t) = 0, with q: R x R -> R^m and A a constant real m by m matrix."
+        },
+        {
+          "location": "raw PDF pages 25--26; printed Chapter 1 pages 3--4",
+          "anchor": "Equation (1.8) and the sentence continued across the page break",
+          "observation": "The general conservation law is q_t + partial_x(f(q)) = 0, and the book explicitly states that the linear problem (1.1) is a conservation law with the linear flux function f(q) = A q."
+        },
+        {
+          "location": "raw PDF page 25; printed Chapter 1 page 3",
+          "anchor": "Equation (1.9) and the following hyperbolicity sentence",
+          "observation": "The flux derivative is the coefficient matrix in quasilinear form; the surrounding discussion distinguishes the algebraic conservation-law form from the additional spectral conditions relevant to hyperbolicity."
+        }
+      ],
+      "statement": {
+        "binders": [
+          "A positive component count m.",
+          "A state q(x,t) with values in R^m.",
+          "A constant real matrix A of size m by m.",
+          "A flux f: R^m -> R^m defined by f(v) = A v."
+        ],
+        "hypotheses": [
+          "A is independent of x, t, and q.",
+          "q is spatially differentiable so that partial_x(A q) = A q_x."
+        ],
+        "conclusions": [
+          "The constant-coefficient linear system q_t + A q_x = 0 is exactly the conservation law q_t + partial_x(f(q)) = 0 with linear flux f(q) = A q."
+        ],
+        "definitions_and_conventions": [
+          "A q is ordinary real matrix-vector multiplication.",
+          "A linear flux has no additive constant term and maps R^m to R^m.",
+          "Subscripts t and x denote partial derivatives.",
+          "Constancy of A permits the identity partial_x(A q) = A q_x."
+        ],
+        "implicit_context": [
+          "The problem is a one-dimensional homogeneous first-order system.",
+          "The conservation-law specialization is algebraic and separate from whether A satisfies the spectral conditions for hyperbolicity.",
+          "The scalar case is included when m = 1."
+        ],
+        "semantic_facets": [
+          {
+            "topic": "exact specialization",
+            "details": [
+              "Substituting f(q) = A q into q_t + partial_x(f(q)) = 0 produces q_t + A q_x = 0 because A is constant.",
+              "The two displayed forms describe the same PDE under the stated differentiability."
+            ]
+          },
+          {
+            "topic": "typing",
+            "details": [
+              "q has m real components and A is an m by m real matrix, so both A q and A q_x are vectors in R^m."
+            ]
+          },
+          {
+            "topic": "hyperbolicity separation",
+            "details": [
+              "No eigenvalue or eigenvector hypothesis is used in the flux substitution itself.",
+              "Such spectral conditions matter only if the system is additionally claimed to be hyperbolic."
+            ]
+          }
+        ]
+      },
+      "undebatable_constraints": [
+        "The flux is exactly f(q) = A q.",
+        "A is a constant real m by m matrix.",
+        "The state and flux have the same dimension m.",
+        "The conservation derivative is partial_x(A q) = A q_x, relying on constancy of A.",
+        "The resulting equation retains the plus sign and zero right-hand side: q_t + A q_x = 0.",
+        "The algebraic specialization does not by itself impose hyperbolicity spectral conditions."
+      ],
+      "ambiguities": [
+        {
+          "issue": "The immediate specialization sentence does not restate a differentiability class for q.",
+          "evidence": "Raw PDF pages 25--26 identify f(q) = A q, while differentiability is implicit in the displayed PDE notation and is discussed explicitly later for classical differential forms.",
+          "impact": "A formal statement must provide enough spatial differentiability to commute the constant matrix with the derivative."
+        },
+        {
+          "issue": "The phrase 'linear problem (1.1)' occurs in a chapter about hyperbolic systems, but the conservation-form identity itself uses no spectral hypothesis on A.",
+          "evidence": "Raw PDF page 23 says spectral properties are needed 'in order for this problem to be hyperbolic,' whereas raw PDF pages 25--26 state the linear-flux conservation form without repeating them.",
+          "impact": "A benchmark about the flux specialization should not require diagonalizability unless it separately claims hyperbolicity."
+        }
+      ],
+      "contract_plain_english": "For a constant real matrix A and a differentiable vector state q, define the linear flux by f(q) = A q. Then the conservation-law derivative partial_x(f(q)) is A q_x, so the conservation law is exactly the constant-coefficient linear system q_t + A q_x = 0."
+    }
+  ]
+}

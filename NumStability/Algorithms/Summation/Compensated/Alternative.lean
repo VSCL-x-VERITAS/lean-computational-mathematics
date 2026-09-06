@@ -1,9 +1,8 @@
-import NumStability.Algorithms.Summation.Compensated.Alternative.Core
-import NumStability.Algorithms.Summation.Compensated.Alternative.ErrorBounds
+import ComputationalMathematics.Algorithms.Summation.Compensated.Alternative
 
 /-!
-# Alternative compensated summation
+Historical import path retained for compatibility.
 
-Declaration-free reusable entry point for the separately accumulated correction
-algorithm and its generic error analysis.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Compensated.Alternative`.
+Declaration names and mathematical terminology are unchanged.
 -/

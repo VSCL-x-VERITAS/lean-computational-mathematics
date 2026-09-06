@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Exact.GrowthArithmetic
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Exact.GrowthArithmetic`. -/
+
+#check NumStability.Higham11RoundedBunchKaufmanExecution.completed_exactArithmetic
+#check NumStability.higham11_2_bunchKaufmanExactArithmeticFP
+#check NumStability.higham11_2_bunchKaufmanExactArithmetic_secondPivot_ne_zero
+#check NumStability.higham11_2_exactArithmeticBunchKaufmanExecution
+#check NumStability.higham11_2_exactArithmeticBunchKaufmanExecution_completed

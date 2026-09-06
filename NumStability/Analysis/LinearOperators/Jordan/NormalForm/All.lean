@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.Jordan.NormalForm.NilpotentChains
-import NumStability.Analysis.LinearOperators.Jordan.NormalForm.PrimaryDecomposition
+import ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.All
 
 /-!
-# Analysis.LinearOperators.Jordan.NormalForm.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

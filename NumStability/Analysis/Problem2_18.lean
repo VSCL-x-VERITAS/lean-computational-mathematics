@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem18.ExactSubtractionCounterexample.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem18.ExactSubtractionCounterexample.Basic
 
 /-!
 # Problem2_18 (compatibility module)

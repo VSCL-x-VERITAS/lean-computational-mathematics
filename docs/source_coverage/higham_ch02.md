@@ -111,3 +111,12 @@ Main modules: `NumStability/FloatingPoint/Model.lean`, `NumStability/Analysis/Fl
 ## Cross-chapter role
 
 Chapter 2 is the substrate for the whole book as formalized here: `FPModel` (§2.2 standard model (2.4)/(2.5)) is the assumption surface consumed by the Chapter 3 `γ_k`/`θ_k` machinery (`Analysis/Rounding.lean`) and thence by every later-chapter error analysis (summation ch4, inner products/ch3, LU/ch9–14, QR/ch19, powers/ch18, etc.). Theorem 2.5 (Sterbenz exactness) is invoked by compensated summation (ch4, `Algorithms/CompensatedSum.lean`) and by the Heron/Kahan analyses; the FMA single-rounding surface feeds ch3-style FMA variants; equation (2.8) supports the underflow-aware rows (Problem 2.28 here, CESTAC/§26.5 references later); the unit-roundoff/format definitions (`ieeeSingleFormat`/`ieeeDoubleFormat`, `machineEpsilon`, `unitRoundoff`) are the numeric instances used wherever concrete IEEE constants appear. The IEEE value/flag layer is the base for exception-aware statements (e.g. Problem 2.22's NaN comparison semantics) chapters 25–27 may reuse.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter02` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

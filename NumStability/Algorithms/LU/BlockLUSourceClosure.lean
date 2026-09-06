@@ -1,5 +1,5 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.OperatorTwo
-import NumStability.Source.Higham.Chapter13.Section03.ColumnDominanceClosure
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.OperatorTwo
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.ColumnDominanceClosure
 
 /-!
 # Historical column-dominance Block LU compatibility import

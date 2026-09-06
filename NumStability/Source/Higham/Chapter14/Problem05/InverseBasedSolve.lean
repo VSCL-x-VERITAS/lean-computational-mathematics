@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem05.InverseBasedSolve.AsymptoticFamilies
-import NumStability.Source.Higham.Chapter14.Problem05.InverseBasedSolve.ForwardErrorEndpoint
-import NumStability.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem05.InverseBasedSolve
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve`.
+Declaration names and mathematical terminology are unchanged.
 -/

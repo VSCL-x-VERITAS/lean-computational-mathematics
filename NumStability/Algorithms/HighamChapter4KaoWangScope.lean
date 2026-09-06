@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter04.Section02.KaoWangCitationDiscrepancy
+import ComputationalMathematics.Source.Higham.Chapter04.Section02.KaoWangCitationDiscrepancy
 
 /-!
 # Compatibility import for the Higham--Kao--Wang citation discrepancy

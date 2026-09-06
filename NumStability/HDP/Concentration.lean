@@ -1,8 +1,8 @@
-import NumStability.HDP.Concentration.MetricMeasure
+import ComputationalMathematics.HDP.Concentration
 
 /-!
-# Concentration without independence
+Historical import path retained for compatibility.
 
-Reusable entry point for the metric-measure concentration material behind
-Vershynin, *High-Dimensional Probability*, Chapter 5.
+The implementation is provided by `ComputationalMathematics.HDP.Concentration`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,50 @@
+import ComputationalMathematics.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.CauchySchwarz
+import ComputationalMathematics.Source.Vershynin.Chapter01.CDFAndTail.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.ConvergenceInDistribution.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.ConvexFunction.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.DistributionDetermined.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Equation02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Equation03.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Equation04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Equation05.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Equation07.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.ExpectationAndVariance.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.HolderInequality.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Indicator.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.JensenInequality
+import ComputationalMathematics.Source.Vershynin.Chapter01.L2Geometry.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.LayerCakePointwise.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.LpBanachSpace.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.LpNormedSpace.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.LpQuasinorm.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.LpSpace.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.MinkowskiInequality.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.MomentGeneratingFunction.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Moments.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.PoissonDistribution.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.SampleMeanVarianceLimit.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section01.Remark01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise03.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01.Fubini.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01.IndicatorExpectation.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Proposition04
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Proposition04.Decomposition.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Exercise03.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem01
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.StandardDeviationAndCovariance.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.StandardNormal.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.TailCDFIdentity.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.VarianceOfSum.Contract
+
+/-!
+# Vershynin Chapter 01 source contracts
+
+Complete source entry point for the migrated signatures and checked contracts
+from Vershynin's *High-Dimensional Probability*, Chapter 01.
+-/

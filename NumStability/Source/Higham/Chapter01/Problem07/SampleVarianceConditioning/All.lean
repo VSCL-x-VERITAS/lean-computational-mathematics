@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.ConditionNumbers
+import ComputationalMathematics.Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.All
 
 /-!
-# Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

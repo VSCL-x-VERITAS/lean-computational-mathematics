@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Problem05.InverseBasedSolve.MatrixInversion`. -/
+
+#check NumStability.higham14_inverseLeftResidual_mulVec_add_self
+#check NumStability.higham14_problem14_5_forward_error_of_residual_bound
+#check NumStability.higham14_problem14_5_left_inverse_solve_residual_bound

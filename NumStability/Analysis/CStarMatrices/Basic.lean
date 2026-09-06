@@ -1,7 +1,8 @@
-import NumStability.Analysis.CStarMatrices.Basic.All
+import ComputationalMathematics.Analysis.CStarMatrices.Basic
 
 /-!
-# NumStability.Analysis.CStarMatrices.Basic
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.CStarMatrices.Basic`.
+Declaration names and mathematical terminology are unchanged.
 -/

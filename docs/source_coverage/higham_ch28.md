@@ -94,3 +94,12 @@ Verification targets are `Higham28`, `Higham28Exact`, `Higham28Stewart`,
 `Higham28GaussianQRHaar`,
 `Higham28ShiftedHilbert`, and `Higham28Contracts`, plus the Algorithms umbrella.
 Forbidden-token hygiene and representative axiom audits are required at handoff.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter28` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

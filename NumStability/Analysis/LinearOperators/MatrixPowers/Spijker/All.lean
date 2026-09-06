@@ -1,11 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.KreissBridge
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarAlgebra
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarAnalysis
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.ProjectionIntegral
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.Rational
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.Spijker.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

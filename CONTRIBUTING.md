@@ -1,8 +1,9 @@
-# Contributing to NumStability
+# Contributing to Lean Computational Mathematics
 
-NumStability is both a reusable numerical-stability library and a checked
-correspondence with numerical-analysis sources. Keep those roles separate when
-adding or moving code.
+Lean Computational Mathematics contains reusable mathematics and checked
+correspondence with books and research papers. Keep those roles separate when
+adding or moving code. Numerical stability remains part of the library
+alongside its other subjects.
 
 ## Before changing modules
 
@@ -19,15 +20,17 @@ Read:
 ## Place new code deliberately
 
 Every new or moved production module must be classified in
-[`docs/architecture/tiers.json`](docs/architecture/tiers.json). The remaining
-historical inventory is recorded exactly in
-[`docs/architecture/layout-exceptions.json`](docs/architecture/layout-exceptions.json);
-that reviewed debt may only decrease until classification reaches 100%.
+[`docs/architecture/tiers.json`](docs/architecture/tiers.json). Classification
+is 100% complete: every production module carries exactly one tier, with no
+unclassified or mixed entries, and CI forbids regression from that state.
+[`docs/architecture/layout-exceptions.json`](docs/architecture/layout-exceptions.json)
+now records only the checked structural ceilings; its legacy debt lists are
+empty and may not regrow.
 
 - Put source-independent mathematics in `FloatingPoint`, `Analysis`, or a
   semantic `Algorithms` family.
 - Put numbered book results, source aliases, examples, corrections, and
-  discrepancies under `NumStability/Source/<work>/`.
+  discrepancies under `ComputationalMathematics/Source/<work>/`.
 - Put unsupported proof scaffolding in `Internal/` below its closest
   mathematical owner.
 - Put copied or adapted external code under `Upstream/<origin>/` and preserve
@@ -62,7 +65,7 @@ python tools/architecture/check_layout.py
 python tools/architecture/check_compatibility.py
 python tools/architecture/check_provenance.py
 python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
-lake build NumStability NumStabilityTest
+lake build ComputationalMathematics NumStability NumStabilityTest
 ```
 
 Architecture batches should also build their canonical modules and isolated
@@ -97,7 +100,7 @@ See LICENSES/Apache-2.0.txt.
 
 Copied, adapted, or backported code must:
 
-1. live under `NumStability/Upstream/<origin>/`;
+1. live under `ComputationalMathematics/Upstream/<origin>/`;
 2. retain the upstream copyright, author, and license notices;
 3. cite the upstream project, exact URL, and immutable full commit hash;
 4. describe whether it was copied, adapted, or backported;

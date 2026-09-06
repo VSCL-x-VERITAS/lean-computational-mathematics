@@ -1,0 +1,17 @@
+import ComputationalMathematics.Analysis.MatrixNorms.Attainment
+import ComputationalMathematics.Analysis.MatrixNorms.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.Comparisons
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseAbsolute
+import ComputationalMathematics.Analysis.MatrixNorms.EntrywiseMaximum
+import ComputationalMathematics.Analysis.MatrixNorms.Hadamard
+import ComputationalMathematics.Analysis.MatrixNorms.HadamardDeterminant
+import ComputationalMathematics.Analysis.MatrixNorms.Lp
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralExtrema
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralRadius
+import ComputationalMathematics.Analysis.MatrixNorms.UnitarilyInvariant
+
+/-!
+# Matrix norms
+
+Declaration-free aggregate for the canonical matrix-norm family.
+-/

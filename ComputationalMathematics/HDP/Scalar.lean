@@ -1,0 +1,26 @@
+import ComputationalMathematics.HDP.Scalar.AsymptoticComparisons
+import ComputationalMathematics.HDP.Scalar.BerryEsseen
+import ComputationalMathematics.HDP.Scalar.CentralLimit
+import ComputationalMathematics.HDP.Scalar.GaussianAtoms
+import ComputationalMathematics.HDP.Scalar.GaussianSquareTail
+import ComputationalMathematics.HDP.Scalar.GaussianTails
+import ComputationalMathematics.HDP.Scalar.IndependentSums
+import ComputationalMathematics.HDP.Scalar.LimitTheorems
+import ComputationalMathematics.HDP.Scalar.NonSubGaussian
+import ComputationalMathematics.HDP.Scalar.PoissonLimit
+import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.SubExponential
+import ComputationalMathematics.HDP.Scalar.SubExponentialCharacterization
+import ComputationalMathematics.HDP.Scalar.SubExponentialPropertyThreeGauge
+import ComputationalMathematics.HDP.Scalar.SubGaussian
+import ComputationalMathematics.HDP.Scalar.SubGaussianCentering
+import ComputationalMathematics.HDP.Scalar.SubGaussianMinimality
+import ComputationalMathematics.HDP.Scalar.SubGaussianToSubExponential
+
+/-!
+# Scalar high-dimensional probability
+
+Complete family entry point for the current scalar probability development,
+including preliminary probability interfaces, limit theorems, independent
+sums, and sub-Gaussian and sub-exponential results.
+-/

@@ -6,7 +6,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Charpoly
 import Mathlib.LinearAlgebra.Eigenspace.Matrix
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
-import NumStability.Analysis.LinearOperators.Schur.Real.Triangularization.SplitCharpoly
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Real.Triangularization.SplitCharpoly
 
 /-!
 # Analysis.RealSchurTriangulation

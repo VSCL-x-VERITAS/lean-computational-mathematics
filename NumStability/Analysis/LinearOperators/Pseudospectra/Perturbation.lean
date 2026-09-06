@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation.All
+import ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation
 
 /-!
-# NumStability.Analysis.LinearOperators.Pseudospectra.Perturbation
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Pseudospectra.Perturbation`.
+Declaration names and mathematical terminology are unchanged.
 -/

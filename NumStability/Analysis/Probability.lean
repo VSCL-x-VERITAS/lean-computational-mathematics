@@ -1,9 +1,8 @@
-import NumStability.Analysis.Probability.Gaussian
-import NumStability.Analysis.Probability.Haar
+import ComputationalMathematics.Analysis.Probability
 
 /-!
-# Probability analysis
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for reusable probability results used by
-the numerical-stability library.
+The implementation is provided by `ComputationalMathematics.Analysis.Probability`.
+Declaration names and mathematical terminology are unchanged.
 -/

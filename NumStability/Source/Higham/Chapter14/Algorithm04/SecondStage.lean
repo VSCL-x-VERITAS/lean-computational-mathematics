@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Algorithm04.SecondStage.GaussJordanQConstruction
-import NumStability.Source.Higham.Chapter14.Algorithm04.SecondStage.GaussJordanStep
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.SecondStage
 
 /-!
-# NumStability.Source.Higham.Chapter14.Algorithm04.SecondStage
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.SecondStage`.
+Declaration names and mathematical terminology are unchanged.
 -/

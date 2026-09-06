@@ -1,4 +1,4 @@
-import NumStability.Analysis.Probability.Gaussian.AbsoluteMoment
+import ComputationalMathematics.Analysis.Probability.Gaussian.AbsoluteMoment
 
 /-!
 # Historical Gaussian absolute-moment import

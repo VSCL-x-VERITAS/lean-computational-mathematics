@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section01.SylvesterEquation.All
-import NumStability.Source.Higham.Chapter16.Section01.SylvesterEquation.ComplexSolvability
-import NumStability.Source.Higham.Chapter16.Section01.SylvesterEquation.VectorizationNotes
+import ComputationalMathematics.Source.Higham.Chapter16.Section01.SylvesterEquation
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section01.SylvesterEquation
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section01.SylvesterEquation`.
+Declaration names and mathematical terminology are unchanged.
 -/

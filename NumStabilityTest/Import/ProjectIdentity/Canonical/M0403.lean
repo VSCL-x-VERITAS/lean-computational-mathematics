@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem01
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem01`. -/
+
+#check NumStability.HDP.Contract.hdp_01_hthm_h1_d3_d1
+#check NumStability.HDP.Contract.hdp_01_hthm_h1_d3_d1__contract_type

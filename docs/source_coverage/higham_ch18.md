@@ -223,3 +223,12 @@ Every previously "allowed-BLOCKED" item was genuinely ATTEMPTED (not a-priori di
 | `lake env lean NumStability/Algorithms/MatrixPowers.lean` | PASS | after each increment |
 | `#print axioms` on all new source-facing theorems | `[propext, Classical.choice, Quot.sound]` | no sorry/new axiom |
 | hygiene scan (`sorry\|admit\|axiom\|unsafe\|opaque`) | clean | comment mentions of "axiom" are prose flags on `similarity_absorbs` |
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter18` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

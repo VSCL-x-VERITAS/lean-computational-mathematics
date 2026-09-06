@@ -1,5 +1,5 @@
-import NumStability.Analysis.Norms.Core
-import NumStability.Source.Higham.Chapter06.Norms
+import ComputationalMathematics.Analysis.Norms.Core
+import ComputationalMathematics.Source.Higham.Chapter06.Norms
 
 /-!
 # Historical norms import

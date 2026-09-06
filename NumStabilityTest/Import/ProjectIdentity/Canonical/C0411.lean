@@ -1,0 +1,19 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients.Coupled
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients.Coupled`. -/
+
+#check NumStability.KahanCoupledCoeffStep
+#check NumStability.KahanCoupledCoeffStep.next
+#check NumStability.KahanCoupledCoeffStep.propagateTotalCorrection
+#check NumStability.kahanCoupledCoeffFold
+#check NumStability.kahanCoupledCoeffStepOfIndex
+#check NumStability.kahanCoupledCoeffStepOfWitness
+#check NumStability.kahanCoupledCoeffSteps
+#check NumStability.kahanCoupledCoeffStepsExactSub
+#check NumStability.kahanCoupledCoeffStepsOfWitnesses
+#check NumStability.kahanCoupledCoeffStepsOfWitnessesExactSub
+#check NumStability.kahanCoupledCoeffStepsOfWitnesses_fold_eq_finFold
+#check NumStability.kahanCoupledCoeffStepsOfWitnesses_prefixState_total_eq_sum_sourceTotalCoeff
+#check NumStability.kahanCoupledCoeffSteps_sourceCoeff_s_abs_sub_one_le_two_u_plus_exactSubMajorant
+#check NumStability.kahanCoupledPairedCoeffMajorant
+#check NumStability.kahanCoupledSourceUnroll

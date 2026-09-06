@@ -1,0 +1,12 @@
+import ComputationalMathematics.Analysis.TestMatrices.Orthogonal.HaarFiberMeasure
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.TestMatrices.Orthogonal.HaarFiberMeasure`. -/
+
+#check NumStability.measurable_orthogonalHaarFiberProducer
+#check NumStability.measurable_stewartFirstSection
+#check NumStability.measurable_stewartFirstSectionMatrix
+#check NumStability.measurable_stewartSphereSection
+#check NumStability.orthogonalHaarFiberMeasure_eq_normalizedHaar
+#check NumStability.orthogonalHaarFiberMeasure_firstRow
+#check NumStability.orthogonalHaarFiberMeasure_isProbabilityMeasure
+#check NumStability.orthogonalHaarFiberMeasure_left_invariant

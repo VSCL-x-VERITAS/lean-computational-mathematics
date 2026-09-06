@@ -1,0 +1,3 @@
+import NumStability.Source.Vershynin.Chapter01.StandardDeviationAndCovariance.Contract
+
+#check NumStability.HDP.Contract.hdp_01_hdef_hstdev_hcovariance

@@ -1,0 +1,59 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "round-trip judge classification is undetermined",
+    "direct judge left dependency_coverage item D008 unclear",
+    "direct judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "direct judge left implication source_implies_lean unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "classification": "not-faithful-weaker",
+  "completed_at_utc": "2026-08-31T23:51:18.000714+00:00",
+  "findings": [
+    {
+      "category": "added-regularity-and-reduced-applicability",
+      "evidence": "The PDF says equation (1.2) admits the translated form for any profile function and states no regularity condition; Lean requires HasDerivAt at x-speed*t.",
+      "impact": "Profiles lacking that local classical derivative fall outside the target's substantive conclusion, so the added premise is reduced applicability rather than genuine theorem strength.",
+      "severity": "major"
+    },
+    {
+      "category": "global-family-versus-pointwise-conclusion",
+      "evidence": "The source presents q(x,t)=q_tilde(x-u_bar*t) as a space-time solution family, whereas D001 asserts PDE satisfaction only at one x,t.",
+      "impact": "The target cannot imply that one translated field solves the PDE throughout space-time for every source-allowed profile.",
+      "severity": "major"
+    },
+    {
+      "category": "source-solution-notion-underspecified",
+      "evidence": "The same source passage uses classical partial-derivative notation while quantifying over any profile function without defining a solution class.",
+      "impact": "The printed claim needs an explicit regularity or generalized-solution convention for standalone mathematical validity, but this source defect must not be silently repaired when judging literal faithfulness.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "Lean proves only that, at a selected x,t where the profile is classically differentiable at x-speed*t, the constructed traveling wave satisfies the classical advection identity at that point. It does not establish the source's literal arbitrary-profile, whole-space-time solution-family claim. The construction encodes rigid translation, but that does not supply the missing unconditional global PDE assertion.",
+      "verdict": "no"
+    },
+    "source_implies_lean": {
+      "reasoning": "Assume the source claim and then fix the Lean binders and its HasDerivAt premise. Equation (1.3) identifies q with profile(x-speed*t). The chain rule gives q_t=-speed*profile' and q_x=profile' at the selected point, so the expanded D001 conclusion follows. This derivation uses the target's premise and does not require choosing between classical and generalized global solution notions.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "undetermined",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "The target correctly preserves the real scalar setting, phase x-speed*t, coefficient signs, and local chain-rule identity. D008 is unambiguously a classical derivative-at-a-point predicate, making C04 a substantive mismatch with the source's explicit arbitrary-function scope. The source nevertheless implies the Lean conditional proposition: once the target's own HasDerivAt premise is assumed, equation (1.3) yields the required pointwise derivative witnesses by the chain rule. The converse fails because the conditional pointwise result does not establish the source's unconditional arbitrary-profile solution family. Therefore the consistent classification is not-faithful-weaker and the target is not accepted.",
+  "remaining_uncertainties": [
+    "The source does not specify a classical, weak, or distributional solution notion, and its phrase \"any function\" conflicts with the derivatives displayed in equation (1.2). This remains a source-validity ambiguity, but it does not alter the adjudicated implication directions because equation (1.3) plus the Lean premise suffices for the local Lean conclusion, while Lean cannot recover the literal arbitrary-profile global claim."
+  ],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "LEV-CH01-EQ-1.3-ADVECTED-PROFILE"
+}

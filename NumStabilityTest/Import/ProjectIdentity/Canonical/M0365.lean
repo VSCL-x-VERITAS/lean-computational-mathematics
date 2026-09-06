@@ -1,0 +1,10 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section06
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section06`. -/
+
+#check NumStability.companionMatrix_charpoly
+#check NumStability.companionOrderTwoNormalCounterexample_coeff_one
+#check NumStability.companionSingularValues_multiset_eq
+#check NumStability.companion_hasLeftCyclicVector
+#check NumStability.companion_orderAtLeastThree_isStarNormal_iff
+#check NumStability.companion_orderTwo_isStarNormal_iff

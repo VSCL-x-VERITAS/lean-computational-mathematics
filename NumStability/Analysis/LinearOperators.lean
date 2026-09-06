@@ -1,13 +1,8 @@
-import NumStability.Analysis.LinearOperators.Basic
-import NumStability.Analysis.LinearOperators.Jordan
-import NumStability.Analysis.LinearOperators.MatrixPowers
-import NumStability.Analysis.LinearOperators.NumericalRadius
-import NumStability.Analysis.LinearOperators.Pseudospectra
-import NumStability.Analysis.LinearOperators.Schur
-import NumStability.Analysis.LinearOperators.Triangularization
+import ComputationalMathematics.Analysis.LinearOperators
 
 /-!
-# Linear operators
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical linear-operator family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators`.
+Declaration names and mathematical terminology are unchanged.
 -/

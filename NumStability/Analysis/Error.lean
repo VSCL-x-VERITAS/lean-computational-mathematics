@@ -1,16 +1,16 @@
-import NumStability.Analysis.Error.Measures.AccuracyPrecision
-import NumStability.Analysis.Error.Measures.Componentwise
-import NumStability.Analysis.Error.Measures.ScalarDefinitions
-import NumStability.Analysis.Error.Measures.ScalarProperties
-import NumStability.Analysis.Error.Measures.ScalarWitnesses
-import NumStability.Analysis.FloatingPointArithmetic.ErrorModels.Additive
-import NumStability.Analysis.FloatingPointArithmetic.ErrorModels.AdditiveProperties
-import NumStability.Analysis.FloatingPointArithmetic.ErrorModels.NoGuardBasic
-import NumStability.Analysis.FloatingPointArithmetic.ErrorModels.NoGuardModel
-import NumStability.Source.Higham.Chapter01.Problem01.RelativeError.Bounds
-import NumStability.Source.Higham.Chapter01.Section03.ErrorSources.Core
-import NumStability.Source.Higham.Chapter01.Section07.Cancellation.Basic
-import NumStability.Source.Higham.Chapter02.Section04.NoGuardModel.BinaryT3Example
+import ComputationalMathematics.Analysis.Error.Measures.AccuracyPrecision
+import ComputationalMathematics.Analysis.Error.Measures.Componentwise
+import ComputationalMathematics.Analysis.Error.Measures.ScalarDefinitions
+import ComputationalMathematics.Analysis.Error.Measures.ScalarProperties
+import ComputationalMathematics.Analysis.Error.Measures.ScalarWitnesses
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.ErrorModels.Additive
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.ErrorModels.AdditiveProperties
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.ErrorModels.NoGuardBasic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.ErrorModels.NoGuardModel
+import ComputationalMathematics.Source.Higham.Chapter01.Problem01.RelativeError.Bounds
+import ComputationalMathematics.Source.Higham.Chapter01.Section03.ErrorSources.Core
+import ComputationalMathematics.Source.Higham.Chapter01.Section07.Cancellation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section04.NoGuardModel.BinaryT3Example
 
 /-!
 # Analysis.Error compatibility facade

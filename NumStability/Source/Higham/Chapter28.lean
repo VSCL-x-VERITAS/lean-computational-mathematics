@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter28.Equation02
+import ComputationalMathematics.Source.Higham.Chapter28
 
 /-!
-# Higham Chapter 28: Test Matrices
+Historical import path retained for compatibility.
 
-Incremental canonical import-only entry point for source correspondence with
-Chapter 28 of Higham's *Accuracy and Stability of Numerical Algorithms*.
-
-This aggregate is complete over its current physical descendants; it does not
-claim complete formalized coverage of Chapter 28.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28`.
+Declaration names and mathematical terminology are unchanged.
 -/

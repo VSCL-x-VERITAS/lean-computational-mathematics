@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter08.Lemma08Discrepancy
+import ComputationalMathematics.Source.Higham.Chapter08.Lemma08Discrepancy
 
 /-!
 # Compatibility import for Higham Chapter 8, Lemma 8.8

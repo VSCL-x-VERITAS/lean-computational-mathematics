@@ -1,5 +1,5 @@
-import NumStability.Algorithms.Summation.Compensated.Priest.FiniteFormat
-import NumStability.Source.Higham.Chapter04.Algorithm03.Priest.SourceAssumptions
+import ComputationalMathematics.Algorithms.Summation.Compensated.Priest.FiniteFormat
+import ComputationalMathematics.Source.Higham.Chapter04.Algorithm03.Priest.SourceAssumptions
 
 /-!
 # Algorithms.PriestFiniteFormat compatibility facade

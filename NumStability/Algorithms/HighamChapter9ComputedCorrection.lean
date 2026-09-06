@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.ComputedCorrection
+import ComputationalMathematics.Source.Higham.Chapter09.ComputedCorrection
 
 /-!
 # Historical Higham Chapter 9 computed-correction import

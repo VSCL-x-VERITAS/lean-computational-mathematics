@@ -1,9 +1,8 @@
-import NumStability.Analysis.Conditioning.DistanceToSingularity
-import NumStability.Analysis.Conditioning.InversePerturbation
-import NumStability.Analysis.Conditioning.LinearSystems.All
+import ComputationalMathematics.Analysis.Conditioning
 
 /-!
-# Conditioning
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical conditioning family.
+The implementation is provided by `ComputationalMathematics.Analysis.Conditioning`.
+Declaration names and mathematical terminology are unchanged.
 -/

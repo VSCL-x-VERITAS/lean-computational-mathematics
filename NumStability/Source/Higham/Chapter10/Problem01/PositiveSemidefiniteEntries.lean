@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries.Basic
+import ComputationalMathematics.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries
 
 /-!
-# Source Higham Chapter10 Problem01 PositiveSemidefiniteEntries
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries`.
+Declaration names and mathematical terminology are unchanged.
 -/

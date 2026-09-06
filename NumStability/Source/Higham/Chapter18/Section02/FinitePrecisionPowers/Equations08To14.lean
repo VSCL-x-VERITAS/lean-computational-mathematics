@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.All
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14
 
 /-!
-# NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14`.
+Declaration names and mathematical terminology are unchanged.
 -/

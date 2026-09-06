@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.AutomaticBounds.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.AutomaticBounds
 
 /-!
-# NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.AutomaticBounds
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.AutomaticBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

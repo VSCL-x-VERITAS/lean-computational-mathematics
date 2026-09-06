@@ -190,3 +190,12 @@ producer closes (5.12). The selected-scope gate is PASS.**
   (including the now-closed Paterson--Stockmeyer P1 evaluator; cf. [509, Chap. 11] citations in the source).
 - **Chapter 28.6 / zero-finding**: Algorithm 5.1's stopping-criterion use for polynomial zero-finders is
   editorial here; no ch28 consumer yet.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter05` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

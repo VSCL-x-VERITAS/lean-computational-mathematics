@@ -1,10 +1,8 @@
-import NumStability.Algorithms.Summation.Pairwise.Core
-import NumStability.Source.Higham.Chapter04.Section01.PairwiseSixTerm
+import ComputationalMathematics.Algorithms.Summation.Pairwise
 
 /-!
-# Pairwise summation family
+Historical import path retained for compatibility.
 
-Complete supported entry point for pairwise summation. It combines the
-source-independent implementation and error theory in `Pairwise.Core` with
-the six-term schedule reproduced from Higham under `Chapter04.Section01`.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Pairwise`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -5,7 +5,7 @@ benchmark to ordinary pull-request CI. It supports three measurements:
 
 - `clean`: remove only the root package's build output, then build the library
   and smoke-test targets;
-- `warm`: rebuild both targets with an already warm workspace;
+- `warm`: rebuild the configured library and smoke-test targets with an already warm workspace;
 - `incremental`: append a temporary comment to representative source files,
   build downstream targets, restore the exact source bytes and timestamps, and
   rebuild once more to leave valid Lake traces.
@@ -27,8 +27,8 @@ modules:
 
 ```console
 python tools/benchmark/run.py --mode incremental \
-  --scenario foundation=NumStability/FloatingPoint/Model.lean \
-  --scenario endpoint=NumStability/Higham/Chapter02/Problem04.lean
+  --scenario foundation=ComputationalMathematics/FloatingPoint/Model.lean \
+  --scenario endpoint=ComputationalMathematics/Source/Higham/Chapter02/Problem04.lean
 ```
 
 The default scenarios deliberately compare a highly foundational module with a

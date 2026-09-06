@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Tree
+import ComputationalMathematics.Algorithms.Summation.Tree
 
 /-!
 # Summation-tree compatibility import

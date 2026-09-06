@@ -1,0 +1,858 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "addc3a9fc80d9b6cbb970def7ccca41c2a2433e86a2fbb82c593fb8887f3822b",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "Projects a finite-volume partition to the measurable region assigned to a cell.",
+      "effect_on_target": "Used to state every cell's measure, integrability, average, and volume-weighted balance.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "The mesh data type: a cell partition together with nonempty interfaces, distinct left/right incident cells, and a representative point on both cell closures.",
+      "effect_on_target": "Supplies all geometric/incidence data used by the proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "Projects the left incident cell of an interface.",
+      "effect_on_target": "Determines the positive orientation and left state in interface fluxes.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "Projects the right incident cell of an interface.",
+      "effect_on_target": "Determines the negative orientation and right state in interface fluxes.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "Projects the underlying finite-volume cell partition from a mesh.",
+      "effect_on_target": "Connects mesh cells to their domain and measurable regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "LocalDef006",
+      "meaning": "Says that a proposed value is the measure average of a field on a region: the region has nonzero noninfinite measure, the field is integrable there, and the value equals the normalized Bochner integral.",
+      "effect_on_target": "Expresses the conclusion that each old cell value is a genuine cell average.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "LocalDef007",
+      "meaning": "Defines physical interface flux by evaluating the conserved field at the interface representative point and then applying the physical flux function.",
+      "effect_on_target": "Provides the physical quantity to which the numerical interface flux is compared.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LocalDef008",
+      "meaning": "Defines the signed aggregate interface flux of a finite cell set as the sum over all interfaces of flux when the left cell is selected minus flux when the right cell is selected.",
+      "effect_on_target": "Forms the boundary-flux term in the finite-set conservation identity and cancels internal interfaces.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "LocalDef009",
+      "meaning": "Defines a cell average as the normalized Bochner integral of the conserved field over that cell's region.",
+      "effect_on_target": "Provides every old cell value used by the numerical solver and update.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "LocalDef010",
+      "meaning": "Defines a cell's signed net interface flux by summing each interface flux positively for a left incidence and negatively for a right incidence.",
+      "effect_on_target": "Forms the cell-local finite-volume update.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "LocalDef011",
+      "meaning": "Defines numerical flux at an interface by applying the two-state numerical flux function to the averages of its left and right cells.",
+      "effect_on_target": "Ties the interface flux used in the update to adjacent one-cell averages.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "LocalDef012",
+      "meaning": "The type of measurable cell partitions of a domain.",
+      "effect_on_target": "Carries the domain and cell regions underlying the mesh.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "LocalDef013",
+      "meaning": "Projects an interface's representative point.",
+      "effect_on_target": "Locates the state used in the physical interface flux.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "LocalDef014",
+      "meaning": "Constructs a mesh from a genuine partition, a nonempty interface type, distinct left/right cell maps, and representative points lying in the domain and both adjacent closures.",
+      "effect_on_target": "Guarantees nonvacuous interfaces and the stated cell-incidence/closure geometry.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "LocalDef015",
+      "meaning": "Defines the average on a region as the inverse of the region's real-valued measure times the Bochner integral over the restricted measure.",
+      "effect_on_target": "Fixes the exact normalization used for every cell average.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "LocalDef016",
+      "meaning": "Projects the domain set of a cell partition.",
+      "effect_on_target": "Used to require interface points to lie in the partitioned domain.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "LocalDef017",
+      "meaning": "Constructs a partition from a nonempty cell type, measurable pairwise-disjoint regions, and exact coverage of the domain.",
+      "effect_on_target": "Ensures the mesh rests on a genuine measurable exhaustive partition of its domain.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "AddGroup.toSubNegMonoid",
+      "meaning": "Exposes subtraction and negation from an additive group.",
+      "effect_on_target": "Supports signed flux differences in update and conservation formulas.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "AddMonoid.toAddZeroClass",
+      "meaning": "Exposes addition-with-zero and its laws from an additive monoid.",
+      "effect_on_target": "Supports finite sums and zero contributions.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "AddZero.toZero",
+      "meaning": "Projects the zero element from an addition-with-zero structure.",
+      "effect_on_target": "Supplies zero in conditional flux contributions.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "AddZeroClass.toAddZero",
+      "meaning": "Projects addition and zero from their law-bearing class.",
+      "effect_on_target": "Supplies the basic zero/additive structure used by sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "And",
+      "meaning": "Logical conjunction.",
+      "effect_on_target": "Combines hypotheses and the multiple asserted conclusions.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "DFunLike.coe",
+      "meaning": "Coerces a function-like object to a function.",
+      "effect_on_target": "Allows a measure to be evaluated on a cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "DecidableEq",
+      "meaning": "Decidable equality on a type.",
+      "effect_on_target": "Makes cell equality and finite-set membership computable in incidence sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Dist.dist",
+      "meaning": "The distance operation of a metric-like structure.",
+      "effect_on_target": "States the numerical-versus-physical flux error bound.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "DistribMulAction.toDistribSMul",
+      "meaning": "Extracts distributive scalar multiplication from a distributive multiplicative action.",
+      "effect_on_target": "Provides linear behavior of real scalar multiplication on flux/state values.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "DistribSMul.toSMulZeroClass",
+      "meaning": "Extracts scalar multiplication preserving zero.",
+      "effect_on_target": "Supports scalar-weighted update terms.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "ENNReal",
+      "meaning": "The extended nonnegative real numbers.",
+      "effect_on_target": "Is the codomain of measures, including zero and infinity.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "ENNReal.toReal",
+      "meaning": "Converts an extended nonnegative real to a real, with the intended finite-measure use.",
+      "effect_on_target": "Turns each finite cell measure into the real volume coefficient.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "meaning": "Typeclass projection from an extended-normed additive commutative monoid.",
+      "effect_on_target": "Helps derive analytic structure required for integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "meaning": "Extracts an additive commutative monoid.",
+      "effect_on_target": "Provides finite summation of state/flux values.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "meaning": "Forgets commutativity while retaining extended seminormed additive structure.",
+      "effect_on_target": "Participates in deriving analytic instances used by integration.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "meaning": "Extracts an additive monoid.",
+      "effect_on_target": "Provides addition and zero for analytic constructions.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "Eq",
+      "meaning": "Propositional equality.",
+      "effect_on_target": "States defining equalities and exact conservation balances.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Exists",
+      "meaning": "Existential quantification.",
+      "effect_on_target": "Introduces the updated cell-average assignment.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "Finset",
+      "meaning": "Finite subsets.",
+      "effect_on_target": "Indexes arbitrary finite collections of cells.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "Finset.sum",
+      "meaning": "Finite commutative sum.",
+      "effect_on_target": "Aggregates cell contents and interface fluxes.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "Fintype",
+      "meaning": "A finite type structure.",
+      "effect_on_target": "Makes the full interface collection a finite summation domain.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "HSMul.hSMul",
+      "meaning": "Heterogeneous scalar multiplication notation/operation.",
+      "effect_on_target": "Forms volume-weighted states and time-scaled fluxes.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "HSub.hSub",
+      "meaning": "Heterogeneous subtraction notation/operation.",
+      "effect_on_target": "Forms signed fluxes and old-minus-flux updates.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "LT.lt",
+      "meaning": "Strict order relation.",
+      "effect_on_target": "Expresses positive time interval, tolerance, and strict error bounds.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "MeasurableSpace",
+      "meaning": "A measurable-space structure on points.",
+      "effect_on_target": "Makes cell measurability, measures, restriction, and integration meaningful.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "MeasureTheory.IntegrableOn",
+      "meaning": "Integrability of a function on a set with respect to a measure.",
+      "effect_on_target": "Requires the conserved field to admit each cell's Bochner integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "MeasureTheory.Measure",
+      "meaning": "A measure on the point space.",
+      "effect_on_target": "Provides cell volumes and integration.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "meaning": "The function-like instance evaluating a measure on sets.",
+      "effect_on_target": "Interprets μ(cellRegion) in hypotheses and balances.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "Module.toDistribMulAction",
+      "meaning": "Extracts distributive scalar action from a module.",
+      "effect_on_target": "Supports real-linear scaling of values.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "Ne",
+      "meaning": "Inequality, defined as negated equality.",
+      "effect_on_target": "Excludes zero and infinite cell measures and distinctness failures.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "NormedAddCommGroup",
+      "meaning": "Normed additive commutative group structure.",
+      "effect_on_target": "Gives values addition, subtraction, distance, and Bochner-integration structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "meaning": "Extracts the additive commutative group.",
+      "effect_on_target": "Supports signed finite sums of E-valued fluxes.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "meaning": "Derives extended-normed additive structure.",
+      "effect_on_target": "Supplies analytic instances used by integrability.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "NormedAddCommGroup.toNormedAddGroup",
+      "meaning": "Extracts normed additive group structure.",
+      "effect_on_target": "Supplies metric and continuous norm structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "meaning": "Forgets norm separation while retaining seminormed commutative group structure.",
+      "effect_on_target": "Feeds the NormedSpace and integration instance hierarchy.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "NormedAddGroup.toAddGroup",
+      "meaning": "Extracts an additive group from a normed additive group.",
+      "effect_on_target": "Provides subtraction and negation on E.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "NormedSpace",
+      "meaning": "Normed real vector-space structure.",
+      "effect_on_target": "Makes real scaling and Bochner integration of E-valued fields available.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "NormedSpace.toModule",
+      "meaning": "Extracts the underlying real module.",
+      "effect_on_target": "Supplies algebraic scalar multiplication laws.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets numeric literals.",
+      "effect_on_target": "Provides the literal zero appearing in positivity and nonzero conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "PseudoMetricSpace.toDist",
+      "meaning": "Extracts a distance operation from a pseudometric space.",
+      "effect_on_target": "Realizes the distance in the flux-accuracy premise.",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the induced uniform structure.",
+      "effect_on_target": "Participates in deriving the topology on E required for analysis.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "Real",
+      "meaning": "The real numbers.",
+      "effect_on_target": "Index time, tolerance, distances, cell volumes after conversion, and scalars.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "Real.instLT",
+      "meaning": "The strict order on real numbers.",
+      "effect_on_target": "Interprets all real-valued strict inequalities.",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "Real.instMonoid",
+      "meaning": "The multiplicative monoid structure on reals.",
+      "effect_on_target": "Supports the real scalar-action hierarchy.",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "Real.instSub",
+      "meaning": "Real subtraction.",
+      "effect_on_target": "Defines the positive time step timeEnd - timeStart.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "Real.instZero",
+      "meaning": "The real zero.",
+      "effect_on_target": "Interprets positivity assertions against zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "Real.normedField",
+      "meaning": "The normed-field structure on reals.",
+      "effect_on_target": "Supports inversion and normed real vector spaces.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "Real.semiring",
+      "meaning": "The semiring structure on reals.",
+      "effect_on_target": "Supports the module/scalar-action hierarchy.",
+      "status": "understood"
+    },
+    {
+      "id": "D066",
+      "name": "SMulZeroClass.toSMul",
+      "meaning": "Extracts scalar multiplication.",
+      "effect_on_target": "Provides the real action used in weighted balances.",
+      "status": "understood"
+    },
+    {
+      "id": "D067",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "meaning": "Extracts a pseudometric space.",
+      "effect_on_target": "Provides the distance structure on E.",
+      "status": "understood"
+    },
+    {
+      "id": "D068",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "meaning": "Forgets commutativity while retaining seminormed group structure.",
+      "effect_on_target": "Feeds continuity and integrability instances.",
+      "status": "understood"
+    },
+    {
+      "id": "D069",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "meaning": "Derives continuity of the extended norm.",
+      "effect_on_target": "Supports the definition of integrability on cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D070",
+      "name": "Set",
+      "meaning": "Sets represented as predicates.",
+      "effect_on_target": "Represents the domain and every cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D071",
+      "name": "SubNegMonoid.toSub",
+      "meaning": "Extracts subtraction.",
+      "effect_on_target": "Interprets differences in signed flux and update identities.",
+      "status": "understood"
+    },
+    {
+      "id": "D072",
+      "name": "Top.top",
+      "meaning": "The greatest element of an ordered type.",
+      "effect_on_target": "Represents infinite measure in the finite-volume hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D073",
+      "name": "TopologicalSpace",
+      "meaning": "A topology on points.",
+      "effect_on_target": "Makes closures of cell regions meaningful.",
+      "status": "understood"
+    },
+    {
+      "id": "D074",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology induced by a uniform space.",
+      "effect_on_target": "Supplies the topology on E used by integration machinery.",
+      "status": "understood"
+    },
+    {
+      "id": "D075",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral 0 from a zero structure.",
+      "effect_on_target": "Connects zero-valued algebraic terms to literal notation.",
+      "status": "understood"
+    },
+    {
+      "id": "D076",
+      "name": "instHSMul",
+      "meaning": "Builds heterogeneous scalar multiplication from ordinary scalar multiplication.",
+      "effect_on_target": "Interprets all real scalar multiples in the proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D077",
+      "name": "instHSub",
+      "meaning": "Builds heterogeneous subtraction from ordinary subtraction.",
+      "effect_on_target": "Interprets subtraction in flux balances.",
+      "status": "understood"
+    },
+    {
+      "id": "D078",
+      "name": "instTopENNReal",
+      "meaning": "The infinite top element of extended nonnegative reals.",
+      "effect_on_target": "States that each cell has noninfinite measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D079",
+      "name": "instZeroENNReal",
+      "meaning": "Zero in extended nonnegative reals.",
+      "effect_on_target": "States that each cell has nonzero measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D080",
+      "name": "AddCommGroup",
+      "meaning": "Additive commutative group structure.",
+      "effect_on_target": "Underlies signed E-valued interface sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D081",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "meaning": "Extracts the additive commutative monoid.",
+      "effect_on_target": "Makes finite sums of E-valued terms available.",
+      "status": "understood"
+    },
+    {
+      "id": "D082",
+      "name": "AddCommGroup.toAddGroup",
+      "meaning": "Extracts the additive group.",
+      "effect_on_target": "Provides subtraction and negation in conservation identities.",
+      "status": "understood"
+    },
+    {
+      "id": "D083",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "meaning": "Builds the commutative subtraction structure from an additive commutative group.",
+      "effect_on_target": "Supports the inherited subtraction/negation instance chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D084",
+      "name": "Finset.decidableMem",
+      "meaning": "Decides membership in a finite set.",
+      "effect_on_target": "Selects left/right interface contributions for a chosen cell set.",
+      "status": "understood"
+    },
+    {
+      "id": "D085",
+      "name": "Finset.instSetLike",
+      "meaning": "Views a finite set as a set-like object.",
+      "effect_on_target": "Enables membership notation for finite cell sets.",
+      "status": "understood"
+    },
+    {
+      "id": "D086",
+      "name": "Finset.univ",
+      "meaning": "The finite set of all elements of a finite type.",
+      "effect_on_target": "Makes every interface participate in the signed sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D087",
+      "name": "Membership.mem",
+      "meaning": "Generic membership operation.",
+      "effect_on_target": "Expresses cell membership in finite sets and point membership in regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D088",
+      "name": "NegZeroClass.toZero",
+      "meaning": "Extracts zero from a negation-with-zero class.",
+      "effect_on_target": "Supplies zero through the additive instance hierarchy.",
+      "status": "understood"
+    },
+    {
+      "id": "D089",
+      "name": "SetLike.instMembership",
+      "meaning": "Derives membership for set-like objects.",
+      "effect_on_target": "Interprets membership in Finset through its set-like coercion.",
+      "status": "understood"
+    },
+    {
+      "id": "D090",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "meaning": "Extracts negation and zero with the negation-of-zero law.",
+      "effect_on_target": "Supports signed additive computations.",
+      "status": "understood"
+    },
+    {
+      "id": "D091",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "meaning": "Forgets commutativity from a subtraction commutative monoid.",
+      "effect_on_target": "Participates in deriving subtraction instances for E.",
+      "status": "understood"
+    },
+    {
+      "id": "D092",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "meaning": "Derives subtraction, negation, and zero structure.",
+      "effect_on_target": "Supports the algebra of flux differences.",
+      "status": "understood"
+    },
+    {
+      "id": "D093",
+      "name": "ite",
+      "meaning": "If-then-else.",
+      "effect_on_target": "Includes an interface flux exactly when a cell incidence/membership condition holds.",
+      "status": "understood"
+    },
+    {
+      "id": "D094",
+      "name": "Inv.inv",
+      "meaning": "Multiplicative inversion.",
+      "effect_on_target": "Normalizes an integral by the real cell measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D095",
+      "name": "MeasureTheory.Measure.restrict",
+      "meaning": "Restricts a measure to a set.",
+      "effect_on_target": "Defines integration over a cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D096",
+      "name": "MeasureTheory.integral",
+      "meaning": "The Bochner integral.",
+      "effect_on_target": "Computes the E-valued integral underlying each average.",
+      "status": "understood"
+    },
+    {
+      "id": "D097",
+      "name": "Nonempty",
+      "meaning": "Proposition that a type has an inhabitant.",
+      "effect_on_target": "Ensures both the cell type and interface type are genuinely inhabited.",
+      "status": "understood"
+    },
+    {
+      "id": "D098",
+      "name": "Real.instInv",
+      "meaning": "Real inversion.",
+      "effect_on_target": "Forms the reciprocal cell volume in the averaging definition.",
+      "status": "understood"
+    },
+    {
+      "id": "D099",
+      "name": "Set.instMembership",
+      "meaning": "Membership in predicate sets.",
+      "effect_on_target": "States point membership in the domain and cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D100",
+      "name": "closure",
+      "meaning": "Topological closure of a set.",
+      "effect_on_target": "Requires each interface point to touch the closures of both adjacent cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D101",
+      "name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "meaning": "Projects complete Boolean-algebra structure.",
+      "effect_on_target": "Provides part of the order structure on sets used by disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D102",
+      "name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "meaning": "Derives complete distributive-lattice structure.",
+      "effect_on_target": "Supports the inherited order structure on sets.",
+      "status": "understood"
+    },
+    {
+      "id": "D103",
+      "name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "meaning": "Projects complete-lattice structure.",
+      "effect_on_target": "Supports ordering and bottom for sets.",
+      "status": "understood"
+    },
+    {
+      "id": "D104",
+      "name": "CompleteDistribLattice.toFrame",
+      "meaning": "Projects frame structure.",
+      "effect_on_target": "Participates in deriving Heyting/order-bottom structure on sets.",
+      "status": "understood"
+    },
+    {
+      "id": "D105",
+      "name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "meaning": "Derives an omega-complete partial order.",
+      "effect_on_target": "Contributes the partial-order instance used to define set disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D106",
+      "name": "Disjoint",
+      "meaning": "Order-theoretic disjointness.",
+      "effect_on_target": "Requires regions of distinct cells to have no common points.",
+      "status": "understood"
+    },
+    {
+      "id": "D107",
+      "name": "HeytingAlgebra.toOrderBot",
+      "meaning": "Extracts a bottom element from a Heyting algebra.",
+      "effect_on_target": "Provides the empty-set bottom used by disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D108",
+      "name": "Iff",
+      "meaning": "Logical equivalence.",
+      "effect_on_target": "States exact pointwise equivalence between domain membership and membership in some cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D109",
+      "name": "MeasurableSet",
+      "meaning": "Predicate that a set is measurable.",
+      "effect_on_target": "Requires every cell region to be measurable.",
+      "status": "understood"
+    },
+    {
+      "id": "D110",
+      "name": "OmegaCompletePartialOrder.toPartialOrder",
+      "meaning": "Extracts a partial order.",
+      "effect_on_target": "Supports the order-theoretic definition of disjoint cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D111",
+      "name": "Order.Frame.toHeytingAlgebra",
+      "meaning": "Derives Heyting-algebra structure from a frame.",
+      "effect_on_target": "Contributes bottom/order structure for sets.",
+      "status": "understood"
+    },
+    {
+      "id": "D112",
+      "name": "Set.instCompleteAtomicBooleanAlgebra",
+      "meaning": "Complete atomic Boolean-algebra instance for sets.",
+      "effect_on_target": "Supplies lattice, bottom, and order instances used in measurable-partition disjointness.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "Arbitrary types Cell, Interface, Point, and E.",
+      "A measurable-space structure and a topological-space structure on Point.",
+      "A finite-type structure on Interface and decidable equality on Cell.",
+      "A normed additive commutative group E and a real normed-vector-space structure on E.",
+      "A mesh whose underlying domain is genuinely partitioned into measurable pairwise-disjoint cell regions, whose cell and interface types are nonempty, and whose every interface has distinct left and right cells and a representative point lying in the domain and in the closures of both adjacent regions.",
+      "A measure μ on Point.",
+      "A conserved field conservedField : Point → E.",
+      "A physical conservation-flux function physicalConservationFlux : E → E.",
+      "A two-state local numerical-flux function localNumericalFlux : E → E → E.",
+      "Real numbers timeStart, timeEnd, and fluxTolerance."
+    ],
+    "hypotheses": [
+      "timeStart < timeEnd.",
+      "0 < fluxTolerance.",
+      "For every cell, its region has μ-measure different from 0 and different from ∞.",
+      "For every cell, conservedField is Bochner-integrable on its region with respect to μ.",
+      "For every interface, the distance between the numerical flux computed from the μ-averages of its left and right cells and the physical flux obtained by evaluating conservedField at that interface's representative point is strictly less than fluxTolerance."
+    ],
+    "conclusions": [
+      "The time increment Δt = timeEnd - timeStart is positive.",
+      "The flux tolerance is positive.",
+      "For every cell, its designated old value is exactly the genuine μ-average of conservedField over that cell: the region has positive finite measure, the field is integrable there, and the value equals (μ(region).toReal)⁻¹ times the Bochner integral over the restricted measure.",
+      "For every interface, the designated numerical interface flux is exactly localNumericalFlux applied to the old average of the left cell and the old average of the right cell.",
+      "For every interface, that numerical interface flux is within fluxTolerance of physicalConservationFlux(conservedField(interfacePoint)).",
+      "There exists an assignment updatedCellAverages : Cell → E such that, for every cell c, μ(region(c)).toReal • updatedCellAverages(c) equals μ(region(c)).toReal • oldCellAverage(c) minus Δt times the signed net numerical flux of c.",
+      "The same assignment satisfies conservation on every finite set S of cells: the sum over c in S of μ(region(c)).toReal • updatedCellAverages(c) equals the corresponding sum of old cell contents minus Δt times the signed aggregate interface flux of S; interfaces internal to S cancel because the same interface flux occurs once with each opposite incidence sign."
+    ],
+    "mathematical_definitions": [
+      "A partition consists of a domain, a nonempty cell index type, measurable cell regions, pairwise disjointness of distinct regions, and exact coverage: a point is in the domain if and only if it belongs to at least one cell region.",
+      "A mesh augments such a partition by a nonempty interface index type, leftCell and rightCell maps with leftCell(i) ≠ rightCell(i), and an interfacePoint(i) that belongs to the domain and to the closures of both adjacent cell regions.",
+      "avg(c) = (μ(region(c)).toReal)⁻¹ • ∫ x in region(c), conservedField(x) dμ, where the integral is the Bochner integral against μ restricted to region(c).",
+      "physicalFlux(i) = physicalConservationFlux(conservedField(interfacePoint(i))).",
+      "numericalFlux(i) = localNumericalFlux(avg(leftCell(i)), avg(rightCell(i))).",
+      "netFlux(c) = Σ over all interfaces i of ([leftCell(i)=c] numericalFlux(i) - [rightCell(i)=c] numericalFlux(i)), with a false indicator contributing 0.",
+      "boundaryFlux(S) = Σ over all interfaces i of ([leftCell(i)∈S] numericalFlux(i) - [rightCell(i)∈S] numericalFlux(i)), for a finite set S of cells.",
+      "The update is stated in content form volume(c) • updated(c) = volume(c) • old(c) - Δt • netFlux(c), with volume(c) = μ(region(c)).toReal."
+    ],
+    "proposition_plain_english": "Given a nonempty measurable finite-volume cell partition equipped with finitely many nonempty interfaces, orient each interface from a distinct left cell to a distinct right cell and choose a representative point in the domain lying in both adjacent cell closures. Let an E-valued conserved field be integrable on every positive-finite-measure cell. Compute each old cell state as its normalized Bochner average, and compute each interface's numerical flux by feeding the adjacent left and right cell averages to a two-state numerical-flux function. Assume a positive time interval, a positive tolerance, and that every such numerical interface flux lies within that tolerance of the physical flux evaluated from the field at the interface representative point. Then the time step and tolerance are positive, the cell values and interface fluxes have exactly those definitions and retain the stated error bound, and there exists an updated value for every cell satisfying the usual volume-weighted explicit flux balance. Moreover, summing those cell balances over any finite set of cells yields an exact conservative balance with the signed boundary flux of that set, because numerical fluxes across interfaces whose two incident cells are both selected cancel algebraically."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The theorem is conditional: it assumes the numerical-versus-physical flux bound at every interface; it does not prove that a solver satisfying the bound exists.",
+    "The interface quantification is not vacuous: the mesh contains Nonempty Interface and Interface is finite. Cell quantification is also nonvacuous because the partition contains Nonempty Cell.",
+    "The empty finite cell set is included in the aggregate conclusion and yields only the tautological identity 0 = 0.",
+    "Cell need not be a finite type. Therefore conservation is asserted for every finite subset, but there is no single whole-mesh global sum when the cell family is infinite.",
+    "Interfaces are finite, but there is no requirement that every cell be incident to an interface or that the interface list exhaust all geometric contacts between cells.",
+    "Every interface has two actual, distinct cells; physical boundary faces, exterior states, or boundary conditions are not separately modeled.",
+    "An interface is represented only by one point in two closures. There is no face set, face measure, normal vector, orientation geometry beyond left/right signs, coordinate system, spatial dimension, or flux integration over a face.",
+    "The topology and measurable-space structure on Point are unrelated by any compatibility assumption.",
+    "The partition covers only its specified domain, not necessarily all of Point.",
+    "The physical interface flux is a point evaluation, not a cell-face average or integral.",
+    "The two-state numerical-flux function is arbitrary: no consistency law, conservation symmetry, Riemann-solver property, monotonicity, Lipschitz bound, entropy condition, or stability property is imposed.",
+    "Duplicate interfaces or multiple interfaces with the same representative point and cell pair are not forbidden and would be counted with multiplicity.",
+    "The update creates E-valued numbers, but does not construct an updated pointwise field or prove that the updated numbers are averages of such a field.",
+    "No admissibility, positivity, boundedness, CFL restriction, convergence, truncation-error estimate, or preservation property is proved for the updated values.",
+    "The time variables enter only through Δt; there is no time-dependent field, temporal integration, or claim that the updated values equal an exact solution at timeEnd.",
+    "The strict tolerance premise can be made weak by choosing a large positive tolerance; no quantitative relation to mesh size or time step is required.",
+    "The aggregate conservation identity is algebraic and uses the identical single-valued interface flux with opposite left/right signs; it does not independently validate the physical fidelity of that flux.",
+    "Positive finite cell measure prevents division-by-zero and infinite-volume degeneracy, but these facts are assumptions for every cell rather than consequences of the partition structure."
+  ],
+  "ambiguities": [
+    "The formal statement does not identify a particular conservation law, PDE, spatial dimension, coordinate geometry, or physical interpretation of E.",
+    "The term 'interface flux' can only mean the oriented E-valued quantity defined by the left/right incidence convention; the statement does not specify physical units or whether E represents scalar flux, vector flux, or a bundled multidimensional flux.",
+    "The representative interface point need not be unique and is only constrained by closure membership, so its intended geometric relation to a full face is unspecified.",
+    "The existential updated assignment is mathematically determined by positive finite volumes, but the proposition presents only weighted balance equations and does not name an operational algorithm or evaluation order."
+  ]
+}

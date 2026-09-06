@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Core.Basic
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.NumericalRadius
 
 /-!
-# Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.NumericalRadius
+Historical import path retained for compatibility.
 
-Higham source locator for reusable W06 content. Projection-pinned historical declarations are intentionally not imported through this canonical path.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.NumericalRadius`.
+Declaration names and mathematical terminology are unchanged.
 -/

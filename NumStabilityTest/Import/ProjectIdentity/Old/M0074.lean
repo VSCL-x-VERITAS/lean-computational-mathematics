@@ -1,0 +1,5 @@
+import NumStability.Algorithms.Quadrature
+
+/-! Isolated API witness for `NumStability.Algorithms.Quadrature`; authored declaration names are retained. -/
+
+#check @NumStability.fl_quadrature_error_bound_of_function_value_rel_error

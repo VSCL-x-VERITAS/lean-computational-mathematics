@@ -6,31 +6,33 @@ from __future__ import annotations
 from pathlib import Path
 
 
+from project_roots import production_paths
+
+
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_ROOT = ROOT / "NumStability"
 APACHE_MARKER = "Released under Apache 2.0"
 SPDX = "SPDX-License-Identifier: Apache-2.0"
 BROKEN_POINTER = "described in the file LICENSE"
 LICENSE_REFERENCE = "LICENSES/Apache-2.0.txt"
 
 UPSTREAM_EVIDENCE: dict[str, tuple[str, ...]] = {
-    "NumStability/Upstream/Lindemann/AlgebraicPart.lean": (
+    "ComputationalMathematics/Upstream/Lindemann/AlgebraicPart.lean": (
         "https://github.com/leanprover-community/mathlib4/pull/28013",
         "5abb7c68488b527e4d7ecf5d7bbe085db8d2a388",
     ),
-    "NumStability/Upstream/Lindemann/Basic.lean": (
+    "ComputationalMathematics/Upstream/Lindemann/Basic.lean": (
         "https://github.com/leanprover-community/mathlib4/pull/28013",
         "5abb7c68488b527e4d7ecf5d7bbe085db8d2a388",
     ),
-    "NumStability/Upstream/Lindemann/FinsuppQuotient.lean": (
+    "ComputationalMathematics/Upstream/Lindemann/FinsuppQuotient.lean": (
         "https://github.com/leanprover-community/mathlib4/pull/28013",
         "5abb7c68488b527e4d7ecf5d7bbe085db8d2a388",
     ),
-    "NumStability/Upstream/Lindemann/SymmetricEval.lean": (
+    "ComputationalMathematics/Upstream/Lindemann/SymmetricEval.lean": (
         "https://github.com/leanprover-community/mathlib4/pull/28013",
         "5abb7c68488b527e4d7ecf5d7bbe085db8d2a388",
     ),
-    "NumStability/Upstream/Lindemann/MonoidAlgebraCompat.lean": (
+    "ComputationalMathematics/Upstream/Lindemann/MonoidAlgebraCompat.lean": (
         "https://github.com/leanprover-community/mathlib4/pull/36762",
         "cbdf82d6b083de3a961936dbea002185060b46c3",
         "https://github.com/leanprover-community/mathlib4/pull/37797",
@@ -59,7 +61,7 @@ def main() -> int:
             if section not in license_text:
                 errors.append(f"Apache license text is missing: {section}")
 
-    for path in sorted(SOURCE_ROOT.rglob("*.lean")):
+    for path in production_paths(ROOT):
         text = path.read_text(encoding="utf-8")
         if APACHE_MARKER not in text:
             continue

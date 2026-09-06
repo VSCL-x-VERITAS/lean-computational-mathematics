@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter27.Problem06
-import NumStability.Source.Higham.Chapter27.SoftwareEnvironment
+import ComputationalMathematics.Source.Higham.Chapter27
 
 /-!
-# Higham Chapter 27
+Historical import path retained for compatibility.
 
-Complete source-correspondence entry point for Higham Chapter 27. It exposes
-the floating-point software-environment specifications and the exact
-real-arithmetic content of Problem 27.6.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter27`.
+Declaration names and mathematical terminology are unchanged.
 -/

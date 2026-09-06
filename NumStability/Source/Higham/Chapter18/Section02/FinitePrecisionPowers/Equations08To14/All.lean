@@ -1,14 +1,8 @@
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComplexSimilarity
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComputedIteration
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.DunfordResidue
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PowerBound
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PseudospectralLowerBound
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.PseudospectralRadius
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ResolventCalculus
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ResolventLowerBound
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.All
 
 /-!
-# Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

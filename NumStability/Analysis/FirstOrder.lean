@@ -1,11 +1,8 @@
-import NumStability.Analysis.FirstOrder.AsymptoticFamilies
-import NumStability.Analysis.FirstOrder.FixedPrecision
-import NumStability.Analysis.FirstOrder.MatrixFamilies
+import ComputationalMathematics.Analysis.FirstOrder
 
 /-!
-# First-order analysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical first-order analysis family.
-It exposes both uniform filter-indexed asymptotic families and fixed-precision
-first-order bounds.
+The implementation is provided by `ComputationalMathematics.Analysis.FirstOrder`.
+Declaration names and mathematical terminology are unchanged.
 -/

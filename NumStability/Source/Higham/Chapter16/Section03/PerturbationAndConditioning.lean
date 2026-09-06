@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AttainedSeparation
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AutomaticBounds
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.SigmaMinCorollaries
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning`.
+Declaration names and mathematical terminology are unchanged.
 -/

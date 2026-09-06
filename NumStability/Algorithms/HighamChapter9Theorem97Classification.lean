@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.Theorem97Classification
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem97Classification
 
 /-!
 # Historical HighamChapter9Theorem97Classification import

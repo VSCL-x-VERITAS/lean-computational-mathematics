@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.VaryingBlocks
 
 /-!
 # Historical unequal-block LU compatibility wrapper

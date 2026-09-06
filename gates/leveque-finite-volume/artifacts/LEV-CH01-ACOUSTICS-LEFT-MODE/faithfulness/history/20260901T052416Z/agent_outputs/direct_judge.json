@@ -1,0 +1,967 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-ACOUSTICS-LEFT-MODE",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "6ea19bf785f19d00e0af21f8096cce9146fa9e9d4ebde5c7ec7bbcaccfeb2275",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.LinearAcousticsSolution",
+      "interpretation": "The indexed solution structure packages density nonzeroness, pressure and velocity fields, and satisfaction of the acoustics equations at every point, as exposed by its constructor and projections.",
+      "effect_on_target": "It restricts the system binder to pressure/velocity fields satisfying both source acoustics equations globally.",
+      "source_match": "Matches the coupled system (1.5), with density nonzeroness and derivative existence made explicit.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.LinearAcousticsSolution.pressure",
+      "interpretation": "The body projects the pressure field from a LinearAcousticsSolution.",
+      "effect_on_target": "It supplies the pressure field used by the target mode or wave equation.",
+      "source_match": "Matches source pressure p.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.LinearAcousticsSolution.velocity",
+      "interpretation": "The body projects the velocity field from a LinearAcousticsSolution.",
+      "effect_on_target": "It supplies the particle-velocity field used by the target mode or mixed derivatives.",
+      "source_match": "Matches source particle velocity u.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.leveque01_equation04_oneWayWaveAt",
+      "interpretation": "The body is exactly IsLinearAdvectionSolutionAt for the supplied scalar field, speed, x, and t.",
+      "effect_on_target": "It makes each asserted mode equation precisely a scalar advection equation at the stated signed speed.",
+      "source_match": "Matches the source one-way equation w_t+c*w_x=0 for the supplied signed speed.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.linearAcousticsLeftInvariant",
+      "interpretation": "The body evaluates pressure - density*soundSpeed*velocity.",
+      "effect_on_target": "It fixes the left mode to p-rho*c*u.",
+      "source_match": "Exact match to w^2=p-rho*c*u.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.travelingWave",
+      "interpretation": "The body evaluates profile(x - speed*t).",
+      "effect_on_target": "At speed -c it reduces to profile(x+c*t); the target uses only this value identity, not its solutionhood.",
+      "source_match": "Its x-speed*t convention gives x+ct at speed -c, matching the source profile formula; the target-level missing solution link is recorded separately.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "NumStability.IsLinearAdvectionSolutionAt",
+      "interpretation": "The body existentially supplies time and space derivatives qt,qx at (x,t) and requires qt + speed*qx = 0.",
+      "effect_on_target": "It expands mode solutionhood to derivative existence plus w_t+speed*w_x=0.",
+      "source_match": "Exact pointwise derivative semantics of the scalar transport equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "NumStability.LinearAcousticsSolution.mk",
+      "interpretation": "The constructor requires density != 0, pressure and velocity fields, and pointwise satisfaction of IsLinearAcousticsSolutionAt.",
+      "effect_on_target": "It exposes the exact global-system and density-nonzero content of the solution type.",
+      "source_match": "Matches the source's global-solution context and explicitizes tacit regularity/nonzero density.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "NumStability.IsLinearAcousticsSolutionAt",
+      "interpretation": "The body existentially supplies pt,px,ut,ux with derivative evidence and requires pt+K*ux=0 and ut+density^{-1}*px=0.",
+      "effect_on_target": "It expands packaged acoustics solutionhood to both component PDEs with derivative witnesses.",
+      "source_match": "Exact pointwise derivative semantics of both equations in (1.5).",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "NumStability.IsLinearAdvectionSolutionAt._proof_1",
+      "interpretation": "This theorem supplies the ContinuousSMul instance needed by HasDerivAt for the relevant normed real vector space.",
+      "effect_on_target": "It is an instance side-condition for derivative semantics and adds no source-level hypothesis.",
+      "source_match": "No separate source object; this is standard instance infrastructure and does not alter the proposition's mathematical content.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "NumStability.IsLinearAcousticsSolutionAt._proof_1",
+      "interpretation": "This theorem supplies standard continuous real scalar multiplication for derivative predicates.",
+      "effect_on_target": "It is an instance side-condition for derivative semantics and adds no source-level hypothesis.",
+      "source_match": "No separate source object; this is standard instance infrastructure and does not alter the proposition's mathematical content.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "And",
+      "interpretation": "Logical conjunction requiring both component propositions.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "DivInvMonoid.toDiv",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : DivInvMonoid G] → Div G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Eq",
+      "interpretation": "Homogeneous equality of two terms.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "HAdd.hAdd",
+      "interpretation": "The supplied heterogeneous addition operation; here it elaborates ordinary real/vector addition.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "HDiv.hDiv",
+      "interpretation": "The supplied heterogeneous division operation; here it elaborates ordinary real division.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "HMul.hMul",
+      "interpretation": "The supplied heterogeneous multiplication operation; here it elaborates ordinary real multiplication.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "LT.lt",
+      "interpretation": "The less-than relation supplied by the ambient ordered type.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "Neg.neg",
+      "interpretation": "Unary negation from the ambient additive group; here ordinary real negation.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "OfNat.ofNat",
+      "interpretation": "Interpretation of a natural numeral in the target type.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "Real",
+      "interpretation": "The standard real-number type.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "Real.instAdd",
+      "interpretation": "The supplied declaration equips Real with its standard instAdd operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "Real.instDivInvMonoid",
+      "interpretation": "The supplied declaration equips Real with its standard instDivInvMonoid operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "Real.instLT",
+      "interpretation": "The supplied declaration equips Real with its standard instLT operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "Real.instMul",
+      "interpretation": "The supplied declaration equips Real with its standard instMul operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "Real.instNeg",
+      "interpretation": "The supplied declaration equips Real with its standard instNeg operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "Real.instZero",
+      "interpretation": "The supplied declaration equips Real with its standard instZero operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "Real.sqrt",
+      "interpretation": "The nonnegative real square root (implemented through NNReal).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "Zero.toOfNat0",
+      "interpretation": "The numeral-zero instance derived from a Zero structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "instHAdd",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u_1} → [Add α] → HAdd α α α).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "instHDiv",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u_1} → [Div α] → HDiv α α α).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "instHMul",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u_1} → [Mul α] → HMul α α α).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "HSub.hSub",
+      "interpretation": "The supplied heterogeneous subtraction operation; here it elaborates ordinary real subtraction.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {𝕜 : Type u_1} → [inst : NormedField 𝕜] → NormedSpace 𝕜 𝕜.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "Real.instSub",
+      "interpretation": "The supplied declaration equips Real with its standard instSub operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "Real.normedAddCommGroup",
+      "interpretation": "The supplied declaration equips Real with its standard normedAddCommGroup operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "Real.normedField",
+      "interpretation": "The supplied declaration equips Real with its standard normedField operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "instHSub",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u_1} → [Sub α] → HSub α α α).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u_1} → [AddCommGroup G] → SubtractionCommMonoid G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "AddCommMagma.toAdd",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : AddCommMagma G] → Add G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "AddCommMonoid.toAddCommSemigroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u} → [self : AddCommMonoid M] → AddCommSemigroup M.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "AddCommSemigroup.toAddCommMagma",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : AddCommSemigroup G] → AddCommMagma G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "AddMonoid.toAddZeroClass",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u} → [self : AddMonoid M] → AddZeroClass M.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "AddZero.toZero",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u_2} → [self : AddZero M] → Zero M.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "AddZeroClass.toAddZero",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u} → [self : AddZeroClass M] → AddZero M.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_2} → [DenselyNormedField α] → NontriviallyNormedField α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "DistribMulAction.toDistribSMul",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "DistribSMul.toSMulZeroClass",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → {inst : TopologicalSpace E} → [self : ENormedAddCommMonoid E] → ESeminormedAddCommMonoid E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → [inst : TopologicalSpace E] → [self : ESeminormedAddCommMonoid E] → AddCommMonoid E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddCommMonoid E] → ESeminormedAddMonoid E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddMonoid E] → AddMonoid E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "Exists",
+      "interpretation": "Existential quantification over a witness.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "HSMul.hSMul",
+      "interpretation": "The supplied heterogeneous scalar action; here it elaborates pointwise real scalar multiplication.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "HasDerivAt",
+      "interpretation": "The Fréchet derivative predicate asserting the displayed derivative at the displayed point.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "Module.toDistribMulAction",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {R : Type u} → {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "Ne",
+      "interpretation": "Inequality defined as negated equality.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "NegZeroClass.toZero",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u_2} → [self : NegZeroClass G] → Zero G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "NormedAddCommGroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type Type u_8 → Type u_8.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → [self : NormedAddCommGroup E] → AddCommGroup E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_4} → [inst : NormedAddCommGroup E] → ENormedAddCommMonoid E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_5} → [NormedAddCommGroup E] → SeminormedAddCommGroup E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "NormedSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type (𝕜 : Type u_6) → (E : Type u_7) → [NormedField 𝕜] → [SeminormedAddCommGroup E] → Type (max u_6 u_7).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "NormedSpace.toModule",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {𝕜 : Type u_6} → {E : Type u_7} → {inst : NormedField 𝕜} → {inst_1 : SeminormedAddCommGroup E} → [self : NormedSpace 𝕜 E] → Module 𝕜 E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Real.denselyNormedField",
+      "interpretation": "The supplied declaration equips Real with its standard denselyNormedField operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "Real.instMonoid",
+      "interpretation": "The supplied declaration equips Real with its standard instMonoid operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Real.semiring",
+      "interpretation": "The supplied declaration equips Real with its standard semiring operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "SMulZeroClass.toSMul",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {E : Type u_8} → [self : SeminormedAddCommGroup E] → PseudoMetricSpace E.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u_2} → [self : SubNegZeroMonoid G] → NegZeroClass G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : SubtractionCommMonoid G] → SubtractionMonoid G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_1} → [SubtractionMonoid α] → SubNegZeroMonoid α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u} → [self : UniformSpace α] → TopologicalSpace α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "instHSMul",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : AddCommGroup G] → AddCommMonoid G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "AddCommGroup.toAddGroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : AddCommGroup G] → AddGroup G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "AddGroup.toSubNegMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {A : Type u} → [self : AddGroup A] → SubNegMonoid A.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "ContinuousSMul",
+      "interpretation": "The proposition that scalar multiplication is continuous.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "DivisionSemiring.toSemiring",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {K : Type u_2} → [self : DivisionSemiring K] → Semiring K.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "Field.toSemifield",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {K : Type u_1} → [Field K] → Semifield K.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "Inv.inv",
+      "interpretation": "Multiplicative inverse; here ordinary real reciprocal.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "MonoidWithZero.toMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {M₀ : Type u} → [self : MonoidWithZero M₀] → Monoid M₀.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_5} → [self : NonUnitalSeminormedCommRing α] → NonUnitalSeminormedRing α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_2} → [NonUnitalSeminormedRing α] → SeminormedAddCommGroup α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "NontriviallyNormedField.toNormedField",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_5} → [self : NontriviallyNormedField α] → NormedField α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_2} → [β : NormedCommRing α] → SeminormedCommRing α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D088",
+      "name": "NormedField.toField",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_5} → [self : NormedField α] → Field α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D089",
+      "name": "Real.instAddCommGroup",
+      "interpretation": "The supplied declaration equips Real with its standard instAddCommGroup operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D090",
+      "name": "Real.instInv",
+      "interpretation": "The supplied declaration equips Real with its standard instInv operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D091",
+      "name": "Real.normedCommRing",
+      "interpretation": "The supplied declaration equips Real with its standard normedCommRing operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D092",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "The supplied declaration equips Real with its standard pseudoMetricSpace operation or algebraic/topological structure.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D093",
+      "name": "Semifield.toDivisionSemiring",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {K : Type u_2} → [self : Semifield K] → DivisionSemiring K.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D094",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_2} → [β : SeminormedCommRing α] → NonUnitalSeminormedCommRing α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D095",
+      "name": "Semiring.toMonoidWithZero",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u} → [self : Semiring α] → MonoidWithZero α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D096",
+      "name": "SubNegMonoid.toAddMonoid",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {G : Type u} → [self : SubNegMonoid G] → AddMonoid G.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D097",
+      "name": "NormedField.toNormedCommRing",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_2} → [NormedField α] → NormedCommRing α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D098",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_5} → [self : SeminormedCommRing α] → SeminormedRing α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D099",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "interpretation": "A supplied forgetful/projection declaration exposing the standard inherited algebraic, normed, scalar-action, or topological structure with type {α : Type u_5} → [self : SeminormedRing α] → PseudoMetricSpace α.",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D100",
+      "name": "instSMulOfMul",
+      "interpretation": "The supplied body lifts an underlying standard operation into the notation/typeclass used by the elaborated target ({α : Type u} → [Mul α] → SMul α α).",
+      "effect_on_target": "It supplies standard elaboration semantics used by the displayed target and introduces no additional source-level restriction or conclusion.",
+      "source_match": "Matches the ordinary logic, real arithmetic, finite-vector/matrix, or calculus semantics used by the source; no contrary convention is introduced.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "LeVeque, raw PDF page 24 / printed Chapter 1 page 2: w^2=p-rho*c*u obeys w^2_t-c*w^2_x=0 and has left-moving profile solutions with argument x+ct.",
+      "lean_evidence": "For a global acoustics solution and positive K,rho, Lean proves the left invariant p-rho*c*u satisfies the advection equation at speed -c, then separately unfolds travelingWave profile (-c) x t to profile(x+c*t) for every profile.",
+      "reasoning": "The cited immutable pages and the prepared declaration target the same acoustics claim."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "LeVeque, raw PDF page 24 / printed Chapter 1 page 2: w^2=p-rho*c*u obeys w^2_t-c*w^2_x=0 and has left-moving profile solutions with argument x+ct.",
+      "lean_evidence": "For a global acoustics solution and positive K,rho, Lean proves the left invariant p-rho*c*u satisfies the advection equation at speed -c, then separately unfolds travelingWave profile (-c) x t to profile(x+c*t) for every profile.",
+      "reasoning": "Real fields/parameters, dimensions, derivative variables, and state components have the intended types."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "The source asserts a family of profile solutions without claiming every arbitrary profile unconditionally.",
+      "lean_evidence": "Lean universally quantifies all profiles only inside a definitional value equality, not a solution predicate.",
+      "reasoning": "This is a consequential mismatch for quantifier scope."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "Lean explicitly assumes positive K,rho and packages p,u as a global first-order acoustics solution; this matches the source's tacit physical and differentiability context.",
+      "lean_evidence": "Lean explicitly assumes positive K,rho and packages p,u as a global first-order acoustics solution; this matches the source's tacit physical and differentiability context.",
+      "reasoning": "Explicit Lean conditions are the analytic/physical assumptions inherited by the source, not an unintended domain restriction."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The source says the x+ct profiles are solutions of the left-going equation.",
+      "lean_evidence": "Lean never states IsLinearAdvectionSolutionAt for travelingWave profile (-c).",
+      "reasoning": "This is a consequential mismatch for conclusion completeness."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "LeVeque, raw PDF page 24 / printed Chapter 1 page 2: w^2=p-rho*c*u obeys w^2_t-c*w^2_x=0 and has left-moving profile solutions with argument x+ct.",
+      "lean_evidence": "The dossier unfolds the full acoustics solution predicate, the left invariant, the one-way equation, derivative witnesses, and travelingWave(profile,speed,x,t)=profile(x-speed*t).",
+      "reasoning": "All local operators were unfolded from their declarations and match the source meanings."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source relation is solutionhood for a differential equation.",
+      "lean_evidence": "The profile conjunct uses only equality of two function values after unfolding a definition.",
+      "reasoning": "This is a consequential mismatch for relation strength."
+    },
+    {
+      "id": "C08",
+      "status": "fail",
+      "source_evidence": "The source's profile describes the left-going mode solution.",
+      "lean_evidence": "Lean does not identify the actual left invariant with any profile-built travelingWave.",
+      "reasoning": "This is a consequential mismatch for object identity and roles."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "LeVeque, raw PDF page 24 / printed Chapter 1 page 2: w^2=p-rho*c*u obeys w^2_t-c*w^2_x=0 and has left-moving profile solutions with argument x+ct.",
+      "lean_evidence": "The minus sign in p-rho*c*u, speed -c, c=sqrt(K/rho), and x-(-c)t=x+ct all match.",
+      "reasoning": "All coefficients, signs, powers, state positions, and parameter dependences match."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "LeVeque, raw PDF page 24 / printed Chapter 1 page 2: w^2=p-rho*c*u obeys w^2_t-c*w^2_x=0 and has left-moving profile solutions with argument x+ct.",
+      "lean_evidence": "Real-valued one-dimensional fields and positive constant material parameters match the intended source setting.",
+      "reasoning": "No consequential specialization or generalization beyond the intended source setting occurs."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Lean explicitly assumes positive K,rho and packages p,u as a global first-order acoustics solution; this matches the source's tacit physical and differentiability context.",
+      "lean_evidence": "Positive density makes division defined and c positive; no differentiability premise is imposed on the arbitrary profile in the second conjunct.",
+      "reasoning": "Undefined reciprocals, square-root degeneracy, and derivative boundary issues are handled consistently with the source context."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The source's profile statement has differential content.",
+      "lean_evidence": "The profile conjunct is a tautological rewrite for every profile and supplies no differential content.",
+      "reasoning": "This is a consequential mismatch for nonvacuity."
+    },
+    {
+      "id": "N01",
+      "status": "fail",
+      "source_evidence": "The source links x+ct profiles to the propagation process by asserting they solve the one-way PDE.",
+      "lean_evidence": "The profile construction is not linked to the one-way-wave predicate.",
+      "reasoning": "This is a consequential mismatch for algorithm or process linkage."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no norm or metric convention.",
+      "lean_evidence": "The Lean target contains no norm or metric convention; its structural instances only support ordinary real calculus/algebra.",
+      "reasoning": "Norm, metric, and component semantics is outside the selected proposition."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no error or stability notion.",
+      "lean_evidence": "The Lean target contains no error or stability notion; its structural instances only support ordinary real calculus/algebra.",
+      "reasoning": "Error and stability notion is outside the selected proposition."
+    },
+    {
+      "id": "N04",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no computed or rounded quantity.",
+      "lean_evidence": "The Lean target contains no computed or rounded quantity; its structural instances only support ordinary real calculus/algebra.",
+      "reasoning": "Exact versus computed quantities is outside the selected proposition."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no asymptotic or higher-order term.",
+      "lean_evidence": "The Lean target contains no asymptotic or higher-order term; its structural instances only support ordinary real calculus/algebra.",
+      "reasoning": "Asymptotic and higher-order terms is outside the selected proposition."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The selected source claim contains no separate numerical existence/uniqueness or well-posedness claim.",
+      "lean_evidence": "The Lean target contains no separate numerical existence/uniqueness or well-posedness claim; its structural instances only support ordinary real calculus/algebra.",
+      "reasoning": "Existence, uniqueness, and well-posedness is outside the selected proposition."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "Lean proves the correct PDE for the specific left invariant, but its second conjunct is only the definitional identity travelingWave(profile,-c,x,t)=profile(x+ct). It neither proves that these profile fields solve the PDE nor represents the actual invariant as one of them, so the full source conclusion does not follow."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's acoustics equations imply the first Lean conjunct. The second Lean conjunct follows unconditionally from the supplied definition travelingWave(profile,speed,x,t)=profile(x-speed*t), so the source context also entails it."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "traveling-profile solutionhood omitted",
+      "source_evidence": "Raw PDF page 24 says the left-going equation has solutions of the form q^2(x,t)=q-tilde(x+ct).",
+      "lean_evidence": "The second conjunct states only travelingWave profile (-c) x t = profile(x+c*t); no derivative or IsLinearAdvectionSolutionAt assertion occurs there.",
+      "impact": "The theorem does not formalize the source's claim that the displayed profiles solve the PDE."
+    },
+    {
+      "severity": "major",
+      "category": "mode-profile object linkage omitted",
+      "source_evidence": "The profile sentence immediately follows the PDE for w^2 and describes that left-going scalar mode.",
+      "lean_evidence": "The left invariant in the first conjunct is never equated with, or existentially represented by, the arbitrary profile construction in the second conjunct.",
+      "impact": "The correct PDE and correct x+ct formula remain disconnected, so together they do not recover the source statement."
+    }
+  ],
+  "rationale": "The first conjunct faithfully derives the left characteristic equation with the correct invariant and signed speed. The second conjunct, however, is only the definition of a travelingWave at speed -c. It does not assert solutionhood and does not represent the actual mode by such a profile. Consequently Lean is implied by the source context but omits a substantive source conclusion."
+}

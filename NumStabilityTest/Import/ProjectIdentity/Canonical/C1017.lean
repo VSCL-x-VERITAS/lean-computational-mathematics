@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07.AbstractModelCounterexample
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation07.AbstractModelCounterexample`. -/
+
+#check NumStability.correctionFormulaAbstractCounterexampleFPModel
+#check NumStability.correctionFormulaAbstractCounterexample_abs_order
+#check NumStability.correctionFormulaAbstractCounterexample_not_exact

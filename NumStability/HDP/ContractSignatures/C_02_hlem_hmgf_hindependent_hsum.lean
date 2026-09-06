@@ -1,26 +1,8 @@
-import Mathlib.Probability.Independence.Integration
+import ComputationalMathematics.Source.Vershynin.Chapter02.IndependentSumMGF.Signature
 
 /-!
-# Frozen contract signature for finite independent-sum MGF tensorization
+# Compatibility import for an HDP contract signature
 
-This file is intentionally proof-free.  The implementation is checked in the
-semantic module and the contract wrapper is checked against this type.
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.IndependentSumMGF.Signature`.
+Use the canonical Vershynin module in new imports.
 -/
-
-noncomputable section
-
-open MeasureTheory
-open ProbabilityTheory
-
-namespace NumStability.HDP.Contract
-
-def hdp_02_hlem_hmgf_hindependent_hsum__contract_type : Prop :=
-  ∀ {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : ι → Ω → ℝ} (lam : ℝ) (a : ι → ℝ),
-    iIndepFun X μ →
-      (∀ i, Integrable (fun ω => Real.exp (lam * (a i * X i ω))) μ) →
-      (∫ ω, Real.exp (lam * ∑ i, a i * X i ω) ∂μ =
-        ∏ i, ∫ ω, Real.exp (lam * (a i * X i ω)) ∂μ)
-
-end NumStability.HDP.Contract

@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamFull
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamFull`. -/
+
+#check NumStability.Wave19.concrete_sigma_ordering_transport_note

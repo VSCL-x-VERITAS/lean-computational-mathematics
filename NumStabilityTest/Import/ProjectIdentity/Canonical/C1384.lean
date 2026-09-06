@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter11.Theorem07.TridiagonalTwoByTwoResidual.Basic
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter11.Theorem07.TridiagonalTwoByTwoResidual.Basic`. -/
+
+#check NumStability.fl_tridiagonal_twoByTwo_trailing_one_stage_printed_bound
+#check NumStability.tridiagonalLeadingBlockSupport_add_bound_printed
+#check NumStability.tridiagonalLeadingBlockSupport_zero_printed_bound

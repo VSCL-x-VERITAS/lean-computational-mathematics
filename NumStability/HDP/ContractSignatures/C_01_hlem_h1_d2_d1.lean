@@ -1,22 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01.Signature
 
-/-! Frozen proof-free signature for Lemma 1.2.1. -/
+/-!
+# Compatibility import for an HDP contract signature
 
-noncomputable section
-
-open MeasureTheory
-
-namespace NumStability.HDP.Contract
-
-def hdp_01_hlem_h1_d2_d1__contract_type : Prop :=
-  ∀ {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ} (hX : Measurable X)
-    (hNonneg : ∀ ω, 0 ≤ X ω),
-    ((∫⁻ ω, ENNReal.ofReal (X ω) ∂μ) =
-        ∫⁻ t in Set.Ioi 0, μ {ω | t < X ω}) ∧
-      (∀ hInt : Integrable X μ,
-        (∫ ω, X ω ∂μ) =
-          ∫ t in Set.Ioi 0, μ.real {ω | t < X ω})
-
-end NumStability.HDP.Contract
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter01.Section02.Lemma01.Signature`.
+Use the canonical Vershynin module in new imports.
+-/

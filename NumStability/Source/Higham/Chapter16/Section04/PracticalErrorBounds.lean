@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.All
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions
-import NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds.NormEstimator
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section04.PracticalErrorBounds
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

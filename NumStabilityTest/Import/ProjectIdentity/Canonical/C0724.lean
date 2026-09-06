@@ -1,0 +1,7 @@
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.AugmentedSystem
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.Perturbation.LeastSquares.AugmentedSystem`. -/
+
+#check NumStability.lsScaledAugmentedDiagonalBranch_abs_le_max_of_alpha_eq_div_sqrt_two
+#check NumStability.lsScaledAugmentedDiagonalBranch_ne_zero_of_alpha_eq_div_sqrt_two
+#check NumStability.lsScaledAugmentedEigenvalue_branch_extreme_bounds_of_sigma_bounds

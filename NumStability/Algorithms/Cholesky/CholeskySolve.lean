@@ -3,13 +3,13 @@ import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.Cholesky.CholeskySpec
-import NumStability.Algorithms.LU.LUSolve
-import NumStability.Algorithms.LinearSystems.Cholesky.Solve.Basic
-import NumStability.Algorithms.LinearSystems.Triangular.BackSubstitution
-import NumStability.Algorithms.LinearSystems.Triangular.ForwardSubstitution
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
+import ComputationalMathematics.Algorithms.Cholesky.CholeskySpec
+import ComputationalMathematics.Algorithms.LU.LUSolve
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.Solve.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.BackSubstitution
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ForwardSubstitution
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
 
 /-!
 # CholeskySolve (compatibility module)

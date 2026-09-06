@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Solvers.QuasiTriangularBartelsStewart.SmallSystemRounding
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiRounded
 
 /-!
-# Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiRounded
+Historical import path retained for compatibility.
 
-Higham source locator for reusable W06 content. Projection-pinned historical declarations are intentionally not imported through this canonical path.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiQuasiRounded`.
+Declaration names and mathematical terminology are unchanged.
 -/

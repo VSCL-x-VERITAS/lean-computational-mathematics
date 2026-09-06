@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter17
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter17`. -/
+
+#check NumStability.higham17_22_sourceBlockForm_of_forall_orbit_tendsto
+#check NumStability.higham17_problem17_1
+#check NumStability.literal_norm_form_forward_bound
+#check NumStability.literal_norm_form_gaussSeidel_forward_bound
+#check NumStability.literal_norm_form_jacobi_forward_bound
+#check NumStability.partialSumBound_cALiteral
+#check NumStability.residualSigmaTsum_eq_residualSigmaSup
+#check NumStability.tsum_infNorm_matPow_le

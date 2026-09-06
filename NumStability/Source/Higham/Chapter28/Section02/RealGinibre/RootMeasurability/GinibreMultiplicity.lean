@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.RootMeasurability.GinibreMultiplicity
+
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.RootMeasurability.GinibreMultiplicity`.
+Declaration names and mathematical terminology are unchanged.
+-/

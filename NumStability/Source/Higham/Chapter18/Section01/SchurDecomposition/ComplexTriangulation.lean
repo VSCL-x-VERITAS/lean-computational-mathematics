@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Complex.Triangulation
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.SchurDecomposition.ComplexTriangulation
 
 /-!
-# Source.Higham.Chapter18.Section01.SchurDecomposition.ComplexTriangulation
+Historical import path retained for compatibility.
 
-Source locator for Higham's numbered presentation; the formal content lives in reusable Schur modules.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section01.SchurDecomposition.ComplexTriangulation`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,8 @@
-import NumStability.FloatingPoint.FusedMultiplyAdd.Core
-import NumStability.FloatingPoint.FusedMultiplyAdd.DotProductCounts
+import ComputationalMathematics.FloatingPoint.FusedMultiplyAdd.All
 
 /-!
-# FloatingPoint.FusedMultiplyAdd.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.FloatingPoint.FusedMultiplyAdd.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

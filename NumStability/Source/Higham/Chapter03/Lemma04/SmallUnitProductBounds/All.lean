@@ -1,7 +1,8 @@
-import NumStability.Analysis.Error.RoundingProducts.All
+import ComputationalMathematics.Source.Higham.Chapter03.Lemma04.SmallUnitProductBounds.All
 
 /-!
-# Source.Higham.Chapter03.Lemma04.SmallUnitProductBounds.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter03.Lemma04.SmallUnitProductBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

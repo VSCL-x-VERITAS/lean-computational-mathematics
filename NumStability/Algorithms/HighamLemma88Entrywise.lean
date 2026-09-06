@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter08.Lemma08.Entrywise.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Lemma08.Entrywise.Basic
 
 /-!
 # HighamLemma88Entrywise (compatibility module)

@@ -1,5 +1,5 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.ArbitraryNorm
-import NumStability.Source.Higham.Chapter13.Section03.ArbitraryNormDominance
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.ArbitraryNorm
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.ArbitraryNormDominance
 
 /-!
 # Historical arbitrary-norm Block LU compatibility import

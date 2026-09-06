@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.DistanceToInstability
-import NumStability.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.StabilityRadius
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.BaiDemmelGu.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,21 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem11.HadamardCondition.MatrixInversion
-
-namespace NumStability
+import ComputationalMathematics.Source.Higham.Chapter14.Discrepancies
 
 /-!
-# Higham Chapter 14 source corrections
+Historical import path retained for compatibility.
 
-Checked witnesses for statements whose printed hypotheses or signs are
-inconsistent with their stated conclusions.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Discrepancies`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-/-- The signed ratio printed in Section 14.6 cannot be the asserted
-    nonnegative condition number without an absolute value in the denominator.
-    The one-by-one matrix `[-1]` gives the raw value `-1`. -/
-theorem higham14_hadamardConditionNumberRaw_negative_one_counterexample :
-    higham14_hadamardConditionNumberRaw
-        (fun _ : Fin 1 => fun _ : Fin 1 => (-1 : ℝ)) = -1 := by
-  simp [higham14_hadamardConditionNumberRaw, higham14_rowNorm2,
-    vecNorm2, vecNorm2Sq]
-
-end NumStability

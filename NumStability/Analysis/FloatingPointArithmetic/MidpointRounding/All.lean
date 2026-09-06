@@ -1,7 +1,8 @@
-import NumStability.Analysis.FloatingPointArithmetic.MidpointRounding.DecimalTieExamples
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.MidpointRounding.All
 
 /-!
-# Analysis.FloatingPointArithmetic.MidpointRounding.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Analysis.FloatingPointArithmetic.MidpointRounding.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

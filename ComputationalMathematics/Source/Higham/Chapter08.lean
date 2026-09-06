@@ -1,0 +1,38 @@
+import ComputationalMathematics.Source.Higham.Chapter08.Equation02.TriangularSubstitution.RelativeInfinityNormBounds.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Equation10.ColumnPivotedQR.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Equation14.FanInExecutor.All
+import ComputationalMathematics.Source.Higham.Chapter08.Equation14.FanInProduct.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.FanInExecutor.FirstOrderResidual
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.All
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.LocalCancellationResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Equation18.FanInExecutor.FirstOrderForwardError
+import ComputationalMathematics.Source.Higham.Chapter08.Lemma08.CorrectedCondition.All
+import ComputationalMathematics.Source.Higham.Chapter08.Lemma08.Entrywise.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Lemma08Discrepancy
+import ComputationalMathematics.Source.Higham.Chapter08.Problem01.NoGuardSubstitution.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem02.ComparisonMatrixWitness.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem02.ComparisonMatrixWitness.ArbitraryRatios.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem03.UnitTriangularSubstitution.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem04.MMatrixSubstitution.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem05.InverseNormBounds.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem06.ComparisonInverseBounds.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem07.DiagonalScaling.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem07.DiagonalScaling.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem08.SingleEntrySingularity.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem08.SingleEntrySingularity.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem09.KahanSingularValues.All
+import ComputationalMathematics.Source.Higham.Chapter08.Problem09.KahanSingularValues.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Section01.BackwardErrorAnalysis.All
+import ComputationalMathematics.Source.Higham.Chapter08.Section02.ForwardErrorAnalysis.All
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.BidiagonalComparison.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.All
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.ComparisonConditioningResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.InverseNormResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Section04.FanInAsymptotics.Basic
+import ComputationalMathematics.Source.Higham.Chapter08.Section04.FanInCore.All
+
+/-!
+# Higham Chapter 8 source correspondence
+
+Complete import-only surface for the migrated Chapter 8 source results.
+-/

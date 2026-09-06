@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Algorithm04.Pivoting.GaussJordanPivoting
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Pivoting
 
 /-!
-# NumStability.Source.Higham.Chapter14.Algorithm04.Pivoting
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Pivoting`.
+Declaration names and mathematical terminology are unchanged.
 -/

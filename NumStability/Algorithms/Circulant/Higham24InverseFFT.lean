@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.InverseFFT
+import ComputationalMathematics.Source.Higham.Chapter24.InverseFFT
 
 /-!
 # Historical Chapter 24 inverse-FFT import

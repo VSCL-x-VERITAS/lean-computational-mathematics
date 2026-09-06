@@ -2,8 +2,8 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.Source.Higham.Chapter02.Problem11
-import NumStability.Source.Higham.Chapter02.Section07.PowerLeadingDigits
+import ComputationalMathematics.Source.Higham.Chapter02.Problem11
+import ComputationalMathematics.Source.Higham.Chapter02.Section07.PowerLeadingDigits
 
 /-!
 # Compatibility import

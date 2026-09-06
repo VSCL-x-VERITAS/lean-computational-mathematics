@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Section03.RowDominanceClosure
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Section03.RowDominanceClosure`. -/
+
+#check NumStability.higham13_algorithm13_3_exists_pivotInv_right_inverse_of_blockMatrixNonsingular_blockDiagDomRow_opNorm2_lowerNorm2

@@ -1,20 +1,8 @@
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BaiDemmelGu
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BaiDemmelGuDistance
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BergerHermitian
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.Gautschi
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.HenriciDeparture
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.HenriciExtremal
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.HenriciImprovedConstant
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.HenriciSharpConstant
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.Kreiss
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.Laszlo
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.NumericalRadius
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerKreiss
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerProjectionIntegral
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.SpijkerRational
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.All
 
 /-!
-# Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

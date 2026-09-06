@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter01.Section17.StoredGrid
+import ComputationalMathematics.Source.Higham.Chapter01.Section17.StoredGrid
 
 /-!
 # Historical nonrandom-rounding stored-grid import

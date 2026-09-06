@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BlockLDLTAllOneByOnePrinted
+import ComputationalMathematics.Source.Higham.Chapter11.BlockLDLTAllOneByOnePrinted
 
 /-!
 Compatibility facade for the canonical Chapter 11 owner(s).

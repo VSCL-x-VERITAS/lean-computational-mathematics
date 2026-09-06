@@ -1,7 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Periodic
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.ProjectionIntegral
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ProjectionIntegral
 
 /-!
 # Analysis.SpijkerProjectionIntegral

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Pairwise
+import ComputationalMathematics.Algorithms.Summation.Pairwise
 
 /-!
 # Pairwise summation compatibility import

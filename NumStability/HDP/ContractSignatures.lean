@@ -1,65 +1,8 @@
-import NumStability.HDP.ContractSignatures.BernsteinProofDisplays
-import NumStability.HDP.ContractSignatures.C_01_hcor_h1_d2_d5
-import NumStability.HDP.ContractSignatures.C_01_hex_h1_d2_d2
-import NumStability.HDP.ContractSignatures.C_01_hlem_h1_d2_d1
-import NumStability.HDP.ContractSignatures.C_01_hprop_h1_d2_d4
-import NumStability.HDP.ContractSignatures.C_01_hthm_h1_d3_d1
-import NumStability.HDP.ContractSignatures.C_01_hthm_hcauchy_hschwarz
-import NumStability.HDP.ContractSignatures.C_01_hthm_hjensen
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hbinom_hcentral
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hgaussian_hatom
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hsn_hmoments
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hzn_hidentity
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d6_hconstant_hpsi2
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d7_hgaussian_hsquare_htail
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d7_hsg_himplies_hse
-import NumStability.HDP.ContractSignatures.C_02_hbody_h2_d7_hyoung
-import NumStability.HDP.ContractSignatures.C_02_hdef_h2_d7_d5
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d1
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d12
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d19
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d20
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d21
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d22
-import NumStability.HDP.ContractSignatures.C_02_heq_h2_d3
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d1_d4
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d2_d10b
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d3_d5
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d5_d1
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d5_d5a
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d5_d9
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d6_d9
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d7_d2
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d7_d3
-import NumStability.HDP.ContractSignatures.C_02_hex_h2_d7_d4
-import NumStability.HDP.ContractSignatures.C_02_hexample_h2_d5_d8b
-import NumStability.HDP.ContractSignatures.C_02_hexample_h2_d5_d8c
-import NumStability.HDP.ContractSignatures.C_02_hexample_h2_d7_d13
-import NumStability.HDP.ContractSignatures.C_02_hlem_h2_d6_d8
-import NumStability.HDP.ContractSignatures.C_02_hlem_h2_d7_d6
-import NumStability.HDP.ContractSignatures.C_02_hlem_h2_d7_d7
-import NumStability.HDP.ContractSignatures.C_02_hlem_hexponential_hmarkov
-import NumStability.HDP.ContractSignatures.C_02_hlem_hmgf_hindependent_hsum
-import NumStability.HDP.ContractSignatures.C_02_hnotation_h2_d1_hasymptotic
-import NumStability.HDP.ContractSignatures.C_02_hprop_h2_d1_d2
-import NumStability.HDP.ContractSignatures.C_02_hprop_h2_d5_d2
-import NumStability.HDP.ContractSignatures.C_02_hprop_h2_d6_d1
-import NumStability.HDP.ContractSignatures.C_02_hprop_h2_d7_d1
-import NumStability.HDP.ContractSignatures.C_02_hrem_h2_d5_d3
-import NumStability.HDP.ContractSignatures.C_02_hrem_h2_d7_d14
-import NumStability.HDP.ContractSignatures.C_02_hrem_h2_d7_d9
-import NumStability.HDP.ContractSignatures.C_02_hthm_h2_d2_d6
-import NumStability.HDP.ContractSignatures.C_02_hthm_h2_d6_d2
-import NumStability.HDP.ContractSignatures.C_02_hthm_h2_d6_d3
-import NumStability.HDP.ContractSignatures.C_02_hthm_hpsi2_hnorm_hcharacterizations
-import NumStability.HDP.ContractSignatures.C_05_hex_h5_d1_d13
-import NumStability.HDP.ContractSignatures.C_05_hex_h5_d1_d14
-import NumStability.HDP.ContractSignatures.C_05_hex_h5_d2_d11
+import ComputationalMathematics.HDP.ContractSignatures
 
 /-!
-# Frozen HDP contract signatures
+Historical import path retained for compatibility.
 
-`Prop`-valued signatures pinning the shape of each source-facing HDP statement
-independently of its proof.  Source correspondence only: nothing reusable may
-depend on this surface.
+The implementation is provided by `ComputationalMathematics.HDP.ContractSignatures`.
+Declaration names and mathematical terminology are unchanged.
 -/

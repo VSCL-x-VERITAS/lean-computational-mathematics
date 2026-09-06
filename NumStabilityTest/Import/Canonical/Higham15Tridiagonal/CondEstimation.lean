@@ -1,0 +1,3 @@
+import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod
+
+#check NumStability.lapackNormEstimator_lower_bound

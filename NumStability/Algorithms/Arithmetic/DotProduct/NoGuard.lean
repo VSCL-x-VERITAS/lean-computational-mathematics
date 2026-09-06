@@ -1,9 +1,8 @@
-import NumStability.Algorithms.Arithmetic.DotProduct.NoGuard.Core
-import NumStability.Algorithms.Arithmetic.DotProduct.NoGuard.Tree
+import ComputationalMathematics.Algorithms.Arithmetic.DotProduct.NoGuard
 
 /-!
-# No-guard dot products
+Historical import path retained for compatibility.
 
-Complete reusable import surface for sequential and arbitrary-tree no-guard
-dot-product execution and error analysis.
+The implementation is provided by `ComputationalMathematics.Algorithms.Arithmetic.DotProduct.NoGuard`.
+Declaration names and mathematical terminology are unchanged.
 -/

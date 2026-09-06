@@ -1,9 +1,8 @@
-import NumStability.Algorithms.Summation.Compensated.Kahan.Coefficients.Affine
-import NumStability.Algorithms.Summation.Compensated.Kahan.Coefficients.Coupled
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients
 
 /-!
-# Kahan coefficient engines
+Historical import path retained for compatibility.
 
-Declaration-free entry point for the reusable affine and coupled coefficient
-representations used in Kahan compensated-summation analysis.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients`.
+Declaration names and mathematical terminology are unchanged.
 -/

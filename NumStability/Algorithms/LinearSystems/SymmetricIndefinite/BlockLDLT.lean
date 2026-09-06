@@ -1,11 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalFactorBound
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalGrowth
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalGrowthInvariant
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalSparseFactor
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalSparseSolve
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT
 
 /-!
-# Symmetric-indefinite block LDLᵀ algorithms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the reusable block-pivoting interfaces.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT`.
+Declaration names and mathematical terminology are unchanged.
 -/

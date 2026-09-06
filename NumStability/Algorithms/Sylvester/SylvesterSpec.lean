@@ -6,15 +6,15 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.MatrixEquations.Sylvester.BackwardError.Specification
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Basic
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.Lyapunov
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation10
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation11
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation12
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation21
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.LyapunovDefinition
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.BackwardError.Specification
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.Basic
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation.Lyapunov
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation10
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation11
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation12
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.Equation21
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.LyapunovDefinition
 
 /-!
 # Algorithms.Sylvester.SylvesterSpec

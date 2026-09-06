@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.EndpointTermination.RectangularTermination
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.EndpointTermination.RectangularTermination`. -/
+
+#check NumStability.RectPNormPair.infinityNPlusOneCounterexampleA
+#check NumStability.RectPNormPair.infinityNPlusOneCounterexampleX0
+#check NumStability.RectPNormPair.infinityNPlusOneCounterexample_unit
+#check NumStability.RectPNormPair.infinity_terminates_by_m_plus_one_rect
+#check NumStability.RectPNormPair.one_terminates_by_n_plus_one_rect

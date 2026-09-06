@@ -1,7 +1,8 @@
-import NumStability.Analysis.SingularValues.InverseBounds.All
+import ComputationalMathematics.Analysis.SingularValues.InverseBounds
 
 /-!
-# Analysis SingularValues InverseBounds
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.SingularValues.InverseBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

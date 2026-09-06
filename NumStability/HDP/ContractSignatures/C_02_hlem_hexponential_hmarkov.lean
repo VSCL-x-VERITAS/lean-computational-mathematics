@@ -1,32 +1,8 @@
-import Mathlib.MeasureTheory.Integral.Bochner.Set
-import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
+import ComputationalMathematics.Source.Vershynin.Chapter02.ExponentialMarkov.Signature
 
 /-!
-# Frozen contract signature for exponential Markov
+# Compatibility import for an HDP contract signature
 
-This file is intentionally proof-free.  The implementation is checked in the
-semantic module and the contract wrapper is checked against this type.
+This historical source-locator path forwards to `NumStability.Source.Vershynin.Chapter02.ExponentialMarkov.Signature`.
+Use the canonical Vershynin module in new imports.
 -/
-
-noncomputable section
-
-open MeasureTheory
-open scoped BigOperators ENNReal
-
-namespace NumStability.HDP.Contract
-
-def hdp_02_hlem_hexponential_hmarkov__contract_type : Prop :=
-  ∀ {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {S : Ω → ℝ} (hS : Measurable S)
-    {lam t : ℝ} (hlam : 0 < lam)
-    (hExp : Integrable (fun ω => Real.exp (lam * S ω)) μ)
-    (hExpNeg : Integrable (fun ω => Real.exp (lam * (-S ω))) μ),
-    (μ.real (S ⁻¹' Set.Ici t) ≤
-        Real.exp (-(lam * t)) *
-          (∫ ω, Real.exp (lam * S ω) ∂μ)) ∧
-      (μ.real ((fun ω => -S ω) ⁻¹' Set.Ici t) ≤
-        Real.exp (-(lam * t)) *
-          (∫ ω, Real.exp (lam * (-S ω)) ∂μ))
-
-end NumStability.HDP.Contract

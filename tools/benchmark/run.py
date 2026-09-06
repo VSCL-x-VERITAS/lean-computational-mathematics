@@ -23,8 +23,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCENARIOS = {
-    "foundation": Path("NumStability/FloatingPoint/Model.lean"),
-    "endpoint": Path("NumStability/Higham/Chapter02/Problem04.lean"),
+    "foundation": Path("ComputationalMathematics/FloatingPoint/Model.lean"),
+    "endpoint": Path("ComputationalMathematics/Source/Higham/Chapter02/Problem04.lean"),
 }
 
 
@@ -103,7 +103,7 @@ class BenchmarkRunner:
         self.args = args
         self.results_dir = results_dir
         self.results: list[dict[str, Any]] = []
-        self.targets = args.targets or ["NumStability", "NumStabilityTest"]
+        self.targets = args.targets or ["ComputationalMathematics", "NumStability", "NumStabilityTest"]
 
     def run_command(
         self, label: str, command: list[str], *, measured: bool = True
