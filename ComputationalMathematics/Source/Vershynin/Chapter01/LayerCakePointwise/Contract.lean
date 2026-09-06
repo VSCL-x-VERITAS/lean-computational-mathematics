@@ -11,7 +11,7 @@ open MeasureTheory
 /-- A nonnegative real is the length of `[0,x]`, equivalently the integral of
 the strict-threshold indicator over positive thresholds. -/
 theorem hdp_01_hlem_hlayer_hcake_hpointwise {x : ℝ} (hx : 0 ≤ x) :
-    x = (∫ t in Set.Ioc 0 x, (1 : ℝ) ∂volume) ∧
+    x = (∫ _t in Set.Ioc 0 x, (1 : ℝ) ∂volume) ∧
       ENNReal.ofReal x =
         ∫⁻ t in Set.Ioi 0,
           (Set.Iio x).indicator (fun _ => (1 : ENNReal)) t ∂volume :=

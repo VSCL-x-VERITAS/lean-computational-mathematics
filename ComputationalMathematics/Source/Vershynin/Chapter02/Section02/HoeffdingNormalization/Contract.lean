@@ -14,7 +14,7 @@ theorem hdp_02_hbody_h2_d2_hwlog_hnorm
     (X : ι → Ω → ℝ) (a : ι → ℝ) (t : ℝ)
     (_ht : 0 ≤ t) :
     ((∑ i, (a i) ^ 2 = 0) ∧
-        {ω | ∑ i, a i * X i ω ≥ t} = {ω | (0 : ℝ) ≥ t}) ∨
+        {ω | ∑ i, a i * X i ω ≥ t} = {_ω | (0 : ℝ) ≥ t}) ∨
       ((0 < ∑ i, (a i) ^ 2) ∧
         (∑ i, (a i / Real.sqrt (∑ j, (a j) ^ 2)) ^ 2 = 1) ∧
         {ω | ∑ i, a i * X i ω ≥ t} =
