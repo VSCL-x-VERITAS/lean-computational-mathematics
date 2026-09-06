@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Stable Chapter 1 contract for the indicator-function definition. -/
 

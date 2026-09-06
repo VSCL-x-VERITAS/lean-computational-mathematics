@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.LimitTheorems
+import ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic
 
 /-! Stable source-facing contract for the independent finite-sum variance identity. -/
 

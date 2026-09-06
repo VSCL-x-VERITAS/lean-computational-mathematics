@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.LimitTheorems
+import ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic
 
 /-! Stable source-facing contract for the Chapter 1 Poisson-law definition. -/
 

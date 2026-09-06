@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Stable source-facing forwarding declaration for Minkowski's inequality. -/
 

@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Source-facing exhaustive contract for the Chapter 1 Hölder inequality. -/
 

@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Source-facing contract for uniqueness of a real law from its CDF. -/
 

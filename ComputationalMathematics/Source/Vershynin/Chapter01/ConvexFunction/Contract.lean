@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Stable source-facing contract for the convex-function definition in
 Section 1.2, footnote 3. -/

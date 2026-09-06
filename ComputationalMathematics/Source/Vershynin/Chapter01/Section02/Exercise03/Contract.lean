@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Source-facing contract for Exercise 1.2.3, the tail formula for positive
 absolute moments. -/

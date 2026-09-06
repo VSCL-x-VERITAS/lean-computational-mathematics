@@ -1,19 +1,43 @@
 # Chapter 1 organization baseline
 
+## Import-preserving checkpoint integration
+
+Chapter 1 canonical alias placement remains complete: the 24 aliases extracted
+from Preliminaries and LimitTheorems remain declared in the Vershynin source
+tree, with none returned to the Scalar implementation bodies. The old Scalar
+paths are import-only facades over their new `Basic` leaves and those source
+declaration owners. They preserve the historical alias exports together with
+the semantic API.
+
+The four existing Jensen, Corollary 1.2.5, Exercise 1.2.2 and Lemma 1.2.1
+`Contract` modules retain their former Preliminaries import surface as facades.
+Their declarations move to `Contract.Theorem`; Scalar imports those leaves,
+whose implementation dependencies use `Basic`, so this export preservation
+introduces no import cycle. Existing ProjectIdentity assertions remain intact.
+
+The two `Basic` leaves retain the reviewed `source` role. This dependency split
+does not claim a reusable-tier reclassification. Exact candidate validation is
+recorded separately from the historical checkpoint measurements below.
+
+## Historical checkpoint organization record
+
+The following counters and build results describe the checkpoint-era scan,
+not a fresh census or validation result for the merged repository.
+
 The source architecture baseline was generated with the repository's
 `tools/architecture/generate_baseline.py --skip-declarations --strict-source`
 workflow and the portable book-migration scanner.
 
-Current measured counters:
+Historical measured counters:
 
 | Counter | Value | Evidence |
 |---|---:|---|
-| unclassified production modules | 309 | current `tools/architecture/check_layout.py` output after classifying the Chapter 1 leaves |
+| unclassified production modules | 309 | checkpoint `tools/architecture/check_layout.py` output after classifying the Chapter 1 leaves |
 | duplicate wrappers | 0 | one semantic producer per inspected Chapter 1 alias |
 | placeholder findings | 0 | corrected repository scan: ordinary structure fields named `constant` are no longer misclassified as Lean commands |
-| canonical placement pending | 0 | current `rg` scan finds no `hdp_01_*` declaration in either reusable scalar producer |
+| canonical placement pending | 0 | checkpoint `rg` scan found no `hdp_01_*` declaration in either scalar producer |
 
-The current baseline covered 2,326 production modules and 3,290,496
+That checkpoint baseline covered 2,326 production modules and 3,290,496
 production lines; 2,016 modules were classified (86.672%). It also reports two
 forbidden reusable-to-source direct edges and four reusable-to-source reachable
 pairs introduced by the current shared organization increment. The portable
@@ -90,7 +114,7 @@ The moments increment likewise moved `hdp_01_hdef_hmoments` into
 `NumStability/HDP/Contracts/C_01_hdef_hmoments.lean`, beside its obstruction
 and corrected-contract declarations.
 
-The 309 unclassified production modules and current global source-graph/layout
-findings are repository-wide organization debt. Resolving them is materially
-broader than this Chapter 1 unit and therefore remains an exact
-organization-loop blocker.
+The 309 unclassified production modules and global source-graph/layout
+findings were repository-wide organization debt in that checkpoint. Resolving
+them was broader than that Chapter 1 unit; this historical blocker is not a
+claim about the current integrated repository.

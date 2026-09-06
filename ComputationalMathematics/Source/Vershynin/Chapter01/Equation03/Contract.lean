@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Scalar.Preliminaries
+import ComputationalMathematics.HDP.Scalar.Preliminaries.Basic
 
 /-! Source-facing contracts for Equation (1.3), including its printed
 zero-exponent obstruction and the corrected positive-exponent theorem. -/

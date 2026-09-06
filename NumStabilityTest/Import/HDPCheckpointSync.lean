@@ -1,3 +1,5 @@
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Corollary05ContractTheorem
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Exercise02ContractTheorem
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.F03d15b264a0c083f
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.F052ca92ae7546afa
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.F09441dc2152a2176
@@ -134,6 +136,10 @@ import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Ff3b291bd5605fc2e
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Ff4aa84c70edd4a3f
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Ff7041637df73c6a9
 import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Ff8bc59b64a246306
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.JensenContractTheorem
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.Lemma01ContractTheorem
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.LimitTheoremsBasic
+import NumStabilityTest.Import.HDPCheckpointSync.Canonical.PreliminariesBasic
 import NumStabilityTest.Import.HDPCheckpointSync.Old.F03d15b264a0c083f
 import NumStabilityTest.Import.HDPCheckpointSync.Old.F052ca92ae7546afa
 import NumStabilityTest.Import.HDPCheckpointSync.Old.F09441dc2152a2176
