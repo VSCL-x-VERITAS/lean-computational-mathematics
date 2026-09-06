@@ -6,6 +6,7 @@ import ComputationalMathematics.HDP.Scalar.GaussianSquareTail
 import ComputationalMathematics.HDP.Scalar.GaussianTails
 import ComputationalMathematics.HDP.Scalar.IndependentSums
 import ComputationalMathematics.HDP.Scalar.LimitTheorems
+import ComputationalMathematics.HDP.Scalar.MGFLocalTaylor
 import ComputationalMathematics.HDP.Scalar.NonSubGaussian
 import ComputationalMathematics.HDP.Scalar.PoissonLimit
 import ComputationalMathematics.HDP.Scalar.Preliminaries

@@ -6,10 +6,12 @@ import Mathlib.MeasureTheory.Function.L1Space.Integrable
 import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
 import Mathlib.Probability.Distributions.Exponential
 
-/-! Frozen proof-free signature for Remark 2.7.9.
+/-! Frozen proof-free signatures for Remark 2.7.9.
 
-The local Taylor assertion is witnessed by the symmetric two-point law, while the
-domain-sensitive MGF assertion uses Mathlib's exponential distribution of rate one.
+The exact source-facing signature quantifies over every bounded, centered,
+unit-variance random variable.  The older two-point witness is retained below as
+a compatibility contract for the declaration already exposed by the original
+monolithic development.
 -/
 
 noncomputable section
@@ -21,6 +23,27 @@ open scoped Topology
 
 namespace NumStability.HDP.Contract
 
+/-- Local analytic and exponential-counterexample clauses used by the complete
+source-facing contract for Remark 2.7.9. -/
+def hdp_02_hrem_h2_d7_d9_local__contract_type : Prop :=
+  (∀ {Ω : Type*} [MeasurableSpace Ω]
+      (μ : Measure Ω) [IsProbabilityMeasure μ]
+      (X : Ω → ℝ),
+      Measurable X →
+      (∃ C : ℝ, ∀ ω, |X ω| ≤ C) →
+      (∫ ω, X ω ∂μ) = 0 →
+      (∫ ω, (X ω) ^ 2 ∂μ) = 1 →
+      (fun lam : ℝ =>
+        (∫ ω, Real.exp (lam * X ω) ∂μ) - 1 -
+          lam * (∫ ω, X ω ∂μ) -
+          lam ^ 2 / 2 * (∫ ω, (X ω) ^ 2 ∂μ)) =o[𝓝 (0 : ℝ)]
+        (fun lam : ℝ => lam ^ 2)) ∧
+  ((fun lam : ℝ => Real.exp (lam ^ 2 / 2) - (1 + lam ^ 2 / 2))
+      =o[𝓝 (0 : ℝ)] (fun lam : ℝ => lam ^ 2)) ∧
+  (∀ lam : ℝ, 1 ≤ lam →
+    ¬ Integrable (fun x : ℝ => Real.exp (lam * x)) (expMeasure 1))
+
+/-- Compatibility contract predating the source-faithful universal wrapper. -/
 def hdp_02_hrem_h2_d7_d9__contract_type : Prop :=
   ∃ (μ : Measure ℝ) (X : ℝ → ℝ),
     IsProbabilityMeasure μ ∧

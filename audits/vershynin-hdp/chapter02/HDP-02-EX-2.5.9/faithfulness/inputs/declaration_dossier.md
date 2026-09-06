@@ -2421,7 +2421,7 @@ Definition body (one-level semantic boundary):
 ### `NumStability.HDP.ContractSignatures.C_02_hrem_h2_d7_d9`
 
 Path: `lean-numerical-stability/NumStability/HDP/ContractSignatures/C_02_hrem_h2_d7_d9.lean`
-SHA-256: `40a067fd9891f568fc21167d44bbe5059ebd91e2617a2d6c6faaf46ebb218137`
+SHA-256: `8ceb0c29b2a77016e53cc0e09ddac45f095214d13ec686b86f9a49e46457f3e2`
 
 ```lean
 import Mathlib.Analysis.Calculus.Taylor
@@ -2432,10 +2432,12 @@ import Mathlib.MeasureTheory.Function.L1Space.Integrable
 import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
 import Mathlib.Probability.Distributions.Exponential
 
-/-! Frozen proof-free signature for Remark 2.7.9.
+/-! Frozen proof-free signatures for Remark 2.7.9.
 
-The local Taylor assertion is witnessed by the symmetric two-point law, while the
-domain-sensitive MGF assertion uses Mathlib's exponential distribution of rate one.
+The exact source-facing signature quantifies over every bounded, centered,
+unit-variance random variable.  The older two-point witness is retained below as
+a compatibility contract for the declaration already exposed by the original
+monolithic development.
 -/
 
 noncomputable section
@@ -2447,6 +2449,31 @@ open scoped Topology
 
 namespace NumStability.HDP.Contract
 
+/-- Source-facing contract for Remark 2.7.9: the quadratic MGF expansion for
+bounded centered unit-variance variables, the matching elementary exponential
+expansion, and the sharp failure of the `Exp(1)` MGF from `λ = 1` onward. -/
+def hdp_02_hrem_h2_d7_d9_exact__contract_type : Prop :=
+  (∀ {Ω : Type*} [MeasurableSpace Ω]
+      (μ : Measure Ω) [IsProbabilityMeasure μ]
+      (X : Ω → ℝ),
+      Measurable X →
+      (∃ C : ℝ, ∀ ω, |X ω| ≤ C) →
+      (∫ ω, X ω ∂μ) = 0 →
+      (∫ ω, (X ω) ^ 2 ∂μ) = 1 →
+      (fun lam : ℝ =>
+        (∫ ω, Real.exp (lam * X ω) ∂μ) - 1 -
+          lam * (∫ ω, X ω ∂μ) -
+          lam ^ 2 / 2 * (∫ ω, (X ω) ^ 2 ∂μ)) =o[𝓝 (0 : ℝ)]
+        (fun lam : ℝ => lam ^ 2)) ∧
+  ((fun lam : ℝ => Real.exp (lam ^ 2 / 2) - (1 + lam ^ 2 / 2))
+      =o[𝓝 (0 : ℝ)] (fun lam : ℝ => lam ^ 2)) ∧
+  (∀ lam : ℝ, lam < 1 →
+    Integrable (fun x : ℝ => Real.exp (lam * x)) (expMeasure 1) ∧
+      (∫ x, Real.exp (lam * x) ∂(expMeasure 1)) = (1 - lam)⁻¹) ∧
+  (∀ lam : ℝ, 1 ≤ lam →
+    ¬ Integrable (fun x : ℝ => Real.exp (lam * x)) (expMeasure 1))
+
+/-- Compatibility contract predating the source-faithful universal wrapper. -/
 def hdp_02_hrem_h2_d7_d9__contract_type : Prop :=
   ∃ (μ : Measure ℝ) (X : ℝ → ℝ),
     IsProbabilityMeasure μ ∧

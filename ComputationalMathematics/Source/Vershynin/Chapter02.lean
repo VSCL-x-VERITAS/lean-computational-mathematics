@@ -66,6 +66,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSqu
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Proposition01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark14.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussianImpliesSubExponential.Contract

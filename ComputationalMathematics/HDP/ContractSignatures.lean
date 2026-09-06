@@ -47,6 +47,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSqu
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Proposition01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Exact.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark14.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussianImpliesSubExponential.Signature

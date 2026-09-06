@@ -3364,3 +3364,7 @@ representative historical imports.
 | `NumStability.HDP.Scalar.SubGaussianCentering` | `ComputationalMathematics.HDP.Scalar.SubGaussianCentering` |
 | `NumStability.HDP.Scalar.SubGaussianMinimality` | `ComputationalMathematics.HDP.Scalar.SubGaussianMinimality` |
 | `NumStability.HDP.Scalar.SubGaussianToSubExponential` | `ComputationalMathematics.HDP.Scalar.SubGaussianToSubExponential` |
+
+| `NumStability.HDP.ContractSignatures.C_02_hrem_h2_d7_d9_exact` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Exact.Signature` |
+| `NumStability.HDP.Contracts.C_02_hrem_h2_d7_d9` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Contract` |
+| `NumStability.HDP.Scalar.MGFLocalTaylor` | `ComputationalMathematics.HDP.Scalar.MGFLocalTaylor` |
