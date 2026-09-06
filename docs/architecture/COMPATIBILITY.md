@@ -3265,3 +3265,21 @@ representative historical imports.
 | `NumStability.HDP.Scalar.CentralLimit` | `ComputationalMathematics.HDP.Scalar.CentralLimit` |
 | `NumStability.HDP.Scalar.IndependentSums.Bernstein` | `ComputationalMathematics.HDP.Scalar.IndependentSums.Bernstein` |
 | `NumStability.HDP.Scalar.PoissonLimit` | `ComputationalMathematics.HDP.Scalar.PoissonLimit` |
+
+| `NumStability.HDP.ContractSignatures.BernsteinProofDisplays` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature` |
+| `NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hsn_hmoments` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCountMoments.Signature` |
+| `NumStability.HDP.ContractSignatures.C_02_hbody_h2_d1_hzn_hidentity` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Signature` |
+| `NumStability.HDP.ContractSignatures.C_02_heq_h2_d1` | `ComputationalMathematics.Source.Vershynin.Chapter02.Equation01.Signature` |
+| `NumStability.HDP.ContractSignatures.C_02_heq_h2_d3` | `ComputationalMathematics.Source.Vershynin.Chapter02.Equation03.Signature` |
+| `NumStability.HDP.ContractSignatures.C_02_hprop_h2_d1_d2` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Signature` |
+| `NumStability.HDP.Contracts.BernsteinProofDisplays` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Contract` |
+| `NumStability.HDP.Contracts.C_02_hbody_h2_d1_hsn_hmoments` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCountMoments.Contract` |
+| `NumStability.HDP.Contracts.C_02_hbody_h2_d1_hzn_hidentity` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Contract` |
+| `NumStability.HDP.Contracts.C_02_heq_h2_d1` | `ComputationalMathematics.Source.Vershynin.Chapter02.Equation01.Contract` |
+| `NumStability.HDP.Contracts.C_02_heq_h2_d3` | `ComputationalMathematics.Source.Vershynin.Chapter02.Equation03.Contract` |
+| `NumStability.HDP.Contracts.C_02_hprop_h2_d1_d2` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Contract` |
+| `NumStability.HDP.Scalar.BerryEsseen` | `ComputationalMathematics.HDP.Scalar.BerryEsseen` |
+| `NumStability.HDP.Scalar.GaussianTails` | `ComputationalMathematics.HDP.Scalar.GaussianTails` |
+| `NumStability.HDP.Scalar.IndependentSums.FairCoinChebyshev` | `ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinChebyshev` |
+| `NumStability.HDP.Scalar.IndependentSums.FairCoinMoments` | `ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinMoments` |
+| `NumStability.HDP.Scalar.IndependentSums.FairCoinNormalization` | `ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinNormalization` |

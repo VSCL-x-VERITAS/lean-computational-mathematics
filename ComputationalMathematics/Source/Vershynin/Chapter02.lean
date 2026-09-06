@@ -1,9 +1,14 @@
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Equation03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Equation12
 import ComputationalMathematics.Source.Vershynin.Chapter02.Equation18.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.ExponentialMarkov
 import ComputationalMathematics.Source.Vershynin.Chapter02.IndependentSumMGF
 import ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCountMoments.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Definition01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Theorem06
@@ -23,6 +28,8 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example12.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
 
 /-!
 # Vershynin Chapter 02 source contracts

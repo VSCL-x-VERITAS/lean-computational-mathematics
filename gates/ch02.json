@@ -3,31 +3,31 @@
   "chapter_gate": "ACTIVE",
   "mode": "default",
   "plan_epoch": "replace-with-certified-plan-epoch",
-  "updated_utc": "2026-08-28T20:35:32Z",
+  "updated_utc": "2026-08-29T04:45:50Z",
   "source": {
     "unit_source": "collab:books/vershynin-hdp/source/Chapter02_Concentration of sums of independent random variables.pdf",
     "unit_source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
     "unit_audit_epoch": "hdp-unit-source-2026-08-26-v1",
-    "module_audit_epoch": "hdp-module-audit-2026-08-28-actionability-v2",
-    "module_audit_sha256": "af71fe2eb25e672e6bd13898b770123b2d1321849b6a4b00b6ec9486fa3734b2",
+    "module_audit_epoch": "hdp-module-audit-2026-08-28-policy-guardrails-v3",
+    "module_audit_sha256": "481184f947b961d8532149c9095e679377269aec43c0132c0eb96472367f6aa9",
     "book_profile_sha256": "b366ee13ce5c1890555f7dda961eda9c2bf9ce6e8ef71de6a17c3f5585196cab",
     "pages": "printed pages 12-40 (29 rendered PDF pages)",
-    "session": "claude-continue-2"
+    "session": "codex-chapter02-b"
   },
   "verification_loops": {
     "formalization_completeness": {},
     "organization_completeness": {
-      "unclassified_modules": 309,
+      "unclassified_modules": 0,
       "duplicate_wrappers": 0,
       "placeholder_findings": 0,
       "canonical_placement_pending": 0
     },
     "semantic_equivalence": {
-      "rows_requiring_check": 0,
-      "blind_recorded": 0,
-      "direct_recorded": 0,
-      "round_trip_recorded": 0,
-      "unresolved_adjudications": 0
+      "rows_requiring_check": 13,
+      "blind_recorded": 13,
+      "direct_recorded": 13,
+      "round_trip_recorded": 13,
+      "unresolved_adjudications": 6
     }
   },
   "excluded_rows": [],
@@ -46,49 +46,102 @@
       "id": "HDP-02-BODY-2.1-SN-MOMENTS",
       "source_label": "Section 2.1 body display: E S_N = N/2, Var(S_N) = N/4",
       "row_kind": "equation",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 12,
       "source_statement": "For S_N the number of heads in N fair tosses, E S_N = N/2 and Var(S_N) = N/4.",
       "source_proof": "none",
-      "next_foundation": "Prove `E S_N = N/2` and `Var S_N = N/4` for `S_N` a sum of `N` independent fair Bernoulli indicators, reusing `NumStability.HDP.Scalar.LimitTheorems.independentVarianceSum` and Mathlib's `PMF.binomial` moments.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: No declaration computes the mean and variance of a binomial/fair-coin count in this lane. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "lean_declarations": [
+        "NumStability.HDP.Contract.hdp_02_hbody_h2_d1_hsn_hmoments",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinMoments.fairBernoulliSum_mean_variance",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinMoments.fairBernoulliPMF_indicator_mean",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinMoments.fairBernoulliPMF_indicator_variance",
+        "NumStability.HDP.Scalar.LimitTheorems.independentVarianceSum"
+      ],
+      "contract_hash": "954b7d4dc1f9e58123686e983998e285f61e13ca464f2e4c113e11e849c98241",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; the independent direct and round-trip judges returned all core checks pass, implications yes/yes, and faithful-equivalent. Complete validation passes with accepted=true and decision SHA-256 052594f06896fd0ed753819d66d970108a82877a5317f36a264b5779d51c4ac4.",
+      "attempted_routes": "The fair-coin moment foundation and source-facing wrapper are proved and the full HDP build passes (3656 jobs). `fairBernoulliPMF_indicator_mean` and `fairBernoulliPMF_indicator_variance` compute the one-coordinate moments; `fairBernoulliSum_mean_variance` uses finite integral linearity and `independentVarianceSum` to obtain the exact display. The complete hash-bound audit is accepted=true, faithful-equivalent, implications yes/yes, with decision SHA-256 052594f06896fd0ed753819d66d970108a82877a5317f36a264b5779d51c4ac4.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No declaration computes the mean and variance of a binomial/fair-coin count in this lane.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
-      ],
-      "open_reason": "No Lean declaration covers this printed row. No declaration computes the mean and variance of a binomial/fair-coin count in this lane."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Added reusable `FairCoinMoments` declarations for the canonical fair-indicator mean and variance and for the mean/variance of an arbitrary nonempty finite independent fair family. The variance proof reuses `NumStability.HDP.Scalar.LimitTheorems.independentVarianceSum`.",
+        "Added frozen signature and source wrapper `NumStability.HDP.Contract.hdp_02_hbody_h2_d1_hsn_hmoments`; targeted builds complete successfully (3359 jobs).",
+        "Updated the scalar, contract-signature, and contract umbrellas plus `docs/architecture/tiers.json`. Fresh `check_layout.py` sees 2364 modules, unclassified=309, mixed=9, missing docs=117, legacy naming exceptions=363, declaration umbrellas=21, unsorted imports=0; its nonzero result is the inherited noncanonical source-module baseline.",
+        "Created the exact page-12 audit task and Section 2.1 source group. The batch source contract, blind translation, direct judgment, and round-trip judgment all validate under their role-specific hashes.",
+        "Both independent judges classified the target faithful-equivalent with implications yes/yes and requested no adjudication. `finalize_audit.py HDP-02-BODY-2.1-SN-MOMENTS` and complete validation pass; decision SHA-256 is 052594f06896fd0ed753819d66d970108a82877a5317f36a264b5779d51c4ac4."
+      ]
     },
     {
       "id": "HDP-02-EQ-2.1",
       "source_label": "(2.1)",
       "row_kind": "equation",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 12,
       "source_statement": "P{S_N >= (3/4)N} <= P{|S_N - N/2| >= N/4} <= 4/N, via Chebyshev.",
       "source_proof": "complete",
-      "next_foundation": "Instantiate `hdp_01_hcor_h1_d2_d5` at `S_N` with `E S_N = N/2`, `Var S_N = N/4` and threshold `N/4`, then chain the inclusion `{S_N >= 3N/4} subset {|S_N - N/2| >= N/4}`; needs HDP-02-BODY-2.1-SN-MOMENTS first.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: Chebyshev's inequality is available as HDP Corollary 1.2.5 in the Chapter 1 lane (`hdp_01_hcor_h1_d2_d5`), but no declaration instantiates it at the fair-coin count. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "lean_declarations": [
+        "NumStability.HDP.Contract.hdp_02_heq_h2_d1",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinChebyshev.fairBernoulliSum_chebyshev",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinMoments.fairBernoulliSum_mean_variance",
+        "NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound"
+      ],
+      "contract_hash": "3a83daa4ee4465081d587a17ba2ad244a1314f29c5309cb0ab3f9f255d9cbac6",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; both independent judges returned faithful-equivalent with implications yes/yes, accepted=true, and every configured core semantic check passed. Complete validation passes with decision SHA-256 4b1d0090f61bf349235058602bfcf4bdba44326e36ac78dbed3c321737b1f9af.",
+      "attempted_routes": "The reusable Equation (2.1) foundation and source wrapper are proved. `fairBernoulliSum_chebyshev` combines the certified moment identities, exact event inclusion, and `Preliminaries.chebyshevEventBound`; the current full HDP build passes (3662 jobs). Its complete hash-bound audit is accepted=true and faithful-equivalent, with implications yes/yes and decision SHA-256 4b1d0090f61bf349235058602bfcf4bdba44326e36ac78dbed3c321737b1f9af.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: Chebyshev's inequality is available as HDP Corollary 1.2.5 in the Chapter 1 lane (`hdp_01_hcor_h1_d2_d5`), but no declaration instantiates it at the fair-coin count.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
-      ],
-      "open_reason": "No Lean declaration covers this printed row. Chebyshev's inequality is available as HDP Corollary 1.2.5 in the Chapter 1 lane (`hdp_01_hcor_h1_d2_d5`), but no declaration instantiates it at the fair-coin count."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Added `FairCoinChebyshev.fairBernoulliSum_chebyshev`, which reuses the certified `N/2` and `N/4` moments, proves the source event inclusion, and specializes `NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound` at threshold `N/4` to obtain `4/N`.",
+        "Added frozen signature and source wrapper `NumStability.HDP.Contract.hdp_02_heq_h2_d1`; targeted builds complete successfully (3360 jobs).",
+        "Updated all umbrellas and architecture tiers. Fresh `check_layout.py` sees 2367 modules, unclassified=309, mixed=9, missing docs=117, legacy naming exceptions=365, declaration umbrellas=21, unsorted imports=0; its nonzero result is the inherited noncanonical source-module baseline.",
+        "Created and prepared a dedicated page-12 audit task. The batch source contract, blind translation, direct judgment, and round-trip judgment all validate under their role-specific hashes.",
+        "The initial blind response was rejected because it appended nonexistent dependency D074; a packet-only retry covered exactly D001-D073 and validated. Both judges then classified the declaration faithful-equivalent with implications yes/yes and required no adjudication.",
+        "`finalize_audit.py HDP-02-EQ-2.1` and complete validation pass; decision SHA-256 is 4b1d0090f61bf349235058602bfcf4bdba44326e36ac78dbed3c321737b1f9af."
+      ]
     },
     {
       "id": "HDP-02-BODY-2.1-ZN-IDENTITY",
       "source_label": "Section 2.1 body: normalization identity inside (2.2)",
       "row_kind": "equation",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 13,
       "source_statement": "With Z_N = (S_N - N/2)/sqrt(N/4), the events {S_N >= (3/4)N} and {Z_N >= sqrt(N/4)} coincide.",
       "source_proof": "sketch",
-      "next_foundation": "Prove the set identity `{S_N >= 3N/4} = {Z_N >= sqrt(N/4)}` for `Z_N = (S_N - N/2)/sqrt(N/4)`; pure algebra once HDP-02-BODY-2.1-SN-MOMENTS fixes the normalization.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: No declaration relates the normalized count `Z_N` to the raw count. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "lean_declarations": [
+        "NumStability.HDP.Contract.hdp_02_hbody_h2_d1_hzn_hidentity",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinNormalization.fairBernoulliSum_standardizedThreeQuartersEvent",
+        "NumStability.HDP.Scalar.IndependentSums.FairCoinNormalization.standardizedThreeQuartersEvent"
+      ],
+      "contract_hash": "57aaf34ae74095e10d40591e6c20f6704498b499b1198b57853739effc4ebe03",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; both judges returned faithful-equivalent, implications yes/yes, accepted=true, and all core semantic checks passed. They agreed that event equality and definitional inlining are harmless equivalents of the source probability equality. Complete validation passes with decision SHA-256 daaf3902b556719146297deaa64842d8bb8dd8d41fa5270f63cdf245548600d5.",
+      "attempted_routes": "The reusable algebraic identity, exact fair-coin specialization, and frozen source wrapper are proved; the current full HDP build passes (3662 jobs). The complete page-13 audit is accepted=true and faithful-equivalent, with implications yes/yes and decision SHA-256 daaf3902b556719146297deaa64842d8bb8dd8d41fa5270f63cdf245548600d5.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No declaration relates the normalized count `Z_N` to the raw count.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
-      ],
-      "open_reason": "No Lean declaration covers this printed row. No declaration relates the normalized count `Z_N` to the raw count."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Added reusable `FairCoinNormalization.standardizedThreeQuartersEvent` and its cardinality-indexed fair-coin specialization; the proof uses positivity of `sqrt (N/4)`, `Real.sq_sqrt`, and order-preserving division.",
+        "Added frozen signature and exact source wrapper `NumStability.HDP.Contract.hdp_02_hbody_h2_d1_hzn_hidentity`; targeted compilation passes (3331 jobs).",
+        "Updated the scalar, contract-signature, and contract umbrellas plus `docs/architecture/tiers.json`. Fresh `check_layout.py` sees 2370 modules, unclassified=309, mixed=9, missing docs=117, legacy naming exceptions=367, declaration umbrellas=21, and unsorted imports=0; its nonzero result is the inherited noncanonical-module baseline.",
+        "Created and prepared the exact printed-page-13 audit task. The source contract, blind translation, direct judgment, and round-trip judgment validate under their bound hashes.",
+        "Both judges classified the event-level formulation faithful-equivalent with implications yes/yes: positive N makes the source's normalization definition pointwise equivalent to the event equality, which in turn yields its printed probability equality.",
+        "`finalize_audit.py HDP-02-BODY-2.1-ZN-IDENTITY` and complete validation pass; decision SHA-256 is daaf3902b556719146297deaa64842d8bb8dd8d41fa5270f63cdf245548600d5."
+      ]
     },
     {
       "id": "HDP-02-EQ-2.2",
@@ -104,33 +157,71 @@
       "id": "HDP-02-PROP-2.1.2",
       "source_label": "Proposition 2.1.2",
       "row_kind": "proposition",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 13,
       "source_statement": "g ~ N(0,1): for all t > 0, (1/t - 1/t^3)(1/sqrt(2pi))e^{-t^2/2} <= P{g >= t} <= (1/t)(1/sqrt(2pi))e^{-t^2/2}.",
       "source_proof": "complete",
-      "next_foundation": "Prove the two-sided Gaussian tail estimate by the source's own route: the upper bound by the substitution `x = t + y` and `exp(-y^2/2) <= 1`, the lower bound from the identity `integral over (t, inf) of (1 - 3 x^{-4}) exp(-x^2/2) dx = (1/t - 1/t^3) exp(-t^2/2)`. Needs a Mathlib-facing statement of the Gaussian density integral on `Set.Ioi t`.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: No Gaussian tail two-sided bound exists in this lane. `NumStability.HDP.Scalar.SubGaussian` supplies `standardNormalMGF`, `standardNormalSquareMGF` and `standardNormalLpNorm`, but no density-comparison tail bound. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "lean_declarations": [
+        "NumStability.HDP.Contract.hdp_02_hprop_h2_d1_d2",
+        "NumStability.HDP.Scalar.GaussianTails.standardNormalTail_bounds",
+        "NumStability.HDP.Scalar.GaussianTails.standardNormalTail_eq_densityIntegral",
+        "NumStability.HDP.Scalar.GaussianTails.gaussianIntegral_Ioi_le",
+        "NumStability.HDP.Scalar.GaussianTails.gaussianIntegral_Ioi_ge",
+        "NumStability.HDP.Scalar.GaussianTails.integral_Ioi_one_add_inv_sq_mul_exp_neg_sq_div_two",
+        "NumStability.HDP.Scalar.GaussianTails.integral_Ioi_mul_exp_neg_sq_div_two"
+      ],
+      "contract_hash": "612c99e1a0c8f5fd22513756422eaa0c9fbe748a0b79ab047aec03c7ba5528e7",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; both independent judges returned faithful-equivalent, implications yes/yes, accepted=true, and all configured core checks passed. Complete validation passes with decision SHA-256 57473627dddc83ea09711e71197e40f699aa792b91e937dfba56508a0f40f395.",
+      "attempted_routes": "The reusable Gaussian density bridge, antiderivative identities, upper and lower Mills bounds, exact standard-normal probability theorem, frozen signature, and source wrapper compile in the full HDP build (3667 jobs). The lower bound is obtained from the stronger integration-by-parts inequality with coefficient t/(t^2+1), which algebraically implies the printed coefficient 1/t - 1/t^3. Its complete hash-bound audit is accepted=true and faithful-equivalent, implications yes/yes, with decision SHA-256 57473627dddc83ea09711e71197e40f699aa792b91e937dfba56508a0f40f395.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No Gaussian tail two-sided bound exists in this lane. `NumStability.HDP.Scalar.SubGaussian` supplies `standardNormalMGF`, `standardNormalSquareMGF` and `standardNormalLpNorm`, but no density-comparison tail bound.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
-      ],
-      "open_reason": "No Lean declaration covers this printed row. No Gaussian tail two-sided bound exists in this lane. `NumStability.HDP.Scalar.SubGaussian` supplies `standardNormalMGF`, `standardNormalSquareMGF` and `standardNormalLpNorm`, but no density-comparison tail bound."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Added `Scalar.GaussianTails.standardNormalTail_eq_densityIntegral`, the exact Gaussian antiderivative, and the upper Mills-ratio integral estimate.",
+        "Added an integration-by-parts identity for `(1 + x⁻²) exp(-x²/2)`, used it to prove the stronger lower coefficient `t/(t²+1)`, and derived the book's printed lower coefficient `1/t - 1/t³`.",
+        "Added `standardNormalTail_bounds`, frozen contract signature `hdp_02_hprop_h2_d1_d2__contract_type`, and source wrapper `NumStability.HDP.Contract.hdp_02_hprop_h2_d1_d2`; targeted contract and umbrella builds pass (3661 jobs).",
+        "Updated scalar/contract umbrellas and `docs/architecture/tiers.json`. Fresh `check_layout.py` sees 2375 modules, unclassified=309, mixed=9, missing module docs=117, legacy naming exceptions=371, declaration-bearing umbrellas=21, and unsorted aggregate imports=0; its nonzero result is the inherited noncanonical-module baseline.",
+        "Prepared the exact task-bounded page-13 audit. A whole-import hash invalidation caused by the adjacent Equation (2.3) sibling declaration required force-preparation; only byte-identical source/blind/direct packets and exact validated role artifacts were restored, and the process limitation is recorded in the session ledger.",
+        "The blind translator, direct judge, and round-trip judge all covered D001-D047 and classified the canonical-distribution formulation faithful-equivalent to the source's standard-normal random-variable formulation, with implications yes/yes and no adjudication.",
+        "`finalize_audit.py HDP-02-PROP-2.1.2` and complete validation pass; source contract SHA-256 is 612c99e1a0c8f5fd22513756422eaa0c9fbe748a0b79ab047aec03c7ba5528e7 and decision SHA-256 is 57473627dddc83ea09711e71197e40f699aa792b91e937dfba56508a0f40f395."
+      ]
     },
     {
       "id": "HDP-02-EQ-2.3",
       "source_label": "(2.3)",
       "row_kind": "equation",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 13,
       "source_statement": "For t >= 1, P{g >= t} <= (1/sqrt(2pi)) e^{-t^2/2}.",
       "source_proof": "complete",
-      "next_foundation": "Specialize the upper half of Proposition 2.1.2 to `t >= 1`, where `1/t <= 1`.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: Depends on HDP-02-PROP-2.1.2, which is not proved. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "lean_declarations": [
+        "NumStability.HDP.Contract.hdp_02_heq_h2_d3",
+        "NumStability.HDP.Scalar.GaussianTails.standardNormalTail_le_density",
+        "NumStability.HDP.Scalar.GaussianTails.standardNormalTail_bounds"
+      ],
+      "contract_hash": "7c80558ff42f0aafe6a70aa8ebbc5b91eb71cfe23a8c1991a42b7ae8156a1892",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; both independent judges returned faithful-equivalent, implications yes/yes, accepted=true, and every configured core semantic check passed. Complete validation passes with decision SHA-256 3fd9185be0e5db617f5fc4903645d4484f69b1514407c9076a46bdf8b208a41f.",
+      "attempted_routes": "The reusable specialization and exact source wrapper compile in the full HDP build (3667 jobs). `standardNormalTail_le_density` applies the upper half of Proposition 2.1.2, derives `1/t <= 1` from `1 <= t`, and preserves the exact density factor. The complete hash-bound semantic audit is accepted=true and faithful-equivalent, with implications yes/yes and decision SHA-256 3fd9185be0e5db617f5fc4903645d4484f69b1514407c9076a46bdf8b208a41f.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: Depends on HDP-02-PROP-2.1.2, which is not proved.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
-      ],
-      "open_reason": "No Lean declaration covers this printed row. Depends on HDP-02-PROP-2.1.2, which is not proved."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Added reusable `GaussianTails.standardNormalTail_le_density`, frozen contract signature `hdp_02_heq_h2_d3__contract_type`, and exact source wrapper `NumStability.HDP.Contract.hdp_02_heq_h2_d3`.",
+        "Updated contract umbrellas and architecture tiers; `lake build NumStability.HDP` passes (3667 jobs).",
+        "Prepared the dedicated page-13 Equation (2.3) audit task after Proposition 2.1.2 closed. The source contract, blind translation, direct judgment, and round-trip judgment validate under their bound hashes.",
+        "Both judges classified the canonical-distribution formulation faithful-equivalent to the source's standard-normal random-variable formulation with implications yes/yes and no adjudication.",
+        "`finalize_audit.py HDP-02-EQ-2.3` and complete validation pass; source contract SHA-256 is 7c80558ff42f0aafe6a70aa8ebbc5b91eb71cfe23a8c1991a42b7ae8156a1892 and decision SHA-256 is 3fd9185be0e5db617f5fc4903645d4484f69b1514407c9076a46bdf8b208a41f."
+      ]
     },
     {
       "id": "HDP-02-EQ-2.4",
@@ -2216,7 +2307,7 @@
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.localMGFToTail",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.independentWeightedSumLocalMGF"
       ],
-      "next_foundation": "Re-prepare the Section 2.8 audit batch against the now-stable target with `prepare_batch_audit.py vershynin-hdp-chapter02-section08 --force` (which archives the existing artifacts) and run the kit's schedule against the printed-form alias as the audited declaration, then record the four results plus `contract_hash` on this row. The earlier run of this session is bound to a superseded file hash (session limitation VHDP-S-CC2-L001): its blind translation, direct judgment and round-trip judgment are all validated and hash-checked, but they audited the window-scale alias, which is a different proposition from the printed form now available.",
+      "next_foundation": "The proof repair and complete audit are finished. The smallest remaining foundation is a module-level source policy or a separately audited nondegenerate/corrected contract for the printed all-zero denominator boundary. Do not reintroduce the source-absent positive-energy premise into the printed alias; keep this row READY until the source ambiguity is resolved under certified policy.",
       "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high). (6) The reusable theorem is proved in the window/MGF scale: `bernsteinTail`, `bernsteinWeightedTail`, `bernsteinAverageTail` compile and are axiom-clean. (7) The first rendering used an arbitrary uniform bound `M >= K i`; the audit's blind-translation role identified that as a strictly weaker large-deviation branch, and the alias was restated over the exact maximum `Finset.univ.sup' hne K` (recorded as VHDP-C02-L001). (8) `NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge. (9) Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors. (10) Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
@@ -2228,31 +2319,49 @@
         "The first rendering used an arbitrary uniform bound `M >= K i`; the audit's blind-translation role identified that as a strictly weaker large-deviation branch, and the alias was restated over the exact maximum `Finset.univ.sup' hne K` (recorded as VHDP-C02-L001).",
         "`NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge.",
         "Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors.",
-        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound."
+        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
+        "A fresh direct semantic judge diagnosed the prior printed-form target as `not-faithful-weaker`: `c` was quantified after the ambient index and probability space, and a source-absent positive gauge-energy premise excluded the degenerate family. The diagnostic packet was bound to dossier SHA-256 ffc8af6f5d5e86ea5c9ebe31c62e8ad23ecabc8eb87ba7c78ab84f87a669e532; its result is intentionally not promoted because the target was then repaired.",
+        "Repaired both `bernsteinTailPsiOne` and `hdp_02_hthm_h2_d8_d1_hpsi1`: one explicit positive constant is now quantified before every ambient binder, and the positive-energy premise is gone. A zero-energy branch uses totalized real division and `prob_le_one`; the unchanged positive-energy proof supplies the substantive estimate. `lake env lean NumStability/HDP/Scalar/IndependentSums/Bernstein.lean` completed with 0 errors.",
+        "Regenerated the Section 2.8 batch against the repaired declaration. Prepared validation passes; the blind and direct packet SHA-256 values are ef29da9e1a96481aeac787ba3a8acd1b54967e299c77f75b267b5503703b74e0 and c782883471578407f88907dc428265d4fd961060874c3c906a965217892826b8, and the restored immutable source contract SHA-256 is 7c41caa614ffcce62ea24ffe335aa1ff2854f7e176dcc3f1c9fa52be2f723e87.",
+        "Fresh blind and direct artifacts validate with SHA-256 values cf6337d9a86b900f4af95638e02acad76a19dc616b102610ba8e9de0a130b87f and 578a7960e0711935f86707ed7aa40b5774c1229ba21ec48ef21021b472b2de6d. The direct judge classified the repaired target faithful-equivalent with implications yes/yes and requested adjudication only for source-silent zero denominators. The blind fallback provenance limitation is recorded as session issue VHDP-S-C02B-I006.",
+        "Fresh round-trip judgment SHA-256 6ae77d3342995250f16b6ec1c73b19a769a248708fa635e1b13cb4bd44c3c3c2 returned undetermined and implications unclear/unclear solely at the all-zero boundary. Fresh adjudication SHA-256 29e5009f2f573b595ab73ad086da7227ad83b802124c2520a5bedbf92c15f357 resolved all 13 triggers but preserved that source-silent convention. After the shared-file normalized-regimes foundation, exact packet matching and re-finalization passed; the current final decision SHA-256 22eb54ebc819645eb879cb5d2091636a5d181f3daf41fc51231d508495a19eee is accepted=false, classification undetermined, implications unclear/unclear.",
+        "`lake build NumStability.HDP` completed successfully after the repair (3651 jobs). The source ambiguity is recorded separately as chapter issue VHDP-C02-N008."
       ],
-      "open_reason": "The printed statement is now formalized over the sub-exponential norm and compiles axiom-clean, but this row carries no completed faithfulness evidence for that declaration: the audit run in this session targeted the earlier window-scale alias and is bound to a superseded file hash. The gate requires direct_pass PASS plus a contract hash before PROVED, and compilation is not evidence of faithfulness."
+      "open_reason": "The quantifier-scope and reduced-applicability defects are repaired, the full HDP build passes, and the complete current audit validates. The immutable source nevertheless leaves both normalization quotients undefined for an all-zero psi-one family, while Lean totalizes them to zero. The adjudicator could not certify either exact implication without a source-policy convention, so this row remains locally actionable rather than PROVED."
     },
     {
       "id": "HDP-02-EQ-2.23",
       "source_label": "(2.23)",
       "row_kind": "equation",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 36,
       "source_statement": "P{S >= t} <= e^{-lam t} prod_{i=1}^N E exp(lam X_i).",
       "source_proof": "complete",
       "lean_declarations": [
-        "NumStability.HDP.Scalar.IndependentSums.Bernstein.independentWeightedSumLocalMGF",
-        "NumStability.HDP.Scalar.IndependentSums.Hoeffding.exponentialMarkovUpper",
-        "NumStability.HDP.Scalar.IndependentSums.Hoeffding.mgfIndependentSum"
+        "NumStability.HDP.Contract.hdp_02_heq_h2_d23",
+        "NumStability.HDP.Scalar.Preliminaries.markovInequalityExtended",
+        "ProbabilityTheory.lintegral_prod_eq_prod_lintegral_of_indepFun"
       ],
-      "next_foundation": "Create `audits/vershynin-hdp/chapter02/<row-id>/audit-task.json` bound to the printed locator, add the row to a source group, then run the kit's batch schedule (batch source contract, blind translator, direct judge, round-trip judge) and record the four results plus `contract_hash` on this row.",
-      "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
+      "contract_hash": "894db76e160bbf698100d690e83940794a961375f621ae59dc3aea91bc97e7d2",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; the refreshed direct and round-trip judges independently returned faithful-equivalent with implications yes/yes. The complete hash-bound audit validates with accepted=true and decision SHA-256 6166559dff235c47636eb7eb75247b643536b10c67afe4f1c1755bdfa3e92f59.",
+      "attempted_routes": "Repaired the source-facing wrapper to preserve the full inherited theorem context and use ENNReal lintegrals for the source-noted potentially infinite MGFs. `lake build NumStability.HDP` passes (3653 jobs). The refreshed independent direct and round-trip audits both classify the exact one-sided product display faithful-equivalent with implications yes/yes; complete validation passes and decision SHA-256 is 6166559dff235c47636eb7eb75247b643536b10c67afe4f1c1755bdfa3e92f59.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
         "Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`.",
-        "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes."
-      ],
-      "open_reason": "Semantic faithfulness evidence is incomplete: this row has no `audit-task.json`, so no source contract, blind translation, direct judgment or round-trip judgment exists for it. The gate requires `direct_pass` = PASS plus a contract hash before `PROVED` may be recorded, and compilation is not evidence of faithfulness."
+        "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
+        "Added the dedicated source-facing declaration `NumStability.HDP.Contract.hdp_02_heq_h2_d23` in the contract layer. It composes exponential Markov, integrability of the independent exponential sum, and exact MGF factorization into the printed one-sided product display.",
+        "The new contract signature, wrapper, umbrella imports, and `lake build NumStability.HDP` compile successfully (3655 jobs). Organization preflight passes with counters unclassified=309, duplicate=0, placeholder=0, placement=0.",
+        "Created and prepared `audits/vershynin-hdp/chapter02/HDP-02-EQ-2.23/audit-task.json` at the exact printed locator in source group `vershynin-hdp-chapter02-section08-proof-displays`; prepared-phase validation passes.",
+        "Repaired `NumStability.HDP.Contract.hdp_02_heq_h2_d23` to retain the inherited nonempty finite, measurable, centered, sub-exponential, independent context while representing potentially infinite coordinate MGFs by ENNReal lintegrals.",
+        "Reused `NumStability.HDP.Scalar.Preliminaries.markovInequalityExtended` and `ProbabilityTheory.lintegral_prod_eq_prod_lintegral_of_indepFun`; the exact independent product display compiles in the full 3653-job `lake build NumStability.HDP`.",
+        "Fresh strict-role direct and round-trip judgments both returned all semantic checks pass, implications yes/yes, and faithful-equivalent. `finalize_audit.py HDP-02-EQ-2.23` and `validate_audit.py HDP-02-EQ-2.23 --phase complete` pass; decision SHA-256 is 6166559dff235c47636eb7eb75247b643536b10c67afe4f1c1755bdfa3e92f59."
+      ]
     },
     {
       "id": "HDP-02-EQ-2.24",
@@ -2263,17 +2372,32 @@
       "source_statement": "|lam| <= c / max_i ||X_i||_{psi_1}, the admissible range for the MGF bound in the proof of Theorem 2.8.1.",
       "source_proof": "complete",
       "lean_declarations": [
-        "NumStability.HDP.Scalar.IndependentSums.Bernstein.SubExponentialLinearMGF",
-        "NumStability.HDP.Scalar.IndependentSums.Bernstein.localMGFToTail"
+        "NumStability.HDP.Contract.hdp_02_heq_h2_d24",
+        "NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF_le",
+        "NumStability.HDP.Scalar.SubExponential.psiOneGauge_eq_zero_iff_ae_eq_zero"
       ],
-      "next_foundation": "Create `audits/vershynin-hdp/chapter02/<row-id>/audit-task.json` bound to the printed locator, add the row to a source group, then run the kit's batch schedule (batch source contract, blind translator, direct judge, round-trip judge) and record the four results plus `contract_hash` on this row.",
-      "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
+      "contract_hash": "32732704f6273db3503f2f15b16554abc73378a4b2befa3cae6bbfc4004b56d1",
+      "blind_pass": "RECORDED",
+      "direct_pass": "RECORDED",
+      "round_trip_pass": "RECORDED",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "unclear",
+      "classification": "undetermined",
+      "adjudication": "Required and complete. Both independent judges agreed that the repaired wrapper is exact on `K > 0` and preserves the global `c, C` scope and quantitative coordinate bound. The adjudicator resolved source-implies-Lean as yes but could not determine Lean-implies-source at the immutable source's undefined `c / 0` boundary. Complete validation passes; decision SHA-256 is d161ce5aaa22d8e7f2f135814661a35a59a31271f31f38fb4e49d53ac701883a.",
+      "next_foundation": "The quantitative wrapper, full build, and complete audit are finished. Keep the row READY until a certified module policy resolves whether the immutable source's undefined `c / 0` excludes the all-zero family or denotes an unbounded lambda window; do not silently choose either convention.",
+      "attempted_routes": "Repaired the source-facing wrapper to quantify both positive absolute constants globally and conclude the exact per-coordinate quadratic MGF bound. The positive-gauge branch reuses `psiOneGaugeToLinearMGF_le`; the zero coordinate-gauge branch reuses `psiOneGauge_eq_zero_iff_ae_eq_zero`. `lake build NumStability.HDP` passes (3653 jobs). The complete audit is undetermined only at the immutable source's undefined all-zero maximum-gauge denominator; source-implies-Lean=yes, Lean-implies-source=unclear, decision SHA-256 d161ce5aaa22d8e7f2f135814661a35a59a31271f31f38fb4e49d53ac701883a.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
         "Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`.",
-        "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes."
+        "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
+        "Added `NumStability.HDP.Contract.hdp_02_heq_h2_d24` in the contract layer. One positive absolute constant is quantified before all ambient data; for the exact maximum finite `PsiOneGauge`, the displayed window supplies integrability of every coordinate MGF used in (2.23). The positive-maximum premise makes the printed division meaningful and is recorded explicitly rather than hidden.",
+        "The new contract signature, wrapper, umbrella imports, and `lake build NumStability.HDP` compile successfully (3655 jobs). Organization preflight passes with counters unclassified=309, duplicate=0, placeholder=0, placement=0.",
+        "Created and prepared `audits/vershynin-hdp/chapter02/HDP-02-EQ-2.24/audit-task.json` at the exact printed locator and immediately following MGF-use sentence in source group `vershynin-hdp-chapter02-section08-proof-displays`; prepared-phase validation passes.",
+        "Repaired `NumStability.HDP.Contract.hdp_02_heq_h2_d24` to quantify both positive absolute constants before all ambient data and to conclude both exponential integrability and the exact bound `E exp(λX_i) ≤ exp(C λ² ||X_i||_{ψ₁}²)`.",
+        "Added and reused `NumStability.HDP.Scalar.SubExponential.psiOneGauge_eq_zero_iff_ae_eq_zero` for coordinates with zero gauge; positive-gauge coordinates reuse `psiOneGaugeToLinearMGF_le`. The full 3653-job HDP build passes.",
+        "Fresh direct and round-trip judges independently found the positive-maximum statement quantitatively exact and requested adjudication only for the source-silent all-zero denominator. The completed adjudication gives source-implies-Lean=yes, Lean-implies-source=unclear, accepted=false, classification=undetermined; `validate_audit.py HDP-02-EQ-2.24 --phase complete` passes with decision SHA-256 d161ce5aaa22d8e7f2f135814661a35a59a31271f31f38fb4e49d53ac701883a."
       ],
-      "open_reason": "Semantic faithfulness evidence is incomplete: this row has no `audit-task.json`, so no source contract, blind translation, direct judgment or round-trip judgment exists for it. The gate requires `direct_pass` = PASS plus a contract hash before `PROVED` may be recorded, and compilation is not evidence of faithfulness."
+      "open_reason": "The proof and complete audit are finished, and the wrapper is exact for every positive maximum gauge. The immutable source nevertheless leaves `c / max_i ||X_i||_{ψ₁}` undefined for an all-zero family. Lean explicitly guards by `0 < K`; the adjudicator could certify source-implies-Lean but not the reverse without a source-policy convention, so the row remains READY."
     },
     {
       "id": "HDP-02-THM-2.8.2",
@@ -2289,7 +2413,15 @@
         "NumStability.HDP.Contract.hdp_02_hthm_h2_d8_d2",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinWeightedTail"
       ],
-      "next_foundation": "Re-prepare the Section 2.8 audit batch against the now-stable target with `prepare_batch_audit.py vershynin-hdp-chapter02-section08 --force` (which archives the existing artifacts) and run the kit's schedule against the printed-form alias as the audited declaration, then record the four results plus `contract_hash` on this row. The earlier run of this session is bound to a superseded file hash (session limitation VHDP-S-CC2-L001): its blind translation, direct judgment and round-trip judgment are all validated and hash-checked, but they audited the window-scale alias, which is a different proposition from the printed form now available.",
+      "contract_hash": "b7844cd4d3655d09e554f57b593cad8a443d84c06e13be13441bc7c01d33c1e0",
+      "blind_pass": "RECORDED",
+      "direct_pass": "RECORDED",
+      "round_trip_pass": "RECORDED",
+      "source_implies_lean": "unclear",
+      "lean_implies_source": "unclear",
+      "classification": "undetermined",
+      "adjudication": "Required and complete. The adjudicator resolved all 13 triggered checklist items and preserved the source's zero-denominator boundary as the sole semantic uncertainty; after exact packet restoration and re-finalization for the shared-file normalized-regimes foundation, current decision SHA-256 is d3b8b7ba945f8bfe0908329e217eecb243d08ab223aefb57d1ec17a27f03414b.",
+      "next_foundation": "The proof repair and complete semantic audit are finished. The smallest remaining foundation is a module-level source policy, or a separately audited corrected/nondegenerate contract, for source statements whose displayed real quotients have zero denominators; do not reintroduce source-absent positivity premises into this wrapper.",
       "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high). (6) The reusable theorem is proved in the window/MGF scale: `bernsteinTail`, `bernsteinWeightedTail`, `bernsteinAverageTail` compile and are axiom-clean. (7) The first rendering used an arbitrary uniform bound `M >= K i`; the audit's blind-translation role identified that as a strictly weaker large-deviation branch, and the alias was restated over the exact maximum `Finset.univ.sup' hne K` (recorded as VHDP-C02-L001). (8) `NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge. (9) Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors. (10) Faithfulness audit run in session claude-continue-2: blind translation recorded and validated (dossier_sha256 5e91... for 2.8.1's group-mate; this task's blind packet hash a6c617c3a16b13a2cfc129d2227146222ba0104d0bb540738e52874544e86631), and an independent round-trip judge classified the statement `faithful-stronger` with `requires_adjudication=true`, failing semantic checks C02, C04, C05, C06, C08 and C09 because the printed `||X_i||_{psi_1}`, `K = max_i ||X_i||_{psi_1}`, `||a||_2` and `||a||_inf` do not occur in the Lean statement. A first direct-judge run reproduced the same verdict independently but was rejected on the kit's derived-`accepted` cross-field rule (session issue VHDP-S-CC2-002) and was rerun. (11) Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
@@ -2302,9 +2434,14 @@
         "`NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge.",
         "Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors.",
         "Faithfulness audit run in session claude-continue-2: blind translation recorded and validated (dossier_sha256 5e91... for 2.8.1's group-mate; this task's blind packet hash a6c617c3a16b13a2cfc129d2227146222ba0104d0bb540738e52874544e86631), and an independent round-trip judge classified the statement `faithful-stronger` with `requires_adjudication=true`, failing semantic checks C02, C04, C05, C06, C08 and C09 because the printed `||X_i||_{psi_1}`, `K = max_i ||X_i||_{psi_1}`, `||a||_2` and `||a||_inf` do not occur in the Lean statement. A first direct-judge run reproduced the same verdict independently but was rejected on the kit's derived-`accepted` cross-field rule (session issue VHDP-S-CC2-002) and was rerun.",
-        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound."
+        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
+        "Current-session semantic preflight found two source-facing defects: `c` was quantified after the ambient index/probability space, and the wrapper required both positive maximum psi-one gauge and positive weight energy although the source permits degenerate families and arbitrary `a ∈ ℝ^N`.",
+        "Repaired `bernsteinWeightedTailPsiOne` and `hdp_02_hthm_h2_d8_d2_hpsi1`: one explicit positive constant now precedes every ambient binder, both source-absent positivity premises are removed, and zero-gauge or zero-weight branches use totalized real division plus `prob_le_one`. The target module and `lake build NumStability.HDP` pass with 0 errors (3651 jobs).",
+        "Force-regenerated all six Section 2.8 tasks after the shared-file change. The repaired task's blind/direct packets changed to a093e3c40edfd3f3f1b6aa4b8bad54f9d55280b20337bd2ea3c7bb076ea8d959 and ab71cb6914678c5723f228147aa66efa4ca564a49906baeaccde91c5d5a715c5; prepared validation passes. Exact packet matches allowed the other four completed audits to be restored and re-finalized without reusing evidence for this changed declaration.",
+        "Fresh semantic artifacts recorded: blind translation 0412d541eaf081f30bd7ab50801269acaa6af0472bd22d97e2a5ee45f8ba0760, direct judgment 6077010b84949fb6bcdcc904bf2d5d879c1c796f029b34c94a8b10922ca3cf5f, round-trip judgment 8b4220e7fcd90f93e8f99b2ab6f0ba39e00fd268a68c6c8cd4d88f6696a88d09, and adjudication 010c922d649bbbb01099778b852a8b91c282850123948a9795c99f636c198c65. The round-trip and adjudication roles reused unrelated, previously isolated agent contexts because the runtime refused new threads; this limitation is recorded as session issue VHDP-S-C02B-I008.",
+        "`finalize_audit.py HDP-02-THM-2.8.2` and complete-phase validation pass. The exact nondegenerate core (`K > 0` and nonzero weight energy) is equivalent, but the printed theorem permits arbitrary weights and does not exclude `K = 0`; its displayed quotients are undefined at zero denominators while Lean's total real division makes them zero. After the shared-file normalized-regimes foundation, exact packet restoration and re-finalization produced current decision SHA-256 d3b8b7ba945f8bfe0908329e217eecb243d08ab223aefb57d1ec17a27f03414b; the decision remains `undetermined`, accepted=false, with implications unclear/unclear."
       ],
-      "open_reason": "The printed statement is now formalized over the sub-exponential norm and compiles axiom-clean, but this row carries no completed faithfulness evidence for that declaration: the audit run in this session targeted the earlier window-scale alias and is bound to a superseded file hash. The gate requires direct_pass PASS plus a contract hash before PROVED, and compilation is not evidence of faithfulness."
+      "open_reason": "The complete hash-bound audit is valid, but the immutable source permits `a = 0` and `K = 0` without specifying meanings for `0/0` or positive-real division by zero. Lean conservatively retains the universal domain using total real division, so exact bidirectional faithfulness is undetermined pending a module-level source policy or separately audited corrected contract."
     },
     {
       "id": "HDP-02-COR-2.8.3",
@@ -2320,7 +2457,15 @@
         "NumStability.HDP.Contract.hdp_02_hcor_h2_d8_d3",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinAverageTail"
       ],
-      "next_foundation": "Re-prepare the Section 2.8 audit batch against the now-stable target with `prepare_batch_audit.py vershynin-hdp-chapter02-section08 --force` (which archives the existing artifacts) and run the kit's schedule against the printed-form alias as the audited declaration, then record the four results plus `contract_hash` on this row. The earlier run of this session is bound to a superseded file hash (session limitation VHDP-S-CC2-L001): its blind translation, direct judgment and round-trip judgment are all validated and hash-checked, but they audited the window-scale alias, which is a different proposition from the printed form now available.",
+      "contract_hash": "adcf5c0ac2bc92ed2d61a29b98c10a9bcf516883ecd3ca385db613fd673045a6",
+      "blind_pass": "RECORDED",
+      "direct_pass": "RECORDED",
+      "round_trip_pass": "RECORDED",
+      "source_implies_lean": "unclear",
+      "lean_implies_source": "unclear",
+      "classification": "undetermined",
+      "adjudication": "Required and complete. All 14 exact finalizer triggers were resolved; the positive-cardinality averaging denominator is source-matching, while the source-silent K = 0 rate denominators remain the sole uncertainty. After exact packet restoration for the shared-file normalized-regimes foundation, current decision SHA-256 is 44af861de642e41d244270d8d5784265b42c9d143fa662beef58ff7a1d0c8f1a.",
+      "next_foundation": "The proof repair and complete semantic audit are finished. The smallest remaining foundation is a module-level source policy, or a separately audited corrected/nondegenerate contract, for source statements whose displayed real quotients have zero denominators; do not reintroduce a source-absent `K > 0` premise into this wrapper.",
       "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high). (6) The reusable theorem is proved in the window/MGF scale: `bernsteinTail`, `bernsteinWeightedTail`, `bernsteinAverageTail` compile and are axiom-clean. (7) The first rendering used an arbitrary uniform bound `M >= K i`; the audit's blind-translation role identified that as a strictly weaker large-deviation branch, and the alias was restated over the exact maximum `Finset.univ.sup' hne K` (recorded as VHDP-C02-L001). (8) `NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge. (9) Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors. (10) Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
@@ -2332,9 +2477,14 @@
         "The first rendering used an arbitrary uniform bound `M >= K i`; the audit's blind-translation role identified that as a strictly weaker large-deviation branch, and the alias was restated over the exact maximum `Finset.univ.sup' hne K` (recorded as VHDP-C02-L001).",
         "`NumStability.HDP.Scalar.SubExponential` was searched for an existing psi-1 gauge: it supplies the generic `orliczGauge`, `SubExponentialOnePointMGF` (property (d)) and `subExponentialCharacterization`, but no psi-1 gauge and no quantitative property-(d)-to-(e) bridge.",
         "Bridge step 1 and step 2 completed in session claude-continue-2. The psi-1 gauge now exists (`NumStability.HDP.Scalar.SubExponential.PsiOneGauge`, display (2.21)), together with the quantitative property-(d)-to-(e) bridge `NumStability.HDP.Scalar.IndependentSums.Bernstein.psiOneGaugeToLinearMGF`: for measurable centered `X`, `PsiOneGauge mu X < ENNReal.ofReal K` implies `SubExponentialLinearMGF mu X (2048 * (Real.exp 1)^4 * K)`, an absolute constant independent of `X`, `K` and any index. It composes `psiOneGauge_lt_imp_onePointMGF` (strict gauge bound to property (d), via `subExponentialOnePointMGF_mono`), the constant-explicit `subExponentialPropertyTransfer` (512 e^3, property (d) to property (b)) and the existing `momentToLinearMGF` (4 e, property (b) to property (e)), plus `subExponentialLinearMGF_mono`. `lake env lean` on both modules reports 0 errors.",
-        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound."
+        "Printed-form rendering delivered in session claude-continue-2. `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinTailPsiOne`, `bernsteinWeightedTailPsiOne` and `bernsteinAverageTailPsiOne` state Theorems 2.8.1, 2.8.2 and Corollary 2.8.3 over the sub-exponential norm `PsiOneGauge` of Definition 2.7.5: the exact per-index gauges and their exact maximum `Finset.univ.sup' hne (fun i => (PsiOneGauge mu (X i)).toReal)`, with the printed denominators (`sum_i ||X_i||^2_{psi_1}` and `max_i ||X_i||_{psi_1}` for 2.8.1; `K^2 ||a||_2^2` and `K ||a||_inf` for 2.8.2; `min(t^2/K^2, t/K) N` for 2.8.3), and the absolute constant left existential as printed. No arbitrary uniform upper bound is used, which discharges chapter finding VHDP-C02-L001, and the printed objects are now named, which is the substance of VHDP-C02-L002. The `psi_1`-to-window conversion is `psiOneGaugeToLinearMGF_le`; because `PsiOneGauge` is an infimum it is applied at the inflated scale `||X_i||_{psi_1} + e` and the printed denominators are recovered by `ge_of_tendsto` as `e -> 0+`, the right-hand side being continuous there. `lake build NumStability.HDP` completed with 0 errors (3626 jobs) and `#print axioms` on all six new declarations reports only propext, Classical.choice, Quot.sound.",
+        "Current-session semantic preflight found that `c` was quantified after the ambient index/probability space and that the wrapper required a positive maximum psi-one gauge, although the source presents an absolute constant and permits zero-gauge families.",
+        "Repaired `bernsteinAverageTailPsiOne` and `hdp_02_hcor_h2_d8_d3_hpsi1`: one explicit positive constant now precedes every ambient binder, the source-absent positive-gauge premise is removed, and the zero-gauge branch uses totalized real division plus `prob_le_one`. `lake env lean NumStability/HDP/Scalar/IndependentSums/Bernstein.lean` and `lake build NumStability.HDP` both pass; the full build completed successfully with 3651 jobs.",
+        "Force-regenerated all six Section 2.8 dossiers after the shared-file repair. Every unchanged completed row retained byte-identical blind and direct packets and was restored only from exact cached role artifacts, then re-finalized and complete-validated. This changed corollary now has fresh packet SHA-256 values a68c1bb15a193f6c1e0cc2f8e9fa260afc0cc226b8e3888400898fe1e9cfb754 and 184ce1d40573c526169a7afefbcc7e567b908a561c648f8ca23f7b8a625d8cc2; its restored source contract SHA-256 is adcf5c0ac2bc92ed2d61a29b98c10a9bcf516883ecd3ca385db613fd673045a6, and prepared validation passes.",
+        "Validated semantic artifacts recorded: blind translation 8e19239f8f1f5860301edb8bdec30fbbd334aed7434039e54c4008bff3567ae1, direct judgment 3742ccadbe46924d6399c5375e24a0bc830cde0a7c67d62da4ad816a49d0a3f6, round-trip judgment 0b24a25c10660f272fa0597926ebeb3d16327eb78d97e2be26ae91d542dd9517, and adjudication a4fac3f205f4a487c1b6713d518b1d667bfbcfb35e133f5feae5c5832f4c3cb1. Persistent thread quota forced role-specific reuse of prior contexts; exact restrictions and provenance are recorded in `agent_runs.json` and session issue VHDP-S-C02B-I009.",
+        "`finalize_audit.py HDP-02-COR-2.8.3` and complete-phase validation pass. The exact K > 0 core is faithful-equivalent, including the arithmetic average, positive cardinality, constant scope, both rate branches, and external N factor. The printed source does not exclude K = 0 or define its quotients; after exact packet restoration for the shared-file normalized-regimes foundation, final decision 44af861de642e41d244270d8d5784265b42c9d143fa662beef58ff7a1d0c8f1a remains undetermined, accepted=false, implications unclear/unclear."
       ],
-      "open_reason": "The printed statement is now formalized over the sub-exponential norm and compiles axiom-clean, but this row carries no completed faithfulness evidence for that declaration: the audit run in this session targeted the earlier window-scale alias and is bound to a superseded file hash. The gate requires direct_pass PASS plus a contract hash before PROVED, and compilation is not evidence of faithfulness."
+      "open_reason": "The complete hash-bound audit is valid, but the immutable source permits all-zero families with `K = 0` and does not specify meanings for `0/0` or positive-real division by zero in the rate. Lean conservatively retains the universal domain using total real division, so exact bidirectional faithfulness is undetermined pending a module-level source policy or separately audited corrected contract."
     },
     {
       "id": "HDP-02-BODY-2.8-NORMALIZED-REGIMES",
@@ -2344,13 +2494,23 @@
       "source_page": 37,
       "source_statement": "P{|(1/sqrt N) sum X_i| >= t} <= 2 exp(-c t^2) for t <= C sqrt N and <= 2 exp(-t sqrt N) for t >= C sqrt N, with c, C depending on K.",
       "source_proof": "sketch",
-      "next_foundation": "Specialize `bernsteinWeightedTail` at `a_i = 1/sqrt N` and split on `t <= C sqrt N` versus `t >= C sqrt N` to recover the printed piecewise form. Note the source's footnote 9 explicitly lets `c`, `C` depend on `K`, so the row's constants are `K`-dependent by the printed contract.",
+      "lean_declarations": [
+        "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinNormalizedTailPsiOne",
+        "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinNormalizedTwoRegimePsiOne_corrected",
+        "NumStability.HDP.Contract.hdp_02_body_h2_d8_hnormalized_hregimes_corrected"
+      ],
+      "next_foundation": "The exact normalized `min` bound and the mathematically valid two-regime correction now compile. The smallest remaining foundation is a hash-bound discrepancy/adjudication contract for the literal printed large-deviation branch `2 exp(-t sqrt N)`, which omits the necessary K-dependent positive coefficient; do not alias the corrected theorem as the literal source row.",
       "attempted_routes": "(1) Repository searched for an existing declaration covering this row: The normalized two-regime display is not stated; `bernsteinTail` gives the unnormalized `min` form. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: The normalized two-regime display is not stated; `bernsteinTail` gives the unnormalized `min` form.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Read the exact pinned display and footnote 9. Theorem 2.8.2 specialized at `a_i = 1/sqrt N` gives the exact rate `c₀ * min(t²/K², t sqrt N/K)`. The small branch can be written `c t²` and the large branch `c t sqrt N` with K-dependent positive `c`; the printed coefficient 1 in the large branch is not obtained by allowing only `c` and the threshold `C` to depend on K.",
+        "Added `bernsteinNormalizedTailPsiOne`, proving the exact normalized `min` estimate with one universal positive constant, including the source's finite nonempty indexing and totalized zero-gauge convention.",
+        "Added `bernsteinNormalizedTwoRegimePsiOne_corrected` and `hdp_02_body_h2_d8_hnormalized_hregimes_corrected`. On the explicit nondegenerate domain `K > 0`, they choose positive K-dependent constants and prove both `2 exp(-c t²)` for `t ≤ C sqrt N` and `2 exp(-c t sqrt N)` for `t ≥ C sqrt N`. The corrected wrapper is deliberately named and documented as non-identical to the literal source display.",
+        "`lake env lean NumStability/HDP/Scalar/IndependentSums/Bernstein.lean` and `lake build NumStability.HDP` pass; the full build completed successfully with 3651 jobs.",
+        "Force-regenerated the shared Section 2.8 audit batch after adding the normalized foundations. All six completed tasks retained byte-identical blind and direct packets; only exact cached role artifacts were restored, and every task re-finalized and passed complete validation. Current decisions: Theorem 2.8.1 `22eb54ebc819645eb879cb5d2091636a5d181f3daf41fc51231d508495a19eee`, Theorem 2.8.2 `d3b8b7ba945f8bfe0908329e217eecb243d08ab223aefb57d1ec17a27f03414b`, Corollary 2.8.3 `44af861de642e41d244270d8d5784265b42c9d143fa662beef58ff7a1d0c8f1a`, Theorem 2.8.4 `ffc6677a93b73d049cf807087b6368b0b95d8417d3aa92b8f194aa4541d18701`, Exercise 2.8.5 `f31a2d975e7f3ab7c5ef79f04d4bc8961d8f28de0cf6e04fe2d042c417879ff9`, Exercise 2.8.6 `59d7777faf8e5349d6c61c0c5bf268fdf5370e332bb81d271b2f1280c1fcb4af`."
       ],
-      "open_reason": "No Lean declaration covers this printed row. The normalized two-regime display is not stated; `bernsteinTail` gives the unnormalized `min` form."
+      "open_reason": "The reusable normalized mathematics and corrected two-regime wrapper are proved, but the literal source's large-deviation exponent has coefficient 1 rather than a necessary positive coefficient depending on K. The exact printed row therefore remains READY pending a separate discrepancy contract and semantic adjudication; the corrected declaration must not be counted as exact source formalization."
     },
     {
       "id": "HDP-02-THM-2.8.4",
@@ -2365,22 +2525,34 @@
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinBoundedTail",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinBoundedTailOfMGFBound"
       ],
-      "next_foundation": "Run the kit's remaining three roles for this task in fresh isolated agents (blind translator, then direct and round-trip judges concurrently), then `finalize_audit.py <TASK-ID>` and `validate_audit.py <TASK-ID> --phase complete`.",
-      "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+      "contract_hash": "adff9aede39da999850448665aad4b7049ff795d8d064e4e80510df456c69c73",
+      "blind_pass": "RECORDED",
+      "direct_pass": "RECORDED",
+      "round_trip_pass": "RECORDED",
+      "source_implies_lean": "unclear",
+      "lean_implies_source": "unclear",
+      "classification": "undetermined",
+      "adjudication": "Required and complete. The direct judge classified the nondegenerate theorem faithful-equivalent, while the source-only round-trip judge preserved the printed zero-denominator ambiguity. The adjudicator resolved all ten computed triggers but could not certify either full implication without a source repair. Exact packet matching and re-finalization after the shared-file normalized-regimes foundation pass; current final decision SHA-256 is ffc6677a93b73d049cf807087b6368b0b95d8417d3aa92b8f194aa4541d18701.",
+      "next_foundation": "The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Keep this row READY until that source ambiguity is resolved under certified policy.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
         "Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`.",
         "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
         "An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856.",
-        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high)."
+        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+        "Fresh blind and direct artifacts validate with SHA-256 values 433bef31eb99791552463c6b34f950fc726e654fe67d9a2d63e25afd4aeb3aab and 469561a7aa132fb8d629112df69be239f583d810afd7a570b2e95d29ac86d55f. The direct judge classified the target faithful-equivalent with yes/yes implications and no adjudication request.",
+        "Fresh source-only round-trip judgment SHA-256 8a05e2631caafb05358f73d408362c5f97c0d97dd11549b1cc25af8f7007eb8f returned undetermined and implications unclear/unclear, requesting adjudication for the source-silent zero denominator, unstated K positivity, a.e. bound, and empty-family case.",
+        "Fresh adjudication SHA-256 2fb1be1b00e10b9d6c156f3a83c2fd7509216597280f6a1d0b1f9734fbcdcb9b resolved all ten exact finalizer triggers but preserved the immutable source's undefined `0/0` boundary. Exact packet matching and re-finalization after the shared-file normalized-regimes foundation pass; current final decision SHA-256 ffc6677a93b73d049cf807087b6368b0b95d8417d3aa92b8f194aa4541d18701 is accepted=false, classification undetermined, implications unclear/unclear.",
+        "The direct artifact transport failure and exact session-log recovery are recorded as session issue VHDP-S-C02B-I007; the source boundary is already recorded separately as chapter issue VHDP-C02-N007."
       ],
-      "open_reason": "Source contract recorded, but the blind translation, direct judgment and round-trip judgment for this row have not been run, so `direct_pass` is absent and the gate cannot record `PROVED`."
+      "attempted_routes": "The bounded Bernstein theorem and wrappers compile, and their complete hash-bound audit validates. The direct judge accepted the exact nondegenerate contract, but the source-only round-trip judge and adjudicator preserved the pinned source's undefined `0/0` case at `t = 0` and zero second moment, plus secondary source-silent boundary conventions. The final decision is undetermined with implications unclear/unclear, so the row remains READY.",
+      "open_reason": "The mathematical theorem and complete audit are finished, but the immutable source quantifies over `t >= 0` while its displayed exponent is undefined (`0/0`) at `t = 0` and zero total second moment. Lean's total real division chooses zero. Without a certified source-policy convention or separately audited corrected contract, neither exact implication is certifiable and this row remains locally actionable rather than PROVED."
     },
     {
       "id": "HDP-02-EX-2.8.5",
       "source_label": "Exercise 2.8.5",
       "row_kind": "exercise",
-      "status": "READY",
+      "status": "PROVED",
       "source_page": 38,
       "source_statement": "X mean zero with |X| <= K: E exp(lam X) <= exp(g(lam) E X^2) where g(lam) = (lam^2/2)/(1 - |lam| K/3), provided |lam| < 3/K.",
       "source_proof": "none",
@@ -2390,16 +2562,31 @@
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.exp_le_one_add_add_geometric",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.expRemainder_le_geometric"
       ],
-      "next_foundation": "Run the kit's remaining three roles for this task in fresh isolated agents (blind translator, then direct and round-trip judges concurrently), then `finalize_audit.py <TASK-ID>` and `validate_audit.py <TASK-ID> --phase complete`.",
-      "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+      "contract_hash": "76f98d20c38b79547052fc21cda270efb011b0c6c959612db50df732a91da9c4",
+      "blind_pass": "PASS",
+      "direct_pass": "PASS",
+      "round_trip_pass": "PASS",
+      "source_implies_lean": "yes",
+      "lean_implies_source": "yes",
+      "classification": "faithful-equivalent",
+      "adjudication": "Not required; both independent judges returned faithful-equivalent with implications yes/yes. Regenerated packets matched the cached audited packets exactly, complete validation passes, and after the shared-file normalized-regimes foundation the current decision SHA-256 is f31a2d975e7f3ab7c5ef79f04d4bc8961d8f28de0cf6e04fe2d042c417879ff9.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
         "Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`.",
         "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
         "An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856.",
-        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high)."
+        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+        "A fresh blind translator reviewed all 62 dependency records without filesystem or tool access; `blind_translation.json` validates and its runtime provenance is recorded under `/root/blind_helper_a/blind_translator` (the runtime exposed neither model nor reasoning effort).",
+        "The target module `NumStability/HDP/Scalar/IndependentSums/Bernstein.lean` was recompiled after the blind increment with 0 errors.",
+        "Fresh isolated direct and round-trip judges independently returned all 12 core checks as pass, both semantic implications as yes, and classification faithful-equivalent; neither requested adjudication.",
+        "`finalize_audit.py HDP-02-EX-2.8.5` produced accepted decision SHA-256 a1c416697af5c08e52c082542dc296bf6aa2543a45a4cf02d4a3121e91462fb0, and `validate_audit.py HDP-02-EX-2.8.5 --phase complete` passed.",
+        "The later source-faithful repair for Exercise 2.8.6 changed the shared Bernstein source file and correctly invalidated this file-hash-bound audit even though the Exercise 2.8.5 declaration was unchanged.",
+        "Reprepared the complete Section 2.8 batch after that repair. The regenerated blind and direct packets for this unchanged declaration matched their audited SHA-256 values exactly: 9637d5a4854339f2fab3f77beaf6b26dd64c13424a102be7435a76d41f9b157a and 119897f62bac147d975a95275ddde2c938e07e331a86501b6133744193aee593.",
+        "Restored only those hash-matching cached role outputs, recorded their original isolated-agent provenance plus the cache-validation basis, and reran the coordinator finalizer and complete validator successfully. The revalidated decision SHA-256 is 0e24af08e0f4eb5fa0366afa8e45842be33db654d9750909f055eb9e7617db19.",
+        "The later Theorem 2.8.1 quantifier-scope and zero-energy repair changed the same Bernstein target file, so this whole-file-hash-bound audit became stale again.",
+        "Regenerated the complete Section 2.8 batch after the Theorem 2.8.1 repair. This unchanged declaration's blind and direct packet SHA-256 values again matched 9637d5a4854339f2fab3f77beaf6b26dd64c13424a102be7435a76d41f9b157a and 119897f62bac147d975a95275ddde2c938e07e331a86501b6133744193aee593 exactly. After the later 2.8.2, 2.8.3, and normalized-regimes changes they matched once more; exact cached role restoration and complete validation pass with current decision SHA-256 f31a2d975e7f3ab7c5ef79f04d4bc8961d8f28de0cf6e04fe2d042c417879ff9."
       ],
-      "open_reason": "Source contract recorded, but the blind translation, direct judgment and round-trip judgment for this row have not been run, so `direct_pass` is absent and the gate cannot record `PROVED`."
+      "attempted_routes": "The declaration compiles and its current complete hash-bound audit passes. After the shared Bernstein file changed, regeneration proved its blind and direct packets byte-identical to the audited packets, so only the exact cached isolated-role outputs were restored. Both judges classify the target faithful-equivalent with implications yes/yes; current decision SHA-256 f31a2d975e7f3ab7c5ef79f04d4bc8961d8f28de0cf6e04fe2d042c417879ff9 is accepted=true."
     },
     {
       "id": "HDP-02-EX-2.8.6",
@@ -2414,16 +2601,22 @@
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinBoundedTailOfMGFBound",
         "NumStability.HDP.Scalar.IndependentSums.Bernstein.BoundedCenteredMGFHypothesis"
       ],
-      "next_foundation": "Run the kit's remaining three roles for this task in fresh isolated agents (blind translator, then direct and round-trip judges concurrently), then `finalize_audit.py <TASK-ID>` and `validate_audit.py <TASK-ID> --phase complete`.",
-      "attempted_routes": "(1) Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs). (2) Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`. (3) The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes. (4) An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856. (5) Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+      "next_foundation": "The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Do not reintroduce the source-absent positive-variance premise into the printed alias; keep this row READY until that source ambiguity is resolved under the certified policy.",
+      "attempted_routes": "The source-absent positive-variance restriction was removed from the reusable Bernstein tail theorem and both source wrappers; the zero-variance branch proves every summand zero almost everywhere and the target module recompiles with 0 errors. After later shared-file changes, regenerated packet hashes matched the audited packets exactly and the isolated role outputs plus adjudication were restored. The direct judge returned faithful-equivalent with yes/yes implications, while the round-trip judge returned undetermined. The adjudicator resolved every dependency, indexing, boundedness, and nonvacuity dispute but preserved the immutable source's `t = 0`, zero-second-moment `0/0` boundary as the sole uncertainty. Complete validation passes, but after the shared-file normalized-regimes foundation current final decision 59d7777faf8e5349d6c61c0c5bf268fdf5370e332bb81d271b2f1280c1fcb4af is accepted=false, classification undetermined, implications unclear/unclear.",
       "attempted_routes_list": [
         "Lean content exists, is reachable from `NumStability.HDP`, and compiles: `lake build NumStability.HDP` completed with 0 errors (3600 jobs).",
         "Hygiene verified: no `sorry`/`admit`/`axiom`/`unsafe`/`native_decide` in `NumStability/HDP/`; `#print axioms` over all 86 `hdp_02_*` declarations reports only `propext`, `Classical.choice`, `Quot.sound`.",
         "The faithfulness kit is installed as the single verified copy at `.faithfulness-audit` (42/42 `SHA256SUMS` OK) and `check_setup.py` passes.",
         "An `audit-task.json` exists, the task is prepared (`prepare_batch_audit.py --force` after the last target change), and a batch source contract validated against `schemas/batch_source_contract.schema.json` is recorded in `agent_outputs/source_contract.json` with `source_locator_sha256` 202d9a7b519b0cd79dd8f3b7ab6f9cbd5a29155f5584636eca26ebdf0a58c856.",
-        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high)."
+        "Batch source-contract provenance recorded in `agent_outputs/agent_runs.json` (model claude-opus-5, effort high).",
+        "Removed the source-absent positive-variance hypothesis from `bernsteinBoundedTailOfMGFBound`, `bernsteinBoundedTail`, Theorem 2.8.4's wrapper, and Exercise 2.8.6's wrapper. The new zero-variance branch proves each summand is zero almost everywhere from its zero second moment and closes the positive-threshold event by nullity; the Bernstein module recompiles with 0 errors.",
+        "Regenerated the Section 2.8 batch against the corrected declaration and restored the unchanged source contract. Prepared validation passes; the direct and blind packet SHA-256 values are 3ba4ec1f25adb8535b8d3971c64d75998dbe09e3adcb843b8e69d42a686a5f73 and fdd8ee8cf87c2a5ae4c3db4b420558a0d5988ac36049e8788145266ecf439dd8.",
+        "A fresh source-isolated blind role reviewed all 80 dependency records. After rejecting its initial zero-hash response unchanged, the same still-isolated role received only the missing orchestrator dossier hash and returned an authenticated complete JSON artifact; `validate_agent_output.py` passes and the artifact SHA-256 is 5d49e59652f192f2797783128689bb8864f2e2c19bb583a67ef5161a3398e16a.",
+        "Fresh direct and round-trip judges validated with output SHA-256 values 0a3448d5dddc6ab0a1f2ace9cdbe2f922897a10df090b41c3be6a3b4404b3196 and 73280f0e18835eff3ebace6fcd60feb29727ca57e171fa083723d18a315c44b6. The direct judge returned faithful-equivalent; the round-trip judge returned undetermined and requested adjudication.",
+        "Fresh adjudication resolved all 19 triggers except the source-silent `0/0` boundary at `t = 0` and zero total second moment. The adjudicator artifact SHA-256 is f9e9bc984a579d4fd46a9f1e177d76b936e196c73cd9f0559f3becd588d5f8d0. Final decision SHA-256 b86378bc9d0cbc34189e09baaf9ba83c8453e52fb7e23e02eef468704d176773 was accepted=false, classification undetermined, implications unclear/unclear; complete artifact validation passed.",
+        "After the Theorem 2.8.1, 2.8.2, 2.8.3, and normalized-regimes changes affected the shared file, this row's regenerated blind and direct packets exactly matched fdd8ee8cf87c2a5ae4c3db4b420558a0d5988ac36049e8788145266ecf439dd8 and 3ba4ec1f25adb8535b8d3971c64d75998dbe09e3adcb843b8e69d42a686a5f73. Restored only those matching role and adjudication artifacts; complete validation passes with current decision SHA-256 59d7777faf8e5349d6c61c0c5bf268fdf5370e332bb81d271b2f1280c1fcb4af."
       ],
-      "open_reason": "Source contract recorded, but the blind translation, direct judgment and round-trip judgment for this row have not been run, so `direct_pass` is absent and the gate cannot record `PROVED`."
+      "open_reason": "The mathematical deduction compiles and its complete audit is valid, but the immutable source quantifies over `t >= 0` while its displayed exponent is undefined (`0/0`) at `t = 0` and zero total second moment. Lean's total real division chooses zero. The adjudicator could not certify either exact implication without a source-policy convention; this row therefore remains locally actionable rather than PROVED."
     },
     {
       "id": "HDP-02-FIG-2.3",

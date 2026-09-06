@@ -1,4 +1,6 @@
+import ComputationalMathematics.HDP.Scalar.BerryEsseen
 import ComputationalMathematics.HDP.Scalar.CentralLimit
+import ComputationalMathematics.HDP.Scalar.GaussianTails
 import ComputationalMathematics.HDP.Scalar.IndependentSums
 import ComputationalMathematics.HDP.Scalar.LimitTheorems
 import ComputationalMathematics.HDP.Scalar.PoissonLimit
