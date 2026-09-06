@@ -1,7 +1,7 @@
 /-
-# NumStability declaration dependency extractor
+# Lean Computational Mathematics declaration dependency extractor
 
-This program loads the compiled `NumStability` environment and emits a tab-separated stream.
+This program loads both compiled production roots and emits a tab-separated stream.
 It deliberately keeps dependencies occurring in declaration signatures separate from dependencies
 occurring in values/proofs.  The Python baseline generator consumes this stream and computes the
 architecture metrics.
@@ -31,7 +31,8 @@ namespace NumStabilityArchitecture
 
 private def isProjectModule (moduleName : Name) : Bool :=
   let text := moduleName.toString
-  text == "NumStability" || text.startsWith "NumStability."
+  text == "ComputationalMathematics" || text.startsWith "ComputationalMathematics." ||
+    text == "NumStability" || text.startsWith "NumStability."
 
 private def isGeneratedMatchComponent (part : String) : Bool :=
   part.startsWith "match_" && (Name.mkSimple part).isInternalDetail
@@ -147,7 +148,7 @@ private def writeEdges
 
 private unsafe def extract (outputPath : System.FilePath) : IO Unit := do
   initSearchPath (← findSysroot)
-  withImportModules #[{ module := `NumStability }] {} fun env => do
+  withImportModules #[{ module := `ComputationalMathematics }, { module := `NumStability }] {} fun env => do
     let allDeclarations := collectProjectDeclarations env
     let declarations := allDeclarations.filter fun declaration =>
       shouldIncludeDeclaration env declaration.name
@@ -176,6 +177,13 @@ private def ensureSelfTest (condition : Bool) (message : String) : IO Unit := do
     throw <| IO.userError s!"declaration dependency extractor self-test failed: {message}"
 
 private unsafe def selfTest : IO Unit := do
+  ensureSelfTest (isProjectModule `ComputationalMathematics &&
+      isProjectModule `ComputationalMathematics.Leaf &&
+      isProjectModule `NumStability && isProjectModule `NumStability.Leaf)
+    "a canonical or compatibility module root was not recognized"
+  ensureSelfTest (!isProjectModule `NumStabilityTest &&
+      !isProjectModule `ComputationalMathematicsExtra.Leaf)
+    "project module matching escaped its component boundary"
   initSearchPath (← findSysroot)
   withImportModules #[{ module := `Lean }] {} fun env => do
     let parent := `NumStabilityArchitecture.selfTestParent

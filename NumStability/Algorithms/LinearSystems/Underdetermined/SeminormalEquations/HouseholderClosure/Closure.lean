@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.EndToEnd
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.EndToEnd
 
 /-!
 # Closure (compatibility module)

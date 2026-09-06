@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Algorithm12.MGSSourceRate
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm12.MGSSourceRate
 
 /-!
 # Higham19Alg12MGSSourceRate (compatibility wrapper)

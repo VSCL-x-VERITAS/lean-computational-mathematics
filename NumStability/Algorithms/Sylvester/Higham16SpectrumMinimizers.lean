@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Spectrum.Minimizers
+import ComputationalMathematics.Source.Higham.Chapter16.Spectrum.Minimizers
 
 /-!
 # Higham16SpectrumMinimizers (compatibility module)

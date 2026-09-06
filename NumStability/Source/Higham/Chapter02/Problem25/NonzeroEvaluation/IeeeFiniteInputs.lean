@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.IeeeFiniteSystems.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.IeeeFiniteSystems.Results
 
 /-!
 # Checkpoint compatibility alias: IeeeFiniteInputs

@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Problem04.UnpivotedGrowth.Basic
-import NumStability.Source.Higham.Chapter10.Problem04.UnpivotedGrowth.PositivePivots.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth
 
 /-!
-# Source Higham Chapter10 Problem04 UnpivotedGrowth
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth`.
+Declaration names and mathematical terminology are unchanged.
 -/

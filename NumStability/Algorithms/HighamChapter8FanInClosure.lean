@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.RawCube
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.RawCube
 
 /-!
 # Algorithms.HighamChapter8FanInClosure compatibility facade

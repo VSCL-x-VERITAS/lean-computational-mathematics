@@ -1,7 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Contract
 
-/-! Stable Chapter 2 contract module for Proposition 2.5.2.
+/-!
+Historical import path retained for compatibility.
 
-The semantic module owns the value-level forwarding declaration; this module
-re-exports it under the contract import path used by cross-split checks.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Bridge
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Bridge
 
 /-!
 # Higham11BunchKaufmanRoundedBridge (compatibility module)

@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Basic
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Counterexample
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.All
 
 /-!
-# Complete StandardModel family
+Historical import path retained for compatibility.
 
-Declaration-free public aggregate for the supported family modules. The declarations remain owned by the current canonical result provider.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

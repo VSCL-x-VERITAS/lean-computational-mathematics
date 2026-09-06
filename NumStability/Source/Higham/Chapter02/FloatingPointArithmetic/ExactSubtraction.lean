@@ -1,9 +1,8 @@
-import NumStability.Analysis.FloatingPointArithmetic.ExactSubtraction
+import ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.ExactSubtraction
 
 /-!
-# Higham Chapter 2 exact subtraction
+Historical import path retained for compatibility.
 
-Source-correspondence entry point for the exact-subtraction results used in
-Higham Chapter 2. The reusable declarations live in the imported analysis
-module.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.ExactSubtraction`.
+Declaration names and mathematical terminology are unchanged.
 -/

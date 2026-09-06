@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Lemma10.ConditionNumber
-import NumStability.Source.Higham.Chapter13.Lemma10.SchurComplement
+import ComputationalMathematics.Source.Higham.Chapter13.Lemma10
 
 /-!
-# Higham Chapter 13: Lemma10
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Lemma10` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Lemma10`.
+Declaration names and mathematical terminology are unchanged.
 -/

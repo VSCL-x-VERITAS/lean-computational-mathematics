@@ -1,9 +1,8 @@
-import NumStability.Algorithms.LinearSystems.IterativeRefinement.All
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.ForwardErrorBounds.Results
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.LegacyChapter11Surface
+import ComputationalMathematics.Source.Higham.Chapter12.IterativeRefinement.All
 
 /-!
-# Source.Higham.Chapter12.IterativeRefinement.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter12.IterativeRefinement.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

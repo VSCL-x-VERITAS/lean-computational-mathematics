@@ -172,3 +172,12 @@ false and was never a source claim.
 
 The benchmark-reserved Problem formalizations flagged above remain a separate
 policy decision, not proof work.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter08` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.QR.ModifiedGramSchmidt.Rounded.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.ModifiedGramSchmidt.Rounded.Core
 
 /-!
 # Higham21MGSRounded (compatibility module)

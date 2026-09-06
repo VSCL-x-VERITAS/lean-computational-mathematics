@@ -1,7 +1,7 @@
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.InnerProductSpace.LinearMap
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
-import NumStability.Analysis.LinearOperators.NumericalRadius.Core.Basic
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core.Basic
 
 /-!
 # Analysis.NumericalRadius (compatibility wrapper)

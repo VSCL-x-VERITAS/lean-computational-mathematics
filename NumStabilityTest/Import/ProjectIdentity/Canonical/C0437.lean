@@ -1,0 +1,6 @@
+import ComputationalMathematics.Algorithms.Summation.Insertion.ScheduleExecution
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Insertion.ScheduleExecution`. -/
+
+#check NumStability.fl_insertionSumList_has_greedy_schedule_exactWithUnitRoundoff_of_ne_nil
+#check NumStability.fl_insertionSumList_has_sumTree_eval_of_ne_nil

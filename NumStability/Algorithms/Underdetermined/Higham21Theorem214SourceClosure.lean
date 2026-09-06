@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Theorem04.SourceClosure.Supplement.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem04.SourceClosure.Supplement.Core
 
 /-!
 # Higham21Theorem214SourceClosure (compatibility module)

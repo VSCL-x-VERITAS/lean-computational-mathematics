@@ -1,7 +1,8 @@
-import NumStability.Analysis.Perturbation.LeastSquares
+import ComputationalMathematics.Analysis.Perturbation
 
 /-!
-# Perturbation analysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for reusable perturbation-analysis families.
+The implementation is provided by `ComputationalMathematics.Analysis.Perturbation`.
+Declaration names and mathematical terminology are unchanged.
 -/

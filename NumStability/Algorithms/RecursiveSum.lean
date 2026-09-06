@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Recursive
+import ComputationalMathematics.Algorithms.Summation.Recursive
 
 /-!
 # Recursive summation compatibility import

@@ -4,11 +4,21 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.RandNLA.RowSamplingGram
-import NumStability.Algorithms.RandomizedLinearAlgebra.Sampling.LeverageScore.Core
-import NumStability.Source.DrineasMahoney.RandNLA2016.Equation06.LeverageProbability.Normalization
-import NumStability.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.Leverage
-import NumStability.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.SampledGramOperatorNorm
+import ComputationalMathematics.Algorithms.DotProduct
+import Mathlib.Data.Real.Sqrt
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.RowNorm.Core
+import ComputationalMathematics.Analysis.FiniteProbability
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm02.RowSampling.Endpoints
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation04.RowSamplingProbability.Normalization
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.RowNorm.Gram
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation05.GramApproximation.Bounds
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation05.GramApproximation.SampledGramEndpoints
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.LeverageScore.Core
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation06.LeverageProbability.Normalization
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.Leverage
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation07.SubspaceEmbedding.SampledGramOperatorNorm
 
 /-!
 Historical owner retained as an import-only compatibility wrapper; its declarations were relocated under the R09/R10 completion waves per the reviewed route ledger.

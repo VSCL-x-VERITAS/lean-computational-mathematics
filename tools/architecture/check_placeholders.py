@@ -27,6 +27,9 @@ import re
 import sys
 from pathlib import Path
 
+from project_roots import PRODUCTION_ROOTS
+
+
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = "docs/architecture/allowed-axioms.json"
 PLACEHOLDER_RE = re.compile(r"(?<![A-Za-z0-9_'.])(sorry|admit)(?![A-Za-z0-9_'])")
@@ -93,7 +96,7 @@ def strip_lean_comments_and_strings(text: str) -> str:
 
 def lean_sources(root: Path) -> list[Path]:
     paths: list[Path] = []
-    for top in ("NumStability", "NumStabilityTest"):
+    for top in (*PRODUCTION_ROOTS, "NumStabilityTest"):
         base = root / top
         if base.is_dir():
             paths.extend(sorted(base.rglob("*.lean")))

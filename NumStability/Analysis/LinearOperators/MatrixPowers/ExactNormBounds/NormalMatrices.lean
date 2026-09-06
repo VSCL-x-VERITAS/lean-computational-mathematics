@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices.Powers
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices`.
+Declaration names and mathematical terminology are unchanged.
 -/

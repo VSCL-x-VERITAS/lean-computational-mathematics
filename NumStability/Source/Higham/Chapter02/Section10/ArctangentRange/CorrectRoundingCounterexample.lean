@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Section10.ArctangentRange.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.ArctangentRange.Counterexample.Results
 
 /-!
 # Checkpoint compatibility alias: CorrectRoundingCounterexample

@@ -38,3 +38,12 @@ corrected generated-budget (12.8) route is formalized for arbitrary derivative
 order over both `ℝ` and the source's `ℂ` domain, including the final rounded
 subtraction and exact finite (12.10), without circular premises. All selected
 Chapter 22 obligations are therefore closed.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter22` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

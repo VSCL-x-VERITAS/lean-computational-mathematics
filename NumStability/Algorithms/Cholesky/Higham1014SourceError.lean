@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter09.DoolittleClosure
-import NumStability.Source.Higham.Chapter10.Theorem07
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.RankSensitiveError.Bounds
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceError
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceSuccess
+import ComputationalMathematics.Source.Higham.Chapter09.DoolittleClosure
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.RankSensitiveError.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceError
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceSuccess
 
 /-!
 # Higham1014SourceError (compatibility module)

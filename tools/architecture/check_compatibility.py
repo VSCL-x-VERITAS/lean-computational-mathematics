@@ -10,7 +10,11 @@ import re
 import sys
 from pathlib import Path
 
-from generate_baseline import IMPORT_RE, module_name, remove_lean_comments, source_paths
+from generate_baseline import (
+    IMPORT_RE, PRODUCTION_ROOTS, is_production_module, module_name,
+    remove_lean_comments, source_paths,
+)
+from project_roots import self_test as root_self_test
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,12 +27,18 @@ def module_path(name: str) -> Path:
     return ROOT / Path(*name.split(".")).with_suffix(".lean")
 
 
-def documented_mappings() -> dict[str, tuple[str, ...]]:
+PROJECT_MODULE_RE = re.compile(
+    r"`((?:" + "|".join(re.escape(root) for root in PRODUCTION_ROOTS)
+    + r")(?:\.[A-Za-z0-9_']+)*)`"
+)
+
+
+def documented_mappings(policy: Path = POLICY) -> dict[str, tuple[str, ...]]:
     mappings: dict[str, tuple[str, ...]] = {}
-    for line in POLICY.read_text(encoding="utf-8").splitlines():
+    for line in policy.read_text(encoding="utf-8").splitlines():
         if not line.startswith("|"):
             continue
-        names = re.findall(r"`(NumStability(?:\.[A-Za-z0-9_']+)+)`", line)
+        names = PROJECT_MODULE_RE.findall(line)
         if len(names) < 2:
             continue
         historical, *canonical = names
@@ -36,7 +46,7 @@ def documented_mappings() -> dict[str, tuple[str, ...]]:
             raise ValueError(f"duplicate compatibility row: {historical}")
         mappings[historical] = tuple(canonical)
     if not mappings:
-        raise ValueError(f"no compatibility mappings found in {POLICY}")
+        raise ValueError(f"no compatibility mappings found in {policy}")
     return mappings
 
 
@@ -299,9 +309,145 @@ def declaration_closure(root: Path, modules: list[str], budget: int = 400) -> se
         path = root / (current.replace(".", "/") + ".lean")
         if path.is_file():
             text = path.read_text(encoding="utf-8", errors="replace")
-            for match in re.finditer(r"^import\s+(NumStability\S*)", text, re.M):
-                queue.append(match.group(1))
+            for target in IMPORT_RE.findall(remove_lean_comments(text)):
+                if is_production_module(target):
+                    queue.append(target)
     return names
+
+
+EMPTY_IMPORT_LINE_RE = re.compile(
+    r"[ \t]*(?:(?:public|private|meta)[ \t]+)*import[ \t]+"
+    r"([A-Za-z0-9_']+(?:\.[A-Za-z0-9_']+)*(?:[ \t]+[A-Za-z0-9_']+(?:\.[A-Za-z0-9_']+)*)*)[ \t]*"
+)
+MODULE_NAME_RE = re.compile(r"[A-Za-z0-9_']+(?:\.[A-Za-z0-9_']+)*")
+
+
+def empty_surface_imports(root: Path, module: str) -> tuple[str, ...]:
+    """Read every import, rejecting any command or external import in an empty API."""
+    path = root / (module.replace(".", "/") + ".lean")
+    text = remove_lean_comments(path.read_text(encoding="utf-8-sig"))
+    imports: list[str] = []
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        match = EMPTY_IMPORT_LINE_RE.fullmatch(line)
+        if match is None:
+            raise ValueError(f"{module}: empty-surface claim contains a Lean command")
+        for target in match.group(1).split():
+            if not is_production_module(target):
+                raise ValueError(f"{module}: empty-surface claim imports external module {target}")
+            imports.append(target)
+    return tuple(imports)
+
+
+def empty_project_closure(root: Path, start: str) -> set[str]:
+    seen: set[str] = set()
+    pending = [start]
+    while pending:
+        module = pending.pop()
+        if module in seen:
+            continue
+        seen.add(module)
+        pending.extend(empty_surface_imports(root, module))
+    return seen
+
+
+def verified_empty_surfaces(root: Path, mappings: dict) -> tuple[set[str], list[str]]:
+    """Accept only reviewed, exactly enumerated, import-only empty API pairs."""
+    failures: list[str] = []
+    covered: set[str] = set()
+    try:
+        manifest = json.loads((root / MANIFEST_PATH).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        return covered, [f"cannot read empty-surface contracts: {error}"]
+    for record in manifest.get("paths", []):
+        if not isinstance(record, dict) or "empty_surface" not in record:
+            continue
+        historical = record.get("historical_module")
+        context = f"{MANIFEST_PATH}: {historical} empty_surface"
+        contract = record["empty_surface"]
+        targets = mappings.get(historical, ())
+        if not isinstance(contract, dict) or set(contract) != {"canonical_project_closure"}:
+            failures.append(f"{context} must record exactly canonical_project_closure")
+            continue
+        expected = contract["canonical_project_closure"]
+        if (
+            len(targets) != 1
+            or not isinstance(expected, list)
+            or not expected
+            or not all(isinstance(name, str) and MODULE_NAME_RE.fullmatch(name) and
+                       (name == PRODUCTION_ROOTS[0] or name.startswith(PRODUCTION_ROOTS[0] + "."))
+                       for name in expected)
+            or expected != sorted(set(expected))
+            or targets[0] not in expected
+        ):
+            failures.append(f"{context} needs one canonical target and its sorted, unique canonical closure")
+            continue
+        canonical = targets[0]
+        try:
+            if empty_project_closure(root, canonical) != set(expected):
+                raise ValueError("canonical imports differ from the exact recorded empty closure")
+            if empty_project_closure(root, historical) != {historical, *expected}:
+                raise ValueError("historical imports differ from the exact recorded empty closure")
+            for field, target in (("old_only_smoke_test", historical),
+                                  ("canonical_only_smoke_test", canonical)):
+                fixture = record.get(field)
+                if not isinstance(fixture, str) or not MODULE_NAME_RE.fullmatch(fixture) or not fixture.startswith("NumStabilityTest."):
+                    raise ValueError(f"{field} must name an exact test module")
+                if empty_surface_imports(root, fixture) != (target,):
+                    raise ValueError(f"{field} must contain exactly one import of {target}")
+        except (OSError, UnicodeError, ValueError) as error:
+            failures.append(f"{context}: {error}")
+            continue
+        covered.update((historical, canonical))
+    return covered, failures
+
+
+def self_test_empty_surface_contract() -> list[str]:
+    failures: list[str] = []
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        files = {
+            "NumStability/Empty.lean": "import ComputationalMathematics.Empty\n",
+            "ComputationalMathematics/Empty.lean": "import ComputationalMathematics.EmptyLeaf\n",
+            "ComputationalMathematics/EmptyLeaf.lean": "/-! Intentionally empty documented surface. -/\n",
+            "NumStabilityTest/OldEmpty.lean": "import NumStability.Empty\n",
+            "NumStabilityTest/CanonicalEmpty.lean": "import ComputationalMathematics.Empty\n",
+        }
+        for relative, text in files.items():
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        mappings = {"NumStability.Empty": ("ComputationalMathematics.Empty",)}
+        manifest = root / MANIFEST_PATH
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({"paths": [{
+            "historical_module": "NumStability.Empty",
+            "canonical_targets": ["ComputationalMathematics.Empty"],
+            "old_only_smoke_test": "NumStabilityTest.OldEmpty",
+            "canonical_only_smoke_test": "NumStabilityTest.CanonicalEmpty",
+            "empty_surface": {"canonical_project_closure": [
+                "ComputationalMathematics.Empty", "ComputationalMathematics.EmptyLeaf",
+            ]},
+        }]}), encoding="utf-8")
+        covered, problems = verified_empty_surfaces(root, mappings)
+        if problems or covered != {"NumStability.Empty", "ComputationalMathematics.Empty"}:
+            failures.append("self-test: an exactly documented empty pair was rejected")
+        leaf = root / "ComputationalMathematics/EmptyLeaf.lean"
+        for body in ("theorem exported : True := by trivial\n", "import Mathlib\n",
+                     'notation "emptyExport" => True\n'):
+            leaf.write_text(body, encoding="utf-8")
+            covered, problems = verified_empty_surfaces(root, mappings)
+            if covered or not problems:
+                failures.append("self-test: an empty claim accepted added declarations, imports or notation")
+        leaf.write_text(files["ComputationalMathematics/EmptyLeaf.lean"], encoding="utf-8")
+        (root / "NumStabilityTest/OldEmpty.lean").write_text(
+            "import NumStability.Empty\nimport ComputationalMathematics.Empty\n", encoding="utf-8"
+        )
+        covered, problems = verified_empty_surfaces(root, mappings)
+        if covered or not problems:
+            failures.append("self-test: a multi-import fixture established an empty isolation claim")
+    return failures
 
 
 def isolation_failures(root: Path, mappings: dict) -> list[str]:
@@ -309,11 +455,13 @@ def isolation_failures(root: Path, mappings: dict) -> list[str]:
 
     failures: list[str] = []
     covered = isolation_coverage(root)
+    empty_covered, empty_failures = verified_empty_surfaces(root, mappings)
+    failures.extend(empty_failures)
     historical = set(mappings)
     targets = {target for values in mappings.values() for target in values}
 
-    uncovered_historical = sorted(historical - set(covered))
-    uncovered_canonical = sorted(targets - set(covered))
+    uncovered_historical = sorted(historical - set(covered) - empty_covered)
+    uncovered_canonical = sorted(targets - set(covered) - empty_covered)
     if uncovered_historical:
         failures.append(
             f"{len(uncovered_historical)} historical path(s) lack a strict single-import "
@@ -387,6 +535,33 @@ def self_test_isolation_rules() -> list[str]:
         )
         if "NumStability.long_name_on_the_next_line" not in declarations_in(root, "NumStability.Wrapped"):
             failures.append("self-test: a name on the line after its keyword must be found")
+
+        canonical = root / "ComputationalMathematics"
+        canonical.mkdir()
+        (canonical / "Leaf.lean").write_text(
+            "namespace NumStability\ntheorem retained_name : True := by trivial\nend NumStability\n",
+            encoding="utf-8",
+        )
+        (root / "ComputationalMathematics.lean").write_text(
+            "import ComputationalMathematics.Leaf\n", encoding="utf-8"
+        )
+        (root / "NumStability.lean").write_text(
+            "import ComputationalMathematics\n", encoding="utf-8"
+        )
+        if "NumStability.retained_name" not in declaration_closure(root, ["NumStability"]):
+            failures.append("self-test: a root facade must traverse the canonical declaration closure")
+        policy = root / "COMPATIBILITY.md"
+        policy.write_text(
+            "| `NumStability` | `ComputationalMathematics` |\n"
+            "| `NumStability.Leaf` | `ComputationalMathematics.Leaf` |\n"
+            "| `NumStabilityTest` | `ComputationalMathematicsExtra` |\n",
+            encoding="utf-8",
+        )
+        if documented_mappings(policy) != {
+            "NumStability": ("ComputationalMathematics",),
+            "NumStability.Leaf": ("ComputationalMathematics.Leaf",),
+        }:
+            failures.append("self-test: module-table parsing must include both roots and exclude lookalikes")
     return failures
 
 
@@ -404,6 +579,7 @@ def main() -> int:
         return 2
 
     failures: list[str] = []
+    failures.extend(root_self_test())
     failures.extend(self_test_manifest_contract())
     failures.extend(validate_manifest(ROOT, documented_mappings()))
 
@@ -444,7 +620,7 @@ def main() -> int:
         imports = tuple(
             target
             for target in IMPORT_RE.findall(uncommented)
-            if target.startswith("NumStability.")
+            if is_production_module(target)
         )
         if imports != canonical:
             failures.append(
@@ -468,6 +644,7 @@ def main() -> int:
 
     canonical_names = {target for targets in mappings.values() for target in targets}
     failures.extend(self_test_isolation_rules())
+    failures.extend(self_test_empty_surface_contract())
     failures.extend(isolation_failures(ROOT, mappings))
 
     if failures:

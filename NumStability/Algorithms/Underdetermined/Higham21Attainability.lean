@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Attainability.Results
+import ComputationalMathematics.Source.Higham.Chapter21.Attainability.Results
 
 /-!
 # Higham21Attainability (compatibility module)

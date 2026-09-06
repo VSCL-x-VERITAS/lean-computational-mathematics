@@ -8,8 +8,8 @@
 import Mathlib.Data.Nat.Sqrt
 import Mathlib.LinearAlgebra.Matrix.Polynomial
 import Mathlib.Tactic
-import NumStability.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Basic
-import NumStability.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Results.Theorems
 
 /-!
 # Higham5PatersonStockmeyer (compatibility wrapper)

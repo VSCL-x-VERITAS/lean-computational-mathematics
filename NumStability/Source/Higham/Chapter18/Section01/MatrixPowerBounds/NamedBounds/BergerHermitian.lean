@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.Hermitian
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BergerHermitian
 
 /-!
-# Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BergerHermitian
+Historical import path retained for compatibility.
 
-Higham source locator for reusable W06 content. Projection-pinned historical declarations are intentionally not imported through this canonical path.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.NamedBounds.BergerHermitian`.
+Declaration names and mathematical terminology are unchanged.
 -/

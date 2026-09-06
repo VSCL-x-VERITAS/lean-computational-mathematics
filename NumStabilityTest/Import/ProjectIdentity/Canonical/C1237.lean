@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias.FirstBreakdown
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias.FirstBreakdown`. -/
+
+#check NumStability.higham10_mathiasLeadingBlock
+#check NumStability.higham10_mathias_first_zero_pivot_has_singular_leading_perturbation
+#check NumStability.higham10_mathias_roundedLoop_leadingBlock_source_backward_error

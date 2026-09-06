@@ -1,28 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Signature
 
 /-!
-# Frozen contract signature for Proposition 2.5.2
+Historical import path retained for compatibility.
 
-This file is intentionally proof-free.  The implementation is checked in the
-semantic module and the contract wrapper is checked against this type.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Signature`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-noncomputable section
-
-open MeasureTheory
-
-namespace NumStability.HDP.Contract
-
-def hdp_02_hprop_h2_d5_d2__contract_type : Prop :=
-  ∀ {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : Ω → ℝ}
-    (hCenter : Integrable X μ ∧ (∫ ω, X ω ∂μ) = 0),
-    ∃ C : ℝ, 1 ≤ C ∧
-      ∀ i j : NumStability.HDP.Scalar.SubGaussian.SubGaussianPropertyKind,
-        ∀ {Ki : ℝ}, 0 < Ki →
-          NumStability.HDP.Scalar.SubGaussian.SubGaussianProperty μ X i Ki →
-            ∃ Kj : ℝ, 0 < Kj ∧ Kj ≤ C * Ki ∧
-              NumStability.HDP.Scalar.SubGaussian.SubGaussianProperty μ X j Kj
-
-end NumStability.HDP.Contract

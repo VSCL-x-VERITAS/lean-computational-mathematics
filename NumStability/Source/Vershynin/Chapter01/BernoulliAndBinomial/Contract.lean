@@ -1,21 +1,8 @@
-import NumStability.HDP.Scalar.LimitTheorems
+import ComputationalMathematics.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract
 
 /-!
-Cross-split stable API for `HDP-01-DEF-BERNOULLI-BINOMIAL`.
+Historical import path retained for compatibility.
 
-This is a real forwarding definition.  The semantic producer owns the
-canonical laws and their proofs; this leaf owns only the stable contract name
-used by Chapters 2 and 3.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-namespace NumStability.HDP.Contract
-
-open scoped NNReal
-
-/-- Stable source-facing bundle of the Bernoulli and binomial laws. -/
-noncomputable def hdp_01_hdef_hbernoulli_hbinomial
-    (p : ℝ≥0) (hp : p ≤ 1) (N : ℕ) :
-    NumStability.HDP.Scalar.LimitTheorems.BernoulliBinomialModelData p hp N :=
-  NumStability.HDP.Scalar.LimitTheorems.bernoulliBinomialModel p hp N
-
-end NumStability.HDP.Contract

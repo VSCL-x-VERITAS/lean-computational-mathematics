@@ -1,0 +1,53 @@
+import ComputationalMathematics.Source.Higham.Chapter02.Equation06.NoGuardModel.All
+import ComputationalMathematics.Source.Higham.Chapter02.Equation08.AdditiveError.All
+import ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.AdditiveUnderflowModel
+import ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.Environment
+import ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.ExactSubtraction
+import ComputationalMathematics.Source.Higham.Chapter02.FloatingPointArithmetic.StandardModel
+import ComputationalMathematics.Source.Higham.Chapter02.Problem01.FloatingPointCounts.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem02
+import ComputationalMathematics.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem04
+import ComputationalMathematics.Source.Higham.Chapter02.Problem05.BinaryOneTenth.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem06.IntegerRepresentability.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem07
+import ComputationalMathematics.Source.Higham.Chapter02.Problem08.MidpointRounding.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem09.DoubleRounding.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem11
+import ComputationalMathematics.Source.Higham.Chapter02.Problem12.ReciprocalProduct.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem18.ExactSubtractionCounterexample.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem19.GradualUnderflowExactness.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem22
+import ComputationalMathematics.Source.Higham.Chapter02.Problem23
+import ComputationalMathematics.Source.Higham.Chapter02.Problem24.GuardDigitCancellation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem26.ExactProduct.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problem27.KahanDeterminant.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.All
+import ComputationalMathematics.Source.Higham.Chapter02.Problems15And16.SpecialValueProbes.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section03.DoubleRounding.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section04.NoGuardModel.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.FusedMultiplyAdd.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.ReciprocalIteration.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section07
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.ArctangentRange.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.All
+import ComputationalMathematics.Source.Higham.Chapter02.Section11.AccuracyTests.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section11.AccuracyTests.CodySineResults.Theorems
+
+/-!
+# Higham Chapter 2
+
+Canonical import-only entry point for floating-point arithmetic and the
+formalized problems from Chapter 2 of Higham's *Accuracy and Stability of
+Numerical Algorithms*.
+-/

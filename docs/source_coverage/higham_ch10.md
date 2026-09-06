@@ -174,3 +174,12 @@ complete-pivoting proofs and the `opNorm2Le` machinery are reused from
 
 None in the precise selected scope.  Equation (10.22) is closed by the explicit
 uniform family-level remainder theorem described above.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter10` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

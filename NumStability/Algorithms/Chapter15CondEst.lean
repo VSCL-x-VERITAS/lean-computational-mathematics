@@ -1,13 +1,13 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import NumStability.Algorithms.CondEstimation
-import NumStability.Analysis.ConditionEstimatorLowerBound
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Source.Higham.Chapter15.Algorithm03.OneNormPowerMethod.Basic
-import NumStability.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.Basic
-import NumStability.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.ConditionEstimate.Bounds
-import NumStability.Source.Higham.Chapter15.Equation06.LAPACKCounterexample.Basic
-import NumStability.Source.Higham.Chapter15.Section01.ConditionNumbers.ConditionEstimators
+import ComputationalMathematics.Algorithms.CondEstimation
+import ComputationalMathematics.Analysis.ConditionEstimatorLowerBound
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm03.OneNormPowerMethod.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm04.LAPACKNormEstimator.ConditionEstimate.Bounds
+import ComputationalMathematics.Source.Higham.Chapter15.Equation06.LAPACKCounterexample.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Section01.ConditionNumbers.ConditionEstimators
 
 /-!
 # Chapter15CondEst (compatibility wrapper)

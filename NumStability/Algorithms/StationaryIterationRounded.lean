@@ -1,5 +1,5 @@
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Execution.RoundedCertificates
-import NumStability.Source.Higham.Chapter17.Results.Section01.RoundedExecution
+import ComputationalMathematics.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Execution.RoundedCertificates
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Section01.RoundedExecution
 
 /-!
 # Historical rounded stationary-iteration compatibility import

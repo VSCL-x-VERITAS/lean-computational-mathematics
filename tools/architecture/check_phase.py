@@ -559,7 +559,11 @@ class PhaseValidator:
         if not self.commit_exists(commit, context):
             return None
         raw = self.run_git(
-            ["ls-tree", "-r", "-z", commit, "--", "NumStability.lean", "NumStability"],
+            [
+                "ls-tree", "-r", "-z", commit, "--",
+                "NumStability.lean", "NumStability",
+                "ComputationalMathematics.lean", "ComputationalMathematics",
+            ],
             context,
         )
         if raw is None:

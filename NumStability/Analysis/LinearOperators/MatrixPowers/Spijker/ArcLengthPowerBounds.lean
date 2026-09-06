@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.ArcLengthPowerBounds.FiniteDimension
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ArcLengthPowerBounds
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.ArcLengthPowerBounds
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.ArcLengthPowerBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

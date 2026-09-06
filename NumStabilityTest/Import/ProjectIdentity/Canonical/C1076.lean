@@ -1,0 +1,14 @@
+import ComputationalMathematics.Source.Higham.Chapter06
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter06`. -/
+
+#check NumStability.HighamProblem61NormQuotientWitness
+#check NumStability.Lemma66.lemma66_c_op2_le
+#check NumStability.ch6aside_blockAntidiag_lp_eq
+#check NumStability.ch6aside_conditionF_ge_sqrt_n
+#check NumStability.complexMatrixBlockShearOp2_eq_highamProblem610_sourceFormula
+#check NumStability.higham6_doubleDualEvaluation_isGreatest
+#check NumStability.higham6_holder_equality_of_powerProfile_sameRay
+#check NumStability.highamProblem65MonomialMatrix
+#check NumStability.highamProblem69_frobenius_op2_bounds
+#check NumStability.mixedInverseAmbientRelativeAmplificationRadiusSup_tendsto_conditionNumberProduct_of_positive_radii

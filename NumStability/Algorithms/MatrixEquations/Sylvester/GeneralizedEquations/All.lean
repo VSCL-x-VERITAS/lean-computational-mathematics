@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.GeneralizedEquations.Basic
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.GeneralizedEquations.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.GeneralizedEquations.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.GeneralizedEquations.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardBackward
-import NumStability.Algorithms.LinearSystems.Triangular.ErrorAnalysis.NoGuardForward
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ErrorAnalysis.All
 
 /-!
-# Algorithms.LinearSystems.Triangular.ErrorAnalysis.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Triangular.ErrorAnalysis.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

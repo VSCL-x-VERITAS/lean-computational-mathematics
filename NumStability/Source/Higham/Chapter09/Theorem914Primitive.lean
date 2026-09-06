@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.Theorem14.Primitive
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.Primitive
 
 /-!
 # Theorem914Primitive (compatibility module)

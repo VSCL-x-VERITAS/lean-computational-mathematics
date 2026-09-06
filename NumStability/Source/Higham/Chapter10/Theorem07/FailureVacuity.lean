@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Theorem07.FailureVacuity.Endpoints
-import NumStability.Source.Higham.Chapter10.Theorem07.FailureVacuity.Vacuity
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.FailureVacuity
 
 /-!
-# Source Higham Chapter10 Theorem07 FailureVacuity
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Theorem07.FailureVacuity`.
+Declaration names and mathematical terminology are unchanged.
 -/

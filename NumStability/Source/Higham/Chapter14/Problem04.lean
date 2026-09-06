@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem04.ResidualCounterexample
+import ComputationalMathematics.Source.Higham.Chapter14.Problem04
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem04
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem04`.
+Declaration names and mathematical terminology are unchanged.
 -/

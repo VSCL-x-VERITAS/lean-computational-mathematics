@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Algorithm04.Accumulation
-import NumStability.Source.Higham.Chapter14.Algorithm04.Execution
-import NumStability.Source.Higham.Chapter14.Algorithm04.FinalDivisionStage.FinalizedErrorFamilies
-import NumStability.Source.Higham.Chapter14.Algorithm04.Pivoting
-import NumStability.Source.Higham.Chapter14.Algorithm04.SecondStage
+import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04
 
 /-!
-# NumStability.Source.Higham.Chapter14.Algorithm04
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Algorithm04`.
+Declaration names and mathematical terminology are unchanged.
 -/

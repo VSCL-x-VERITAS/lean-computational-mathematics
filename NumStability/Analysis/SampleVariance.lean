@@ -15,19 +15,19 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import Mathlib.Topology.Basic
-import NumStability.Analysis.Error.Measures.ScalarDefinitions
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.Statistics.SampleVariance.Core
-import NumStability.Analysis.Statistics.SampleVariance.RoundingErrorBounds.Theorems
-import NumStability.Analysis.Statistics.SampleVariance.TwoPass
-import NumStability.Analysis.Statistics.SampleVariance.Updating
-import NumStability.Analysis.Summation.ErrorBounds
-import NumStability.Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.ConditionNumbers
-import NumStability.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.Bounds
-import NumStability.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.RemainderBound.Theorem
-import NumStability.Source.Higham.Chapter01.Section09.SampleVariance.Examples
-import NumStability.Source.Higham.Chapter01.Section09.SampleVariance.IeeeSingleOnePassCounterexample.Results
+import ComputationalMathematics.Analysis.Error.Measures.ScalarDefinitions
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Statistics.SampleVariance.Core
+import ComputationalMathematics.Analysis.Statistics.SampleVariance.RoundingErrorBounds.Theorems
+import ComputationalMathematics.Analysis.Statistics.SampleVariance.TwoPass
+import ComputationalMathematics.Analysis.Statistics.SampleVariance.Updating
+import ComputationalMathematics.Analysis.Summation.ErrorBounds
+import ComputationalMathematics.Source.Higham.Chapter01.Problem07.SampleVarianceConditioning.ConditionNumbers
+import ComputationalMathematics.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.Bounds
+import ComputationalMathematics.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.RemainderBound.Theorem
+import ComputationalMathematics.Source.Higham.Chapter01.Section09.SampleVariance.Examples
+import ComputationalMathematics.Source.Higham.Chapter01.Section09.SampleVariance.IeeeSingleOnePassCounterexample.Results
 
 /-!
 # SampleVariance (compatibility wrapper)

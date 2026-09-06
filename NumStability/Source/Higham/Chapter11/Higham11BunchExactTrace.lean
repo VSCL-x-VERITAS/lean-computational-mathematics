@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Bunch.ExactTrace
+import ComputationalMathematics.Source.Higham.Chapter11.Bunch.ExactTrace
 
 /-!
 # Higham11BunchExactTrace (compatibility module)

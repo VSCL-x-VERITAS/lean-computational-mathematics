@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFamilies.Derivations
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFirstOrder.Derivations
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockMethod2B.FirstOrderBound
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem02
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem02`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,8 @@
-import NumStability.Analysis.FunctionalCalculus.Resolvent.Analyticity
-import NumStability.Analysis.FunctionalCalculus.Resolvent.DunfordResidue
+import ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent.All
 
 /-!
-# Analysis.FunctionalCalculus.Resolvent.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

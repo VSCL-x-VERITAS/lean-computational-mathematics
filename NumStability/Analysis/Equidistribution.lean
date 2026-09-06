@@ -2,10 +2,11 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.Analysis.Equidistribution.AddCircle
+import ComputationalMathematics.Analysis.Equidistribution
 
 /-!
-# Equidistribution
+Historical import path retained for compatibility.
 
-Reusable equidistribution results and probability limits on compact spaces.
+The implementation is provided by `ComputationalMathematics.Analysis.Equidistribution`.
+Declaration names and mathematical terminology are unchanged.
 -/

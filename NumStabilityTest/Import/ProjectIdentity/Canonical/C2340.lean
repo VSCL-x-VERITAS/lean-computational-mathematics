@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Contract
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Contract`. -/
+
+#check NumStability.HDP.Contract.hdp_02_hthm_hpsi2_hnorm_hcharacterizations__contract

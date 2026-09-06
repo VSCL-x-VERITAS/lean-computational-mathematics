@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.OneNorm
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.PracticalEstimator.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

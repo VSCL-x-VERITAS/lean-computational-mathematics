@@ -1,4 +1,4 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.RealSpectrum
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.RealSpectrum
 
 /-!
 # Historical semiconvergence real-spectrum matrix-power limit import

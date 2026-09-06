@@ -1,23 +1,8 @@
-import NumStability.Algorithms.LinearSystems.QR.GivensMatrixStep
-import NumStability.Algorithms.LinearSystems.QR.GivensQR
-import NumStability.Algorithms.LinearSystems.QR.GivensSpec
-import NumStability.Algorithms.LinearSystems.QR.GramSchmidt
-import NumStability.Algorithms.LinearSystems.QR.GramSchmidtPolar
-import NumStability.Algorithms.LinearSystems.QR.HouseholderApply
-import NumStability.Algorithms.LinearSystems.QR.Householder.PanelApplication
-import NumStability.Algorithms.LinearSystems.QR.HouseholderConstruction2
-import NumStability.Algorithms.LinearSystems.QR.HouseholderMatrixStep
-import NumStability.Algorithms.LinearSystems.QR.HouseholderOneStep
-import NumStability.Algorithms.LinearSystems.QR.HouseholderQApply
-import NumStability.Algorithms.LinearSystems.QR.HouseholderQR
-import NumStability.Algorithms.LinearSystems.QR.Householder.StoredQR
-import NumStability.Algorithms.LinearSystems.QR.HouseholderReflector
-import NumStability.Algorithms.LinearSystems.QR.HouseholderSpec
-import NumStability.Algorithms.LinearSystems.QR.Householder.TrailingPanels
-import NumStability.Algorithms.LinearSystems.QR.QRSolve
+import ComputationalMathematics.Algorithms.LinearSystems.QR
 
 /-!
-# Canonical QR algorithms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the reusable QR algorithm family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.QR`.
+Declaration names and mathematical terminology are unchanged.
 -/

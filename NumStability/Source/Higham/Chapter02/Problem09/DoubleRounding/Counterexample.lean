@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Problem09.DoubleRounding.Counterexample.Inputs
-import NumStability.Source.Higham.Chapter02.Problem09.DoubleRounding.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem09.DoubleRounding.Counterexample
 
 /-!
-# Higham Problem 2.9 double-rounding counterexample
+Historical import path retained for compatibility.
 
-Import-only semantic entry point for the inputs and proved results of the
-Problem 2.9 double-rounding counterexample.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Problem09.DoubleRounding.Counterexample`.
+Declaration names and mathematical terminology are unchanged.
 -/

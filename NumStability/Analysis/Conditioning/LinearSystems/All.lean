@@ -1,9 +1,8 @@
-import NumStability.Analysis.Conditioning.LinearSystems.InversePerturbation
-import NumStability.Analysis.Conditioning.LinearSystems.PerronFrobenius
-import NumStability.Analysis.Conditioning.LinearSystems.SubordinatePerturbation
+import ComputationalMathematics.Analysis.Conditioning.LinearSystems.All
 
 /-!
-# Analysis.Conditioning.LinearSystems.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Analysis.Conditioning.LinearSystems.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

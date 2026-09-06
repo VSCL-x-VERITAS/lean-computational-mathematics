@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.Basic
-import NumStability.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.All
 
 /-!
-# Complete DivisionRoundTrip family
+Historical import path retained for compatibility.
 
-Declaration-free public aggregate for the supported family modules. The declarations remain owned by the current canonical result provider.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

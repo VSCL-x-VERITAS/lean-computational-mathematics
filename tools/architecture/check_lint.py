@@ -48,7 +48,7 @@ NORMALIZATION_VERSION = 2
 
 # Lean source trees whose findings this contract governs.  Anything outside
 # them (Mathlib, Batteries, toolchain sources) is not fingerprinted.
-SOURCE_ROOTS = ("NumStability", "NumStabilityTest")
+SOURCE_ROOTS = ("ComputationalMathematics", "NumStability", "NumStabilityTest")
 
 # ---------------------------------------------------------------------------
 # Log grammar
@@ -474,148 +474,148 @@ _FROZEN_VERSHYNIN_LINT_KEYS = frozenset(
     {
         (
             "defLemma",
-            "NumStability/Source/Vershynin/Chapter01/"
+            "ComputationalMathematics/Source/Vershynin/Chapter01/"
             "StandardDeviationAndCovariance/Contract.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/CauchySchwarz/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter01/CauchySchwarz/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/L2Geometry/Contract.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter01/L2Geometry/Contract.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/Section02/Corollary05/"
+            "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Corollary05/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/Section02/Exercise02/"
+            "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Exercise02/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/Section02/Proposition04/"
+            "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Proposition04/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter01/"
+            "ComputationalMathematics/Source/Vershynin/Chapter01/"
             "StandardDeviationAndCovariance/Contract.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Equation12/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Equation12/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/IndependentSumMGF/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/IndependentSumMGF/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/"
+            "ComputationalMathematics/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section02/Exercise10B/"
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Exercise10B/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section03/Exercise05/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section03/Exercise05/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Example08B/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Example08B/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Exercise01/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Exercise01/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Exercise05A/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Exercise05A/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Proposition02/"
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Proposition02/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section06/Exercise09/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Exercise09/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section06/Proposition01/"
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Proposition01/"
             "Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section07/Example12/Contract.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example12/Contract.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section07/Example13/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example13/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
         ),
         (
             "docBlame",
-            "NumStability/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
+            "ComputationalMathematics/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
         ),
     }
 )
@@ -625,9 +625,9 @@ REVIEWED_DISPOSITIONS: dict[tuple[str, str], dict[str, Any]] = {
         key: _FROZEN_VERSHYNIN_LINT
         for key in _FROZEN_VERSHYNIN_LINT_KEYS
     },
-    ("defLemma", "NumStability/Source/Higham/Chapter11/Section02/Aasen.lean"): _UNTYPED_PROOF_DEF,
-    ("defLemma", "NumStability/Source/Higham/Chapter11/Section01/Tridiagonal.lean"): _UNTYPED_PROOF_DEF,
-    ("defLemma", "NumStability/Source/Higham/Chapter11/Section01/PartialPivoting.lean"): _UNTYPED_PROOF_DEF,
+    ("defLemma", "ComputationalMathematics/Source/Higham/Chapter11/Section02/Aasen.lean"): _UNTYPED_PROOF_DEF,
+    ("defLemma", "ComputationalMathematics/Source/Higham/Chapter11/Section01/Tridiagonal.lean"): _UNTYPED_PROOF_DEF,
+    ("defLemma", "ComputationalMathematics/Source/Higham/Chapter11/Section01/PartialPivoting.lean"): _UNTYPED_PROOF_DEF,
 }
 # Reviewed dispositions survive a re-capture; debt is re-derived.
 CARRIED_REVIEW_FIELDS = (
@@ -1968,6 +1968,33 @@ def run_self_test() -> int:
                 file=sys.stderr,
             )
             return 1
+
+        # Module ownership moves; authored declaration names remain unchanged.
+        canonical_entries = [
+            (linter, path.replace("NumStability", "ComputationalMathematics", 1), line,
+             column, declaration, message)
+            for linter, path, line, column, declaration, message in entries
+        ]
+        old_capture = read_log(log_path)
+        canonical_log = base / "canonical.log"
+        canonical_log.write_bytes(
+            render_self_test_log(canonical_entries)
+            .replace(b"specified modules: [NumStability]", b"specified modules: [ComputationalMathematics]")
+            .replace(b"in NumStability with 16 linters", b"in ComputationalMathematics with 16 linters")
+        )
+        canonical_capture = read_log(canonical_log)
+        expected = {
+            (item.linter, item.path.replace("NumStability/", "ComputationalMathematics/", 1),
+             *item.identity[2:])
+            for item in old_capture.findings
+        }
+        if canonical_capture.unclassified or {
+            item.identity for item in canonical_capture.findings
+        } != expected or canonical_capture.reported_target != "ComputationalMathematics":
+            print("self-test failure: canonical lint ownership changed declaration identities", file=sys.stderr)
+            return 1
+        accepted.append("canonical ownership retains authored declaration identities")
+
 
     print(
         "lint contract self-test passed: "

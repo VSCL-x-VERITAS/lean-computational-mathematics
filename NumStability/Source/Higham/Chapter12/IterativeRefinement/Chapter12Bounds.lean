@@ -11,15 +11,15 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.DotProduct
-import NumStability.Algorithms.LinearSystems.IterativeRefinement.Core
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.MatVec
-import NumStability.Analysis.ForwardError
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.ForwardErrorBounds.Results
+import ComputationalMathematics.Algorithms.DotProduct
+import ComputationalMathematics.Algorithms.LinearSystems.IterativeRefinement.Core
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Analysis.ForwardError
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter12.IterativeRefinement.ForwardErrorBounds.Results
 
 /-!
 # Chapter12Bounds (compatibility wrapper)

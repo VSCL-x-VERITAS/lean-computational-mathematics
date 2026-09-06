@@ -1,0 +1,10 @@
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation20.DiagonalizableBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter17.Results.Equation20.DiagonalizableBounds`. -/
+
+#check NumStability.finiteResidualSigma_le_diagonalizable_bound
+#check NumStability.finiteResidualSigma_le_diagonalizable_max_bound
+#check NumStability.residualSigmaSup_le_diagonalizable_max_bound
+#check NumStability.residualSigmaTsum_le_diagonalizable_bound
+#check NumStability.residualSigmaTsum_le_diagonalizable_max_bound_direct
+#check NumStability.sigma_bound

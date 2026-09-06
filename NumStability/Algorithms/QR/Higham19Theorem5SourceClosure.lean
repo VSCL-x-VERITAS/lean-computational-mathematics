@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Theorem05.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem05.SourceClosure
 
 /-!
 # Higham19Theorem5SourceClosure (compatibility wrapper)

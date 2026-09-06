@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.MiddleSolve
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.MiddleSolve
 
 /-!
 # Higham11BunchKaufmanRoundedMiddleSolve (compatibility module)

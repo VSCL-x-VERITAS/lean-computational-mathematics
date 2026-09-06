@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance
-import NumStability.Source.Higham.Chapter14.Corollary07.FinalizedRunFamilies.ResidualAndForwardEnvelopes
-import NumStability.Source.Higham.Chapter14.Corollary07.PrintedTraceFamilies.ResidualAndForwardEndpoints
-import NumStability.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
-import NumStability.Source.Higham.Chapter14.Corollary07.WeakDominanceFamilies.ResidualAndForwardBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07
 
 /-!
-# NumStability.Source.Higham.Chapter14.Corollary07
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Corollary07`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -5,13 +5,13 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.DotProduct
-import NumStability.Algorithms.RandomizedLinearAlgebra.Sampling.RowNorm.Core
-import NumStability.Analysis.FiniteProbability
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.FloatingPoint.Model
-import NumStability.Source.DrineasMahoney.RandNLA2016.Algorithm02.RowSampling.Endpoints
-import NumStability.Source.DrineasMahoney.RandNLA2016.Equation04.RowSamplingProbability.Normalization
+import ComputationalMathematics.Algorithms.DotProduct
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.RowNorm.Core
+import ComputationalMathematics.Analysis.FiniteProbability
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm02.RowSampling.Endpoints
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation04.RowSamplingProbability.Normalization
 
 /-!
 # NumStability.Algorithms.RandNLA.RowSampling

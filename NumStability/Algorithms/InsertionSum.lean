@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Insertion
+import ComputationalMathematics.Algorithms.Summation.Insertion
 
 /-!
 # Insertion summation compatibility import

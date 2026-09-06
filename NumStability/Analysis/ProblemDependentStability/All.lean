@@ -1,7 +1,8 @@
-import NumStability.Analysis.ProblemDependentStability.HessenbergDeterminant
+import ComputationalMathematics.Analysis.ProblemDependentStability.All
 
 /-!
-# Analysis.ProblemDependentStability.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Analysis.ProblemDependentStability.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

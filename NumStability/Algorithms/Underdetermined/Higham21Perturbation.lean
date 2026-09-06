@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.Perturbation.Bounds.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.Perturbation.Bounds.Core
 
 /-!
 # Higham21Perturbation (compatibility module)

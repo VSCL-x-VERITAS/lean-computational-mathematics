@@ -1,21 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.CDFAndTail.Contract
 
 /-!
-# Chapter 1 CDF and tail contract
+Historical import path retained for compatibility.
 
-Stable source-facing aliases for the distribution, cumulative distribution,
-and upper-tail definitions used in Chapter 1.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter01.CDFAndTail.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-namespace NumStability.HDP.Contract
-
-open MeasureTheory
-
-/-- Chapter 1's distribution, CDF, and upper-tail interface. -/
-noncomputable def hdp_01_hdef_hcdf_htail
-    {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X : Ω → ℝ) :
-    NumStability.HDP.Scalar.Preliminaries.CDFTailModelData μ X :=
-  NumStability.HDP.Scalar.Preliminaries.cdfTailModel μ X
-
-end NumStability.HDP.Contract

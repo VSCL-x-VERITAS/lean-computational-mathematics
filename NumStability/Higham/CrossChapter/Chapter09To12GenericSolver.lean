@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.CrossChapter.LUSolverWeights.Factorization
+import ComputationalMathematics.Source.Higham.CrossChapter.LUSolverWeights.Factorization
 
 /-!
 # Compatibility import for generic Higham Chapters 9 and 12 solver weights

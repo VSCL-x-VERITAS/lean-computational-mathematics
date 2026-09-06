@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample
 
 /-!
-# StandardModelCounterexample
+Historical import path retained for compatibility.
 
-Declaration-free semantic parent for the corresponding `Results` submodule.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample`.
+Declaration names and mathematical terminology are unchanged.
 -/

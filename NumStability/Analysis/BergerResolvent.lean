@@ -4,9 +4,9 @@ import Mathlib.Analysis.InnerProductSpace.LinearMap
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Data.Real.Pointwise
 import Mathlib.FieldTheory.IsAlgClosed.Basic
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.PowerTwo
-import NumStability.Analysis.NumericalRadius
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.PowersOfTwo
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.PowerTwo
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core.Basic
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.PowersOfTwo
 
 /-!
 # Analysis.BergerResolvent (compatibility wrapper)

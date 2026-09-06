@@ -1,6 +1,6 @@
 import Mathlib.Tactic.NormNum
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Problem01.FloatingPointCounts.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem01.FloatingPointCounts.Basic
 
 /-!
 # Counting (compatibility module)

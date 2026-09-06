@@ -9,23 +9,23 @@ import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.Cholesky.CholeskySpec
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.Basic
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.PivotedFactorization.Existence
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.CompletePivotingBound
-import NumStability.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries.EntryBounds.Results
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.ConstructiveFactorization.Existence
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Existence
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.QuadraticFormBounds.WeightedNorm
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.SchurComplement
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Termination
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.TrailingTermination.Bound
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.WNormBound
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.PsdErrorAnalysis
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.RoundedErrorAnalysis.Bounds
+import ComputationalMathematics.Algorithms.Cholesky.CholeskySpec
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.PivotedFactorization.Existence
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma13.KahanSharpness.CompletePivotingBound
+import ComputationalMathematics.Source.Higham.Chapter10.Problem01.PositiveSemidefiniteEntries.EntryBounds.Results
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.ConstructiveFactorization.Existence
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Existence
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.QuadraticFormBounds.WeightedNorm
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.SchurComplement
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Termination
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.TrailingTermination.Bound
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite.WNormBound
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.PsdErrorAnalysis
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.RoundedErrorAnalysis.Bounds
 
 /-!
 # CholeskyPSD (compatibility module)

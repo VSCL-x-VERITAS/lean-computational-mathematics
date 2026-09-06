@@ -1,13 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Basic
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Closure
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Concrete
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.FinalDivisionFamilyClosure
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.SourceClosure
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.SourceDomainConstructor
-import NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance.WeakFamily
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance
 
 /-!
-# NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance`.
+Declaration names and mathematical terminology are unchanged.
 -/

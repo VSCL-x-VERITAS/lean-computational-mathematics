@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart
-import NumStability.Source.Higham.Chapter16.Section02.RealSchurDecomposition.All
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError
+import ComputationalMathematics.Source.Higham.Chapter16.Section02
 
 /-!
-# Source Higham Chapter16 Section02
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02`.
+Declaration names and mathematical terminology are unchanged.
 -/

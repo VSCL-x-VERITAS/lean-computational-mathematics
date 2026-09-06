@@ -1,12 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.ErrorAnalysis
-import NumStability.Algorithms.LinearSystems.Cholesky.Factorization
-import NumStability.Algorithms.LinearSystems.Cholesky.Perturbation
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite
-import NumStability.Algorithms.LinearSystems.Cholesky.RoundedFactorization
-import NumStability.Algorithms.LinearSystems.Cholesky.Solve
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky
 
 /-!
-# Algorithms LinearSystems Cholesky
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky`.
+Declaration names and mathematical terminology are unchanged.
 -/

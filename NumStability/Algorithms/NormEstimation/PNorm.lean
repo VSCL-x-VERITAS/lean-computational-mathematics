@@ -1,7 +1,8 @@
-import NumStability.Algorithms.NormEstimation.PNorm.All
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm
 
 /-!
-# Algorithms.NormEstimation.PNorm
+Historical import path retained for compatibility.
 
-Declaration-free W10 discovery aggregate for reusable p-norm estimation.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.PNorm`.
+Declaration names and mathematical terminology are unchanged.
 -/

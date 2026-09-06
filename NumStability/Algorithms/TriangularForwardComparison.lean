@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Triangular.ComparisonBounds
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.ComparisonBounds
 
 /-!
 # Historical triangular comparison-bounds import

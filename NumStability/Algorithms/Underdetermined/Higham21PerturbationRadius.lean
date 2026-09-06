@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.Perturbation.Radius.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.Perturbation.Radius.Core
 
 /-!
 # Higham21PerturbationRadius (compatibility module)

@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion`. -/
+
+#check NumStability.higham14_eq14_34_abs_det_eq_abs_prod_U_diag_of_LUFactSpec
+#check NumStability.higham14_eq14_34_abs_det_eq_abs_prod_U_diag_of_PermutedLUFactSpec
+#check NumStability.higham14_eq14_34_det_eq_prod_U_diag_of_LUFactSpec

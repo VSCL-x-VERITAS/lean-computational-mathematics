@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter02.IndependentSumMGF.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.IndependentSumMGF.Contract
 
 /-!
 # Compatibility import for an HDP source contract

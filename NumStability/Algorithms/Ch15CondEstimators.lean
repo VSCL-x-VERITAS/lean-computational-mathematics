@@ -8,15 +8,15 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.CondEstimation
-import NumStability.Algorithms.NormEstimation.OneNorm.LINPACK.Basic
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.CondEstimators
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.PowerBounds.CondEstimators
-import NumStability.Analysis.ConditionEstimatorLowerBound
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Source.Higham.Chapter15.Algorithm05.LINPACKConditionEstimator.Basic
-import NumStability.Source.Higham.Chapter15.Algorithm05.LINPACKConditionEstimator.InverseNormBound.TriangularSolve
-import NumStability.Source.Higham.Chapter15.Equation07.DixonBound.Basic
+import ComputationalMathematics.Algorithms.CondEstimation
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.LINPACK.Basic
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.CondEstimators
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon.PowerBounds.CondEstimators
+import ComputationalMathematics.Analysis.ConditionEstimatorLowerBound
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm05.LINPACKConditionEstimator.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Algorithm05.LINPACKConditionEstimator.InverseNormBound.TriangularSolve
+import ComputationalMathematics.Source.Higham.Chapter15.Equation07.DixonBound.Basic
 
 /-!
 # Ch15CondEstimators (compatibility wrapper)

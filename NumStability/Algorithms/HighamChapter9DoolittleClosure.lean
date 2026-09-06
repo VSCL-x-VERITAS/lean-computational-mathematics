@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.DoolittleClosure
+import ComputationalMathematics.Source.Higham.Chapter09.DoolittleClosure
 
 /-!
 # Historical Higham Chapter 9 Doolittle-closure import

@@ -1,9 +1,8 @@
-import NumStability.Source.Vershynin.Chapter01.Section02.Lemma01.Contract
-import NumStability.Source.Vershynin.Chapter01.Section02.Lemma01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01
 
 /-!
-# Vershynin Lemma01 source correspondence
+Historical import path retained for compatibility.
 
-Canonical entry point combining the frozen signature and checked contract for
-this source result.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Lemma01`.
+Declaration names and mathematical terminology are unchanged.
 -/

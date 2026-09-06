@@ -6,6 +6,12 @@ notice is instead governed by
 [`LICENSES/Apache-2.0.txt`](../../LICENSES/Apache-2.0.txt). Moving a file never
 changes its license, copyright holder, or authorship.
 
+The approved identity migration relocates canonical owners under
+`ComputationalMathematics`, including `ComputationalMathematics/Upstream/Lindemann`.
+The dated audit paths below identify their original snapshots. Current
+attribution and the source-preservation record retain the same authors,
+upstream commits and license notices through that relocation.
+
 ## Audited state
 
 The organization audit on 2026-07-22 found 148 production Lean files with

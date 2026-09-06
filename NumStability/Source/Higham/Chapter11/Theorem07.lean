@@ -1,12 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalGrowthInvariant
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.BlockLDLT.BunchTridiagonalSparseFactor
-import NumStability.Source.Higham.Chapter11.BlockLDLTBunchTridiagonal
-import NumStability.Source.Higham.Chapter11.Theorem07.Core.Results
+import ComputationalMathematics.Source.Higham.Chapter11.Theorem07
 
 /-!
-# Theorem07
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate after wave R04. Every declaration
-moved unchanged to its routed child; this module imports the canonical
-children so existing imports keep resolving.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter11.Theorem07`.
+Declaration names and mathematical terminology are unchanged.
 -/

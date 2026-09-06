@@ -1,9 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Pseudoinverse.UnderdeterminedSpec
-import NumStability.Source.Higham.Chapter21.Equation04.QRFoundations
-import NumStability.Source.Higham.Chapter21.Equation04.UnderdeterminedSpec
+import ComputationalMathematics.Source.Higham.Chapter21.Equation04.Pseudoinverse
 
 /-!
-# Source.Higham.Chapter21.Equation04.Pseudoinverse
+Historical import path retained for compatibility.
 
-Exact Chapter 21 equation 21.4 pseudoinverse endpoint.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter21.Equation04.Pseudoinverse`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -4,13 +4,13 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.RandomizedLinearAlgebra.Sampling.Elementwise.Core
-import NumStability.Analysis.FiniteProbability
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.Rounding
-import NumStability.Analysis.Summation.ErrorBounds
-import NumStability.FloatingPoint.Model
-import NumStability.Source.DrineasMahoney.RandNLA2016.Algorithm01.ElementwiseSampling.Sampling
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.Elementwise.Core
+import ComputationalMathematics.Analysis.FiniteProbability
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Analysis.Summation.ErrorBounds
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm01.ElementwiseSampling.Sampling
 
 /-!
 # NumStability.Algorithms.RandNLA.ElementwiseSampling

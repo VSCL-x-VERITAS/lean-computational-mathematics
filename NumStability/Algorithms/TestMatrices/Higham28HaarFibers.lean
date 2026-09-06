@@ -1,4 +1,4 @@
-import NumStability.Analysis.Probability.Haar.HomogeneousSpaceUniqueness
+import ComputationalMathematics.Analysis.Probability.Haar.HomogeneousSpaceUniqueness
 
 /-!
 # Historical Chapter 28 Haar-fiber import

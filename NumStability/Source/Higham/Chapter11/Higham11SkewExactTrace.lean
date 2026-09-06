@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Skew.ExactTrace
+import ComputationalMathematics.Source.Higham.Chapter11.Skew.ExactTrace
 
 /-!
 # Higham11SkewExactTrace (compatibility module)

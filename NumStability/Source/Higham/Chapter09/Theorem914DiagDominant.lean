@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.Theorem14.DiagDominant
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.DiagDominant
 
 /-!
 # Theorem914DiagDominant (compatibility module)

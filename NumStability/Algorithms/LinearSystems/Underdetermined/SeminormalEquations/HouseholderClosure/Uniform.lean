@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.Uniform
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.Uniform
 
 /-!
 # Uniform (compatibility module)

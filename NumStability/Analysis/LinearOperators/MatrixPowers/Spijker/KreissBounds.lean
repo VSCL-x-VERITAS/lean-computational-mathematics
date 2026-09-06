@@ -1,4 +1,4 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds.Kreiss
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds.Kreiss
 
 /-!
 # MatrixPowers Spijker/Kreiss compatibility route

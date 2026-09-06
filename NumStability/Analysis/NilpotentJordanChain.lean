@@ -4,8 +4,16 @@ import Mathlib.Algebra.Polynomial.Module.AEval
 import Mathlib.Data.Fin.Rev
 import Mathlib.LinearAlgebra.StdBasis
 import Mathlib.RingTheory.AdjoinRoot
-import NumStability.Analysis.JordanNormalForm
-import NumStability.Analysis.LinearOperators.Jordan.NormalForm.NilpotentChains
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Matrix.Block
+import Mathlib.FieldTheory.IsAlgClosed.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
+import Mathlib.LinearAlgebra.Matrix.Basis
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.PrimaryDecomposition
+import ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.NilpotentChains
 
 /-!
 # Analysis.NilpotentJordanChain

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.QR.Givens.StoredReplay.EndToEnd.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.Givens.StoredReplay.EndToEnd.Core
 
 /-!
 # Closure (compatibility module)

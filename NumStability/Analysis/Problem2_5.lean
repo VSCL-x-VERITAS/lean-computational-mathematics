@@ -1,7 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Topology.Algebra.InfiniteSum.Real
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Problem05.BinaryOneTenth.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem05.BinaryOneTenth.Basic
 
 /-!
 # Problem2_5 (compatibility module)

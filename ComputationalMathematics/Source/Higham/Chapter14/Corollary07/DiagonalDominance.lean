@@ -1,0 +1,13 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Basic
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Closure
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.Concrete
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.FinalDivisionFamilyClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.SourceDomainConstructor
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.DiagonalDominance.WeakFamily
+
+/-!
+# NumStability.Source.Higham.Chapter14.Corollary07.DiagonalDominance
+
+Declaration-free W08 discovery aggregate.
+-/

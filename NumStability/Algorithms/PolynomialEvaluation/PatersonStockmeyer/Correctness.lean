@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Results.Theorems
 
 /-!
 # Checkpoint compatibility wrapper: Correctness

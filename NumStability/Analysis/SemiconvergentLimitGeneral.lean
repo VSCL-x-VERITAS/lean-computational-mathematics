@@ -1,4 +1,4 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.General
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.General
 
 /-!
 # Historical semiconvergence general matrix-power limit import

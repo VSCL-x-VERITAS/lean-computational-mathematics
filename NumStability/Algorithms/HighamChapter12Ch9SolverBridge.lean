@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.CrossChapter.LUSolverWeights.Doolittle
+import ComputationalMathematics.Source.Higham.CrossChapter.LUSolverWeights.Doolittle
 
 /-!
 # Compatibility import for the Chapter 9 to Chapter 12 solver bridge

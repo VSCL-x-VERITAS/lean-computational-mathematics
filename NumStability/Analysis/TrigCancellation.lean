@@ -1,6 +1,6 @@
-import NumStability.Analysis.FloatingPointArithmetic.TrigonometricCancellation.Core
-import NumStability.Source.Higham.Chapter01.Problem03.CancellationRewrites.Algebra
-import NumStability.Source.Higham.Chapter01.Section07.TrigonometricCancellation.Example
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.TrigonometricCancellation.Core
+import ComputationalMathematics.Source.Higham.Chapter01.Problem03.CancellationRewrites.Algebra
+import ComputationalMathematics.Source.Higham.Chapter01.Section07.TrigonometricCancellation.Example
 
 /-!
 # Analysis.TrigCancellation compatibility facade

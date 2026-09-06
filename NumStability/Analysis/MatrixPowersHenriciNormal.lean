@@ -1,7 +1,15 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalMatrices
-import NumStability.Analysis.MatrixPowersHenrici
-import NumStability.Analysis.MatrixPowersSchur
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalMatrices
+import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
+import Mathlib.LinearAlgebra.Matrix.Trace
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.DepartureFromNormality
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.Triangulation
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices.Powers
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
+
 
 /-!
 # Analysis.MatrixPowersHenriciNormal (compatibility wrapper)

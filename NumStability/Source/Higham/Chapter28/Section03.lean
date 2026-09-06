@@ -1,14 +1,8 @@
-import NumStability.Source.Higham.Chapter28.Section03.RandomSVD.RandsvdNorm
-import NumStability.Source.Higham.Chapter28.Section03.RandomSVD.SingleHouseholderRankTwo
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.GaussianQRHaar
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.HaarConclusion
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.QRFactorHaar
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.RawFiberConclusion
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.Stewart
-import NumStability.Source.Higham.Chapter28.Section03.Theorem01.StewartHaar.StewartRawFiber
+import ComputationalMathematics.Source.Higham.Chapter28.Section03
 
 /-!
-# Higham Chapter 28 Section03
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the Higham Chapter 28 Section03 subtree.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28.Section03`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,9 +1,9 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
-import NumStability.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter05.Section03.NewtonEvaluation.Basic
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.NewtonEvaluation.Basic
 
 /-!
 # Ch5NewtonForm (compatibility module)

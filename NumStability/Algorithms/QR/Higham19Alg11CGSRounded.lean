@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Algorithm11.CGSRounded
+import ComputationalMathematics.Source.Higham.Chapter19.Algorithm11.CGSRounded
 
 /-!
 # Higham19Alg11CGSRounded (compatibility wrapper)

@@ -1,10 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.Lyapunov
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.StructuredSylvester
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.SylvesterPerturbation
-import NumStability.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.Vectorized
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Conditioning.SigmaMinBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

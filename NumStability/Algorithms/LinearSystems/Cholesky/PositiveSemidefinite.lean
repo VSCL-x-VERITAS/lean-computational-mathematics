@@ -1,12 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.Basic
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.KahanMatrix
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.KahanTelescope.Identity
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.PivotedFactorization.Existence
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.ScaledStage
-import NumStability.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite.StageEmbedding.InteriorMass
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite
 
 /-!
-# Algorithms LinearSystems Cholesky PositiveSemidefinite
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky.PositiveSemidefinite`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Problem02.LyapunovIntegral.All
+import ComputationalMathematics.Source.Higham.Chapter16.Problem02.LyapunovIntegral
 
 /-!
-# NumStability.Source.Higham.Chapter16.Problem02.LyapunovIntegral
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Problem02.LyapunovIntegral`.
+Declaration names and mathematical terminology are unchanged.
 -/

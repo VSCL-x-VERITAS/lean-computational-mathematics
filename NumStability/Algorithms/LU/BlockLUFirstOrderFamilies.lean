@@ -1,7 +1,7 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU.FirstOrderFamilies
-import NumStability.Source.Higham.Chapter13.Section01.OperationModelFamilies
-import NumStability.Source.Higham.Chapter13.Table01.Families
-import NumStability.Source.Higham.Chapter13.Theorem05.FamilyErrorAnalysis
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.FirstOrderFamilies
+import ComputationalMathematics.Source.Higham.Chapter13.Section01.OperationModelFamilies
+import ComputationalMathematics.Source.Higham.Chapter13.Table01.Families
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05.FamilyErrorAnalysis
 
 /-!
 # Historical BlockLU compatibility import

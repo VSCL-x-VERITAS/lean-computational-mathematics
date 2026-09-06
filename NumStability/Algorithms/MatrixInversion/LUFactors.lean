@@ -1,8 +1,8 @@
-import NumStability.Algorithms.MatrixInversion.LUFactors.ErrorAnalysis
-import NumStability.Algorithms.MatrixInversion.LUFactors.Methods
+import ComputationalMathematics.Algorithms.MatrixInversion.LUFactors
 
 /-!
-# NumStability.Algorithms.MatrixInversion.LUFactors
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixInversion.LUFactors`.
+Declaration names and mathematical terminology are unchanged.
 -/

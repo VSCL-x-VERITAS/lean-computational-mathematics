@@ -6,10 +6,10 @@
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
 import Mathlib.Tactic
-import NumStability.Source.Higham.Chapter01.Section12.InstabilityWithoutCancellation.PivotingExample
-import NumStability.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
-import NumStability.Source.Higham.Chapter03.Problem11.KahanAbsoluteValue.Basic
-import NumStability.Source.Higham.Chapter03.Problem11.KahanAbsoluteValue.IeeeDoubleTrace.Results
+import ComputationalMathematics.Source.Higham.Chapter01.Section12.InstabilityWithoutCancellation.PivotingExample
+import ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
+import ComputationalMathematics.Source.Higham.Chapter03.Problem11.KahanAbsoluteValue.Basic
+import ComputationalMathematics.Source.Higham.Chapter03.Problem11.KahanAbsoluteValue.IeeeDoubleTrace.Results
 
 /-!
 # KahanAbsolute (compatibility wrapper)

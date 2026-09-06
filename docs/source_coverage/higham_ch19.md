@@ -1172,3 +1172,12 @@ CLOSED (module `QR/Higham19Labels.lean`, axiom-clean, on `main`): **Lemma 19.1 C
 - The verified tail-leading-block normalized signed-active certificate milestone is synchronized to both `origin/main` and `origin/codex/split3b-ch19-main-sync` through the branch/main sync loop for this commit.
 - `chapter_splitting/` is local-only context: it is ignored by `.gitignore`, has no tracked files, is absent from the refreshed `origin/main`, and must not be pushed.
 - Remaining local untracked file at this point: `.codex/config.toml`.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter19` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

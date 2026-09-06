@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.VecNorm.Results
+import ComputationalMathematics.Source.Higham.Chapter16.VecNorm.Results
 
 /-!
 # Higham16VecNorm (compatibility module)

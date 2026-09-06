@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Equation23.PointRowGrowth
-import NumStability.Source.Higham.Chapter13.Equation23.ProductBounds.PointRow
+import ComputationalMathematics.Source.Higham.Chapter13.Equation23
 
 /-!
-# Higham Chapter 13, equation (13.23)
+Historical import path retained for compatibility.
 
-Complete compatibility aggregate for the canonical child modules. This module intentionally declares nothing.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Equation23`.
+Declaration names and mathematical terminology are unchanged.
 -/

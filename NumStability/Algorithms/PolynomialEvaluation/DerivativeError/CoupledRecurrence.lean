@@ -1,4 +1,4 @@
-import NumStability.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
 
 /-!
 # Checkpoint compatibility wrapper: CoupledRecurrence

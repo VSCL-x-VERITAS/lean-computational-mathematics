@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Corrections.CorrectedMGS.RoundedReplay
+import ComputationalMathematics.Source.Higham.Chapter21.Corrections.CorrectedMGS.RoundedReplay
 
 /-!
 # RoundedReplay (compatibility module)

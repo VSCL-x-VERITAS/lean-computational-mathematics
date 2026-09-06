@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem03.ResidualComparison.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem03.ResidualComparison
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem03.ResidualComparison`.
+Declaration names and mathematical terminology are unchanged.
 -/

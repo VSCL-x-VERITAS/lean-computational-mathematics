@@ -1,5 +1,5 @@
-import NumStability.Analysis.Error.RoundingProducts.Core
-import NumStability.Source.Higham.Chapter03.Problem02.ProductBounds.PositiveFactors
+import ComputationalMathematics.Analysis.Error.RoundingProducts.Core
+import ComputationalMathematics.Source.Higham.Chapter03.Problem02.ProductBounds.PositiveFactors
 
 /-!
 # Analysis.RoundingProductBounds compatibility facade

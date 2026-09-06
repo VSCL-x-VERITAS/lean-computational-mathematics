@@ -1,5 +1,5 @@
-import NumStability.Source.Higham.Chapter17.Problem01
-import NumStability.Source.Higham.Chapter17.Results.Series
+import ComputationalMathematics.Source.Higham.Chapter17.Problem01
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Series
 
 /-!
 # Historical stationary-iteration series import

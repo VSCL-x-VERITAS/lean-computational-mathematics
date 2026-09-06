@@ -6,9 +6,9 @@
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
 import Mathlib.Data.Nat.Factorization.Basic
-import NumStability.Source.Higham.Chapter02.Problem12.ReciprocalProduct.Results.Theorems
-import NumStability.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Basic
-import NumStability.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem12.ReciprocalProduct.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
 
 /-!
 # Problem2_13 (compatibility wrapper)

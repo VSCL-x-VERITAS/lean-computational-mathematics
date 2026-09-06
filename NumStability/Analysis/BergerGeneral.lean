@@ -7,9 +7,12 @@ import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.FieldTheory.IsAlgClosed.Basic
 import Mathlib.RingTheory.RootsOfUnity.Complex
-import NumStability.Analysis.BergerResolvent
-import NumStability.Analysis.NumericalRadius
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.Powers
+import Mathlib.Data.Real.Pointwise
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.PowerTwo
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core.Basic
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.PowersOfTwo
+
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.Powers
 
 /-!
 # Analysis.BergerGeneral (compatibility wrapper)

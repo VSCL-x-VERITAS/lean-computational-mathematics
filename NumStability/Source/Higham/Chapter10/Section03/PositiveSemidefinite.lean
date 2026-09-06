@@ -1,15 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.ConstructiveFactorization.Existence
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Endpoints
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Existence
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.PivotingAndScaling.Results
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.QuadraticFormBounds.WeightedNorm
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.SchurComplement
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.Termination
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.TrailingTermination.Bound
-import NumStability.Source.Higham.Chapter10.Section03.PositiveSemidefinite.WNormBound
+import ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite
 
 /-!
-# Source Higham Chapter10 Section03 PositiveSemidefinite
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Section03.PositiveSemidefinite`.
+Declaration names and mathematical terminology are unchanged.
 -/

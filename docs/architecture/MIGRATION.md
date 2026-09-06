@@ -1,7 +1,13 @@
 # Book-formalization migration gates
 
-This is the executable migration sequence for NumStability.  A gate is complete
+This is the executable migration sequence for Lean Computational Mathematics. A gate is complete
 only when its stated evidence is checked into the repository or recorded by CI.
+
+The separately authorized [identity migration](../migrations/lean-computational-mathematics/README.md)
+uses `ComputationalMathematics` for canonical modules while retaining the
+package, authored namespaces, test root and old imports. The phase/checkpoint
+records below retain their historical module names and measured outcomes.
+Use the identity validation record for the current canonical/legacy build matrix.
 
 The active repository-wide operating contract is
 [`phases/2026-08-repository-reorganization-completion/`](phases/2026-08-repository-reorganization-completion/README.md),

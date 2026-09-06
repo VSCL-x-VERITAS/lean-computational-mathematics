@@ -8,10 +8,19 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.MatrixPowers
-import NumStability.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealJordan
-import NumStability.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
-import NumStability.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealJordan
+import ComputationalMathematics.Algorithms.MatVec
+import ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.Model
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.MatrixNorms
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Real
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealDiagonal
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealDiagonal
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Equations08To14.ComputedIteration
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealCases
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.JordanScaling.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
+import ComputationalMathematics.Source.Higham.Chapter18.Section02.FinitePrecisionPowers.Theorems01And02.RealJordan
 
 /-!
 # Algorithms.MatrixPowersJordan

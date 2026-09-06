@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockResidual.WholeMatrixBounds
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.BlockResidual.LeftResidualBounds
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section02
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02`.
+Declaration names and mathematical terminology are unchanged.
 -/

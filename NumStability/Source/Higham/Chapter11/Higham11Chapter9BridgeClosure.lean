@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.CrossChapter.SymmetricIndefiniteLU.BridgeClosure
+import ComputationalMathematics.Source.Higham.CrossChapter.SymmetricIndefiniteLU.BridgeClosure
 
 /-!
 # Higham11Chapter9BridgeClosure (compatibility module)

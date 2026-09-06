@@ -1,9 +1,8 @@
-import NumStability.Source.Vershynin.Chapter02.Section07.Example13.Contract
-import NumStability.Source.Vershynin.Chapter02.Section07.Example13.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13
 
 /-!
-# Vershynin Example13 source correspondence
+Historical import path retained for compatibility.
 
-Canonical entry point combining the frozen signature and checked contract for
-this source result.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13`.
+Declaration names and mathematical terminology are unchanged.
 -/

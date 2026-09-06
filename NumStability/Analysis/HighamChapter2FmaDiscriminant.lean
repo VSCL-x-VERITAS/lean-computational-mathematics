@@ -5,8 +5,8 @@
 -- not deleted and not Git-renamed, so every existing `import` keeps resolving.
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.Basic
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.Counterexample.Results
 
 /-!
 # HighamChapter2FmaDiscriminant (compatibility wrapper)

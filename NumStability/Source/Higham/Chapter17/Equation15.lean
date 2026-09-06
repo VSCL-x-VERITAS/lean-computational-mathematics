@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter17.Results.Equation15.UniformForwardBound
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation15.UniformForwardBound
 
 /-!
 # Higham Chapter 17, Equation 17.15 compatibility wrapper

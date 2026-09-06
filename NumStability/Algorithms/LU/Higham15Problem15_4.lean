@@ -1,6 +1,6 @@
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Source.Higham.Chapter15.Problem04.LUConditionBounds.Basic
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter15.Problem04.LUConditionBounds.Basic
 
 /-!
 # Higham15Problem15_4 (compatibility wrapper)

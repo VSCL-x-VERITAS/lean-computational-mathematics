@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AutomaticBounds.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AutomaticBounds.Results.Core
 
 /-!
 # Higham16AutoCondition (compatibility module)

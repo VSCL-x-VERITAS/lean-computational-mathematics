@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Problem08.LeadingMinorsCounterexample.Basic
+import ComputationalMathematics.Source.Higham.Chapter10.Problem08.LeadingMinorsCounterexample
 
 /-!
-# Source Higham Chapter10 Problem08 LeadingMinorsCounterexample
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Problem08.LeadingMinorsCounterexample`.
+Declaration names and mathematical terminology are unchanged.
 -/

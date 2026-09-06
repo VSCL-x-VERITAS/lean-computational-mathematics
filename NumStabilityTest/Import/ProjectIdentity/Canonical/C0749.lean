@@ -1,0 +1,7 @@
+import ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMatrixLaw
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMatrixLaw`. -/
+
+#check NumStability.IsNormalizedOrthogonalHaarLaw
+#check NumStability.diracIdentity_isNormalizedOrthogonalHaarLaw_zero
+#check NumStability.stewartLaw_isNormalizedOrthogonalHaarLaw

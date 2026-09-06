@@ -1,7 +1,8 @@
-import NumStability.Analysis.FunctionalCalculus.Resolvent.All
+import ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent
 
 /-!
-# NumStability.Analysis.FunctionalCalculus.Resolvent
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.FunctionalCalculus.Resolvent`.
+Declaration names and mathematical terminology are unchanged.
 -/

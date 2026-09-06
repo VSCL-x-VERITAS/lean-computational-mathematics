@@ -1,5 +1,8 @@
-import NumStability.Source.Higham.Chapter21.Equation09.EquationClosure
-import NumStability.Source.Higham.Chapter21.Equation09.ProjectorNorm
-import NumStability.Source.Higham.Chapter21.Equation09.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation09
 
-/-! # Higham Chapter 21, equation (21.9) -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter21.Equation09`.
+Declaration names and mathematical terminology are unchanged.
+-/

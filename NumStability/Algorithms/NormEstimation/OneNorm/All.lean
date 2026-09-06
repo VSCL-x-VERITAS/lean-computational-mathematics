@@ -1,12 +1,8 @@
-import NumStability.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic
-import NumStability.Algorithms.NormEstimation.OneNorm.GeneralIndex
-import NumStability.Algorithms.NormEstimation.OneNorm.LAPACK.Basic
-import NumStability.Algorithms.NormEstimation.OneNorm.LINPACK.Basic
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.All
 
 /-!
-# Algorithms.NormEstimation.OneNorm.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.OneNorm.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

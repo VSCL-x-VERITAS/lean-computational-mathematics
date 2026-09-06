@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem01.ComponentwisePerturbation.RankStability
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter21.Theorem01.ComponentwisePerturbation.RankStability`. -/
+
+#check NumStability.higham21_theorem21_1_perturbed_gram_det_ne_zero_of_gram_det_ne_zero

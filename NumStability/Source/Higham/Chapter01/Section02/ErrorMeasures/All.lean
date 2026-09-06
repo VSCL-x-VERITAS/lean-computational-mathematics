@@ -1,7 +1,8 @@
-import NumStability.Analysis.Error.Measures.All
+import ComputationalMathematics.Source.Higham.Chapter01.Section02.ErrorMeasures.All
 
 /-!
-# Source.Higham.Chapter01.Section02.ErrorMeasures.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter01.Section02.ErrorMeasures.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

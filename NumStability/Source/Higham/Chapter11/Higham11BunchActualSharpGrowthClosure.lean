@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Bunch.ActualSharpGrowthClosure
+import ComputationalMathematics.Source.Higham.Chapter11.Bunch.ActualSharpGrowthClosure
 
 /-!
 # Higham11BunchActualSharpGrowthClosure (compatibility module)

@@ -1,0 +1,10 @@
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.SecondVariation.BoydLocal
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.NormEstimation.PNorm.Boyd.SecondVariation.BoydLocal`. -/
+
+#check NumStability.Ch15.IsBoydNondegenerateTangentHessian
+#check NumStability.Ch15.boydInvariantRestriction
+#check NumStability.Ch15.boydWeightedTangentDerivative
+#check NumStability.Ch15.boyd_tangent_restriction_power_stable_of_nondegenerate_hessian
+#check NumStability.Ch15.boyd_weighted_tangent_contraction_of_nondegenerate_hessian
+#check NumStability.Ch15.opNorm_le_one_sub_of_symmetric_psd_rayleigh_gap

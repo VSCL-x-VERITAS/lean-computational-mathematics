@@ -1,9 +1,8 @@
-import NumStability.Algorithms.NormEstimation.OneNorm
-import NumStability.Algorithms.NormEstimation.PNorm
-import NumStability.Algorithms.NormEstimation.TwoNorm
+import ComputationalMathematics.Algorithms.NormEstimation
 
 /-!
-# NumStability.Algorithms.NormEstimation
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation`.
+Declaration names and mathematical terminology are unchanged.
 -/

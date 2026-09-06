@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Algorithm02.InitializationModelLimitations
+import ComputationalMathematics.Source.Higham.Chapter04.Algorithm02
 
 /-!
-# Higham Chapter 4, Algorithm 4.2
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for source-specific audits of Kahan's
-compensated summation algorithm.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Algorithm02`.
+Declaration names and mathematical terminology are unchanged.
 -/

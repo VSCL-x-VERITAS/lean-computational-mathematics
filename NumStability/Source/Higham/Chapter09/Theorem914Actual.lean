@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.Theorem14.Actual
+import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.Actual
 
 /-!
 # Theorem914Actual (compatibility module)

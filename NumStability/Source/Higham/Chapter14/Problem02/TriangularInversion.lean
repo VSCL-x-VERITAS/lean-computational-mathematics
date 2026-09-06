@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.Basic
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.Families
-import NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion.Method2B
+import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem02.TriangularInversion
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion`.
+Declaration names and mathematical terminology are unchanged.
 -/

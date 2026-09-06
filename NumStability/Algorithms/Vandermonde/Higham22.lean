@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter22.VandermondeSystems
+import ComputationalMathematics.Source.Higham.Chapter22.VandermondeSystems
 
 /-!
 # Compatibility import for Higham Chapter 22 Vandermonde systems

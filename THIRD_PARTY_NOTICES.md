@@ -12,10 +12,10 @@ Version 2.0 is available at
 The following files state that they were adapted from mathlib4 PR #28013 at
 commit `5abb7c68488b527e4d7ecf5d7bbe085db8d2a388`:
 
-- `NumStability/Upstream/Lindemann/AlgebraicPart.lean`
-- `NumStability/Upstream/Lindemann/Basic.lean`
-- `NumStability/Upstream/Lindemann/FinsuppQuotient.lean`
-- `NumStability/Upstream/Lindemann/SymmetricEval.lean`
+- `ComputationalMathematics/Upstream/Lindemann/AlgebraicPart.lean`
+- `ComputationalMathematics/Upstream/Lindemann/Basic.lean`
+- `ComputationalMathematics/Upstream/Lindemann/FinsuppQuotient.lean`
+- `ComputationalMathematics/Upstream/Lindemann/SymmetricEval.lean`
 
 They retain:
 
@@ -26,7 +26,7 @@ Upstream: <https://github.com/leanprover-community/mathlib4/pull/28013>
 
 ## mathlib4: monoid-algebra compatibility API
 
-`NumStability/Upstream/Lindemann/MonoidAlgebraCompat.lean` states that it
+`ComputationalMathematics/Upstream/Lindemann/MonoidAlgebraCompat.lean` states that it
 backports APIs from:
 
 - mathlib4 PR #36762,

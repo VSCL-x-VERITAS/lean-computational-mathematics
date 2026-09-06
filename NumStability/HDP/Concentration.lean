@@ -1,8 +1,8 @@
-import NumStability.HDP.Concentration.MetricMeasure
+import ComputationalMathematics.HDP.Concentration
 
 /-!
-# Concentration in metric-measure settings
+Historical import path retained for compatibility.
 
-Complete family entry point for the current metric-measure concentration
-development.
+The implementation is provided by `ComputationalMathematics.HDP.Concentration`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,0 +1,6 @@
+import NumStability.Source.Vershynin.Chapter05.Section01.Exercise13
+
+/-! Isolated API witness for `NumStability.Source.Vershynin.Chapter05.Section01.Exercise13`; authored declaration names are retained. -/
+
+#check @NumStability.HDP.Contract.hdp_05_hex_h5_d1_d13__contract
+#check @NumStability.HDP.Contract.hdp_05_hex_h5_d1_d13__contract_type

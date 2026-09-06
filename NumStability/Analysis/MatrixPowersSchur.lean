@@ -1,9 +1,9 @@
 import Mathlib.Analysis.CStarAlgebra.Matrix
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Schur
-import NumStability.Analysis.LinearOperators.Schur.Complex.Triangulation
-import NumStability.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices.Powers
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
-import NumStability.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.Triangulation
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices.Powers
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
 
 /-!
 # Analysis.MatrixPowersSchur (compatibility wrapper)

@@ -1,13 +1,8 @@
-import NumStability.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Rectangular
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.BoydInterface
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.PNormGeneral
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.PNormRectangular
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.RectangularTermination
-import NumStability.Source.Higham.Chapter15.Algorithm01.PNormPowerMethod.PNormRectangular
-import NumStability.Source.Higham.Chapter15.Lemma02.PNormPowerMethod.PNormRectangular
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular
 
 /-!
-# Rectangular p-norm estimation
+Historical import path retained for compatibility.
 
-Semantic entry point for rectangular p-norm estimation and its source results.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular`.
+Declaration names and mathematical terminology are unchanged.
 -/

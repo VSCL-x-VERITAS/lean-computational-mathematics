@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.CompletePivotingBound
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.Endpoints
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.GramFamily
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.Limit
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.OperatorNorm.SourceBound
-import NumStability.Source.Higham.Chapter10.Lemma13.KahanSharpness.UnboundedGrowth.Construction
+import ComputationalMathematics.Source.Higham.Chapter10.Lemma13.KahanSharpness
 
 /-!
-# Source Higham Chapter10 Lemma13 KahanSharpness
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Lemma13.KahanSharpness`.
+Declaration names and mathematical terminology are unchanged.
 -/

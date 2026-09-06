@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Equation11.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation11.Results.Core
 
 /-!
 # Higham21Equation21_11 (compatibility module)

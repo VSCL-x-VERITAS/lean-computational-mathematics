@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.QuasiRounded.Sylvester
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Sylvester
 
 /-!
 # Higham16QuasiRoundedSylvester (compatibility module)

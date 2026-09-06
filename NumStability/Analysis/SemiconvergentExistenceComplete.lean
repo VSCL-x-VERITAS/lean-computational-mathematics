@@ -1,4 +1,4 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.PrimarySplitting
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.PrimarySplitting
 
 /-!
 # Historical semiconvergence primary-splitting import

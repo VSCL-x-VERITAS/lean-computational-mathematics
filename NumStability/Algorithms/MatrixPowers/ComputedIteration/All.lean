@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixPowers.ComputedIteration.Model
+import ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.All
 
 /-!
-# Algorithms.MatrixPowers.ComputedIteration.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixPowers.ComputedIteration.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

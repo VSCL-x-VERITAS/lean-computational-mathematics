@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma03.ActualSequence
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter19.Lemma03.ActualSequence`. -/
+
+#check NumStability.higham19_lemma19_3_actual_stored_sequence_backward_error

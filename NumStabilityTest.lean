@@ -594,6 +594,7 @@ import NumStabilityTest.Reorganization.CheckpointSync.OldOnly.NumStability_Algor
 import NumStabilityTest.Reorganization.CheckpointSync.OldOnly.NumStability_Algorithms_PolynomialEvaluation_PatersonStockmeyer_Correctness
 import NumStabilityTest.Reorganization.W06.MatrixPowersCanonical
 import NumStabilityTest.Reorganization.W06.MatrixPowersCompatibility
+import NumStabilityTest.Import.ProjectIdentity
 
 /-!
 # NumStability test suite

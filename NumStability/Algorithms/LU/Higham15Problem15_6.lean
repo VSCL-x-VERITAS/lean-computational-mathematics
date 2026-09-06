@@ -1,7 +1,11 @@
 import Mathlib.Tactic
-import NumStability.Algorithms.LU.TridiagonalCondCh15IkebeClosure
-import NumStability.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.Recurrences.EntryFormulas
-import NumStability.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.TridiagonalInverse
+import ComputationalMathematics.Algorithms.LU.TridiagonalCond
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem07.TridiagonalLU.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem08.TridiagonalDiagonalDominance.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.IrreducibleRightInverse.RankOneStructure
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.Recurrences.EntryFormulas
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.TridiagonalInverse
 
 /-!
 # Higham15Problem15_6 (compatibility wrapper)

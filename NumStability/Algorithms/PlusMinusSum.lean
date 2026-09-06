@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.PlusMinus
+import ComputationalMathematics.Algorithms.Summation.PlusMinus
 
 /-!
 # Plus/minus summation compatibility import

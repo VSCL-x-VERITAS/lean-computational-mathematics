@@ -1,8 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Basic
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting.Tridiagonal
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting
 
 /-!
-# Algorithms LinearSystems SymmetricIndefinite Pivoting
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.Pivoting`.
+Declaration names and mathematical terminology are unchanged.
 -/

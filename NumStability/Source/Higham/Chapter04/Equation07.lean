@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Equation07.AbstractModelCounterexample
-import NumStability.Source.Higham.Chapter04.Equation07.NoGuardCounterexample
-import NumStability.Source.Higham.Chapter04.Equation07.SterbenzCounterexamples
+import ComputationalMathematics.Source.Higham.Chapter04.Equation07
 
 /-!
-# Higham Chapter 4, equation (4.7)
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for source-specific counterexamples and
-proof-route audits associated with Higham equation (4.7).
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Equation07`.
+Declaration names and mathematical terminology are unchanged.
 -/

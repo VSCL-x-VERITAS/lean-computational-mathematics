@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter01.CauchySchwarz.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.CauchySchwarz.Contract
 
 /-!
 # Compatibility import for an HDP source contract

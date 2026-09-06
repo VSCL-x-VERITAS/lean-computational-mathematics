@@ -1,4 +1,4 @@
-import NumStability.Analysis.MatrixEquations.SylvesterExistence
+import ComputationalMathematics.Analysis.MatrixEquations.SylvesterExistence
 
 /-!
 # SylvesterSchurExistence (compatibility module)

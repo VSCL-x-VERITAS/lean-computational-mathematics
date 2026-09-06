@@ -1,0 +1,26 @@
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Absorption
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.AlternativeBound
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.AugmentedSystem
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.BackwardError
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Basic
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Conditioning
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Contract
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Equality.KKTInverse
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Equality.MixedStability
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Equality.Perturbation
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Equality.RowwiseBackwardError
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.GramBasis
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.MinimumNorm
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.NormalEquations
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Normwise
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Projection
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.ResidualQuality
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.Wedin
+import ComputationalMathematics.Analysis.Perturbation.LeastSquares.WeightedLimit
+
+/-!
+# Least-squares perturbation analysis
+
+Declaration-free aggregate for the canonical reusable least-squares
+perturbation and error analysis family.
+-/

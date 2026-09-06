@@ -1,5 +1,5 @@
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Problems15And16.SpecialValueProbes.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problems15And16.SpecialValueProbes.Basic
 
 /-!
 # Problem2_15_16 (compatibility module)

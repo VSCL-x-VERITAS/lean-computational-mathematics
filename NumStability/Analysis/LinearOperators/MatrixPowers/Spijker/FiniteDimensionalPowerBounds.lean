@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds.Kreiss
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.FiniteDimensionalPowerBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

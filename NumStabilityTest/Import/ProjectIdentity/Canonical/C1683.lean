@@ -1,0 +1,6 @@
+import ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.EndpointTermination.InfinityCounterexample.Trace
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter15.Section02.Boyd.EndpointTermination.InfinityCounterexample.Trace`. -/
+
+#check NumStability.RectPNormPair.higham15_rectangular_infinity_counterexample_stops_at_four
+#check NumStability.RectPNormPair.higham15_rectangular_infinity_n_plus_one_source_discrepancy

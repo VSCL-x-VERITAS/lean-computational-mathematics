@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.TerminalClosedForm
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.TerminalClosedForm
 
 /-!
 # Higham11BunchKaufmanRoundedTerminalClosedForm (compatibility module)

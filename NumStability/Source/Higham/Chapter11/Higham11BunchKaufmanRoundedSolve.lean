@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Solve
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Solve
 
 /-!
 # Higham11BunchKaufmanRoundedSolve (compatibility module)

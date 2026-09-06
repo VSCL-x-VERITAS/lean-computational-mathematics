@@ -1,9 +1,8 @@
-import NumStability.All
+import ComputationalMathematics
 
 /-!
-# NumStability compatibility entry point
+Historical import path retained for compatibility.
 
-This module preserves the pre-migration behavior of `import NumStability` by
-re-exporting the complete tree.  New downstream code should prefer the narrowest
-entry point that supplies the declarations it uses.
+The implementation is provided by `ComputationalMathematics`.
+Declaration names and mathematical terminology are unchanged.
 -/

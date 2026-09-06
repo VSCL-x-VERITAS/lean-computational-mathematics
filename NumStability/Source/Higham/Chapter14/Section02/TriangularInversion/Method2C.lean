@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2C
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.Method2CWhole
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C`.
+Declaration names and mathematical terminology are unchanged.
 -/

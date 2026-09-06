@@ -5,9 +5,9 @@
 -- not deleted and not Git-renamed, so every existing `import` keeps resolving.
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
-import NumStability.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
-import NumStability.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.Basic
-import NumStability.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
 
 /-!
 # Problem2_14 (compatibility wrapper)

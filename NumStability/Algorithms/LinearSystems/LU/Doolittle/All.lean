@@ -1,11 +1,8 @@
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.BackwardError
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Basic
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Budgets
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Certificates
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.RoundedEntries
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.All
 
 /-!
-# Algorithms.LinearSystems.LU.Doolittle.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

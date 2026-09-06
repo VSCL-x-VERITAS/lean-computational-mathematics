@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.CrossChapter.SymmetricIndefiniteLU.ActualExecutorBridge
+import ComputationalMathematics.Source.Higham.CrossChapter.SymmetricIndefiniteLU.ActualExecutorBridge
 
 /-!
 # Higham11Chapter9ActualExecutorBridge (compatibility module)

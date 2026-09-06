@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter17.Results.Equation12.AttainedPartialSumBound
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation12.AttainedPartialSumBound
 
 /-!
 # Higham Chapter 17, Equation 17.12 compatibility wrapper

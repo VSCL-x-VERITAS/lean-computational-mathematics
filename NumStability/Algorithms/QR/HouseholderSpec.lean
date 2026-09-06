@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Algorithms.LinearSystems.QR.HouseholderSpec
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderSpec
 
 /-!
 # HouseholderSpec (compatibility wrapper)

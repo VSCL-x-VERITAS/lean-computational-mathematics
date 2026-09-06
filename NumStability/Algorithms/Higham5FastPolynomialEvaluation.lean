@@ -7,9 +7,9 @@
 
 import Mathlib.Analysis.Polynomial.Factorization
 import Mathlib.Tactic
-import NumStability.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
-import NumStability.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Basic
-import NumStability.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Results.Theorems
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Results.Theorems
 
 /-!
 # Higham5FastPolynomialEvaluation (compatibility wrapper)

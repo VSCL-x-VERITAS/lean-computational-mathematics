@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter02.ExponentialMarkov.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.ExponentialMarkov.Signature
 
 /-!
 # Compatibility import for an HDP contract signature

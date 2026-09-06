@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter21.Equation03.UnderdeterminedSolve
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter21.Equation03.UnderdeterminedSolve`. -/
+
+#check NumStability.higham21_eq21_3_q_factor_zero_free_block_min_norm

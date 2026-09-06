@@ -5,22 +5,22 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Analysis.ForwardError
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter09.Problems
-import NumStability.Source.Higham.Chapter09.Section01
-import NumStability.Source.Higham.Chapter09.Section02
-import NumStability.Source.Higham.Chapter09.Section03
-import NumStability.Source.Higham.Chapter09.Section04
-import NumStability.Source.Higham.Chapter09.Section05
-import NumStability.Source.Higham.Chapter09.Section06
-import NumStability.Source.Higham.Chapter09.Section08
-import NumStability.Source.Higham.Chapter09.Section10
-import NumStability.Source.Higham.Chapter09.Section11
-import NumStability.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
+import ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Analysis.ForwardError
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter14.Corollary07.RowDominantCertificates.CumulativeProductBounds
 
 /-!
 # GaussJordan (compatibility module)

@@ -8,9 +8,9 @@
 import Mathlib.Data.Nat.Log
 import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.NormNum
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Basic
-import NumStability.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Results.Theorems
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Results.Theorems
 
 /-!
 # Problem2_3 (compatibility wrapper)

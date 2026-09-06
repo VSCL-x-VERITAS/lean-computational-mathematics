@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.CirculantSystems
+import ComputationalMathematics.Source.Higham.Chapter24.CirculantSystems
 
 /-!
 # Historical Chapter 24 circulant-systems import

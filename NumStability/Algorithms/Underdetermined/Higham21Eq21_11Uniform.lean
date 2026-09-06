@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Equation11.UniformEnvelope.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation11.UniformEnvelope.Core
 
 /-!
 # Higham21Eq21_11Uniform (compatibility module)

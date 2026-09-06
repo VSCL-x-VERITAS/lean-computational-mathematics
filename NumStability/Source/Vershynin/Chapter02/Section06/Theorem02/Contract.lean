@@ -1,16 +1,8 @@
-import NumStability.Source.Vershynin.Chapter02.Section06.Theorem02.Signature
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02.Contract
 
-/-! Stable Chapter 2 forwarding module for Theorem 2.6.2. -/
+/-!
+Historical import path retained for compatibility.
 
-noncomputable section
-
-namespace NumStability.HDP.Contract
-
-theorem hdp_02_hthm_h2_d6_d2__contract
-    : hdp_02_hthm_h2_d6_d2__contract_type := by
-  intro ι Ω instFintype instMeasurableSpace μ instProbability X K hX hIndep hEnergy t ht
-  exact NumStability.HDP.Contract.hdp_02_hthm_h2_d6_d2
-    hX hIndep hEnergy ht
-
-end NumStability.HDP.Contract
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02.Contract`.
+Declaration names and mathematical terminology are unchanged.
+-/

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Growth
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Growth
 
 /-!
 # Higham11BunchKaufmanRoundedGrowth (compatibility module)

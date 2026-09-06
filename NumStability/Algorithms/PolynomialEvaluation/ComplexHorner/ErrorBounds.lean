@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter05.Algorithm01.ComplexHorner.ErrorBounds.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Algorithm01.ComplexHorner.ErrorBounds.Theorems
 
 /-!
 # Checkpoint compatibility wrapper: ErrorBounds

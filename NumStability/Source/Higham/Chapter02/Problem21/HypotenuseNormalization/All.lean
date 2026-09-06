@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.Basic
-import NumStability.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.All
 
 /-!
-# Complete HypotenuseNormalization family
+Historical import path retained for compatibility.
 
-Declaration-free public aggregate for the supported family modules. The declarations remain owned by the current canonical result provider.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

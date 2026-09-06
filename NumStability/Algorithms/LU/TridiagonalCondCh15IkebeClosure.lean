@@ -1,5 +1,8 @@
-import NumStability.Algorithms.LU.TridiagonalCondCh15
-import NumStability.Source.Higham.Chapter15.Theorem09.Ikebe.IrreducibleRightInverse.RankOneStructure
+import ComputationalMathematics.Algorithms.LU.TridiagonalCond
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem07.TridiagonalLU.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem08.TridiagonalDiagonalDominance.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.IrreducibleRightInverse.RankOneStructure
 
 /-!
 # TridiagonalCondCh15IkebeClosure (compatibility wrapper)

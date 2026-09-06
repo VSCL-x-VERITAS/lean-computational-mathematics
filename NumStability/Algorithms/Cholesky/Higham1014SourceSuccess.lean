@@ -1,5 +1,5 @@
-import NumStability.Source.Higham.Chapter10.Theorem07
-import NumStability.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceSuccess
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem14.CompletePivotedPSD.SourceSuccess
 
 /-!
 # Higham1014SourceSuccess (compatibility module)

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Foundations.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Foundations.Core
 
 /-!
 # Higham16 (compatibility module)

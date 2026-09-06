@@ -1,3 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05.Contract
 
-/-! Stable Chapter 1 forwarding module for Corollary 1.2.5. -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05.Contract`.
+Declaration names and mathematical terminology are unchanged.
+-/

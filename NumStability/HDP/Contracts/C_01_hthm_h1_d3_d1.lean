@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter01.Section03.Theorem01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section03.Theorem01.Contract
 
 /-!
 # Compatibility import for an HDP source contract

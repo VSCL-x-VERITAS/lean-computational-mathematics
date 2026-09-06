@@ -18,7 +18,7 @@ the architecture and diagnostic checker self-tests, `check_phase.py --all-phases
 `check_completion_phase.py`, `check_layout.py`, `check_compatibility.py`,
 `check_tiers.py`, `check_placeholders.py --completion`,
 `check_provenance.py`, `generate_baseline.py --skip-declarations
---strict-source`, `lake build NumStability NumStabilityTest`, the literal
+--strict-source`, `lake build ComputationalMathematics NumStability NumStabilityTest`, the literal
 `lake test` test-driver step, `check_warnings.py --check` against
 `docs/architecture/warnings.json`, and `check_lint.py --check` against
 `docs/architecture/lint.json`.
@@ -66,3 +66,13 @@ unless it changes the recorded history itself, which no batch may do.
 - No second physical Lake library without benchmark evidence and a separate
   approved packaging decision.
 - Declaration/API renames are never combined with path migration.
+
+## Approved public-identity migration
+
+The separately authorized [identity migration](../migrations/lean-computational-mathematics/README.md)
+moves the canonical module root to `ComputationalMathematics` while retaining
+the `numStability` package, `NumStabilityTest`, authored `NumStability`
+declarations and every old import. It supplies the explicit compatibility
+and packaging decision for this prefix change; it does not authorize a
+mathematical reorganization, declaration rename or relaxed gate. The original
+checkpoint/lifecycle records above remain historical evidence.

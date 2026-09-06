@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter04.Equation10.AbstractModel
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation10.AbstractModel`. -/
+
+#check NumStability.fl_alternativeCompensatedSum_backward_error_source_bound_of_exact_steps_correction_transfer
+#check NumStability.fl_alternativeCompensatedSum_backward_error_source_bound_of_exact_steps_higham_cap
+#check NumStability.fl_alternativeCompensatedSum_relError_le_of_backward_oneSigned
+#check NumStability.not_forall_alternativeCompensated_globalGammaRadius_le_two_u_add_n_sq_u_sq_of_nu_le_tenth

@@ -10,7 +10,7 @@
 --   NumStability.Algorithms.LinearSystems.QR.HouseholderQRSupport
 --     -> NumStability.Algorithms.LinearSystems.QR.Householder.StoredQR
 
-import NumStability.Algorithms.LinearSystems.QR.Householder.StoredQR
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.StoredQR
 
 /-!
 # HouseholderQRSupport (compatibility wrapper)

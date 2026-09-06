@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning
-import NumStability.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.AutomaticBounds.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Section03
 
 /-!
-# Source Higham Chapter16 Section03
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section03`.
+Declaration names and mathematical terminology are unchanged.
 -/

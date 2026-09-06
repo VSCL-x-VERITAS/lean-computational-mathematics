@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem13.GEJBound.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem13.GEJBound
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem13.GEJBound
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem13.GEJBound`.
+Declaration names and mathematical terminology are unchanged.
 -/

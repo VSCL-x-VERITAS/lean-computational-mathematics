@@ -1,9 +1,8 @@
-import NumStability.Source.Vershynin.Chapter02.Section02.Exercise10B.Contract
-import NumStability.Source.Vershynin.Chapter02.Section02.Exercise10B.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B
 
 /-!
-# Vershynin Exercise10B source correspondence
+Historical import path retained for compatibility.
 
-Canonical entry point combining the frozen signature and checked contract for
-this source result.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B`.
+Declaration names and mathematical terminology are unchanged.
 -/

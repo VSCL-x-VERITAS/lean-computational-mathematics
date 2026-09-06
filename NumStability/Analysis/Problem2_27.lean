@@ -8,10 +8,10 @@
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
-import NumStability.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.Basic
-import NumStability.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.UnderflowAwareConvergence.Results
-import NumStability.Source.Higham.Chapter02.Section06.ReciprocalIteration.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.UnderflowAwareConvergence.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.ReciprocalIteration.Basic
 
 /-!
 # Problem2_27 (compatibility wrapper)

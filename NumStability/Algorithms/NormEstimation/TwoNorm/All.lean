@@ -1,7 +1,8 @@
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.All
 
 /-!
-# Algorithms.NormEstimation.TwoNorm.All
+Historical import path retained for compatibility.
 
-Reviewed W10 discovery entry point for the reusable two-norm estimation family.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,10 @@
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Analysis.InnerProductSpace.Symmetric
 import Mathlib.LinearAlgebra.Matrix.Hermitian
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.Hermitian
-import NumStability.Analysis.NumericalRadius
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.Hermitian
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Analysis.InnerProductSpace.LinearMap
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core.Basic
 
 /-!
 # Analysis.BergerInequality (compatibility wrapper)

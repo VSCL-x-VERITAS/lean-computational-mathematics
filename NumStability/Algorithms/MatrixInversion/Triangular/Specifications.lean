@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixInversion.Triangular.Specifications.MatrixInversion
+import ComputationalMathematics.Algorithms.MatrixInversion.Triangular.Specifications
 
 /-!
-# NumStability.Algorithms.MatrixInversion.Triangular.Specifications
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixInversion.Triangular.Specifications`.
+Declaration names and mathematical terminology are unchanged.
 -/

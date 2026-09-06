@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.CrossChapter.LUSolverWeights
-import NumStability.Source.Higham.CrossChapter.NoGuardDotProduct
-import NumStability.Source.Higham.CrossChapter.PracticalConditionBound
-import NumStability.Source.Higham.CrossChapter.SymmetricIndefiniteLU.ActualExecutorBridge
-import NumStability.Source.Higham.CrossChapter.SymmetricIndefiniteLU.BridgeClosure
+import ComputationalMathematics.Source.Higham.CrossChapter
 
 /-!
-# Higham cross-chapter results
+Historical import path retained for compatibility.
 
-Complete source-correspondence import surface for results whose mathematical
-scope spans more than one chapter.
+The implementation is provided by `ComputationalMathematics.Source.Higham.CrossChapter`.
+Declaration names and mathematical terminology are unchanged.
 -/

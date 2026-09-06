@@ -1,7 +1,8 @@
-import NumStability.Analysis.Asymptotics.Bounds
+import ComputationalMathematics.Analysis.Asymptotics
 
 /-!
-# Asymptotic analysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical asymptotic-analysis family.
+The implementation is provided by `ComputationalMathematics.Analysis.Asymptotics`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,3 +1,8 @@
-import NumStability.HDP.Scalar.SubExponential
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13.Contract
 
-/-! Stable Chapter 2 contract re-export for Example 2.7.13. -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13.Contract`.
+Declaration names and mathematical terminology are unchanged.
+-/

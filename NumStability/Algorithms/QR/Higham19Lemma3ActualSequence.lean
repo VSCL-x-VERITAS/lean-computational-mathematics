@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Lemma03.ActualSequence
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma03.ActualSequence
 
 /-!
 # Higham19Lemma3ActualSequence (compatibility wrapper)

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Results.Theorems
 
 /-!
 # Checkpoint compatibility wrapper: QuinticKernel

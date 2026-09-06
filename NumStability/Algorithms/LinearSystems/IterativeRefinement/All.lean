@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.IterativeRefinement.Core
+import ComputationalMathematics.Algorithms.LinearSystems.IterativeRefinement.All
 
 /-!
-# Algorithms.LinearSystems.IterativeRefinement.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.IterativeRefinement.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter09.CompletePivotSharpClosure
+import ComputationalMathematics.Source.Higham.Chapter09.CompletePivotSharpClosure
 
 /-!
 # Historical HighamChapter9CompletePivotSharpClosure import

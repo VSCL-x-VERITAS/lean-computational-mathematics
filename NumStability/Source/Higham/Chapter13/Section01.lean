@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Section01.NormConventions
-import NumStability.Source.Higham.Chapter13.Section01.OperationModelFamilies
-import NumStability.Source.Higham.Chapter13.Section01.OperationModels
-import NumStability.Source.Higham.Chapter13.Section01.StandardFactorization
+import ComputationalMathematics.Source.Higham.Chapter13.Section01
 
 /-!
-# Higham Chapter 13: Section01
+Historical import path retained for compatibility.
 
-Declaration-free source aggregate for the Chapter 13 `Section01` family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Section01`.
+Declaration names and mathematical terminology are unchanged.
 -/

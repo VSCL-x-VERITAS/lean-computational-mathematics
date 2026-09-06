@@ -5,9 +5,9 @@
 -- not deleted and not Git-renamed, so every existing `import` keeps resolving.
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
-import NumStability.Analysis.PerturbationTheory
-import NumStability.Source.Higham.Chapter07.LinearSystemsConditioning.RectangularTheorems
-import NumStability.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem03.RectangularResults
+import ComputationalMathematics.Analysis.PerturbationTheory
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.RectangularTheorems
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem03.RectangularResults
 
 /-!
 # HighamChapter7Rectangular (compatibility wrapper)

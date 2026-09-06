@@ -1,7 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Perturbation.All
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation
 
 /-!
-# Algorithms MatrixEquations Sylvester Perturbation
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Perturbation`.
+Declaration names and mathematical terminology are unchanged.
 -/

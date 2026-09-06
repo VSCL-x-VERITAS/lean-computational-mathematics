@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter17.Results.Section04.DrazinConsequences
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Section04.DrazinConsequences
 
 /-!
 # Historical stationary-iteration Drazin compatibility import

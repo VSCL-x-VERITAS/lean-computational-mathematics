@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.VecPermutation.Notes
+import ComputationalMathematics.Source.Higham.Chapter16.VecPermutation.Notes
 
 /-!
 # Higham16VecPermutationNotes (compatibility module)

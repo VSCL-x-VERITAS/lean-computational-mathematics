@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract
 
 /-!
 # Compatibility import for an HDP source contract

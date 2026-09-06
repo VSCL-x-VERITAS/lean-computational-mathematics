@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversion
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B.MatrixInversionMethod2BInstance
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2B`.
+Declaration names and mathematical terminology are unchanged.
 -/

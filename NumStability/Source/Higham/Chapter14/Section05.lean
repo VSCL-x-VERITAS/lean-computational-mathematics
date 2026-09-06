@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section05.RectangularIteration
-import NumStability.Source.Higham.Chapter14.Section05.SpectralConvergence
-import NumStability.Source.Higham.Chapter14.Section05.SquareIteration
+import ComputationalMathematics.Source.Higham.Chapter14.Section05
 
 /-!
-# Higham Chapter 14, Section 5
+Historical import path retained for compatibility.
 
-Complete canonical aggregate for the exact square and rectangular Schulz
-inverse iterations and the source's spectral convergence criterion.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section05`.
+Declaration names and mathematical terminology are unchanged.
 -/

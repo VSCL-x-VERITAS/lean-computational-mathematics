@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Skew.SourceCorrection
+import ComputationalMathematics.Source.Higham.Chapter11.Skew.SourceCorrection
 
 /-!
 # Higham11SkewSourceCorrection (compatibility module)

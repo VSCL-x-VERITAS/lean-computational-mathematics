@@ -250,3 +250,12 @@ Chapter 6 is consumed everywhere norms appear; the concrete dependency spine obs
 - Theorem 6.5's "condition number = reciprocal distance to singularity" pattern recurs for the
   problem classes named in §6.5 (matrix inversion, eigenproblems); the mixed-norm κ machinery here is
   the foundation used by the Ch14/Ch21 perturbation-radius modules.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter06` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

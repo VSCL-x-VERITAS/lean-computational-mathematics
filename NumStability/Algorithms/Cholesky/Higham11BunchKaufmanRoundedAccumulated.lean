@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Accumulated
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Accumulated
 
 /-!
 Compatibility facade for the canonical Chapter 11 owner(s).

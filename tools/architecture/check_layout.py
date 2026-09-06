@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enforce the NumStability layout contract with an explicit legacy ratchet."""
+"""Enforce the production layout contract with an explicit legacy ratchet."""
 
 from __future__ import annotations
 
@@ -156,10 +156,10 @@ def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
     parts = module.name.split(".")[1:]
     if any(not UPPER_CAMEL_RE.fullmatch(part) for part in parts):
         return True
-    if module.name == "NumStability.Source" or module.name.startswith("NumStability.Source."):
+    if parts and parts[0] == "Source":
         if any("_" in part for part in parts):
             return True
-        if module.name == "NumStability.Source":
+        if len(parts) == 1:
             return False
         if len(parts) >= 2 and parts[:2] == ["Source", "Higham"]:
             if len(parts) == 2:
@@ -478,7 +478,7 @@ def main() -> int:
             raise LayoutError("refusing to baseline tracked generated artifacts")
         complete_aggregates: dict[str, Any] = {}
         direct_import_ceilings: dict[str, Any] = {
-            "NumStability.Algorithms": {"NumStability.Analysis.": 45}
+            "ComputationalMathematics.Algorithms": {"ComputationalMathematics.Analysis.": 45}
         }
         if BASELINE.is_file():
             existing = load_json(BASELINE)

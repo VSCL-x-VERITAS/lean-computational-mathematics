@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter04.Section02.KaoWangCitationDiscrepancy
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Section02.KaoWangCitationDiscrepancy`. -/
+
+#check NumStability.HighamChapter4KaoWang.IntegerAdditionTree
+#check NumStability.HighamChapter4KaoWang.IntegerAdditionTree.toSchedule_exactMergeCost
+#check NumStability.HighamChapter4KaoWang.ReductionCorrect
+#check NumStability.HighamChapter4KaoWang.higham43_computedBudget_ne_kaoWangExactCost_witness
+#check NumStability.HighamChapter4KaoWang.higham43_runningBudget_exactArithmetic_eq_kaoWangCost

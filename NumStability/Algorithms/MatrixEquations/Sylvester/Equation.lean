@@ -1,8 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.All
-import NumStability.Algorithms.MatrixEquations.Sylvester.Equation.VectorizationIdentities
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation
 
 /-!
-# Algorithms MatrixEquations Sylvester Equation
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.Equation`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,8 +1,8 @@
-import NumStability.Analysis.Probability.Gaussian.AbsoluteMoment
+import ComputationalMathematics.Analysis.Probability.Gaussian
 
 /-!
-# Gaussian probability analysis
+Historical import path retained for compatibility.
 
-Canonical import-only entry point for reusable results about Gaussian
-measures and their moments.
+The implementation is provided by `ComputationalMathematics.Analysis.Probability.Gaussian`.
+Declaration names and mathematical terminology are unchanged.
 -/

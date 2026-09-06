@@ -1,13 +1,8 @@
-import NumStability.Source.Higham.Chapter06.Asides.ConditionNumberBounds
-import NumStability.Source.Higham.Chapter06.Asides.EuclideanNormDifferentiability
-import NumStability.Source.Higham.Chapter06.Asides.MaxNormInconsistency
-import NumStability.Source.Higham.Chapter06.Asides.UnitaryInvariance
-import NumStability.Source.Higham.Chapter06.BlockAntidiagonalNorm.OperatorTwo
-import NumStability.Source.Higham.Chapter06.Equation01
+import ComputationalMathematics.Source.Higham.Chapter06.Asides
 
 /-!
-# Higham Chapter 6 historical asides surface
+Historical import path retained for compatibility.
 
-Declaration-free canonical aggregate for the six semantic source topics
-historically published by `NumStability.Analysis.Higham6Asides`.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter06.Asides`.
+Declaration names and mathematical terminology are unchanged.
 -/

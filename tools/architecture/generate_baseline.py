@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Generate a reproducible architecture baseline for NumStability.
+"""Generate a reproducible architecture baseline for Lean Computational Mathematics.
 
 The source scan uses only the Python standard library.  Unless
-``--skip-declarations`` is passed, the script first builds ``NumStability`` and
+``--skip-declarations`` is passed, the script first builds both production libraries and
 then runs ``declaration_dependencies.lean`` to inspect the compiled Lean
 environment.  The generated Markdown is intended for humans; the JSON is the
 machine-readable source of truth.
@@ -25,8 +25,16 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator, Sequence
 
 
+try:
+    from project_roots import PRODUCTION_ROOTS, is_production_module, is_production_path, production_paths
+except ModuleNotFoundError:  # Support import as tools.architecture.generate_baseline.
+    from tools.architecture.project_roots import (
+        PRODUCTION_ROOTS, is_production_module, is_production_path, production_paths,
+    )
+
+
 SCHEMA_VERSION = 1
-PROJECT_PREFIX = "NumStability"
+PROJECT_PREFIX = PRODUCTION_ROOTS[0]
 IMPORT_RE = re.compile(
     r"(?m)^[ \t]*(?:(?:public|private|meta)\s+)*import[ \t]+([A-Za-z0-9_'.]+)"
 )
@@ -176,19 +184,7 @@ def module_name(path: Path) -> str:
 
 
 def source_paths(root: Path) -> list[Path]:
-    result: list[Path] = []
-    umbrella = root / "NumStability.lean"
-    if umbrella.is_file():
-        result.append(umbrella)
-    library = root / "NumStability"
-    if library.is_dir():
-        result.extend(
-            sorted(
-                library.rglob("*.lean"),
-                key=lambda path: path.relative_to(root).as_posix(),
-            )
-        )
-    return result
+    return production_paths(root)
 
 
 def scan_sources(root: Path) -> tuple[dict[str, Any], list[SourceModule]]:
@@ -232,7 +228,7 @@ def scan_sources(root: Path) -> tuple[dict[str, Any], list[SourceModule]]:
             direct_import_count += 1
             if target in by_name:
                 internal_edges.add((source.name, target))
-            elif target == PROJECT_PREFIX or target.startswith(f"{PROJECT_PREFIX}."):
+            elif is_production_module(target):
                 unresolved_project_imports[target] += 1
             else:
                 external_imports[target] += 1
@@ -582,7 +578,7 @@ def repository_metadata(root: Path, *, probe_lean: bool) -> dict[str, Any]:
     library_dirty = sorted(
         path
         for path in dirty_paths
-        if path == "NumStability.lean" or path.startswith("NumStability/")
+        if is_production_path(path)
     )
     commit = git(root, "rev-parse", "HEAD")
     commit_date = git(root, "show", "-s", "--format=%cI", "HEAD")
@@ -613,7 +609,7 @@ def repository_metadata(root: Path, *, probe_lean: bool) -> dict[str, Any]:
 
 def extract_declarations(root: Path, *, build: bool, keep_tsv: Path | None) -> dict[str, Any]:
     if build:
-        build_result = run(("lake", "build", "NumStability"), cwd=root)
+        build_result = run(("lake", "build", *PRODUCTION_ROOTS), cwd=root)
         if build_result.stdout:
             print(build_result.stdout, end="", file=sys.stderr)
         if build_result.stderr:
@@ -1115,7 +1111,7 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument(
         "--no-build",
         action="store_true",
-        help="do not run `lake build NumStability` before inspecting oleans",
+        help="do not build the canonical and compatibility libraries before inspecting oleans",
     )
     parser.add_argument(
         "--keep-dependency-tsv",

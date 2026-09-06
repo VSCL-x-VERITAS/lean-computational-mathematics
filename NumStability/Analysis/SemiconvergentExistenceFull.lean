@@ -1,4 +1,4 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.QuasiTriangularBlockForm
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.QuasiTriangularBlockForm
 
 /-!
 # Historical semiconvergence quasi-triangular block-form import

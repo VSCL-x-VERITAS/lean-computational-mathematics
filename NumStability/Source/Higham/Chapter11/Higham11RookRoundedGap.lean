@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Rook.RoundedGap
+import ComputationalMathematics.Source.Higham.Chapter11.Rook.RoundedGap
 
 /-!
 # Higham11RookRoundedGap (compatibility module)

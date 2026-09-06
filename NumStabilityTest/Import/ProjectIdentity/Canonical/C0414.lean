@@ -1,0 +1,16 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Exactness
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Exactness`. -/
+
+#check NumStability.fl_kahanCorrection_exactWithUnitRoundoff
+#check NumStability.fl_kahanFinalCorrectedSum
+#check NumStability.fl_kahanFinalCorrectedSum_eq_add_correction
+#check NumStability.fl_kahanFinalCorrectedSum_eq_sum_of_exact_steps_and_final_add
+#check NumStability.fl_kahanFinalCorrectedSum_exactWithUnitRoundoff
+#check NumStability.fl_kahanState_compensated_total_eq_sum_of_exact_steps
+#check NumStability.fl_kahanState_exactWithUnitRoundoff
+#check NumStability.fl_kahanSum_add_correction_eq_sum_of_exact_steps
+#check NumStability.fl_kahanSum_exactWithUnitRoundoff
+#check NumStability.kahanPrefixState_compensated_total_eq_sum_of_exact_steps
+#check NumStability.kahanStepTrace_correctionFormulaTrace
+#check NumStability.kahanStep_compensated_total_eq_of_exact_y_and_correction

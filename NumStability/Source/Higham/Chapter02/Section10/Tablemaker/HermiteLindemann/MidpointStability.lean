@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
 
 /-!
 # Checkpoint compatibility alias: MidpointStability

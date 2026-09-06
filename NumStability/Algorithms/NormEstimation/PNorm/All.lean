@@ -1,25 +1,8 @@
-import NumStability.Algorithms.NormEstimation.PNorm.Boyd
-import NumStability.Algorithms.NormEstimation.PNorm.Convergence.BoydConcrete
-import NumStability.Algorithms.NormEstimation.PNorm.Convergence.BoydInterface
-import NumStability.Algorithms.NormEstimation.PNorm.Convergence.ConvergenceStatements
-import NumStability.Algorithms.NormEstimation.PNorm.Duality.BoydInterface
-import NumStability.Algorithms.NormEstimation.PNorm.Duality.BoydUniqueness
-import NumStability.Algorithms.NormEstimation.PNorm.Duality.ConvergenceStatements
-import NumStability.Algorithms.NormEstimation.PNorm.Duality.PNormGeneral
-import NumStability.Algorithms.NormEstimation.PNorm.Duality.PNormPowerMethod
-import NumStability.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Rectangular
-import NumStability.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Square
-import NumStability.Algorithms.NormEstimation.PNorm.PowerMethod.BoydConcrete
-import NumStability.Algorithms.NormEstimation.PNorm.PowerMethod.BoydInterface
-import NumStability.Algorithms.NormEstimation.PNorm.PowerMethod.PNormGeneral
-import NumStability.Algorithms.NormEstimation.PNorm.PowerMethod.PNormPowerMethod
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.BoydInterface
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.PNormGeneral
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.PNormRectangular
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.RectangularTermination
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.All
 
 /-!
-# Algorithms.NormEstimation.PNorm.All
+Historical import path retained for compatibility.
 
-Reviewed W10 discovery entry point for the reusable p-norm estimation family.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.PNorm.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,5 +1,5 @@
-import NumStability.FloatingPoint.OperationLaws
-import NumStability.Source.Higham.Chapter02.Problem07
+import ComputationalMathematics.FloatingPoint.OperationLaws
+import ComputationalMathematics.Source.Higham.Chapter02.Problem07
 
 /-!
 # Compatibility import

@@ -1,0 +1,87 @@
+import ComputationalMathematics
+
+/-! Canonical import regression for `ComputationalMathematics`. -/
+
+open NumStability in
+#check Ch14Ext.ch14ext_hyman_flDet_backward_error_original
+open NumStability in
+#check Ch14Ext.ch14ext_problem14_15_det_add_rel_le_of_kappa2_opNorm2_inv_card_guard
+open NumStability in
+#check Ch14Ext.ch14ext_schulzIter_tendsto_inverse_of_lt_two_div_norm_sq
+open NumStability in
+#check Ch14Ext.ch14ext_singularValue_abs_sub_le_of_euclideanLin_diff_bound
+open NumStability in
+#check Ch22B.ch22b_refinement_converges_via_ch12
+open NumStability in
+#check FloatingPointFormat.problem2_2_lemma2_1_spacing_bounds
+open NumStability in
+#check HighamProblem61NormQuotientWitness
+open NumStability in
+#check Lemma66.lemma66_a_abs_entry_le
+#check MeasureTheory.measure_eq_of_invariant_probability_of_pretransitive
+open NumStability in
+#check StrassenRecurrence
+open NumStability in
+#check ch14ext_problem14_13_gej_bound_fin_one
+open NumStability in
+#check ch6aside_blockAntidiag_lp_eq
+open NumStability in
+#check ch6aside_maxNorm_not_consistent
+open NumStability in
+#check complexMatrixBlockShearOp2_eq_highamProblem610_sourceFormula
+open NumStability in
+#check complexMatrixLpNorm
+open NumStability in
+#check fl_noGuardDotProduct
+open NumStability in
+#check higham12_problem12_2_two_step_recurrence
+open NumStability in
+#check higham13_demmel_sharp_multiplier_of_spectral_interval
+open NumStability in
+#check higham14SchulzStep
+open NumStability in
+#check higham14_hadamardConditionNumberRaw_negative_one_counterexample
+open NumStability in
+#check higham17_problem17_1
+open NumStability in
+#check higham20_eq20_32_Bplus_residual_eq_crossProjection
+open NumStability in
+#check higham21Cond2With_row_scaling
+open NumStability in
+#check higham21_theorem21_3_exact_attainment_or_pairing_obstruction
+open NumStability in
+#check higham21_theorem21_4_computed_qhat_omegaR_le_gamma
+open NumStability in
+#check higham23_problem23_8_power_exponent
+open NumStability in
+#check higham26ADCrudeSweep_nondecreasing
+open NumStability in
+#check higham27_problem27_6_cubic_error_bound
+open NumStability in
+#check higham28NormalizedHilbertDet_tendsto_atTop
+open NumStability in
+#check higham28_not_HilbertDetAsymptotic
+open NumStability in
+#check higham2_power_decimalLeadingDigit_frequency_tendsto
+open NumStability in
+#check higham6_doubleDualEvaluation_isGreatest
+open NumStability in
+#check highamProblem65MonomialMatrix
+open NumStability in
+#check highamProblem69_frobenius_op2_bounds
+open NumStability in
+#check ieeeNaiveMax_not_nan_propagating
+open NumStability in
+#check integral_abs_standardGaussian_difference
+open NumStability in
+#check mixedInverseAmbientRelativeAmplificationRadiusSup_tendsto_conditionNumberProduct_of_positive_radii
+open NumStability in
+#check not_forall_ieeeDoubleKahanStoredGridError_eq_on_source_grid
+open NumStability in
+#check problem2_11EmpiricalSource
+open NumStability in
+#check problem2_11_decimalLeadingDigit
+open NumStability in
+#check problem2_22_guard_digit_a_sub_b_exact
+open NumStability in
+#check problem44_outputs_exactly_Icc

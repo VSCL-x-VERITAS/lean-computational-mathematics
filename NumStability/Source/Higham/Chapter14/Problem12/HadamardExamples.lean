@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Problem12.HadamardExamples.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Problem12.HadamardExamples
 
 /-!
-# NumStability.Source.Higham.Chapter14.Problem12.HadamardExamples
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Problem12.HadamardExamples`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -106,3 +106,12 @@ The original Chapter-15 relabeling wrappers reuse those proofs under the correct
 - `#print axioms` on every headline declaration — `[propext, Classical.choice, Quot.sound]`.
 - No `sorry`/`admit`/`axiom`/`unsafe`/`opaque`/`native_decide`/`set_option` in any of the four new files.
 - Adversarial verification of all four modules: ACCEPT (T1, T4), ACCEPT_WITH_NOTES (T2, T3, notes as documented above).
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter15` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

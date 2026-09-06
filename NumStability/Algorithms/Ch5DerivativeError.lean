@@ -5,9 +5,9 @@
 -- not deleted and not Git-renamed, so every existing `import` keeps resolving.
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
-import NumStability.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
-import NumStability.Source.Higham.Chapter05.Section02.DerivativeError.Basic
-import NumStability.Source.Higham.Chapter05.Section02.DerivativeError.Results.Theorems
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeError.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeError.Results.Theorems
 
 /-!
 # Ch5DerivativeError (compatibility wrapper)

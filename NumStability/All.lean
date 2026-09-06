@@ -1,12 +1,8 @@
-import NumStability.Algorithms
-import NumStability.Analysis
-import NumStability.FloatingPoint
-import NumStability.HDP
-import NumStability.Source
+import ComputationalMathematics.All
 
 /-!
-# Complete NumStability tree
+Historical import path retained for compatibility.
 
-This is the explicit complete-tree entry point, including reusable mathematics,
-book correspondence, audit capstones, and case studies.
+The implementation is provided by `ComputationalMathematics.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

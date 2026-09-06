@@ -7,14 +7,14 @@
 
 import Mathlib.Data.List.TakeDrop
 import Mathlib.Tactic
-import NumStability.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
-import NumStability.Analysis.Rounding
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter05.Problem04.LejaOrdering.Basic
-import NumStability.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Basic
-import NumStability.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Results.Theorems
-import NumStability.Source.Higham.Chapter05.Section03.NewtonEvaluation.Basic
-import NumStability.Source.Higham.Chapter05.Section03.ResidualUnwind.Basic
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter05.Problem04.LejaOrdering.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.NewtonEvaluation.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Section03.ResidualUnwind.Basic
 
 /-!
 # Ch5SourceClosure (compatibility wrapper)

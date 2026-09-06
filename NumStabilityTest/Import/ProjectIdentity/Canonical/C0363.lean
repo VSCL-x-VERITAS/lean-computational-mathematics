@@ -1,0 +1,8 @@
+import ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.PolynomialEvaluation.DerivativeEvaluation.ErrorBounds`. -/
+
+#check NumStability.fl_hornerDerivativeDesc_first_derivative_error_bound
+#check NumStability.fl_hornerDerivativeDesc_snd_backward_error_coefficients_coupled
+#check NumStability.fl_hornerDerivativeDesc_snd_forward_error_bound_coupled
+#check NumStability.fl_hornerDerivativeFold_snd_backward_error_coefficients

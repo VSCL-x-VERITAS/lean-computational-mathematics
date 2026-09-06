@@ -1,5 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03.Contract
 
 /-!
-Stable contract re-export for Remark 2.5.3.
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/

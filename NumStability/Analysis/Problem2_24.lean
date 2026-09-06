@@ -7,9 +7,9 @@
 
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
-import NumStability.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.Basic
-import NumStability.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.IeeeFiniteSystems.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem25.NonzeroEvaluation.IeeeFiniteSystems.Results
 
 /-!
 # Problem2_24 (compatibility wrapper)

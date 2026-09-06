@@ -1,0 +1,17 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients.Affine
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Coefficients.Affine`. -/
+
+#check NumStability.KahanAffineCoeffStep
+#check NumStability.KahanAffineCoeffStep.source
+#check NumStability.kahanAffineCoeffStepOfIndex
+#check NumStability.kahanAffineCoeffSteps
+#check NumStability.kahanAffineCoeffSteps_fold_eq_finFold
+#check NumStability.kahanAffineCoeffSteps_fold_zero_eq_final_total
+#check NumStability.kahanAffineCoeffSteps_prefixSum_sub_sum_inputCoeff_abs_le_inputMajorantBudget
+#check NumStability.kahanAffineCoeffSteps_prefixTotal_sub_sum_inputCoeff_abs_le_inputMajorantBudget
+#check NumStability.kahanAffineCorrectionAbsUnroll_le_indexedBudget
+#check NumStability.kahanAffineCorrectionIndexedBudget
+#check NumStability.kahanAffineInputCoeffProductRadius
+#check NumStability.kahanAffineInputCoeffProductRadius_le_two_u_plus
+#check NumStability.kahanAffineResidualFold

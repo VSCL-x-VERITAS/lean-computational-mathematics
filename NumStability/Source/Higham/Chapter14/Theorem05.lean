@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Theorem05.EliminationFamilies.CoefficientAsymptotics
-import NumStability.Source.Higham.Chapter14.Theorem05.ForwardError
-import NumStability.Source.Higham.Chapter14.Theorem05.PrintedEnvelopes.CorrectionBounds
-import NumStability.Source.Higham.Chapter14.Theorem05.PrintedTrace.VanishingEndpoints
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05
 
 /-!
-# NumStability.Source.Higham.Chapter14.Theorem05
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Theorem05`.
+Declaration names and mathematical terminology are unchanged.
 -/

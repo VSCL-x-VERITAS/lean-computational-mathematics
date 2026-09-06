@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.All
 
 /-!
-# Complete HermiteLindemann family
+Historical import path retained for compatibility.
 
-Declaration-free public aggregate for the supported family modules. The declarations remain owned by the current canonical result provider.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

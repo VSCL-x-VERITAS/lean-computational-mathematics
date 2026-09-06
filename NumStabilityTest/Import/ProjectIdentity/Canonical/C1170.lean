@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter08.Problem02.ComparisonMatrixWitness.ArbitraryRatios.Theorems
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter08.Problem02.ComparisonMatrixWitness.ArbitraryRatios.Theorems`. -/
+
+#check NumStability.higham8_2_comparisonInverseInfNormRatio_ge_lambda
+#check NumStability.higham8_2_comparisonInverseOneNormRatio_ge_lambda
+#check NumStability.higham8_2_comparisonInverseRatios_arbitrarily_large

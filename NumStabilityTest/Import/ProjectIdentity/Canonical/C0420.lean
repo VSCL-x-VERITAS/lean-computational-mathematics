@@ -1,0 +1,15 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Majorants
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Kahan.Majorants`. -/
+
+#check NumStability.kahanCorrectionAbsMajorant
+#check NumStability.kahanCorrectionAbsMajorant_nonneg
+#check NumStability.kahanInputAbsMajorant
+#check NumStability.kahanInputAbsMajorant_nonneg
+#check NumStability.kahanPrefixState_abs_le_inputMajorant
+#check NumStability.kahanPrefixState_e_abs_le_correctionMajorant
+#check NumStability.kahanPrefixState_e_abs_le_inputMajorant
+#check NumStability.kahanPrefixState_s_abs_le_inputMajorant
+#check NumStability.kahanStepDeltaWitness_s_abs_le_inputMajorants
+#check NumStability.kahanTrace_e_abs_le
+#check NumStability.kahanTrace_e_abs_le_split

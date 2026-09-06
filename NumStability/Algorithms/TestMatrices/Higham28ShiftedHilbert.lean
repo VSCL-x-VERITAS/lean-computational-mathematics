@@ -1,7 +1,32 @@
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.Analysis.SumIntegralComparisons
-import NumStability.Algorithms.TestMatrices.Higham28Asymptotics
-import NumStability.Analysis.TestMatrices.Hilbert.ShiftedHilbert
+import Mathlib.Analysis.SpecialFunctions.Stirling
+import Mathlib.Algebra.BigOperators.Intervals
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.Choose.Cast
+import Mathlib.Data.Nat.Choose.Sum
+import Mathlib.Data.Nat.Choose.Vandermonde
+import Mathlib.LinearAlgebra.Matrix.Block
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.TestMatrices.Cauchy.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Companion.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Orthogonal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Basic
+import ComputationalMathematics.Analysis.TestMatrices.RandomSVD.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Toeplitz.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Basic
+import ComputationalMathematics.Source.Higham.Chapter28.Equation04.HilbertCholeskyInverse.Basic
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Pascal.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation01.HilbertInverse.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation02.ExactHilbertDeterminant.Exact
+import ComputationalMathematics.Source.Higham.Chapter28.Equation03.HilbertCholeskyFactor.Exact
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.Asymptotics
+import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.Asymptotics.Asymptotics
+import ComputationalMathematics.Analysis.TestMatrices.Hilbert.ShiftedHilbert
 
 /-!
 Historical owner retained as an import-only compatibility wrapper; its declarations were relocated under the R09/R10 completion waves per the reviewed route ledger.

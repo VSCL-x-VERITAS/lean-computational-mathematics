@@ -1,7 +1,7 @@
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.LinearAlgebra.Matrix.Trace
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.DepartureFromNormality
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.DepartureFromNormality
 
 /-!
 # Analysis.MatrixPowersHenrici

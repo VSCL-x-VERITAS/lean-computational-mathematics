@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GaussJordanQConstruction
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Theorem05.ForwardError.GaussJordanQConstruction`. -/
+
+#check NumStability.Ch14Ext.ch14ext_gjeConcrete_overall_forward_error_14_32
+#check NumStability.Ch14Ext.ch14ext_gjeConstructedQ_forward_error_8nu
+#check NumStability.Ch14Ext.ch14ext_gjeConstructedQ_overall_forward_error

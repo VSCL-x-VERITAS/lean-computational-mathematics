@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarArcLength.Variation
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarArcLength
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarArcLength
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Spijker.PlanarArcLength`.
+Declaration names and mathematical terminology are unchanged.
 -/

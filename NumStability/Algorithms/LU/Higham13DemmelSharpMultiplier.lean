@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter13.DemmelSharpMultiplier
+import ComputationalMathematics.Source.Higham.Chapter13.DemmelSharpMultiplier
 
 /-!
 # Compatibility import for Higham Chapter 13's sharp multiplier bound

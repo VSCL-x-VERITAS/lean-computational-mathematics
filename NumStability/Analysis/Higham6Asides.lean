@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter06.Asides
+import ComputationalMathematics.Source.Higham.Chapter06.Asides
 
 /-!
 # Historical Higham Chapter 6 asides import

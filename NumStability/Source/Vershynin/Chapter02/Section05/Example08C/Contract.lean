@@ -1,3 +1,8 @@
-import NumStability.HDP.Scalar.SubGaussian
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C.Contract
 
-/-! Stable Chapter 2 contract module for Example 2.5.8(c). -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C.Contract`.
+Declaration names and mathematical terminology are unchanged.
+-/

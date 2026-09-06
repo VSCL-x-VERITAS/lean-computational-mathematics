@@ -1,7 +1,14 @@
 # Documentation map
 
-This directory separates current policy from dated evidence and source-audit
-history. When two documents disagree, use the precedence order below.
+This directory maps Lean Computational Mathematics and separates current policy
+from dated evidence and source-audit history. When two documents disagree, use
+the precedence order below.
+
+The [identity migration](migrations/lean-computational-mathematics/README.md)
+records the canonical `ComputationalMathematics` module root and retained
+`NumStability` imports/declarations. Checkpoint measurements below describe
+their historical accepted trees; current migration measurements and build
+outcomes are recorded separately in its validation record.
 
 The operative reorganization process is
 [`architecture/PROCESS.md`](architecture/PROCESS.md): per-batch static gates,
@@ -99,6 +106,8 @@ remains a separate later control.
 
 ## Current source coverage
 
+- The [verified source inventory](migrations/lean-computational-mathematics/source-scope.md)
+  distinguishes present source developments from candidate books and papers.
 - [`source_coverage/`](source_coverage/) contains the concise per-chapter
   coverage ledgers.
 - `chapterNN/` directories contain detailed inventories, proof-source ledgers,
@@ -109,6 +118,8 @@ remains a separate later control.
 
 ## Migration and generated evidence
 
+- The [identity migration report](migrations/lean-computational-mathematics/README.md)
+  records the public name, interface mapping, GitHub cutover and validation.
 - [`architecture/migrations/`](architecture/migrations/) records reviewed path
   changes and their verification evidence.
 - [`architecture/baselines/`](architecture/baselines/) contains immutable,

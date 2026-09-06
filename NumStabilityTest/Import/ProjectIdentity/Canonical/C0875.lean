@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter01
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter01`. -/
+
+#check NumStability.ieeeDoubleKahanRationalFunction_175_289_error_spread_gt_of_output_spread
+#check NumStability.ieeeDoubleKahanRationalFunction_eq_errorEval_of_finiteNormal
+#check NumStability.ieeeDoubleKahanRationalFunction_eq_errorEval_on_source_interval
+#check NumStability.ieeeDoubleKahanStoredGridRationalFunction_289_eq
+#check NumStability.not_forall_ieeeDoubleKahanStoredGridError_eq_on_source_grid

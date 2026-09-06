@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds.Estimates
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Equation11.ScalarCase.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation11.ScalarCase.Core
 
 /-!
 # Higham21Equation21_11Scalar (compatibility module)

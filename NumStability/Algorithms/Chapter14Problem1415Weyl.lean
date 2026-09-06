@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter14.Problem15
+import ComputationalMathematics.Source.Higham.Chapter14.Problem15
 
 /-!
 # Historical Higham Chapter 14, Problem 14.15 import

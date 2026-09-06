@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter06.Equation02
+import ComputationalMathematics.Source.Higham.Chapter06.Equation02
 
 /-!
 # Historical Higham Chapter 6 equation (6.2) import

@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation29.SingularBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter17.Results.Equation29.SingularBounds`. -/
+
+#check NumStability.singularErrorSourceTerm_componentwise_bound
+#check NumStability.singularErrorSourceTerm_componentwise_bound_of_local_error
+#check NumStability.singularErrorSourceTerm_norm_bound
+#check NumStability.singularErrorSourceTerm_norm_bound_of_local_error

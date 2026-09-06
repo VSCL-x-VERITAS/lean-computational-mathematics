@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.UnderflowAwareConvergence.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.UnderflowAwareConvergence.Results
 
 /-!
 # Checkpoint compatibility alias: ConvergenceTest

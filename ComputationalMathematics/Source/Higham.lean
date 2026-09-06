@@ -1,0 +1,72 @@
+import ComputationalMathematics.Source.Higham.Chapter01
+import ComputationalMathematics.Source.Higham.Chapter01.Problem10.TwoPassSampleVariance.RemainderBound.Theorem
+import ComputationalMathematics.Source.Higham.Chapter01.Section09.SampleVariance.IeeeSingleOnePassCounterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter01.Section13.IncreasingPrecision.BinaryStorageExamples
+import ComputationalMathematics.Source.Higham.Chapter01.Section14.CancellationOfRoundingErrors.Algorithm02RoundedCore
+import ComputationalMathematics.Source.Higham.Chapter02
+import ComputationalMathematics.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem12.ReciprocalProduct.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem28.IterativeDivisionTermination.UnderflowAwareConvergence.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.FusedMultiplyAdd.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.ArctangentRange.Counterexample.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Section11.AccuracyTests.CodySineResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter03
+import ComputationalMathematics.Source.Higham.Chapter03.Problem11.KahanAbsoluteValue.IeeeDoubleTrace.Results
+import ComputationalMathematics.Source.Higham.Chapter04
+import ComputationalMathematics.Source.Higham.Chapter04.Problem02.WilkinsonAttainability.IeeeDoubleTrace.Results
+import ComputationalMathematics.Source.Higham.Chapter05
+import ComputationalMathematics.Source.Higham.Chapter05.Algorithm01.ComplexHorner.ErrorBounds.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.DerivativeError.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section04.PatersonStockmeyer.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section05.FastPolynomialEvaluation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter06
+import ComputationalMathematics.Source.Higham.Chapter07
+import ComputationalMathematics.Source.Higham.Chapter07.Equation17.KahanConditioningExample
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.RumpCycle.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem03.RectangularResults
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem05.RowInfinityScaleCounterexample.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08
+import ComputationalMathematics.Source.Higham.Chapter08.Equation02.TriangularSubstitution.RelativeInfinityNormBounds.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.GlobalEnvelopeCounterexample.LocalCancellationResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem02.ComparisonMatrixWitness.ArbitraryRatios.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem07.DiagonalScaling.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem08.SingleEntrySingularity.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Problem09.KahanSingularValues.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.ComparisonConditioningResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.InverseNormResults.Theorems
+import ComputationalMathematics.Source.Higham.Chapter09
+import ComputationalMathematics.Source.Higham.Chapter10
+import ComputationalMathematics.Source.Higham.Chapter11
+import ComputationalMathematics.Source.Higham.Chapter12
+import ComputationalMathematics.Source.Higham.Chapter13
+import ComputationalMathematics.Source.Higham.Chapter14
+import ComputationalMathematics.Source.Higham.Chapter15
+import ComputationalMathematics.Source.Higham.Chapter16
+import ComputationalMathematics.Source.Higham.Chapter17
+import ComputationalMathematics.Source.Higham.Chapter18
+import ComputationalMathematics.Source.Higham.Chapter19
+import ComputationalMathematics.Source.Higham.Chapter20
+import ComputationalMathematics.Source.Higham.Chapter21
+import ComputationalMathematics.Source.Higham.Chapter22
+import ComputationalMathematics.Source.Higham.Chapter23
+import ComputationalMathematics.Source.Higham.Chapter24
+import ComputationalMathematics.Source.Higham.Chapter25
+import ComputationalMathematics.Source.Higham.Chapter26
+import ComputationalMathematics.Source.Higham.Chapter27
+import ComputationalMathematics.Source.Higham.Chapter28
+import ComputationalMathematics.Source.Higham.CrossChapter
+
+/-!
+# Higham source correspondence
+
+Canonical entry point for correspondence with Higham's *Accuracy and Stability
+of Numerical Algorithms*. Chapter and cross-chapter source correspondence is
+organized below this tree; historical paths under `NumStability.Higham` are
+compatibility wrappers.
+-/

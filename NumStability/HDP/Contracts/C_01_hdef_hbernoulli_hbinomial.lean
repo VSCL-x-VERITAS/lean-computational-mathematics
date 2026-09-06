@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract
 
 /-!
 # Compatibility import for an HDP source contract

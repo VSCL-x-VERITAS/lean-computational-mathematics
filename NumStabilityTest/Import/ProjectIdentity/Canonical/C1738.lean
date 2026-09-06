@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.EndToEnd
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equation09.EndToEnd`. -/
+
+#check NumStability.Wave14.H16_eq16_8_9_frobNormRect_le_gamma_dataScale_of_componentwise_product_budget

@@ -1,9 +1,8 @@
-import NumStability.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Section01.ConditionNumbers.CondEstimation
 
 /-!
-# Chapter 15 Section 1 condition-estimation correspondence
+Historical import path retained for compatibility.
 
-Source-discovery wrapper for the generic finite-index norm identities used in
-Higham's condition-estimation discussion. The reusable declarations live in
-`NumStability.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic`.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter15.Section01.ConditionNumbers.CondEstimation`.
+Declaration names and mathematical terminology are unchanged.
 -/

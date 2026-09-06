@@ -1,4 +1,8 @@
-import NumStability.Source.Higham.Chapter21.Attainability.Results
-import NumStability.Source.Higham.Chapter21.Theorem01.Attainability.Attainability
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem01.Attainability
 
-/-! # Attainability results for Higham Chapter 21, theorem 21.1 -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter21.Theorem01.Attainability`.
+Declaration names and mathematical terminology are unchanged.
+-/

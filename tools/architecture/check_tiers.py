@@ -31,6 +31,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from project_roots import PRODUCTION_ROOTS, self_test as root_self_test
+
+
 ROOT = Path(__file__).resolve().parents[2]
 TIERS = "docs/architecture/tiers.json"
 REQUIRED_RULE_FIELDS = ("rule_id", "match_kind", "role", "rationale", "introduction", "review")
@@ -43,7 +46,8 @@ def load(path: Path) -> dict:
 
 
 def production_modules(root: Path) -> list[str]:
-    out = subprocess.run(["git", "ls-files", "NumStability/*.lean", "NumStability.lean"],
+    pathspecs = [path for name in PRODUCTION_ROOTS for path in (f"{name}/*.lean", f"{name}.lean")]
+    out = subprocess.run(["git", "ls-files", *pathspecs],
                          cwd=root, capture_output=True, text=True, encoding="utf-8").stdout
     return sorted(p[:-5].replace("/", ".") for p in out.split("\n") if p.endswith(".lean"))
 
@@ -173,7 +177,7 @@ def validate(root: Path, manifest: dict, modules: list[str]) -> list[str]:
 
 
 def self_test() -> list[str]:
-    failures: list[str] = []
+    failures: list[str] = root_self_test()
     prefixes = {"A.B": "source", "A.B.C": "reusable"}
     if resolve("A.B.C.D", {}, prefixes) != ("reusable", "prefix:A.B.C"):
         failures.append("self-test: the longest matching prefix must decide")

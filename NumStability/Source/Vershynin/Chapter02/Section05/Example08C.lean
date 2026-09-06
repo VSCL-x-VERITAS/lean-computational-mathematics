@@ -1,9 +1,8 @@
-import NumStability.Source.Vershynin.Chapter02.Section05.Example08C.Contract
-import NumStability.Source.Vershynin.Chapter02.Section05.Example08C.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C
 
 /-!
-# Vershynin Example08C source correspondence
+Historical import path retained for compatibility.
 
-Canonical entry point combining the frozen signature and checked contract for
-this source result.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C`.
+Declaration names and mathematical terminology are unchanged.
 -/

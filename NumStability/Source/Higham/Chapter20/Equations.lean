@@ -1,11 +1,8 @@
-import NumStability.Source.Higham.Chapter20.Equations.Core.Results
-import NumStability.Source.Higham.Chapter20.Equations.WeightedLimit
+import ComputationalMathematics.Source.Higham.Chapter20.Equations
 
 /-!
-# NumStability.Source.Higham.Chapter20.Equations
+Historical import path retained for compatibility.
 
-Declaration-free aggregate: wave R05 relocated this umbrella's own
-declarations, whole and byte-for-byte, into
-`NumStability.Source.Higham.Chapter20.Equations.Core.Results`,
-which this module imports together with every previously existing
-canonical descendant that does not itself depend on this module.-/
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter20.Equations`.
+Declaration names and mathematical terminology are unchanged.
+-/

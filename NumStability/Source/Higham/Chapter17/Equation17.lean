@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter17.Results.Equation17.SORForwardBound
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation17.SORForwardBound
 
 /-!
 # Higham Chapter 17, Equation 17.17 compatibility wrapper

@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Section01.RoundedExecution
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter17.Results.Section01.RoundedExecution`. -/
+
+#check NumStability.flStationaryIterationLower_actual_forward_bound
+#check NumStability.flStationaryIterationLower_localErrorBound
+#check NumStability.flStationaryIterationUpper_actual_forward_bound
+#check NumStability.flStationaryIterationUpper_localErrorBound
+#check NumStability.localErrorBound_of_roundedStationarySolveCertificate
+#check NumStability.sourceComputedIteration_actual_forward_bound
+#check NumStability.sourceComputedIteration_actual_norm_forward_bound
+#check NumStability.stationaryLocalError_sourceComputedIteration

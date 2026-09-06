@@ -1,8 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.Projectors.ComplementNorm.ProjectorNorm
-import NumStability.Algorithms.Underdetermined.Higham21Eq21_8
-import NumStability.Algorithms.Underdetermined.Higham21Eq21_9
-import NumStability.Source.Higham.Chapter21.Equation08.ProjectorNorm
-import NumStability.Source.Higham.Chapter21.Equation09.ProjectorNorm
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.Projectors.ComplementNorm.ProjectorNorm
+import ComputationalMathematics.Source.Higham.Chapter21.Equation08.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation09.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Equation08.ProjectorNorm
+import ComputationalMathematics.Source.Higham.Chapter21.Equation09.ProjectorNorm
 
 /-!
 # Algorithms.Underdetermined.Higham21ProjectorNorm

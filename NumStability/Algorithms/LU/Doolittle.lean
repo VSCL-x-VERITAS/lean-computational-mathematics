@@ -12,17 +12,17 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Algorithms.LU.LUSolve
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Assembly.Core
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.BackwardError
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Basic
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Budgets
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Certificates
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.RoundedEntries
-import NumStability.Analysis.Rounding
-import NumStability.Analysis.SubtractionFold
-import NumStability.FloatingPoint.Model
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Algorithms.LU.LUSolve
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Assembly.Core
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.BackwardError
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Budgets
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.Certificates
+import ComputationalMathematics.Algorithms.LinearSystems.LU.Doolittle.RoundedEntries
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Analysis.SubtractionFold
+import ComputationalMathematics.FloatingPoint.Model
 
 /-!
 # Doolittle (compatibility wrapper)

@@ -6,8 +6,8 @@
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
 import Mathlib.Tactic
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.All
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter12.IterativeRefinement.All
+import ComputationalMathematics.Source.Higham.Chapter12.IterativeRefinement.Results.Theorems
 
 /-!
 # IterativeRefinement (compatibility wrapper)

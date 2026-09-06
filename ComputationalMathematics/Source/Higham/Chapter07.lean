@@ -1,0 +1,18 @@
+import ComputationalMathematics.Source.Higham.Chapter07.Corollary06.Equilibration.Basic
+import ComputationalMathematics.Source.Higham.Chapter07.Corollary06.LinearSystemsConditioning.All
+import ComputationalMathematics.Source.Higham.Chapter07.Equation17.KahanConditioningExample
+import ComputationalMathematics.Source.Higham.Chapter07.Equation25.InverseConditioning.All
+import ComputationalMathematics.Source.Higham.Chapter07.Equation25.SourceEndpoint.Basic
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.ComponentwiseDistance.Basic
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.DistanceToSingularity.Results
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.RumpCycle.Basic
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.RumpCycle.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.All
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem03.RectangularResults
+import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem05.RowInfinityScaleCounterexample.Theorems
+
+/-!
+# Higham Chapter 7
+
+Declaration-free aggregate for the accepted Chapter 7 source-correspondence families.
+-/

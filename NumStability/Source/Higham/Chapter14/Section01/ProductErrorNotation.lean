@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section01.ProductErrorNotation.ProductErrorNotation
+import ComputationalMathematics.Source.Higham.Chapter14.Section01.ProductErrorNotation
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section01.ProductErrorNotation
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section01.ProductErrorNotation`.
+Declaration names and mathematical terminology are unchanged.
 -/

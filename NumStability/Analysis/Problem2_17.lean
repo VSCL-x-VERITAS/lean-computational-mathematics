@@ -7,10 +7,10 @@
 
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Analysis.Nonassociativity
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Basic
-import NumStability.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Counterexample.Results
+import ComputationalMathematics.Analysis.Nonassociativity
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.Discriminant.StandardModel.Counterexample.Results
 
 /-!
 # Problem2_17 (compatibility wrapper)

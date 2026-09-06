@@ -1,9 +1,8 @@
-import NumStability.Analysis.SingularValues.InverseBounds.Gram
-import NumStability.Analysis.SingularValues.InverseBounds.OperatorTwo
-import NumStability.Analysis.SingularValues.InverseBounds.Rayleigh
+import ComputationalMathematics.Analysis.SingularValues.InverseBounds.All
 
 /-!
-# Analysis.SingularValues.InverseBounds.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.SingularValues.InverseBounds.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

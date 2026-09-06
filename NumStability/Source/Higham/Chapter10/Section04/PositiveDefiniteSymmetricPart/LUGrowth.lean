@@ -1,3 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.LUGrowth.Equation29
+import ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.LUGrowth
 
-/-! # LU growth for matrices with positive-definite symmetric part -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.LUGrowth`.
+Declaration names and mathematical terminology are unchanged.
+-/

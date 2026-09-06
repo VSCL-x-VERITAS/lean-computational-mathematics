@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization`.
+Declaration names and mathematical terminology are unchanged.
 -/

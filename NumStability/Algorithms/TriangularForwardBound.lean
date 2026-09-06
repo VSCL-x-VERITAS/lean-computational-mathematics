@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Triangular.DiagonalDominance
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.DiagonalDominance
 
 /-!
 # Historical triangular diagonal-dominance import

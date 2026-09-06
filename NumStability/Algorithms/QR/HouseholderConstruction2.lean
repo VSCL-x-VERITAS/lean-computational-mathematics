@@ -7,8 +7,8 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Algorithms.LinearSystems.QR.HouseholderConstruction2
-import NumStability.Source.Higham.Chapter19.Lemma01.Construction2
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderConstruction2
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma01.Construction2
 
 /-!
 # HouseholderConstruction2 (compatibility wrapper)

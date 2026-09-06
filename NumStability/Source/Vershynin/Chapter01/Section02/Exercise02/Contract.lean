@@ -1,4 +1,8 @@
-import NumStability.HDP.Scalar.Preliminaries
+import ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02.Contract
 
-/-! Stable Chapter 1 forwarding module for the corrected form of
-    Exercise 1.2.2. -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02.Contract`.
+Declaration names and mathematical terminology are unchanged.
+-/

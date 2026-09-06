@@ -1,7 +1,8 @@
-import NumStability.Analysis.Polynomials.RealRootCounting
+import ComputationalMathematics.Analysis.Polynomials
 
 /-!
-# Polynomial analysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the Polynomial analysis subtree.
+The implementation is provided by `ComputationalMathematics.Analysis.Polynomials`.
+Declaration names and mathematical terminology are unchanged.
 -/

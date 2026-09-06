@@ -2,10 +2,11 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.Source.Higham.Chapter02.Section07.PowerLeadingDigits
+import ComputationalMathematics.Source.Higham.Chapter02.Section07
 
 /-!
-# Higham Chapter 2, Section 2.7
+Historical import path retained for compatibility.
 
-Canonical source entry point for the logarithmic leading-digit discussion.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter02.Section07`.
+Declaration names and mathematical terminology are unchanged.
 -/

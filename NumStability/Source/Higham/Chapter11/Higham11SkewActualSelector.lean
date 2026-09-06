@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Skew.ActualSelector
+import ComputationalMathematics.Source.Higham.Chapter11.Skew.ActualSelector
 
 /-!
 # Higham11SkewActualSelector (compatibility module)

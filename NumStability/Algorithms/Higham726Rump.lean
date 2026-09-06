@@ -12,9 +12,9 @@ import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
 import Mathlib.LinearAlgebra.Matrix.ToLinearEquiv
 import Mathlib.Logic.Equiv.Fin.Rotate
-import NumStability.Source.Higham.Chapter07.Equation26.RumpCycle.Basic
-import NumStability.Source.Higham.Chapter07.Equation26.RumpCycle.Results.Theorems
-import NumStability.Source.Higham.Chapter08.Equation18.FanInExecutor.FirstOrderForwardError
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.RumpCycle.Basic
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.RumpCycle.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter08.Equation18.FanInExecutor.FirstOrderForwardError
 
 /-!
 # Higham726Rump (compatibility wrapper)

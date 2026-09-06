@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.All
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08`.
+Declaration names and mathematical terminology are unchanged.
 -/

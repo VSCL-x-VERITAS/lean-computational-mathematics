@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem13.ReciprocalProductThreshold.Results.Theorems
 
 /-!
 # Checkpoint compatibility alias: IeeeDoubleCertificate

@@ -14,15 +14,15 @@ import Mathlib.Tactic.Ring
 import Mathlib.Topology.MetricSpace.ProperSpace
 import Mathlib.Topology.Order.MonotoneConvergence
 import Mathlib.Topology.Sequences
-import NumStability.Algorithms.LU.GrowthFactor
-import NumStability.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
-import NumStability.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Square
-import NumStability.Algorithms.NormEstimation.PNorm.PowerMethod.PNormPowerMethod
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.MatrixNorms.Lp
-import NumStability.Analysis.SingularValues.Realification
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.FiniteIndex.Basic
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Square
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.Lp
+import ComputationalMathematics.Analysis.SingularValues.Realification
 
 /-!
 # ConvergenceStatements (compatibility wrapper)

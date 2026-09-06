@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter12.IterativeRefinement.Results.Theorems
-import NumStability.Source.Higham.Chapter12.OmegaDiscontinuity
-import NumStability.Source.Higham.Chapter12.Problem02
+import ComputationalMathematics.Source.Higham.Chapter12
 
 /-!
-# Higham Chapter 12 source correspondence
+Historical import path retained for compatibility.
 
-Complete canonical entry point for the Chapter 12 iterative-refinement
-correspondence, including the exact finite refinement results, the
-zero-denominator componentwise backward-error discontinuity, and Problems
-12.1--12.2.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter12`.
+Declaration names and mathematical terminology are unchanged.
 -/

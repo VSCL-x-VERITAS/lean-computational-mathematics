@@ -1,10 +1,8 @@
-import NumStability.HDP.Scalar.IndependentSums.Chernoff
-import NumStability.HDP.Scalar.IndependentSums.GraphDegreeLaw
-import NumStability.HDP.Scalar.IndependentSums.Hoeffding
+import ComputationalMathematics.HDP.Scalar.IndependentSums
 
 /-!
-# Independent scalar sums
+Historical import path retained for compatibility.
 
-Complete family entry point for the HDP development of Hoeffding and Chernoff
-bounds and its reusable binomial random-graph degree support.
+The implementation is provided by `ComputationalMathematics.HDP.Scalar.IndependentSums`.
+Declaration names and mathematical terminology are unchanged.
 -/

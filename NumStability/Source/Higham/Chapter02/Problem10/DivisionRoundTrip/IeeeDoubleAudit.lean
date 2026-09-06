@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
 
 /-!
 # Checkpoint compatibility alias: IeeeDoubleAudit

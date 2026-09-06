@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.Endpoints
-import NumStability.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.Equation29
-import NumStability.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.LUGrowth.Equation29
-import NumStability.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart.SchurStages.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart
 
 /-!
-# Source Higham Chapter10 Section04 PositiveDefiniteSymmetricPart
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Section04.PositiveDefiniteSymmetricPart`.
+Declaration names and mathematical terminology are unchanged.
 -/

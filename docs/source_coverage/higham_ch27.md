@@ -47,3 +47,12 @@ Verification: target and Algorithms-umbrella builds PASS; forbidden-token
 hygiene PASS. Representative axiom audits, including `twoPassScaledNorm_sq`,
 `higham27_twoPassRoundedScaledNorm_trace_safe`, both Smith branch traces, and
 the max-finite counterexample contain only standard Mathlib axioms.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter27` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

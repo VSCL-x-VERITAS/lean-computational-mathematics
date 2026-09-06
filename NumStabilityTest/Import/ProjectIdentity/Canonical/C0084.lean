@@ -1,0 +1,20 @@
+import ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.ResidualLifting
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.LU.BlockLU.ResidualLifting`. -/
+
+#check NumStability.dhsBlockBackCurrentBlock_infNormVec_le_suffix
+#check NumStability.dhsBlockBackUpperSuffixColumn
+#check NumStability.dhsBlockBackUpperSuffixVector
+#check NumStability.dhsBlockBackUpperSuffixVector_apply
+#check NumStability.dhsBlockBackUpperTailColumn
+#check NumStability.dhsBlockBackUpperTailColumn_apply
+#check NumStability.dhsBlockBackUpperTailRowFlat
+#check NumStability.dhsBlockBackUpperTailRowFlat_apply
+#check NumStability.dhsBlockBackUpperTailRowFlat_mul_apply
+#check NumStability.dhsBlockBackUpperTailVector
+#check NumStability.dhsBlockBackUpperTailVector_apply
+#check NumStability.dhsBlockBackUpperTail_infNormVec_le_suffix
+#check NumStability.higham13_maxNorm_upperBlockRowResidual_lift
+#check NumStability.higham13_maxNorm_upperBlockSuffixResidual_lift
+#check NumStability.higham13_maxNorm_vecResidual_lift
+#check NumStability.higham13_maxNorm_vecResidual_lift_zero_columns

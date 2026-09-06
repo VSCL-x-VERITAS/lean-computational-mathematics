@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Section02.ErrorAnalysis.Basic
-import NumStability.Source.Higham.Chapter10.Section02.ErrorAnalysis.FactorizationAndSolve.Bounds
+import ComputationalMathematics.Source.Higham.Chapter10.Section02.ErrorAnalysis
 
 /-!
-# Source Higham Chapter10 Section02 ErrorAnalysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Section02.ErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable user-facing changes to NumStability are recorded here. The project
+All notable user-facing changes to Lean Computational Mathematics are recorded here. The project
 follows semantic versioning for its public module paths and declaration API.
 
 ## [Unreleased]
@@ -32,6 +32,16 @@ follows semantic versioning for its public module paths and declaration API.
 
 ### Changed
 
+- The project display name is now Lean Computational Mathematics, reflecting
+  its multiple source developments. Mathematical stability terminology and
+  source identities are preserved; the
+  [migration report](docs/migrations/lean-computational-mathematics/README.md)
+  records interface and repository-address changes separately.
+- The approved canonical module root is `ComputationalMathematics`; all
+  original `NumStability` imports remain forwarding interfaces. The Lake
+  package `numStability`, test root `NumStabilityTest` and authored
+  `NumStability` declaration namespaces are retained. Validation and cutover
+  completion are recorded in the migration report.
 - Historical source and triangular-system paths are now import-only forwarding
   modules. They remain supported until a declared breaking release.
 - `NumStability.Analysis.Summation` is now an import-only complete aggregate;
@@ -89,5 +99,5 @@ follows semantic versioning for its public module paths and declaration API.
 
 - Initial tagged NumStability release.
 
-[Unreleased]: https://github.com/AlexGeorgantzas/lean-numerical-stability/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/AlexGeorgantzas/lean-numerical-stability/releases/tag/v0.1.0

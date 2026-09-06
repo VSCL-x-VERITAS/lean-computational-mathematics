@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Theorem04.RowwiseBackwardError
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem04.RowwiseBackwardError
 
 /-!
 # Historical Higham Chapter 21 row-wise backward-error import

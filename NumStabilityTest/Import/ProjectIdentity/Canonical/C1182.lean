@@ -1,0 +1,7 @@
+import ComputationalMathematics.Source.Higham.Chapter08.Problem07.DiagonalScaling.Results.Theorems
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter08.Problem07.DiagonalScaling.Results.Theorems`. -/
+
+#check NumStability.higham8_7_comparisonInverseOnes_infNorm_ge_inverseInfNorm
+#check NumStability.higham8_7_scaledStrictRowDiagDominant_invInfNorm_le
+#check NumStability.higham8_7_strictRowDiagDominant_invInfNorm_le

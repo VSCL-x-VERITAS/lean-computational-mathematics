@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.SourceCorrection
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.SourceCorrection
 
 /-!
 # Higham11BunchKaufmanSourceCorrection (compatibility module)

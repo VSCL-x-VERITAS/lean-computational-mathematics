@@ -12,16 +12,16 @@ import Mathlib.LinearAlgebra.Eigenspace.Charpoly
 import Mathlib.LinearAlgebra.Finsupp.Pi
 import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
-import NumStability.Algorithms.CondEstimation
-import NumStability.Analysis.Asymptotics.Bounds
-import NumStability.Analysis.Conditioning.DistanceToSingularity
-import NumStability.Analysis.MatrixNorms.Basic
-import NumStability.Analysis.MatrixNorms.SpectralRadius
-import NumStability.Analysis.PerturbationTheory
-import NumStability.Analysis.Summation.Signs
-import NumStability.Analysis.VectorNorms.Basic
-import NumStability.Source.Higham.Chapter06.Problem05
-import NumStability.Source.Higham.Chapter07.Equation26.DistanceToSingularity.Results
+import ComputationalMathematics.Algorithms.CondEstimation
+import ComputationalMathematics.Analysis.Asymptotics.Bounds
+import ComputationalMathematics.Analysis.Conditioning.DistanceToSingularity
+import ComputationalMathematics.Analysis.MatrixNorms.Basic
+import ComputationalMathematics.Analysis.MatrixNorms.SpectralRadius
+import ComputationalMathematics.Analysis.PerturbationTheory
+import ComputationalMathematics.Analysis.Summation.Signs
+import ComputationalMathematics.Analysis.VectorNorms.Basic
+import ComputationalMathematics.Source.Higham.Chapter06.Problem05
+import ComputationalMathematics.Source.Higham.Chapter07.Equation26.DistanceToSingularity.Results
 
 /-!
 # Chapter07Equation26 (compatibility wrapper)

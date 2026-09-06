@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.Endpoints
-import NumStability.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.NormalizedResolvent.SourceBound
-import NumStability.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.Resolvent
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation
 
 /-!
-# Source Higham Chapter10 Theorem08 ComponentwisePerturbation
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation`.
+Declaration names and mathematical terminology are unchanged.
 -/

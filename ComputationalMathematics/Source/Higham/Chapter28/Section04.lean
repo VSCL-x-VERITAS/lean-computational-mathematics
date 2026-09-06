@@ -1,0 +1,20 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.IdentityCubeRoot
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.MomentMatrix
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.OptimalPerturbationRate
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.OscillationEigenbasis
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.OscillationSpectrum
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.Pascal
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.PascalCondition
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.PascalOscillation
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.PascalSpectral
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.SignChangeCount
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.SingularizingPerturbation
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.Pascal.TotalPositivity
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.ReciprocalSpectrumSPD.ReciprocalSPD
+import ComputationalMathematics.Source.Higham.Chapter28.Section04.ReciprocalSpectrumSPD.TriangularInvolution
+
+/-!
+# Higham Chapter 28 Section04
+
+Declaration-free aggregate for the Higham Chapter 28 Section04 subtree.
+-/

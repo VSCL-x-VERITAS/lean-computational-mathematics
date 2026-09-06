@@ -1,20 +1,8 @@
-import NumStability.HDP.Scalar.IndependentSums.Chernoff
+import ComputationalMathematics.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract
 
 /-!
-# Chapter 2 Erdős--Rényi model contract
+Historical import path retained for compatibility.
 
-Stable source-facing aliases for the finite binomial random-graph model and its
-degree observable.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter02.ErdosRenyiModel.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/
-
-namespace NumStability.HDP.Contract
-
-open MeasureTheory
-
-/-- Chapter 2's Erdős--Rényi random graph and degree interface. -/
-noncomputable def hdp_02_hdef_herdos_hrenyi
-    (n : ℕ) (p : Set.Icc (0 : ℝ) 1) :
-    NumStability.HDP.Scalar.IndependentSums.Chernoff.ErdosRenyiModelData n p :=
-  NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n p
-
-end NumStability.HDP.Contract

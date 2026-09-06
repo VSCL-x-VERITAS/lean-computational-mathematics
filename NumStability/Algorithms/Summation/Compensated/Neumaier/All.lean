@@ -1,9 +1,8 @@
-import NumStability.Algorithms.Summation.Compensated.Neumaier.AdaptiveFiniteFormat
-import NumStability.Algorithms.Summation.Compensated.Neumaier.ExactResidual
-import NumStability.Algorithms.Summation.Compensated.Neumaier.FiniteExecutor
+import ComputationalMathematics.Algorithms.Summation.Compensated.Neumaier.All
 
 /-!
-# Algorithms.Summation.Compensated.Neumaier.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Compensated.Neumaier.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

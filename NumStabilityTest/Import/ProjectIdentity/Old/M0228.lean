@@ -1,0 +1,39 @@
+import NumStability.Source.Higham.Chapter07.LinearSystemsConditioning.All
+
+/-! Isolated API witness for `NumStability.Source.Higham.Chapter07.LinearSystemsConditioning.All`; authored declaration names are retained. -/
+
+#check @NumStability.eq_7_31_componentwise_bound
+#check @NumStability.infNormVec_const_one
+#check @NumStability.ch7NormwiseCondEFRadiusSet_value_le
+#check @NumStability.eq_7_32_subordinate_differentiable_system
+#check @NumStability.stochasticMatrix_mul_ones
+#check @NumStability.ch7AmplifiedRhsEF_nonneg
+#check @NumStability.lemma7_9_componentwise_bound
+#check @NumStability.ch7Problem71ContractionMatrix_nonneg
+#check @NumStability.problem7_2_infNorm_scaled_lower
+#check @NumStability.problem7_4_one_le_rowAbsSum_of_diag_one
+#check @NumStability.ch7Problem75SVDProjectionNorm_sq
+#check @NumStability.ch7AbsMatrixAbsVecOneNorm_nonneg
+#check @NumStability.ch7_abs_le_oneNormVec
+#check @NumStability.problem7_7_normwise_inf_residual_bound
+#check @NumStability.ch7Problem78AugVector_norm_sq
+#check @NumStability.ch7_isLeftInverse_of_isRightInverse
+#check @NumStability.opNorm2Le_mono
+#check @NumStability.ch7TwoSidedScale_nonneg
+#check @NumStability.ch7_matMul_pos_of_pos
+#check @NumStability.ch7TwoSidedScale_isInverse
+#check @NumStability.ch7_matrix_of_matTranspose
+#check @NumStability.ch7RowSupport_card_le
+#check @NumStability.ch7TwoSidedScaledOp2Kappa_mem_set
+#check @NumStability.higham7_1_rectangular
+#check @NumStability.ch7RowScale_inverse
+#check @NumStability.theorem7_2_subordinate_forward_error_bound
+#check @NumStability.theorem7_4_absolute_forward_error_bound
+#check @NumStability.ch7_vecNorm2_basisVec
+#check @NumStability.ch7Op2RightScaledCond_nonneg
+#check @NumStability.ch7RectRowNorm2_nonneg
+#check @NumStability.ch7Op2LeftScaledCond_nonneg
+#check @NumStability.ch7RectRowNorm1_nonneg
+#check @NumStability.ch7_idMatrix_symmetric
+#check @NumStability.ch7ColumnNorm2_nonneg
+#check @NumStability.theorem7_8_bauer_scaledInfCondSet_sInf_eq_spectralRadius

@@ -1,20 +1,27 @@
-# NumStability
+# Lean Computational Mathematics
 
-[![Lean CI](https://github.com/VSCL-x-VERITAS/lean-numerical-stability/actions/workflows/lean_action_ci.yml/badge.svg?branch=main)](https://github.com/VSCL-x-VERITAS/lean-numerical-stability/actions/workflows/lean_action_ci.yml)
+[![Lean CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/workflows/lean_action_ci.yml/badge.svg?branch=main)](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/workflows/lean_action_ci.yml)
 [![Lean](https://img.shields.io/badge/Lean-4.29.0--rc3-blue)](lean-toolchain)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-NumStability is a Lean 4 library for machine-checked numerical analysis. It
-contains reusable mathematics for floating-point error analysis, numerical
-stability, matrix algorithms, finite-volume methods, hyperbolic partial
-differential equations, and high-dimensional probability, together with
-source-correspondence modules for results from books and papers.
+Lean Computational Mathematics is a Lean 4 library of formalized results in
+computational mathematics and its mathematical foundations, developed from
+books and research papers. It contains reusable mathematics for floating-point
+error analysis, numerical stability, matrix algorithms, finite-volume methods,
+hyperbolic partial differential equations, and high-dimensional probability,
+together with source-correspondence modules.
 
 > **Active development repository:**
-> [`VSCL-x-VERITAS/lean-numerical-stability`](https://github.com/VSCL-x-VERITAS/lean-numerical-stability).
+> [`VSCL-x-VERITAS/lean-computational-mathematics`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics).
 > The [`AlexGeorgantzas` repository](https://github.com/AlexGeorgantzas/lean-numerical-stability)
 > is the upstream project history; new development, branches, and pull requests for
 > this continuation should target the VSCL-x-VERITAS repository.
+
+The broader project name reflects these multiple source developments;
+numerical stability remains in scope. The canonical repository slug is
+`lean-computational-mathematics`. The
+[migration report](docs/migrations/lean-computational-mathematics/README.md)
+records the verified GitHub cutover state and package/import compatibility.
 
 The principal source developments currently cover:
 
@@ -34,31 +41,47 @@ faithfully.
 
 ## Current repository status
 
-The source-only figures below were regenerated on 2026-09-04 from the
-production Lean tree in this revision with the repository-owned strict
-baseline generator. Its normalized source-tree SHA-256 is
-`31e824f6aef9084ac5c2585c1b417ad5a7e488dc158a894751177bbefca66821`.
+The source-only figures below compare the clean publishing base
+`718beac641a8094611dc249c3508a2f5415381a3` with the migrated integration tree
+captured on 2026-09-06 at 01:24:30 UTC by the strict baseline generator. The
+migration capture includes the uncommitted module-root transformation; it is
+not a measurement of the unchanged base commit or a successful build claim.
+Its normalized source-tree SHA-256 is
+`a345c00884ddea4def6c4892928ea70b7c4b566b5707844ce504c4ee77fe6aa5`.
 
-| Metric | Current result |
-|---|---:|
-| Production Lean modules | **3,198** |
-| Nonblank Lean source lines | **1,475,097** |
-| Direct imports | **31,987** (20,049 internal; 11,938 external) |
-| Import cycles / unresolved project imports | **0 / 0** |
-| Classified modules | **3,198 / 3,198 (100%)** |
-| Modules with module documentation | **3,198 / 3,198 (100%)** |
-| Aggregate / compatibility modules | **443 / 797** |
-| Reusable / source / internal / upstream modules | **593 / 1,355 / 5 / 5** |
-| Mixed or unclassified modules | **0** |
-| Forbidden reusable-to-source import paths | **0** |
+| Metric | Clean base | Migrated tree |
+|---|---:|---:|
+| Production Lean modules, including compatibility | 3,198 | **5,599** |
+| Canonical implementation / aggregate modules | 2,401 | **2,401** |
+| Retained old import forwarders | 797 | **3,198** |
+| Nonblank Lean source lines | 1,475,097 | **1,503,619** |
+| Direct imports | 31,987 | **47,223** |
+| Internal / external direct imports | 20,049 / 11,938 | **32,152 / 15,071** |
+| Import cycles / unresolved project imports | 0 / 0 | **0 / 0** |
+| Classified modules | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
+| Modules with module documentation | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
+| Aggregate modules | 443 | **443** |
+| Reusable / source / internal / upstream modules | 593 / 1,355 / 5 / 5 | **593 / 1,355 / 5 / 5** |
+| Mixed or unclassified modules | 0 | **0** |
+| Forbidden reusable-to-source import paths | 0 | **0** |
 
-The executable tier manifest is
-[`docs/architecture/tiers.json`](docs/architecture/tiers.json). The current
-compatibility map contains 797 forwarding modules, 1,713 unique canonical
-targets, and 2,449 forwarding edges; production code has no imports of the
-historical paths. The placeholder gate finds no `sorry`, `admit`, or unreviewed
-project axiom declaration. Five attributed upstream modules and 137
-Apache-2.0-marked production files are covered by the provenance gate.
+The additional files preserve existing import interfaces; they add no new
+mathematical results. The migrated compatibility map contains all 3,198 old
+paths, 2,401 unique canonical targets and 14,552 forwarding edges. The checks
+found no canonical production imports of historical paths, no `sorry` or
+`admit`, and no unreviewed project axiom declaration. Five attributed upstream
+modules and 264 Apache-2.0-marked production files, including retained
+forwarding notices, are covered by the provenance gate.
+
+Canonical modules use `ComputationalMathematics`. The package remains
+`numStability`, the test root remains `NumStabilityTest`, and authored
+declarations remain in their existing `NumStability` namespaces. The
+[validation record](docs/migrations/lean-computational-mathematics/validation.md)
+separates the 18 passing migrated source gates, source-preservation and six
+representative clean-build results from the pending full build, consumer and
+diagnostic results. The
+[live tier manifest](docs/architecture/tiers.json) and
+[compatibility map](docs/architecture/COMPATIBILITY.md) describe the mapped tree.
 
 The bounded 2026-08 repository-reorganization phase is accepted at checkpoint
 [`C0008`](docs/architecture/phases/2026-08-repository-reorganization-completion/checkpoints/C0008-gates.md),
@@ -75,11 +98,21 @@ and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
 The badge above is the authoritative live status of `main`. On every push to
 `main`, every pull request, and manual dispatch, Lean CI validates the recorded
 architecture phases, completion state, layout, tiers, placeholder and axiom
-policy, compatibility, provenance, and strict source graph. It then builds
-`NumStability` and `NumStabilityTest`, runs `lake test`, and enforces the
+policy, compatibility, provenance, and strict source graph. The migrated
+workflow builds `ComputationalMathematics`, `NumStability` and
+`NumStabilityTest`, runs `lake test`, and enforces the
 reviewed warning and lint baselines.
 
 The workflow has a 360-minute job ceiling to accommodate cold-cache builds.
+Manual dispatch can set `clean_project=true` to build fresh project artifacts
+without the restored lean-action project cache; the official Mathlib dependency
+cache remains available. After all ordinary checks pass, that manual mode also
+captures the existing format-2 compiled declaration graph, seven representative
+axiom reports, and an independent downstream package build using canonical,
+legacy and mixed imports. Its 13 consumer fixtures use the exact checked-out
+commit with the retained `numStability` package identity and verify all transitive
+dependency pins. The compressed graph and consumer logs are retained for 14
+days. Default push and pull-request cache behavior is unchanged.
 Warning and lint checks run independently so one diagnostic failure cannot
 hide the other. When the diagnostic stage is reached, the raw build and lint
 logs are retained as a 14-day workflow artifact, and a final enforcement step
@@ -91,7 +124,7 @@ passing only the structural checks or having no `sorry` is insufficient.
 ## Floating-point model
 
 The core library uses an
-[abstract real-arithmetic model](NumStability/FloatingPoint/Model.lean), not a
+[abstract real-arithmetic model](ComputationalMathematics/FloatingPoint/Model.lean), not a
 concrete IEEE-754 implementation. An `FPModel` supplies a nonnegative unit
 roundoff `u` and rounded addition, subtraction, multiplication, division, and
 square root. For the binary operations, the central relative-error law is
@@ -158,15 +191,15 @@ than a Lean proof hole. Detailed evidence lives in the
 ### LeVeque: hyperbolic PDEs and finite-volume methods
 
 Fifteen reusable modules under
-[`NumStability/Analysis/PartialDifferentialEquations/`](NumStability/Analysis/PartialDifferentialEquations/)
+[`ComputationalMathematics/Analysis/PartialDifferentialEquations/`](ComputationalMathematics/Analysis/PartialDifferentialEquations/)
 provide conservation-law residuals, constant-coefficient systems,
 hyperbolicity, eigenmode waves, scalar advection, linear acoustics, integral
 conservation, finite-volume cell averages and flux differences, Riemann data,
 Riemann-interface adapters, and operator splitting.
 
 The 30-module LeVeque source surface begins at
-[`NumStability.Source.LeVeque`](NumStability/Source/LeVeque.lean); its
-[`Chapter01` subtree](NumStability/Source/LeVeque/Chapter01/) connects those foundations
+[`ComputationalMathematics.Source.LeVeque`](ComputationalMathematics/Source/LeVeque.lean); its
+[`Chapter01` subtree](ComputationalMathematics/Source/LeVeque/Chapter01/) connects those foundations
 to Chapter 1 equations and constructions. The machine-readable
 [`Chapter 1 gate`](gates/leveque-finite-volume/chapter-01.json) and its
 [`audit artifacts`](gates/leveque-finite-volume/artifacts/) record source
@@ -176,13 +209,13 @@ under [`ledgers/leveque-finite-volume/`](ledgers/leveque-finite-volume/).
 
 ### Vershynin: high-dimensional probability
 
-[`NumStability.HDP`](NumStability/HDP.lean) is the current high-dimensional
+[`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
 probability entry point. Its semantic layer covers probability preliminaries,
 limit theorems, independent sums, Hoeffding and Chernoff bounds, random-graph
 degree laws, sub-Gaussian and sub-exponential variables, and metric-measure
 concentration.
 
-[`NumStability.Source.Vershynin`](NumStability/Source/Vershynin.lean) exposes
+[`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
 checked source contracts and frozen signatures for selected material in
 Chapters 1, 2, and 5 of *High-Dimensional Probability*. Historical
 `NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` paths
@@ -191,9 +224,9 @@ remain supported through the compatibility map.
 ### Drineas–Mahoney: randomized numerical linear algebra
 
 The RandNLA case study separates reusable algorithms and analysis under
-[`NumStability/Algorithms/RandomizedLinearAlgebra/`](NumStability/Algorithms/RandomizedLinearAlgebra/)
+[`ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/`](ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/)
 from source correspondence under
-[`NumStability/Source/DrineasMahoney/RandNLA2016/`](NumStability/Source/DrineasMahoney/RandNLA2016/).
+[`ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/`](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/).
 It covers sampling, matrix concentration, low-rank approximation,
 least-squares sketching, and randomized preconditioning. Historical
 `NumStability.Algorithms.RandNLA` imports remain available as compatibility
@@ -205,12 +238,16 @@ Install Git and [elan](https://github.com/leanprover/elan), then clone the
 active repository:
 
 ```bash
-git clone https://github.com/VSCL-x-VERITAS/lean-numerical-stability.git
-cd lean-numerical-stability
+git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
+cd lean-computational-mathematics
 lake exe cache get
-lake build NumStability NumStabilityTest
+lake build ComputationalMathematics NumStability NumStabilityTest
 lake test
 ```
+
+`lake build` selects the canonical and retained legacy libraries; the explicit
+command above also includes the test library. `lake test` uses the retained
+`NumStabilityTest` driver.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -219,9 +256,9 @@ Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
 To build one module, pass its Lean module name to Lake, for example:
 
 ```bash
-lake build NumStability.FloatingPoint.Model
-lake build NumStability.HDP.Scalar.SubGaussian
-lake build NumStability.Source.LeVeque
+lake build ComputationalMathematics.FloatingPoint.Model
+lake build ComputationalMathematics.HDP.Scalar.SubGaussian
+lake build ComputationalMathematics.Source.LeVeque
 ```
 
 ## Key entry points
@@ -230,18 +267,19 @@ Choose the narrowest import that supplies the declarations you need.
 
 | Import | Purpose |
 |---|---|
-| `NumStability.Core` | Small reusable foundation for the floating-point model and core error analysis |
-| `NumStability.FloatingPoint` | Reusable floating-point foundations and IEEE-facing utilities |
-| `NumStability.Analysis` | Broad historical analysis discovery surface; prefer a narrower family import |
-| `NumStability.Algorithms` | Broad historical algorithm discovery surface; prefer a canonical family import |
-| `NumStability.HDP` | High-dimensional-probability semantics, contracts, and signatures |
-| `NumStability.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
-| `NumStability.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `NumStability.Source.LeVeque` | LeVeque Chapter 1 correspondence |
-| `NumStability.Source.Vershynin` | Vershynin Chapters 1, 2, and 5 source contracts |
-| `NumStability.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
-| `NumStability.All` | Complete supported library surface |
-| `NumStability` | Historical compatibility entry point forwarding to `NumStability.All` |
+| `ComputationalMathematics.Core` | Small reusable foundation for the floating-point model and core error analysis |
+| `ComputationalMathematics.FloatingPoint` | Reusable floating-point foundations and IEEE-facing utilities |
+| `ComputationalMathematics.Analysis` | Broad historical analysis discovery surface; prefer a narrower family import |
+| `ComputationalMathematics.Algorithms` | Broad historical algorithm discovery surface; prefer a canonical family import |
+| `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
+| `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
+| `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 correspondence |
+| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1, 2, and 5 source contracts |
+| `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
+| `ComputationalMathematics.All` | Complete supported library surface |
+| `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
+| `NumStability` | Retained old entry point forwarding through the canonical root |
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for API tiers and dependency rules.
 Historical imports and their canonical destinations are documented in
@@ -249,21 +287,23 @@ Historical imports and their canonical destinations are documented in
 
 ## Use as a dependency
 
-The inherited `v0.1.0` tag predates the current LeVeque and HDP work. Use the
-tag for the original release surface:
+For the migrated development tree, retain the package name `numStability`:
 
 ```toml
 [[require]]
 name = "numStability"
-git = "https://github.com/VSCL-x-VERITAS/lean-numerical-stability"
-rev = "v0.1.0"
+git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
+rev = "main"
 ```
 
-Use `rev = "main"` when you intentionally want the current development tree.
-A minimal reusable import is:
+Pin a reviewed commit when reproducibility is required. The inherited
+`v0.1.0` tag predates the current LeVeque/HDP work and the new module root;
+consumers of that tag use its original `NumStability` imports.
+
+A minimal current reusable import is:
 
 ```lean
-import NumStability.FloatingPoint.Model
+import ComputationalMathematics.FloatingPoint.Model
 
 open NumStability
 
@@ -271,14 +311,19 @@ open NumStability
 #check FPModel.exactWithUnitRoundoff
 ```
 
+The import root and declaration namespace are different interfaces:
+`ComputationalMathematics.FloatingPoint.Model` still defines
+`NumStability.FPModel`. Existing old import paths are retained under the
+documented compatibility policy.
+
 ## Repository layout
 
 The map emphasizes supported entry points and semantic boundaries rather than
 listing every theorem leaf.
 
 ```text
-NumStability.lean                         historical complete-tree entry point
-NumStability/
+ComputationalMathematics.lean             canonical complete-tree entry point
+ComputationalMathematics/
 ├── Core.lean                            small reusable foundation
 ├── All.lean                             complete supported tree
 ├── FloatingPoint.lean                   floating-point umbrella
@@ -301,8 +346,11 @@ NumStability/
 │   ├── LeVeque/                          finite-volume methods, Chapter 1
 │   ├── Vershynin/                        high-dimensional probability, Chapters 1, 2, and 5
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
-├── Higham.lean and Higham/               historical Higham compatibility paths
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
+
+NumStability.lean                         retained original complete-tree import
+NumStability/                            retained old imports; no duplicate implementation
+└── Higham.lean and Higham/               earlier Higham compatibility paths
 
 NumStabilityTest.lean                     complete test-library entry point
 NumStabilityTest/
@@ -345,6 +393,8 @@ follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 
 ## Documentation
 
+- The [identity migration report](docs/migrations/lean-computational-mathematics/README.md)
+  records the public name, interface mapping, GitHub cutover and validation.
 - [`docs/README.md`](docs/README.md) maps current policy and retained evidence.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
   and supported entry points.
@@ -355,6 +405,20 @@ follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 - [`docs/source_coverage/`](docs/source_coverage/) contains Higham's concise
   chapter ledgers and PDF-first audits.
 - [`CHANGELOG.md`](CHANGELOG.md) records release-facing changes.
+
+## Roadmap
+
+The companion source catalogue lists six candidates whose formalization status
+is `not-started`: Greenbaum and Saad on iterative linear solvers, LeVeque on
+finite differences, Krüger and Succi on lattice Boltzmann methods, and Kettner
+et al. on robust geometric computation. The finite-difference source
+collection currently contains only Chapters 1–4. A kinetic-models and
+macroscopic-limits request still needs an authoritative source.
+
+These are candidate source materials, not completed library coverage. The
+[verified source inventory](docs/migrations/lean-computational-mathematics/source-scope.md)
+records exact titles, editions, source identifiers, catalogue status and the
+boundary between present developments and future work.
 
 ## References
 
@@ -370,7 +434,7 @@ follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 
 ## License and citation
 
-Except where an individual file states otherwise, NumStability is licensed
+Except where an individual file states otherwise, Lean Computational Mathematics is licensed
 under the [MIT License](LICENSE). Files carrying an Apache-2.0 notice are
 licensed under the [Apache License, Version 2.0](LICENSES/Apache-2.0.txt).
 Third-party attribution is recorded in

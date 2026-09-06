@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter08.Equation14.FanInExecutor.Executor
+import ComputationalMathematics.Source.Higham.Chapter08.Equation14.FanInExecutor.All
 
 /-!
-# Source.Higham.Chapter08.Equation14.FanInExecutor.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter08.Equation14.FanInExecutor.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

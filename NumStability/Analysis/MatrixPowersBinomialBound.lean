@@ -1,7 +1,11 @@
 import Mathlib.Analysis.CStarAlgebra.Matrix
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.BinomialPowerBound
-import NumStability.Analysis.MatrixPowersSchur
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds.Estimates
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.BinomialPowerBound
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.Triangulation
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.ExactNormBounds.NormalMatrices.Powers
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds.Estimates
 
 /-!
 # Analysis.MatrixPowersBinomialBound (compatibility wrapper)

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Bunch.SharpGrowthBridge
+import ComputationalMathematics.Source.Higham.Chapter11.Bunch.SharpGrowthBridge
 
 /-!
 # Higham11BunchSharpGrowthBridge (compatibility module)

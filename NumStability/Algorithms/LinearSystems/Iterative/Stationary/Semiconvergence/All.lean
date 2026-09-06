@@ -1,11 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.BlockForm.Existence
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.BlockForm.ProjectorLimit
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Execution.RoundedCertificates
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Projectors.FixedRange
+import ComputationalMathematics.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.All
 
 /-!
-# Stationary-iteration semiconvergence
+Historical import path retained for compatibility.
 
-Declaration-free reusable aggregate for the stationary-iteration
-semiconvergence family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

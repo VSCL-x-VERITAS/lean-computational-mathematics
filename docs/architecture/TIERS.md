@@ -33,8 +33,8 @@ more than one declaration tier; it is an explicit split queue, not a permanent
 architecture category.
 
 The Chapter 1 Section 1.17 migration uses exact `aggregate` rules for
-`NumStability.Source.Higham.Chapter01` and its `Section17` child. The five
-canonical leaves inherit `source` from the `NumStability.Source` prefix. The
+`ComputationalMathematics.Source.Higham.Chapter01` and its `Section17` child. The five
+canonical leaves inherit `source` from the `ComputationalMathematics.Source` prefix. The
 six historical `NumStability.Analysis.NonrandomRounding*` paths use exact
 `compatibility` rules; there is deliberately no source-tier prefix rule for
 that historical directory.
@@ -106,17 +106,23 @@ isolated old-only tests.
 
 ## Current inventory
 
-The live ratchet classifies all 2,928 production modules (100%): 1,224 as
-source, 405 as aggregate, 712 as compatibility, 577 as reusable, 5 as
-internal, and 5 as upstream. The unclassified queue is empty and no module is
-marked mixed. The `NumStability.Algorithms` direct-import ceilings are read
-live from the `direct_import_ceilings` entry of
-[`layout-exceptions.json`](layout-exceptions.json). Every legacy debt list in
-that manifest is empty: 0 missing module docstrings, 0 noncanonical historical
-module names, and 0 declaration-bearing umbrellas; the compatibility inventory
-contains 712 forwarding modules over 2,364 canonical targets. The three
+The pre-identity baseline `718beac641a8094611dc249c3508a2f5415381a3`
+classifies all 3,198 production modules: 1,355 source, 443 aggregate, 797
+compatibility, 593 reusable, 5 internal and 5 upstream. Its source checks
+found no unclassified or mixed modules. The approved identity map relocates
+the 2,401 non-compatibility modules under `ComputationalMathematics` and
+retains all 3,198 old imports as compatibility modules; those wrappers do not
+add mathematical results.
+
+Live canonical/compatibility counts and final validation outcomes are recorded
+by [`tiers.json`](tiers.json) and the
+[migration validation](../migrations/lean-computational-mathematics/validation.md).
+The `ComputationalMathematics.Algorithms` direct-import ceilings are read
+from `direct_import_ceilings` in
+[`layout-exceptions.json`](layout-exceptions.json), with no relaxation of the
+reviewed limits. The three
 formerly declaration-bearing source parents (`Equation23`, `Equation25`, and
-`Table01` under `NumStability.Source.Higham.Chapter13`) are now
+`Table01` under `ComputationalMathematics.Source.Higham.Chapter13`) are now
 declaration-free import umbrellas over their semantic children.
 
 Because structural aggregates do not themselves own declarations,

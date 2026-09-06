@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Closure
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Closure
 
 /-!
 # Higham11BunchKaufmanRoundedClosure (compatibility module)

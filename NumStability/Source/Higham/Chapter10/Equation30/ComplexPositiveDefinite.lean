@@ -1,9 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite.Endpoints
-import NumStability.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite.NoPivotLU.SourceBounds
-import NumStability.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite.SourceClosure
+import ComputationalMathematics.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite
 
 /-!
-# Source Higham Chapter10 Equation30 ComplexPositiveDefinite
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Equation30.ComplexPositiveDefinite`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -11,10 +11,10 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LU.GaussianElimination
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Source.Higham.Chapter01.FloatingPointArithmetic.InstabilityWithoutCancellation
-import NumStability.Source.Higham.Chapter01.Section12.InstabilityWithoutCancellation.PivotingExample
+import ComputationalMathematics.Algorithms.LU.GaussianElimination
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Source.Higham.Chapter01.FloatingPointArithmetic.InstabilityWithoutCancellation
+import ComputationalMathematics.Source.Higham.Chapter01.Section12.InstabilityWithoutCancellation.PivotingExample
 
 /-!
 # InstabilityWithoutCancellation (compatibility wrapper)

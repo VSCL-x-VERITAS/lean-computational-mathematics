@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Spectrum.Results
+import ComputationalMathematics.Source.Higham.Chapter16.Spectrum.Results
 
 /-!
 # Higham16Spectrum (compatibility module)

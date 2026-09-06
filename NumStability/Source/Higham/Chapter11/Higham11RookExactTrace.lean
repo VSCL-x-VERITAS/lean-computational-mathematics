@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Rook.ExactTrace
+import ComputationalMathematics.Source.Higham.Chapter11.Rook.ExactTrace
 
 /-!
 # Higham11RookExactTrace (compatibility module)

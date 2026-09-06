@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Laszlo.NearestNormal
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Laszlo.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.Laszlo.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Laszlo.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

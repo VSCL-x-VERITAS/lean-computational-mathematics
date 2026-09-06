@@ -9,10 +9,10 @@ import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
-import NumStability.Analysis.BeneficialRounding
-import NumStability.Analysis.Error.Measures.ScalarDefinitions
-import NumStability.Source.Higham.Chapter01.FloatingPointArithmetic.IncreasingPrecision
-import NumStability.Source.Higham.Chapter01.Section13.IncreasingPrecision.BinaryStorageExamples
+import ComputationalMathematics.Analysis.BeneficialRounding
+import ComputationalMathematics.Analysis.Error.Measures.ScalarDefinitions
+import ComputationalMathematics.Source.Higham.Chapter01.FloatingPointArithmetic.IncreasingPrecision
+import ComputationalMathematics.Source.Higham.Chapter01.Section13.IncreasingPrecision.BinaryStorageExamples
 
 /-!
 # IncreasingPrecision (compatibility wrapper)

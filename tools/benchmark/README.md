@@ -27,8 +27,8 @@ modules:
 
 ```console
 python tools/benchmark/run.py --mode incremental \
-  --scenario foundation=NumStability/FloatingPoint/Model.lean \
-  --scenario endpoint=NumStability/Higham/Chapter02/Problem04.lean
+  --scenario foundation=ComputationalMathematics/FloatingPoint/Model.lean \
+  --scenario endpoint=ComputationalMathematics/Source/Higham/Chapter02/Problem04.lean
 ```
 
 The default scenarios deliberately compare a highly foundational module with a

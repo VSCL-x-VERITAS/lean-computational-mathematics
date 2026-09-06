@@ -14,14 +14,14 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Positivity
-import NumStability.Analysis.Error.Measures.ScalarDefinitions
-import NumStability.Analysis.FloatingPointArithmetic.Format
-import NumStability.Analysis.FloatingPointArithmetic.NearestRoundingError
-import NumStability.Analysis.Rounding
-import NumStability.Source.Higham.Chapter01.FloatingPointArithmetic.CancellationOfRoundingErrors
-import NumStability.Source.Higham.Chapter01.Problem05.CompensatedLogarithm.Basic
-import NumStability.Source.Higham.Chapter01.Section11.Accumulation.Basic
-import NumStability.Source.Higham.Chapter01.Section14.CancellationOfRoundingErrors.Algorithm02RoundedCore
+import ComputationalMathematics.Analysis.Error.Measures.ScalarDefinitions
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.Format
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.NearestRoundingError
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter01.FloatingPointArithmetic.CancellationOfRoundingErrors
+import ComputationalMathematics.Source.Higham.Chapter01.Problem05.CompensatedLogarithm.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Section11.Accumulation.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Section14.CancellationOfRoundingErrors.Algorithm02RoundedCore
 
 /-!
 # CancellationOfRoundingErrors (compatibility wrapper)

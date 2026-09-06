@@ -1,14 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.BinomialPowerBound
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.DepartureFromNormality
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.Extremal
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.ImprovedConstant
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.NormalMatrices
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.SchurBinomialBounds
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.SharpConstant
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.All
 
 /-!
-# Analysis.LinearOperators.MatrixPowers.Henrici.All
+Historical import path retained for compatibility.
 
-W06 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

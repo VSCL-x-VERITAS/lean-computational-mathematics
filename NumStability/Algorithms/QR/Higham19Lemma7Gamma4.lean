@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Lemma07.Gamma4
+import ComputationalMathematics.Source.Higham.Chapter19.Lemma07.Gamma4
 
 /-!
 # Higham19Lemma7Gamma4 (compatibility wrapper)

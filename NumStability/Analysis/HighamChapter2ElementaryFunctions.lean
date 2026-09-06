@@ -7,9 +7,9 @@
 
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Section10.ArctangentRange.Basic
-import NumStability.Source.Higham.Chapter02.Section10.ArctangentRange.Counterexample.Results
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.ArctangentRange.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.ArctangentRange.Counterexample.Results
 
 /-!
 # HighamChapter2ElementaryFunctions (compatibility wrapper)

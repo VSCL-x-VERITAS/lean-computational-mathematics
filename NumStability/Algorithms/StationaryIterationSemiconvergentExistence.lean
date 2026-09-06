@@ -1,5 +1,5 @@
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.BlockForm.Existence
-import NumStability.Source.Higham.Chapter17.Results.Equation27.SingularErrorSplit
+import ComputationalMathematics.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.BlockForm.Existence
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation27.SingularErrorSplit
 
 /-!
 # Historical semiconvergent-existence compatibility import

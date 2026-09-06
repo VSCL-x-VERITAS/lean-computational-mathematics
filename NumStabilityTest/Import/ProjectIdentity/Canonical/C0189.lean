@@ -1,0 +1,7 @@
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ConditionTransfer.Core
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ConditionTransfer.Core`. -/
+
+#check NumStability.higham21_sne_cond2_mul_solution_norm_le_direction_radius
+#check NumStability.higham21_sne_dual_solution_difference_vecNorm2_le_direction_radius
+#check NumStability.higham21_sne_primal_solution_difference_vecNorm2_le_direction_radius

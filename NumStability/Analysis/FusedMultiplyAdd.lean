@@ -1,7 +1,7 @@
-import NumStability.FloatingPoint.FusedMultiplyAdd.Core
-import NumStability.FloatingPoint.FusedMultiplyAdd.DotProductCounts
-import NumStability.Source.Higham.Chapter02.Problem26.ExactProduct.Discrepancy
-import NumStability.Source.Higham.Chapter02.Section06.FusedMultiplyAdd.DotProductCount
+import ComputationalMathematics.FloatingPoint.FusedMultiplyAdd.Core
+import ComputationalMathematics.FloatingPoint.FusedMultiplyAdd.DotProductCounts
+import ComputationalMathematics.Source.Higham.Chapter02.Problem26.ExactProduct.Discrepancy
+import ComputationalMathematics.Source.Higham.Chapter02.Section06.FusedMultiplyAdd.DotProductCount
 
 /-!
 # Analysis.FusedMultiplyAdd compatibility facade

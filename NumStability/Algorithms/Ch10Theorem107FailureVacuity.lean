@@ -1,6 +1,6 @@
-import NumStability.Source.Higham.Chapter08.Equation15.FanInExecutor.FirstOrderResidual
-import NumStability.Source.Higham.Chapter08.Equation18.FanInExecutor.FirstOrderForwardError
-import NumStability.Source.Higham.Chapter10.Theorem07.FailureVacuity.Vacuity
+import ComputationalMathematics.Source.Higham.Chapter08.Equation15.FanInExecutor.FirstOrderResidual
+import ComputationalMathematics.Source.Higham.Chapter08.Equation18.FanInExecutor.FirstOrderForwardError
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem07.FailureVacuity.Vacuity
 
 /-!
 # Ch10Theorem107FailureVacuity (compatibility module)

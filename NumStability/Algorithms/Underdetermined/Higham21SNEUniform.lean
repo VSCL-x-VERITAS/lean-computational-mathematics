@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Uniform.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Uniform.Core
 
 /-!
 # Higham21SNEUniform (compatibility module)

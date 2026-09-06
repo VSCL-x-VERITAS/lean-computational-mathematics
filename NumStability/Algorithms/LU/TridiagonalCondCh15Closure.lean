@@ -1,5 +1,8 @@
-import NumStability.Algorithms.LU.TridiagonalCondCh15
-import NumStability.Source.Higham.Chapter15.Section06.TridiagonalLUConditionBounds.ExactBounds
+import ComputationalMathematics.Algorithms.LU.TridiagonalCond
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem07.TridiagonalLU.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem08.TridiagonalDiagonalDominance.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Section06.TridiagonalLUConditionBounds.ExactBounds
 
 /-!
 # TridiagonalCondCh15Closure (compatibility wrapper)

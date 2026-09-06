@@ -10,7 +10,7 @@
 --   NumStability.Algorithms.LinearSystems.QR.HouseholderApplySupport
 --     -> NumStability.Algorithms.LinearSystems.QR.Householder.PanelApplication
 
-import NumStability.Algorithms.LinearSystems.QR.Householder.PanelApplication
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.PanelApplication
 
 /-!
 # HouseholderApplySupport (compatibility wrapper)

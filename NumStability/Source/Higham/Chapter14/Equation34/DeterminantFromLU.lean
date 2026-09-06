@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Equation34.DeterminantFromLU.MatrixInversion
+import ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU
 
 /-!
-# NumStability.Source.Higham.Chapter14.Equation34.DeterminantFromLU
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Equation34.DeterminantFromLU`.
+Declaration names and mathematical terminology are unchanged.
 -/

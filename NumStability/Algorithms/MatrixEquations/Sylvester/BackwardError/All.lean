@@ -1,9 +1,8 @@
-import NumStability.Algorithms.MatrixEquations.Sylvester.BackwardError.LyapunovSpectral
-import NumStability.Algorithms.MatrixEquations.Sylvester.BackwardError.Specification
-import NumStability.Algorithms.MatrixEquations.Sylvester.BackwardError.SylvesterSVD
+import ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.BackwardError.All
 
 /-!
-# Algorithms.MatrixEquations.Sylvester.BackwardError.All
+Historical import path retained for compatibility.
 
-W05 reviewed discovery entry point.
+The implementation is provided by `ComputationalMathematics.Algorithms.MatrixEquations.Sylvester.BackwardError.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

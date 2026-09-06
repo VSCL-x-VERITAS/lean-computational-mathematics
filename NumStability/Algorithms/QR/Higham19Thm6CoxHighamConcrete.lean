@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Source.Higham.Chapter19.Theorem06.CoxHighamConcrete
+import ComputationalMathematics.Source.Higham.Chapter19.Theorem06.CoxHighamConcrete
 
 /-!
 # Higham19Thm6CoxHighamConcrete (compatibility wrapper)

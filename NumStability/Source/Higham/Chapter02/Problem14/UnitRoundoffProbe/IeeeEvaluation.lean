@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem14.UnitRoundoffProbe.IeeeExamples.Results
 
 /-!
 # Checkpoint compatibility alias: IeeeEvaluation

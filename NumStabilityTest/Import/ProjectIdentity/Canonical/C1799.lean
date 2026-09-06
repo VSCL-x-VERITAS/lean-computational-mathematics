@@ -1,0 +1,5 @@
+import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.Minimizers
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.Minimizers`. -/
+
+#check NumStability.H16_eq16_29_lyapunov_practical_error_bound_of_operator_sigmaMin_computed_residual_budget

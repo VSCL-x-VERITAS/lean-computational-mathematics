@@ -1,6 +1,13 @@
-import NumStability.Algorithms.LU.Higham15Problem15_6
-import NumStability.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.Recurrences.FactorizationAndNorm
-import NumStability.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.TridiagonalInverseCompletion
+import Mathlib.Tactic
+import ComputationalMathematics.Algorithms.LU.TridiagonalCond
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem07.TridiagonalLU.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem08.TridiagonalDiagonalDominance.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.Basic
+import ComputationalMathematics.Source.Higham.Chapter15.Theorem09.Ikebe.IrreducibleRightInverse.RankOneStructure
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.Recurrences.EntryFormulas
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.TridiagonalInverse
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.Recurrences.FactorizationAndNorm
+import ComputationalMathematics.Source.Higham.Chapter15.Problem06.TridiagonalInverseNorm.TridiagonalInverseCompletion
 
 /-!
 # Higham15Problem15_6Closure (compatibility wrapper)

@@ -2,11 +2,11 @@
 SPDX-License-Identifier: MIT
 -/
 
-import NumStability.Source.LeVeque.Chapter01
+import ComputationalMathematics.Source.LeVeque
 
 /-!
-# LeVeque source-local results
+Historical import path retained for compatibility.
 
-Source-local wrappers for LeVeque's *Finite Volume Methods for Hyperbolic
-Problems*.
+The implementation is provided by `ComputationalMathematics.Source.LeVeque`.
+Declaration names and mathematical terminology are unchanged.
 -/

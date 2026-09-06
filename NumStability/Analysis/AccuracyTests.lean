@@ -15,14 +15,14 @@ import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.Analysis.Approximation.SineTaylor.OddDegreeFiveError.Theorems
-import NumStability.Analysis.FloatingPointArithmetic.Format
-import NumStability.Analysis.FloatingPointArithmetic.NearestRoundingError
-import NumStability.Analysis.Rounding
-import NumStability.Source.Higham.Chapter01.Problem05.CompensatedLogarithm.Basic
-import NumStability.Source.Higham.Chapter01.Section11.Accumulation.Basic
-import NumStability.Source.Higham.Chapter02.Section11.AccuracyTests.Basic
-import NumStability.Source.Higham.Chapter02.Section11.AccuracyTests.CodySineResults.Theorems
+import ComputationalMathematics.Analysis.Approximation.SineTaylor.OddDegreeFiveError.Theorems
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.Format
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.NearestRoundingError
+import ComputationalMathematics.Analysis.Rounding
+import ComputationalMathematics.Source.Higham.Chapter01.Problem05.CompensatedLogarithm.Basic
+import ComputationalMathematics.Source.Higham.Chapter01.Section11.Accumulation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section11.AccuracyTests.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section11.AccuracyTests.CodySineResults.Theorems
 
 /-!
 # AccuracyTests (compatibility wrapper)

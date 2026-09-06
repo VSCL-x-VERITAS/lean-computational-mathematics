@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ConditionTransfer.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ConditionTransfer.Core
 
 /-!
 # Higham21SNEConditionTransfer (compatibility module)

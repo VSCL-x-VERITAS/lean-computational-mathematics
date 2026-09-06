@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter14.Discrepancies
+import ComputationalMathematics.Source.Higham.Chapter14.Discrepancies
 
 /-!
 # Compatibility import

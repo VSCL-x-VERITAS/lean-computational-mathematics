@@ -1,8 +1,8 @@
-import NumStability.Analysis.Error.MatrixProducts.Contracts
-import NumStability.Analysis.Error.MatrixProducts.EvaluationTrees
+import ComputationalMathematics.Analysis.Error.MatrixProducts
 
 /-!
-# NumStability.Analysis.Error.MatrixProducts
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.Error.MatrixProducts`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -5,11 +5,11 @@
 -- not deleted and not Git-renamed, so every existing `import` keeps resolving.
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Basic
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
-import NumStability.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.Basic
-import NumStability.Upstream.Lindemann.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.FiniteSeparation.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Section10.Tablemaker.HermiteLindemann.Basic
+import ComputationalMathematics.Upstream.Lindemann.Basic
 
 /-!
 # HighamChapter2Lindemann (compatibility wrapper)

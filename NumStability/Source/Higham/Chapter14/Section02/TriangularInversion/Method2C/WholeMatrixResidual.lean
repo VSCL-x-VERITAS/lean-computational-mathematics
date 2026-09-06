@@ -1,3 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual
 
-/-! # Method 2C whole-matrix residual bounds -/
+/-!
+Historical import path retained for compatibility.
+
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual`.
+Declaration names and mathematical terminology are unchanged.
+-/

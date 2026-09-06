@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger
-import NumStability.Analysis.LinearOperators.NumericalRadius.Core
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius
 
 /-!
-# NumStability.Analysis.LinearOperators.NumericalRadius
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.NumericalRadius`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,17 +1,17 @@
-import NumStability.Algorithms.Cholesky.CholeskySpec
-import NumStability.Algorithms.LinearSystems.Triangular.InverseBounds
-import NumStability.Source.Higham.Chapter09.Problems
-import NumStability.Source.Higham.Chapter09.Section01
-import NumStability.Source.Higham.Chapter09.Section02
-import NumStability.Source.Higham.Chapter09.Section03
-import NumStability.Source.Higham.Chapter09.Section04
-import NumStability.Source.Higham.Chapter09.Section05
-import NumStability.Source.Higham.Chapter09.Section06
-import NumStability.Source.Higham.Chapter09.Section08
-import NumStability.Source.Higham.Chapter09.Section10
-import NumStability.Source.Higham.Chapter09.Section11
-import NumStability.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.NormalizedResolvent.SourceBound
-import NumStability.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.Resolvent
+import ComputationalMathematics.Algorithms.Cholesky.CholeskySpec
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.InverseBounds
+import ComputationalMathematics.Source.Higham.Chapter09.Problems
+import ComputationalMathematics.Source.Higham.Chapter09.Section01
+import ComputationalMathematics.Source.Higham.Chapter09.Section02
+import ComputationalMathematics.Source.Higham.Chapter09.Section03
+import ComputationalMathematics.Source.Higham.Chapter09.Section04
+import ComputationalMathematics.Source.Higham.Chapter09.Section05
+import ComputationalMathematics.Source.Higham.Chapter09.Section06
+import ComputationalMathematics.Source.Higham.Chapter09.Section08
+import ComputationalMathematics.Source.Higham.Chapter09.Section10
+import ComputationalMathematics.Source.Higham.Chapter09.Section11
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.NormalizedResolvent.SourceBound
+import ComputationalMathematics.Source.Higham.Chapter10.Theorem08.ComponentwisePerturbation.Resolvent
 
 /-!
 # Ch10Theorem108Componentwise (compatibility module)

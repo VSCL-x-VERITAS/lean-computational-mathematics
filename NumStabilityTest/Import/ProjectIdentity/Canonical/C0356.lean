@@ -1,0 +1,12 @@
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.DixonCompletion
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.DixonCompletion`. -/
+
+#check NumStability.ch15Closure_exists_gram_opNorm2_sq_unit_eigenvector
+#check NumStability.ch15Closure_gram_pow_finitePSD
+#check NumStability.ch15Closure_gram_symmetric
+#check NumStability.ch15Closure_matPow_matrix_eq_pow
+#check NumStability.ch15Closure_matPow_mulVec_eigenvector
+#check NumStability.ch15Closure_matPow_symmetric
+#check NumStability.ch15Closure_sqrt_inv_pow_eq_rpow_neg_half
+#check NumStability.ch15Closure_unitSphereOfFiniteVec

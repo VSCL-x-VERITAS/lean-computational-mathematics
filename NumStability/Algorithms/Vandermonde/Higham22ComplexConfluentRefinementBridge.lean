@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter22.Section03.ComplexConfluentRefinement
+import ComputationalMathematics.Source.Higham.Chapter22.Section03.ComplexConfluentRefinement
 
 /-!
 # Compatibility import for complex confluent Vandermonde refinement

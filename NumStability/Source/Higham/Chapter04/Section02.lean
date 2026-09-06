@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter04.Section02.KaoWangCitationDiscrepancy
+import ComputationalMathematics.Source.Higham.Chapter04.Section02
 
 /-!
-# Higham Chapter 4, Section 4.2: error analysis
+Historical import path retained for compatibility.
 
-Canonical declaration-free entry point for source correspondence tied to
-Higham's Section 4.2 error analysis.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter04.Section02`.
+Declaration names and mathematical terminology are unchanged.
 -/

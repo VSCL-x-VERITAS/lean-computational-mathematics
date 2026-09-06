@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.ExplicitInverse.Solve
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.ExplicitInverse.Solve
 
 /-!
 # Higham11BunchKaufmanExplicitInverseSolve (compatibility module)

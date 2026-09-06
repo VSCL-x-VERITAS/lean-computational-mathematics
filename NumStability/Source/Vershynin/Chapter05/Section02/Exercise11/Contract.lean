@@ -1,7 +1,8 @@
-import NumStability.HDP.Concentration.MetricMeasure
+import ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Contract
 
-/-! Stable Chapter 5 contract module for Exercise 5.2.11.
+/-!
+Historical import path retained for compatibility.
 
-The semantic module owns the value-level forwarding theorem; importing this
-module exposes the stable contract import path used by cross-split checks.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Contract`.
+Declaration names and mathematical terminology are unchanged.
 -/

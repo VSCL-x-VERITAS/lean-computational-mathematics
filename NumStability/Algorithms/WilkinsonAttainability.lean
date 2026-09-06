@@ -6,10 +6,10 @@
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
 import Mathlib.Tactic
-import NumStability.Algorithms.Summation.Recursive.Core
-import NumStability.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
-import NumStability.Source.Higham.Chapter04.Problem02.WilkinsonAttainability.Basic
-import NumStability.Source.Higham.Chapter04.Problem02.WilkinsonAttainability.IeeeDoubleTrace.Results
+import ComputationalMathematics.Algorithms.Summation.Recursive.Core
+import ComputationalMathematics.Source.Higham.Chapter02.Problem10.DivisionRoundTrip.ExhaustiveBinary64.Results
+import ComputationalMathematics.Source.Higham.Chapter04.Problem02.WilkinsonAttainability.Basic
+import ComputationalMathematics.Source.Higham.Chapter04.Problem02.WilkinsonAttainability.IeeeDoubleTrace.Results
 
 /-!
 # WilkinsonAttainability (compatibility wrapper)

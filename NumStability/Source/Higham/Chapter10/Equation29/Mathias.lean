@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter10.Equation29.Mathias.Endpoints
-import NumStability.Source.Higham.Chapter10.Equation29.Mathias.FirstBreakdown
-import NumStability.Source.Higham.Chapter10.Equation29.Mathias.RoundedSchur.Bounds
-import NumStability.Source.Higham.Chapter10.Equation29.Mathias.SourceIngredients
+import ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias
 
 /-!
-# Source Higham Chapter10 Equation29 Mathias
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias`.
+Declaration names and mathematical terminology are unchanged.
 -/

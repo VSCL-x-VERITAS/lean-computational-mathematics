@@ -48,7 +48,7 @@ NORMALIZATION_VERSION = 1
 
 # Lean source trees whose diagnostics this contract governs.  Anything outside
 # them (Mathlib, toolchain sources) is not fingerprinted.
-SOURCE_ROOTS = ("NumStability", "NumStabilityTest")
+SOURCE_ROOTS = ("ComputationalMathematics", "NumStability", "NumStabilityTest")
 
 # The anchor hashes the whitespace-normalized source lines in the closed
 # interval [line - 2, line + 2] (clamped to the file).  A five-line window is
@@ -800,64 +800,64 @@ _RETAINED_HDP_WARNING = {
 }
 
 _FROZEN_VERSHYNIN_NAMECHECK_PATHS = (
-    "NumStability/Source/Vershynin/Chapter01/CauchySchwarz/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Corollary05/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Exercise02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Proposition04/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Equation12/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/IndependentSumMGF/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section02/Exercise10B/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section03/Exercise05/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Example08B/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Exercise01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Exercise05A/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Proposition02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Exercise09/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Lemma08/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Proposition01/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Proposition01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem02/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem03/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section07/Example12/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section07/Example13/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter05/Section01/Exercise13/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter05/Section01/Exercise14/Contract.lean",
-    "NumStability/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/CauchySchwarz/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Corollary05/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Exercise02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Proposition04/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Equation12/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/IndependentSumMGF/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Exercise10B/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section03/Exercise05/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Example08B/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Exercise01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Exercise05A/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Proposition02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Exercise09/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Lemma08/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Proposition01/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Proposition01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem02/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem03/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example12/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example13/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Contract.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
 )
 
 _FROZEN_VERSHYNIN_UNUSED_PATHS = (
-    "NumStability/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Corollary05/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Exercise02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section02/Proposition04/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section02/Exercise10B/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Proposition02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Proposition01/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
-    "NumStability/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/JensenInequality/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Corollary05/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Exercise02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Lemma01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section02/Proposition04/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter01/Section03/Theorem01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/ExponentialMarkov/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/PsiTwoNormCharacterizations/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Exercise10B/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section02/Theorem06/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Example08C/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Proposition02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Remark03/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Lemma08/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Proposition01/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem02/Signature.lean",
+    "ComputationalMathematics/Source/Vershynin/Chapter02/Section06/Theorem03/Signature.lean",
 )
 
 _FROZEN_VERSHYNIN_WARNING_KEYS = frozenset(
@@ -874,27 +874,27 @@ _FROZEN_VERSHYNIN_WARNING_KEYS = frozenset(
 _RETAINED_HDP_WARNING_KEYS = frozenset(
     {
         (
-            "NumStability/HDP/Concentration/MetricMeasure.lean",
+            "ComputationalMathematics/HDP/Concentration/MetricMeasure.lean",
             "linter.unusedVariables",
         ),
         (
-            "NumStability/HDP/Scalar/IndependentSums/Chernoff.lean",
+            "ComputationalMathematics/HDP/Scalar/IndependentSums/Chernoff.lean",
             "linter.unusedVariables",
         ),
         (
-            "NumStability/HDP/Scalar/IndependentSums/Hoeffding.lean",
+            "ComputationalMathematics/HDP/Scalar/IndependentSums/Hoeffding.lean",
             "linter.unusedVariables",
         ),
         (
-            "NumStability/HDP/Scalar/Preliminaries.lean",
+            "ComputationalMathematics/HDP/Scalar/Preliminaries.lean",
             "linter.unusedVariables",
         ),
         (
-            "NumStability/HDP/Scalar/SubExponential.lean",
+            "ComputationalMathematics/HDP/Scalar/SubExponential.lean",
             "linter.unusedVariables",
         ),
         (
-            "NumStability/HDP/Scalar/SubGaussian.lean",
+            "ComputationalMathematics/HDP/Scalar/SubGaussian.lean",
             "linter.unusedVariables",
         ),
     }
@@ -907,15 +907,15 @@ REVIEWED_DISPOSITIONS: dict[tuple[str, str], dict[str, str]] = {
     },
     **{key: _RETAINED_HDP_WARNING for key in _RETAINED_HDP_WARNING_KEYS},
     (
-        "NumStability/Upstream/Lindemann/Basic.lean",
+        "ComputationalMathematics/Upstream/Lindemann/Basic.lean",
         "linter.unnecessarySeqFocus",
     ): _UPSTREAM_VENDORED,
     (
-        "NumStability/Upstream/Lindemann/Basic.lean",
+        "ComputationalMathematics/Upstream/Lindemann/Basic.lean",
         "linter.unusedSimpArgs",
     ): _UPSTREAM_VENDORED,
     (
-        "NumStability/Upstream/Lindemann/MonoidAlgebraCompat.lean",
+        "ComputationalMathematics/Upstream/Lindemann/MonoidAlgebraCompat.lean",
         "linter.unusedSimpArgs",
     ): _UPSTREAM_VENDORED,
     (
@@ -955,7 +955,7 @@ REVIEWED_DISPOSITIONS: dict[tuple[str, str], dict[str, str]] = {
         ),
     },
     (
-        "NumStability/Algorithms/NormEstimation/TwoNorm/Dixon/Algebra/"
+        "ComputationalMathematics/Algorithms/NormEstimation/TwoNorm/Dixon/Algebra/"
         "DixonCompletion.lean",
         "deprecation",
     ): {
@@ -977,7 +977,7 @@ REVIEWED_DISPOSITIONS: dict[tuple[str, str], dict[str, str]] = {
         ),
     },
     (
-        "NumStability/Source/Higham/Chapter13/DemmelSharpMultiplier.lean",
+        "ComputationalMathematics/Source/Higham/Chapter13/DemmelSharpMultiplier.lean",
         "deprecation",
     ): {
         "disposition": "reviewed_deferred_migration",
@@ -2148,6 +2148,33 @@ def run_self_test() -> int:
                 file=sys.stderr,
             )
             return 1
+
+        # Canonical source paths retain the same diagnostic identity components.
+        canonical_entries = [
+            (path.replace("NumStability/", "ComputationalMathematics/", 1), line, column, body)
+            for path, line, column, body in entries
+        ]
+        for old_entry, new_entry in zip(entries, canonical_entries):
+            destination = root / new_entry[0]
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes((root / old_entry[0]).read_bytes())
+        old_capture = read_log(log_path, AnchorReader(root))
+        canonical_log = base / "canonical.log"
+        canonical_log.write_bytes(render_self_test_log(canonical_entries))
+        canonical_capture = read_log(canonical_log, AnchorReader(root))
+        expected = {
+            (item.path.replace("NumStability/", "ComputationalMathematics/", 1), *item.identity[1:])
+            for item in old_capture.diagnostics
+        }
+        if canonical_capture.unclassified or {
+            item.identity for item in canonical_capture.diagnostics
+        } != expected or not {entry[0] for entry in canonical_entries} <= {
+            path.relative_to(root).as_posix() for path in lean_sources(root)
+        }:
+            print("self-test failure: canonical diagnostics or source discovery changed", file=sys.stderr)
+            return 1
+        accepted.append("canonical paths retain warning identities and source coverage")
+
 
     print(
         "warning contract self-test passed: valid fixture accepted; "

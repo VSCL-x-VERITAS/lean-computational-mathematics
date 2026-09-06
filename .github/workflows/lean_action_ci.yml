@@ -6,6 +6,11 @@ on:
       - main
   pull_request:
   workflow_dispatch:
+    inputs:
+      clean_project:
+        description: Start validation without restored project build artifacts
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -25,13 +30,14 @@ jobs:
           fetch-depth: 0
       - name: Check architecture source graph and Python tooling
         run: |
-          python -m py_compile tools/architecture/generate_baseline.py tools/architecture/check_compatibility.py tools/architecture/check_layout.py tools/architecture/check_phase.py tools/architecture/check_phase_projection.py tools/architecture/check_completion_phase_projection.py tools/architecture/check_completion_phase.py tools/architecture/check_warnings.py tools/architecture/check_lint.py tools/architecture/check_provenance.py tools/architecture/normalize_apache_notices.py tools/architecture/sort_aggregate_imports.py tools/benchmark/run.py
+          python -m py_compile tools/architecture/project_roots.py tools/architecture/migrate_diagnostic_roots.py tools/architecture/check_tiers.py tools/architecture/check_placeholders.py tools/architecture/generate_baseline.py tools/architecture/check_compatibility.py tools/architecture/check_layout.py tools/architecture/check_phase.py tools/architecture/check_phase_projection.py tools/architecture/check_completion_phase_projection.py tools/architecture/check_completion_phase.py tools/architecture/check_warnings.py tools/architecture/check_lint.py tools/architecture/check_provenance.py tools/architecture/normalize_apache_notices.py tools/architecture/sort_aggregate_imports.py tools/benchmark/run.py
           python tools/architecture/check_phase.py --self-test
           python tools/architecture/check_phase_projection.py --self-test
           python tools/architecture/check_completion_phase_projection.py --self-test
           python tools/architecture/check_completion_phase.py --self-test
           python tools/architecture/check_warnings.py --self-test
           python tools/architecture/check_lint.py --self-test
+          python tools/architecture/migrate_diagnostic_roots.py --self-test
           python tools/architecture/check_phase.py --all-phases
           python tools/architecture/check_completion_phase.py
           python tools/architecture/check_layout.py
@@ -46,7 +52,8 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           build: true
-          build-args: --quiet NumStability NumStabilityTest
+          build-args: --quiet ComputationalMathematics NumStability NumStabilityTest
+          use-github-cache: ${{ !(github.event_name == 'workflow_dispatch' && inputs.clean_project) }}
           test: false
           lint: false
       - name: Run lake test
@@ -57,12 +64,12 @@ jobs:
         run: |
           set -o pipefail
           {
-            printf '##[group]lake build NumStability NumStabilityTest\n'
+            printf '##[group]lake build ComputationalMathematics NumStability NumStabilityTest\n'
             printf '[command]/usr/bin/git log -1 --format=%%H\n'
             git log -1 --format=%H
             lean --version
           } | tee "$RUNNER_TEMP/lean-build.log"
-          lake build NumStability NumStabilityTest 2>&1 | tee -a "$RUNNER_TEMP/lean-build.log"
+          lake build ComputationalMathematics NumStability NumStabilityTest 2>&1 | tee -a "$RUNNER_TEMP/lean-build.log"
           printf '##[endgroup]\n' | tee -a "$RUNNER_TEMP/lean-build.log"
           PYTHONIOENCODING=utf-8 python tools/architecture/check_placeholders.py --completion --log "$RUNNER_TEMP/lean-build.log"
           python tools/architecture/check_warnings.py --log "$RUNNER_TEMP/lean-build.log" --baseline docs/architecture/warnings.json --check
@@ -93,3 +100,93 @@ jobs:
             echo "lint baseline: $LINT_OUTCOME"
             exit 1
           fi
+      - name: Capture clean compiled graph and downstream consumer
+        id: clean_identity_evidence
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.clean_project }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/lcm-cutover-evidence"
+          consumer="$RUNNER_TEMP/lcm-identity-consumer"
+          mkdir -p "$evidence" "$consumer"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$evidence/commit.txt"
+          lean --version > "$evidence/lean-version.txt"
+          cp lean-toolchain lake-manifest.json "$evidence/"
+          sha256sum tools/architecture/declaration_dependencies.lean > "$evidence/extractor.sha256"
+          lake env lean --run tools/architecture/declaration_dependencies.lean --self-test 2>&1 | tee "$evidence/extractor-self-test.log"
+          lake env lean --run tools/architecture/declaration_dependencies.lean "$evidence/declarations.tsv" 2>&1 | tee "$evidence/extraction.log"
+          python tools/architecture/generate_baseline.py --strict-source --dependency-tsv "$evidence/declarations.tsv" --output-dir "$evidence" --name compiled
+          gzip -n "$evidence/declarations.tsv"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, shutil
+          root = Path(os.environ['GITHUB_WORKSPACE'])
+          evidence = Path(os.environ['RUNNER_TEMP']) / 'lcm-cutover-evidence'
+          consumer = Path(os.environ['RUNNER_TEMP']) / 'lcm-identity-consumer'
+          families = ['FloatingPoint', 'Stability', 'Gaussian', 'Vershynin', 'LeVeque', 'MatrixNotation']
+          modules = []; hashes = {}
+          for branch in ['Old', 'Canonical']:
+              for family in families:
+                  relative = Path(branch) / (family + '.lean')
+                  source = root / 'NumStabilityTest/Import/ProjectIdentity' / relative
+                  destination = consumer / 'Consumer' / relative
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(source, destination)
+                  hashes[destination.relative_to(consumer).as_posix()] = hashlib.sha256(destination.read_bytes()).hexdigest()
+                  modules.append('Consumer.' + branch + '.' + family)
+          source = root / 'NumStabilityTest/Import/ProjectIdentity/Mixed.lean'
+          shutil.copyfile(source, consumer / 'Consumer/Mixed.lean')
+          hashes['Consumer/Mixed.lean'] = hashlib.sha256(source.read_bytes()).hexdigest()
+          modules.append('Consumer.Mixed')
+          (consumer / 'Consumer.lean').write_text(''.join('import ' + module + '\n' for module in sorted(modules)), encoding='utf-8')
+          (consumer / 'lakefile.toml').write_text(
+              'name = "lcmIdentityConsumer"\nversion = "0.1.0"\ndefaultTargets = ["Consumer"]\n'
+              'packagesDir = ' + json.dumps(str(root / '.lake/packages')) + '\n'
+              '\n[[lean_lib]]\nname = "Consumer"\n'
+              '\n[[require]]\nname = "numStability"\npath = ' + json.dumps(str(root)) + '\n', encoding='utf-8')
+          shutil.copyfile(root / 'lean-toolchain', consumer / 'lean-toolchain')
+          (evidence / 'consumer-source-hashes.json').write_text(json.dumps(hashes, indent=2) + '\n', encoding='utf-8')
+          representatives = [
+              'NumStability.mixedForwardBackward_of_backward',
+              'NumStability.integral_abs_mul_standardGaussianPDF_eq_sqrt',
+              'NumStability.HDP.Contract.hdp_02_hthm_h2_d2_d6',
+              'NumStability.leveque01_equation03_advectedProfile',
+              'NumStability.FPModel.model_basicOp',
+              'NumStability.FPModel.exactWithUnitRoundoff',
+              'NumStability.matMul_id_right',
+          ]
+          (evidence / 'Axioms.lean').write_text('import ComputationalMathematics\nimport NumStability\n\n' +
+              ''.join('#print axioms ' + name + '\n' for name in representatives), encoding='utf-8')
+          PY
+          lake env lean "$evidence/Axioms.lean" > "$evidence/axioms.log" 2>&1
+          (
+            cd "$consumer"
+            lake --keep-toolchain update 2>&1 | tee "$evidence/consumer-update.log"
+            python - <<'PY'
+          from pathlib import Path
+          import json, os
+          root = Path(os.environ['GITHUB_WORKSPACE'])
+          expected = json.loads((root / 'lake-manifest.json').read_text())
+          actual = json.loads(Path('lake-manifest.json').read_text())
+          def revisions(manifest):
+              return {p['name']: (p['url'], p['rev']) for p in manifest['packages'] if p['type'] == 'git'}
+          assert revisions(actual) == revisions(expected), 'consumer transitive dependency pins changed'
+          local = [p for p in actual['packages'] if p['name'] == 'numStability']
+          assert len(local) == 1 and local[0]['type'] == 'path', 'consumer did not resolve the local project dependency'
+          print('consumer package dependency and exact transitive revisions verified')
+          PY
+            lake build Consumer 2>&1 | tee "$evidence/consumer-build.log"
+          )
+          cp "$consumer/lakefile.toml" "$evidence/consumer-lakefile.toml"
+          cp "$consumer/lake-manifest.json" "$evidence/consumer-lake-manifest.json"
+          printf 'PASS\n' > "$evidence/consumer-result.txt"
+
+      - name: Upload clean comparison evidence
+        if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.clean_project && steps.clean_identity_evidence.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clean-identity-evidence-${{ github.sha }}
+          path: ${{ runner.temp }}/lcm-cutover-evidence/
+          if-no-files-found: error
+          retention-days: 14

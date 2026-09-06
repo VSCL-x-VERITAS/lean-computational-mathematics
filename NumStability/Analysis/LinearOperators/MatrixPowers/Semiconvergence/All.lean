@@ -1,13 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.General
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.Limits.RealSpectrum
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.PrimarySplitting
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.QuasiTriangularBlockForm
-import NumStability.Analysis.LinearOperators.MatrixPowers.Semiconvergence.TriangularBlockForm
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.All
 
 /-!
-# Matrix-power semiconvergence
+Historical import path retained for compatibility.
 
-Declaration-free canonical aggregate for the complete R01 semiconvergence analysis family.
-It exposes general and real-spectrum limits together with the triangular,
-quasi-triangular, and primary-splitting existence results.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Semiconvergence.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.Summation.Tree.Chain
+import ComputationalMathematics.Algorithms.Summation.Tree.Chain
 
 /-!
 # Compatibility import for recursive chain trees

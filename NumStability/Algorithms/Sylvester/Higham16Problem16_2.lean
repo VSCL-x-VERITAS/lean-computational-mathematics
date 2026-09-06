@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Problem02.Results.Core
+import ComputationalMathematics.Source.Higham.Chapter16.Problem02.Results.Core
 
 /-!
 # Higham16Problem16_2 (compatibility module)

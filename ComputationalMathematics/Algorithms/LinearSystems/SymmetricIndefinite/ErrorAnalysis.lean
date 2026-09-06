@@ -1,0 +1,10 @@
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLT
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLTStep
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.Predicates
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.SkewSymmetric
+
+/-!
+# Algorithms LinearSystems SymmetricIndefinite ErrorAnalysis
+
+Declaration-free aggregate for the canonical modules in this semantic family.
+-/

@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Table01.ProductTransfers.Families
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Table01.ProductTransfers.Families`. -/
+
+#check NumStability.higham13_table13_1_arbitrary_product_family_from_eq13_22_source_norms
+#check NumStability.higham13_table13_1_col_bdd_product_family_from_source_norms
+#check NumStability.higham13_table13_1_point_col_bdd_product_family_from_source_norms
+#check NumStability.higham13_table13_1_point_row_product_family_from_eq13_23_source_norms
+#check NumStability.higham13_table13_1_spd_product_family_from_eq13_24_source_norms

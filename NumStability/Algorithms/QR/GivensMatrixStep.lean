@@ -7,7 +7,7 @@
 -- Reorganization wave R11 (phase branch B0003) documents this wrapper
 -- and retains its exact existing imports.
 
-import NumStability.Algorithms.LinearSystems.QR.GivensMatrixStep
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GivensMatrixStep
 
 /-!
 # GivensMatrixStep (compatibility wrapper)

@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis.GaussJordan
+import ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis
 
 /-!
-# NumStability.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.GaussJordan.ErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/

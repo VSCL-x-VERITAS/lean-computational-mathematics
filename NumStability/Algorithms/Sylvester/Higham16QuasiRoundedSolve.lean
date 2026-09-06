@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.QuasiRounded.Solve
+import ComputationalMathematics.Source.Higham.Chapter16.QuasiRounded.Solve
 
 /-!
 # Higham16QuasiRoundedSolve (compatibility module)

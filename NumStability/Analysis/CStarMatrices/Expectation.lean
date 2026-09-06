@@ -1,7 +1,8 @@
-import NumStability.Analysis.CStarMatrices.Expectation.All
+import ComputationalMathematics.Analysis.CStarMatrices.Expectation
 
 /-!
-# NumStability.Analysis.CStarMatrices.Expectation
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.CStarMatrices.Expectation`.
+Declaration names and mathematical terminology are unchanged.
 -/

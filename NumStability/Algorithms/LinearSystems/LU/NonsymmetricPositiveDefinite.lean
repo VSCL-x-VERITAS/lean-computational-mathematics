@@ -1,7 +1,8 @@
-import NumStability.Algorithms.LinearSystems.LU.NonsymmetricPositiveDefinite.Basic
+import ComputationalMathematics.Algorithms.LinearSystems.LU.NonsymmetricPositiveDefinite
 
 /-!
-# Algorithms LinearSystems LU NonsymmetricPositiveDefinite
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.LU.NonsymmetricPositiveDefinite`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.MatrixPowers.Henrici.All
+import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici
 
 /-!
-# NumStability.Analysis.LinearOperators.MatrixPowers.Henrici
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter02.Section05.Remark03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03.Signature
 
 /-!
 # Compatibility import for an HDP contract signature

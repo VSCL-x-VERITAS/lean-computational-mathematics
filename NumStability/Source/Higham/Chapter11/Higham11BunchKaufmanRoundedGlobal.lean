@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.Rounded.Global
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.Global
 
 /-!
 # Higham11BunchKaufmanRoundedGlobal (compatibility module)

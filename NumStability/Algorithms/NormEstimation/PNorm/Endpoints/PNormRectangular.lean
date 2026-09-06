@@ -10,14 +10,14 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import NumStability.Algorithms.LU.GrowthFactor
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
-import NumStability.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
-import NumStability.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Rectangular
-import NumStability.Algorithms.NormEstimation.PNorm.Rectangular.PNormRectangular
-import NumStability.Analysis.MatrixAlgebra
-import NumStability.Analysis.MatrixNorms.Lp
-import NumStability.Analysis.SingularValues.Realification
+import ComputationalMathematics.Algorithms.LU.GrowthFactor
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.CondEstimation
+import ComputationalMathematics.Algorithms.NormEstimation.OneNorm.PowerMethod.PNormPowerMethod
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.OneAndInfinityNorms.Rectangular
+import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.PNormRectangular
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.MatrixNorms.Lp
+import ComputationalMathematics.Analysis.SingularValues.Realification
 
 /-!
 # PNormRectangular (compatibility wrapper)

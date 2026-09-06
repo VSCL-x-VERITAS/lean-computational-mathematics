@@ -1,7 +1,8 @@
-import NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2.Method2Loop
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2
 
 /-!
-# NumStability.Source.Higham.Chapter14.Section02.TriangularInversion.Method2
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2`.
+Declaration names and mathematical terminology are unchanged.
 -/

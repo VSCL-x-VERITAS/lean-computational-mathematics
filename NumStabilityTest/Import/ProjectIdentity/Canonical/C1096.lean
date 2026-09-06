@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter06.Theorem04
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter06.Theorem04`. -/
+
+#check NumStability.MixedInverseAmbientRelativeAmplificationRadiusSet
+#check NumStability.mixedInverseAmbientRelativeAmplificationRadiusSup
+#check NumStability.mixedInverseAmbientRelativeAmplificationRadiusSup_tendsto_conditionNumberProduct_of_positive_radii
+#check NumStability.mixedInverseAmbientRelativeAmplificationRadius_sup_lower_le_of_linearized
+#check NumStability.mixedInverseAmbientRelativeAmplificationRadius_value_le

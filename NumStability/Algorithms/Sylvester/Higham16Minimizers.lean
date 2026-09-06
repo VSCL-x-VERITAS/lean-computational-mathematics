@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter16.Minimizers.Results
+import ComputationalMathematics.Source.Higham.Chapter16.Minimizers.Results
 
 /-!
 # Higham16Minimizers (compatibility module)

@@ -6,9 +6,9 @@
 -- All of its declarations moved unchanged to the canonical module(s) below.
 
 import Mathlib.Tactic
-import NumStability.Analysis.ComplexArithmetic
-import NumStability.Source.Higham.Chapter05.Algorithm01.ComplexHorner.Basic
-import NumStability.Source.Higham.Chapter05.Algorithm01.ComplexHorner.ErrorBounds.Theorems
+import ComputationalMathematics.Analysis.ComplexArithmetic
+import ComputationalMathematics.Source.Higham.Chapter05.Algorithm01.ComplexHorner.Basic
+import ComputationalMathematics.Source.Higham.Chapter05.Algorithm01.ComplexHorner.ErrorBounds.Theorems
 
 /-!
 # HighamChapter5ComplexAlgorithm51 (compatibility wrapper)

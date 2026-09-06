@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter14.Section05.RectangularIteration
+import ComputationalMathematics.Source.Higham.Chapter14.Section05.RectangularIteration
 
 /-!
 # Historical Chapter 14 rectangular Schulz-iteration import

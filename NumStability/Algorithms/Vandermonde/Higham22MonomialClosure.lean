@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter22.MonomialResidual
+import ComputationalMathematics.Source.Higham.Chapter22.MonomialResidual
 
 /-!
 # Compatibility import for Higham Chapter 22 monomial residual bounds

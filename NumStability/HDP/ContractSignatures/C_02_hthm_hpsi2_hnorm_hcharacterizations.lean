@@ -1,4 +1,4 @@
-import NumStability.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Signature
 
 /-!
 # Compatibility import for an HDP contract signature

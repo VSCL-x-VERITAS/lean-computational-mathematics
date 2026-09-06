@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter28.Section01.Cauchy.Cauchy
-import NumStability.Source.Higham.Chapter28.Section01.HilbertConditioning.Cauchy
-import NumStability.Source.Higham.Chapter28.Section01.HilbertConditioning.ConditionLogRate
-import NumStability.Source.Higham.Chapter28.Section01.HilbertConditioning.HilbertCondition
+import ComputationalMathematics.Source.Higham.Chapter28.Section01
 
 /-!
-# Higham Chapter 28 Section01
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the Higham Chapter 28 Section01 subtree.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28.Section01`.
+Declaration names and mathematical terminology are unchanged.
 -/

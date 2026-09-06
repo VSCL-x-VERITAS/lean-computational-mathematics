@@ -1,9 +1,8 @@
-import NumStability.Algorithms.PriestAccuracy
-import NumStability.Algorithms.PriestDefectBounded
-import NumStability.Algorithms.Summation.Compensated.Priest.FiniteFormat
+import ComputationalMathematics.Algorithms.Summation.Compensated.Priest.All
 
 /-!
-# Algorithms.Summation.Compensated.Priest.All
+Historical import path retained for compatibility.
 
-W02 semantic entry point generated from the reviewed B0002 routing contract.
+The implementation is provided by `ComputationalMathematics.Algorithms.Summation.Compensated.Priest.All`.
+Declaration names and mathematical terminology are unchanged.
 -/

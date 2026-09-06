@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation02.SpectralApproximation.ElementwiseSpectral
+
+/-! Canonical import regression for `ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation02.SpectralApproximation.ElementwiseSpectral`. -/
+
+#check NumStability.finiteComplexCStarMatrix
+#check NumStability.finiteComplexCStarMatrix_isSelfAdjoint_of_symmetric
+#check NumStability.finiteComplexCStarMatrix_le_of_finiteLoewnerLe
+#check NumStability.finiteComplexCStarMatrix_mul
+#check NumStability.finiteComplexCStarMatrix_neg
+#check NumStability.finiteComplexCStarMatrix_smul
+#check NumStability.finiteComplexCStarMatrix_smul_finiteIdMatrix
+#check NumStability.finiteComplexCStarMatrix_zero

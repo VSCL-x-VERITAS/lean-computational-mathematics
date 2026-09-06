@@ -5,7 +5,7 @@ book-formalization migration. The generator has two layers:
 
 - `generate_baseline.py` scans Lean sources and the direct-import graph using
   only the Python standard library.
-- `declaration_dependencies.lean` loads the compiled `NumStability`
+- `declaration_dependencies.lean` loads the compiled `ComputationalMathematics`
   environment, separates signature references from body/proof references, and
   contracts Lean-reserved or compiler-generated declarations onto the authored
   project declarations reachable through them. Authored private declarations
@@ -75,7 +75,7 @@ book-formalization migration. The generator has two layers:
   class against synthetic fixtures.
 - `check_lint.py` is the Batteries `runLinter` counterpart of `check_warnings.py`
   and enforces the lint contract in `docs/architecture/lint.json` against a
-  captured `lake lint` (or `lake exe runLinter NumStability`) log. It normalizes
+  captured `lake lint` (or `lake exe runLinter ComputationalMathematics`) log. It normalizes
   ANSI sequences, CRLF, GitHub timestamp prefixes, runner and Windows absolute
   path prefixes, and the pretty-printer's wrapped message lines, then
   identifies each finding by linter, repo-relative path, fully-qualified
@@ -189,7 +189,7 @@ python tools/architecture/check_lint.py --log lint.log \
 Sort and deduplicate an import-only aggregate mechanically:
 
 ```text
-python tools/architecture/sort_aggregate_imports.py NumStability/Algorithms.lean --write
+python tools/architecture/sort_aggregate_imports.py ComputationalMathematics/Algorithms.lean --write
 ```
 
 Check that no architectural debt has increased:
@@ -227,7 +227,7 @@ The layout check also rejects production or test modules containing `sorry`,
 `admit`, or top-level `axiom`/`constant` commands. This is a zero-debt gate, not
 a grandfathered warning count.
 
-The command builds `NumStability`, then writes matching JSON and Markdown files
+The command builds `ComputationalMathematics`, then writes matching JSON and Markdown files
 under `docs/architecture/baselines/`. The JSON is the machine-readable source
 of truth. The Markdown is generated for review.
 

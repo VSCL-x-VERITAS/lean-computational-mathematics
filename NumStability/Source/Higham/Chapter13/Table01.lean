@@ -1,10 +1,8 @@
-import NumStability.Source.Higham.Chapter13.Table01.BackwardErrorBounds.Endpoints
-import NumStability.Source.Higham.Chapter13.Table01.DiagonalDominance.Bounds
-import NumStability.Source.Higham.Chapter13.Table01.Families
-import NumStability.Source.Higham.Chapter13.Table01.ProductTransfers.Families
+import ComputationalMathematics.Source.Higham.Chapter13.Table01
 
 /-!
-# Higham Chapter 13, Table 13.1
+Historical import path retained for compatibility.
 
-Complete compatibility aggregate for the canonical child modules. This module intentionally declares nothing.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter13.Table01`.
+Declaration names and mathematical terminology are unchanged.
 -/

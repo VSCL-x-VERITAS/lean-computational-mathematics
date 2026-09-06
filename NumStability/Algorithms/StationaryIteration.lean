@@ -1,7 +1,7 @@
-import NumStability.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Projectors.FixedRange
-import NumStability.Source.Higham.Chapter17.Results.Equation20.DiagonalizableBounds
-import NumStability.Source.Higham.Chapter17.Results.Equation27.SingularErrorSplit
-import NumStability.Source.Higham.Chapter17.Results.Equation29.SingularBounds
+import ComputationalMathematics.Algorithms.LinearSystems.Iterative.Stationary.Semiconvergence.Projectors.FixedRange
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation20.DiagonalizableBounds
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation27.SingularErrorSplit
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation29.SingularBounds
 
 /-!
 # Historical stationary-iteration compatibility import

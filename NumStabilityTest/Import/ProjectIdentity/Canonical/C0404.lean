@@ -1,0 +1,7 @@
+import ComputationalMathematics.Algorithms.Summation.Compensated.Alternative.ErrorBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Algorithms.Summation.Compensated.Alternative.ErrorBounds`. -/
+
+#check NumStability.alternativeCompensatedCorrectionRunningErrorBudget_of_exact_steps
+#check NumStability.fl_alternativeCompensatedMainSum_add_exact_corrections_eq_sum_of_exact_steps
+#check NumStability.fl_alternativeCompensatedSum_exactWithUnitRoundoff

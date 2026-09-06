@@ -7,10 +7,10 @@
 
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import NumStability.FloatingPoint.Model
-import NumStability.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
-import NumStability.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.Basic
-import NumStability.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample.Results
+import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.Basic
+import ComputationalMathematics.Source.Higham.Chapter02.Problem21.HypotenuseNormalization.StandardModelCounterexample.Results
 
 /-!
 # Problem2_20 (compatibility wrapper)

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Solvers.Executor.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Solvers.Executor.Core
 
 /-!
 # UnderdeterminedSolve (compatibility module)

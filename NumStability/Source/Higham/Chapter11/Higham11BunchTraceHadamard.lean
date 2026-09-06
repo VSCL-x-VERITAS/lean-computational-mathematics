@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Bunch.TraceHadamard
+import ComputationalMathematics.Source.Higham.Chapter11.Bunch.TraceHadamard
 
 /-!
 # Higham11BunchTraceHadamard (compatibility module)

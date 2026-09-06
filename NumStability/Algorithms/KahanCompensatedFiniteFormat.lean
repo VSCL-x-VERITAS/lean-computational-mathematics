@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter04.Section03.FiniteFormat
+import ComputationalMathematics.Source.Higham.Chapter04.Section03.FiniteFormat
 
 /-!
 # Compatibility import for compensated finite-format results

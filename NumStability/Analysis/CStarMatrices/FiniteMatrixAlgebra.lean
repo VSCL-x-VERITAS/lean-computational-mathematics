@@ -1,21 +1,8 @@
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonal
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonalCompression
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPair
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairPinching
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeProjection
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeReflection
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteDimensional
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteMatrixOrder
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealEmbedding
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealOrder
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ProjectionReflection
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularCompression
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.RectangularMultiplication
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.ReflectionAverage
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra.StrictPositivity
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra
 
 /-!
-# NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra`.
+Declaration names and mathematical terminology are unchanged.
 -/

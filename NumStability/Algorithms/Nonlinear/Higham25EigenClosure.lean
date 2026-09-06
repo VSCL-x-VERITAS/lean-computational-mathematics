@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter25.Eigenproblem
+import ComputationalMathematics.Source.Higham.Chapter25.Eigenproblem
 
 /-!
 # Compatibility import for the Chapter 25 eigenproblem

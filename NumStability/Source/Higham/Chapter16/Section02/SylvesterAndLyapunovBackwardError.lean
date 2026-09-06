@@ -1,8 +1,8 @@
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.All
-import NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError.AttainedMinima
+import ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError
 
 /-!
-# NumStability.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter16.Section02.SylvesterAndLyapunovBackwardError`.
+Declaration names and mathematical terminology are unchanged.
 -/

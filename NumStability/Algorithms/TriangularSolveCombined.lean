@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Triangular.Combined
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.Combined
 
 /-!
 # Compatibility import

@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.EndToEnd.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.EndToEnd.Core
 
 /-!
 # Higham21SNEClosure (compatibility module)

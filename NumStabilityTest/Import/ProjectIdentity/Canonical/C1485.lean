@@ -1,0 +1,12 @@
+import ComputationalMathematics.Source.Higham.Chapter13.Theorem05.Recurrences
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Theorem05.Recurrences`. -/
+
+#check NumStability.blockErrorDelta
+#check NumStability.blockErrorDelta_succ_succ
+#check NumStability.blockErrorTheta
+#check NumStability.blockErrorTheta_le_cubic_of_quadratic_constants
+#check NumStability.blockErrorTheta_le_linear_of_step_bound
+#check NumStability.blockErrorTheta_succ_succ
+#check NumStability.higham13_theta_conventional_isBigO_cubic
+#check NumStability.higham13_theta_isBigO_cubic_of_quadratic_constants

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.Rook.ExecutorAdapter
+import ComputationalMathematics.Source.Higham.Chapter11.Rook.ExecutorAdapter
 
 /-!
 # Higham11RookExecutorAdapter (compatibility module)

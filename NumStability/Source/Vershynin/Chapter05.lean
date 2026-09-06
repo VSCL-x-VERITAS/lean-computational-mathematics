@@ -1,10 +1,8 @@
-import NumStability.Source.Vershynin.Chapter05.Section01.Exercise13
-import NumStability.Source.Vershynin.Chapter05.Section01.Exercise14
-import NumStability.Source.Vershynin.Chapter05.Section02.Exercise11
+import ComputationalMathematics.Source.Vershynin.Chapter05
 
 /-!
-# Vershynin Chapter 05 source contracts
+Historical import path retained for compatibility.
 
-Complete source entry point for the migrated signatures and checked contracts
-from Vershynin's *High-Dimensional Probability*, Chapter 05.
+The implementation is provided by `ComputationalMathematics.Source.Vershynin.Chapter05`.
+Declaration names and mathematical terminology are unchanged.
 -/

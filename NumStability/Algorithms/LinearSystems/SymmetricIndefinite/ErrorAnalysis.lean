@@ -1,10 +1,8 @@
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLT
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.BlockLDLTStep
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.Predicates
-import NumStability.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis.SkewSymmetric
+import ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis
 
 /-!
-# Algorithms LinearSystems SymmetricIndefinite ErrorAnalysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.SymmetricIndefinite.ErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.Schur.Complex.NormalTriangular.Diagonal
+import ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.NormalTriangular
 
 /-!
-# NumStability.Analysis.LinearOperators.Schur.Complex.NormalTriangular
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.Schur.Complex.NormalTriangular`.
+Declaration names and mathematical terminology are unchanged.
 -/

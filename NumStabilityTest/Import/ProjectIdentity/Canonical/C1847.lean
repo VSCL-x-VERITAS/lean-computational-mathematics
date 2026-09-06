@@ -1,0 +1,19 @@
+import ComputationalMathematics.Source.Higham.Chapter17.Results.Equation20.ResidualSigmaEnvelope
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter17.Results.Equation20.ResidualSigmaEnvelope`. -/
+
+#check NumStability.bddAbove_residualSigmaValues
+#check NumStability.finiteResidualSigmaMatrix_le_residualSigmaMatrix
+#check NumStability.finiteResidualSigmaMatrix_nonneg
+#check NumStability.finiteResidualSigma_le_infNorm_residualSigmaMatrix
+#check NumStability.infNorm_residualSigmaMatrix_eq_residualSigmaSup
+#check NumStability.infNorm_residualSigmaMatrix_le_residualSigmaSup
+#check NumStability.residualSigmaEntry
+#check NumStability.residualSigmaEntry_nonneg
+#check NumStability.residualSigmaMatrix
+#check NumStability.residualSigmaSup_le_infNorm_residualSigmaMatrix
+#check NumStability.residualSigmaTsum_eq_infNorm_residualSigmaMatrix
+#check NumStability.residualSigmaTsum_eq_residualSigmaSup
+#check NumStability.residualSigmaTsum_le_diagonalizable_max_bound_of_infNorm_bound
+#check NumStability.residual_entry_abs_le_geometric
+#check NumStability.summable_residualSigmaEntry

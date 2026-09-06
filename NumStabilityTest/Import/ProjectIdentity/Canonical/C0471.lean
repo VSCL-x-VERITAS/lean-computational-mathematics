@@ -1,0 +1,9 @@
+import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeProjection
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ColumnPairRangeProjection`. -/
+
+#check NumStability.cstarMatrixColumnPairRangeProjection
+#check NumStability.cstarMatrixColumnPairRangeProjection_isSelfAdjoint
+#check NumStability.cstarMatrixColumnPairRangeProjection_mul_columnPair_of_sum
+#check NumStability.cstarMatrixColumnPairRangeProjection_mul_self_of_sum
+#check NumStability.cstarMatrixColumnPair_conjTranspose_mul_rangeProjection_of_sum

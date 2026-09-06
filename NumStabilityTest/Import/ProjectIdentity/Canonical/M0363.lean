@@ -1,0 +1,18 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section04
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section04`. -/
+
+#check NumStability.abs_matrix_entry_le_opNorm2
+#check NumStability.compoundMatrix_pascal_pos
+#check NumStability.higham28ReciprocalInvolution_lower_and_diag
+#check NumStability.higham28SignDiagonal_sq
+#check NumStability.opNorm2_pascalOptimalSingularizingPerturbation
+#check NumStability.opNorm2_transpose_eq
+#check NumStability.pascalLower_initial_minor_pos
+#check NumStability.pascalOptimalPerturbation_log_rate
+#check NumStability.pascalSortedEigenEquiv_apply
+#check NumStability.pascalSortedEigenvalue_strictAnti
+#check NumStability.pascalSortedEigenvector_signChangeCount_ge
+#check NumStability.pascal_circleMoment
+#check NumStability.rotatedSignedPascal_apply
+#check NumStability.rotatedSignedPascal_cube

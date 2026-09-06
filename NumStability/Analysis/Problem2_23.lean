@@ -1,6 +1,6 @@
 import Mathlib.Algebra.Group.Nat.Even
-import NumStability.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
-import NumStability.Source.Higham.Chapter02.Problem24.GuardDigitCancellation.Basic
+import ComputationalMathematics.Analysis.FloatingPointArithmetic.IeeeSpecialValueOperations.Results
+import ComputationalMathematics.Source.Higham.Chapter02.Problem24.GuardDigitCancellation.Basic
 
 /-!
 # Problem2_23 (compatibility module)

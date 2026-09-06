@@ -1,8 +1,16 @@
-# NumStability architecture
+# Lean Computational Mathematics architecture
 
-NumStability is both a reusable numerical-stability library and a machine-checked
-correspondence with book sources.  Those roles share one repository, but they do
-not share one public API tier.
+Lean Computational Mathematics contains reusable mathematics and machine-checked
+correspondence with books and research papers. Numerical stability, probability,
+and other represented subjects share the repository; reusable theory and source
+correspondence retain distinct public API tiers.
+
+The approved identity migration uses `ComputationalMathematics` for canonical
+modules, retains all old `NumStability` imports as forwarding modules, and
+keeps authored `NumStability` declaration namespaces. The Lake package remains
+`numStability` and the test root remains `NumStabilityTest`. See the
+[migration record](docs/migrations/lean-computational-mathematics/internal-migration.md)
+for the exact mapping and validation status.
 
 ## API tiers
 
@@ -55,12 +63,12 @@ split from the reusable library.
 
 ## Entry points
 
-- `NumStability.Core` is the deliberately small reusable foundation entry point.
-- `NumStability.FloatingPoint` is the complete reusable floating-point entry
+- `ComputationalMathematics.Core` is the deliberately small reusable foundation entry point.
+- `ComputationalMathematics.FloatingPoint` is the complete reusable floating-point entry
   point. Its declaration-free `FloatingPoint.IEEE` aggregate exposes reusable
   operations over the IEEE value-level model, beginning with
   `IEEE.NaiveMaximum`.
-- `NumStability.Algorithms.LinearSystems` is the declaration-free reusable
+- `ComputationalMathematics.Algorithms.LinearSystems` is the declaration-free reusable
   linear-systems entry point. It re-exports the canonical `Cholesky`,
   `CramersRule`, `GaussJordan`, `Iterative`, `IterativeRefinement`,
   `LeastSquares`, `LU`, `QR`, `SymmetricIndefinite`, `Triangular`, and
@@ -72,19 +80,19 @@ split from the reusable library.
   `Source.Higham.Chapter13.BlockLU`. Its follow-on moved 287 declarations from
   ten separately scoped siblings into 22 semantic destinations; all ten old
   sibling paths are now declaration-free compatibility wrappers.
-- `NumStability.Algorithms.Summation` is the complete published summation
+- `ComputationalMathematics.Algorithms.Summation` is the complete published summation
   surface. Its `Recursive` and `Pairwise` family umbrellas preserve source
   reachability, while reusable consumers import their `.Core` leaves.
-- `NumStability.Source` is the canonical source-correspondence entry point.
-- `NumStability.Analysis.Summation` is an import-only family aggregate split
+- `ComputationalMathematics.Source` is the canonical source-correspondence entry point.
+- `ComputationalMathematics.Analysis.Summation` is an import-only family aggregate split
   into reusable `Signs` and `ErrorBounds` leaves.
-- `NumStability.Analysis.Equidistribution` is the reusable equidistribution
+- `ComputationalMathematics.Analysis.Equidistribution` is the reusable equidistribution
   entry point. Its `AddCircle` leaf contains the finite-orbit, Fourier, Haar,
   ball-frequency, and half-open-arc APIs.
-- `NumStability.Analysis.LeadingDigits` is the reusable leading-digit entry
+- `ComputationalMathematics.Analysis.LeadingDigits` is the reusable leading-digit entry
   point over `Decimal`, `DecimalPowers`, `Empirical`, and
   `LogarithmicDistribution`.
-- `NumStability.Analysis.Asymptotics`, `LinearOperators`, `OperatorNorms`,
+- `ComputationalMathematics.Analysis.Asymptotics`, `LinearOperators`, `OperatorNorms`,
   `VectorNorms`, `MatrixNorms`, `SingularValues`, and `Conditioning` are the
   declaration-free reusable entry points produced or completed by the Phase
   11B1 norm split. Their 20 new reusable leaves own the generic asymptotic,
@@ -94,29 +102,29 @@ split from the reusable library.
   `SingularValues.WeylMirsky` remains the independently extracted
   source-neutral all-index perturbation API shared by Chapter 14 Problem 14.15
   and reusable least-squares analysis.
-- `NumStability.Analysis.FirstOrder` is the declaration-free Phase 12A
+- `ComputationalMathematics.Analysis.FirstOrder` is the declaration-free Phase 12A
   aggregate over reusable `AsymptoticFamilies` and `FixedPrecision` leaves.
-- `NumStability.Analysis.Norms.Core` is now a declaration-free reusable
+- `ComputationalMathematics.Analysis.Norms.Core` is now a declaration-free reusable
   aggregate over those 20 Phase 11B1 owners. The path remains importable for
   the former reusable subset; numbered Chapter 6 results are exposed by the
   dedicated `Source.Higham.Chapter06.Norms` source aggregate. The historical
   `NumStability.Analysis.Norms` path is an import-only facade over both.
-- `NumStability.Analysis.Probability` is the reusable probability-analysis
+- `ComputationalMathematics.Analysis.Probability` is the reusable probability-analysis
   entry point. Its declaration-free `Probability.Gaussian` aggregate exposes
   the source-neutral `Probability.Gaussian.AbsoluteMoment` leaf. Its
   declaration-free `Probability.Haar` aggregate exposes
   `Probability.Haar.HomogeneousSpaceUniqueness`, whose generic Haar-fiber and
   invariant-probability uniqueness theorems support the Chapter 28 Stewart
   development without becoming source correspondence.
-- `NumStability.Algorithms.Sylvester` is a complete family-discovery umbrella,
+- `ComputationalMathematics.Algorithms.Sylvester` is a complete family-discovery umbrella,
   not a claim that every Chapter 16 declaration is reusable mathematics.
-- `NumStability.Algorithms.FastMatMul.Recurrences` is the reusable fast-
-  multiplication recurrence leaf. `NumStability.Algorithms.FastMatMul` is the
+- `ComputationalMathematics.Algorithms.FastMatMul.Recurrences` is the reusable fast-
+  multiplication recurrence leaf. `ComputationalMathematics.Algorithms.FastMatMul` is the
   declaration-free complete-family aggregate retained for historical
   discovery; its internal legacy-bounds leaf is not supported downstream API.
-- `NumStability.Source.Higham` is the canonical Higham correspondence entry
+- `ComputationalMathematics.Source.Higham` is the canonical Higham correspondence entry
   point. Chapter 1 Section 1.17 is organized under
-  `NumStability.Source.Higham.Chapter01.Section17`, with five semantic source
+  `ComputationalMathematics.Source.Higham.Chapter01.Section17`, with five semantic source
   leaves and declaration-free chapter and section aggregates. Historical
   `Analysis.NonrandomRounding*` paths are compatibility wrappers only.
   Chapter 2's Problem 2.2 surface lives in the canonical `Chapter02.Problem02`
@@ -176,7 +184,7 @@ split from the reusable library.
   canonicalized the RandNLA surface, and the tier inventory records 0
   unclassified modules and 0 noncanonical names.
   Chapter 12 uses the declaration-free
-  `NumStability.Source.Higham.Chapter12` aggregate over the source leaves
+  `ComputationalMathematics.Source.Higham.Chapter12` aggregate over the source leaves
   `IterativeRefinement`, `OmegaDiscontinuity`, and `Problem02`. Chapter 13's
   declaration-free `BlockLU` aggregate has an exact 82-member direct-import
   surface: 81 declaration-bearing source owners and the declaration-free
@@ -197,19 +205,19 @@ split from the reusable library.
   former monolith and all ten sibling paths as declaration-free compatibility
   facades while production consumers use exact semantic owners.
   Chapter 23 is organized under
-  `NumStability.Source.Higham.Chapter23`, with semantic base leaves and
+  `ComputationalMathematics.Source.Higham.Chapter23`, with semantic base leaves and
   declaration-free Theorem 23.2, Theorem 23.3, Bini--Lotti, and combined
   3M--Strassen family aggregates. Historical `FastMatMul.Higham23*` paths are
   compatibility wrappers only.
 - `NumStability.Higham` is a compatibility entry point forwarding to
-  `NumStability.Source.Higham`.
-- `NumStability.All` is the explicit complete-tree entry point.
-- `NumStability.Algorithms` preserves its historical complete algorithm-layer
+  `ComputationalMathematics.Source.Higham`.
+- `ComputationalMathematics.All` is the explicit complete-tree entry point.
+- `ComputationalMathematics.Algorithms` preserves its historical complete algorithm-layer
   surface, including source correspondence; it is not the pure reusable entry
   point. Its checked direct-import ceilings, recorded in
   [`docs/architecture/layout-exceptions.json`](docs/architecture/layout-exceptions.json),
-  are 446 imports below `NumStability`, including 44 below
-  `NumStability.Analysis` and 73 below `NumStability.Source`; these are
+  are 446 imports below `ComputationalMathematics`, including 44 below
+  `ComputationalMathematics.Analysis` and 73 below `ComputationalMathematics.Source`; these are
   enforced ceilings, not the live direct-import count.
 - `NumStability` retains its historical complete-tree behavior through the
   compatibility window.
@@ -245,8 +253,9 @@ compatibility manifest.
 
 ## Imports and module boundaries
 
-- Production files import precise modules, never `NumStability` or
-  `NumStability.All`.
+- Canonical production files import precise canonical modules, never the
+  `NumStability` compatibility surface or the broad `ComputationalMathematics`
+  and `ComputationalMathematics.All` entry points.
 - Umbrella files contain imports and documentation only.
 - Keep imports alphabetized within public and private groups as files adopt the
   modern Lean module system.
@@ -270,16 +279,22 @@ Architecture changes are evaluated with:
 - complete builds of every public entry point;
 - lint, placeholder, and documentation checks.
 
-CI enforces the source/import sanity scan plus entry-point and compatibility
-builds. Full declaration baselines, controlled benchmarks, lint, placeholder,
-and documentation audits are release gates run and recorded for architecture
-migrations; they are not all repeated on every pull request.
+CI enforces the source/import, phase, tier, compatibility, provenance and
+placeholder gates, builds the canonical and legacy interfaces and test library,
+runs `lake test`, and checks the reviewed warning and lint baselines. Full
+declaration baselines, controlled benchmarks and documentation audits remain
+separate recorded checks; their execution is not inferred from a green CI run.
 
 Cross-module declaration utilization is diagnostic only.  Splitting a file can
 increase it mechanically, so it must not be used as a reorganization target.
 Apparent leaves and endpoint modules are review queues, not deletion evidence.
 
 ## Physical library split
+
+The identity migration's canonical and legacy Lake targets separate the
+implementation from its retained forwarding interface. They do not split
+reusable mathematics from source correspondence or duplicate declarations.
+The following conditions still govern a separate mathematical-library split.
 
 The source-correspondence corpus remains in the same Lake library during the
 first migration stages.  A separate physical library target is justified only

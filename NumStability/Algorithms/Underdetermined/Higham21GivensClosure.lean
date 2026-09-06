@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.QR.Givens.EndToEnd.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.Givens.EndToEnd.Core
 
 /-!
 # Higham21GivensClosure (compatibility module)

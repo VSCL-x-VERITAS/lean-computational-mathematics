@@ -1,7 +1,8 @@
-import NumStability.Analysis.FirstOrder.MatrixFamilies.AsymptoticFamilies
+import ComputationalMathematics.Analysis.FirstOrder.MatrixFamilies
 
 /-!
-# NumStability.Analysis.FirstOrder.MatrixFamilies
+Historical import path retained for compatibility.
 
-Declaration-free W08 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.FirstOrder.MatrixFamilies`.
+Declaration names and mathematical terminology are unchanged.
 -/

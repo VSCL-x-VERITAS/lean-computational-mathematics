@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Triangular.BackSubstitution
+import ComputationalMathematics.Algorithms.LinearSystems.Triangular.BackSubstitution
 
 /-!
 # Historical back-substitution import

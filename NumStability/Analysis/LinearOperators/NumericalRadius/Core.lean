@@ -1,7 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Core.All
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core
 
 /-!
-# NumStability.Analysis.LinearOperators.NumericalRadius.Core
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Core`.
+Declaration names and mathematical terminology are unchanged.
 -/

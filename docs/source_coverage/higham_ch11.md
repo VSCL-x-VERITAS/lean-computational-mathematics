@@ -13141,3 +13141,12 @@ coefficient-one route is not used.**
   error `(A+ΔA)x̂=b`, `‖ΔA‖_M ≤ (1100n²+20n)ρₙu‖A‖_M`, is derived from the fl
   model assuming only Higham's own inputs for Theorem 11.4 (his cited [608] factor
   growth bound and the (11.5) 2×2-pivot solve). No `h : P ⊢ P`.
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter11` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

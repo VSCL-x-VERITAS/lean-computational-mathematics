@@ -1,0 +1,8 @@
+import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockResidual.WholeMatrixBounds
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method1B.BlockResidual.WholeMatrixBounds`. -/
+
+#check NumStability.Ch14Ext.ch14ext_m1bInv_right_residual
+#check NumStability.Ch14Ext.ch14ext_m1b_block_right_residual
+#check NumStability.Ch14Ext.ch14ext_method1B_whole_right_residual
+#check NumStability.Ch14Ext.ch14ext_method1B_whole_right_residual_normwise

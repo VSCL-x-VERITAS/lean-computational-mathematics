@@ -1,4 +1,4 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.QR.Givens.Rounded.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.QR.Givens.Rounded.Core
 
 /-!
 # Higham21GivensRounded (compatibility module)

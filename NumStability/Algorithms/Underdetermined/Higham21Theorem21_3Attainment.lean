@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter21.Theorem03.Attainment
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem03.Attainment
 
 /-!
 # Historical Higham Chapter 21, Theorem 21.3 attainment import

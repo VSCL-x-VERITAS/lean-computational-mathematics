@@ -1,12 +1,8 @@
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.CondEstimators
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.Algebra.DixonCompletion
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.PowerBounds.CondEstimators
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.PowerBounds.DixonCompletion
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.Probability.DixonCompletion
-import NumStability.Algorithms.NormEstimation.TwoNorm.Dixon.Probability.DixonProbability
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon
 
 /-!
-# Algorithms.NormEstimation.TwoNorm.Dixon
+Historical import path retained for compatibility.
 
-Reviewed W10 discovery entry point for the reusable Dixon two-norm family.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.TwoNorm.Dixon`.
+Declaration names and mathematical terminology are unchanged.
 -/

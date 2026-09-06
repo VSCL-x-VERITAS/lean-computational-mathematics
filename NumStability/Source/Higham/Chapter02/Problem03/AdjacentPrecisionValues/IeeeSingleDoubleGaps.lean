@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem03.AdjacentPrecisionValues.Results.Theorems
 
 /-!
 # Checkpoint compatibility alias: IeeeSingleDoubleGaps

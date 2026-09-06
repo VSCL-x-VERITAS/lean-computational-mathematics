@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.ActualSelector
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.ActualSelector
 
 /-!
 # Higham11BunchKaufmanActualSelector (compatibility module)

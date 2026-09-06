@@ -110,3 +110,12 @@ Chapter 3 is the foundation layer consumed by essentially every later chapter:
 - Lemmas 3.6–3.8 (`matSeqProd_*`) are the perturbed-product engine for Householder/Givens QR (ch19), underdetermined systems (ch21), and matrix powers (ch18).
 - Lemma 3.9 (`fl_rankOneUpdate*`) underlies Gram–Schmidt and Householder QR error analyses (ch19).
 - Lemma 3.5 (`complexRelErrorModel`, `fl_complex*`) is the bridge that transfers real-arithmetic results to complex arithmetic "with constants increased appropriately" (used by the ch18 complex matrix-powers modules and ch25/27-adjacent material).
+
+## Current import navigation after the identity migration
+
+Use `ComputationalMathematics.Source.Higham.Chapter03` for current source navigation. The
+[identity migration](../migrations/lean-computational-mathematics/README.md)
+retains the old import paths and authored `NumStability` declaration names.
+Earlier paths, commands, audit dates and coverage decisions in this ledger
+remain evidence of their original snapshots; this navigation note does not
+claim a fresh source-faithfulness audit or change any source status.

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter11.BunchKaufman.ExplicitInverse.TerminalClosedForm
+import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.ExplicitInverse.TerminalClosedForm
 
 /-!
 # Higham11BunchKaufmanExplicitInverseTerminalClosedForm (compatibility module)

@@ -1,8 +1,11 @@
-import NumStability.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.ActualOutput
-import NumStability.Algorithms.Underdetermined.Higham21RankStability
-import NumStability.Algorithms.Underdetermined.Higham21SNEForward
-import NumStability.Source.Higham.Chapter21.Equation11.ActualOutput
-import NumStability.Source.Higham.Chapter21.Theorem04.SeminormalEquations.ActualOutput
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.ComputedOutput.Core
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Solvers.Executor.Core
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem01.ComponentwisePerturbation.RankStability
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.Forward
+import ComputationalMathematics.Source.Higham.Chapter21.Equation11.Forward
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem04.SeminormalEquations.Forward
+import ComputationalMathematics.Source.Higham.Chapter21.Equation11.ActualOutput
+import ComputationalMathematics.Source.Higham.Chapter21.Theorem04.SeminormalEquations.ActualOutput
 
 /-!
 # Algorithms.Underdetermined.Higham21SNEActualOutput

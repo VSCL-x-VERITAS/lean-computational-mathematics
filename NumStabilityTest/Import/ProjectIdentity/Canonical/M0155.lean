@@ -1,0 +1,5 @@
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAcousticsWaveEquation
+
+/-! Canonical import regression for `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAcousticsWaveEquation`. -/
+
+#check NumStability.LinearAcousticsSolution.pressureSecondOrderWaveAt

@@ -10,7 +10,7 @@
 --   NumStability.Algorithms.LinearSystems.QR.HouseholderSpecSupport
 --     -> NumStability.Algorithms.LinearSystems.QR.Householder.TrailingPanels
 
-import NumStability.Algorithms.LinearSystems.QR.Householder.TrailingPanels
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.TrailingPanels
 
 /-!
 # HouseholderSpecSupport (compatibility wrapper)

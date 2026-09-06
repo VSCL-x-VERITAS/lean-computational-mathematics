@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter05.Section02.BidiagonalDerivativeAnalysis.Results.Theorems
 
 /-!
 # Checkpoint compatibility wrapper: InverseAndRoundedSolve

@@ -1,7 +1,8 @@
-import NumStability.Algorithms.NormEstimation.TwoNorm.All
+import ComputationalMathematics.Algorithms.NormEstimation.TwoNorm
 
 /-!
-# Algorithms.NormEstimation.TwoNorm
+Historical import path retained for compatibility.
 
-Declaration-free W10 discovery aggregate for reusable two-norm estimation.
+The implementation is provided by `ComputationalMathematics.Algorithms.NormEstimation.TwoNorm`.
+Declaration names and mathematical terminology are unchanged.
 -/

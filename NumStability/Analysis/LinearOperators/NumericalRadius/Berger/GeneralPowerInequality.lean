@@ -1,8 +1,8 @@
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.Powers
-import NumStability.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.PowersOfTwo
+import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality
 
 /-!
-# NumStability.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical modules in this semantic family.
+The implementation is provided by `ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality`.
+Declaration names and mathematical terminology are unchanged.
 -/

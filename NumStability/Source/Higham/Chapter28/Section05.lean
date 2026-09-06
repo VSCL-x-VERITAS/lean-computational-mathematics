@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.CharacteristicPolynomial
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SecondDifferenceCondition
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenpairs
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SineEigenvectors
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.ToeplitzCondition
-import NumStability.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.ToeplitzGeneral
+import ComputationalMathematics.Source.Higham.Chapter28.Section05
 
 /-!
-# Higham Chapter 28 Section05
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the Higham Chapter 28 Section05 subtree.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28.Section05`.
+Declaration names and mathematical terminology are unchanged.
 -/

@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
 import Mathlib.LinearAlgebra.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.ToLin
-import NumStability.Analysis.LinearOperators.Jordan.NormalForm.PrimaryDecomposition
+import ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.PrimaryDecomposition
 
 /-!
 # Analysis.JordanNormalForm

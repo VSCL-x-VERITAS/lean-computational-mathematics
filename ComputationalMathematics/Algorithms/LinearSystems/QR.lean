@@ -1,0 +1,23 @@
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GivensMatrixStep
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GivensQR
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GivensSpec
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GramSchmidt
+import ComputationalMathematics.Algorithms.LinearSystems.QR.GramSchmidtPolar
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderApply
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.PanelApplication
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderConstruction2
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderMatrixStep
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderOneStep
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderQApply
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderQR
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.StoredQR
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderReflector
+import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderSpec
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.TrailingPanels
+import ComputationalMathematics.Algorithms.LinearSystems.QR.QRSolve
+
+/-!
+# Canonical QR algorithms
+
+Declaration-free aggregate for the reusable QR algorithm family.
+-/

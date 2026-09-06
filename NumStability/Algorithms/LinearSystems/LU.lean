@@ -1,10 +1,8 @@
-import NumStability.Algorithms.LinearSystems.LU.BlockLU
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.All
-import NumStability.Algorithms.LinearSystems.LU.Doolittle.Assembly.Core
-import NumStability.Algorithms.LinearSystems.LU.NonsymmetricPositiveDefinite
+import ComputationalMathematics.Algorithms.LinearSystems.LU
 
 /-!
-# LU algorithms
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for canonical reusable LU algorithm families.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.LU`.
+Declaration names and mathematical terminology are unchanged.
 -/

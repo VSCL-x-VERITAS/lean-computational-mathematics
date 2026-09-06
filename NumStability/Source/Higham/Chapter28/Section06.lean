@@ -1,12 +1,8 @@
-import NumStability.Source.Higham.Chapter28.Section06.Companion.CharacteristicPolynomial
-import NumStability.Source.Higham.Chapter28.Section06.Companion.Companion
-import NumStability.Source.Higham.Chapter28.Section06.Companion.CompanionSpectral
-import NumStability.Source.Higham.Chapter28.Section06.Companion.Nonderogatory
-import NumStability.Source.Higham.Chapter28.Section06.Companion.Normality
-import NumStability.Source.Higham.Chapter28.Section06.Companion.SingularValues
+import ComputationalMathematics.Source.Higham.Chapter28.Section06
 
 /-!
-# Higham Chapter 28 Section06
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the Higham Chapter 28 Section06 subtree.
+The implementation is provided by `ComputationalMathematics.Source.Higham.Chapter28.Section06`.
+Declaration names and mathematical terminology are unchanged.
 -/

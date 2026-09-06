@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter02.Problem12.ReciprocalProduct.Results.Theorems
+import ComputationalMathematics.Source.Higham.Chapter02.Problem12.ReciprocalProduct.Results.Theorems
 
 /-!
 # Checkpoint compatibility alias: IeeeDoubleRounding

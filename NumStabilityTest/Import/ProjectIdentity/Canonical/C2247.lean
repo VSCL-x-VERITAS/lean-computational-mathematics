@@ -1,0 +1,9 @@
+import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SecondDifferenceCondition
+
+/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.SecondDifferenceCondition`. -/
+
+#check NumStability.opNorm2_secondDifferenceInverse_eq
+#check NumStability.opNorm2_secondDifference_eq
+#check NumStability.secondDifferenceConditionAsymptotic_proved
+#check NumStability.secondDifferenceConditionTwo_eq_closedForm
+#check NumStability.secondDifferenceInverse_scaled_sine_eigenpair

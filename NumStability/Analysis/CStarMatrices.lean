@@ -1,10 +1,8 @@
-import NumStability.Analysis.CStarMatrices.Basic
-import NumStability.Analysis.CStarMatrices.Expectation
-import NumStability.Analysis.CStarMatrices.FiniteMatrixAlgebra
-import NumStability.Analysis.CStarMatrices.Trace
+import ComputationalMathematics.Analysis.CStarMatrices
 
 /-!
-# NumStability.Analysis.CStarMatrices
+Historical import path retained for compatibility.
 
-Declaration-free W06 discovery aggregate.
+The implementation is provided by `ComputationalMathematics.Analysis.CStarMatrices`.
+Declaration names and mathematical terminology are unchanged.
 -/

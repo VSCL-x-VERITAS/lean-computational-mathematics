@@ -9,7 +9,7 @@
 -- re-exports. Importing this module therefore still yields exactly the same
 -- declarations, including everything previously reachable transitively.
 
-import NumStability.Algorithms.LinearSystems.QR.Householder.PanelApplication
+import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.PanelApplication
 
 /-!
 # HouseholderApplySupport (compatibility wrapper)

@@ -1,4 +1,4 @@
-import NumStability.Source.Higham.Chapter24.ForwardFFTPerturbation
+import ComputationalMathematics.Source.Higham.Chapter24.ForwardFFTPerturbation
 
 /-!
 # Historical Chapter 24 forward-FFT perturbation import

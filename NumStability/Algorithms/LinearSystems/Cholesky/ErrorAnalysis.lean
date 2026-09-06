@@ -1,9 +1,8 @@
-import NumStability.Algorithms.LinearSystems.Cholesky.ErrorAnalysis.Certificates
-import NumStability.Algorithms.LinearSystems.Cholesky.ErrorAnalysis.Demmel
-import NumStability.Algorithms.LinearSystems.Cholesky.ErrorAnalysis.PositivePivots.Certificate
+import ComputationalMathematics.Algorithms.LinearSystems.Cholesky.ErrorAnalysis
 
 /-!
-# Cholesky error analysis
+Historical import path retained for compatibility.
 
-Declaration-free aggregate for the canonical Cholesky error-analysis modules.
+The implementation is provided by `ComputationalMathematics.Algorithms.LinearSystems.Cholesky.ErrorAnalysis`.
+Declaration names and mathematical terminology are unchanged.
 -/
