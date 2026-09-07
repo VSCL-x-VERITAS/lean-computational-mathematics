@@ -37,7 +37,7 @@ Chapter 1 and Chapter 2 gates:
 The candidate workflow's organization preflight compares these counters across
 all available gates and passes for `ch01.json`, `ch02.json`, and `ch08.json`.
 These zeros describe present Chapter 8 organization debt. They do not claim
-that the 152 actionable source rows have been formalized.
+that the 149 actionable source rows have been formalized.
 
 ## Campaign topology
 
