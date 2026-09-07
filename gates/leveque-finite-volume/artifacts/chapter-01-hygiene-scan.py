@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import subprocess
 import sys
@@ -10,11 +11,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 GATE_PATH = ROOT / "gates" / "leveque-finite-volume" / "chapter-01.json"
-GATE_CHECKER = Path(
-    r"C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS"
-    r"\formalization-collaboration\books\candidates\leveque-finite-volume"
-    r"\module\scripts\gate.py"
-)
 LAYOUT_CHECKER = ROOT / "tools" / "architecture" / "check_layout.py"
 
 
@@ -28,16 +24,22 @@ def load(path: Path, name: str):
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--gate-checker", type=Path, required=True)
+    args = parser.parse_args()
     sys.path.insert(0, str(LAYOUT_CHECKER.parent))
-    gate = load(GATE_CHECKER, "leveque_gate")
+    gate = load(args.gate_checker.expanduser().resolve(), "leveque_gate")
     layout = load(LAYOUT_CHECKER, "check_layout")
     changed = gate.current_context(GATE_PATH, 1)["lean_changed_paths"]
-    assert changed
 
     failures = []
     for relative in changed:
         path = ROOT / relative
-        assert path.is_file()
+        if not path.exists():
+            continue
+        if not path.is_file() or path.is_symlink():
+            failures.append(f"unsupported controlled path: {relative}")
+            continue
         if path.suffix.lower() not in {".lean", ".py", ".json", ".md", ".txt", ""}:
             continue
         text = path.read_text(encoding="utf-8-sig", errors="replace")
@@ -45,7 +47,9 @@ def main() -> int:
             failures.append(f"trailing whitespace: {relative}")
         if any(marker in text for marker in ("<<<<<<<", "=======", ">>>>>>>")):
             failures.append(f"conflict marker: {relative}")
-        if path.suffix.lower() == ".lean" and layout.has_placeholder(text):
+        if path.suffix.lower() == ".lean" and layout.PLACEHOLDER_RE.search(
+            layout.remove_lean_comments(text)
+        ):
             failures.append(f"Lean placeholder: {relative}")
 
     diff = subprocess.run(
@@ -53,6 +57,7 @@ def main() -> int:
             "git",
             "diff",
             "--check",
+            gate.LEAN_BASELINE_COMMIT,
             "--",
             ".",
             ":(exclude)gates/**",

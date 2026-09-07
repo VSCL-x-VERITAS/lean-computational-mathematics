@@ -17,7 +17,18 @@ EXPECTED = {
     "placeholder_findings": 0,
     "canonical_placement_pending": 0,
 }
-LEVEQUE_MODULES = {
+CANONICAL_LEVEQUE_MODULES = {
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.ConstantCoefficientLinearSystem",
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection",
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvectionGlobal",
+    "ComputationalMathematics.Source.LeVeque",
+    "ComputationalMathematics.Source.LeVeque.Chapter01",
+    "ComputationalMathematics.Source.LeVeque.Chapter01.Equation01",
+    "ComputationalMathematics.Source.LeVeque.Chapter01.Equation02",
+    "ComputationalMathematics.Source.LeVeque.Chapter01.Equation03",
+    "ComputationalMathematics.Source.LeVeque.Chapter01.Equation03AdvectedProfile",
+}
+COMPATIBILITY_LEVEQUE_MODULES = {
     "NumStability.Analysis.PartialDifferentialEquations.ConstantCoefficientLinearSystem",
     "NumStability.Analysis.PartialDifferentialEquations.LinearAdvection",
     "NumStability.Analysis.PartialDifferentialEquations.LinearAdvectionGlobal",
@@ -53,7 +64,7 @@ def main() -> int:
     scan_paths.extend(sorted((ROOT / "NumStabilityTest").rglob("*.lean")))
     for path in scan_paths:
         source = path.read_text(encoding="utf-8-sig", errors="replace")
-        if layout.has_placeholder(source):
+        if layout.PLACEHOLDER_RE.search(layout.remove_lean_comments(source)):
             placeholder_paths.append(path.relative_to(ROOT).as_posix())
 
     placement_modules = sorted(
@@ -80,15 +91,23 @@ def main() -> int:
     assert not placement_counts
     assert not placeholder_paths
 
-    assert LEVEQUE_MODULES <= set(by_name)
-    for name in LEVEQUE_MODULES:
+    assert CANONICAL_LEVEQUE_MODULES <= set(by_name)
+    assert COMPATIBILITY_LEVEQUE_MODULES <= set(by_name)
+    for name in CANONICAL_LEVEQUE_MODULES:
         assert name in assignment
-        assert assignment[name] != "mixed"
+        assert assignment[name] not in {"compatibility", "mixed"}
         assert name not in debt["noncanonical_modules"]
         source = (ROOT / by_name[name].path).read_text(
             encoding="utf-8-sig", errors="replace"
         )
-        assert not layout.has_placeholder(source)
+        assert not layout.PLACEHOLDER_RE.search(layout.remove_lean_comments(source))
+    for name in COMPATIBILITY_LEVEQUE_MODULES:
+        assert name in assignment
+        assert assignment[name] == "compatibility"
+        source = (ROOT / by_name[name].path).read_text(
+            encoding="utf-8-sig", errors="replace"
+        )
+        assert not layout.PLACEHOLDER_RE.search(layout.remove_lean_comments(source))
 
     gate = json.loads(GATE_PATH.read_text(encoding="utf-8"))
     recorded = gate["verification_loops"]["organization_completeness"]
@@ -97,6 +116,8 @@ def main() -> int:
         "organization counters passed: "
         + json.dumps(actual, sort_keys=True)
         + f"; {len(modules)} classified canonical modules; "
+        f"{len(CANONICAL_LEVEQUE_MODULES)} canonical and "
+        f"{len(COMPATIBILITY_LEVEQUE_MODULES)} compatibility LeVeque modules checked; "
         "current LeVeque delta is 0/0/0/0"
     )
     return 0
