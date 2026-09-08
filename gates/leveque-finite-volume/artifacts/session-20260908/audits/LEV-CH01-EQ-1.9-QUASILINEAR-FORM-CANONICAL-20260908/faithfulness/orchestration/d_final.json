@@ -1,0 +1,816 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-EQ-1.9-QUASILINEAR-FORM-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "871589dfba64cdb540b6f3cac9b7e14b8093c7b81fb17f0bab179d6183c5bd2d",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.leveque01_equation08_conservationLawAt",
+      "interpretation": "The body aliases IsConservationLawSolutionAt with the same q, flux, x, and t and component type Fin m.",
+      "effect_on_target": "The left side is the classical conservation-law predicate interpreted in D003.",
+      "source_match": "Matches equation (1.8) on printed page 3.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.leveque01_equation09_quasilinearAt",
+      "interpretation": "The body aliases IsQuasilinearConservationLawSolutionAt with unchanged arguments and component type Fin m.",
+      "effect_on_target": "The right side is exactly the derivative-and-balance predicate in D004.",
+      "source_match": "Matches the quasilinear equation (1.9).",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.IsConservationLawSolutionAt",
+      "reuse_sha256": "7b62e8991d6f78a6f7866ec2f95d3560be7c26203096ceca893d4509ae443bbf",
+      "effect_on_target": "Requires actual time and composed spatial flux derivatives at the selected point, with qt + fluxx = 0. The theorem's spatial and flux differentiability premises provide the chain-rule expansion of fluxx.",
+      "source_match": "Preserves q_t and the spatial derivative of f(q) in (1.8), including their common evaluation point and vector zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.IsQuasilinearConservationLawSolutionAt",
+      "interpretation": "There exist vectors qt and qx which are respectively derivatives of the time and spatial slices of q, and qt + fluxDerivative(q(x,t))(qx) = 0.",
+      "effect_on_target": "Requires the quasilinear equation with actual partial derivatives. Its existential qx agrees with the outer derivative witness by uniqueness of real derivatives.",
+      "source_match": "Exactly preserves the time term and Jacobian action f′(q)q_x in (1.9); hflux identifies the supplied map with the flux derivative at the current state.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.IsConservationLawSolutionAt._proof_1",
+      "reuse_sha256": "f0bd1c7e92331ec4100750ca28cc3a9bf2feca7db7397998c631f7c82d395ec3",
+      "effect_on_target": "Supplies continuity of ordinary scalar multiplication needed to express vector derivatives; adds no hypothesis on q or flux.",
+      "source_match": "Consistent with the ordinary real vector space inherited from printed page 1.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "AddCommMonoid.toAddMonoid",
+      "interpretation": "Projects the additive monoid structure from an additive commutative monoid.",
+      "effect_on_target": "Retains the same real addition and zero in scalar-action infrastructure.",
+      "source_match": "Preserves ordinary real-vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "ContinuousLinearMap",
+      "interpretation": "The external library type bundles continuous semilinear maps between the displayed modules; the target uses the identity scalar homomorphism over Real.",
+      "effect_on_target": "Represents each state derivative as a continuous real-linear endomorphism of R^m.",
+      "source_match": "In finite-dimensional real coordinates this is the action of the flux Jacobian matrix in (1.9).",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "ContinuousMul.to_continuousSMul",
+      "interpretation": "Continuous multiplication supplies continuity of the scalar action given by that multiplication.",
+      "effect_on_target": "Supports continuous real scalar multiplication used by derivative predicates.",
+      "source_match": "Matches ordinary real multiplication without restricting the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "interpretation": "Retains the given normed field and derives nontriviality of its norm.",
+      "effect_on_target": "Provides the real scalar-field structure required for derivatives.",
+      "source_match": "Uses the source's real field and usual calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "DistribMulAction.toMulAction",
+      "interpretation": "Projects the underlying multiplicative action from a distributive action.",
+      "effect_on_target": "Preserves the scalar action in derivative instances.",
+      "source_match": "Does not alter real-vector multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "DivisionSemiring.toSemiring",
+      "interpretation": "Projects the underlying semiring.",
+      "effect_on_target": "Supplies real addition and multiplication for module structures.",
+      "source_match": "Preserves the arithmetic of R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Field.toSemifield",
+      "interpretation": "Constructs a semifield using the field's existing arithmetic operations.",
+      "effect_on_target": "Provides an instance path to the real semiring without changing its carrier or operations.",
+      "source_match": "Does not restrict real scalars to nonnegative values or otherwise change the source field.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Fin",
+      "interpretation": "The foundational finite index type Fin m has indices 0 through m−1.",
+      "effect_on_target": "Fin m → Real represents all m-component real vectors.",
+      "source_match": "Matches the inherited R^m state; zero-based component names are immaterial.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "HasDerivAt",
+      "interpretation": "Specializes the library derivative-at-filter predicate to a variable approaching x in nhds x with base point fixed at x.",
+      "effect_on_target": "Expresses genuine local derivatives of one-real-variable vector-valued slices, including their existence.",
+      "source_match": "Implements the partial derivatives defined on printed page 1, rather than assigning values to undefined derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "HasFDerivAt",
+      "interpretation": "Specializes the library Fréchet derivative predicate to the neighborhood of the indicated point with that point fixed as base.",
+      "effect_on_target": "Requires fluxDerivative(q x t) to be the actual real Fréchet derivative of flux at q x t, with no derivative requirement at other states.",
+      "source_match": "Precisely supplies the local classical Jacobian needed to expand the composed flux derivative in (1.9).",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Iff",
+      "interpretation": "Logical equivalence of the two propositions.",
+      "effect_on_target": "Asserts both directions between the conservation and quasilinear predicates.",
+      "source_match": "Matches the source's rewriting of the same differential equation under the chain-rule interpretation.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "IsTopologicalRing.toIsTopologicalSemiring",
+      "interpretation": "A topological ring supplies a topological semiring for the same operations and topology.",
+      "effect_on_target": "Supports continuity instances on Real.",
+      "source_match": "Preserves the ordinary real topology used in classical differentiation.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "IsTopologicalSemiring.toContinuousMul",
+      "interpretation": "Extracts continuity of multiplication from the topological semiring structure.",
+      "effect_on_target": "Supplies continuity for scalar multiplication.",
+      "source_match": "Consistent with the source's real-vector calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "Module.toDistribMulAction",
+      "interpretation": "Projects the distributive scalar action of a module.",
+      "effect_on_target": "Retains real scalar multiplication in the derivative structures.",
+      "source_match": "Preserves the vector-space operations of R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "Monoid.toSemigroup",
+      "interpretation": "Projects a monoid's underlying semigroup.",
+      "effect_on_target": "Retains real multiplication in an instance path for scalar actions.",
+      "source_match": "Introduces no change to source arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "MonoidWithZero.toMonoid",
+      "interpretation": "Projects the monoid structure while retaining its operations.",
+      "effect_on_target": "Supports the ordinary real scalar action.",
+      "source_match": "No positivity or nonzero restriction is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "MulAction.toSemigroupAction",
+      "interpretation": "Projects the underlying semigroup action.",
+      "effect_on_target": "Preserves the scalar multiplication used in derivatives.",
+      "source_match": "Agrees with real scalar action on the state space.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "Nat",
+      "interpretation": "The foundational natural-number type, including zero.",
+      "effect_on_target": "Quantifies the finite state dimension m.",
+      "source_match": "Covers every positive component count in the source and the harmless empty-vector case.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "interpretation": "Retains the underlying ring operations and commutativity while forgetting the associativity requirement.",
+      "effect_on_target": "Provides an algebraic instance underlying the real topology.",
+      "source_match": "Does not modify the actual associative real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "interpretation": "Projects the underlying nonunital nonassociative ring structure.",
+      "effect_on_target": "Retains the same real operations in topological instances.",
+      "source_match": "Preserves the real field used by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "interpretation": "Builds a semiring reduct from the same addition, multiplication, and zero.",
+      "effect_on_target": "Supports continuity of the existing real multiplication.",
+      "source_match": "Changes no mathematical operation or PDE hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "interpretation": "Projects the additive commutative monoid.",
+      "effect_on_target": "Provides the real additive structure in module instances.",
+      "source_match": "Matches addition of real components.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "interpretation": "Retains the underlying ring operations and commutativity while forgetting the norm.",
+      "effect_on_target": "Connects real normed and algebraic structures.",
+      "source_match": "Preserves the source's real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "Projects the underlying seminormed ring structure.",
+      "effect_on_target": "Retains the real seminorm and arithmetic used for module instances.",
+      "source_match": "No different norm or state space is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "Builds the additive seminormed group from the same norm, additive group, and pseudometric.",
+      "effect_on_target": "Supplies the real additive topological structure for normed spaces.",
+      "source_match": "Consistent with ordinary real calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "NonUnitalSemiring.toNonUnitalNonAssocSemiring",
+      "interpretation": "Projects the underlying nonassociative semiring reduct.",
+      "effect_on_target": "Retains the real operations in the additive-instance path.",
+      "source_match": "No change to source arithmetic or applicability.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "NontriviallyNormedField.toNormedField",
+      "interpretation": "Projects the existing normed field.",
+      "effect_on_target": "Preserves Real's normed-field data used in derivatives.",
+      "source_match": "Matches the real scalar setting.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "interpretation": "Constructs the nonunital reduct with the same norm, metric, and ring operations.",
+      "effect_on_target": "Supports topological-ring infrastructure on Real.",
+      "source_match": "Preserves the source's standard real operations and topology.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "Retains the norm, ring, and induced pseudometric while weakening the packaged structure.",
+      "effect_on_target": "Connects Real's normed ring to derivative instance requirements.",
+      "source_match": "Does not replace the ordinary real norm by another seminorm.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "NormedField.toField",
+      "interpretation": "Projects the underlying field.",
+      "effect_on_target": "Supplies the field arithmetic for real differentiation.",
+      "source_match": "Matches the real scalars in the displayed PDEs.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "NormedField.toNormedCommRing",
+      "interpretation": "Builds the normed commutative ring using the field's existing norm, ring, and metric.",
+      "effect_on_target": "Keeps the same topology and operations in the derivative instance chain.",
+      "source_match": "Preserves ordinary real calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "Makes a normed field a normed space over itself using its multiplication as scalar action.",
+      "effect_on_target": "Provides ordinary Real-on-Real scalar multiplication before lifting to vectors.",
+      "source_match": "Matches scalar multiplication of real state components.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "NormedSpace.toModule",
+      "interpretation": "Projects a normed space's underlying module.",
+      "effect_on_target": "Retains the real scalar action used by Pi.Function.module.",
+      "source_match": "Preserves the real-vector interpretation.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "Pi.Function.module",
+      "interpretation": "Instantiates the Pi module on functions with constant codomain.",
+      "effect_on_target": "Equips Fin m → Real with componentwise real scalar multiplication and vector-space structure.",
+      "source_match": "Represents the standard vector space R^m, not a restricted class of vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "Pi.addCommGroup",
+      "interpretation": "Constructs the additive commutative group on functions from the component additive groups.",
+      "effect_on_target": "Gives the state vectors componentwise addition, negation, and subtraction.",
+      "source_match": "Matches the vector arithmetic underlying both differential equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Pi.addCommMonoid",
+      "interpretation": "Constructs the additive commutative monoid on functions from component structures.",
+      "effect_on_target": "Supports ordinary vector addition and zero.",
+      "source_match": "Matches the addition and zero in (1.8) and (1.9).",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "Pi.topologicalSpace",
+      "interpretation": "The infimum of topologies induced by coordinate evaluations is the product topology.",
+      "effect_on_target": "Gives finite real-coordinate states their usual finite-dimensional topology.",
+      "source_match": "Supports the ordinary vector derivatives and Jacobian of the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "Projects the uniform structure associated with the pseudometric space.",
+      "effect_on_target": "Transfers Real's absolute-distance structure to its topology.",
+      "source_match": "Retains the ordinary real topology for derivative limits.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Real",
+      "interpretation": "The external library real-number type, equipped here with the displayed real arithmetic and metric instances.",
+      "effect_on_target": "Types space, time, and every state component as exact real numbers.",
+      "source_match": "Matches R × R and R^m on printed page 1.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Real.denselyNormedField",
+      "interpretation": "Extends Real.normedField with the dense-norm property.",
+      "effect_on_target": "Supplies the nontrivially normed real field used by derivative predicates.",
+      "source_match": "Adds no restriction on source states or fluxes.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Real.instAddCommGroup",
+      "interpretation": "The inferred additive commutative group structure on Real at the external library boundary.",
+      "effect_on_target": "Supplies additive-group operations for real-vector derivatives.",
+      "source_match": "Consistent with exact real addition and subtraction.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "Real.instAddCommMonoid",
+      "interpretation": "The inferred additive commutative monoid structure on Real.",
+      "effect_on_target": "Provides real addition and zero for vector modules.",
+      "source_match": "Matches source component arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "Real.instMul",
+      "interpretation": "Uses the library Real multiplication operation.",
+      "effect_on_target": "Supplies multiplication behind real scalar actions.",
+      "source_match": "Matches ordinary real multiplication, without rounding.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "Real.instRing",
+      "interpretation": "The inferred ring structure on Real.",
+      "effect_on_target": "Supplies an arithmetic instance path used in derivative structures.",
+      "source_match": "Preserves the source real field operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "Real.normedCommRing",
+      "interpretation": "Combines Real's normed additive group and commutative ring, retaining their operations and metric.",
+      "effect_on_target": "Provides compatible normed and algebraic structures on real components.",
+      "source_match": "Matches the standard topology and arithmetic of the source's R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "Real.normedField",
+      "interpretation": "Combines Real's field arithmetic with its normed additive group and metric.",
+      "effect_on_target": "Provides the scalar field and norm used for classical derivatives.",
+      "source_match": "Uses exact real calculus rather than a numerical approximation model.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "The displayed distance is abs(x − y), with its associated uniformity.",
+      "effect_on_target": "Fixes the usual real topology in both scalar and product spaces.",
+      "source_match": "Matches the conventional real limits implicit in partial derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "Real.semiring",
+      "interpretation": "The inferred semiring structure on Real.",
+      "effect_on_target": "Supplies ordinary real arithmetic to continuous linear maps and modules.",
+      "source_match": "Does not change the source's scalar field or restrict its values.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "Ring.toSemiring",
+      "interpretation": "Projects the semiring reduct of a ring.",
+      "effect_on_target": "Retains Real's existing addition and multiplication.",
+      "source_match": "Preserves vector-space arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "RingHom.id",
+      "interpretation": "The ring homomorphism whose underlying function is identity.",
+      "effect_on_target": "Makes the derivative maps real-linear rather than twisted semilinear maps.",
+      "source_match": "Matches real Jacobian matrix action.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "Semifield.toDivisionSemiring",
+      "interpretation": "Retains the semifield's arithmetic while constructing its division-semiring reduct.",
+      "effect_on_target": "Provides an instance path for ordinary real scalar arithmetic.",
+      "source_match": "Introduces no altered division convention relevant to the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "SemigroupAction.toSMul",
+      "interpretation": "Projects the scalar multiplication operation from a semigroup action.",
+      "effect_on_target": "Exposes the real scalar action used by continuous scalar multiplication.",
+      "source_match": "Preserves standard scalar multiplication on real components.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "Constructs the nonunital reduct with unchanged norm, pseudometric, and operations.",
+      "effect_on_target": "Supports the real normed-space instance chain.",
+      "source_match": "Leaves the source's real topology and arithmetic unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "interpretation": "Projects the underlying seminormed ring.",
+      "effect_on_target": "Retains the same real seminorm and operations.",
+      "source_match": "No alternate norm convention affects the rewrite.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "interpretation": "Projects the seminormed ring's pseudometric structure.",
+      "effect_on_target": "Supplies the real topology used in scalar continuity.",
+      "source_match": "Preserves ordinary real differentiation.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "Semiring.toMonoidWithZero",
+      "interpretation": "Builds the multiplicative monoid with zero using the same multiplication, one, and zero.",
+      "effect_on_target": "Supports scalar action instances on Real.",
+      "source_match": "Matches standard real scalar arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "Semiring.toNonAssocSemiring",
+      "interpretation": "Constructs a reduct retaining addition, multiplication, one, zero, and natural casts.",
+      "effect_on_target": "Provides the structure required by the identity real ring homomorphism.",
+      "source_match": "Does not alter the Jacobian's real linearity.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "Semiring.toNonUnitalSemiring",
+      "interpretation": "Projects the nonunital semiring reduct.",
+      "effect_on_target": "Supplies an additive-instance path with unchanged real arithmetic.",
+      "source_match": "Preserves componentwise real operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "Projects the topology carried by a uniform space.",
+      "effect_on_target": "Uses the topology associated with Real's absolute-distance uniformity.",
+      "source_match": "Matches the source's usual real neighborhood limits.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "instContinuousSMulForall",
+      "interpretation": "Componentwise continuous scalar actions induce a continuous action on the product function space.",
+      "effect_on_target": "Supplies continuous real scalar multiplication on Fin m → Real.",
+      "source_match": "Matches standard finite-dimensional vector calculus and adds no PDE assumption.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "instIsTopologicalRingReal",
+      "interpretation": "Asserts that the displayed real topology and real ring operations form a topological ring.",
+      "effect_on_target": "Supports continuity of the scalar operations used in derivatives.",
+      "source_match": "Matches ordinary real analysis.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "Fin.fintype",
+      "interpretation": "Enumerates Fin n using List.finRange n with completeness and no duplicates.",
+      "effect_on_target": "Supplies finiteness of the m coordinate indices to the solution predicates.",
+      "source_match": "Includes every component of the source's m-vector exactly once.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "Requires derivative conditions and the balance equality simultaneously.",
+      "source_match": "Prevents replacing the classical PDE by an alternative between regularity and balance.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "ContinuousLinearMap.funLike",
+      "interpretation": "Coerces a continuous linear map through its underlying linear map to its function.",
+      "effect_on_target": "Applies fluxDerivative(q x t) directly to the spatial derivative vector.",
+      "source_match": "Preserves the order and meaning of the Jacobian action f′(q)q_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "DFunLike.coe",
+      "interpretation": "Projects the underlying function from the supplied function-like instance.",
+      "effect_on_target": "Enables evaluation of the derivative map without changing its values.",
+      "source_match": "Matches evaluation of the Jacobian as a linear operator.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "Eq",
+      "interpretation": "Exact equality of objects of the same type.",
+      "effect_on_target": "Requires the vector balance to equal the zero vector exactly.",
+      "source_match": "Matches the equality in (1.8) and (1.9), not an approximate residual bound.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "Exists",
+      "interpretation": "Existential quantification over witnesses satisfying the supplied predicate.",
+      "effect_on_target": "Packages the existence of actual derivative vectors at the specified point.",
+      "source_match": "Makes derivative existence explicit without replacing derivatives by arbitrary values.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "Fintype",
+      "interpretation": "The external library structure of a finite type with a complete finite enumeration.",
+      "effect_on_target": "Restricts the generic local predicates to finite component types, instantiated as Fin m.",
+      "source_match": "Matches finite-dimensional systems R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "HAdd.hAdd",
+      "interpretation": "Projects the addition operation from the supplied heterogeneous-addition instance.",
+      "effect_on_target": "With the displayed instances, adds two vectors of the same state type.",
+      "source_match": "Matches the plus sign between time and spatial terms in both equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "OfNat.ofNat",
+      "interpretation": "Projects the value representing a natural-number literal in the selected type.",
+      "effect_on_target": "Interprets the literal 0 through Zero.toOfNat0 for the state-vector type.",
+      "source_match": "The right-hand side is the zero vector required by the homogeneous source equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "Pi.instAdd",
+      "interpretation": "Defines function addition by adding values at each index.",
+      "effect_on_target": "The PDE balance is componentwise vector addition.",
+      "source_match": "Matches addition in R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "Pi.instZero",
+      "interpretation": "Defines the zero function to have zero at every index.",
+      "effect_on_target": "All components of the PDE residual must vanish.",
+      "source_match": "Matches vector zero in (1.8) and (1.9).",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "Real.instAdd",
+      "interpretation": "Uses the library Real addition operation.",
+      "effect_on_target": "Supplies exact real addition in each residual component.",
+      "source_match": "Matches source component arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "Real.instZero",
+      "interpretation": "Uses the library Real zero.",
+      "effect_on_target": "Provides zero in every component of the state-vector zero.",
+      "source_match": "Matches the source's homogeneous right-hand side.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "Zero.toOfNat0",
+      "interpretation": "Represents the numeral 0 by the given zero operation.",
+      "effect_on_target": "Ensures the displayed zero literal denotes the actual zero vector.",
+      "source_match": "Preserves the zero right-hand side of the equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "instHAdd",
+      "interpretation": "Constructs same-type heterogeneous addition from the existing Add operation.",
+      "effect_on_target": "Routes the balance's addition to ordinary vector addition.",
+      "source_match": "No change to the equation's additive terms.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "ContinuousSMul",
+      "interpretation": "The external library proposition that the given scalar action is jointly continuous in the specified topologies.",
+      "effect_on_target": "Provides background continuity for vector derivatives, discharged by real and product-space instances.",
+      "source_match": "An ambient property of R^m, not an additional regularity assumption on q.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "Pi.instSMul",
+      "interpretation": "Defines scalar action on a function by applying the scalar action to each component.",
+      "effect_on_target": "Uses standard componentwise real scalar multiplication on state vectors.",
+      "source_match": "Matches R^m and supports the correct real-linear Jacobian action.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached rendering of raw page 25, printed page 3, displays (1.8), the sentence introducing its quasilinear rewrite, and (1.9). Raw page 23 supplies the real-vector and partial-derivative conventions; raw page 26 supplies nonlinear-flux and smoothness context.",
+      "lean_evidence": "The proof-free header and both elaborated target types concern equivalence of the equation08 and equation09 predicates under local spatial and flux derivative hypotheses.",
+      "reasoning": "The selected claim is the differential rewrite itself. The adjacent hyperbolicity discussion supplies context rather than an additional conclusion of this selected rewrite. Source identity and hashes are taken from the supplied verified evidence; I inspected the attached renderings and did not independently recompute hashes."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Printed page 1 specifies q : R × R → R^m; printed page 3 identifies f′(q) as a flux Jacobian matrix.",
+      "lean_evidence": "q : Real → Real → Fin m → Real, flux : (Fin m → Real) → Fin m → Real, and fluxDerivative takes values in continuous real-linear endomorphisms of Fin m → Real.",
+      "reasoning": "Currying preserves the two independent real variables. Finite real-coordinate vectors and their real-linear endomorphisms represent R^m and its Jacobian matrices. No scalar-only restriction occurs."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "(1.8) displays the common arguments (x,t), and (1.9) suppresses those same arguments in rewriting the equation.",
+      "lean_evidence": "The target universally quantifies m, q, flux, fluxDerivative, x, t, and a spatial derivative witness. Both predicates use the same x and t; their derivative witnesses are existential inside each predicate.",
+      "reasoning": "The pointwise universal statement can be applied at every classical point. Derivative uniqueness identifies the existential spatial derivative on the right with the outer witness. Only the value fluxDerivative(q x t) is constrained or used, so there is no hidden global Jacobian hypothesis."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The rewrite on printed page 3 uses classical derivative notation without a specified differentiability class. Printed page 4 explicitly distinguishes sufficiently smooth differential reasoning from discontinuous solutions.",
+      "lean_evidence": "hqx supplies the derivative of the spatial slice at x; hflux supplies the Fréchet derivative of flux at q x t. Both solution predicates require a time derivative at t.",
+      "reasoning": "These are local chain-rule conditions that make the printed classical rewrite precise. No global C1 condition, positivity assumption, hyperbolicity condition, or matrix invertibility is imposed. Time differentiability is required within both predicates, so its absence cannot create a spurious classical solution."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Equation (1.9) retains q_t and zero while expanding the spatial flux derivative to f′(q)q_x.",
+      "lean_evidence": "D003 expresses qt + fluxx = 0 with the appropriate derivatives. D004 expresses qt + fluxDerivative(q x t)(qx) = 0 with the appropriate derivatives. The theorem relates them by Iff.",
+      "reasoning": "The selected rewrite is complete, including the unchanged time term, evaluation of the Jacobian at the current state, and vector zero. The subsequent spectral observation is separate from the selected equation-rewriting claim."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Printed page 1 defines derivative subscripts; printed page 3 distinguishes the spatial derivative f(q)_x from the state Jacobian f′(q).",
+      "lean_evidence": "D001–D004 expose the local predicates. D014–D015 provide actual derivative relations; D055, D069, and D070 expose real-linear application; D076–D080 expose componentwise addition and zero.",
+      "reasoning": "All D001–D083 dependencies have been covered, using the exact supplied reuse hashes for D003 and D005. The declared external library frontier is retained. The operators implement the intended classical vector equation."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source presents (1.9) as a rewriting of (1.8), with exact equalities to zero.",
+      "lean_evidence": "The outer connective is Iff, and each predicate contains exact Eq of a vector sum with zero.",
+      "reasoning": "Under the chain-rule hypotheses, the residuals coincide, making equivalence the appropriate logical strength. There is no approximate equality or reversed one-way substitute."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "(1.8) differentiates the composed spatial flux, while (1.9) evaluates the flux Jacobian at q and applies it to q_x.",
+      "lean_evidence": "D003 differentiates ξ ↦ flux(q ξ t); hflux differentiates flux at q x t; D004 applies fluxDerivative(q x t) to the derivative of ξ ↦ q ξ t. Time derivatives use τ ↦ q x τ.",
+      "reasoning": "Space, time, state, flux, and flux derivative have distinct correct roles. The supplied derivative field is linked to the actual flux at the only state relevant to this pointwise statement."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Both displayed equations have coefficient one on q_t, a positive spatial term, and zero right-hand side; the Jacobian is evaluated at the current state.",
+      "lean_evidence": "D003 and D004 use addition without extra factors and equality to componentwise zero; D004 evaluates fluxDerivative at q x t.",
+      "reasoning": "Signs, coefficients, evaluation points, and all m components are preserved. Fin indexing merely labels coordinates."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The inherited setting is finite-dimensional real states with one spatial coordinate and time. The source does not specify a flux state set or global differentiability.",
+      "lean_evidence": "The target uses arbitrary finite m and total real-domain functions but assumes differentiability only at x and q x t; m = 0 is also allowed.",
+      "reasoning": "The theorem preserves every positive finite vector dimension and nonlinear fluxes. Total-function representation imposes no global smoothness: a flux defined on an open neighborhood of the current state can be extended arbitrarily outside it without changing the local statement. No relative-boundary derivative claim is selected by the source. The empty-vector instance is a harmless degenerate extension, not evidence of substantive stronger applicability."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Printed page 4 explicitly discusses discontinuities and qualifies classical differential reasoning by smoothness. Neither the rewrite nor its context requires an invertible Jacobian.",
+      "lean_evidence": "HasDerivAt and HasFDerivAt guard spatial and flux differentiability, and both predicates require time derivative witnesses. No inverses or divisions appear in the balance. Nat permits m = 0.",
+      "reasoning": "The proposition does not claim a weak-solution rewrite at shocks. If the time derivative fails, both predicates are false. Singular or zero Jacobians remain allowed, and the empty-dimensional instance does not remove nonempty cases."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "Printed page 1 gives scalar advection and transported profiles; printed page 4 includes linear flux f(q) = Aq.",
+      "lean_evidence": "Take m = 1, flux(v) = v, fluxDerivative constantly the identity, and q(x,t) = x − t in its sole coordinate. Then qx = 1, qt = −1, and both predicates hold. With q(x,t) = x + t and the same flux, the derivative premises hold while both predicates fail.",
+      "reasoning": "The hypotheses are satisfiable for nonconstant states with nonzero derivatives. The predicates distinguish solutions from nonsolutions; the equivalence is not true only because of impossible premises or the zero-dimensional case."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage rewrites a continuous PDE and specifies no discretization, recurrence, or numerical algorithm.",
+      "lean_evidence": "The target contains derivative predicates and a logical equivalence, with no iteration or discrete construction.",
+      "reasoning": "There is no algorithm or execution semantics to preserve in this claim."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "The state is in R^m and the coefficient in (1.9) is a Jacobian matrix acting on q_x.",
+      "lean_evidence": "Finite product topology, componentwise arithmetic, identity-scalar continuous linear maps, and exact vector equality are explicit in the dossier.",
+      "reasoning": "The coordinate and operator semantics agree with real finite-dimensional calculus. No norm estimate is claimed, and the usual finite-dimensional topology introduces no conflicting norm convention."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "(1.8)–(1.9) assert an exact differential rewrite without an error bound or stability notion.",
+      "lean_evidence": "The conclusion is equivalence of exact zero-balance predicates.",
+      "reasoning": "There is no forward, backward, truncation, or stability quantity to compare."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "q, f(q), and f′(q) are exact mathematical state, flux, and derivative quantities.",
+      "lean_evidence": "All quantities are over Real, and hflux certifies the supplied derivative map as the actual derivative at q x t.",
+      "reasoning": "The separate fluxDerivative argument is not an approximate Jacobian. No computed or rounded quantity replaces an exact source object."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The quasilinear rewrite is exact; the selected passage contains no asymptotic remainder or truncation.",
+      "lean_evidence": "The theorem concludes Iff between exact derivative-balance predicates, without Big-O or approximation terms.",
+      "reasoning": "The term first-order describes derivative order, not a discarded higher-order approximation."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The selected passage concerns rewriting where classical differentiation applies, not existence or uniqueness of PDE solutions. The following hyperbolicity observation refers separately to real eigenvalues and a complete eigenvector set.",
+      "lean_evidence": "The theorem requires local spatial and flux derivatives and packages time-derivative existence in both predicates; it contains no solution-existence, uniqueness, rank, or spectral assertion.",
+      "reasoning": "The relevant regularity is preserved. Derivative witnesses encode the meaning of the displayed PDEs and do not assert a well-posedness theorem. No unnecessary spectral or invertibility requirement narrows the rewrite."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "In the source's classical finite-dimensional setting, choose the actual spatial derivative as qx and the flux Jacobian as fluxDerivative(q x t). The target's premises then hold. D003 is precisely (1.8), and D004 is precisely (1.9), including existence of their partial derivatives. The target equivalence therefore yields the selected rewrite at each classical point. Its universal pointwise form supplies the same rewrite throughout any region where these conditions hold; it makes no claim about discontinuous weak solutions or the separate hyperbolicity observation."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's rewriting means equality of the classical spatial terms wherever the chain rule applies. The target explicitly supplies those local conditions, giving derivative of ξ ↦ flux(q ξ t) equal to fluxDerivative(q x t)(qx). Actual derivatives are unique, so the existential flux derivative in D003 and spatial derivative in D004 cannot be chosen independently to change the balance. With a time derivative present, substitution gives both directions of the target Iff; without a time derivative both predicates are false. The unrestricted values of the derivative field away from q x t are irrelevant, and the zero-dimensional case is immediate. Thus the target is the pointwise, derivative-existence-explicit expression of the selected classical rewrite."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [],
+  "rationale": "Inspection of the attached primary-source pages and the proof-free readable and explicit Lean evidence supports equivalence for the selected (1.8)–(1.9) classical rewrite. The target preserves vector and nonlinear scope, the spatial chain rule, the Jacobian evaluation and action order, the time derivative, and exact zero balance. Its local derivative premises explicate the classical reading rather than imposing global smoothness or hyperbolicity. All 83 dependencies and all configured checks are accounted for, including fresh target-effect assessments for both reused meanings. The separate spectral observation is outside the selected rewrite. No unresolved semantic discrepancy remains."
+}
