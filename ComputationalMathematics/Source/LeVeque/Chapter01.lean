@@ -5,6 +5,7 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Source.LeVeque.Chapter01.AcousticsConservationForm
 import ComputationalMathematics.Source.LeVeque.Chapter01.AcousticsEigenvalues
 import ComputationalMathematics.Source.LeVeque.Chapter01.AcousticsModes
+import ComputationalMathematics.Source.LeVeque.Chapter01.AcousticsRightModeAlgebraic
 import ComputationalMathematics.Source.LeVeque.Chapter01.AdvectionLinearFlux
 import ComputationalMathematics.Source.LeVeque.Chapter01.AdvectionWaveIdentity
 import ComputationalMathematics.Source.LeVeque.Chapter01.DimensionalSplitting

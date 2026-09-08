@@ -1,0 +1,4 @@
+import ComputationalMathematics.Source.LeVeque.Chapter01.AcousticsRightModeAlgebraic
+
+#check NumStability.leveque01_acousticsRightMode_of_pos_ratio
+#print axioms NumStability.leveque01_acousticsRightMode_of_pos_ratio

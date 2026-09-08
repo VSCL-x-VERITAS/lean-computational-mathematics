@@ -1,0 +1,471 @@
+NumStability.leveque01_acoustics_hasConservationForm (pressure velocity : ℝ → ℝ → ℝ) (bulkModulus density x t : ℝ)
+  (hdensity : density ≠ 0)
+  (hacoustics : NumStability.leveque01_equation05_linearAcousticsAt pressure velocity bulkModulus density x t) :
+  NumStability.leveque01_equation08_conservationLawAt (NumStability.linearAcousticsState pressure velocity)
+    (NumStability.constantLinearFlux (NumStability.linearAcousticsMatrix bulkModulus density)) x t
+'NumStability.leveque01_acoustics_hasConservationForm' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsMatrixEigenvalues {bulkModulus density : ℝ} (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) :
+  have soundSpeed := √(bulkModulus / density);
+  0 < soundSpeed ∧
+    NumStability.linearAcousticsLeftEigenvector density soundSpeed ≠ 0 ∧
+      (NumStability.linearAcousticsMatrix bulkModulus density).mulVec
+            (NumStability.linearAcousticsLeftEigenvector density soundSpeed) =
+          -soundSpeed • NumStability.linearAcousticsLeftEigenvector density soundSpeed ∧
+        (∀ {profile : ℝ → ℝ} {profile' : ℝ} (x t : ℝ),
+            HasDerivAt profile profile' (x - -soundSpeed * t) →
+              NumStability.IsConstantCoefficientLinearSystemSolutionAt
+                (NumStability.eigenmodeTravelingWave profile (-soundSpeed)
+                  (NumStability.linearAcousticsLeftEigenvector density soundSpeed))
+                (NumStability.linearAcousticsMatrix bulkModulus density) x t) ∧
+          NumStability.linearAcousticsRightEigenvector density soundSpeed ≠ 0 ∧
+            (NumStability.linearAcousticsMatrix bulkModulus density).mulVec
+                  (NumStability.linearAcousticsRightEigenvector density soundSpeed) =
+                soundSpeed • NumStability.linearAcousticsRightEigenvector density soundSpeed ∧
+              ∀ {profile : ℝ → ℝ} {profile' : ℝ} (x t : ℝ),
+                HasDerivAt profile profile' (x - soundSpeed * t) →
+                  NumStability.IsConstantCoefficientLinearSystemSolutionAt
+                    (NumStability.eigenmodeTravelingWave profile soundSpeed
+                      (NumStability.linearAcousticsRightEigenvector density soundSpeed))
+                    (NumStability.linearAcousticsMatrix bulkModulus density) x t
+'NumStability.leveque01_acousticsMatrixEigenvalues' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsLeftMode {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) :
+  0 < √(bulkModulus / density) ∧
+    (∀ (x t : ℝ),
+        NumStability.leveque01_equation04_oneWayWaveAt
+          (NumStability.linearAcousticsLeftInvariant system.pressure system.velocity density √(bulkModulus / density))
+          (-√(bulkModulus / density)) x t) ∧
+      ∀ {profile : ℝ → ℝ} {profile' : ℝ} (x t : ℝ),
+        HasDerivAt profile profile' (x + √(bulkModulus / density) * t) →
+          NumStability.leveque01_equation04_oneWayWaveAt
+              (NumStability.travelingWave profile (-√(bulkModulus / density))) (-√(bulkModulus / density)) x t ∧
+            NumStability.travelingWave profile (-√(bulkModulus / density)) x t =
+              profile (x + √(bulkModulus / density) * t)
+'NumStability.leveque01_acousticsLeftMode' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsRightMode {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) :
+  0 < √(bulkModulus / density) ∧
+    ∀ (x t : ℝ),
+      NumStability.leveque01_equation04_oneWayWaveAt
+        (NumStability.linearAcousticsRightInvariant system.pressure system.velocity density √(bulkModulus / density))
+        (√(bulkModulus / density)) x t
+'NumStability.leveque01_acousticsRightMode' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsTwoWaveDecomposition {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) (x t : ℝ) :
+  NumStability.leveque01_equation04_oneWayWaveAt
+      (NumStability.linearAcousticsRightInvariant system.pressure system.velocity density √(bulkModulus / density))
+      (√(bulkModulus / density)) x t ∧
+    NumStability.leveque01_equation04_oneWayWaveAt
+      (NumStability.linearAcousticsLeftInvariant system.pressure system.velocity density √(bulkModulus / density))
+      (-√(bulkModulus / density)) x t
+'NumStability.leveque01_acousticsTwoWaveDecomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_advectionLinearFlux_fromMassConservation (q : ℝ → ℝ → ℝ) (speed t : ℝ)
+  (qt qx fluxx : ℝ → Fin 1 → ℝ)
+  (hintegralMass :
+    NumStability.IsIntegralConservationLawSolution (NumStability.scalarAsOneComponentSystem q)
+      (NumStability.constantLinearFlux (NumStability.constantCoefficientScalarMatrix speed)))
+  (hqt : ∀ (x : ℝ), HasDerivAt (fun τ => NumStability.scalarAsOneComponentSystem q x τ) (qt x) t)
+  (hqx : ∀ (x : ℝ), HasDerivAt (fun ξ => NumStability.scalarAsOneComponentSystem q ξ t) (qx x) x)
+  (hfluxx :
+    ∀ (x : ℝ),
+      HasDerivAt
+        (fun ξ =>
+          NumStability.constantLinearFlux (NumStability.constantCoefficientScalarMatrix speed)
+            (NumStability.scalarAsOneComponentSystem q ξ t))
+        (fluxx x) x)
+  (hqtIntegrable : ∀ (a b : ℝ), IntervalIntegrable qt MeasureTheory.volume a b)
+  (hfluxxIntegrable : ∀ (a b : ℝ), IntervalIntegrable fluxx MeasureTheory.volume a b)
+  (hinterchange :
+    ∀ (a b : ℝ),
+      HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, NumStability.scalarAsOneComponentSystem q x τ) (∫ (x : ℝ) in a..b, qt x)
+        t)
+  (hresidualContinuous : Continuous fun x => qt x + fluxx x) :
+  (∀ (state : Fin 1 → ℝ),
+      NumStability.constantLinearFlux (NumStability.constantCoefficientScalarMatrix speed) state = fun x =>
+        speed * state 0) ∧
+    ∀ (x : ℝ), NumStability.leveque01_equation02_scalarAdvectionAt q speed x t
+'NumStability.leveque01_advectionLinearFlux_fromMassConservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_advectionWaveIdentity (field : ℝ → ℝ → ℝ) (speed x t : ℝ) (_hspeed : 0 < speed) :
+  NumStability.leveque01_equation02_scalarAdvectionAt field speed x t ↔
+    NumStability.leveque01_equation04_oneWayWaveAt field speed x t
+'NumStability.leveque01_advectionWaveIdentity' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_dimensionalSplitting_sourceContract.{u, u_1, u_2} {Cell : Type u_1} {Value : Type u_2}
+  {Point Direction : Type u} [MeasurableSpace Point]
+  (grid : NumStability.CoordinateFiniteVolumeGrid Cell Point Direction)
+  (method : NumStability.CoordinateHighResolutionMethod Direction Cell Value)
+  (initialState : NumStability.FiniteVolumeCellState Cell Value) :
+  ∃ schedule finalState trace,
+    schedule = NumStability.coordinateFractionalSchedule grid.coordinateDirections method ∧
+      schedule ≠ [] ∧
+        (∀ (direction : Direction),
+            ∃ step ∈ schedule,
+              step.direction = direction ∧
+                step.timeFraction = method.timeFraction direction ∧
+                  step.oneDimensionalSolve = method.solveDirection direction) ∧
+          NumStability.CoordinateSweepExecution schedule initialState finalState trace ∧
+            trace.length = schedule.length + 1
+'NumStability.leveque01_dimensionalSplitting_sourceContract' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_discontinuity_integralBalance_witness (valueAtJump : ℝ) :
+  NumStability.IsRectangleConservationLawSolution (NumStability.MovingStep.timeShiftedStep valueAtJump 1) id ∧
+    ¬NumStability.IsLinearAdvectionSolutionAt (NumStability.MovingStep.timeShiftedStep valueAtJump 1) 1 0 1 ∧
+      ∀ (d : ℝ), ¬HasDerivAt (fun t => ∫ (x : ℝ) in 0..1, NumStability.MovingStep.timeShiftedStep valueAtJump 1 x t) d 1
+'NumStability.leveque01_discontinuity_integralBalance_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_hyperbolicMatrix_uniqueEigenbasisDecomposition {m : ℕ} {coefficient : Matrix (Fin m) (Fin m) ℝ}
+  (hcoefficient : NumStability.leveque01IsHyperbolicMatrix coefficient) :
+  ∃ eigenvalues eigenbasis,
+    (∀ (p : Fin m), coefficient.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+      ∀ (q : Fin m → ℝ), ∃! amplitudes, ∑ p, amplitudes p • eigenbasis p = q
+'NumStability.leveque01_hyperbolicMatrix_uniqueEigenbasisDecomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_eigenvaluesAreWaveSpeeds {m : ℕ} (coefficient : Matrix (Fin m) (Fin m) ℝ) {profile : ℝ → ℝ}
+  {profile' speed : ℝ} (eigenvector : Fin m → ℝ) (x t : ℝ)
+  (heigen : coefficient.mulVec eigenvector = speed • eigenvector)
+  (hprofile : HasDerivAt profile profile' (x - speed * t)) :
+  NumStability.leveque01_equation01_constantLinearSystemAt
+    (NumStability.eigenmodeTravelingWave profile speed eigenvector) coefficient x t
+'NumStability.leveque01_eigenvaluesAreWaveSpeeds' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation01_constantLinearSystemAt_iff {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (coefficient : Matrix (Fin m) (Fin m) ℝ) (x t : ℝ) :
+  NumStability.leveque01_equation01_constantLinearSystemAt q coefficient x t ↔
+    ∃ qt qx, HasDerivAt (fun τ => q x τ) qt t ∧ HasDerivAt (fun ξ => q ξ t) qx x ∧ qt + coefficient.mulVec qx = 0
+'NumStability.leveque01_equation01_constantLinearSystemAt_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_equation10_integralConservation_iff {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) :
+  NumStability.leveque01Equation10IntegralConservation q flux ↔
+    ∀ (x₁ x₂ t : ℝ),
+      IntervalIntegrable (fun x => q x t) MeasureTheory.volume x₁ x₂ ∧
+        HasDerivAt (fun τ => ∫ (x : ℝ) in x₁..x₂, q x τ) (flux (q x₁ t) - flux (q x₂ t)) t
+'NumStability.leveque01_equation10_integralConservation_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation11_characterization {m : ℕ} (initialState : ℝ → Fin m → ℝ)
+  (leftState rightState : Fin m → ℝ) :
+  NumStability.leveque01Equation11RiemannData initialState leftState rightState ↔
+    ∃ valueAtOrigin, initialState = NumStability.riemannData leftState valueAtOrigin rightState
+'NumStability.leveque01_equation11_characterization' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation02_uniformTransportModel (speed : ℝ) :
+  NumStability.IsRealHyperbolicMatrix (NumStability.constantCoefficientScalarMatrix speed) ∧
+    (∀ (q : ℝ → ℝ → ℝ) (x t : ℝ),
+        NumStability.leveque01_equation01_constantLinearSystemAt (NumStability.scalarAsOneComponentSystem q)
+            (NumStability.constantCoefficientScalarMatrix speed) x t ↔
+          NumStability.leveque01_equation02_scalarAdvectionAt q speed x t) ∧
+      ∀ (q : ℝ → ℝ → ℝ),
+        NumStability.IsUniformAdvection q speed →
+          ((Differentiable ℝ fun x => q x 0) → NumStability.IsLinearAdvectionSolution q speed) ∧
+            ((∀ (a b : ℝ), IntervalIntegrable (fun x => q x 0) MeasureTheory.volume a b) →
+              NumStability.IsRectangleConservationLawSolution q fun state => speed * state)
+'NumStability.leveque01_equation02_uniformTransportModel' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation03_transportSolution (profile : ℝ → ℝ) (speed : ℝ) :
+  (∀ (x : ℝ), NumStability.travelingWave profile speed x 0 = profile x) ∧
+    (∀ (x t : ℝ), NumStability.travelingWave profile speed (x + speed * t) t = profile x) ∧
+      (∀ (x t : ℝ), HasDerivAt (fun τ => NumStability.travelingWave profile speed (x + speed * τ) τ) 0 t) ∧
+        (Differentiable ℝ profile →
+            NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile speed) speed) ∧
+          ((∀ (a b : ℝ), IntervalIntegrable profile MeasureTheory.volume a b) →
+            NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile speed) fun state =>
+              speed * state)
+'NumStability.leveque01_equation03_transportSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation04_acousticOneWayModel :
+  (∀ (c : ℝ),
+      0 < c →
+        NumStability.leveque01IsHyperbolicMatrix (NumStability.constantCoefficientScalarMatrix c) ∧
+          (∀ (x t₁ t₂ : ℝ), t₁ < t₂ → x + c * t₁ < x + c * t₂) ∧
+            ∀ {profile : ℝ → ℝ} {profile' : ℝ} (x t : ℝ),
+              HasDerivAt profile profile' (x - c * t) →
+                NumStability.leveque01_equation04_oneWayWaveAt (NumStability.travelingWave profile c) c x t ∧
+                  NumStability.travelingWave profile c (x + c * t) t = profile x) ∧
+    ∀ {bulkModulus density : ℝ} (system : NumStability.LinearAcousticsSolution bulkModulus density),
+      0 < bulkModulus →
+        0 < density →
+          ∃ c,
+            c = √(bulkModulus / density) ∧
+              0 < c ∧
+                ∃ w,
+                  (∀ (x t : ℝ), w x t = system.pressure x t + density * c * system.velocity x t) ∧
+                    ∀ (x t : ℝ), NumStability.leveque01_equation04_oneWayWaveAt w c x t
+'NumStability.leveque01_equation04_acousticOneWayModel' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation05_linearAcousticsAt_iff (pressure velocity : ℝ → ℝ → ℝ) (bulkModulus density x t : ℝ)
+  (_hdensity : density ≠ 0) :
+  NumStability.leveque01_equation05_linearAcousticsAt pressure velocity bulkModulus density x t ↔
+    ∃ pt px ut ux,
+      HasDerivAt (fun τ => pressure x τ) pt t ∧
+        HasDerivAt (fun ξ => pressure ξ t) px x ∧
+          HasDerivAt (fun τ => velocity x τ) ut t ∧
+            HasDerivAt (fun ξ => velocity ξ t) ux x ∧ pt + bulkModulus * ux = 0 ∧ ut + density⁻¹ * px = 0
+'NumStability.leveque01_equation05_linearAcousticsAt_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation06_acousticsMatrixForm (pressure velocity : ℝ → ℝ → ℝ) (bulkModulus density x t : ℝ)
+  (_hdensity : density ≠ 0) :
+  NumStability.leveque01_equation01_constantLinearSystemAt (NumStability.linearAcousticsState pressure velocity)
+      (NumStability.linearAcousticsMatrix bulkModulus density) x t ↔
+    NumStability.leveque01_equation05_linearAcousticsAt pressure velocity bulkModulus density x t
+'NumStability.leveque01_equation06_acousticsMatrixForm' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation07_pressureWave {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) (x t ptt pxx uxt utx : ℝ)
+  (hptt : HasDerivAt (fun τ => NumStability.partialTimeDerivative system.pressure x τ) ptt t)
+  (huxt : HasDerivAt (fun τ => NumStability.partialSpaceDerivative system.velocity x τ) uxt t)
+  (hutx : HasDerivAt (fun ξ => NumStability.partialTimeDerivative system.velocity ξ t) utx x)
+  (hpxx : HasDerivAt (fun ξ => NumStability.partialSpaceDerivative system.pressure ξ t) pxx x) (hmixed : uxt = utx) :
+  ptt = √(bulkModulus / density) ^ 2 * pxx
+'NumStability.leveque01_equation07_pressureWave' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation08_conservationLawAt_iff {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (x t : ℝ) :
+  NumStability.leveque01_equation08_conservationLawAt q flux x t ↔
+    ∃ qt fluxx, HasDerivAt (fun τ => q x τ) qt t ∧ HasDerivAt (fun ξ => flux (q ξ t)) fluxx x ∧ qt + fluxx = 0
+'NumStability.leveque01_equation08_conservationLawAt_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation09_quasilinearForm {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (fluxDerivative : (Fin m → ℝ) → (Fin m → ℝ) →L[ℝ] Fin m → ℝ) (x t : ℝ) (qx : Fin m → ℝ)
+  (hqx : HasDerivAt (fun ξ => q ξ t) qx x) (hflux : HasFDerivAt flux (fluxDerivative (q x t)) (q x t)) :
+  NumStability.leveque01_equation08_conservationLawAt q flux x t ↔
+    NumStability.leveque01_equation09_quasilinearAt q fluxDerivative x t
+'NumStability.leveque01_equation09_quasilinearForm' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_finiteVolumeCellAverage_spec {m : ℕ} (state : ℝ → Fin m → ℝ) {left right : ℝ}
+  (hcell : left < right) (hstate : IntervalIntegrable state MeasureTheory.volume left right) :
+  NumStability.IsOneDimensionalCellAverage state left right
+    (NumStability.leveque01_finiteVolumeCellAverage state left right)
+'NumStability.leveque01_finiteVolumeCellAverage_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_finiteVolumeFluxUpdate_sourceContract.{u_1, u_2, u_3, u_4} {Cell : Type u_1}
+  {Interface : Type u_2} {Point : Type u_3} {E : Type u_4} [MeasurableSpace Point] [TopologicalSpace Point]
+  [Fintype Interface] [DecidableEq Cell] [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (mesh : NumStability.FiniteVolumeInterfaceMesh Cell Interface Point) (μ : MeasureTheory.Measure Point)
+  (conservedField : Point → E) (physicalConservationFlux : E → E) (localNumericalFlux : E → E → E)
+  (timeStart timeEnd fluxTolerance : ℝ) (hTimeInterval : timeStart < timeEnd) (hFluxTolerance : 0 < fluxTolerance)
+  (hPositiveCellVolume : ∀ (cell : Cell), μ (mesh.cellRegion cell) ≠ 0)
+  (hFiniteCellVolume : ∀ (cell : Cell), μ (mesh.cellRegion cell) ≠ ⊤)
+  (hIntegrable : ∀ (cell : Cell), MeasureTheory.IntegrableOn conservedField (mesh.cellRegion cell) μ)
+  (hFluxApproximation :
+    ∀ (interface : Interface),
+      dist
+          (NumStability.neighboringCellNumericalFlux mesh localNumericalFlux
+            (NumStability.finiteVolumeCellAverages mesh μ conservedField) interface)
+          (NumStability.conservationLawInterfaceFlux mesh conservedField physicalConservationFlux interface) <
+        fluxTolerance) :
+  0 < timeEnd - timeStart ∧
+    0 < fluxTolerance ∧
+      (∀ (cell : Cell),
+          NumStability.IsCellVolumeAverage μ (mesh.cellRegion cell) conservedField
+            (NumStability.finiteVolumeCellAverages mesh μ conservedField cell)) ∧
+        (∀ (interface : Interface),
+            NumStability.neighboringCellNumericalFlux mesh localNumericalFlux
+                  (NumStability.finiteVolumeCellAverages mesh μ conservedField) interface =
+                localNumericalFlux
+                  (NumStability.finiteVolumeCellAverages mesh μ conservedField (mesh.leftCell interface))
+                  (NumStability.finiteVolumeCellAverages mesh μ conservedField (mesh.rightCell interface)) ∧
+              dist
+                  (NumStability.neighboringCellNumericalFlux mesh localNumericalFlux
+                    (NumStability.finiteVolumeCellAverages mesh μ conservedField) interface)
+                  (NumStability.conservationLawInterfaceFlux mesh conservedField physicalConservationFlux interface) <
+                fluxTolerance) ∧
+          ∃ updatedCellAverages,
+            (∀ (cell : Cell),
+                (μ (mesh.cellRegion cell)).toReal • updatedCellAverages cell =
+                  (μ (mesh.cellRegion cell)).toReal • NumStability.finiteVolumeCellAverages mesh μ conservedField cell -
+                    (timeEnd - timeStart) •
+                      NumStability.finiteVolumeNetOutwardFlux mesh
+                        (NumStability.neighboringCellNumericalFlux mesh localNumericalFlux
+                          (NumStability.finiteVolumeCellAverages mesh μ conservedField))
+                        cell) ∧
+              ∀ (cells : Finset Cell),
+                ∑ cell ∈ cells, (μ (mesh.cellRegion cell)).toReal • updatedCellAverages cell =
+                  ∑ cell ∈ cells,
+                      (μ (mesh.cellRegion cell)).toReal •
+                        NumStability.finiteVolumeCellAverages mesh μ conservedField cell -
+                    (timeEnd - timeStart) •
+                      NumStability.finiteVolumeBoundaryFlux mesh
+                        (NumStability.neighboringCellNumericalFlux mesh localNumericalFlux
+                          (NumStability.finiteVolumeCellAverages mesh μ conservedField))
+                        cells
+'NumStability.leveque01_finiteVolumeFluxUpdate_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_fluxJacobian_hyperbolicity_iff {m : ℕ} (flux : (Fin m → ℝ) → Fin m → ℝ) (state : Fin m → ℝ)
+  (derivative : (Fin m → ℝ) →L[ℝ] Fin m → ℝ) (hderivative : HasFDerivAt flux derivative state) :
+  NumStability.IsHyperbolicFluxAt flux state ↔
+    ∃ eigenvalues eigenvectors,
+      LinearIndependent ℝ eigenvectors ∧ ∀ (p : Fin m), derivative (eigenvectors p) = eigenvalues p • eigenvectors p
+'NumStability.leveque01_fluxJacobian_hyperbolicity_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_heterogeneousMaterialCellAverage_sourceContract.{u_1, u_2, u_3, u_4} {Model : Type u_1}
+  {Cell : Type u_2} {Point : Type u_3} {Parameter : Type u_4} [MeasurableSpace Point]
+  (grid : NumStability.FiniteVolumeCellPartition Cell Point) (volumeMeasure : MeasureTheory.Measure Point)
+  (averagingRule : NumStability.CellMaterialAveragingRule Model Cell Point Parameter grid.cellRegion) (model : Model)
+  (materialParameters : Point → Parameter) (hpositive : ∀ (cell : Cell), volumeMeasure (grid.cellRegion cell) ≠ 0)
+  (hfinite : ∀ (cell : Cell), volumeMeasure (grid.cellRegion cell) ≠ ⊤)
+  (hdifferentCellAverages :
+    ∃ cell₁ cell₂,
+      averagingRule.averageParameter model volumeMeasure cell₁ materialParameters ≠
+        averagingRule.averageParameter model volumeMeasure cell₂ materialParameters) :
+  ∃ assignedCellProperties,
+    (∀ (cell : Cell),
+        (assignedCellProperties cell).averagedParameter =
+          averagingRule.averageParameter model volumeMeasure cell materialParameters) ∧
+      (∀ (cell : Cell) (alternativeParameters : Point → Parameter),
+          Set.EqOn materialParameters alternativeParameters (grid.cellRegion cell) →
+            (assignedCellProperties cell).averagedParameter =
+              averagingRule.averageParameter model volumeMeasure cell alternativeParameters) ∧
+        (∀ (cell : Cell) (parameter : Parameter),
+            (averagingRule.averageParameter model volumeMeasure cell fun x => parameter) = parameter) ∧
+          ∃ cell₁ cell₂, assignedCellProperties cell₁ ≠ assignedCellProperties cell₂
+'NumStability.leveque01_heterogeneousMaterialCellAverage_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_hyperbolicMatrixDefinition {m : ℕ} (coefficient : Matrix (Fin m) (Fin m) ℝ) :
+  NumStability.leveque01IsHyperbolicMatrix coefficient ↔
+    ∃ eigenvalues eigenvectors,
+      LinearIndependent ℝ eigenvectors ∧
+        ∀ (p : Fin m), coefficient.mulVec (eigenvectors p) = eigenvalues p • eigenvectors p
+'NumStability.leveque01_hyperbolicMatrixDefinition' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_hyperbolicSystem_scalarWaveDecomposition {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) :
+  ∃ speeds b,
+    (∀ (i : Fin m), A.mulVec (b i) = speeds i • b i) ∧
+      ∀ (q : ℝ → ℝ → Fin m → ℝ) (x t : ℝ),
+        NumStability.IsConstantCoefficientLinearSystemSolutionAt q A x t ↔
+          ∀ (i : Fin m), NumStability.IsLinearAdvectionSolutionAt (fun ξ τ => b.equivFun (q ξ τ) i) (speeds i) x t
+'NumStability.leveque01_hyperbolicSystem_scalarWaveDecomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_integralLaw_impliesDifferentialLaw_of_smooth {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) (qt fluxx : ℝ → Fin m → ℝ) (t : ℝ)
+  (hintegralLaw : NumStability.leveque01Equation10IntegralConservation q flux)
+  (hqt : ∀ (x : ℝ), HasDerivAt (fun τ => q x τ) (qt x) t)
+  (hfluxx : ∀ (x : ℝ), HasDerivAt (fun ξ => flux (q ξ t)) (fluxx x) x)
+  (hqtIntegrable : ∀ (a b : ℝ), IntervalIntegrable qt MeasureTheory.volume a b)
+  (hfluxxIntegrable : ∀ (a b : ℝ), IntervalIntegrable fluxx MeasureTheory.volume a b)
+  (hinterchange : ∀ (a b : ℝ), HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, q x τ) (∫ (x : ℝ) in a..b, qt x) t)
+  (hresidualContinuous : Continuous fun x => qt x + fluxx x) (x : ℝ) :
+  NumStability.leveque01_equation08_conservationLawAt q flux x t
+'NumStability.leveque01_integralLaw_impliesDifferentialLaw_of_smooth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_linearFlux_specializesEquation01 {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (coefficient : Matrix (Fin m) (Fin m) ℝ) (x t : ℝ) (qx : Fin m → ℝ) (hqx : HasDerivAt (fun ξ => q ξ t) qx x) :
+  NumStability.leveque01_equation08_conservationLawAt q (NumStability.constantLinearFlux coefficient) x t ↔
+    NumStability.leveque01_equation01_constantLinearSystemAt q coefficient x t
+'NumStability.leveque01_linearFlux_specializesEquation01' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_linearRiemann_eigensolution.{u_1} {ι : Type u_1} [Fintype ι] {coefficient : Matrix ι ι ℝ}
+  (hcoefficient : NumStability.IsRealHyperbolicMatrix coefficient) (leftState valueAtOrigin rightState : ι → ℝ) :
+  ∃ eigenvalues eigenbasis,
+    (∀ (p : ι), coefficient.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+      NumStability.IsRectangleConservationLawSolution
+          (NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState)
+          coefficient.mulVec ∧
+        (∀ (x : ℝ),
+            NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState x 0 =
+              NumStability.riemannData leftState valueAtOrigin rightState x) ∧
+          ∀ (x t : ℝ),
+            0 < t →
+              NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState x t =
+                NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState (x / t) 1
+'NumStability.leveque01_linearRiemann_eigensolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_materialInterfaceRiemannData_iff.{u_1, u_2} {Material : Type u_1} {State : Type u_2}
+  (medium : ℝ → Material) (initialState : ℝ → State) (leftMaterial rightMaterial : Material)
+  (leftState rightState : State) :
+  NumStability.IsRiemannData (fun x => (medium x, initialState x)) (leftMaterial, leftState)
+      (rightMaterial, rightState) ↔
+    NumStability.IsRiemannData medium leftMaterial rightMaterial ∧
+      NumStability.IsRiemannData initialState leftState rightState
+'NumStability.leveque01_materialInterfaceRiemannData_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_nonconservation_requires_sourceTerm (q : ℝ → ℝ → Fin 1 → ℝ) (speed : ℝ) (qt qx : ℝ → Fin 1 → ℝ)
+  (a b t : ℝ) (massRate : Fin 1 → ℝ) (hqt : ∀ (x : ℝ), HasDerivAt (fun τ => q x τ) (qt x) t)
+  (hqx : ∀ (x : ℝ), HasDerivAt (fun ξ => q ξ t) (qx x) x)
+  (hqtIntegrable : IntervalIntegrable qt MeasureTheory.volume a b)
+  (hqxIntegrable : IntervalIntegrable qx MeasureTheory.volume a b)
+  (hmassRate : HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, q x τ) massRate t)
+  (hinterchange : HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, q x τ) (∫ (x : ℝ) in a..b, qt x) t)
+  (hdefect : massRate ≠ speed • q a t - speed • q b t) :
+  ∃ production,
+    (∀ (x : ℝ), NumStability.IsBalanceLawSolutionAt q (fun state => speed • state) (production x) x t) ∧
+      IntervalIntegrable production MeasureTheory.volume a b ∧
+        ∫ (x : ℝ) in a..b, production x = massRate - (speed • q a t - speed • q b t) ∧
+          production ≠ 0 ∧ ¬∀ (x : ℝ), NumStability.IsConservationLawSolutionAt q (fun state => speed • state) x t
+'NumStability.leveque01_nonconservation_requires_sourceTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_nonlinear_shock_formation :
+  ∃ flux q T ξ qL qR,
+    ContDiff ℝ 1 flux ∧
+      (¬∃ a b, ∀ (u : ℝ), flux u = a * u + b) ∧
+        NumStability.IsRectangleConservationLawSolution q flux ∧
+          (ContDiff ℝ ⊤ fun x => q x 0) ∧
+            0 < T ∧
+              (∀ (t : ℝ), 0 ≤ t → t < T → Continuous fun x => q x t) ∧
+                Filter.Tendsto (fun x => q x T) (nhdsWithin ξ (Set.Iio ξ)) (nhds qL) ∧
+                  Filter.Tendsto (fun x => q x T) (nhdsWithin ξ (Set.Ioi ξ)) (nhds qR) ∧ qR < qL
+'NumStability.leveque01_nonlinear_shock_formation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_oneStepMethod_iff_currentStateMap.{u_1} {Cell : Type u_1} {m : ℕ} (n : ℕ)
+  (advance : (Fin (n + 1) → Cell → Fin m → ℝ) → Cell → Fin m → ℝ) :
+  NumStability.leveque01IsOneStepMethodAt n advance ↔ ∃ step, advance = step ∘ fun history => history (Fin.last n)
+'NumStability.leveque01_oneStepMethod_iff_currentStateMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_riemannInitialConfiguration_iff.{u_1} {State : Type u_1}
+  (evolutionEquation : (ℝ → ℝ → State) → Prop) (leftState rightState : State) (q : ℝ → ℝ → State) :
+  NumStability.leveque01RiemannInitialConfiguration evolutionEquation leftState rightState q ↔
+    evolutionEquation q ∧ (∀ x < 0, q x 0 = leftState) ∧ ∀ (x : ℝ), 0 < x → q x 0 = rightState
+'NumStability.leveque01_riemannInitialConfiguration_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_rectangleRiemannInterfaceFlux_sourceContract.{u_1} {m : ℕ} (hm : 0 < m) {Information : Type u_1}
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m))
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (initialState : ℝ → Fin m → ℝ)
+  (hintegrable : ∀ (i : ℤ), IntervalIntegrable initialState MeasureTheory.volume (grid.cellLeft i) (grid.cellRight i))
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (hdomain :
+    ∀ (i : ℤ),
+      method.domain
+        (NumStability.adjacentCellRiemannProblem law (NumStability.finiteVolumeCellAverageOn grid initialState) i))
+  (timeStep : ℝ) (htimeStep : 0 < timeStep) :
+  0 < m ∧
+    0 < timeStep ∧
+      ∃ cellAverages,
+        (∀ (i : ℤ),
+            NumStability.IsOneDimensionalCellAverage initialState (grid.cellLeft i) (grid.cellRight i)
+              (cellAverages i)) ∧
+          (∀ (i : ℤ), grid.cellRight (i - 1) = grid.cellLeft i) ∧
+            (∀ (i : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law cellAverages i)) ∧
+              ∃ solved,
+                (∀ (i : ℤ),
+                    NumStability.IsRiemannData (fun x => (solved i).solution x 0) (cellAverages (i - 1))
+                      (cellAverages i)) ∧
+                  (∀ (i : ℤ), NumStability.IsRectangleConservationLawSolution (solved i).solution law.physicalFlux) ∧
+                    ∃ information,
+                      (∀ (i : ℤ), information i = method.extractInformation (solved i)) ∧
+                        ∃ numericalFlux,
+                          (∀ (i : ℤ), numericalFlux i = method.numericalFluxFromInformation (information i)) ∧
+                            (∀ (state : Fin m → ℝ),
+                                method.numericalFluxFromInformation
+                                    (method.extractInformation
+                                      (method.solve { leftState := state, rightState := state } ⋯)) =
+                                  law.physicalFlux state) ∧
+                              ∃ updatedCellAverages,
+                                ∀ (i : ℤ),
+                                  updatedCellAverages i =
+                                    NumStability.riemannFiniteVolumeUpdate grid timeStep cellAverages numericalFlux i
+'NumStability.leveque01_rectangleRiemannInterfaceFlux_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_riemannRayZeroValue_iff.{u_1} {State : Type u_1} (evolutionEquation : (ℝ → ℝ → State) → Prop)
+  (leftState rightState : State) (q : ℝ → ℝ → State)
+  (_hriemann : NumStability.leveque01RiemannInitialConfiguration evolutionEquation leftState rightState q)
+  (hself : NumStability.IsPositiveTimeSelfSimilar q) (value : State) :
+  NumStability.leveque01RiemannRayZeroValue q = value ↔ ∀ (t : ℝ), 0 < t → q 0 t = value
+'NumStability.leveque01_riemannRayZeroValue_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_scalarEquation_isHyperbolic (speed : ℝ) :
+  NumStability.leveque01IsHyperbolicMatrix (NumStability.constantCoefficientScalarMatrix speed)
+'NumStability.leveque01_scalarEquation_isHyperbolic' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_equation07_secondOrderHyperbolic (bulkModulus density : ℝ) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) : (NumStability.wavePrincipalPart √(bulkModulus / density)).IsHyperbolic
+'NumStability.leveque01_equation07_secondOrderHyperbolic' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_exists_hyperbolic_variableCoefficient_without_localFlux :
+  ∃ coefficient,
+    ContDiff ℝ (↑⊤) coefficient ∧
+      (∀ (x : ℝ), 0 < coefficient x) ∧
+        (∀ (x : ℝ),
+            NumStability.IsRealHyperbolicMatrix (NumStability.constantCoefficientScalarMatrix (coefficient x))) ∧
+          ¬∃ flux, NumStability.RepresentsScalarTransportFlux coefficient flux
+'NumStability.leveque01_exists_hyperbolic_variableCoefficient_without_localFlux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
