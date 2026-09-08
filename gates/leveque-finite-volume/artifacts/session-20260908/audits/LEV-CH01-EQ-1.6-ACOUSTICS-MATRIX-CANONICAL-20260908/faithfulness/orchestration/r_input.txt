@@ -1,0 +1,1198 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 d2f2ce798485dc309166d4f561d075a672c6b18c82c8e289ba65653ddb81bd2e
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Equations (1.5)--(1.6), including q=(p,u) and the two-by-two matrix A",
+      "location": "raw PDF page 24; printed Chapter 1 page 2"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-EQ-1.6-ACOUSTICS-MATRIX-CANONICAL-20260908"
+}
+
+
+Source contract SHA256 ca647c8dcca696eb573dc0dd7085c982d34222f39eb63a3f82714a69877c3b12
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-EQ-1.6-ACOUSTICS-MATRIX-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and following paragraph",
+      "anchor": "q_t(x,t) + A q_x(x,t) = 0; q : R × R → R^m",
+      "observation": "The enclosing framework is a homogeneous, first-order, constant-coefficient linear system in one spatial variable x and time t. The unknown q is vector-valued, A is a constant real m-by-m matrix, and subscripts denote partial derivatives."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; paragraph introducing equation (1.5)",
+      "anchor": "To model acoustic waves propagating in both directions along a one-dimensional medium",
+      "observation": "The selected acoustic system models waves traveling in both directions and has two scalar equations."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; equation (1.5)",
+      "anchor": "p_t(x,t) + K u_x(x,t) = 0; u_t(x,t) + (1/ρ) p_x(x,t) = 0",
+      "observation": "Pressure and velocity derivatives are coupled with coefficients K and 1/ρ in the displayed order."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; paragraph between equations (1.5) and (1.6)",
+      "anchor": "p(x,t) is the pressure (or more properly the perturbation from some background constant pressure), and u(x,t) is the particle velocity",
+      "observation": "The unknown scalar functions are pressure perturbation and particle velocity. The constants K and ρ describe bulk modulus of compressibility and density, respectively."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; sentence preceding equation (1.6) and equation (1.6)",
+      "anchor": "The system (1.5) can be written as the first-order system q_t + A q_x = 0",
+      "observation": "The state is the column vector q = (p,u)^T, and the coefficient matrix is A = [[0,K],[1/ρ,0]]. This is a matrix rewriting of the two scalar equations."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; paragraph following equation (1.6)",
+      "anchor": "where c = √(K/ρ)",
+      "observation": "Subsequent surrounding material introduces the acoustic speed and characteristic combinations p ± ρcu. These are subsequent claims, not additional entries or components of equation (1.6)."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "Inherited framework: x and t are real spatial and temporal variables, respectively [raw PDF page 23, equation (1.1) and q : R × R → R^m].",
+      "p and u are unknown real-valued functions of (x,t); the selected two-component state specializes the general framework to m = 2 [raw PDF page 24, equations (1.5)–(1.6); page 23, paragraph following (1.1)].",
+      "K and ρ are constant material parameters, with real coefficients inherited from the general system [raw PDF page 24, paragraph between (1.5) and (1.6); page 23, description of A as a constant real matrix].",
+      "The displayed equations concern the functions at general (x,t); no separate initial-value data, boundary data, or explicitly restricted space-time domain is specified [raw PDF page 24, equation (1.5) and its rewriting preceding (1.6)]."
+    ],
+    "hypotheses": [
+      "The scalar acoustic equations are p_t(x,t) + K u_x(x,t) = 0 and u_t(x,t) + (1/ρ)p_x(x,t) = 0 [raw PDF page 24, equation (1.5)].",
+      "K and ρ are constant for the displayed model [raw PDF page 24, paragraph identifying the material constants between (1.5) and (1.6)].",
+      "The partial derivatives appearing in the equations must be meaningful; no explicit differentiability class is supplied [raw PDF page 23, partial-derivative convention following (1.1); page 24, equation (1.5)].",
+      "The ordinary real reciprocal 1/ρ requires ρ ≠ 0. This is a mathematical domain requirement inferred from the displayed reciprocal, not an expressly stated hypothesis [raw PDF page 24, equations (1.5)–(1.6)]."
+    ],
+    "conclusions": [
+      "Define q(x,t) = (p(x,t),u(x,t))^T and A = [[0,K],[1/ρ,0]]. Then the scalar system (1.5) is written q_t + A q_x = 0 [raw PDF page 24, sentence preceding (1.6) and equation (1.6)].",
+      "The matrix equation has first component p_t + K u_x = 0 and second component u_t + (1/ρ)p_x = 0; it represents both equations together [raw PDF page 24, displayed structure of equations (1.5)–(1.6)]."
+    ],
+    "definitions_and_conventions": [
+      "p denotes pressure, more precisely its perturbation from a constant background pressure; u denotes particle velocity [raw PDF page 24, paragraph immediately following (1.5)].",
+      "K denotes the bulk modulus of compressibility and ρ denotes density [raw PDF page 24, paragraph immediately following (1.5)].",
+      "The state is a column vector ordered pressure first, velocity second [raw PDF page 24, equation (1.6)].",
+      "A has zero diagonal, upper-right entry K, and lower-left entry 1/ρ [raw PDF page 24, equation (1.6)].",
+      "Subscripts t and x denote partial differentiation with respect to time and space; A acts on the spatial derivative column by matrix multiplication [raw PDF page 23, equation (1.1) and derivative convention; page 24, equation (1.6)].",
+      "The zero on the right of the matrix system is the two-component zero vector, as determined by the displayed state and the two scalar zero right-hand sides [raw PDF page 24, equations (1.5)–(1.6), structural inference]."
+    ],
+    "implicit_context": [
+      "The selected system belongs to the homogeneous, first-order, constant-coefficient linear framework in one spatial dimension [raw PDF page 23, introduction to (1.1); page 24, sentence preceding (1.6)].",
+      "The physical application is acoustic propagation in both directions through a one-dimensional medium [raw PDF page 24, paragraph introducing (1.5)].",
+      "Chapter 2 is cited as the location of the acoustic equations' derivation; the selected passage states the equations and their matrix representation directly [raw PDF page 24, sentence introducing (1.5)]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Coupling and component order",
+        "details": [
+          "Pressure's time derivative couples to velocity's spatial derivative through K; velocity's time derivative couples to pressure's spatial derivative through 1/ρ [raw PDF page 24, equation (1.5)].",
+          "The specified order q = (p,u)^T fixes the positions of the off-diagonal coefficients in A [raw PDF page 24, equation (1.6)]."
+        ]
+      },
+      {
+        "topic": "Nature of the claim",
+        "details": [
+          "The source supplies an explicit representation of a PDE system, with both a state-vector definition and a coefficient-matrix definition [raw PDF page 24, equation (1.6) and preceding sentence].",
+          "The phrase 'can be written' presents the matrix equation as a rewriting of the scalar system; componentwise equivalence follows from the displayed definitions [raw PDF page 24, equations (1.5)–(1.6), structural inference]."
+        ]
+      },
+      {
+        "topic": "Parameter domain and regularity",
+        "details": [
+          "The passage describes material constants but states no explicit inequalities for K or ρ [raw PDF page 24, paragraph between (1.5) and (1.6)].",
+          "The displayed reciprocal excludes zero density under ordinary real arithmetic; no exceptional zero-density convention appears [raw PDF page 24, equations (1.5)–(1.6)].",
+          "The passage uses partial derivatives without specifying classical versus weak solution spaces or a regularity class [raw PDF page 23, derivative convention; page 24, equation (1.5)]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve both definitions in (1.6): q = (p,u)^T and A = [[0,K],[1/ρ,0]] [raw PDF page 24, equation (1.6)].",
+    "Preserve both scalar equations and their correspondence to q_t + A q_x = 0 [raw PDF page 24, equations (1.5)–(1.6) and connecting sentence].",
+    "Preserve pressure-first, velocity-second column ordering, with K in the upper-right and 1/ρ in the lower-left matrix entry [raw PDF page 24, equation (1.6)].",
+    "Preserve the identification of p as pressure perturbation, u as particle velocity, K as bulk modulus, and ρ as density, with K and ρ constant [raw PDF page 24, paragraph following (1.5)].",
+    "Do not treat the displayed reciprocal as a source-defined extension to ρ = 0; no such exceptional convention is supplied [raw PDF page 24, equations (1.5)–(1.6)]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The admissible signs of the material parameters are not explicitly stated.",
+      "evidence": "Raw PDF page 24, paragraph following (1.5), names K and ρ as bulk modulus and density without inequalities; the following discussion defines c = √(K/ρ).",
+      "impact": "Physical positivity may be intended, but explicit positivity hypotheses cannot be attributed to the selected passage. The matrix rewriting itself only requires a meaningful reciprocal and the displayed derivatives."
+    },
+    {
+      "issue": "The source leaves solution regularity and the precise solution domain unspecified.",
+      "evidence": "Raw PDF page 23 gives q : R × R → R^m and the partial-derivative convention after (1.1); raw PDF page 24 displays (1.5) without a function-space declaration.",
+      "impact": "A precise formal statement may need derivative-existence assumptions or a selected solution notion; these choices must be identified as formal elaborations."
+    },
+    {
+      "issue": "The rewriting is stated narratively rather than as an explicitly quantified biconditional.",
+      "evidence": "Raw PDF page 24, immediately before (1.6): 'The system (1.5) can be written as the first-order system q_t + A q_x = 0'.",
+      "impact": "An equivalence formulation is supported by component expansion, but its explicit quantifier structure is an analyst's mathematical elaboration of the displayed rewriting."
+    }
+  ],
+  "contract_plain_english": "For one-dimensional acoustics, let p(x,t) be the pressure perturbation and u(x,t) the particle velocity, with constant bulk modulus K and density ρ. The equations p_t + K u_x = 0 and u_t + (1/ρ)p_x = 0 are represented by q_t + A q_x = 0 when q is the column (p,u)^T and A has rows (0,K) and (1/ρ,0) [raw PDF page 24, equations (1.5)–(1.6) and intervening paragraph]. The inherited framework uses real variables and a constant real coefficient matrix, with subscripts denoting partial derivatives [raw PDF page 23, equation (1.1) and following paragraph]. The passage does not specify a regularity class or explicit parameter-sign assumptions; nonzero density is an inferred requirement of its ordinary reciprocal [raw PDF page 24, equations (1.5)–(1.6)]."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 d8412815d9792506f1f04f2fca4c6850b3c5cf9f5681ad3491032c14f991c7ba
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "2828382b1598c6eaf7bbca3c951b794dad548c0bd5ccb5f2159e4a0c9ac652b3",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "Abbreviation for LocalDef005 on vectors indexed by Fin m.",
+      "effect_on_target": "Specializes the vector derivative equation to m = 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "Abbreviation for LocalDef006 with the same six arguments.",
+      "effect_on_target": "Makes the right side precisely the scalar derivative and equation predicate.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "The real matrix with rows (0, bulkModulus) and (density⁻¹, 0).",
+      "effect_on_target": "Its product with (px, ux) is (bulkModulus·ux, density⁻¹·px).",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "The vector-valued function q(x,t) = (pressure(x,t), velocity(x,t)), in that coordinate order.",
+      "effect_on_target": "Identifies coordinate 0 with pressure and coordinate 1 with velocity.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "There exist vectors qt and qx such that the time slice has derivative qt at t, the spatial slice has derivative qx at x, and qt + coefficient·qx = 0.",
+      "effect_on_target": "Requires both vector partial derivatives to exist at the selected point and satisfy the matrix equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "LocalDef006",
+      "meaning": "There exist real pt, px, ut, ux giving the respective time and space derivatives of pressure and velocity at (x,t), with pt + bulkModulus·ux = 0 and ut + density⁻¹·px = 0.",
+      "effect_on_target": "Requires all four scalar partial derivatives and both scalar equations simultaneously.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "LocalDef007",
+      "meaning": "Real scalar multiplication on real-valued functions on any index type is continuous.",
+      "effect_on_target": "Supplies continuity of scalar multiplication for the vector derivative predicate; adds no hypothesis on pressure or velocity.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LocalDef008",
+      "meaning": "Real scalar multiplication on the real numbers is continuous.",
+      "effect_on_target": "Supplies the scalar codomain structure for derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "Iff",
+      "meaning": "Logical equivalence: each proposition implies the other.",
+      "effect_on_target": "Asserts both directions between the vector and scalar formulations.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Nat",
+      "meaning": "The natural numbers.",
+      "effect_on_target": "Provides the vector dimension 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "Ne",
+      "meaning": "Inequality, defined as the negation of equality.",
+      "effect_on_target": "The hypothesis is density ≠ 0.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural numeral using its specified numeral instance.",
+      "effect_on_target": "Interprets 0 as a real number and 2 as a natural dimension.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Real",
+      "meaning": "The real numbers.",
+      "effect_on_target": "All independent variables, parameters, scalar values, and matrix entries are real.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "Real.instZero",
+      "meaning": "The real additive zero.",
+      "effect_on_target": "Provides zero in the density restriction, matrix entries, and scalar equations.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "Zero.toOfNat0",
+      "meaning": "Uses a type's zero as its numeral 0.",
+      "effect_on_target": "Ensures the written zeros denote the applicable additive zeros.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "instOfNatNat",
+      "meaning": "Interprets a natural numeral n as n itself.",
+      "effect_on_target": "Fixes the target dimension to exactly two.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "DFunLike.coe",
+      "meaning": "Extracts the underlying function from a function-like object.",
+      "effect_on_target": "Allows the matrix-construction equivalence to act as a function.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Equiv",
+      "meaning": "An equivalence between types, consisting of mutually inverse maps.",
+      "effect_on_target": "Supports identification of a doubly indexed function with a matrix.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Equiv.instEquivLike",
+      "meaning": "Exposes an equivalence's forward and inverse functions.",
+      "effect_on_target": "The forward function of Matrix.of is used to construct the coefficient matrix.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "EquivLike.toFunLike",
+      "meaning": "Views an equivalence-like object as function-like using its forward map.",
+      "effect_on_target": "Adds no transformation beyond applying Matrix.of.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Fin",
+      "meaning": "Fin n is the type of natural indices strictly less than n.",
+      "effect_on_target": "The target has exactly coordinates 0 and 1.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Fin.fintype",
+      "meaning": "Enumerates all indices in Fin n.",
+      "effect_on_target": "Matrix-vector multiplication sums over both indices of Fin 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "Inv.inv",
+      "meaning": "Extracts the inversion operation of the supplied instance.",
+      "effect_on_target": "Selects the reciprocal operation for density.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Matrix",
+      "meaning": "A matrix is a function from a row index and a column index to an entry.",
+      "effect_on_target": "The coefficient is a real 2 by 2 matrix with row-first indexing.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Matrix.of",
+      "meaning": "The identity equivalence between doubly indexed functions and matrices.",
+      "effect_on_target": "Preserves the displayed rows and entries without transposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "Matrix.vecCons",
+      "meaning": "Prepends an entry to a finite vector, placing it at index 0.",
+      "effect_on_target": "Determines the pressure-velocity order and the coefficient matrix's row and column order.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "Matrix.vecEmpty",
+      "meaning": "The unique vector on the empty index type Fin 0.",
+      "effect_on_target": "Terminates the explicitly constructed two-entry vectors.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "Real.instInv",
+      "meaning": "Real multiplicative inversion, with the field convention that the inverse of zero is zero.",
+      "effect_on_target": "Under density ≠ 0, density⁻¹ is the ordinary reciprocal 1/density.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "And",
+      "meaning": "Logical conjunction.",
+      "effect_on_target": "All derivative assertions and equations within each side must hold together.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "meaning": "Retains the normed field structure and obtains nontriviality of the norm from dense norm values.",
+      "effect_on_target": "Supplies the real scalar field structure needed for differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "DivisionSemiring.toSemiring",
+      "meaning": "Forgets division structure while retaining semiring operations.",
+      "effect_on_target": "Provides real algebraic operations for module construction without changing them.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "The scalar residuals equal real zero, and the vector residual equals zero in every coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "Exists",
+      "meaning": "Existential quantification over a witness satisfying a predicate.",
+      "effect_on_target": "Derivative values are existentially quantified inside each side, after the outer functions, parameters, and point are fixed.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "Field.toSemifield",
+      "meaning": "Retains a field's semiring, reciprocal, and division structure while forgetting additive inverses as required structure.",
+      "effect_on_target": "Supports the real scalar algebra and preserves the inverse-zero convention.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Fintype",
+      "meaning": "A finite enumeration containing every element of a type.",
+      "effect_on_target": "Makes the coordinate sum in matrix-vector multiplication a finite sum.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "HAdd.hAdd",
+      "meaning": "The addition operation selected by a heterogeneous addition instance.",
+      "effect_on_target": "Denotes real addition in scalar equations and pointwise addition in the vector equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "HMul.hMul",
+      "meaning": "The multiplication operation selected by a heterogeneous multiplication instance.",
+      "effect_on_target": "Denotes real multiplication in the scalar residuals.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "HasDerivAt",
+      "meaning": "The function has the stated derivative at the specified point, using the neighborhood filter there with the comparison point fixed.",
+      "effect_on_target": "Requires ordinary derivatives of the one-variable slices, with real or two-coordinate real codomain; it is not merely a total derivative-value operator.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "Matrix.mulVec",
+      "meaning": "Matrix-vector multiplication: coordinate i is the dot product of row i with the vector, namely the sum of M(i,j)·v(j).",
+      "effect_on_target": "Produces (bulkModulus·ux, density⁻¹·px) from the spatial derivative vector (px, ux).",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "meaning": "Forgets the associativity requirement while preserving commutative ring operations without a specified unit.",
+      "effect_on_target": "Provides a weaker algebraic structure for real matrix operations without altering entries or arithmetic.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "meaning": "Forgets the multiplicative commutativity requirement.",
+      "effect_on_target": "Continues the inheritance of the same real operations needed for matrix multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "meaning": "Retains addition, multiplication, distributivity, and zero multiplication while forgetting additive inverses as required structure.",
+      "effect_on_target": "Supplies the algebraic structure accepted by Matrix.mulVec.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "meaning": "Extracts the commutative additive monoid.",
+      "effect_on_target": "Provides addition and zero for finite coordinate sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "meaning": "Forgets the norm and metric while preserving the ring operations.",
+      "effect_on_target": "Connects real normed algebra to the algebra used in matrix-vector multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "meaning": "Forgets multiplicative commutativity while retaining seminormed ring data.",
+      "effect_on_target": "Supports extraction of the additive and topological structures used for derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "meaning": "Retains the norm, additive group, and pseudometric from a seminormed ring.",
+      "effect_on_target": "Provides the real additive topological structure underlying scalar differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "NonUnitalSemiring.toNonUnitalNonAssocSemiring",
+      "meaning": "Forgets multiplication associativity as required structure.",
+      "effect_on_target": "Allows inherited real semiring operations to meet weaker operation requirements.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "NontriviallyNormedField.toNormedField",
+      "meaning": "Extracts the underlying normed field.",
+      "effect_on_target": "Provides the real normed field used by derivative and scalar-module instances.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "meaning": "Retains normed commutative ring operations while forgetting the specified unit.",
+      "effect_on_target": "Preserves ordinary real arithmetic and metric in the matrix-operation instance chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "meaning": "Views a normed commutative ring as seminormed, preserving its norm, operations, and underlying pseudometric.",
+      "effect_on_target": "Supplies real topological and additive structures without imposing new function hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "NormedField.toField",
+      "meaning": "Extracts the field operations and laws.",
+      "effect_on_target": "Supplies ordinary real field arithmetic, including reciprocal.",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "NormedField.toNormedSpace",
+      "meaning": "Makes a normed field a normed vector space over itself, with scalar multiplication given by multiplication.",
+      "effect_on_target": "Scalar derivatives take values in the usual real vector space.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "NormedSpace.toModule",
+      "meaning": "Extracts the module structure from a normed space.",
+      "effect_on_target": "Supplies the real-linear structure required by HasDerivAt.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "Pi.Function.module",
+      "meaning": "The module structure on functions, with operations defined coordinatewise.",
+      "effect_on_target": "The vector derivative values belong to the usual real vector space of functions Fin 2 → Real.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "Pi.addCommGroup",
+      "meaning": "The coordinatewise additive commutative group on a family of functions.",
+      "effect_on_target": "Provides the vector additive group used in differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "Pi.instAdd",
+      "meaning": "Function addition satisfies (f + g)(i) = f(i) + g(i).",
+      "effect_on_target": "The vector equation adds the two residual coordinates separately.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "Pi.instZero",
+      "meaning": "The zero function has value zero at each index.",
+      "effect_on_target": "The right side of the vector equation is (0, 0).",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "Pi.topologicalSpace",
+      "meaning": "The product topology induced by the coordinate projections.",
+      "effect_on_target": "Vector derivatives use the usual product topology on two real coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the uniform structure associated with a pseudometric.",
+      "effect_on_target": "Connects the real metric to the topology used in derivative limits.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "Real.denselyNormedField",
+      "meaning": "The real normed field has densely available positive norm values.",
+      "effect_on_target": "Provides the nontrivially normed real field required for differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "Real.instAdd",
+      "meaning": "Ordinary real addition.",
+      "effect_on_target": "Determines addition in scalar residuals and vector coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "Real.instAddCommGroup",
+      "meaning": "The additive commutative group structure of the real numbers.",
+      "effect_on_target": "Provides the additive codomain structure required for scalar derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "Real.instMul",
+      "meaning": "Ordinary real multiplication.",
+      "effect_on_target": "Determines the coefficient-times-derivative products.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "Real.instRing",
+      "meaning": "The ring structure of the real numbers.",
+      "effect_on_target": "Supplies the real algebra used by vector modules and finite sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "Real.normedCommRing",
+      "meaning": "The real commutative ring equipped with its usual norm and metric.",
+      "effect_on_target": "Makes the algebraic operations and topology in the dependency chain the ordinary real ones.",
+      "status": "understood"
+    },
+    {
+      "id": "D066",
+      "name": "Real.normedField",
+      "meaning": "The real field equipped with its usual norm and metric, including multiplicative norm and inverse-zero laws.",
+      "effect_on_target": "Fixes the standard real field and analytic structure used throughout.",
+      "status": "understood"
+    },
+    {
+      "id": "D067",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "The real distance is |x − y|.",
+      "effect_on_target": "Derivative limits use the ordinary real topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D068",
+      "name": "Ring.toSemiring",
+      "meaning": "Extracts the semiring structure from a ring.",
+      "effect_on_target": "Retains real addition, multiplication, zero, and one for module and sum constructions.",
+      "status": "understood"
+    },
+    {
+      "id": "D069",
+      "name": "Semifield.toDivisionSemiring",
+      "meaning": "Retains semiring and division data while forgetting multiplicative commutativity as required structure.",
+      "effect_on_target": "Preserves the real operations in the scalar-structure inheritance chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D070",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "meaning": "Forgets the specified unit while preserving seminormed commutative ring data.",
+      "effect_on_target": "Supports extraction of the real seminormed additive group used by derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D071",
+      "name": "Semiring.toNonUnitalSemiring",
+      "meaning": "Forgets the specified multiplicative unit from a semiring.",
+      "effect_on_target": "Provides weaker real algebraic structure without changing arithmetic.",
+      "status": "understood"
+    },
+    {
+      "id": "D072",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology underlying a uniform space.",
+      "effect_on_target": "Supplies the topology for the real derivative predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D073",
+      "name": "instHAdd",
+      "meaning": "Uses ordinary addition as heterogeneous addition with identical input and output types.",
+      "effect_on_target": "Resolves addition notation to real addition or coordinatewise vector addition.",
+      "status": "understood"
+    },
+    {
+      "id": "D074",
+      "name": "instHMul",
+      "meaning": "Uses ordinary multiplication as heterogeneous multiplication with identical input and output types.",
+      "effect_on_target": "Resolves scalar products to real multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D075",
+      "name": "AddCommMonoid.toAddMonoid",
+      "meaning": "Forgets additive commutativity as required structure.",
+      "effect_on_target": "Supplies additive monoid data for scalar-action structures without changing vector or scalar addition.",
+      "status": "understood"
+    },
+    {
+      "id": "D076",
+      "name": "ContinuousSMul",
+      "meaning": "Joint continuity of the scalar multiplication map (a, v) ↦ a·v.",
+      "effect_on_target": "Is a structural prerequisite for the derivative codomains, supplied by D007 and D008.",
+      "status": "understood"
+    },
+    {
+      "id": "D077",
+      "name": "DistribMulAction.toMulAction",
+      "meaning": "Extracts a multiplicative action from an action distributing over addition.",
+      "effect_on_target": "Preserves the scalar action underlying real differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D078",
+      "name": "Module.toDistribMulAction",
+      "meaning": "Extracts the distributive scalar action of a module.",
+      "effect_on_target": "Connects the real module structures to their scalar multiplication operations.",
+      "status": "understood"
+    },
+    {
+      "id": "D079",
+      "name": "Monoid.toSemigroup",
+      "meaning": "Forgets the specified identity while retaining associative multiplication.",
+      "effect_on_target": "Provides scalar multiplication's underlying semigroup structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D080",
+      "name": "MonoidWithZero.toMonoid",
+      "meaning": "Extracts the multiplicative monoid from a monoid with zero.",
+      "effect_on_target": "Supplies the real multiplicative monoid for scalar actions.",
+      "status": "understood"
+    },
+    {
+      "id": "D081",
+      "name": "MulAction.toSemigroupAction",
+      "meaning": "Extracts a semigroup action from a monoid action.",
+      "effect_on_target": "Preserves the same real scalar action in the instance chain.",
+      "status": "understood"
+    },
+    {
+      "id": "D082",
+      "name": "NormedField.toNormedCommRing",
+      "meaning": "Retains the normed commutative ring underlying a normed field.",
+      "effect_on_target": "Keeps the real norm, metric, and ring arithmetic consistent in the analytic structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D083",
+      "name": "Pi.instSMul",
+      "meaning": "Scalar multiplication on functions is coordinatewise: (a·f)(i) = a·f(i).",
+      "effect_on_target": "Vector derivatives use ordinary coordinatewise real scaling.",
+      "status": "understood"
+    },
+    {
+      "id": "D084",
+      "name": "SemigroupAction.toSMul",
+      "meaning": "Extracts the scalar multiplication operation from a semigroup action.",
+      "effect_on_target": "Supplies the action operation appearing in derivative and continuity structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D085",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "meaning": "Forgets multiplicative commutativity while retaining seminormed ring data.",
+      "effect_on_target": "Supports extraction of the usual real pseudometric.",
+      "status": "understood"
+    },
+    {
+      "id": "D086",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "meaning": "Extracts the pseudometric underlying a seminormed ring.",
+      "effect_on_target": "Provides the metric-derived topology for scalar multiplication and derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D087",
+      "name": "Semiring.toMonoidWithZero",
+      "meaning": "Retains multiplication, one, zero, and their monoid-with-zero laws from a semiring.",
+      "effect_on_target": "Provides the real multiplicative structure used by scalar actions.",
+      "status": "understood"
+    },
+    {
+      "id": "D088",
+      "name": "instSMulOfMul",
+      "meaning": "Defines scalar multiplication of a type on itself by its multiplication.",
+      "effect_on_target": "Real scalar multiplication on Real is ordinary multiplication.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every pair of functions pressure, velocity : ℝ → ℝ → ℝ, whose first argument is x and second argument is t.",
+      "For every real bulkModulus K, density ρ, spatial coordinate x, and time coordinate t.",
+      "On the left side, there exist qt, qx ∈ ℝ², chosen after the functions, parameters, and point are fixed.",
+      "On the right side, there exist pt, px, ut, ux ∈ ℝ, in that quantifier order, chosen after the functions, parameters, and point are fixed. These witnesses are local to the right side and are not separately quantified common witnesses across the equivalence."
+    ],
+    "hypotheses": [
+      "ρ ≠ 0."
+    ],
+    "conclusions": [
+      "The following statements are equivalent: (A) there exist qt, qx ∈ ℝ² such that τ ↦ q(x,τ) has derivative qt at t, ξ ↦ q(ξ,t) has derivative qx at x, and qt + A qx = (0,0); (B) there exist pt, px, ut, ux ∈ ℝ such that τ ↦ pressure(x,τ) has derivative pt at t, ξ ↦ pressure(ξ,t) has derivative px at x, τ ↦ velocity(x,τ) has derivative ut at t, ξ ↦ velocity(ξ,t) has derivative ux at x, pt + K·ux = 0, and ut + ρ⁻¹·px = 0."
+    ],
+    "mathematical_definitions": [
+      "q(ξ,τ) = (pressure(ξ,τ), velocity(ξ,τ)), interpreted as a function Fin 2 → ℝ with indices 0 and 1.",
+      "A is the constant real matrix [[0, K], [ρ⁻¹, 0]], where the first index is the row index.",
+      "For v = (v0,v1), A v = (K·v1, ρ⁻¹·v0). Vector addition, zero, and scalar multiplication are coordinatewise, and ℝ² carries the product topology.",
+      "A derivative assertion means existence of the ordinary derivative of the indicated one-variable slice at its specified real argument. Equivalently, for derivative value d, the difference quotient converges to d as a nonzero real increment tends to zero.",
+      "Since ρ ≠ 0, ρ⁻¹ = 1/ρ."
+    ],
+    "proposition_plain_english": "For any two real-valued functions pressure and velocity of two real variables, any real constants K and ρ with ρ nonzero, and any point (x,t), form q = (pressure, velocity) and A = [[0,K],[1/ρ,0]]. The time and space derivatives of q exist at that point and satisfy q_t + A q_x = 0 if and only if all four scalar partial derivatives pressure_t, pressure_x, velocity_t, and velocity_x exist at that point and simultaneously satisfy pressure_t + K·velocity_x = 0 and velocity_t + (1/ρ)·pressure_x = 0."
+  },
+  "restrictions_and_vacuity_risks": [
+    "Density is required to be nonzero, but need not be positive. Bulk modulus is an arbitrary real number, including zero or negative values.",
+    "The functions have domain all of ℝ². The derivatives are ordinary two-sided derivatives of slices, not derivatives restricted to a spatial or temporal subdomain.",
+    "The equivalence is pointwise for each universally quantified (x,t). It does not assert that either formulation holds at every point for the chosen functions.",
+    "Differentiability is part of each side of the equivalence, not an outer hypothesis. Both sides can be false because a required derivative fails to exist or an equation fails.",
+    "At density zero, the implication in the target imposes no conclusion. The definitions themselves still have a meaning because real inversion is totalized at zero.",
+    "No joint differentiability, continuity of partial derivatives, higher regularity, initial conditions, boundary conditions, or existence or uniqueness of solutions is asserted.",
+    "K and ρ are scalar parameters, not functions of space or time. No derivatives of these coefficients occur.",
+    "The variable names do not impose physical units, constitutive assumptions, positivity, or a physical interpretation.",
+    "Although the generic vector predicate permits arbitrary finite index types, the target fixes a nonempty two-element index type, so its vector equality has exactly two scalar components."
+  ],
+  "ambiguities": []
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract and blind translation.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 24.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

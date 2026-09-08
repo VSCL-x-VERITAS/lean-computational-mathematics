@@ -18,6 +18,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03AdvectedProfile
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03TransportSolution
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04
+import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04AcousticModel
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04Model
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation05
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation05Definition
