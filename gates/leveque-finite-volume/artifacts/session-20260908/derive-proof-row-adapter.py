@@ -53,8 +53,16 @@ replace("""        'status': 'REUSED', 'lean_declarations': [declaration],
 """        'status': 'PROVED', 'lean_declarations': [declaration],""")
 replace("    binding_dir = task_path.parent / 'gate-bindings' / binding['row_subject_sha256']",
  "    binding_dir = task_path.parent / 'gate-bindings' / checker.canonical_sha256(binding)")
+replace("    binding = checker.row_artifact_bindings(row, 1, context)",
+"""    if decision.get('adjudicated') is True:
+        row['adjudication_required'] = True
+        row['adjudication_status'] = 'resolved'
+        row['adjudication_audit'] = ('The complete sealed decision accepts both directions after fresh independent adjudication. '
+            + (output / 'decision.json').relative_to(root).as_posix()
+            + '; original direct/roundtrip classifications: ' + str(decision.get('judge_classifications', {})))
+    binding = checker.row_artifact_bindings(row, 1, context)""")
 replace("declaration/axiom output SHA-256 {resolution_sha}. {decision['rationale']}",
- "declaration/axiom output SHA-256 {resolution_sha}; exact proof-input manifest SHA-256 {resolution_manifest_sha}; successful native exit receipt SHA-256 {resolution_exit_sha}. {decision['rationale']}")
+ "declaration/axiom output SHA-256 {resolution_sha}; exact proof-input manifest SHA-256 {resolution_manifest_sha}; successful native exit receipt SHA-256 {resolution_exit_sha}. Final PASS projects the accepted sealed conclusion, including adjudication when required; original role outcomes remain unchanged. {decision['rationale']}")
 replace("    prior = binding_dir / 'prior-gate.json'",
  "    prior = binding_dir / ('prior-gate-' + hashlib.sha256(original_bytes).hexdigest() + '.json')")
 replace("print(json.dumps({'row': args.row, 'status': 'REUSED', 'declaration': declaration,",

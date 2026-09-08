@@ -161,28 +161,12 @@ fun q x t x_1 => q x t
 - Distance from target type: `2`
 - Semantic SHA-256: `9f446c6a55d9b32fb90ad5c7e8a268b2f8a27356a6502bbbe96f19a301dcb625`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{ι : Type u_1} → [Fintype ι] → (Real → Real → ι → Real) → Matrix ι ι Real → Real → Real → Prop
-```
+- Reuse SHA-256: `af9d44f338cf37d016f385637a8fe0a769d3336204c1724aed5de2131576ccef`
+- Reviewed interpretation: There exist time and space derivative vectors of the corresponding one-variable slices at t and x, whose sum qt + A qx is zero.
 
-Fully explicit type:
-
-```lean
-{ι : Type u_1} →
-  [Fintype.{u_1} ι] → (q : Real → Real → ι → Real) → (coefficient : Matrix.{u_1, u_1, 0} ι ι Real) → (x t : Real) → Prop
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {ι} [Fintype ι] q coefficient x t =>
-  Exists fun qt =>
-    Exists fun qx =>
-      And (HasDerivAt (fun τ => q x τ) qt t)
-        (And (HasDerivAt (fun ξ => q ξ t) qx x) (Eq (instHAdd.hAdd qt (coefficient.mulVec qx)) 0))
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D006: `NumStability.IsLinearAdvectionSolutionAt`
 
@@ -225,77 +209,12 @@ fun {E} [NormedAddCommGroup E] [NormedSpace Real E] q speed x t =>
 - Distance from target type: `3`
 - Semantic SHA-256: `57490fb22b43764f68cb9cff131e2e74230fbaf0188d50d22f1fb4537dc5cfe8`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-∀ {ι : Type u_1}, ContinuousSMul Real (ι → Real)
-```
+- Reuse SHA-256: `d8321c6a827f9411a900d2f1f382b3b341cb28f478df2fa0d6717c52e6294889`
+- Reviewed interpretation: Real scalar multiplication on real-valued functions is continuous for the displayed pointwise action and product topology.
 
-Fully explicit type:
-
-```lean
-∀ {ι : Type u_1},
-  @ContinuousSMul.{0, u_1} Real ((i : ι) → Real)
-    (@Pi.instSMul.{u_1, 0, 0} ι Real (fun (a : ι) => Real) fun (i : ι) =>
-      @SemigroupAction.toSMul.{0, 0} Real Real
-        (@Monoid.toSemigroup.{0} Real
-          (@MonoidWithZero.toMonoid.{0} Real
-            (@Semiring.toMonoidWithZero.{0} Real
-              (@DivisionSemiring.toSemiring.{0} Real
-                (@Semifield.toDivisionSemiring.{0} Real
-                  (@Field.toSemifield.{0} Real
-                    (@NormedField.toField.{0} Real
-                      (@NontriviallyNormedField.toNormedField.{0} Real
-                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField)))))))))
-        (@MulAction.toSemigroupAction.{0, 0} Real Real
-          (@MonoidWithZero.toMonoid.{0} Real
-            (@Semiring.toMonoidWithZero.{0} Real
-              (@DivisionSemiring.toSemiring.{0} Real
-                (@Semifield.toDivisionSemiring.{0} Real
-                  (@Field.toSemifield.{0} Real
-                    (@NormedField.toField.{0} Real
-                      (@NontriviallyNormedField.toNormedField.{0} Real
-                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
-          (@DistribMulAction.toMulAction.{0, 0} Real Real
-            (@MonoidWithZero.toMonoid.{0} Real
-              (@Semiring.toMonoidWithZero.{0} Real
-                (@DivisionSemiring.toSemiring.{0} Real
-                  (@Semifield.toDivisionSemiring.{0} Real
-                    (@Field.toSemifield.{0} Real
-                      (@NormedField.toField.{0} Real
-                        (@NontriviallyNormedField.toNormedField.{0} Real
-                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
-            (@AddCommMonoid.toAddMonoid.{0} Real
-              (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
-                (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
-                  (@Semiring.toNonUnitalSemiring.{0} Real (@Ring.toSemiring.{0} Real Real.instRing)))))
-            (@Module.toDistribMulAction.{0, 0} Real Real
-              (@DivisionSemiring.toSemiring.{0} Real
-                (@Semifield.toDivisionSemiring.{0} Real
-                  (@Field.toSemifield.{0} Real
-                    (@NormedField.toField.{0} Real
-                      (@NontriviallyNormedField.toNormedField.{0} Real
-                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
-              (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
-                (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
-                  (@Semiring.toNonUnitalSemiring.{0} Real (@Ring.toSemiring.{0} Real Real.instRing))))
-              (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
-                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
-                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
-                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
-                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
-                (@NormedField.toNormedSpace.{0} Real Real.normedField))))))
-    (@UniformSpace.toTopologicalSpace.{0} Real
-      (@PseudoMetricSpace.toUniformSpace.{0} Real
-        (@SeminormedRing.toPseudoMetricSpace.{0} Real
-          (@SeminormedCommRing.toSeminormedRing.{0} Real
-            (@NormedCommRing.toSeminormedCommRing.{0} Real
-              (@NormedField.toNormedCommRing.{0} Real
-                (@NontriviallyNormedField.toNormedField.{0} Real
-                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
-    (@Pi.topologicalSpace.{0, u_1} ι (fun (a : ι) => Real) fun (i : ι) =>
-      @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D008: `NumStability.IsLinearAdvectionSolutionAt._proof_1`
 
@@ -366,17 +285,12 @@ Fully explicit type:
 - Distance from target type: `1`
 - Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Prop → Prop → Prop
-```
+- Reuse SHA-256: `af2b5efd77411686ed07b88c9f537abe83f96d9d93f22c4a4f39d6f4882bf123`
+- Reviewed interpretation: Logical equivalence.
 
-Fully explicit type:
-
-```lean
-(a b : Prop) → Prop
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D010: `Nat`
 
@@ -386,17 +300,12 @@ Fully explicit type:
 - Distance from target type: `1`
 - Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Type
-```
+- Reuse SHA-256: `c97e25fd0750ab5f0904d7bf50363984fcbd92a4a392fc62d9c63c9842f8c9ac`
+- Reviewed interpretation: Natural numbers, including zero.
 
-Fully explicit type:
-
-```lean
-Type
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D011: `OfNat.ofNat`
 
@@ -406,23 +315,12 @@ Type
 - Distance from target type: `1`
 - Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → (x : Nat) → [self : OfNat α x] → α
-```
+- Reuse SHA-256: `b0ac4beedc868838232d4a0a08359a64074dc1c3a777d9d169413f4ab9a3c98f`
+- Reviewed interpretation: Extracts the value assigned to a natural-number literal by its instance.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α x [self : OfNat α x] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D012: `Real`
 
@@ -432,17 +330,12 @@ fun α x [self : OfNat α x] => self.1
 - Distance from target type: `1`
 - Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Type
-```
+- Reuse SHA-256: `a606c856a8e65b952072e7b44d4d27e9dbd678fbce59f46427bb3fd1c5d6ff7b`
+- Reviewed interpretation: The standard library real-number type at the external semantic frontier.
 
-Fully explicit type:
-
-```lean
-Type
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D013: `instOfNatNat`
 
@@ -478,17 +371,12 @@ fun n => { ofNat := n }
 - Distance from target type: `2`
 - Semantic SHA-256: `59788903be5da78a88e4dc3844df38effdaabdfa82bb364602790d2271da7fda`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Nat → Type
-```
+- Reuse SHA-256: `d38642e8c5ce951866f4b3ce84673e59775a1e9c24e69c271e8ad6a805c7202d`
+- Reviewed interpretation: The standard finite index type of natural numbers below its parameter.
 
-Fully explicit type:
-
-```lean
-(n : Nat) → Type
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D015: `Fin.fintype`
 
@@ -498,23 +386,12 @@ Fully explicit type:
 - Distance from target type: `2`
 - Semantic SHA-256: `e7038d0981813ab904ddadd5c858e1d87d6d42413a72872c71b6e0413db6bb44`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-(n : Nat) → Fintype (Fin n)
-```
+- Reuse SHA-256: `0ac54cfa645d971be8ea9379fa65adb0918ab09483ba6393babe5067b755b2f5`
+- Reviewed interpretation: Enumerates Fin n using List.finRange n, with completeness and absence of duplicates.
 
-Fully explicit type:
-
-```lean
-(n : Nat) → Fintype.{0} (Fin n)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun n => { elems := { val := Multiset.ofList (List.finRange n), nodup := ⋯ }, complete := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D016: `Matrix`
 
@@ -524,23 +401,12 @@ fun n => { elems := { val := Multiset.ofList (List.finRange n), nodup := ⋯ }, 
 - Distance from target type: `2`
 - Semantic SHA-256: `e552ffc8c85b917dca38e5965ad91773fdb989246623a528d91526b75d68c2f1`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Type u → Type u' → Type v → Type (max u u' v)
-```
+- Reuse SHA-256: `6d450f70b6dbc45556f458d98d9cf68d0eb604e53eed0acb9c34c77a1b9291b2`
+- Reviewed interpretation: A matrix is a function from row indices to column indices to entries.
 
-Fully explicit type:
-
-```lean
-(m : Type u) → (n : Type u') → (α : Type v) → Type (max u u' v)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun m n α => m → n → α
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D017: `NormedField.toNormedSpace`
 
@@ -550,29 +416,12 @@ fun m n α => m → n → α
 - Distance from target type: `2`
 - Semantic SHA-256: `9e0629e665c648aac86a6d587dab809d81c8bb691b9b016c7808244edbccdc92`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{𝕜 : Type u_1} → [inst : NormedField 𝕜] → NormedSpace 𝕜 𝕜
-```
+- Reuse SHA-256: `46d7ea7ee6cc646eff59695e9f70ce0a774f35c5af9fa4fbf598658cd00b8267`
+- Reviewed interpretation: A normed field acts on itself through its semiring module structure.
 
-Fully explicit type:
-
-```lean
-{𝕜 : Type u_1} →
-  [inst : NormedField.{u_1} 𝕜] →
-    @NormedSpace.{u_1, u_1} 𝕜 𝕜 inst
-      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{u_1} 𝕜
-        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{u_1} 𝕜
-          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{u_1} 𝕜
-            (@NormedCommRing.toSeminormedCommRing.{u_1} 𝕜 (@NormedField.toNormedCommRing.{u_1} 𝕜 inst)))))
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {𝕜} [NormedField 𝕜] => { toModule := Semiring.toModule, norm_smul_le := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D018: `Real.normedAddCommGroup`
 
@@ -608,39 +457,12 @@ Definition body (one-level semantic boundary):
 - Distance from target type: `2`
 - Semantic SHA-256: `3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-NormedField Real
-```
+- Reuse SHA-256: `68339b4c80d7b122c254a82b157b2003bd99e7bc2ebca00924d9ac204a1c2a39`
+- Reviewed interpretation: Combines the real field with its normed additive group and metric.
 
-Fully explicit type:
-
-```lean
-NormedField.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-let __src := Real.normedAddCommGroup;
-let __src_1 := Real.instField;
-{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,
-  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,
-  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,
-  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,
-  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,
-  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,
-  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,
-  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,
-  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,
-  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,
-  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,
-  toDiv := __src_1.toDiv, div_eq_mul_inv := ⋯, zpow := __src_1.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯,
-  toNontrivial := ⋯, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := ⋯,
-  inv_zero := ⋯, nnratCast_def := ⋯, nnqsmul := __src_1.nnqsmul, nnqsmul_def := ⋯, ratCast_def := ⋯,
-  qsmul := __src_1.qsmul, qsmul_def := ⋯, toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D020: `AddCommGroup.toDivisionAddCommMonoid`
 
@@ -835,17 +657,12 @@ fun M [self : AddZeroClass M] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Prop → Prop → Prop
-```
+- Reuse SHA-256: `bf6620aa29130c0cfccc88e5825561089d3fe22985bf20085b3235a9d28dbb18`
+- Reviewed interpretation: Logical conjunction.
 
-Fully explicit type:
-
-```lean
-(a b : Prop) → Prop
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D028: `DenselyNormedField.toNontriviallyNormedField`
 
@@ -855,23 +672,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `22b7c7d8fc79e8fdde53f4c5f0f7e47a5b48886ac404b11b983a20e9fe547215`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [DenselyNormedField α] → NontriviallyNormedField α
-```
+- Reuse SHA-256: `1242206634c58d916d319f386771ac692247b9a64e5010dd4dbef8cc0fa478e7`
+- Reviewed interpretation: Retains the supplied normed field and establishes its nontrivial norm.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [DenselyNormedField.{u_2} α] → NontriviallyNormedField.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : DenselyNormedField α] => { toNormedField := inst.toNormedField, non_trivial := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D029: `DistribMulAction.toDistribSMul`
 
@@ -944,23 +750,12 @@ fun M A {inst} [self : DistribSMul M A] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `587c80a71f9aa5749b5d6c35c97cdae1067fa669257c865951843b747c511934`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{K : Type u_2} → [self : DivisionSemiring K] → Semiring K
-```
+- Reuse SHA-256: `d23b1156d74d42591ec76227f843da7c5f073513fb248937a452585aa1233964`
+- Reviewed interpretation: Projects the underlying semiring.
 
-Fully explicit type:
-
-```lean
-{K : Type u_2} → [self : DivisionSemiring.{u_2} K] → Semiring.{u_2} K
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun K [self : DivisionSemiring K] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D032: `ENormedAddCommMonoid.toESeminormedAddCommMonoid`
 
@@ -1079,17 +874,12 @@ fun E {inst} [self : ESeminormedAddMonoid E] => self.2
 - Distance from target type: `3`
 - Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Sort u_1} → α → α → Prop
-```
+- Reuse SHA-256: `7aaa624c66842df6d1e2dc1274c0ac9bdfc764e127b5c7586b11dbe31340a433`
+- Reviewed interpretation: Equality of two objects of the same type.
 
-Fully explicit type:
-
-```lean
-{α : Sort u_1} → α → α → Prop
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D037: `Exists`
 
@@ -1099,17 +889,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Sort u} → (α → Prop) → Prop
-```
+- Reuse SHA-256: `053a3dc417955e75df9a7bacbb5327058d2b0e8226a30c99e101dd57316b4880`
+- Reviewed interpretation: Existential quantification over a specified type.
 
-Fully explicit type:
-
-```lean
-{α : Sort u} → (p : α → Prop) → Prop
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D038: `Field.toSemifield`
 
@@ -1119,28 +904,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `9a6353c2087dc0f4123f4079d947842f8b7bc1fc0c77de170382c04e31608fd4`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{K : Type u_1} → [Field K] → Semifield K
-```
+- Reuse SHA-256: `b776884c7cbb4376e99b809ed9780b6eb09f6591eae329207de1f630d64b71c3`
+- Reviewed interpretation: Builds the semifield structure using the field's existing arithmetic and inverse operations.
 
-Fully explicit type:
-
-```lean
-{K : Type u_1} → [Field.{u_1} K] → Semifield.{u_1} K
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {K} [inst : Field K] =>
-  let __src := inst;
-  { toSemiring := __src.toSemiring, mul_comm := ⋯, toInv := __src.toInv, toDiv := __src.toDiv, div_eq_mul_inv := ⋯,
-    zpow := __src.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯, toNontrivial := ⋯, inv_zero := ⋯,
-    mul_inv_cancel := ⋯, toNNRatCast := __src.toNNRatCast, nnratCast_def := ⋯, nnqsmul := __src.nnqsmul,
-    nnqsmul_def := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D039: `Fintype`
 
@@ -1150,17 +919,12 @@ fun {K} [inst : Field K] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `ff39697629d53c72a76ae41500ef08888ff834898920af48012f83225b729e55`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Type u_4 → Type u_4
-```
+- Reuse SHA-256: `4797c198e1f0af20e3a737a095f7e6e231a16e4761ccb3122f12937d49e431bb`
+- Reviewed interpretation: A finite enumeration structure on an index type.
 
-Fully explicit type:
-
-```lean
-(α : Type u_4) → Type u_4
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D040: `HAdd.hAdd`
 
@@ -1170,23 +934,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
-```
+- Reuse SHA-256: `44b7b7706ef0a064225a03daf0dddeea8c97c90a8be363c74fcc96f7b4a694ab`
+- Reviewed interpretation: Extracts the addition operation from the supplied HAdd instance.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HAdd.{u, v, w} α β γ] → α → β → γ
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α β {γ} [self : HAdd α β γ] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D041: `HSMul.hSMul`
 
@@ -1222,75 +975,12 @@ fun α β {γ} [self : HSMul α β γ] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `425ec9578fd20d63923b9588cbb7761a6e92f281528630fe03d0dc3dc1bc60a2`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{𝕜 : Type u} →
-  [inst : NontriviallyNormedField 𝕜] →
-    {F : Type v} →
-      [inst_1 : AddCommGroup F] →
-        [inst_2 : Module 𝕜 F] → [inst_3 : TopologicalSpace F] → [ContinuousSMul 𝕜 F] → (𝕜 → F) → F → 𝕜 → Prop
-```
+- Reuse SHA-256: `8e804e0d4cd968d5db028c21218a7ff094d3cc5b271d2deaa57eb7c348a96ea8`
+- Reviewed interpretation: Derivative assertion at a point, obtained from HasDerivAtFilter with the neighborhood filter in the varying argument and the fixed base point.
 
-Fully explicit type:
-
-```lean
-{𝕜 : Type u} →
-  [inst : NontriviallyNormedField.{u} 𝕜] →
-    {F : Type v} →
-      [inst_1 : AddCommGroup.{v} F] →
-        [inst_2 :
-            @Module.{u, v} 𝕜 F
-              (@DivisionSemiring.toSemiring.{u} 𝕜
-                (@Semifield.toDivisionSemiring.{u} 𝕜
-                  (@Field.toSemifield.{u} 𝕜
-                    (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))
-              (@AddCommGroup.toAddCommMonoid.{v} F inst_1)] →
-          [inst_3 : TopologicalSpace.{v} F] →
-            [@ContinuousSMul.{u, v} 𝕜 F
-                  (@SMulZeroClass.toSMul.{u, v} 𝕜 F
-                    (@AddZero.toZero.{v} F
-                      (@AddZeroClass.toAddZero.{v} F
-                        (@AddMonoid.toAddZeroClass.{v} F
-                          (@SubNegMonoid.toAddMonoid.{v} F
-                            (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))))
-                    (@DistribSMul.toSMulZeroClass.{u, v} 𝕜 F
-                      (@AddMonoid.toAddZeroClass.{v} F
-                        (@SubNegMonoid.toAddMonoid.{v} F
-                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))
-                      (@DistribMulAction.toDistribSMul.{u, v} 𝕜 F
-                        (@MonoidWithZero.toMonoid.{u} 𝕜
-                          (@Semiring.toMonoidWithZero.{u} 𝕜
-                            (@DivisionSemiring.toSemiring.{u} 𝕜
-                              (@Semifield.toDivisionSemiring.{u} 𝕜
-                                (@Field.toSemifield.{u} 𝕜
-                                  (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))))
-                        (@SubNegMonoid.toAddMonoid.{v} F
-                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1)))
-                        (@Module.toDistribMulAction.{u, v} 𝕜 F
-                          (@DivisionSemiring.toSemiring.{u} 𝕜
-                            (@Semifield.toDivisionSemiring.{u} 𝕜
-                              (@Field.toSemifield.{u} 𝕜
-                                (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))
-                          (@AddCommGroup.toAddCommMonoid.{v} F inst_1) inst_2))))
-                  (@UniformSpace.toTopologicalSpace.{u} 𝕜
-                    (@PseudoMetricSpace.toUniformSpace.{u} 𝕜
-                      (@SeminormedRing.toPseudoMetricSpace.{u} 𝕜
-                        (@SeminormedCommRing.toSeminormedRing.{u} 𝕜
-                          (@NormedCommRing.toSeminormedCommRing.{u} 𝕜
-                            (@NormedField.toNormedCommRing.{u} 𝕜
-                              (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))))
-                  inst_3] →
-              (f : 𝕜 → F) → (f' : F) → (x : 𝕜) → Prop
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {𝕜} [NontriviallyNormedField 𝕜] {F} [AddCommGroup F] [Module 𝕜 F] [TopologicalSpace F] [ContinuousSMul 𝕜 F] f f'
-    x =>
-  HasDerivAtFilter f f' (Filter.instSProd.sprod (nhds x) (Filter.instPure.pure x))
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D043: `Matrix.mulVec`
 
@@ -1300,29 +990,12 @@ fun {𝕜} [NontriviallyNormedField 𝕜] {F} [AddCommGroup F] [Module 𝕜 F] [
 - Distance from target type: `3`
 - Semantic SHA-256: `715de3f0bd9e7bcf034726e1efbf1b4dad42a16e2ce790d4403774d16ed5b549`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{m : Type u_2} →
-  {n : Type u_3} → {α : Type v} → [NonUnitalNonAssocSemiring α] → [Fintype n] → Matrix m n α → (n → α) → m → α
-```
+- Reuse SHA-256: `8e01ae439a470bf9265b60baf8589741361ef5e211347104074b9761a5282046`
+- Reviewed interpretation: At row i, takes the dot product of row M i with the input vector.
 
-Fully explicit type:
-
-```lean
-{m : Type u_2} →
-  {n : Type u_3} →
-    {α : Type v} →
-      [NonUnitalNonAssocSemiring.{v} α] → [Fintype.{u_3} n] → (M : Matrix.{u_2, u_3, v} m n α) → (v : n → α) → m → α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {m} {n} {α} [NonUnitalNonAssocSemiring α] [Fintype n] M v x =>
-  have i := x;
-  dotProduct (fun j => M i j) v
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D044: `Module.toDistribMulAction`
 
@@ -1332,30 +1005,12 @@ fun {m} {n} {α} [NonUnitalNonAssocSemiring α] [Fintype n] M v x =>
 - Distance from target type: `3`
 - Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{R : Type u} →
-  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
-```
+- Reuse SHA-256: `55d705745faf35344c6dcd55cf83cf89a4997d2cbd5abd7f57ada43ef48b5357`
+- Reviewed interpretation: Projects the distributive scalar action from a module.
 
-Fully explicit type:
-
-```lean
-{R : Type u} →
-  {M : Type v} →
-    {inst : Semiring.{u} R} →
-      {inst_1 : AddCommMonoid.{v} M} →
-        [self : @Module.{u, v} R M inst inst_1] →
-          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))
-            (@AddCommMonoid.toAddMonoid.{v} M inst_1)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun R M {inst} {inst_1} [self : Module R M] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D045: `NegZeroClass.toZero`
 
@@ -1391,23 +1046,12 @@ fun G [self : NegZeroClass G] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `3bd70454a5180abed6221bb3f73922ebc30c10136298d23eb30d358cdd2fdb82`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : NonUnitalCommRing α] → NonUnitalNonAssocCommRing α
-```
+- Reuse SHA-256: `a864e35d7b0fce501bf44b5ddd99dae58f799e154509892dd48cacea7ae29fb1`
+- Reviewed interpretation: Retains the underlying ring operations while forgetting associativity structure.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : NonUnitalCommRing.{u} α] → NonUnitalNonAssocCommRing.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α self => { toNonUnitalNonAssocRing := self.toNonUnitalNonAssocRing, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D047: `NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing`
 
@@ -1417,23 +1061,12 @@ fun α self => { toNonUnitalNonAssocRing := self.toNonUnitalNonAssocRing, mul_co
 - Distance from target type: `3`
 - Semantic SHA-256: `1082112ee2b1424cb7e1eff69df85640d23793811157d8a4401f364710bc21d2`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : NonUnitalNonAssocCommRing α] → NonUnitalNonAssocRing α
-```
+- Reuse SHA-256: `f2074e1cccc68c535ca5c204c170314d58ceafddda8d47db0b4980cf6b393758`
+- Reviewed interpretation: Projects the underlying nonassociative ring.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : NonUnitalNonAssocCommRing.{u} α] → NonUnitalNonAssocRing.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NonUnitalNonAssocCommRing α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D048: `NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring`
 
@@ -1443,25 +1076,12 @@ fun α [self : NonUnitalNonAssocCommRing α] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `ffc3b0b49d777bb976662d9282026e03ef869205e45f90008bd1659a4e78f2d7`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : NonUnitalNonAssocRing α] → NonUnitalNonAssocSemiring α
-```
+- Reuse SHA-256: `e0521630bac9bfda307fadedba87e0a60c1cb74f7ebbefaee732d6f07637e25d`
+- Reviewed interpretation: Builds a semiring structure with the original addition and multiplication.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : NonUnitalNonAssocRing.{u} α] → NonUnitalNonAssocSemiring.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α self =>
-  { toAddMonoid := self.toAddMonoid, add_comm := ⋯, toMul := self.toMul, left_distrib := ⋯, right_distrib := ⋯,
-    zero_mul := ⋯, mul_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D049: `NonUnitalNonAssocSemiring.toAddCommMonoid`
 
@@ -1471,23 +1091,12 @@ fun α self =>
 - Distance from target type: `3`
 - Semantic SHA-256: `fc6b0a41257a855dbb5b09cfe7e3150884caf2b0f898b30e688420784d3b6e76`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : NonUnitalNonAssocSemiring α] → AddCommMonoid α
-```
+- Reuse SHA-256: `1c1314370f948e4c08858998bb6e40874387a4d3ca3e08449f446d65ae29abcc`
+- Reviewed interpretation: Projects the additive commutative monoid.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : NonUnitalNonAssocSemiring.{u} α] → AddCommMonoid.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NonUnitalNonAssocSemiring α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D050: `NonUnitalNormedCommRing.toNonUnitalCommRing`
 
@@ -1497,23 +1106,12 @@ fun α [self : NonUnitalNonAssocSemiring α] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `4a44c0a0630b1766c12bb0c5456f4f914c813b6dcb179e8b3d87084d495efd1f`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : NonUnitalNormedCommRing α] → NonUnitalCommRing α
-```
+- Reuse SHA-256: `508277c6d525af0a9340cd948ef8e19f3d47ebed218c3d090eed73fd1c99f4f2`
+- Reviewed interpretation: Retains ring operations and commutativity while dropping norm structure.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : NonUnitalNormedCommRing.{u_5} α] → NonUnitalCommRing.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α self => { toNonUnitalRing := self.toNonUnitalRing, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D051: `NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing`
 
@@ -1523,23 +1121,12 @@ fun α self => { toNonUnitalRing := self.toNonUnitalRing, mul_comm := ⋯ }
 - Distance from target type: `3`
 - Semantic SHA-256: `c697ff5e735ebe18733e51950717037e73ba73e94ac2e99953bfb521708cabd2`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : NonUnitalSeminormedCommRing α] → NonUnitalSeminormedRing α
-```
+- Reuse SHA-256: `af5668964b5bccdc76ab3e35b49ee6f7a401a67f2eeacf94c15dcfbde7d60242`
+- Reviewed interpretation: Projects the underlying seminormed ring.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : NonUnitalSeminormedCommRing.{u_5} α] → NonUnitalSeminormedRing.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NonUnitalSeminormedCommRing α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D052: `NonUnitalSeminormedRing.toSeminormedAddCommGroup`
 
@@ -1549,26 +1136,12 @@ fun α [self : NonUnitalSeminormedCommRing α] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `db7996fa414ad67340b9d6991cd145ac2a5d251a870097d20f2f63e371fb101d`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [NonUnitalSeminormedRing α] → SeminormedAddCommGroup α
-```
+- Reuse SHA-256: `b5f3c7dcd9d943244c3d24743bfe7902b6158ad25404d76754091d41a285eb6a`
+- Reviewed interpretation: Retains the norm, additive group, and pseudometric of the supplied ring.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [NonUnitalSeminormedRing.{u_2} α] → SeminormedAddCommGroup.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : NonUnitalSeminormedRing α] =>
-  have __src := inst;
-  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
-    dist_eq := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D053: `NonUnitalSemiring.toNonUnitalNonAssocSemiring`
 
@@ -1578,23 +1151,12 @@ fun {α} [inst : NonUnitalSeminormedRing α] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `240f532586ad43548ebc46dcbda3efacdb04f947093d623a575ee7a0a49b9e32`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : NonUnitalSemiring α] → NonUnitalNonAssocSemiring α
-```
+- Reuse SHA-256: `b5429d72ae19fc6cf59189fcc14dd7fe59756e75fac7f604f8d3cfa7c305d9fe`
+- Reviewed interpretation: Projects the underlying nonassociative semiring.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : NonUnitalSemiring.{u} α] → NonUnitalNonAssocSemiring.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NonUnitalSemiring α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D054: `NontriviallyNormedField.toNormedField`
 
@@ -1604,23 +1166,12 @@ fun α [self : NonUnitalSemiring α] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `dc08b02d757cccbd21bce550b40d3f76d2ee704ec2cd7f5507023d827296474f`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : NontriviallyNormedField α] → NormedField α
-```
+- Reuse SHA-256: `a1c464b4291f90ce20ecdb8f5e65e427390a1cc34bf7e767abbc8cb7e3faed20`
+- Reviewed interpretation: Projects the supplied normed field.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : NontriviallyNormedField.{u_5} α] → NormedField.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NontriviallyNormedField α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D055: `NormedAddCommGroup`
 
@@ -1740,27 +1291,12 @@ fun {E} [inst : NormedAddCommGroup E] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `ce5ba4f454145f64923f4d555eb95891cb66dc2df21d2ef730bfa600ea6a22e5`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [β : NormedCommRing α] → NonUnitalNormedCommRing α
-```
+- Reuse SHA-256: `7988df9dc99884b02ef9f083cd5da732f26981bf260f74a2909b1ffebcd33b65`
+- Reviewed interpretation: Copies the norm, metric, and ring operations into the structure without a unit requirement.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [β : NormedCommRing.{u_2} α] → NonUnitalNormedCommRing.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [β : NormedCommRing α] =>
-  { toNorm := β.toNorm, toAddMonoid := β.toAddMonoid, toNeg := β.toNeg, toSub := β.toSub, sub_eq_add_neg := ⋯,
-    zsmul := β.zsmul, zsmul_zero' := ⋯, zsmul_succ' := ⋯, zsmul_neg' := ⋯, neg_add_cancel := ⋯, add_comm := ⋯,
-    toMul := β.toMul, left_distrib := ⋯, right_distrib := ⋯, zero_mul := ⋯, mul_zero := ⋯, mul_assoc := ⋯,
-    toMetricSpace := β.toMetricSpace, dist_eq := ⋯, norm_mul_le := ⋯, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D060: `NormedCommRing.toSeminormedCommRing`
 
@@ -1770,25 +1306,12 @@ fun {α} [β : NormedCommRing α] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `ad504b2606febc5a066d58ac540c9826bd1b7fce734d59a7fef63c7c27112fe3`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [β : NormedCommRing α] → SeminormedCommRing α
-```
+- Reuse SHA-256: `9e9deaa002285f88e678d24f782946801ca934f89846f440378916d935e5caa1`
+- Reviewed interpretation: Retains the norm, ring, and induced pseudometric.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [β : NormedCommRing.{u_2} α] → SeminormedCommRing.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [β : NormedCommRing α] =>
-  { toNorm := β.toNorm, toRing := β.toRing, toPseudoMetricSpace := β.toPseudoMetricSpace, dist_eq := ⋯,
-    norm_mul_le := ⋯, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D061: `NormedField.toField`
 
@@ -1798,23 +1321,12 @@ fun {α} [β : NormedCommRing α] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `ec9eab2d54099c52c160e626a54324e8c9a07675797f0926435031098f363e5f`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : NormedField α] → Field α
-```
+- Reuse SHA-256: `2437f974a513f424b1648570e69a9565810605f9aad3ea67edb6962e96e1a5c7`
+- Reviewed interpretation: Projects the underlying field.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : NormedField.{u_5} α] → Field.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : NormedField α] => self.2
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D062: `NormedSpace`
 
@@ -1844,32 +1356,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{𝕜 : Type u_6} →
-  {E : Type u_7} → {inst : NormedField 𝕜} → {inst_1 : SeminormedAddCommGroup E} → [self : NormedSpace 𝕜 E] → Module 𝕜 E
-```
+- Reuse SHA-256: `c7810fb6c6a83b1ba80c45c6fccf29c20b173be07b512735dcf8c76eb19f0f4a`
+- Reviewed interpretation: Projects the underlying module.
 
-Fully explicit type:
-
-```lean
-{𝕜 : Type u_6} →
-  {E : Type u_7} →
-    {inst : NormedField.{u_6} 𝕜} →
-      {inst_1 : SeminormedAddCommGroup.{u_7} E} →
-        [self : @NormedSpace.{u_6, u_7} 𝕜 E inst inst_1] →
-          @Module.{u_6, u_7} 𝕜 E
-            (@DivisionSemiring.toSemiring.{u_6} 𝕜
-              (@Semifield.toDivisionSemiring.{u_6} 𝕜 (@Field.toSemifield.{u_6} 𝕜 (@NormedField.toField.{u_6} 𝕜 inst))))
-            (@AddCommGroup.toAddCommMonoid.{u_7} E (@SeminormedAddCommGroup.toAddCommGroup.{u_7} E inst_1))
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun 𝕜 E {inst} {inst_1} [self : NormedSpace 𝕜 E] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D064: `Pi.Function.module`
 
@@ -1879,31 +1371,12 @@ fun 𝕜 E {inst} {inst_1} [self : NormedSpace 𝕜 E] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `921742a1effe7c5d653ed6512c1187064090ee805009644177b1646ce2ee15b1`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-(I : Type u) →
-  (α : Type u_1) → (β : Type u_2) → [inst : Semiring α] → [inst_1 : AddCommMonoid β] → [Module α β] → Module α (I → β)
-```
+- Reuse SHA-256: `5a17c75dfe475a481fe6d66be13e3fc0cbd1c4c8f1613c520869c989e2351d2d`
+- Reviewed interpretation: Uses the product module on functions with fixed codomain.
 
-Fully explicit type:
-
-```lean
-(I : Type u) →
-  (α : Type u_1) →
-    (β : Type u_2) →
-      [inst : Semiring.{u_1} α] →
-        [inst_1 : AddCommMonoid.{u_2} β] →
-          [@Module.{u_1, u_2} α β inst inst_1] →
-            @Module.{u_1, max u u_2} α (I → β) inst
-              (@Pi.addCommMonoid.{u, u_2} I (fun (a : I) => β) fun (i : I) => inst_1)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun I α β [Semiring α] [AddCommMonoid β] [Module α β] => Pi.module I (fun a => β) α
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D065: `Pi.addCommGroup`
 
@@ -1913,26 +1386,12 @@ fun I α β [Semiring α] [AddCommMonoid β] [Module α β] => Pi.module I (fun 
 - Distance from target type: `3`
 - Semantic SHA-256: `1ff5ab7097969c98627adc1250432bd9fa32995632035a4346ce1d770c552153`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{I : Type u} → {f : I → Type v₁} → [(i : I) → AddCommGroup (f i)] → AddCommGroup ((i : I) → f i)
-```
+- Reuse SHA-256: `3824e28599f6623131c942cdb0c0c4c8e51358f64a8fa63110c3e7606694abed`
+- Reviewed interpretation: Builds the additive commutative group of functions from coordinate additive groups.
 
-Fully explicit type:
-
-```lean
-{I : Type u} → {f : I → Type v₁} → [(i : I) → AddCommGroup.{v₁} (f i)] → AddCommGroup.{max u v₁} ((i : I) → f i)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {I} {f} [(i : I) → AddCommGroup (f i)] =>
-  let __src := Pi.addGroup;
-  have __src_1 := Pi.addCommMonoid;
-  { toAddGroup := __src, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D066: `Pi.instAdd`
 
@@ -1942,23 +1401,12 @@ fun {I} {f} [(i : I) → AddCommGroup (f i)] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `786aa93e85ac0acc746f4c8ee6aed957d52e0231f66623c2b8e478a794d15ce0`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{ι : Type u_1} → {M : ι → Type u_5} → [(i : ι) → Add (M i)] → Add ((i : ι) → M i)
-```
+- Reuse SHA-256: `19a521936b1879fcd360437d7fe2113412694771a45d480ff901b01a28f44610`
+- Reviewed interpretation: Adds functions by adding their values at each index.
 
-Fully explicit type:
-
-```lean
-{ι : Type u_1} → {M : ι → Type u_5} → [(i : ι) → Add.{u_5} (M i)] → Add.{max u_1 u_5} ((i : ι) → M i)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {ι} {M} [(i : ι) → Add (M i)] => { add := fun f g i => instHAdd.hAdd (f i) (g i) }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D067: `Pi.instZero`
 
@@ -1968,23 +1416,12 @@ fun {ι} {M} [(i : ι) → Add (M i)] => { add := fun f g i => instHAdd.hAdd (f 
 - Distance from target type: `3`
 - Semantic SHA-256: `eb5c70d9b813d7099537e8db11f59a65a3f5ad951da7314a1aa554471a122049`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{ι : Type u_1} → {M : ι → Type u_5} → [(i : ι) → Zero (M i)] → Zero ((i : ι) → M i)
-```
+- Reuse SHA-256: `8f3b97fd09f747463749db564f2e40e6d543a132258a73d48033352a69ef5e04`
+- Reviewed interpretation: The zero function takes the zero value at every index.
 
-Fully explicit type:
-
-```lean
-{ι : Type u_1} → {M : ι → Type u_5} → [(i : ι) → Zero.{u_5} (M i)] → Zero.{max u_1 u_5} ((i : ι) → M i)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {ι} {M} [(i : ι) → Zero (M i)] => { zero := fun x => 0 }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D068: `Pi.topologicalSpace`
 
@@ -1994,24 +1431,12 @@ fun {ι} {M} [(i : ι) → Zero (M i)] => { zero := fun x => 0 }
 - Distance from target type: `3`
 - Semantic SHA-256: `a81381c20af462683322c70d792fc61454007e60d0781bb4fda6103a009c8abd`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{ι : Type u_5} → {Y : ι → Type v} → [t₂ : (i : ι) → TopologicalSpace (Y i)] → TopologicalSpace ((i : ι) → Y i)
-```
+- Reuse SHA-256: `88c67397ef4314c48e79e2af679669fc3b0f2cb488428423db6d7aefe03ce234`
+- Reviewed interpretation: The product topology is constructed from the induced topologies of coordinate evaluations.
 
-Fully explicit type:
-
-```lean
-{ι : Type u_5} →
-  {Y : ι → Type v} → [t₂ : (i : ι) → TopologicalSpace.{v} (Y i)] → TopologicalSpace.{max u_5 v} ((i : ι) → Y i)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {ι} {Y} [t₂ : (i : ι) → TopologicalSpace (Y i)] => iInf fun i => TopologicalSpace.induced (fun f => f i) (t₂ i)
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D069: `PseudoMetricSpace.toUniformSpace`
 
@@ -2021,23 +1446,12 @@ fun {ι} {Y} [t₂ : (i : ι) → TopologicalSpace (Y i)] => iInf fun i => Topol
 - Distance from target type: `3`
 - Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
-```
+- Reuse SHA-256: `2f10cdf923beaad26035dc025e3c62631a8278776d254040cd8538116ba7a779`
+- Reviewed interpretation: Projects the uniform space associated with the pseudometric.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : PseudoMetricSpace α] => self.7
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D070: `Real.denselyNormedField`
 
@@ -2047,23 +1461,12 @@ fun α [self : PseudoMetricSpace α] => self.7
 - Distance from target type: `3`
 - Semantic SHA-256: `4e05f43f0aeaac135f86bed438060268b7a1c7e5a288939a5075d7a9f7b2e105`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-DenselyNormedField Real
-```
+- Reuse SHA-256: `f2b3e845924823b8a5c8f3414635b824ab08eb9ec6932bb7483c2f6be770d279`
+- Reviewed interpretation: Equips Real with its normed field and the dense-norm property.
 
-Fully explicit type:
-
-```lean
-DenselyNormedField.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ toNormedField := Real.normedField, lt_norm_lt := Real.denselyNormedField._proof_1 }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D071: `Real.instAdd`
 
@@ -2073,23 +1476,12 @@ Definition body (one-level semantic boundary):
 - Distance from target type: `3`
 - Semantic SHA-256: `f99208c181266311bec9c890b688378f329076f9e6be38fe93d9cedf4d7f50ce`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Add Real
-```
+- Reuse SHA-256: `5b41894658cb9f66a188e61af7f3e8d4a8313dd7a605623e677aa3de1ac51e97`
+- Reviewed interpretation: Selects Real.add as real addition.
 
-Fully explicit type:
-
-```lean
-Add.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ add := Real.add✝ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D072: `Real.instAddCommGroup`
 
@@ -2099,23 +1491,12 @@ Definition body (one-level semantic boundary):
 - Distance from target type: `3`
 - Semantic SHA-256: `b34bb82f0825ba57903ab69349a17976c5b261082b1e5dd3b28e8c2a96ee46cc`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-AddCommGroup Real
-```
+- Reuse SHA-256: `b6ce1a9ac19d0c384a25de4fa6bca9226c2af901b0de4928f599410957a20a9f`
+- Reviewed interpretation: Supplies the standard inferred additive commutative group of Real.
 
-Fully explicit type:
-
-```lean
-AddCommGroup.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D073: `Real.instMonoid`
 
@@ -2151,23 +1532,12 @@ inferInstance
 - Distance from target type: `3`
 - Semantic SHA-256: `3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Ring Real
-```
+- Reuse SHA-256: `da75e319b9a7243234feb38446805d72c51596ae8b66f28a7c0150951b612d28`
+- Reviewed interpretation: Supplies the inferred ring structure on Real.
 
-Fully explicit type:
-
-```lean
-Ring.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D075: `Real.instZero`
 
@@ -2177,23 +1547,12 @@ inferInstance
 - Distance from target type: `3`
 - Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Zero Real
-```
+- Reuse SHA-256: `67a5634fe6d1b901acd9d7e98cb7326847cad53fdf33329e2f46776c2e535a79`
+- Reviewed interpretation: Selects Real.zero.
 
-Fully explicit type:
-
-```lean
-Zero.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ zero := Real.zero✝ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D076: `Real.normedCommRing`
 
@@ -2203,36 +1562,12 @@ Definition body (one-level semantic boundary):
 - Distance from target type: `3`
 - Semantic SHA-256: `69cccc1e864661e103785f4a2712b9ad164d845c03b7737801c37e5ac852bad7`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-NormedCommRing Real
-```
+- Reuse SHA-256: `5dcf5d8491073ee08db8f6efb7471dd7d01d283af9514453828851d19dbf360e`
+- Reviewed interpretation: Combines the real normed additive group and real commutative ring, retaining their operations and metric.
 
-Fully explicit type:
-
-```lean
-NormedCommRing.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-let __src := Real.normedAddCommGroup;
-let __src_1 := Real.commRing;
-{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedCommRing._proof_1,
-  toMul := __src_1.toMul, left_distrib := Real.normedCommRing._proof_2, right_distrib := Real.normedCommRing._proof_3,
-  zero_mul := Real.normedCommRing._proof_4, mul_zero := Real.normedCommRing._proof_5,
-  mul_assoc := Real.normedCommRing._proof_6, toOne := __src_1.toOne, one_mul := Real.normedCommRing._proof_7,
-  mul_one := Real.normedCommRing._proof_8, toNatCast := __src_1.toNatCast, natCast_zero := Real.normedCommRing._proof_9,
-  natCast_succ := Real.normedCommRing._proof_10, npow := __src_1.npow, npow_zero := Real.normedCommRing._proof_11,
-  npow_succ := Real.normedCommRing._proof_12, toNeg := __src.toNeg, toSub := __src.toSub,
-  sub_eq_add_neg := Real.normedCommRing._proof_13, zsmul := __src.zsmul, zsmul_zero' := Real.normedCommRing._proof_14,
-  zsmul_succ' := Real.normedCommRing._proof_15, zsmul_neg' := Real.normedCommRing._proof_16,
-  neg_add_cancel := Real.normedCommRing._proof_17, toIntCast := __src_1.toIntCast,
-  intCast_ofNat := Real.normedCommRing._proof_18, intCast_negSucc := Real.normedCommRing._proof_19,
-  toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul_le := Real.normedCommRing._proof_20, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D077: `Real.pseudoMetricSpace`
 
@@ -2242,25 +1577,12 @@ let __src_1 := Real.commRing;
 - Distance from target type: `3`
 - Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-PseudoMetricSpace Real
-```
+- Reuse SHA-256: `7a3b6a0e65d48c873cfafdf21d7c7936bff9d47582b958ef19a6566e9cd53720`
+- Reviewed interpretation: The distance between x and y is abs(x - y).
 
-Fully explicit type:
-
-```lean
-PseudoMetricSpace.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
-  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
-  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D078: `Real.semiring`
 
@@ -2296,23 +1618,12 @@ inferInstance
 - Distance from target type: `3`
 - Semantic SHA-256: `167479b8a8bd861d283398cd7ed47b3bc2699266c1cebddbc243ee2ac503a88e`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{R : Type u} → [self : Ring R] → Semiring R
-```
+- Reuse SHA-256: `4c17098a6114f33e22973872e66ea8941873b96d8f0ba019498512016e5e0ce8`
+- Reviewed interpretation: Projects the underlying semiring.
 
-Fully explicit type:
-
-```lean
-{R : Type u} → [self : Ring.{u} R] → Semiring.{u} R
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun R [self : Ring R] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D080: `SMulZeroClass.toSMul`
 
@@ -2349,26 +1660,12 @@ fun M A {inst} [self : SMulZeroClass M A] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `a1b771abeff9bbbdcce988134973a1a367c44a340bcd29acb0cc44b8d6a2e55c`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{K : Type u_2} → [self : Semifield K] → DivisionSemiring K
-```
+- Reuse SHA-256: `d8d99575e2486f50a5901cd9f017f44c3558d93681bb3208b448f0b5f5631821`
+- Reviewed interpretation: Retains arithmetic and inverses in the division-semiring structure.
 
-Fully explicit type:
-
-```lean
-{K : Type u_2} → [self : Semifield.{u_2} K] → DivisionSemiring.{u_2} K
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun K self =>
-  { toSemiring := self.toSemiring, toInv := self.toInv, toDiv := self.toDiv, div_eq_mul_inv := ⋯, zpow := self.zpow,
-    zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯, toNontrivial := ⋯, inv_zero := ⋯, mul_inv_cancel := ⋯,
-    toNNRatCast := self.toNNRatCast, nnratCast_def := ⋯, nnqsmul := self.nnqsmul, nnqsmul_def := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D082: `SeminormedAddCommGroup.toPseudoMetricSpace`
 
@@ -2404,27 +1701,12 @@ fun E [self : SeminormedAddCommGroup E] => self.3
 - Distance from target type: `3`
 - Semantic SHA-256: `a29f0377c9baf2265c34aaf85b852e7c4260b34d2dc04574484c335ebc09a6e9`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [β : SeminormedCommRing α] → NonUnitalSeminormedCommRing α
-```
+- Reuse SHA-256: `6cd92046a175beae919648ad407253b83936ced15e5cc7a258b910c5fd2e20d1`
+- Reviewed interpretation: Retains norm, pseudometric, and ring operations while omitting unit structure.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [β : SeminormedCommRing.{u_2} α] → NonUnitalSeminormedCommRing.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [β : SeminormedCommRing α] =>
-  { toNorm := β.toNorm, toAddMonoid := β.toAddMonoid, toNeg := β.toNeg, toSub := β.toSub, sub_eq_add_neg := ⋯,
-    zsmul := β.zsmul, zsmul_zero' := ⋯, zsmul_succ' := ⋯, zsmul_neg' := ⋯, neg_add_cancel := ⋯, add_comm := ⋯,
-    toMul := β.toMul, left_distrib := ⋯, right_distrib := ⋯, zero_mul := ⋯, mul_zero := ⋯, mul_assoc := ⋯,
-    toPseudoMetricSpace := β.toPseudoMetricSpace, dist_eq := ⋯, norm_mul_le := ⋯, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D084: `Semiring.toNonUnitalSemiring`
 
@@ -2434,23 +1716,12 @@ fun {α} [β : SeminormedCommRing α] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `0a8a55914b4c4681e0b76728e731a700196986460aa03a9048377aa35a373323`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : Semiring α] → NonUnitalSemiring α
-```
+- Reuse SHA-256: `5631e871cfc79279c05c125fc0104c31f8d9da9ecd350834c750d7fcc63f194c`
+- Reviewed interpretation: Projects the underlying semiring without unit structure.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : Semiring.{u} α] → NonUnitalSemiring.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : Semiring α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D085: `SubNegZeroMonoid.toNegZeroClass`
 
@@ -2540,23 +1811,12 @@ fun {α} [inst : SubtractionMonoid α] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
-```
+- Reuse SHA-256: `fa36be5ca9a8df516298db6db5765db2843bc4239d5bfe5f37ffbc8dd2de5944`
+- Reviewed interpretation: Projects the underlying topology of a uniform space.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : UniformSpace α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D089: `Zero.toOfNat0`
 
@@ -2566,23 +1826,12 @@ fun α [self : UniformSpace α] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_1} → [Zero α] → OfNat α 0
-```
+- Reuse SHA-256: `ba5870478beb608983221a5ae03033dfa99d78ba732a5fead579610519e9affc`
+- Reviewed interpretation: Interprets the literal 0 as the supplied zero element.
 
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : Zero α] => { ofNat := inst.zero }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D090: `instHAdd`
 
@@ -2592,23 +1841,12 @@ fun {α} [inst : Zero α] => { ofNat := inst.zero }
 - Distance from target type: `3`
 - Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_1} → [Add α] → HAdd α α α
-```
+- Reuse SHA-256: `fdd44f3f98dea301e6042a47a64d94787d69798e675e22c3520714821f20d734`
+- Reviewed interpretation: Uses the supplied homogeneous addition as heterogeneous addition with all types equal.
 
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [Add.{u_1} α] → HAdd.{u_1, u_1, u_1} α α α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D091: `instHSMul`
 
@@ -2696,23 +1934,12 @@ fun G [self : AddCommGroup G] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `98c22aec54da8e2278fb6c5ae1daeffb76abd7bad320de72096bec6a7046bc17`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u} → [self : AddCommMonoid M] → AddMonoid M
-```
+- Reuse SHA-256: `52949c286a2a89f516066ec8eaecae3145583f91eb2920f40d7e8caafa98027f`
+- Reviewed interpretation: Projects the underlying additive monoid without changing operations.
 
-Fully explicit type:
-
-```lean
-{M : Type u} → [self : AddCommMonoid.{u} M] → AddMonoid.{u} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M [self : AddCommMonoid M] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D095: `AddGroup.toSubNegMonoid`
 
@@ -2748,17 +1975,12 @@ fun A [self : AddGroup A] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `b36800b38dbbf71323d517896ed68ecf785e1c2dc2b52f5265b6b5be545cb4c1`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-(M : Type u_1) → (X : Type u_2) → [SMul M X] → [TopologicalSpace M] → [TopologicalSpace X] → Prop
-```
+- Reuse SHA-256: `13ca3a7ff0f3dd1b566640b8ee87e1494280835ef6b845f2810568cdb2718556`
+- Reviewed interpretation: The proposition that the supplied scalar action is jointly continuous in the supplied topologies.
 
-Fully explicit type:
-
-```lean
-(M : Type u_1) → (X : Type u_2) → [SMul.{u_1, u_2} M X] → [TopologicalSpace.{u_1} M] → [TopologicalSpace.{u_2} X] → Prop
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D097: `DistribMulAction.toMulAction`
 
@@ -2768,28 +1990,12 @@ Fully explicit type:
 - Distance from target type: `4`
 - Semantic SHA-256: `ea6124156f152313d3298dd94738351217f9626c6fc23cb2b63efa1528a4f9b9`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u_12} →
-  {A : Type u_13} → {inst : Monoid M} → {inst_1 : AddMonoid A} → [self : DistribMulAction M A] → MulAction M A
-```
+- Reuse SHA-256: `199e1fc168de7b7778358f031bbe47f83e8a80cf639aee45d8ad26981cd6a784`
+- Reviewed interpretation: Projects the multiplicative action from a distributive action.
 
-Fully explicit type:
-
-```lean
-{M : Type u_12} →
-  {A : Type u_13} →
-    {inst : Monoid.{u_12} M} →
-      {inst_1 : AddMonoid.{u_13} A} →
-        [self : @DistribMulAction.{u_12, u_13} M A inst inst_1] → @MulAction.{u_12, u_13} M A inst
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M A {inst} {inst_1} [self : DistribMulAction M A] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D098: `Monoid.toSemigroup`
 
@@ -2799,23 +2005,12 @@ fun M A {inst} {inst_1} [self : DistribMulAction M A] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `136930a747dcd73895587cb4c7ea1df27360fed0a4adb57efb71bb8949f0fa71`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u} → [self : Monoid M] → Semigroup M
-```
+- Reuse SHA-256: `7979d318591a803ac9540b6dd9572d66ddb368b3107182ef64ec047d4b9357a0`
+- Reviewed interpretation: Projects the underlying semigroup.
 
-Fully explicit type:
-
-```lean
-{M : Type u} → [self : Monoid.{u} M] → Semigroup.{u} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M [self : Monoid M] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D099: `MonoidWithZero.toMonoid`
 
@@ -2825,23 +2020,12 @@ fun M [self : Monoid M] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `c0f91ccdc0415c148969849b7a83ce67d87cf4c402704186fa19f6313928d90f`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M₀ : Type u} → [self : MonoidWithZero M₀] → Monoid M₀
-```
+- Reuse SHA-256: `4a54de7ebf388f69b83201fcad6e90f6bab4778224ba937e02237714fdcb8643`
+- Reviewed interpretation: Projects the underlying multiplicative monoid.
 
-Fully explicit type:
-
-```lean
-{M₀ : Type u} → [self : MonoidWithZero.{u} M₀] → Monoid.{u} M₀
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M₀ [self : MonoidWithZero M₀] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D100: `MulAction.toSemigroupAction`
 
@@ -2851,26 +2035,12 @@ fun M₀ [self : MonoidWithZero M₀] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `2a4074e38a7cedd1ecdaf86a42d3be01ad9728988610178bf9a698f57a876516`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_9} → {β : Type u_10} → {inst : Monoid α} → [self : MulAction α β] → SemigroupAction α β
-```
+- Reuse SHA-256: `0b756889ed26ddc8c923f2332516ed09bfb176144b74ee133ee88fa073b98e3d`
+- Reviewed interpretation: Projects the underlying semigroup action.
 
-Fully explicit type:
-
-```lean
-{α : Type u_9} →
-  {β : Type u_10} →
-    {inst : Monoid.{u_9} α} →
-      [self : @MulAction.{u_9, u_10} α β inst] → @SemigroupAction.{u_9, u_10} α β (@Monoid.toSemigroup.{u_9} α inst)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α β {inst} [self : MulAction α β] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D101: `NormedField.toNormedCommRing`
 
@@ -2880,26 +2050,12 @@ fun α β {inst} [self : MulAction α β] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `4aa3dba57859ca72552799005279a2b5a65b8c083980070fbbff11fd1de56dec`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_2} → [NormedField α] → NormedCommRing α
-```
+- Reuse SHA-256: `9729fb048304bec4c45180b74f65ce4712c20b3f1fc9607f2ecf272a42b97af3`
+- Reviewed interpretation: Retains the norm, ring, and metric of the field.
 
-Fully explicit type:
-
-```lean
-{α : Type u_2} → [NormedField.{u_2} α] → NormedCommRing.{u_2} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : NormedField α] =>
-  let __src := inst;
-  { toNorm := __src.toNorm, toRing := __src.toRing, toMetricSpace := __src.toMetricSpace, dist_eq := ⋯,
-    norm_mul_le := ⋯, mul_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D102: `Pi.instSMul`
 
@@ -2909,24 +2065,12 @@ fun {α} [inst : NormedField α] =>
 - Distance from target type: `4`
 - Semantic SHA-256: `adba1d4e42926a50c2701c18af6f5749dd72a4d631113b924c96482924951276`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{ι : Type u_1} → {α : Type u_2} → {M : ι → Type u_5} → [(i : ι) → SMul α (M i)] → SMul α ((i : ι) → M i)
-```
+- Reuse SHA-256: `a6fc39408c12f71d89ec7d4eaf668aa2259ffd39554aad3d8b90dc4e5f32a1fb`
+- Reviewed interpretation: Defines scalar multiplication on functions by scaling every coordinate value.
 
-Fully explicit type:
-
-```lean
-{ι : Type u_1} →
-  {α : Type u_2} → {M : ι → Type u_5} → [(i : ι) → SMul.{u_2, u_5} α (M i)] → SMul.{u_2, max u_1 u_5} α ((i : ι) → M i)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {ι} {α} {M} [(i : ι) → SMul α (M i)] => { smul := fun a f i => instHSMul.hSMul a (f i) }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D103: `SemigroupAction.toSMul`
 
@@ -2936,24 +2080,12 @@ fun {ι} {α} {M} [(i : ι) → SMul α (M i)] => { smul := fun a f i => instHSM
 - Distance from target type: `4`
 - Semantic SHA-256: `5a8783c66a2e56a4cc509bbb0651eda5b66e25c197307a42445cac31c4a4bb6c`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_9} → {β : Type u_10} → {inst : Semigroup α} → [self : SemigroupAction α β] → SMul α β
-```
+- Reuse SHA-256: `f70f6d6e016c6698af67f2fd8bb78fdc7a2d73ce166a91b6cd1ac46bd6373d32`
+- Reviewed interpretation: Projects the scalar multiplication operation of an action.
 
-Fully explicit type:
-
-```lean
-{α : Type u_9} →
-  {β : Type u_10} → {inst : Semigroup.{u_9} α} → [self : @SemigroupAction.{u_9, u_10} α β inst] → SMul.{u_9, u_10} α β
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α β {inst} [self : SemigroupAction α β] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D104: `SeminormedCommRing.toSeminormedRing`
 
@@ -2963,23 +2095,12 @@ fun α β {inst} [self : SemigroupAction α β] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `e3cbc92d1d5e37d9eaeb1d595c83a78f7af7e3a8d249a700fa3676ab4e0c3d60`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : SeminormedCommRing α] → SeminormedRing α
-```
+- Reuse SHA-256: `977e99ed3a50e0c50d8dccdc1876c34bc863804d7f14c5d69d7163728602a65f`
+- Reviewed interpretation: Projects the underlying seminormed ring.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : SeminormedCommRing.{u_5} α] → SeminormedRing.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : SeminormedCommRing α] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D105: `SeminormedRing.toPseudoMetricSpace`
 
@@ -2989,23 +2110,12 @@ fun α [self : SeminormedCommRing α] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `e6ea9296e8643d5ae7cf334c065c9d6ebe4a95de22d3b0708a585db80e17322a`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_5} → [self : SeminormedRing α] → PseudoMetricSpace α
-```
+- Reuse SHA-256: `5a500e6496e41a6701fe1cc0d42da4a4591c3d910d6da6f05832a1fb97f9bf0f`
+- Reviewed interpretation: Projects the supplied pseudometric space.
 
-Fully explicit type:
-
-```lean
-{α : Type u_5} → [self : SeminormedRing.{u_5} α] → PseudoMetricSpace.{u_5} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α [self : SeminormedRing α] => self.3
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D106: `Semiring.toMonoidWithZero`
 
@@ -3015,25 +2125,12 @@ fun α [self : SeminormedRing α] => self.3
 - Distance from target type: `4`
 - Semantic SHA-256: `bf0d463c55fbfcd762eb28ad6f1672fe482a72dfed67d13a797c09f1f0431e64`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → [self : Semiring α] → MonoidWithZero α
-```
+- Reuse SHA-256: `48af5e532e40b510402859215caf78505bc33823fdd13a9de08769db285dad79`
+- Reviewed interpretation: Retains multiplication, one, powers, and zero of the semiring.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → [self : Semiring.{u} α] → MonoidWithZero.{u} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α self =>
-  { toMul := self.toMul, mul_assoc := ⋯, toOne := self.toOne, one_mul := ⋯, mul_one := ⋯, npow := self.npow,
-    npow_zero := ⋯, npow_succ := ⋯, toZero := self.toZero, zero_mul := ⋯, mul_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D107: `SubNegMonoid.toAddMonoid`
 

@@ -1,0 +1,105 @@
+gates/leveque-finite-volume/artifacts/session-20260908/rectangle-riemann-interface/candidate.lean:128:30: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+gates/leveque-finite-volume/artifacts/session-20260908/rectangle-riemann-interface/candidate.lean:130:40: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+gates/leveque-finite-volume/artifacts/session-20260908/rectangle-riemann-interface/candidate.lean:154:16: error: Application type mismatch: The argument
+  linearRiemannSolution_isRectangleSolution A eigenbasis eigenvalues heigen problem.leftState problem.leftState
+    problem.rightState
+has type
+  IsRectangleConservationLawSolution
+    (linearRiemannSolution eigenbasis eigenvalues problem.leftState problem.leftState problem.rightState) A.mulVec
+but is expected to have type
+  IsRectangleConservationLawSolution
+    (linearRiemannSolution eigenbasis eigenvalues problem.leftState problem.leftState problem.rightState)
+    (linearHyperbolicConservationLaw A hA).physicalFlux
+in the application
+  ⟨?m.45,
+    linearRiemannSolution_isRectangleSolution A eigenbasis eigenvalues heigen problem.leftState problem.leftState
+      problem.rightState⟩
+gates/leveque-finite-volume/artifacts/session-20260908/rectangle-riemann-interface/candidate.lean:176:4: error: Tactic `rfl` failed: The left-hand side
+  A.mulVec state
+is not definitionally equal to the right-hand side
+  (linearHyperbolicConservationLaw A hA).physicalFlux state
+
+ι : Type u_1
+inst✝ : Fintype ι
+A : Matrix ι ι ℝ
+hA : IsRealHyperbolicMatrix A
+eigenbasis : Module.Basis ι ℝ (ι → ℝ)
+eigenvalues : ι → ℝ
+heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p
+state : ι → ℝ
+⊢ A.mulVec state = (linearHyperbolicConservationLaw A hA).physicalFlux state
+NumStability.rectangleRiemannInterface_finiteVolumeStep.{u_1, u_2} {Component : Type u_1} {Information : Type u_2}
+  [Fintype Component] (law : OneDimensionalHyperbolicConservationLaw Component) (grid : OneDimensionalFiniteVolumeGrid)
+  (initialState : ℝ → Component → ℝ)
+  (hintegrable : ∀ (i : ℤ), IntervalIntegrable initialState volume (grid.cellLeft i) (grid.cellRight i))
+  (method : RectangleRiemannInterfaceFluxMethod law Information)
+  (hdomain : ∀ (i : ℤ), method.domain (adjacentCellRiemannProblem law (finiteVolumeCellAverageOn grid initialState) i))
+  (timeStep : ℝ) :
+  ∃ cellAverages,
+    (∀ (i : ℤ), IsOneDimensionalCellAverage initialState (grid.cellLeft i) (grid.cellRight i) (cellAverages i)) ∧
+      (∀ (i : ℤ), grid.cellRight (i - 1) = grid.cellLeft i) ∧
+        (∀ (i : ℤ), method.domain (adjacentCellRiemannProblem law cellAverages i)) ∧
+          ∃ solved,
+            (∀ (i : ℤ), IsRiemannData (fun x => (solved i).solution x 0) (cellAverages (i - 1)) (cellAverages i)) ∧
+              (∀ (i : ℤ), IsRectangleConservationLawSolution (solved i).solution law.physicalFlux) ∧
+                ∃ information,
+                  (∀ (i : ℤ), information i = method.extractInformation (solved i)) ∧
+                    ∃ numericalFlux,
+                      (∀ (i : ℤ), numericalFlux i = method.numericalFluxFromInformation (information i)) ∧
+                        (∀ (state : Component → ℝ),
+                            method.numericalFluxFromInformation
+                                (method.extractInformation
+                                  (method.solve { leftState := state, rightState := state } ⋯)) =
+                              law.physicalFlux state) ∧
+                          ∃ updatedCellAverages,
+                            ∀ (i : ℤ),
+                              updatedCellAverages i =
+                                riemannFiniteVolumeUpdate grid timeStep cellAverages numericalFlux i
+'NumStability.rectangleRiemannInterface_finiteVolumeStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearHyperbolicConservationLaw.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : IsRealHyperbolicMatrix A) : OneDimensionalHyperbolicConservationLaw ι
+'NumStability.linearHyperbolicConservationLaw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NumStability.linearRiemannSolution_constant.{u_1} {ι : Type u_1} [Fintype ι] (eigenbasis : Module.Basis ι ℝ (ι → ℝ))
+  (eigenvalues state : ι → ℝ) (x t : ℝ) : linearRiemannSolution eigenbasis eigenvalues state state state x t = state
+'NumStability.linearRiemannSolution_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.certifiedLinearRectangleRiemannSolution.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p)
+  (problem : HyperbolicRiemannProblem (linearHyperbolicConservationLaw A hA)) :
+  CertifiedRectangleRiemannSolution (linearHyperbolicConservationLaw A hA) problem
+'NumStability.certifiedLinearRectangleRiemannSolution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) :
+  RectangleRiemannInterfaceFluxMethod (linearHyperbolicConservationLaw A hA) (ι → ℝ)
+'NumStability.linearRectangleRiemannInterfaceFluxMethod' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod_nonempty.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : IsRealHyperbolicMatrix A) :
+  Nonempty (RectangleRiemannInterfaceFluxMethod (linearHyperbolicConservationLaw A hA) (ι → ℝ))
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_nonempty' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod_information.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p)
+  (problem : HyperbolicRiemannProblem (linearHyperbolicConservationLaw A hA)) {t : ℝ} (ht : 0 < t) :
+  (linearRectangleRiemannInterfaceFluxMethod A hA eigenbasis eigenvalues heigen).extractInformation
+      ((linearRectangleRiemannInterfaceFluxMethod A hA eigenbasis eigenvalues heigen).solve problem trivial) =
+    linearRiemannSolution eigenbasis eigenvalues problem.leftState problem.leftState problem.rightState 0 t
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_information' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

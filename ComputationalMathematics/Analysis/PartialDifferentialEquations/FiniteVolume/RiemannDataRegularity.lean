@@ -46,4 +46,3 @@ theorem IsRiemannData.not_continuousAt_zero {State : Type*}
   exact hne (hl.trans hr.symm)
 
 end NumStability
-
