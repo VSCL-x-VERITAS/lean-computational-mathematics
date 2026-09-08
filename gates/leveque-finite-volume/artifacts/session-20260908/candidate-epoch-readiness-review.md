@@ -1,0 +1,15 @@
+# Candidate verification preparation
+
+This note records a read-only review of the released reconciliation contract on 2026-09-08. It does not assert a candidate, epoch verdict, integration, or promotion. The current Chapter 1 gate remains ACTIVE.
+
+The task is `prepare`, with `remote-write-policy forbid` and `admission-backend none`. A final PASS checkpoint must construct the request-owned candidate and continue to a candidate-bound verified epoch. It does not require an operator integration receipt. Protected campaign and stable refs remain separate and unchanged.
+
+The released epoch verifier requires schema version 2 and workflow schema version 3. It binds the exact topology hash, shared anchor, every formalization/reorganization lane head, candidate commit and tree, retained/selected assets and branches, affected-book certificates, clean unit organization, and the repository ratchet. The inspection-only lane must remain represented; retained historical results and unsuccessful audit attempts must remain available as evidence rather than being discarded.
+
+The fixed validation order is source coverage, import graph, signature graph, body graph, declaration resolution, focused build, full build, and pristine replay. Each entry must use an actual successful command receipt with exact output hash and elapsed time, bound to the candidate tree. Commands are token arrays and may use only the allowed candidate-local checks. The verifier creates its own clone with `--no-hardlinks`, checks out the exact candidate, scrubs the environment, executes those commands, compares their actual output hashes, and rejects resulting tracked or untracked changes.
+
+The existing candidate-local source coverage check uses the committed exact PDF and reviewed inventory. `validate-candidate-architecture.py` builds both production libraries before running the unchanged complete graph comparison, accounting for the fixed order in a cold checkout. Its selected graph baseline must be the final production tree's independently reproduced baseline. Successful quiet build output is deterministic; compiler or fetch failures retain their actual nonzero status.
+
+Before the final epoch, generate the declaration and axiom check input from the final closed rows, finish all eight gate evidence records against the final row subject hash, run the released gate with `--require-pass`, make the exact final checkpoint durable, refresh once, and invoke exactly one matching PASS checkpoint. Candidate validation then continues without a second PASS checkpoint. Any actual cold-environment failure must be diagnosed and repaired from its recorded output; it is not presumed in advance.
+
+Reviewed authority: the unchanged released `skills/book-formalization-migration/references/reconciliation.md` and the `verify_epoch` implementation in `scripts/reconciliation.py`, including its candidate clone, ordered validation commands, environment, output hashing, and final checkout cleanliness check. This note grants no new authority and modifies no released tool or schema.
