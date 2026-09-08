@@ -1,0 +1,68 @@
+NumStability.FirstOrderEquation.residual_eq_zero_iff.{u_1} {ι : Type u_1} [Fintype ι]
+  (equation : NumStability.FirstOrderEquation ι) (x t : ℝ) (state timeDerivative spaceDerivative : ι → ℝ) :
+  equation.residual x t state timeDerivative spaceDerivative = 0 ↔
+    timeDerivative + (equation.principal x t state).mulVec spaceDerivative = equation.forcing x t state
+'NumStability.FirstOrderEquation.residual_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FirstOrderEquation.constantLinear_classical_iff.{u_1} {ι : Type u_1} [Fintype ι]
+  (coefficient : Matrix ι ι ℝ) (q : ℝ → ℝ → ι → ℝ) (x t : ℝ) :
+  (NumStability.FirstOrderEquation.constantLinear coefficient).IsClassicalSolutionAt q x t ↔
+    NumStability.IsConstantCoefficientLinearSystemSolutionAt q coefficient x t
+'NumStability.FirstOrderEquation.constantLinear_classical_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FirstOrderInitialValueProblem.isRiemann_iff.{u_1} {ι : Type u_1} [Fintype ι]
+  (problem : NumStability.FirstOrderInitialValueProblem ι) :
+  problem.IsRiemann ↔
+    ∃ leftState rightState,
+      (∀ (x t : ℝ),
+          ∀ state ∈ problem.governing.admissibleStates,
+            ∃ eigenvalues eigenbasis,
+              ∀ (p : ι), (problem.governing.principal x t state).mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+        leftState ∈ problem.governing.admissibleStates ∧
+          rightState ∈ problem.governing.admissibleStates ∧
+            (∀ x < 0, problem.initialState x = leftState) ∧ ∀ (x : ℝ), 0 < x → problem.initialState x = rightState
+'NumStability.FirstOrderInitialValueProblem.isRiemann_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FirstOrderInitialValueProblem.isRiemannWithStates_iff_origin.{u_1} {ι : Type u_1} [Fintype ι]
+  (problem : NumStability.FirstOrderInitialValueProblem ι) (leftState rightState : ι → ℝ) :
+  problem.IsRiemannWithStates leftState rightState ↔
+    problem.governing.IsHyperbolic ∧
+      leftState ∈ problem.governing.admissibleStates ∧
+        rightState ∈ problem.governing.admissibleStates ∧
+          ∃ origin, problem.initialState = NumStability.riemannData leftState origin rightState
+'NumStability.FirstOrderInitialValueProblem.isRiemannWithStates_iff_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FirstOrderInitialValueProblem.fromEqualStates_not_isJumpRiemann.{u_1} {ι : Type u_1} [Fintype ι]
+  (equation : NumStability.FirstOrderEquation ι) (state origin : ι → ℝ) :
+  ¬(NumStability.FirstOrderInitialValueProblem.fromStates equation state origin state).IsJumpRiemann
+'NumStability.FirstOrderInitialValueProblem.fromEqualStates_not_isJumpRiemann' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_equation10_rectangleConservation_iff_integrated_and_ae_rate {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) :
+  NumStability.IsRectangleConservationLawSolution q flux ↔
+    (∀ (a b t : ℝ), IntervalIntegrable (fun x => q x t) MeasureTheory.volume a b) ∧
+      (∀ (x s t : ℝ), IntervalIntegrable (fun τ => flux (q x τ)) MeasureTheory.volume s t) ∧
+        (∀ (a b s t : ℝ),
+            (∫ (x : ℝ) in a..b, q x t) - ∫ (x : ℝ) in a..b, q x s = ∫ (τ : ℝ) in s..t, flux (q a τ) - flux (q b τ)) ∧
+          ∀ (a b : ℝ), ∀ᵐ (t : ℝ), HasDerivAt (fun s => ∫ (x : ℝ) in a..b, q x s) (flux (q a t) - flux (q b t)) t
+'NumStability.leveque01_equation10_rectangleConservation_iff_integrated_and_ae_rate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_riemannProblem_iff_hyperbolicInitialData {m : ℕ}
+  (problem : NumStability.FirstOrderInitialValueProblem (Fin m)) :
+  (problem.IsRiemann ↔
+      ∃ leftState rightState,
+        (∀ (x t : ℝ),
+            ∀ state ∈ problem.governing.admissibleStates,
+              ∃ eigenvalues eigenbasis,
+                ∀ (p : Fin m),
+                  (problem.governing.principal x t state).mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+          leftState ∈ problem.governing.admissibleStates ∧
+            rightState ∈ problem.governing.admissibleStates ∧
+              (∀ x < 0, problem.initialState x = leftState) ∧ ∀ (x : ℝ), 0 < x → problem.initialState x = rightState) ∧
+    (problem.IsJumpRiemann ↔
+      ∃ leftState rightState, problem.IsRiemannWithStates leftState rightState ∧ leftState ≠ rightState)
+'NumStability.leveque01_riemannProblem_iff_hyperbolicInitialData' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
