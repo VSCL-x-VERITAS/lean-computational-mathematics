@@ -1,0 +1,1091 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "7ed6b364d3cbc21ce567cd1de017285570e062dfb36e62239db63342a6ef16a4",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.FiniteVolumeCellPartition.cellRegion",
+      "interpretation": "Projects the cell-indexed regions from the partition.",
+      "effect_on_target": "Selects each integration region and its measure.",
+      "source_match": "Matches the regions over which Section 1.2 defines cell averages.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.FiniteVolumeInterfaceMesh",
+      "interpretation": "By D014, a measurable partition equipped with nonempty interfaces, distinct endpoint cells, and points belonging to both cell closures.",
+      "effect_on_target": "Supplies an abstract incidence structure; it does not require all geometric edges to be represented or impose spatial orientation.",
+      "source_match": "Insufficient to identify the summed interfaces with all grid-cell edges in Section 1.2.",
+      "status": "fail"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.FiniteVolumeInterfaceMesh.leftCell",
+      "interpretation": "Projects the first incident-cell assignment.",
+      "effect_on_target": "Selects the first flux argument and positive outward contribution.",
+      "source_match": "No declaration condition identifies this assignment with the geometrically left cell of the source's one-dimensional grid.",
+      "status": "fail"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.FiniteVolumeInterfaceMesh.rightCell",
+      "interpretation": "Projects the second incident-cell assignment.",
+      "effect_on_target": "Selects the second flux argument and negative outward contribution.",
+      "source_match": "Distinctness and common closure do not establish the source's spatial right-hand orientation.",
+      "status": "fail"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.FiniteVolumeInterfaceMesh.toFiniteVolumeCellPartition",
+      "interpretation": "Projects the underlying partition.",
+      "effect_on_target": "Connects interface data to the regions used for averages.",
+      "source_match": "Preserves the basic association of flux interfaces with partition cells.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.IsCellVolumeAverage",
+      "interpretation": "Requires nonzero finite measure, integrability, and exact equality to the normalized integral.",
+      "effect_on_target": "Certifies exact averages of conservedField, not independent approximations to its averages.",
+      "source_match": "The normalization matches, but Section 1.2 describes numerical values approximating those exact averages.",
+      "status": "fail"
+    },
+    {
+      "id": "D007",
+      "name": "NumStability.conservationLawInterfaceFlux",
+      "interpretation": "Evaluates physicalConservationFlux at conservedField evaluated at the designated interface point.",
+      "effect_on_target": "Defines the reference for the assumed flux error using a static point value.",
+      "source_match": "Equation (1.10) concerns a time-dependent conservation-law solution. No solution, time dependence, or appropriate discontinuous-interface interpretation is supplied here.",
+      "status": "fail"
+    },
+    {
+      "id": "D008",
+      "name": "NumStability.finiteVolumeBoundaryFlux",
+      "interpretation": "Sums interface flux times the difference of membership indicators for the two incident cells.",
+      "effect_on_target": "Cancels interfaces whose two cells belong to the selected finite set.",
+      "source_match": "Encodes algebraic cancellation, but omitted exterior edges and unconstrained incidence prevent identification with the complete physical boundary flux.",
+      "status": "fail"
+    },
+    {
+      "id": "D009",
+      "name": "NumStability.finiteVolumeCellAverages",
+      "interpretation": "Maps each cell to the normalized integral of conservedField over its region.",
+      "effect_on_target": "Fixes all initial numerical inputs to exact averages of the same field used for reference flux evaluation.",
+      "source_match": "Conflates exact averages with the approximate cell-average data emphasized in Section 1.2.",
+      "status": "fail"
+    },
+    {
+      "id": "D010",
+      "name": "NumStability.finiteVolumeNetOutwardFlux",
+      "interpretation": "Sums positive contributions for first incident cells and negative contributions for second incident cells.",
+      "effect_on_target": "Defines the incidence sum subtracted in the update.",
+      "source_match": "The sign pattern is appropriate under a correct spatial orientation, but neither that orientation nor complete edge coverage is required.",
+      "status": "fail"
+    },
+    {
+      "id": "D011",
+      "name": "NumStability.neighboringCellNumericalFlux",
+      "interpretation": "Applies one binary flux function to the two assigned cell states.",
+      "effect_on_target": "Restricts flux construction to a common two-state function.",
+      "source_match": "The selected paragraph specifies dependence on approximate averages without restricting the stencil to two states; the subsequent Riemann discussion is a mechanism, not a universal restriction.",
+      "status": "fail"
+    },
+    {
+      "id": "D012",
+      "name": "NumStability.FiniteVolumeCellPartition",
+      "interpretation": "By D017, a nonempty indexed measurable partition with pairwise disjoint regions covering a specified domain.",
+      "effect_on_target": "Provides the partition used for cell integration.",
+      "source_match": "Captures the partition aspect of Section 1.2, though interval geometry is not encoded.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "NumStability.FiniteVolumeInterfaceMesh.interfacePoint",
+      "interpretation": "Projects the designated point of each interface.",
+      "effect_on_target": "Selects the point at which the reference physical flux is evaluated.",
+      "source_match": "A common-closure point alone does not supply a time-dependent interface flux for discontinuous solutions.",
+      "status": "fail"
+    },
+    {
+      "id": "D014",
+      "name": "NumStability.FiniteVolumeInterfaceMesh.mk",
+      "interpretation": "Constructs a mesh from a partition, nonempty interface type, distinct incident cells, and interface points in the domain and both closures.",
+      "effect_on_target": "Excludes empty interfaces and self-incidence but allows missing edges, repeated interfaces, reversed spatial labels, and no one-sided exterior interfaces.",
+      "source_match": "These conditions do not capture all cell-edge exchanges described by Section 1.2 and equation (1.10).",
+      "status": "fail"
+    },
+    {
+      "id": "D015",
+      "name": "NumStability.cellVolumeAverage",
+      "interpretation": "Multiplies the restricted integral by the reciprocal of the real-valued cell measure.",
+      "effect_on_target": "Implements volume normalization exactly.",
+      "source_match": "Matches the source's definition of an exact cell average; the mismatch is its use as the numerical data.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "NumStability.FiniteVolumeCellPartition.domain",
+      "interpretation": "Projects the partition's domain set.",
+      "effect_on_target": "Constrains designated interface points to the partitioned domain.",
+      "source_match": "Consistent with partitioning a spatial domain.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "NumStability.FiniteVolumeCellPartition.mk",
+      "interpretation": "Constructs a partition from measurable pairwise disjoint cells whose union equals the domain, with a nonempty cell index type.",
+      "effect_on_target": "Prevents overlapping cells and enforces coverage.",
+      "source_match": "Faithfully represents the basic partition convention; endpoint allocation can make interval cells strictly disjoint.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "AddGroup.toSubNegMonoid",
+      "interpretation": "Projects subtraction and negation structure from an additive group.",
+      "effect_on_target": "Supplies subtraction of E-valued flux contributions.",
+      "source_match": "Matches subtraction of conserved-state vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "AddMonoid.toAddZeroClass",
+      "interpretation": "Retains addition and its zero identity.",
+      "effect_on_target": "Supplies zero for sums and scalar-action instances.",
+      "source_match": "Uses the ordinary additive identity.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "AddZero.toZero",
+      "interpretation": "Projects the zero element.",
+      "effect_on_target": "Provides E-valued zero.",
+      "source_match": "Matches zero conserved quantity or flux.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "AddZeroClass.toAddZero",
+      "interpretation": "Projects addition and zero data.",
+      "effect_on_target": "Preserves the zero used in the module operations.",
+      "source_match": "No change of mathematical zero occurs.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "And",
+      "reuse_sha256": "a5de7d1b42ac116926ac724ea5c48e9b9728170264cd0f6bb58e9ffd060d6aad",
+      "effect_on_target": "Requires all positivity, exact-average, flux, and update clauses together.",
+      "source_match": "Conjunction itself is appropriate; the substantive mismatches are in its clauses.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "DFunLike.coe",
+      "interpretation": "Projects a function-like object's evaluation function.",
+      "effect_on_target": "Evaluates the measure on cell sets.",
+      "source_match": "Preserves the intended cell-volume evaluation.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "DecidableEq",
+      "interpretation": "Provides a decision for equality of any two elements.",
+      "effect_on_target": "Supports incident-cell tests and finite-set membership.",
+      "source_match": "A representational requirement for cell indices, not a changed physical hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "Dist.dist",
+      "interpretation": "Projects a real-valued distance operation.",
+      "effect_on_target": "Measures numerical-reference flux discrepancy in the normed state space.",
+      "source_match": "The source supplies no particular metric or strict tolerance test.",
+      "status": "fail"
+    },
+    {
+      "id": "D026",
+      "name": "DistribMulAction.toDistribSMul",
+      "interpretation": "Retains a scalar action distributing over addition and preserving zero.",
+      "effect_on_target": "Supplies real scaling in the volume and time terms.",
+      "source_match": "Matches linear scaling of conserved vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "DistribSMul.toSMulZeroClass",
+      "interpretation": "Projects the zero-preserving scalar action.",
+      "effect_on_target": "Preserves real scalar multiplication.",
+      "source_match": "No change to the source's scalar-vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "ENNReal",
+      "interpretation": "Nonnegative real numbers with an additional top element.",
+      "effect_on_target": "Provides the codomain of cell measures.",
+      "source_match": "Suitable for volumes; target hypotheses exclude zero and infinity.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "ENNReal.toReal",
+      "interpretation": "Converts through the nonnegative-real representation to a real number.",
+      "effect_on_target": "Turns finite nonzero measures into positive real scaling factors.",
+      "source_match": "Preserves ordinary finite cell volumes under the stated hypotheses.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "interpretation": "Projects the underlying extended-seminormed commutative additive structure.",
+      "effect_on_target": "Participates in the inherited additive instances on E.",
+      "source_match": "Does not alter conserved-vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "interpretation": "Retains the additive monoid and commutativity.",
+      "effect_on_target": "Supplies the finite-sum operation on E.",
+      "source_match": "Matches addition of vector-valued quantities.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "interpretation": "Projects the underlying extended-seminormed additive monoid.",
+      "effect_on_target": "Connects the normed structure to addition and zero.",
+      "source_match": "Preserves the existing operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "interpretation": "Projects the additive monoid.",
+      "effect_on_target": "Supplies addition and zero for module-instance elaboration.",
+      "source_match": "Uses ordinary conserved-state addition.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "Eq",
+      "reuse_sha256": "23aa95efab1800a7999f8833ef59260cf4b8df5c99bc3a0e1f51bfb2052e5be8",
+      "effect_on_target": "Asserts exact average identities and exact discrete balances.",
+      "source_match": "Exact equality correctly defines an exact average, but the target substitutes those averages for approximate data and adds a specific balance formula.",
+      "status": "fail"
+    },
+    {
+      "id": "D035",
+      "name": "Exists",
+      "reuse_sha256": "d88baaf3f36cd54d23ce9718061530f973c8f8a27318a5ceb276a3f852a06b17",
+      "effect_on_target": "Selects a single updated array satisfying both local and all finite-set balances.",
+      "source_match": "An algebraic witness is not linked to the source's evolving numerical approximations.",
+      "status": "fail"
+    },
+    {
+      "id": "D036",
+      "name": "Finset",
+      "interpretation": "The external library type of finite sets.",
+      "effect_on_target": "Indexes finite collections of cells in the aggregate balance.",
+      "source_match": "Suitable for finite cell aggregation, which is an additional target conclusion.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "Finset.sum",
+      "interpretation": "Maps the summand over the underlying multiset and adds its entries.",
+      "effect_on_target": "Adds cell masses and interface contributions.",
+      "source_match": "Matches finite addition of conserved quantities.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "Fintype",
+      "reuse_sha256": "3d82b5cea9d6e87be1fafebfa7aafc201d7d30a1514674e4c260347a21b2f96a",
+      "effect_on_target": "Requires the entire interface type to have a finite enumeration.",
+      "source_match": "The selected paragraph does not restrict the total interface set to be finite.",
+      "status": "fail"
+    },
+    {
+      "id": "D039",
+      "name": "HSMul.hSMul",
+      "interpretation": "Projects heterogeneous scalar multiplication.",
+      "effect_on_target": "Here it resolves to real scalar multiplication on E.",
+      "source_match": "Correct operation for volume normalization and time scaling.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "HSub.hSub",
+      "interpretation": "Projects heterogeneous subtraction.",
+      "effect_on_target": "Here it supplies subtraction on reals or E.",
+      "source_match": "Correct arithmetic operation for time differences and flux balances.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "LT.lt",
+      "interpretation": "Projects a strict-order relation.",
+      "effect_on_target": "Expresses forward time, positive tolerance, and strict flux-error bounds.",
+      "source_match": "Forward time is natural; the strict error threshold is additional quantitative structure absent from the passage.",
+      "status": "fail"
+    },
+    {
+      "id": "D042",
+      "name": "MeasurableSpace",
+      "interpretation": "The external library measurable-space structure.",
+      "effect_on_target": "Supports measurable cells, measures, and integrals on Point.",
+      "source_match": "Appropriate infrastructure for cell integration.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "MeasureTheory.IntegrableOn",
+      "interpretation": "Integrability with respect to the measure restricted to the specified region.",
+      "effect_on_target": "Requires integrability on every cell.",
+      "source_match": "Compatible with finite cell averages and discontinuities; it does not impose classical differentiability.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "MeasureTheory.Measure",
+      "interpretation": "The external library measure type on a measurable space.",
+      "effect_on_target": "Allows an arbitrary measure to determine cell volumes and integrals.",
+      "source_match": "The source uses spatial volume; arbitrary measures are an additional generalization without an accompanying conservation law.",
+      "status": "fail"
+    },
+    {
+      "id": "D045",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "interpretation": "Evaluates a measure through its underlying outer measure.",
+      "effect_on_target": "Implements measure evaluation on measurable cell sets.",
+      "source_match": "Preserves the selected measure's cell-volume values.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Module.toDistribMulAction",
+      "reuse_sha256": "2aadfc9c7fef85730f76cda35e3e944940b2afcfa7eec86e4dbb083f69d2bb78",
+      "effect_on_target": "Supplies real scalar action distributing over conserved-state sums.",
+      "source_match": "Matches scalar-vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "Ne",
+      "interpretation": "Negation of equality.",
+      "effect_on_target": "Excludes zero and infinite cell measures and identical incident cells.",
+      "source_match": "Measure exclusions make average normalization meaningful; distinct incident cells encode ordinary interior adjacency.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "NormedAddCommGroup",
+      "interpretation": "The external library normed commutative additive-group structure.",
+      "effect_on_target": "Provides vector addition, subtraction, and a norm-induced metric.",
+      "source_match": "Includes the source's real vector states, but the arbitrary normed-space scope and chosen error metric exceed the stated setting.",
+      "status": "fail"
+    },
+    {
+      "id": "D049",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "interpretation": "Projects the commutative additive group.",
+      "effect_on_target": "Supplies operations for signed flux sums.",
+      "source_match": "Matches componentwise vector addition and subtraction.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "interpretation": "Builds the compatible extended-normed commutative additive structure.",
+      "effect_on_target": "Provides additive instances compatible with E's topology.",
+      "source_match": "Does not transform the conserved quantities.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "NormedAddCommGroup.toNormedAddGroup",
+      "interpretation": "Retains the same norm, group, and metric while forgetting commutativity.",
+      "effect_on_target": "Supplies subtraction-related instances.",
+      "source_match": "Preserves vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "interpretation": "Retains the same norm, additive group, and pseudometric.",
+      "effect_on_target": "Supplies the metric and module infrastructure used explicitly.",
+      "source_match": "Does not replace the selected norm by a different quantity.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "NormedAddGroup.toAddGroup",
+      "interpretation": "Projects the additive group.",
+      "effect_on_target": "Provides E-valued subtraction.",
+      "source_match": "Matches conserved-vector subtraction.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "NormedSpace",
+      "interpretation": "The external library norm-compatible module structure over a normed field.",
+      "effect_on_target": "Makes E a real normed vector space, without a stated finite-dimensional or completeness requirement.",
+      "source_match": "Generalizes the source's finite-dimensional real state vectors; the supplied integral frontier does not resolve all effective-domain behavior of that generalization.",
+      "status": "unclear"
+    },
+    {
+      "id": "D055",
+      "name": "NormedSpace.toModule",
+      "reuse_sha256": "190d66aeddb02f0030b3c8742e7697f46eea1793ba472b19bfe1cf3008a9e9dc",
+      "effect_on_target": "Supplies the underlying real module for normalization and updates.",
+      "source_match": "Matches real scaling of vector states.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "OfNat.ofNat",
+      "reuse_sha256": "4f7fe512b97c42e9b4a6c1ee49db7ea9aec06cd1651858d83e733410c0b3195d",
+      "effect_on_target": "Interprets zero literals in real and extended-real conditions.",
+      "source_match": "Uses ordinary zero, without a shifted constant.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "PseudoMetricSpace.toDist",
+      "interpretation": "Projects the pseudometric's distance.",
+      "effect_on_target": "Selects E's inherited distance for the error test.",
+      "source_match": "The projection is consistent; the substantive addition of a metric error test is recorded at D025.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "reuse_sha256": "f3c52c8c83521741b1c4b0f620073a239a450dcb4212091e0f45d97f704baf55",
+      "effect_on_target": "Supplies the uniform structure underlying the topology used in integrability.",
+      "source_match": "Keeps the topology compatible with the selected norm.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "Real",
+      "reuse_sha256": "f9939bcc7396f7376a99efa26c817d2d6c43b8133eb8ee88ba5777168f3d7611",
+      "effect_on_target": "Types time parameters, tolerance, and scalar coefficients.",
+      "source_match": "Matches the source's real-valued time and scalar arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "Real.instLT",
+      "interpretation": "Selects the standard real strict order.",
+      "effect_on_target": "Orders times and error magnitudes.",
+      "source_match": "No reversed or nonstandard real ordering is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "Real.instMonoid",
+      "interpretation": "Supplies the standard real multiplicative monoid at the library frontier.",
+      "effect_on_target": "Supports real scalar-action composition.",
+      "source_match": "Matches multiplication of real coefficients.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "Real.instSub",
+      "interpretation": "Defines real subtraction as addition of the negated second argument.",
+      "effect_on_target": "Computes timeEnd minus timeStart.",
+      "source_match": "Correct sign for a forward time increment.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "Real.instZero",
+      "reuse_sha256": "1e776c8d533f559519b378ed6ce05670409d29c2aa7f658960bf7d600575ede1",
+      "effect_on_target": "Provides real zero in positivity conditions.",
+      "source_match": "Correct reference value for positive time increments.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "Real.normedField",
+      "reuse_sha256": "ee2d20d6bcd993145f7a88e95584a4ace99c3b3fda0d037c5c9d67f666be2021",
+      "effect_on_target": "Fixes the scalar field and its norm.",
+      "source_match": "Matches real-valued scalar coefficients.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Real.semiring",
+      "interpretation": "Supplies the standard real semiring structure at the library frontier.",
+      "effect_on_target": "Supports the real module structure.",
+      "source_match": "Preserves ordinary real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "SMulZeroClass.toSMul",
+      "interpretation": "Projects scalar multiplication.",
+      "effect_on_target": "Selects the same real action on E used throughout.",
+      "source_match": "No change in scalar multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "interpretation": "Projects the associated pseudometric structure.",
+      "effect_on_target": "Provides distance and topology for E.",
+      "source_match": "Consistent with the selected normed-state structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "interpretation": "Retains norm, additive group, and pseudometric.",
+      "effect_on_target": "Supplies the structure used to derive a continuous extended norm.",
+      "source_match": "No transformed or squared norm is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "interpretation": "Provides the continuous extended norm derived from the nonnegative norm.",
+      "effect_on_target": "Supports the integrability predicate.",
+      "source_match": "Appropriate for integrating vector magnitudes without imposing differentiability.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "Set",
+      "interpretation": "A predicate on points.",
+      "effect_on_target": "Represents domains, cells, and closures.",
+      "source_match": "Standard representation of spatial regions.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "SubNegMonoid.toSub",
+      "interpretation": "Projects subtraction.",
+      "effect_on_target": "Implements differences of E-valued quantities.",
+      "source_match": "Matches vector subtraction.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "Top.top",
+      "interpretation": "Projects the greatest element.",
+      "effect_on_target": "Here denotes infinite extended-real measure.",
+      "source_match": "Its exclusion enforces finite cell volume.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "TopologicalSpace",
+      "interpretation": "The external library topology structure.",
+      "effect_on_target": "Allows arbitrary topology on Point for common-closure conditions.",
+      "source_match": "Common closure in an arbitrary topology does not establish the source's geometric adjacency or orientation.",
+      "status": "fail"
+    },
+    {
+      "id": "D074",
+      "name": "UniformSpace.toTopologicalSpace",
+      "reuse_sha256": "5e31a7e64b634aae8813bd780fe00e94063ae0fb0f101b2865d36c9bd4f21d40",
+      "effect_on_target": "Provides E's topology from its norm-induced uniformity.",
+      "source_match": "Maintains consistent topology for integration.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "Zero.toOfNat0",
+      "reuse_sha256": "fd6f203a4e2f5402308806836f6504395f77e92829ec449b74ed6783b6f2ef18",
+      "effect_on_target": "Makes zero literals denote the supplied additive zeros.",
+      "source_match": "Correct zero semantics in volume and positivity conditions.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "instHSMul",
+      "interpretation": "Lifts scalar multiplication to heterogeneous notation without changing it.",
+      "effect_on_target": "Elaborates real scaling of E.",
+      "source_match": "Preserves scalar-vector multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "instHSub",
+      "interpretation": "Lifts ordinary subtraction to heterogeneous notation.",
+      "effect_on_target": "Elaborates subtraction on E and reals.",
+      "source_match": "Preserves the stated subtraction operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "instTopENNReal",
+      "interpretation": "Selects the adjoined top of nonnegative extended reals.",
+      "effect_on_target": "Represents infinite measure.",
+      "source_match": "Correct excluded value for finite volumes.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "instZeroENNReal",
+      "interpretation": "Selects the embedded zero in nonnegative extended reals.",
+      "effect_on_target": "Represents zero measure.",
+      "source_match": "Correct excluded value for positive cell volumes.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "AddCommGroup",
+      "interpretation": "The external library commutative additive-group structure.",
+      "effect_on_target": "Supports signed flux sums and cancellation.",
+      "source_match": "Appropriate algebra for conserved real vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "interpretation": "Retains addition, zero, and commutativity.",
+      "effect_on_target": "Supplies finite-sum structure in flux definitions.",
+      "source_match": "Matches addition of flux vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "AddCommGroup.toAddGroup",
+      "interpretation": "Projects the additive group.",
+      "effect_on_target": "Supplies subtraction in signed incidence sums.",
+      "source_match": "Matches differences of fluxes.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "interpretation": "Builds a commutative subtraction structure retaining the group's operations.",
+      "effect_on_target": "Supports subtraction and zero instances inside the flux definitions.",
+      "source_match": "Does not introduce multiplicative division of flux vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "Finset.decidableMem",
+      "interpretation": "Decides finite-set membership using equality and underlying multiset membership.",
+      "effect_on_target": "Determines which incident cells belong to an aggregate.",
+      "source_match": "Correct discrete membership test.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "Finset.instSetLike",
+      "interpretation": "Views a finite set as the predicate of membership in its underlying multiset.",
+      "effect_on_target": "Interprets selected-cell membership.",
+      "source_match": "Preserves the selected collection of cells.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "Finset.univ",
+      "interpretation": "Returns the finite enumeration's full element set.",
+      "effect_on_target": "Sums every declared interface once.",
+      "source_match": "Exhausts declared interfaces, but cannot supply geometric interfaces missing from the mesh.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "Membership.mem",
+      "interpretation": "Projects a membership relation.",
+      "effect_on_target": "Expresses interface-point and cell-set membership.",
+      "source_match": "Standard membership semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D088",
+      "name": "NegZeroClass.toZero",
+      "interpretation": "Projects the zero element.",
+      "effect_on_target": "Supplies zero contributions for absent incidences.",
+      "source_match": "Correct additive zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D089",
+      "name": "SetLike.instMembership",
+      "interpretation": "Defines membership through the object's underlying set.",
+      "effect_on_target": "Implements membership of incident cells in a finite collection.",
+      "source_match": "Preserves set membership.",
+      "status": "pass"
+    },
+    {
+      "id": "D090",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "interpretation": "Retains zero and negation with negation preserving zero.",
+      "effect_on_target": "Supports zero in signed flux expressions.",
+      "source_match": "Matches ordinary zero-flux arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D091",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "interpretation": "Projects the underlying subtraction structure.",
+      "effect_on_target": "Preserves subtraction in interface sums.",
+      "source_match": "No change in flux-difference meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D092",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "interpretation": "Retains subtraction and negation and supplies the zero-negation law.",
+      "effect_on_target": "Provides compatible zero-related instances.",
+      "source_match": "Preserves the same additive arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D093",
+      "name": "ite",
+      "interpretation": "Selects its first or second value according to a decidable proposition.",
+      "effect_on_target": "Includes a flux for an incident cell and zero otherwise.",
+      "source_match": "Correct implementation of signed incidence indicators.",
+      "status": "pass"
+    },
+    {
+      "id": "D094",
+      "name": "Inv.inv",
+      "interpretation": "Projects multiplicative inversion.",
+      "effect_on_target": "Takes the reciprocal of real cell volume.",
+      "source_match": "Matches division by cell volume under the nonzero finite-volume assumptions.",
+      "status": "pass"
+    },
+    {
+      "id": "D095",
+      "name": "MeasureTheory.Measure.restrict",
+      "interpretation": "Applies the library restriction operator to a measure and region.",
+      "effect_on_target": "Restricts integration and integrability to each cell.",
+      "source_match": "Matches integration over a cell.",
+      "status": "pass"
+    },
+    {
+      "id": "D096",
+      "name": "MeasureTheory.integral",
+      "interpretation": "The supplied frontier is a total E-valued integral operator whose body is only the projection MeasureTheory.wrapped✝.1.",
+      "effect_on_target": "Determines the exact averages for arbitrary real normed spaces E, including spaces without a supplied completeness assumption.",
+      "source_match": "The intended finite-dimensional integral is recognizable, but the supplied body does not resolve behavior on the generalized incomplete-space domain. That behavior cannot be independently established from this packet.",
+      "status": "unclear"
+    },
+    {
+      "id": "D097",
+      "name": "Nonempty",
+      "interpretation": "Asserts existence of an inhabitant of a type.",
+      "effect_on_target": "Ensures interfaces and cells exist; distinct incident cells force at least two cells.",
+      "source_match": "Prevents empty-index vacuity, though the requirement excludes a single-cell mesh.",
+      "status": "pass"
+    },
+    {
+      "id": "D098",
+      "name": "Real.instInv",
+      "interpretation": "Selects standard real inversion at the library frontier.",
+      "effect_on_target": "Implements reciprocal-volume normalization.",
+      "source_match": "Correct for the positive real volumes ensured by the hypotheses.",
+      "status": "pass"
+    },
+    {
+      "id": "D099",
+      "name": "Set.instMembership",
+      "interpretation": "Uses predicate membership for sets.",
+      "effect_on_target": "Interprets coverage and interface-point conditions.",
+      "source_match": "Standard spatial set membership.",
+      "status": "pass"
+    },
+    {
+      "id": "D100",
+      "name": "closure",
+      "interpretation": "Intersection of all closed supersets of a set.",
+      "effect_on_target": "Requires each interface point to lie in both incident-cell closures.",
+      "source_match": "Compatible with adjacent interval cells, but alone does not specify a complete oriented grid boundary.",
+      "status": "pass"
+    },
+    {
+      "id": "D101",
+      "name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "interpretation": "Projects the complete Boolean algebra.",
+      "effect_on_target": "Participates in the set-order instances used by disjointness.",
+      "source_match": "Preserves ordinary set operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D102",
+      "name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "interpretation": "Retains the complete lattice and compatible distributive operations.",
+      "effect_on_target": "Supplies the lattice route to the empty-set bottom.",
+      "source_match": "No change to set disjointness.",
+      "status": "pass"
+    },
+    {
+      "id": "D103",
+      "name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "interpretation": "Projects the complete lattice.",
+      "effect_on_target": "Supplies the order used for cell-region disjointness.",
+      "source_match": "Uses ordinary subset order.",
+      "status": "pass"
+    },
+    {
+      "id": "D104",
+      "name": "CompleteDistribLattice.toFrame",
+      "interpretation": "Projects the frame structure.",
+      "effect_on_target": "Supports inherited bottom and order instances on sets.",
+      "source_match": "Preserves the empty-set interpretation of bottom.",
+      "status": "pass"
+    },
+    {
+      "id": "D105",
+      "name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "interpretation": "Retains the partial order and defines increasing-chain suprema using indexed suprema.",
+      "effect_on_target": "Provides an elaboration route to subset order.",
+      "source_match": "Introduces no asymptotic condition on the numerical method.",
+      "status": "pass"
+    },
+    {
+      "id": "D106",
+      "name": "Disjoint",
+      "interpretation": "Requires every common lower bound to lie below bottom; for sets this means empty intersection.",
+      "effect_on_target": "Requires distinct cell regions to have no shared points.",
+      "source_match": "Compatible with a partition using assigned endpoints.",
+      "status": "pass"
+    },
+    {
+      "id": "D107",
+      "name": "HeytingAlgebra.toOrderBot",
+      "interpretation": "Projects the least-element structure.",
+      "effect_on_target": "Supplies the empty set as bottom in disjointness.",
+      "source_match": "Correct empty-intersection semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D108",
+      "name": "Iff",
+      "reuse_sha256": "89f2d9a352803142920bf6b9505c1562669264075426ed41dc274515fbe30cf0",
+      "effect_on_target": "Makes domain membership equivalent to membership in some cell.",
+      "source_match": "Exactly encodes coverage without adding points outside the domain.",
+      "status": "pass"
+    },
+    {
+      "id": "D109",
+      "name": "MeasurableSet",
+      "interpretation": "Tests membership in the measurable-space structure's measurable sets.",
+      "effect_on_target": "Requires each cell region to be measurable.",
+      "source_match": "Appropriate for the cell integrals in Section 1.2.",
+      "status": "pass"
+    },
+    {
+      "id": "D110",
+      "name": "OmegaCompletePartialOrder.toPartialOrder",
+      "interpretation": "Projects the partial order.",
+      "effect_on_target": "Supplies subset order for disjointness.",
+      "source_match": "Preserves ordinary set inclusion.",
+      "status": "pass"
+    },
+    {
+      "id": "D111",
+      "name": "Order.Frame.toHeytingAlgebra",
+      "interpretation": "Retains lattice, top, bottom, and compatible implication operations.",
+      "effect_on_target": "Supplies the order-bottom structure on sets.",
+      "source_match": "Preserves empty-set bottom.",
+      "status": "pass"
+    },
+    {
+      "id": "D112",
+      "name": "Set.instCompleteAtomicBooleanAlgebra",
+      "interpretation": "Builds the complete Boolean algebra of sets from the standard set lattice, unions, intersections, and complements.",
+      "effect_on_target": "Fixes disjointness to ordinary set disjointness.",
+      "source_match": "Matches partitioning the domain into nonoverlapping regions.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached raw page 27, printed page 5, contains Section 1.2's introductory paragraph. Raw page 26 supplies equation (1.10); raw page 23 supplies real vector-valued, time-dependent context.",
+      "lean_evidence": "The supplied proof-free header, readable target, and explicit target all concern the same named declaration and its cell-average/flux-update conjunction.",
+      "reasoning": "The selected source is an introductory description, not a displayed discrete recurrence. Images were inspected directly; source and dossier hashes are supplied provenance, not independently recomputed hashes."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "Printed page 1 describes q(x,t) in R^m; printed pages 4–5 concern spatial interval conservation and grid cells.",
+      "lean_evidence": "Point is any measurable topological type, E any real normed space, conservedField : Point → E, and Interface a globally finite type.",
+      "reasoning": "The target generalizes spatial and state domains while removing explicit solution-time dependence and restricting the interface set."
+    },
+    {
+      "id": "C03",
+      "status": "fail",
+      "source_evidence": "Section 1.2 describes updates at each time step using the available approximate cell averages.",
+      "lean_evidence": "After fixing conservedField and a binary flux function, the target assumes a flux bound and existentially selects one updated array. No arbitrary approximate current array or sequence of successive numerical states is quantified.",
+      "reasoning": "Universality over static fields and time endpoints does not preserve the scope over evolving approximate cell data."
+    },
+    {
+      "id": "C04",
+      "status": "fail",
+      "source_evidence": "Section 1.2 explicitly bases the method on integral conservation law (1.10) and imposes no quantitative flux-error threshold.",
+      "lean_evidence": "There is no conservation-law hypothesis connecting conservedField and physicalConservationFlux. hFluxApproximation assumes the same strict tolerance inequality later concluded.",
+      "reasoning": "Positive finite volume and integrability are reasonable average-domain conditions, but the governing law is absent and a quantitative approximation premise is added."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The paragraph distinguishes exact cell averages from their numerical approximations and describes fluxes computed from those approximations.",
+      "lean_evidence": "D009 and D015 define input values as exact normalized integrals. updatedCellAverages is constrained only by algebraic balances.",
+      "reasoning": "The target does not represent the distinct numerical approximation data or their role throughout the time-stepping process."
+    },
+    {
+      "id": "C06",
+      "status": "unclear",
+      "source_evidence": "The cell average is the spatial integral divided by volume.",
+      "lean_evidence": "D015 gives the normalization explicitly, but D096 exposes only MeasureTheory.wrapped✝.1 for a total integral over arbitrary normed E, without CompleteSpace E.",
+      "reasoning": "All listed dependencies have been accounted for. The generalized integral's effective-domain behavior remains unresolved from the supplied frontier and requires adjudication."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "Section 1.2 describes qualitative approximation and edge-flux updates without a strict error inequality or displayed recurrence.",
+      "lean_evidence": "The target concludes exact normalized averages, repeats dist < fluxTolerance, and imposes an exact volume-weighted discrete update and aggregate identity.",
+      "reasoning": "Exact discrete conservation can be appropriate for a numerical scheme, but these particular relations do not preserve the passage's complete meaning or unspecified discretization choices."
+    },
+    {
+      "id": "C08",
+      "status": "fail",
+      "source_evidence": "Approximate averages are the available data; correct physical fluxes are the quantities numerical fluxes approximate.",
+      "lean_evidence": "One conservedField supplies both exact initial averages and pointwise reference fluxes. No separate approximate state array or time-dependent exact solution exists.",
+      "reasoning": "Exact state data, numerical input data, and conservation-law solution roles are conflated."
+    },
+    {
+      "id": "C09",
+      "status": "fail",
+      "source_evidence": "Equation (1.10) uses left-endpoint flux minus right-endpoint flux; Section 1.2 supplies no discrete time factor or fixed stencil.",
+      "lean_evidence": "The update subtracts (timeEnd - timeStart) times an incidence sum formed from one binary flux function. D014 does not enforce spatial orientation of leftCell and rightCell.",
+      "reasoning": "The sign is correct for a properly oriented mesh, but that correspondence is not ensured. The fixed time-scaled flux construction is an additional specification."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The selected discussion concerns one-dimensional real-vector conservation laws and an unrestricted class of finite volume methods, including high-resolution methods.",
+      "lean_evidence": "The target permits abstract spaces and measures, requires finitely many nonempty two-sided interfaces, and evaluates a shared two-state numerical flux at exact averages.",
+      "reasoning": "This mixes generalization with reduced applicability. The restrictions cannot be classified as stronger coverage of the source."
+    },
+    {
+      "id": "C11",
+      "status": "fail",
+      "source_evidence": "Equation (1.10) permits flux through the endpoints of an interval. The surrounding discussion explicitly accommodates discontinuous solutions.",
+      "lean_evidence": "Every interface has two cells in the partition. For a finite set containing both endpoints of every interface, D008 is zero. Reference fluxes use arbitrary point evaluations without trace or temporal conditions.",
+      "reasoning": "Exterior exchange is not represented, so whole-domain conservation is forced when all cells are selected on a finite mesh. Discontinuous interface values also lack the source's conservation-law linkage."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The source concerns approximate solution evolution governed by conservation-law fluxes.",
+      "lean_evidence": "Take two cells [-1,0) and [0,1], their single interface at 0, Lebesgue measure, E = R, conservedField = 1, both flux functions constantly 1, times 0 and 1, and tolerance 1. All premises hold; the balances force updated values 0 and 2.",
+      "reasoning": "The hypotheses are satisfiable and the update need not be zero. Nevertheless the witness always comes from dividing an algebraic balance by positive volume, and the flux bound is assumed. In the concrete example the constant physical solution's omitted exterior fluxes would balance the interior flux, but the formal update changes both cells. Thus the source interpretation is not secured by nonvacuity."
+    },
+    {
+      "id": "N01",
+      "status": "fail",
+      "source_evidence": "Section 1.2 advances approximate averages at each time step using numerical cell-edge fluxes.",
+      "lean_evidence": "Only a one-step algebraic witness from exact averages is required, with no link to an evolving approximation or integral-law solution.",
+      "reasoning": "The target establishes a conservative incidence update construction, but does not retain the same process semantics as the selected description."
+    },
+    {
+      "id": "N02",
+      "status": "fail",
+      "source_evidence": "The source states vector conserved quantities and qualitative flux approximation, without selecting a norm.",
+      "lean_evidence": "The explicit type uses E's norm-induced distance in a strict uniform interface bound.",
+      "reasoning": "Vector arithmetic is preserved, but a particular norm-based accuracy criterion is introduced without source support."
+    },
+    {
+      "id": "N03",
+      "status": "fail",
+      "source_evidence": "The paragraph identifies constructing sufficiently good numerical flux approximations as the primary problem; it states no error estimate or stability guarantee.",
+      "lean_evidence": "hFluxApproximation assumes a pointwise spatial flux discrepancy below a positive tolerance and the conclusion repeats it.",
+      "reasoning": "The target neither constructs nor establishes approximation quality and replaces the qualitative role with a conditional static error test."
+    },
+    {
+      "id": "N04",
+      "status": "fail",
+      "source_evidence": "Numerical values approximate exact cell averages, and numerical fluxes approximate correct fluxes.",
+      "lean_evidence": "The numerical flux receives exact integrals of the same field used to define the physical reference flux.",
+      "reasoning": "The distinction between exact cell averages and computed approximate values is absent. Reinterpreting conservedField as a reconstruction would instead remove its identification with the exact physical state."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected paragraph states no limit, asymptotic order, remainder, or convergence theorem.",
+      "lean_evidence": "The target contains no asymptotic notation or limiting assertion.",
+      "reasoning": "There is no source asymptotic claim to preserve; the additional strict tolerance condition is assessed separately."
+    },
+    {
+      "id": "N06",
+      "status": "unclear",
+      "source_evidence": "The passage presupposes meaningful finite-dimensional cell averages and a conservation-law setting, but asserts no existence or uniqueness theorem for solutions.",
+      "lean_evidence": "Positive finite volumes make the algebraic update uniquely solvable cellwise. The target additionally uses a total integral on arbitrary normed E without a completeness assumption or an exposed effective-domain definition.",
+      "reasoning": "Algebraic update existence is clear and is not PDE well-posedness. The integral's behavior on the generalized state-space domain requires adjudication."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "The Lean proposition does not recover the source's process using approximate cell-average data in an integral conservation law. Inputs are exact averages, reference fluxes are static point evaluations, and the mesh need not enumerate all physical edges or respect their orientation. A two-cell interval partition with only its shared interior interface, constant state 1, and constant physical and numerical flux 1 satisfies all premises but yields updates 0 and 2 over a unit time step, whereas the constant physical state has balancing exterior fluxes. Additional assumptions about geometry, solution evolution, and distinct approximate data are needed."
+    },
+    "source_implies_lean": {
+      "verdict": "unclear",
+      "reasoning": "The passage does not specify the target's abstract domains, binary stencil, strict error premise, or particular discrete identity, so it does not directly supply this statement as a source-faithful formulation. However, most target conclusions are independently obtainable from definitions and linear algebra: with Vc positive, choose Uc = Qc - ((timeEnd - timeStart) / Vc) • netFlux c, then sum and cancel incidences. Thus simply declaring this implication false because the formula is unstated would conflate semantic correspondence with derivability of an independently valid conditional theorem. Adjudication should resolve that implication convention and the generalized integral frontier."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "exact-approximate-role-conflation",
+      "source_evidence": "Printed page 5, Section 1.2, describes numerical cell values as approximations to normalized cell integrals and as the data used for numerical fluxes.",
+      "lean_evidence": "D009 and D015 define the flux inputs to be exact normalized integrals of conservedField; D006 certifies exact equality.",
+      "impact": "The proposition omits independent approximate numerical data and does not cover their successive evolution."
+    },
+    {
+      "severity": "major",
+      "category": "missing-physical-edge-coverage",
+      "source_evidence": "Printed page 4, equation (1.10), accounts for both interval endpoint fluxes; printed page 5 updates averages through cell edges.",
+      "lean_evidence": "D014 requires only selected two-sided interfaces. D008 cancels all fluxes when both incident cells are included, with no exterior-interface term.",
+      "impact": "A valid target mesh may omit physical boundary fluxes. On two unit cells with constant state and constant unit flux, the target's unit-step update is 0 and 2 despite the exact constant solution remaining unchanged."
+    },
+    {
+      "severity": "major",
+      "category": "missing-conservation-law-linkage",
+      "source_evidence": "Section 1.2 explicitly bases the method on integral law (1.10), whose state depends on space and time.",
+      "lean_evidence": "conservedField : Point → E and physicalConservationFlux : E → E are unrestricted functions with no conservation-law premise. D007 merely composes them at a designated point.",
+      "impact": "The theorem's algebraic balances do not establish that its reference fluxes or updates correspond to a conservation-law solution, including at discontinuities."
+    },
+    {
+      "severity": "major",
+      "category": "restricted-flux-construction-and-assumed-accuracy",
+      "source_evidence": "Section 1.2 specifies dependence on approximate averages without fixing stencil size, a norm, or a tolerance.",
+      "lean_evidence": "D011 fixes a shared binary state-to-flux function; hFluxApproximation assumes the exact strict distance bound repeated in the conclusion.",
+      "impact": "The target restricts the method class and presupposes its quantitative flux comparison. These are reduced applicability and added modeling choices, not stronger source coverage."
+    },
+    {
+      "severity": "major",
+      "category": "unresolved-integral-effective-domain",
+      "source_evidence": "The inherited state space is R^m, and the average is an ordinary vector-valued spatial integral divided by cell volume.",
+      "lean_evidence": "E is an arbitrary real normed space without CompleteSpace E. D096 exposes only a wrapped projection for the total integral.",
+      "impact": "The packet does not establish the behavior of normalized integrals throughout the generalized state-space domain. Adjudication is required rather than assuming finite-dimensional integral semantics globally."
+    },
+    {
+      "severity": "note",
+      "category": "implication-convention-needs-adjudication",
+      "source_evidence": "The selected passage is an introductory description with no explicit discrete recurrence.",
+      "lean_evidence": "The existential update is algebraically constructible from positive volumes and the stipulated incidence sums; the remaining main clauses are definitions or repeated assumptions.",
+      "impact": "The confirmed semantic omissions refute Lean-to-source coverage. Determining whether the reverse direction counts as yes by independent algebraic derivability or no by source-statement correspondence requires explicit adjudication."
+    }
+  ],
+  "rationale": "Direct inspection of the attached primary-source pages confirms the distinction between exact averages and approximate numerical data, the integral conservation-law context, and the absence of a specified discrete recurrence. The supplied Lean statement instead constructs an algebraic incidence update from exact averages under an assumed flux-error bound. Its mesh permits omitted exterior exchanges and lacks spatial orientation guarantees. These are substantive obstacles to acceptance, independent of proof correctness. Every D001–D112 dependency and every configured semantic check has been addressed. The overall classification remains undetermined because the generalized integral semantics and the reverse-implication convention require adjudication; this does not negate the established failures of source coverage."
+}

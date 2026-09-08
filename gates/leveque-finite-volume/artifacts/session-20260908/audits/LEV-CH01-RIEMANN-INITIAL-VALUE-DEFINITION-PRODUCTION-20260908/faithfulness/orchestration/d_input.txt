@@ -1,0 +1,1117 @@
+
+
+Exact role prompt SHA256 e8fc01dc20710b1b6634a745a340c6a7b4d461047e09ee662cbf3c0afc518ba9
+# Role: direct source-versus-Lean judge
+
+You are a fresh, independent judge. Compare the selected source result directly
+with the Lean proposition. The authoritative source and elaborated declaration
+dossier are primary evidence; the source contract supports extraction but does
+not replace checking the source.
+
+## Required analysis
+
+1. Re-read the cited source passage and relevant inherited context.
+2. Read the proof-free source header, readable target type, and fully explicit
+   target type in `direct_review_packet.md`.
+3. Inspect every `Dxxx` dependency. A full section requires an
+   `interpretation`; a reuse section requires its exact `reuse_sha256`. Reuse
+   covers declaration meaning only. Independently determine each dependency's
+   effect on this target and whether it matches the selected source result.
+4. Complete every configured semantic check, in order, with direct evidence.
+   Use `not-applicable` only with a concrete reason.
+5. Decide Lean-implies-source and source-implies-Lean separately.
+6. Classify with the fixed vocabulary.
+
+Additional hypotheses and narrower domains are reduced applicability, not
+stronger theorems. Test satisfiability and nonvacuity. Request adjudication for
+any unresolved evidence, dependency, semantic check, or implication.
+
+Return only JSON conforming to `schemas/direct_judge.schema.json`.
+
+
+Exact output schema SHA256 6e31ec9d39783d43bc0cacbca8ee2512a7f3d75cb59f26265111372c6ded6693
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Direct source-versus-Lean judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "dossier_sha256", "dependency_coverage", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "direct-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "dossier_sha256": {"$ref": "#/$defs/sha256"},
+    "dependency_coverage": {"type": "array", "minItems": 1, "items": {"oneOf": [{"$ref": "#/$defs/reviewedDependency"}, {"$ref": "#/$defs/reusedDependency"}]}},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "reviewedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "interpretation", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "interpretation": {"type": "string", "minLength": 1},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "reusedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "reuse_sha256", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "reuse_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "lean_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "lean_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 64954fb6f4d05ca4b2797a226aa969bb78912c69e9e15935b5344f1664e9c5a9
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.2.1 defines a Riemann problem as a hyperbolic equation with special piecewise constant initial data, followed by (1.11).",
+      "location": "raw PDF page 27; printed Chapter 1 page 5"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 158b87d154fb5af506915b4011d1e1f4fde1ff533cef7d620394bbe99ffe5a83
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, opening paragraph",
+      "anchor": "“the hyperbolic equation together with special initial data”",
+      "observation": "The definition concerns an initial-value problem comprising an equation and initial data."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, sentence preceding (1.11) and equation (1.11)",
+      "anchor": "“piecewise constant with a single jump discontinuity at some point, say x = 0”",
+      "observation": "The displayed initial data equal q_l for x < 0 and q_r for x > 0 at time zero; no value is displayed at x = 0."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and following paragraph",
+      "anchor": "q : ℝ × ℝ → ℝ^m; A is a constant m × m real matrix",
+      "observation": "The introductory setting uses real spatial and temporal variables and a vector of m unknown components; the constant-coefficient linear system is q_t + A q_x = 0. The scalar case m = 1 is also discussed."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph",
+      "anchor": "“real eigenvalues and a corresponding set of m linearly independent eigenvectors”",
+      "observation": "These are the stated hyperbolicity conditions for the constant-coefficient system (1.1)."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; Section 1.1, equations (1.8)–(1.9); raw PDF page 26, printed page 4, opening paragraph",
+      "anchor": "q_t + f(q)_x = 0; f(q) = Aq in the linear case",
+      "observation": "The surrounding discussion includes conservation laws with linear or nonlinear fluxes. Hyperbolicity is related to the previously stated matrix conditions applied to the flux Jacobian."
+    },
+    {
+      "location": "Raw PDF page 26; printed page 4; Section 1.1.2; raw PDF page 27, printed page 5, opening paragraphs",
+      "anchor": "“At a discontinuity in q, the partial differential equation (1.8) does not hold in the classical sense”",
+      "observation": "The source allows discontinuous solutions and treats the integral conservation law as fundamental in that setting."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, paragraph following (1.11)",
+      "anchor": "q_l = Q_{i−1} and q_r = Q_i; “typically a similarity solution”",
+      "observation": "Neighboring cell averages supply an application of the two states. Dependence on x/t and a finite collection of propagating waves are described as typical solution behavior."
+    },
+    {
+      "location": "Raw PDF page 28; printed page 6; continuation of Section 1.2.1 and opening of Section 1.3",
+      "anchor": "“nonlinear systems such as the Euler equations”; “inherently one-dimensional”",
+      "observation": "Riemann problems are not restricted to constant-coefficient linear systems. The source explicitly identifies the problem as one-dimensional."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "x is the real spatial coordinate and t is time, with initial time t = 0; the introductory convention is q : ℝ × ℝ → ℝ^m. [Printed p. 1, text following (1.1); printed p. 5, (1.11).]",
+      "q_l and q_r denote constant left and right states in the state space of q; their membership in ℝ^m is inherited from the introductory vector-valued convention. [Printed p. 1, text following (1.1); printed p. 5, (1.11).]",
+      "The initial interface is some spatial point, represented as x = 0 in the displayed definition. [Printed p. 5, Section 1.2.1, sentence preceding (1.11).]"
+    ],
+    "hypotheses": [
+      "The governing equation is hyperbolic. [Printed p. 5, Section 1.2.1, opening sentence.]",
+      "The prescribed initial data are piecewise constant with one interface, described in prose as a single jump discontinuity. [Printed p. 5, Section 1.2.1, sentence preceding (1.11).]"
+    ],
+    "conclusions": [
+      "A hyperbolic equation together with the specified two-state initial data constitutes a Riemann problem. This is a definition of an initial-value problem. [Printed p. 5, Section 1.2.1, opening paragraph.]",
+      "For every spatial point x < 0, the initial condition is q(x, 0) = q_l. [Printed p. 5, (1.11), first branch.]",
+      "For every spatial point x > 0, the initial condition is q(x, 0) = q_r. [Printed p. 5, (1.11), second branch.]"
+    ],
+    "definitions_and_conventions": [
+      "The subscripts l and r label the states on the left and right of the interface; these states are constant over their respective initial half-lines. [Printed p. 5, prose preceding (1.11) and its two branches.]",
+      "The inequalities in (1.11) are strict; the displayed prescription does not specify q(0, 0). [Printed p. 5, (1.11).]",
+      "The choice of interface location zero is illustrative: the prose first permits a jump at some point. [Printed p. 5, “at some point, say x = 0”.]",
+      "For the constant-coefficient linear case, hyperbolicity means real eigenvalues and m linearly independent corresponding eigenvectors of A. This contextual characterization is specific to that case. [Printed p. 3, opening paragraph.]"
+    ],
+    "implicit_context": [
+      "The unknown may be scalar or vector-valued; the chapter explicitly discusses both m = 1 and systems with m components. [Printed p. 1, paragraphs following (1.1).]",
+      "Conservation laws, including nonlinear ones, form the immediate setting; the definition itself uses the broader phrase hyperbolic equation. [Printed pp. 3–4, Section 1.1; printed p. 5, Section 1.2.1; printed p. 6, continuation of Section 1.2.1.]",
+      "Global classical smoothness is not an inherited requirement: the source explicitly discusses the failure of the classical differential equation at discontinuities. [Printed pp. 4–5, Section 1.1.2.]"
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Problem data versus solution properties",
+        "details": [
+          "The equation and initial data define the problem; (1.11) does not prescribe values at positive times. [Printed p. 5, Section 1.2.1, opening paragraph and (1.11).]",
+          "The subsequent similarity and wave-structure discussion uses the qualifier typically; it is not an unconditional existence, uniqueness, or similarity requirement in the definition. [Printed p. 5, paragraph following (1.11).]"
+        ]
+      },
+      {
+        "topic": "Numerical application",
+        "details": [
+          "Taking q_l = Q_{i−1} and q_r = Q_i uses cell averages from neighboring cells to construct a Riemann problem for numerical flux computation; cell-average provenance is not required in the preceding definition. [Printed p. 5, paragraph following (1.11).]"
+        ]
+      },
+      {
+        "topic": "Spatial dimension and equation class",
+        "details": [
+          "The Riemann problem is one-dimensional even when used as a component of multidimensional numerical methods. [Printed p. 6, Section 1.3, opening paragraph.]",
+          "The definition accommodates nonlinear hyperbolic systems as well as the linear systems discussed in the introduction. [Printed pp. 5–6, Section 1.2.1, discussion following (1.11).]"
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "The definition includes a governing hyperbolic equation as well as initial data. [Printed p. 5, Section 1.2.1, opening sentence.]",
+    "The initial condition assigns q_l to every x < 0 and q_r to every x > 0 at t = 0. [Printed p. 5, (1.11).]",
+    "Equation (1.11) imposes no displayed condition at x = 0. [Printed p. 5, (1.11), strict branch inequalities.]",
+    "The two prescribed states are spatially constant on their respective initial half-lines. [Printed p. 5, “piecewise constant” and (1.11).]",
+    "The selected passage defines a problem and does not state an unconditional existence or uniqueness theorem. [Printed p. 5, Section 1.2.1, opening paragraph and qualified subsequent solution discussion.]"
+  ],
+  "ambiguities": [
+    {
+      "issue": "Whether equal left and right states are admitted as a degenerate Riemann problem.",
+      "evidence": "Printed p. 5, prose preceding (1.11), calls the interface a single jump discontinuity, but (1.11) contains no explicit q_l ≠ q_r condition.",
+      "impact": "Literal discontinuity language suggests distinct states, whereas the displayed prescription also makes sense for equal states. Neither an explicit inequality nor explicit permission for the degenerate case should be attributed to the formula."
+    },
+    {
+      "issue": "The initial value at the interface is unspecified.",
+      "evidence": "Printed p. 5, (1.11), supplies branches only for x < 0 and x > 0.",
+      "impact": "A total initial-data function requires an additional interface-value convention; the source does not select the left state, right state, or another value there."
+    },
+    {
+      "issue": "The precise solution framework and time interval are not specified in the definition.",
+      "evidence": "Printed p. 5, Section 1.2.1, gives the hyperbolic equation and data at t = 0; printed pp. 4–5, Section 1.1.2, supplies general discontinuous-solution context without attaching a complete solution definition to (1.11).",
+      "impact": "A specific weak or entropy solution predicate, temporal domain, or regularity class would require further source support."
+    }
+  ],
+  "contract_plain_english": "A Riemann problem consists of a hyperbolic equation with initial data that are constant on each side of one spatial interface. Placing that interface at zero, the initial state is q_l for every x < 0 and q_r for every x > 0; the displayed definition leaves the value at zero unspecified. The prose describes a single jump, although the formula does not explicitly require distinct states. This is a definition of the initial-value problem, not an unconditional claim about existence, uniqueness, or similarity of its solution. [Printed p. 5, Section 1.2.1, opening paragraph, (1.11), and subsequent qualified solution discussion.]"
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 273234c821a5b7c2f4f9c66fa44ee6823431e5f1915476b4fe144b6d2244c81a
+# Declaration dossier for LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_riemannInitialConfiguration_iff {State : Type*}
+    (evolutionEquation : (ℝ → ℝ → State) → Prop)
+    (leftState rightState : State) (q : ℝ → ℝ → State) :
+    leveque01RiemannInitialConfiguration evolutionEquation leftState rightState q ↔
+      evolutionEquation q ∧
+        (∀ x, x < 0 → q x 0 = leftState) ∧
+        (∀ x, 0 < x → q x 0 = rightState)
+```
+
+## Elaborated target type
+
+```lean
+∀ {State : Type u_1} (evolutionEquation : (Real → Real → State) → Prop) (leftState rightState : State)
+  (q : Real → Real → State),
+  Iff (NumStability.leveque01RiemannInitialConfiguration evolutionEquation leftState rightState q)
+    (And (evolutionEquation q)
+      (And (∀ (x : Real), Real.instLT.lt x 0 → Eq (q x 0) leftState)
+        (∀ (x : Real), Real.instLT.lt 0 x → Eq (q x 0) rightState)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {State : Type u_1} (evolutionEquation : (Real → Real → State) → Prop) (leftState rightState : State)
+  (q : Real → Real → State),
+  Iff (@NumStability.leveque01RiemannInitialConfiguration.{u_1} State evolutionEquation leftState rightState q)
+    (And (evolutionEquation q)
+      (And
+        (∀ (x : Real),
+          @LT.lt.{0} Real Real.instLT x (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →
+            @Eq.{u_1 + 1} State (q x (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+              leftState)
+        (∀ (x : Real),
+          @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) x →
+            @Eq.{u_1 + 1} State (q x (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+              rightState)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.leveque01RiemannInitialConfiguration`
+
+- Role: `local`
+- Owner module: `AuditTarget`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `8f87d6c5b06e6de2318c84dfd17928bd955594c3933e289741cf1e00a94098ce`
+
+Type:
+
+```lean
+{State : Type u_1} → ((Real → Real → State) → Prop) → State → State → (Real → Real → State) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} →
+  (evolutionEquation : (Real → Real → State) → Prop) → (leftState rightState : State) → (q : Real → Real → State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} evolutionEquation leftState rightState q =>
+  NumStability.IsRiemannInitialValueSolution evolutionEquation leftState rightState q
+```
+
+### D002: `NumStability.IsRiemannInitialValueSolution`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `4641364719967a9001e26cda78154811debc5edbdcfe65d7f0408c9d5100a21b`
+
+Type:
+
+```lean
+{State : Type u_1} → ((Real → Real → State) → Prop) → State → State → (Real → Real → State) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} →
+  (evolutionEquation : (Real → Real → State) → Prop) → (leftState rightState : State) → (q : Real → Real → State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} evolutionEquation leftState rightState q =>
+  And (evolutionEquation q) (NumStability.IsRiemannData (fun x => q x 0) leftState rightState)
+```
+
+### D003: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D004: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `b199a7e69311e8216b8b4f468ed884727e6d8559f5cdec1faad336786eed305c`
+- Reviewed interpretation: Logical conjunction.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D005: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `9c613816364ccec5e992fe59677b51dad82b31ae633ce887e15f71063028918b`
+- Reviewed interpretation: Equality of two objects of the same type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D006: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `093de33ba9a4b72c671c954b413d9f0a5c9989861a3b34eaf0d8685d68c2bfce`
+- Reviewed interpretation: Logical equivalence.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D007: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D008: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `5ac7881a67db494c64e7cdf4f96fee04fd4707dcad7249b398ab1b2559f5947a`
+- Reviewed interpretation: Extracts the value assigned to a natural-number literal by its instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D009: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `f2e0f77a3eedec456e15a938719daab023ce83c38d78eaed190d7a193b4500f9`
+- Reviewed interpretation: The standard library real-number type at the external semantic frontier.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D010: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D011: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `d08b7a921bef1d7898c11931c0180d5a572e70dc084be186e4224ab084bfd3dc`
+- Reviewed interpretation: Selects Real.zero.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D012: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `4cab96c7d3ba85dcabaed043dad67f453ba7d4dc4468e28347312ff2b9cd876d`
+- Reviewed interpretation: Interprets the literal 0 as the supplied zero element.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+
+Complete dependency inventory SHA256 ec5a8939cbc7df78109b871e4c90994f13eb48c25cec0a6ce356766fbb67cffc
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun {State} evolutionEquation leftState rightState q =>\n  NumStability.IsRiemannInitialValueSolution evolutionEquation leftState rightState q",
+      "distance": 1,
+      "id": "D001",
+      "kind": "abbrev",
+      "name": "NumStability.leveque01RiemannInitialConfiguration",
+      "owner_module": "AuditTarget",
+      "role": "local",
+      "semantic_sha256": "8f87d6c5b06e6de2318c84dfd17928bd955594c3933e289741cf1e00a94098ce",
+      "type_explicit": "{State : Type u_1} \u2192\n  (evolutionEquation : (Real \u2192 Real \u2192 State) \u2192 Prop) \u2192 (leftState rightState : State) \u2192 (q : Real \u2192 Real \u2192 State) \u2192 Prop",
+      "type_readable": "{State : Type u_1} \u2192 ((Real \u2192 Real \u2192 State) \u2192 Prop) \u2192 State \u2192 State \u2192 (Real \u2192 Real \u2192 State) \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef002",
+      "body_readable": "fun {State} evolutionEquation leftState rightState q =>\n  And (evolutionEquation q) (NumStability.IsRiemannData (fun x => q x 0) leftState rightState)",
+      "distance": 2,
+      "id": "D002",
+      "kind": "def",
+      "name": "NumStability.IsRiemannInitialValueSolution",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann",
+      "role": "local",
+      "semantic_sha256": "4641364719967a9001e26cda78154811debc5edbdcfe65d7f0408c9d5100a21b",
+      "type_explicit": "{State : Type u_1} \u2192\n  (evolutionEquation : (Real \u2192 Real \u2192 State) \u2192 Prop) \u2192 (leftState rightState : State) \u2192 (q : Real \u2192 Real \u2192 State) \u2192 Prop",
+      "type_readable": "{State : Type u_1} \u2192 ((Real \u2192 Real \u2192 State) \u2192 Prop) \u2192 State \u2192 State \u2192 (Real \u2192 Real \u2192 State) \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef003",
+      "body_readable": "fun {State} data leftState rightState =>\n  And (\u2200 (x : Real), Real.instLT.lt x 0 \u2192 Eq (data x) leftState)\n    (\u2200 (x : Real), Real.instLT.lt 0 x \u2192 Eq (data x) rightState)",
+      "distance": 3,
+      "id": "D003",
+      "kind": "def",
+      "name": "NumStability.IsRiemannData",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData",
+      "role": "local",
+      "semantic_sha256": "9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712",
+      "type_explicit": "{State : Type u_1} \u2192 (data : Real \u2192 State) \u2192 (leftState rightState : State) \u2192 Prop",
+      "type_readable": "{State : Type u_1} \u2192 (Real \u2192 State) \u2192 State \u2192 State \u2192 Prop"
+    },
+    {
+      "blind_name": "And",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D004",
+      "kind": "inductive",
+      "name": "And",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D005",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D006",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "LT.lt",
+      "body_readable": "fun \u03b1 [self : LT \u03b1] => self.1",
+      "distance": 1,
+      "id": "D007",
+      "kind": "abbrev",
+      "name": "LT.lt",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : LT.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : LT \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D008",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D009",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Real.instLT",
+      "body_readable": "{ lt := Real.lt\u271d }",
+      "distance": 1,
+      "id": "D010",
+      "kind": "def",
+      "name": "Real.instLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a",
+      "type_explicit": "LT.{0} Real",
+      "type_readable": "LT Real"
+    },
+    {
+      "blind_name": "Real.instZero",
+      "body_readable": "{ zero := Real.zero\u271d }",
+      "distance": 1,
+      "id": "D011",
+      "kind": "def",
+      "name": "Real.instZero",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "type_explicit": "Zero.{0} Real",
+      "type_readable": "Zero Real"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 1,
+      "id": "D012",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 af6d37f59b1e6845796d80e7215a310f65652ce2f1a146176493206dee2d404d
+{
+  "entries": [
+    {
+      "interpretation": "Logical conjunction.",
+      "reuse_sha256": "b199a7e69311e8216b8b4f468ed884727e6d8559f5cdec1faad336786eed305c",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "source_dependency_id": "D005",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D004"
+    },
+    {
+      "interpretation": "Equality of two objects of the same type.",
+      "reuse_sha256": "9c613816364ccec5e992fe59677b51dad82b31ae633ce887e15f71063028918b",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "source_dependency_id": "D010",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D005"
+    },
+    {
+      "interpretation": "Logical equivalence.",
+      "reuse_sha256": "093de33ba9a4b72c671c954b413d9f0a5c9989861a3b34eaf0d8685d68c2bfce",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "source_dependency_id": "D017",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D006"
+    },
+    {
+      "interpretation": "Extracts the value assigned to a natural-number literal by its instance.",
+      "reuse_sha256": "5ac7881a67db494c64e7cdf4f96fee04fd4707dcad7249b398ab1b2559f5947a",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "source_dependency_id": "D042",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D008"
+    },
+    {
+      "interpretation": "The standard library real-number type at the external semantic frontier.",
+      "reuse_sha256": "f2e0f77a3eedec456e15a938719daab023ce83c38d78eaed190d7a193b4500f9",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "source_dependency_id": "D049",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D009"
+    },
+    {
+      "interpretation": "Selects Real.zero.",
+      "reuse_sha256": "d08b7a921bef1d7898c11931c0180d5a572e70dc084be186e4224ab084bfd3dc",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "source_dependency_id": "D055",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D011"
+    },
+    {
+      "interpretation": "Interprets the literal 0 as the supplied zero element.",
+      "reuse_sha256": "4cab96c7d3ba85dcabaed043dad67f453ba7d4dc4468e28347312ff2b9cd876d",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "source_dependency_id": "D068",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D012"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+  "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION-PRODUCTION-20260908"
+}
+
+Direct isolation: do not read blind translation, roundtrip judgment, or prior judgments.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 25.
+
+Attached primary source rendering: raw PDF page 26.
+
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 28.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
