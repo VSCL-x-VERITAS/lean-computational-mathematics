@@ -1,0 +1,142 @@
+
+/-- Glue a right derivative at a threshold, choosing the upper branch at the threshold. -/
+theorem hasDerivWithinAt_if_lt_right {f g : ℝ → ℝ} {c x df dg : ℝ}
+    (hf : x < c → HasDerivWithinAt f df (Ioi x) x)
+    (hg : c ≤ x → HasDerivWithinAt g dg (Ioi x) x) :
+    HasDerivWithinAt (fun y => if y < c then f y else g y)
+      (if x < c then df else dg) (Ioi x) x := by
+  by_cases hx : x < c
+  · simp only [if_pos hx]
+    apply (hf hx).congr_of_eventuallyEq
+    · filter_upwards [(eventually_lt_nhds hx).filter_mono inf_le_left] with y hy
+      simp only [if_pos hy]
+    · simp only [if_pos hx]
+  · simp only [if_neg hx]
+    apply (hg (le_of_not_gt hx)).congr
+    · intro y hy
+      have hh : ¬ y < c := by linarith [mem_Ioi.mp hy]
+      simp only [if_neg hh]
+    · simp only [if_neg hx]
+
+/-- Two differentiable formulas with matching values and derivatives can be glued
+over any predicate at the point. -/
+theorem hasDerivAt_if_of_eq {f g : ℝ → ℝ} (p : ℝ → Prop) [DecidablePred p]
+    {x d : ℝ} (hf : HasDerivAt f d x) (hg : HasDerivAt g d x) (heq : f x = g x) :
+    HasDerivAt (fun y => if p y then f y else g y) d x := by
+  have h₁ : HasDerivWithinAt (fun y => if p y then f y else g y) d {y | p y} x := by
+    apply hf.hasDerivWithinAt.congr
+    · intro y hy
+      simp only [mem_setOf_eq] at hy
+      simp only [if_pos hy]
+    · split_ifs <;> simp [heq]
+  have h₂ : HasDerivWithinAt (fun y => if p y then f y else g y) d {y | p y}ᶜ x := by
+    apply hg.hasDerivWithinAt.congr
+    · intro y hy
+      simp only [mem_compl_iff, mem_setOf_eq] at hy
+      simp only [if_neg hy]
+    · split_ifs <;> simp [heq]
+  exact hasDerivWithinAt_univ.mp (by simpa only [union_compl_self] using h₁.union h₂)
+
+theorem continuous_if_lt_of_closed {f g : ℝ → ℝ} {c : ℝ}
+    (hf : ContinuousOn f (Iic c)) (hg : ContinuousOn g (Ici c)) (heq : f c = g c) :
+    Continuous (fun y => if y < c then f y else g y) := by
+  have hh : Continuous (fun y => if c ≤ y then g y else f y) :=
+    continuous_if_le continuous_const continuous_id hg hf (fun y hy => by simpa [← hy] using heq.symm)
+  convert hh using 1
+  funext y
+  by_cases hy : y < c
+  · simp only [if_pos hy, if_neg (not_le.mpr hy)]
+  · simp only [if_neg hy, if_pos (le_of_not_gt hy)]
+
+theorem hasDerivWithinAt_abs_right (x : ℝ) :
+    HasDerivWithinAt (abs : ℝ → ℝ) (if x < 0 then -1 else 1) (Ioi x) x := by
+  by_cases hx : x < 0
+  · simpa only [if_pos hx] using (hasDerivAt_abs_neg hx).hasDerivWithinAt
+  by_cases hpos : 0 < x
+  · simpa only [if_neg hx] using (hasDerivAt_abs_pos hpos).hasDerivWithinAt
+  have hz : x = 0 := by linarith
+  subst x
+  simp only [lt_self_iff_false, if_false]
+  apply (hasDerivAt_id (0 : ℝ)).hasDerivWithinAt.congr
+  · intro y hy
+    exact abs_of_pos hy
+  · exact abs_zero
+
+theorem centralPotential_space_deriv (x t : ℝ) :
+    HasDerivAt (fun y => centralPotential y t) (-x / (1 - t)) x := by
+  convert (((hasDerivAt_id x).pow 2).neg.div_const 2).div_const (1 - t) using 1
+  simp only [pow_one, mul_one]
+  ring
+
+theorem centralPotential_time_deriv {x t : ℝ} (ht : t < 1) :
+    HasDerivAt (centralPotential x) (-((-x / (1 - t)) ^ 2 / 2)) t := by
+  have hr : 1 - t ≠ 0 := by linarith
+  convert ((hasDerivAt_const t (1 : ℝ)).sub (hasDerivAt_id t)).const_div (-x ^ 2 / 2) hr using 1
+  simp only [zero_sub]
+  field_simp
+  ring
+
+theorem outerPotential_time_deriv (x t : ℝ) :
+    HasDerivAt (outerPotential x) (-|x| + 1 / 2 - t) t := by
+  convert ((((hasDerivAt_const t (-x ^ 2 / 2)).sub ((hasDerivAt_id t).mul_const |x|)).add
+    ((hasDerivAt_id t).div_const 2)).sub (((hasDerivAt_id t).pow 2).div_const 2)) using 1
+  simp only [pow_one, mul_one, zero_sub]
+  ring
+
+theorem outerPotential_space_right_deriv (x t : ℝ) :
+    HasDerivWithinAt (fun y => outerPotential y t) (outerState x t) (Ioi x) x := by
+  have hh := ((((((hasDerivAt_id x).pow 2).neg.div_const 2).hasDerivWithinAt.sub
+    ((hasDerivWithinAt_abs_right x).const_mul t)).add_const (t / 2)).sub_const (t ^ 2 / 2))
+  convert hh using 1
+  simp only [pow_one, mul_one, outerState]
+  split_ifs <;> ring
+
+theorem outerPotential_space_deriv {x : ℝ} (hx : x ≠ 0) (t : ℝ) :
+    HasDerivAt (fun y => outerPotential y t) (outerState x t) x := by
+  rcases lt_or_gt_of_ne hx with hneg | hpos
+  · have hh := ((((((hasDerivAt_id x).pow 2).neg.div_const 2).sub
+      ((hasDerivAt_abs_neg hneg).const_mul t)).add_const (t / 2)).sub_const (t ^ 2 / 2))
+    convert hh using 1
+    simp only [outerState, if_pos hneg, pow_one, mul_one]
+    ring
+  · have hh := ((((((hasDerivAt_id x).pow 2).neg.div_const 2).sub
+      ((hasDerivAt_abs_pos hpos).const_mul t)).add_const (t / 2)).sub_const (t ^ 2 / 2))
+    convert hh using 1
+    simp only [outerState, if_neg (not_lt.mpr hpos.le), pow_one, mul_one]
+    ring
+
+theorem centralPotential_time_continuousOn (x : ℝ) :
+    ContinuousOn (centralPotential x) (Iic (1 - |x|)) := by
+  by_cases hx : x = 0
+  · subst x
+    simpa only [centralPotential, zero_pow, neg_zero, zero_div] using
+      (continuousOn_const : ContinuousOn (fun _ : ℝ => (0 : ℝ)) (Iic (1 - |(0 : ℝ)|)))
+  apply ContinuousOn.div continuousOn_const (continuous_const.sub continuous_id).continuousOn
+  intro t ht
+  have ha : 0 < |x| := abs_pos.mpr hx
+  change t ≤ 1 - |x| at ht
+  linarith
+
+theorem shockPotential_time_continuous (x : ℝ) : Continuous (shockPotential x) := by
+  apply continuous_if_lt_of_closed (centralPotential_time_continuousOn x)
+  · exact (by fun_prop : Continuous (outerPotential x)).continuousOn
+  · exact potential_match rfl
+
+theorem shockPotential_time_right_deriv (x t : ℝ) :
+    HasDerivWithinAt (shockPotential x) (-huberFlux (shockState x t)) (Ioi t) t := by
+  have hh : HasDerivWithinAt (shockPotential x)
+      (if t < 1 - |x| then -((-x / (1 - t)) ^ 2 / 2) else -|x| + 1 / 2 - t) (Ioi t) t := by
+    apply hasDerivWithinAt_if_lt_right
+    · intro ht
+      exact (centralPotential_time_deriv (by linarith [abs_nonneg x])).hasDerivWithinAt
+    · intro _
+      exact (outerPotential_time_deriv x t).hasDerivWithinAt
+  apply hh.congr_deriv
+  by_cases ht : t < 1 - |x|
+  · simp only [if_pos ht, shockState, central_flux ht]
+  · simp only [if_neg ht, shockState, outer_flux (le_of_not_gt ht)]
+    ring
+
+#print axioms shockPotential_time_continuous
+#print axioms shockPotential_time_right_deriv
+

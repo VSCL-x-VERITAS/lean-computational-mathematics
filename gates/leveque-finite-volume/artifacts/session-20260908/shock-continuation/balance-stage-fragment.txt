@@ -1,0 +1,198 @@
+
+theorem huberFlux_convex : ConvexOn ℝ univ huberFlux := by
+  apply Monotone.convexOn_univ_of_deriv (fun x => (hasDerivAt_huberFlux x).differentiableAt)
+  have hm : Monotone huberSlope := monotone_const.min (monotone_const.max monotone_id)
+  simpa only [funext (fun x => (hasDerivAt_huberFlux x).deriv)] using hm
+
+/-- The flux graph lies below the stationary shock chord between its two traces. -/
+theorem stationary_shock_oleinik {t k : ℝ} (ht : 1 ≤ t) (hk : k ∈ Icc (-t) t) :
+    huberFlux k ≤ huberFlux t := by
+  have hh := huberFlux_convex.le_max_of_mem_Icc (mem_univ (-t)) (mem_univ t) hk
+  simpa only [← (stationary_shock_flux_and_speeds ht).1, max_self] using hh
+
+theorem central_outer_state_match {x t : ℝ} (ht : t < 1) (h : t = 1 - |x|) :
+    -x / (1 - t) = outerState x t := by
+  have hr : 1 - t ≠ 0 := by linarith
+  by_cases hx : x < 0
+  · have hrel : t = 1 + x := by simpa only [abs_of_neg hx, sub_neg_eq_add] using h
+    have hc : -x / (1 - t) = 1 := (div_eq_one_iff_eq hr).mpr (by linarith)
+    rw [hc, outerState, if_pos hx]
+    linarith
+  · have hrel : t = 1 - x := by simpa only [abs_of_nonneg (le_of_not_gt hx)] using h
+    have hc : -x / (1 - t) = -1 := (div_eq_iff hr).mpr (by linarith)
+    rw [hc, outerState, if_neg hx]
+    linarith
+
+theorem shockPotential_space_continuous (t : ℝ) :
+    Continuous (fun x => shockPotential x t) := by
+  apply Continuous.if
+  · intro x hx
+    exact potential_match (frontier_lt_subset_eq continuous_const
+      (continuous_const.sub continuous_abs) hx)
+  · unfold centralPotential
+    fun_prop
+  · unfold outerPotential
+    fun_prop
+
+theorem outerState_space_continuousAt {x : ℝ} (hx : x ≠ 0) (t : ℝ) :
+    ContinuousAt (fun y => outerState y t) x := by
+  rcases lt_or_gt_of_ne hx with hneg | hpos
+  · have hh : Continuous (fun y : ℝ => t - y) := continuous_const.sub continuous_id
+    apply hh.continuousAt.congr_of_eventuallyEq
+    filter_upwards [eventually_lt_nhds hneg] with y hy
+    simp only [outerState, if_pos hy]
+  · have hh : Continuous (fun y : ℝ => -t - y) := continuous_const.sub continuous_id
+    apply hh.continuousAt.congr_of_eventuallyEq
+    filter_upwards [eventually_gt_nhds hpos] with y hy
+    simp only [outerState, if_neg (not_lt.mpr hy.le)]
+
+theorem shockState_continuous_before {t : ℝ} (ht : t < 1) :
+    Continuous (fun x => shockState x t) := by
+  apply continuous_if
+  · intro x hx
+    exact central_outer_state_match ht (frontier_lt_subset_eq continuous_const
+      (continuous_const.sub continuous_abs) hx)
+  · exact (by fun_prop : Continuous (fun x : ℝ => -x / (1 - t))).continuousOn
+  · intro x hx
+    have hclosed : IsClosed {y : ℝ | ¬t < 1 - |y|} := by
+      simp only [not_lt]
+      exact isClosed_le (continuous_const.sub continuous_abs) continuous_const
+    have hout : ¬t < 1 - |x| := by simpa only [hclosed.closure_eq] using hx
+    have hxne : x ≠ 0 := by intro hz; simp only [hz, abs_zero, sub_zero] at hout; linarith
+    exact (outerState_space_continuousAt hxne t).continuousWithinAt
+
+theorem shockPotential_space_right_deriv (x t : ℝ) :
+    HasDerivWithinAt (fun y => shockPotential y t) (shockState x t) (Ioi x) x := by
+  by_cases ht : 1 ≤ t
+  · have hpot : (fun y => shockPotential y t) = fun y => outerPotential y t := by
+      funext y
+      simp only [shockPotential, if_neg (show ¬t < 1 - |y| by linarith [abs_nonneg y])]
+    rw [hpot, shockState_after ht]
+    exact outerPotential_space_right_deriv x t
+  have ht' : t < 1 := lt_of_not_ge ht
+  by_cases hc : t < 1 - |x|
+  · simp only [shockState, if_pos hc]
+    apply (centralPotential_space_deriv x t).hasDerivWithinAt.congr_of_eventuallyEq
+    · have hopen : IsOpen {y : ℝ | t < 1 - |y|} :=
+        isOpen_lt continuous_const (continuous_const.sub continuous_abs)
+      filter_upwards [(hopen.mem_nhds hc).filter_mono inf_le_left] with y hy
+      simp only [shockPotential, if_pos hy]
+    · simp only [shockPotential, if_pos hc]
+  by_cases heq : t = 1 - |x|
+  · have hx : x ≠ 0 := by intro hz; simp only [hz, abs_zero, sub_zero] at heq; linarith
+    have hmatch := central_outer_state_match ht' heq
+    have hg : HasDerivAt (fun y => outerPotential y t) (-x / (1 - t)) x :=
+      (outerPotential_space_deriv hx t).congr_deriv hmatch.symm
+    have hh := hasDerivAt_if_of_eq (fun y => t < 1 - |y|)
+      (centralPotential_space_deriv x t) hg (potential_match heq)
+    simp only [shockState, if_neg hc]
+    exact hh.hasDerivWithinAt.congr_deriv hmatch
+  · have hstrict : 1 - |x| < t := lt_of_le_of_ne (le_of_not_gt hc) heq.symm
+    simp only [shockState, if_neg hc]
+    apply (outerPotential_space_right_deriv x t).congr_of_eventuallyEq
+    · have hopen : IsOpen {y : ℝ | 1 - |y| < t} :=
+        isOpen_lt (continuous_const.sub continuous_abs) continuous_const
+      filter_upwards [(hopen.mem_nhds hstrict).filter_mono inf_le_left] with y hy
+      simp only [shockPotential, if_neg (not_lt.mpr (le_of_lt hy))]
+    · simp only [shockPotential, if_neg hc]
+
+theorem intervalIntegrable_if {p : ℝ → Prop} [DecidablePred p]
+    {f g : ℝ → ℝ} {a b : ℝ} (hp : MeasurableSet {x | p x})
+    (hf : IntervalIntegrable f volume a b) (hg : IntervalIntegrable g volume a b) :
+    IntervalIntegrable (fun x => if p x then f x else g x) volume a b := by
+  rw [intervalIntegrable_iff]
+  exact Integrable.piecewise (μ := volume.restrict (uIoc a b)) hp
+    hf.def'.integrableOn hg.def'.integrableOn
+
+theorem shockState_space_intervalIntegrable (a b t : ℝ) :
+    IntervalIntegrable (fun x => shockState x t) volume a b := by
+  have hout : IntervalIntegrable (fun x => outerState x t) volume a b := by
+    apply intervalIntegrable_if measurableSet_Iio
+    · exact (by fun_prop : Continuous (fun x : ℝ => t - x)).intervalIntegrable a b
+    · exact (by fun_prop : Continuous (fun x : ℝ => -t - x)).intervalIntegrable a b
+  apply intervalIntegrable_if
+    (isOpen_lt continuous_const (continuous_const.sub continuous_abs)).measurableSet
+  · exact (by fun_prop : Continuous (fun x : ℝ => -x / (1 - t))).intervalIntegrable a b
+  · exact hout
+
+theorem clippedCentralState_continuous (x : ℝ) :
+    Continuous (fun t : ℝ => -x / max (1 - t) |x|) := by
+  by_cases hx : x = 0
+  · subst x
+    simpa only [neg_zero, zero_div] using (continuous_const : Continuous (fun _ : ℝ => (0 : ℝ)))
+  apply continuous_const.div ((continuous_const.sub continuous_id).max continuous_const)
+  intro t
+  exact ne_of_gt ((abs_pos.mpr hx).trans_le (le_max_right (1 - t) |x|))
+
+theorem shockState_flux_time_intervalIntegrable (x a b : ℝ) :
+    IntervalIntegrable (fun t => huberFlux (shockState x t)) volume a b := by
+  have hrepr : (fun t => huberFlux (shockState x t)) =
+      fun t => if t < 1 - |x| then huberFlux (-x / max (1 - t) |x|)
+        else huberFlux (outerState x t) := by
+    funext t
+    by_cases ht : t < 1 - |x|
+    · simp only [shockState, if_pos ht, max_eq_left (show |x| ≤ 1 - t by linarith)]
+    · simp only [shockState, if_neg ht]
+  rw [hrepr]
+  apply intervalIntegrable_if measurableSet_Iio
+  · exact (huberFlux_contDiff_one.continuous.comp (clippedCentralState_continuous x)).intervalIntegrable a b
+  · have hout : Continuous (outerState x) := by
+      unfold outerState
+      split_ifs <;> fun_prop
+    exact (huberFlux_contDiff_one.continuous.comp hout).intervalIntegrable a b
+
+theorem shockState_mass_potential (a b t : ℝ) :
+    (∫ x in a..b, shockState x t) = shockPotential b t - shockPotential a t := by
+  exact intervalIntegral.integral_eq_sub_of_hasDeriv_right
+    (shockPotential_space_continuous t).continuousOn
+    (fun x _ => shockPotential_space_right_deriv x t)
+    (shockState_space_intervalIntegrable a b t)
+
+theorem shockState_flux_potential (x a b : ℝ) :
+    (∫ t in a..b, huberFlux (shockState x t)) = shockPotential x a - shockPotential x b := by
+  have hh := intervalIntegral.integral_eq_sub_of_hasDeriv_right
+    (shockPotential_time_continuous x).continuousOn
+    (fun t _ => shockPotential_time_right_deriv x t)
+    (shockState_flux_time_intervalIntegrable x a b).neg
+  rw [intervalIntegral.integral_neg] at hh
+  linarith
+
+/-- Complete oriented rectangle balance for the constructed field, proved from its
+primitive and right-derivative FTC; no conservation-law certificate is an input. -/
+theorem shockState_rectangle_balance (a b s t : ℝ) :
+    (∫ x in a..b, shockState x t) - (∫ x in a..b, shockState x s) =
+      ∫ τ in s..t, (huberFlux (shockState a τ) - huberFlux (shockState b τ)) := by
+  rw [shockState_mass_potential, shockState_mass_potential,
+    intervalIntegral.integral_sub (shockState_flux_time_intervalIntegrable a s t)
+      (shockState_flux_time_intervalIntegrable b s t),
+    shockState_flux_potential, shockState_flux_potential]
+  ring
+
+/-- A concrete nonlinear C1 convex flux and its locally integrable, rectangle-balanced
+solution have smooth whole-line initial data and a genuine jump at positive time. -/
+theorem smooth_data_shock_example :
+    ContDiff ℝ 1 huberFlux ∧ ConvexOn ℝ univ huberFlux ∧
+    (¬ ∃ c : ℝ, ∀ q, huberFlux q = c * q) ∧
+    ContDiff ℝ ⊤ (fun x => shockState x 0) ∧
+    (∀ x, shockState x 0 = -x) ∧
+    (∀ t < 1, Continuous (fun x => shockState x t)) ∧
+    (∀ a b t, IntervalIntegrable (fun x => shockState x t) volume a b) ∧
+    (∀ x a b, IntervalIntegrable (fun t => huberFlux (shockState x t)) volume a b) ∧
+    (∀ a b s t, (∫ x in a..b, shockState x t) - (∫ x in a..b, shockState x s) =
+      ∫ τ in s..t, (huberFlux (shockState a τ) - huberFlux (shockState b τ))) ∧
+    (¬ ContinuousAt (fun x => shockState x 2) 0) := by
+  exact ⟨huberFlux_contDiff_one, huberFlux_convex, huberFlux_not_linear,
+    shockState_initial_smooth, shockState_initial, fun _ ht => shockState_continuous_before ht,
+    shockState_space_intervalIntegrable,
+    shockState_flux_time_intervalIntegrable, shockState_rectangle_balance,
+    shockState_not_continuous_after (by norm_num)⟩
+
+#print axioms huberFlux_convex
+#print axioms stationary_shock_oleinik
+#print axioms shockPotential_space_continuous
+#print axioms shockState_continuous_before
+#print axioms shockPotential_space_right_deriv
+#print axioms shockState_space_intervalIntegrable
+#print axioms shockState_flux_time_intervalIntegrable
+#print axioms shockState_rectangle_balance
+#print axioms smooth_data_shock_example
