@@ -1,0 +1,762 @@
+structure NumStability.ReturnedRiemannDraft.FieldFluxMethod.{u_1, u_2} {m : ℕ}
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m))
+  (Result : NumStability.HyperbolicRiemannProblem law → Type u_1) (Information : Type u_2) : Type (max u_1 u_2)
+number of parameters: 4
+fields:
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.domain : NumStability.HyperbolicRiemannProblem law → Prop
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.solve : (problem : NumStability.HyperbolicRiemannProblem law) →
+      self.domain problem → Result problem
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.field : {problem : NumStability.HyperbolicRiemannProblem law} →
+      Result problem → ℝ → ℝ → Fin m → ℝ
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.initial : ∀ {problem : NumStability.HyperbolicRiemannProblem law}
+      (result : Result problem),
+      NumStability.IsRiemannData (fun x => self.field result x 0) problem.leftState problem.rightState
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.trace_integrable : ∀
+      {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (s t : ℝ),
+      IntervalIntegrable (fun τ => law.physicalFlux (self.field result 0 τ)) volume s t
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.extract : {problem : NumStability.HyperbolicRiemannProblem law} →
+      Result problem → Information
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.numericalFlux : Information → Fin m → ℝ
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.constants_in_domain : ∀ (state : Fin m → ℝ),
+      self.domain { leftState := state, rightState := state }
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.consistent : ∀ (state : Fin m → ℝ),
+      self.numericalFlux (self.extract (self.solve { leftState := state, rightState := state } ⋯)) =
+        law.physicalFlux state
+constructor:
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod.mk.{u_1, u_2} {m : ℕ}
+    {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+    {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+    (domain : NumStability.HyperbolicRiemannProblem law → Prop)
+    (solve : (problem : NumStability.HyperbolicRiemannProblem law) → domain problem → Result problem)
+    (field : {problem : NumStability.HyperbolicRiemannProblem law} → Result problem → ℝ → ℝ → Fin m → ℝ)
+    (initial :
+      ∀ {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem),
+        NumStability.IsRiemannData (fun x => field result x 0) problem.leftState problem.rightState)
+    (trace_integrable :
+      ∀ {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (s t : ℝ),
+        IntervalIntegrable (fun τ => law.physicalFlux (field result 0 τ)) volume s t)
+    (extract : {problem : NumStability.HyperbolicRiemannProblem law} → Result problem → Information)
+    (numericalFlux : Information → Fin m → ℝ)
+    (constants_in_domain : ∀ (state : Fin m → ℝ), domain { leftState := state, rightState := state })
+    (consistent :
+      ∀ (state : Fin m → ℝ),
+        numericalFlux (extract (solve { leftState := state, rightState := state } ⋯)) = law.physicalFlux state) :
+    NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information
+NumStability.ReturnedRiemannDraft.FieldFluxMethod.{u_1, u_2} {m : ℕ}
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m))
+  (Result : NumStability.HyperbolicRiemannProblem law → Type u_1) (Information : Type u_2) : Type (max u_1 u_2)
+'NumStability.ReturnedRiemannDraft.FieldFluxMethod' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.interfaceFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) : Fin m → ℝ
+'NumStability.ReturnedRiemannDraft.interfaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.ofExact.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) :
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod law (NumStability.CertifiedRectangleRiemannSolution law) Information
+'NumStability.ReturnedRiemannDraft.ofExact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.ofExact_interfaceFlux.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) :
+  NumStability.ReturnedRiemannDraft.interfaceFlux (NumStability.ReturnedRiemannDraft.ofExact method) old hdomain j =
+    NumStability.rectangleRiemannInterfaceFlux method old hdomain j
+'NumStability.ReturnedRiemannDraft.ofExact_interfaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.ofExact_returnedField.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (problem : NumStability.HyperbolicRiemannProblem law) (h : method.domain problem) :
+  (NumStability.ReturnedRiemannDraft.ofExact method).field
+      ((NumStability.ReturnedRiemannDraft.ofExact method).solve problem h) =
+    (method.solve problem h).solution
+'NumStability.ReturnedRiemannDraft.ofExact_returnedField' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.flux_error_of_trace.{u_3} {E : Type u_3} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] {localTrace physicalTrace : ℝ → E} {numerical : E} {s t a b : ℝ} (hst : s < t)
+  (hl : IntervalIntegrable localTrace volume s t) (hp : IntervalIntegrable physicalTrace volume s t)
+  (hn : ∀ τ ∈ Set.uIoc s t, ‖numerical - localTrace τ‖ ≤ a)
+  (he : ∀ τ ∈ Set.uIoc s t, ‖localTrace τ - physicalTrace τ‖ ≤ b) :
+  ‖numerical - NumStability.oneDimensionalCellAverage physicalTrace s t‖ ≤ a + b
+'NumStability.ReturnedRiemannDraft.flux_error_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.interface_error_le.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt a b : ℝ} (hdt : 0 < dt)
+  (j : ℤ)
+  (hn :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+            law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+        a)
+  (he :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+            law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+        b) :
+  ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+        NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux 0 dt j‖ ≤
+    a + b
+'NumStability.ReturnedRiemannDraft.interface_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.update_error_le.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt oldBound : ℝ}
+  (hdt : 0 < dt) (i : ℤ) (a b : ℤ → ℝ)
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x 0) i‖ ≤ oldBound)
+  (hn :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+              law.physicalFlux
+                (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+          a j)
+  (he :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+              law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+          b j) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid dt old
+          (NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x dt) i‖ ≤
+    oldBound + dt / grid.cellVolume i * (a i + b i + (a (i + 1) + b (i + 1)))
+'NumStability.ReturnedRiemannDraft.update_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.identity_hyperbolic {m : ℕ} : NumStability.IsRealHyperbolicMatrix 1
+'NumStability.ReturnedRiemannDraft.Witness.identity_hyperbolic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.transportLaw {m : ℕ} :
+  NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)
+'NumStability.ReturnedRiemannDraft.Witness.transportLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.physicalFlux {m : ℕ} (state : Fin m → ℝ) :
+  NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux state = state
+'NumStability.ReturnedRiemannDraft.Witness.physicalFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary {m : ℕ} (left right : Fin m → ℝ) (x _t : ℝ) : Fin m → ℝ
+'NumStability.ReturnedRiemannDraft.Witness.stationary' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary_initial {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRiemannData (fun x => NumStability.ReturnedRiemannDraft.Witness.stationary left right x 0) left right
+'NumStability.ReturnedRiemannDraft.Witness.stationary_initial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary_trace_integrable {m : ℕ} (left right : Fin m → ℝ) (s t : ℝ) :
+  IntervalIntegrable
+    (fun τ =>
+      NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux
+        (NumStability.ReturnedRiemannDraft.Witness.stationary left right 0 τ))
+    volume s t
+'NumStability.ReturnedRiemannDraft.Witness.stationary_trace_integrable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.StationaryResult {m : ℕ}
+  (problem : NumStability.HyperbolicRiemannProblem NumStability.ReturnedRiemannDraft.Witness.transportLaw) : Type
+'NumStability.ReturnedRiemannDraft.Witness.StationaryResult' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.method {m : ℕ} :
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod NumStability.ReturnedRiemannDraft.Witness.transportLaw
+    NumStability.ReturnedRiemannDraft.Witness.StationaryResult (Fin m → ℝ)
+'NumStability.ReturnedRiemannDraft.Witness.method' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.reference {m : ℕ} (left right : Fin m → ℝ) : ℝ → ℝ → Fin m → ℝ
+'NumStability.ReturnedRiemannDraft.Witness.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.reference_rectangle {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRectangleConservationLawSolution (NumStability.ReturnedRiemannDraft.Witness.reference left right)
+    NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux
+'NumStability.ReturnedRiemannDraft.Witness.reference_rectangle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.reference_initial {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRiemannData (fun x => NumStability.ReturnedRiemannDraft.Witness.reference left right x 0) left right
+'NumStability.ReturnedRiemannDraft.Witness.reference_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary_not_rectangle {m : ℕ} {left right : Fin m → ℝ}
+  (hne : left ≠ right) :
+  ¬NumStability.IsRectangleConservationLawSolution (NumStability.ReturnedRiemannDraft.Witness.stationary left right)
+      NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux
+'NumStability.ReturnedRiemannDraft.Witness.stationary_not_rectangle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.method_flux_eq_returned_trace {m : ℕ}
+  (problem : NumStability.HyperbolicRiemannProblem NumStability.ReturnedRiemannDraft.Witness.transportLaw) (t : ℝ) :
+  NumStability.ReturnedRiemannDraft.Witness.method.numericalFlux
+      (NumStability.ReturnedRiemannDraft.Witness.method.extract
+        (NumStability.ReturnedRiemannDraft.Witness.method.solve problem trivial)) =
+    NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux
+      (NumStability.ReturnedRiemannDraft.Witness.method.field
+        (NumStability.ReturnedRiemannDraft.Witness.method.solve problem trivial) 0 t)
+'NumStability.ReturnedRiemannDraft.Witness.method_flux_eq_returned_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary_trace_eq_reference {m : ℕ} (left right : Fin m → ℝ) {t : ℝ}
+  (ht : 0 < t) :
+  NumStability.ReturnedRiemannDraft.Witness.stationary left right 0 t =
+    NumStability.ReturnedRiemannDraft.Witness.reference left right 0 t
+'NumStability.ReturnedRiemannDraft.Witness.stationary_trace_eq_reference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.stationary_reference_error_le {m : ℕ} (left right : Fin m → ℝ) (x t : ℝ) :
+  ‖NumStability.ReturnedRiemannDraft.Witness.stationary left right x t -
+        NumStability.ReturnedRiemannDraft.Witness.reference left right x t‖ ≤
+    ‖left - right‖
+'NumStability.ReturnedRiemannDraft.Witness.stationary_reference_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedRiemannDraft.Witness.nonexact_instance :
+  ∃ problem,
+    NumStability.ReturnedRiemannDraft.Witness.method.domain problem ∧
+      ¬NumStability.IsRectangleConservationLawSolution
+          (NumStability.ReturnedRiemannDraft.Witness.method.field
+            (NumStability.ReturnedRiemannDraft.Witness.method.solve problem trivial))
+          NumStability.ReturnedRiemannDraft.Witness.transportLaw.physicalFlux
+'NumStability.ReturnedRiemannDraft.Witness.nonexact_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.norm_oneDimensionalCellAverage_sub_le.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] {f g : ℝ → E} {s t bound : ℝ} (hst : s < t) (hf : IntervalIntegrable f volume s t)
+  (hg : IntervalIntegrable g volume s t) (herror : ∀ τ ∈ Set.uIoc s t, ‖f τ - g τ‖ ≤ bound) :
+  ‖NumStability.oneDimensionalCellAverage f s t - NumStability.oneDimensionalCellAverage g s t‖ ≤ bound
+'NumStability.norm_oneDimensionalCellAverage_sub_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannFiniteVolumeUpdate_error_le {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ} (hst : s < t) (old : ℤ → Fin m → ℝ) (i : ℤ)
+  {oldBound leftBound rightBound : ℝ}
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤ oldBound)
+  (hleft : ‖rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i‖ ≤ leftBound)
+  (hright : ‖rule s t old (i + 1) - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1)‖ ≤ rightBound) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+    oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.riemannFiniteVolumeUpdate_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.rectangleRiemannInterfaceFlux_error_le.{u_1} {m : ℕ} {Information : Type u_1}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j))
+  {dt solverBound traceBound : ℝ} (hdt : 0 < dt) (j : ℤ)
+  (hnumerical :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖NumStability.rectangleRiemannInterfaceFlux method old hdomain j -
+            law.physicalFlux ((method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯).solution 0 τ)‖ ≤
+        solverBound)
+  (htrace :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖law.physicalFlux ((method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯).solution 0 τ) -
+            law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+        traceBound) :
+  ‖NumStability.rectangleRiemannInterfaceFlux method old hdomain j -
+        NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux 0 dt j‖ ≤
+    solverBound + traceBound
+'NumStability.rectangleRiemannInterfaceFlux_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannData_isRiemannData.{u_1} {State : Type u_1} (leftState valueAtOrigin rightState : State) :
+  NumStability.IsRiemannData (NumStability.riemannData leftState valueAtOrigin rightState) leftState rightState
+'NumStability.riemannData_isRiemannData' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannData_intervalIntegrable.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  (leftState valueAtOrigin rightState : E) (a b : ℝ) :
+  IntervalIntegrable (NumStability.riemannData leftState valueAtOrigin rightState) volume a b
+'NumStability.riemannData_intervalIntegrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.travelingWave_isRectangleConservationLawSolution.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] (profile : ℝ → E) (hprofile : ∀ (a b : ℝ), IntervalIntegrable profile volume a b) (speed : ℝ) :
+  NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile speed) fun state => speed • state
+'NumStability.travelingWave_isRectangleConservationLawSolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearHyperbolicConservationLaw.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) : NumStability.OneDimensionalHyperbolicConservationLaw ι
+'NumStability.linearHyperbolicConservationLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+Matrix.one_mulVec.{v, u_2} {m : Type u_2} {α : Type v} [NonAssocSemiring α] [Fintype m] [DecidableEq m] (v : m → α) :
+  Matrix.mulVec 1 v = v
+'Matrix.one_mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+intervalIntegral.integral_const.{u_5} {E : Type u_5} [NormedAddCommGroup E] [NormedSpace ℝ E] {a b : ℝ}
+  [CompleteSpace E] (c : E) : ∫ (x : ℝ) in a..b, c = (b - a) • c
+'intervalIntegral.integral_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) :
+  NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information
+'NumStability.ReturnedFieldPlacementChecks.toDraft' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) :
+  NumStability.RiemannFieldFluxMethod law Result Information
+'NumStability.ReturnedFieldPlacementChecks.fromDraft' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_toDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) :
+  NumStability.ReturnedFieldPlacementChecks.fromDraft (NumStability.ReturnedFieldPlacementChecks.toDraft method) =
+    method
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_toDraft' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_fromDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) :
+  NumStability.ReturnedFieldPlacementChecks.toDraft (NumStability.ReturnedFieldPlacementChecks.fromDraft method) =
+    method
+'NumStability.ReturnedFieldPlacementChecks.toDraft_fromDraft' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.methodEquiv.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2} :
+  NumStability.RiemannFieldFluxMethod law Result Information ≃
+    NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information
+'NumStability.ReturnedFieldPlacementChecks.methodEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_domain.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft method).domain = method.domain
+'NumStability.ReturnedFieldPlacementChecks.toDraft_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_solve.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information)
+  (problem : NumStability.HyperbolicRiemannProblem law) (h : method.domain problem) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft method).solve problem h = method.solve problem h
+'NumStability.ReturnedFieldPlacementChecks.toDraft_solve' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_field.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (x t : ℝ) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft method).field result x t = method.field result x t
+'NumStability.ReturnedFieldPlacementChecks.toDraft_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_initial.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.toDraft_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_trace_integrable.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (s t : ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.toDraft_trace_integrable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_extract.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft method).extract result = method.extract result
+'NumStability.ReturnedFieldPlacementChecks.toDraft_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_numericalFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) (info : Information) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft method).numericalFlux info = method.numericalFlux info
+'NumStability.ReturnedFieldPlacementChecks.toDraft_numericalFlux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_constants_in_domain.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) (state : Fin m → ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.toDraft_constants_in_domain' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_consistent.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) (state : Fin m → ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.toDraft_consistent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_domain.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).domain = method.domain
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_solve.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information)
+  (problem : NumStability.HyperbolicRiemannProblem law) (h : method.domain problem) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).solve problem h = method.solve problem h
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_solve' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_field.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (x t : ℝ) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).field result x t = method.field result x t
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_initial.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_trace_integrable.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) (s t : ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_trace_integrable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_extract.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information)
+  {problem : NumStability.HyperbolicRiemannProblem law} (result : Result problem) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).extract result = method.extract result
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_numericalFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) (info : Information) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).numericalFlux info = method.numericalFlux info
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_numericalFlux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_constants_in_domain.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) (state : Fin m → ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_constants_in_domain' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_consistent.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) (state : Fin m → ℝ) : ⋯ = ⋯
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_consistent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_interfaceFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) :
+  NumStability.ReturnedRiemannDraft.interfaceFlux (NumStability.ReturnedFieldPlacementChecks.toDraft method) old hdomain
+      j =
+    method.interfaceFlux old hdomain j
+'NumStability.ReturnedFieldPlacementChecks.toDraft_interfaceFlux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_interfaceFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) :
+  (NumStability.ReturnedFieldPlacementChecks.fromDraft method).interfaceFlux old hdomain j =
+    NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_interfaceFlux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.toDraft_ofExact.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) :
+  NumStability.ReturnedFieldPlacementChecks.toDraft (NumStability.RiemannFieldFluxMethod.ofExact method) =
+    NumStability.ReturnedRiemannDraft.ofExact method
+'NumStability.ReturnedFieldPlacementChecks.toDraft_ofExact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.fromDraft_ofExact.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) :
+  NumStability.ReturnedFieldPlacementChecks.fromDraft (NumStability.ReturnedRiemannDraft.ofExact method) =
+    NumStability.RiemannFieldFluxMethod.ofExact method
+'NumStability.ReturnedFieldPlacementChecks.fromDraft_ofExact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.ofExact_returnedField_commutes.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (problem : NumStability.HyperbolicRiemannProblem law) (h : method.domain problem) :
+  (NumStability.ReturnedFieldPlacementChecks.toDraft (NumStability.RiemannFieldFluxMethod.ofExact method)).field
+      ((NumStability.ReturnedFieldPlacementChecks.toDraft (NumStability.RiemannFieldFluxMethod.ofExact method)).solve
+        problem h) =
+    (method.solve problem h).solution
+'NumStability.ReturnedFieldPlacementChecks.ofExact_returnedField_commutes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.interface_error_le_fromDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt a b : ℝ} (hdt : 0 < dt)
+  (j : ℤ)
+  (hn :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+            law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+        a)
+  (he :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+            law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+        b) :
+  ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+        NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux 0 dt j‖ ≤
+    a + b
+'NumStability.ReturnedFieldPlacementChecks.interface_error_le_fromDraft' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.interface_error_le_type_comparison.{u_3, u_4} :
+  @NumStability.ReturnedFieldPlacementChecks.interface_error_le_fromDraft =
+    @NumStability.ReturnedRiemannDraft.interface_error_le
+'NumStability.ReturnedFieldPlacementChecks.interface_error_le_type_comparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.update_error_le_fromDraft.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.ReturnedRiemannDraft.FieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt oldBound : ℝ}
+  (hdt : 0 < dt) (i : ℤ) (a b : ℤ → ℝ)
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x 0) i‖ ≤ oldBound)
+  (hn :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain j -
+              law.physicalFlux
+                (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+          a j)
+  (he :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+              law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+          b j) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid dt old
+          (NumStability.ReturnedRiemannDraft.interfaceFlux method old hdomain) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x dt) i‖ ≤
+    oldBound + dt / grid.cellVolume i * (a i + b i + (a (i + 1) + b (i + 1)))
+'NumStability.ReturnedFieldPlacementChecks.update_error_le_fromDraft' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.update_error_le_type_comparison.{u_3, u_4} :
+  @NumStability.ReturnedFieldPlacementChecks.update_error_le_fromDraft =
+    @NumStability.ReturnedRiemannDraft.update_error_le
+'NumStability.ReturnedFieldPlacementChecks.update_error_le_type_comparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.stationary_method_commutes {m : ℕ} :
+  NumStability.ReturnedFieldPlacementChecks.toDraft NumStability.StationaryRiemannField.method =
+    NumStability.ReturnedRiemannDraft.Witness.method
+'NumStability.ReturnedFieldPlacementChecks.stationary_method_commutes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_01.{u_3} :
+  @NumStability.ReturnedRiemannDraft.ofExact_interfaceFlux = @NumStability.RiemannFieldFluxMethod.ofExact_interfaceFlux
+'NumStability.ReturnedFieldPlacementChecks.identity_01' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_02.{u_3} :
+  @NumStability.ReturnedRiemannDraft.ofExact_returnedField = @NumStability.RiemannFieldFluxMethod.ofExact_returnedField
+'NumStability.ReturnedFieldPlacementChecks.identity_02' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_03.{u_3} :
+  @NumStability.ReturnedRiemannDraft.flux_error_of_trace = @NumStability.norm_sub_oneDimensionalCellAverage_le_of_trace
+'NumStability.ReturnedFieldPlacementChecks.identity_03' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_04 :
+  @NumStability.ReturnedRiemannDraft.Witness.transportLaw = @NumStability.StationaryRiemannField.transportLaw
+'NumStability.ReturnedFieldPlacementChecks.identity_04' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_05 :
+  @NumStability.ReturnedRiemannDraft.Witness.physicalFlux = @NumStability.StationaryRiemannField.physicalFlux
+'NumStability.ReturnedFieldPlacementChecks.identity_05' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_06 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary = @NumStability.StationaryRiemannField.stationary
+'NumStability.ReturnedFieldPlacementChecks.identity_06' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_07 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary_initial =
+    @NumStability.StationaryRiemannField.stationary_initial
+'NumStability.ReturnedFieldPlacementChecks.identity_07' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_08 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary_trace_integrable =
+    @NumStability.StationaryRiemannField.stationary_trace_integrable
+'NumStability.ReturnedFieldPlacementChecks.identity_08' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_09 :
+  @NumStability.ReturnedRiemannDraft.Witness.StationaryResult = @NumStability.StationaryRiemannField.StationaryResult
+'NumStability.ReturnedFieldPlacementChecks.identity_09' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_10 :
+  @NumStability.ReturnedRiemannDraft.Witness.reference = @NumStability.StationaryRiemannField.reference
+'NumStability.ReturnedFieldPlacementChecks.identity_10' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_11 :
+  @NumStability.ReturnedRiemannDraft.Witness.reference_rectangle =
+    @NumStability.StationaryRiemannField.reference_rectangle
+'NumStability.ReturnedFieldPlacementChecks.identity_11' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_12 :
+  @NumStability.ReturnedRiemannDraft.Witness.reference_initial = @NumStability.StationaryRiemannField.reference_initial
+'NumStability.ReturnedFieldPlacementChecks.identity_12' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_13 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary_not_rectangle =
+    @NumStability.StationaryRiemannField.stationary_not_rectangle
+'NumStability.ReturnedFieldPlacementChecks.identity_13' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_14 :
+  @NumStability.ReturnedRiemannDraft.Witness.method_flux_eq_returned_trace =
+    @NumStability.StationaryRiemannField.method_flux_eq_returned_trace
+'NumStability.ReturnedFieldPlacementChecks.identity_14' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_15 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary_trace_eq_reference =
+    @NumStability.StationaryRiemannField.stationary_trace_eq_reference
+'NumStability.ReturnedFieldPlacementChecks.identity_15' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_16 :
+  @NumStability.ReturnedRiemannDraft.Witness.stationary_reference_error_le =
+    @NumStability.StationaryRiemannField.stationary_reference_error_le
+'NumStability.ReturnedFieldPlacementChecks.identity_16' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ReturnedFieldPlacementChecks.identity_17 :
+  NumStability.ReturnedRiemannDraft.Witness.nonexact_instance = NumStability.StationaryRiemannField.nonexact_instance
+'NumStability.ReturnedFieldPlacementChecks.identity_17' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.{u_1, u_2} {m : ℕ}
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m))
+  (Result : NumStability.HyperbolicRiemannProblem law → Type u_1) (Information : Type u_2) : Type (max u_1 u_2)
+'NumStability.RiemannFieldFluxMethod' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.interfaceFlux.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) : Fin m → ℝ
+'NumStability.RiemannFieldFluxMethod.interfaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.ofExact.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) :
+  NumStability.RiemannFieldFluxMethod law (NumStability.CertifiedRectangleRiemannSolution law) Information
+'NumStability.RiemannFieldFluxMethod.ofExact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.ofExact_interfaceFlux.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) (j : ℤ) :
+  (NumStability.RiemannFieldFluxMethod.ofExact method).interfaceFlux old hdomain j =
+    NumStability.rectangleRiemannInterfaceFlux method old hdomain j
+'NumStability.RiemannFieldFluxMethod.ofExact_interfaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.ofExact_returnedField.{u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)} {Information : Type u_2}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (problem : NumStability.HyperbolicRiemannProblem law) (h : method.domain problem) :
+  (NumStability.RiemannFieldFluxMethod.ofExact method).field
+      ((NumStability.RiemannFieldFluxMethod.ofExact method).solve problem h) =
+    (method.solve problem h).solution
+'NumStability.RiemannFieldFluxMethod.ofExact_returnedField' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.norm_sub_oneDimensionalCellAverage_le_of_trace.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] [CompleteSpace E] {localTrace physicalTrace : ℝ → E} {numerical : E} {s t a b : ℝ} (hst : s < t)
+  (hl : IntervalIntegrable localTrace volume s t) (hp : IntervalIntegrable physicalTrace volume s t)
+  (hn : ∀ τ ∈ Set.uIoc s t, ‖numerical - localTrace τ‖ ≤ a)
+  (he : ∀ τ ∈ Set.uIoc s t, ‖localTrace τ - physicalTrace τ‖ ≤ b) :
+  ‖numerical - NumStability.oneDimensionalCellAverage physicalTrace s t‖ ≤ a + b
+'NumStability.norm_sub_oneDimensionalCellAverage_le_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.interface_error_le.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt a b : ℝ} (hdt : 0 < dt)
+  (j : ℤ)
+  (hn :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖method.interfaceFlux old hdomain j -
+            law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+        a)
+  (he :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+            law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+        b) :
+  ‖method.interfaceFlux old hdomain j - NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux 0 dt j‖ ≤
+    a + b
+'NumStability.RiemannFieldFluxMethod.interface_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannFieldFluxMethod.update_error_le.{u_1, u_2} {m : ℕ}
+  {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (method : NumStability.RiemannFieldFluxMethod law Result Information) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q law.physicalFlux) (old : ℤ → Fin m → ℝ)
+  (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {dt oldBound : ℝ}
+  (hdt : 0 < dt) (i : ℤ) (a b : ℤ → ℝ)
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x 0) i‖ ≤ oldBound)
+  (hn :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖method.interfaceFlux old hdomain j -
+              law.physicalFlux
+                (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ)‖ ≤
+          a j)
+  (he :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖law.physicalFlux (method.field (method.solve (NumStability.adjacentCellRiemannProblem law old j) ⋯) 0 τ) -
+              law.physicalFlux (q (grid.cellLeft j) τ)‖ ≤
+          b j) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid dt old (method.interfaceFlux old hdomain) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x dt) i‖ ≤
+    oldBound + dt / grid.cellVolume i * (a i + b i + (a (i + 1) + b (i + 1)))
+'NumStability.RiemannFieldFluxMethod.update_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.transportLaw {m : ℕ} : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)
+'NumStability.StationaryRiemannField.transportLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.physicalFlux {m : ℕ} (state : Fin m → ℝ) :
+  NumStability.StationaryRiemannField.transportLaw.physicalFlux state = state
+'NumStability.StationaryRiemannField.physicalFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.stationary {m : ℕ} (left right : Fin m → ℝ) (x _t : ℝ) : Fin m → ℝ
+'NumStability.StationaryRiemannField.stationary' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.stationary_initial {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRiemannData (fun x => NumStability.StationaryRiemannField.stationary left right x 0) left right
+'NumStability.StationaryRiemannField.stationary_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.stationary_trace_integrable {m : ℕ} (left right : Fin m → ℝ) (s t : ℝ) :
+  IntervalIntegrable
+    (fun τ =>
+      NumStability.StationaryRiemannField.transportLaw.physicalFlux
+        (NumStability.StationaryRiemannField.stationary left right 0 τ))
+    volume s t
+'NumStability.StationaryRiemannField.stationary_trace_integrable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.StationaryRiemannField.StationaryResult {m : ℕ}
+  (problem : NumStability.HyperbolicRiemannProblem NumStability.StationaryRiemannField.transportLaw) : Type
+'NumStability.StationaryRiemannField.StationaryResult' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.method {m : ℕ} :
+  NumStability.RiemannFieldFluxMethod NumStability.StationaryRiemannField.transportLaw
+    NumStability.StationaryRiemannField.StationaryResult (Fin m → ℝ)
+'NumStability.StationaryRiemannField.method' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.reference {m : ℕ} (left right : Fin m → ℝ) : ℝ → ℝ → Fin m → ℝ
+'NumStability.StationaryRiemannField.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.reference_rectangle {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRectangleConservationLawSolution (NumStability.StationaryRiemannField.reference left right)
+    NumStability.StationaryRiemannField.transportLaw.physicalFlux
+'NumStability.StationaryRiemannField.reference_rectangle' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.reference_initial {m : ℕ} (left right : Fin m → ℝ) :
+  NumStability.IsRiemannData (fun x => NumStability.StationaryRiemannField.reference left right x 0) left right
+'NumStability.StationaryRiemannField.reference_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.StationaryRiemannField.stationary_not_rectangle {m : ℕ} {left right : Fin m → ℝ} (hne : left ≠ right) :
+  ¬NumStability.IsRectangleConservationLawSolution (NumStability.StationaryRiemannField.stationary left right)
+      NumStability.StationaryRiemannField.transportLaw.physicalFlux
+'NumStability.StationaryRiemannField.stationary_not_rectangle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.StationaryRiemannField.method_flux_eq_returned_trace {m : ℕ}
+  (problem : NumStability.HyperbolicRiemannProblem NumStability.StationaryRiemannField.transportLaw) (t : ℝ) :
+  NumStability.StationaryRiemannField.method.numericalFlux
+      (NumStability.StationaryRiemannField.method.extract
+        (NumStability.StationaryRiemannField.method.solve problem trivial)) =
+    NumStability.StationaryRiemannField.transportLaw.physicalFlux
+      (NumStability.StationaryRiemannField.method.field
+        (NumStability.StationaryRiemannField.method.solve problem trivial) 0 t)
+'NumStability.StationaryRiemannField.method_flux_eq_returned_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.StationaryRiemannField.stationary_trace_eq_reference {m : ℕ} (left right : Fin m → ℝ) {t : ℝ}
+  (ht : 0 < t) :
+  NumStability.StationaryRiemannField.stationary left right 0 t =
+    NumStability.StationaryRiemannField.reference left right 0 t
+'NumStability.StationaryRiemannField.stationary_trace_eq_reference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.StationaryRiemannField.stationary_reference_error_le {m : ℕ} (left right : Fin m → ℝ) (x t : ℝ) :
+  ‖NumStability.StationaryRiemannField.stationary left right x t -
+        NumStability.StationaryRiemannField.reference left right x t‖ ≤
+    ‖left - right‖
+'NumStability.StationaryRiemannField.stationary_reference_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.StationaryRiemannField.nonexact_instance :
+  ∃ problem,
+    NumStability.StationaryRiemannField.method.domain problem ∧
+      ¬NumStability.IsRectangleConservationLawSolution
+          (NumStability.StationaryRiemannField.method.field
+            (NumStability.StationaryRiemannField.method.solve problem trivial))
+          NumStability.StationaryRiemannField.transportLaw.physicalFlux
+'NumStability.StationaryRiemannField.nonexact_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
