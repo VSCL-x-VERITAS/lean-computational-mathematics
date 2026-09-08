@@ -1,0 +1,883 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 6aaa14516c9c49f0f20b92e5e9188553fee0e8f73f784fcb094298b028dec229
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.4 paragraph assigning material properties by averaging parameters over each cell volume",
+      "location": "raw PDF page 30; printed Chapter 1 page 8"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-HETEROGENEOUS-CELL-AVERAGING-CANONICAL-20260908"
+}
+
+
+Source contract SHA256 3fbb39eb8c3c2aa1157f7bee06229d2698ef62352f1b854f7fa37a4e3dba2772
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-HETEROGENEOUS-CELL-AVERAGING-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 29; printed page 7; Section 1.4, final paragraph",
+      "anchor": "materials that are not homogeneous and isotropic",
+      "observation": "The surrounding discussion concerns wave propagation in heterogeneous materials, including smoothly varying material parameters and sharp interfaces with jump discontinuities."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph, opening two sentences",
+      "anchor": "each grid cell can be assigned different material properties via an appropriate averaging of the material parameters over the volume enclosed by the cell",
+      "observation": "The source presents high-resolution finite volume methods based on Riemann problems as an attractive alternative for these problems and explains their suitability for heterogeneous media through cellwise averaging of material parameters."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph, third sentence",
+      "anchor": "a discontinuity in the medium at x = 0 as well as a discontinuity in the initial data",
+      "observation": "The Riemann-problem formulation is said to extend to a medium discontinuity together with an initial-data discontinuity."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph, fourth sentence",
+      "anchor": "a decomposition of the data into waves moving into each cell",
+      "observation": "Solving the interface Riemann problem provides waves moving into the adjoining cells, including reflection and transmission effects between materials."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph, final two sentences",
+      "anchor": "classical reflection and transmission coefficients",
+      "observation": "The source says coefficients for various problems can be derived and understood through particular Riemann solutions, and points to Chapter 9 and Section 21.5 for variable-coefficient linear problems."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, second paragraph, opening sentence",
+      "anchor": "may not be in conservation form",
+      "observation": "The surrounding discussion does not restrict variable-coefficient hyperbolic equations to conservation form."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "Each grid cell is the unit to which material properties may be assigned; the selected paragraph supplies no cell index set or formal quantifiers. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'each grid cell'.]",
+      "Material parameters are the quantities averaged over a cell's enclosed volume; their number, names, and mathematical types are unspecified. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'averaging of the material parameters'.]",
+      "Two adjoining cells provide the setting for the interface Riemann problem. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'interface between two cells'.]"
+    ],
+    "hypotheses": [
+      "The discussion addresses wave propagation in heterogeneous media, potentially with sharp material interfaces. This is inherited application context rather than a formally enumerated hypothesis list. [Raw PDF page 29, printed page 7, Section 1.4, final paragraph: 'sharp interfaces between different materials'.]",
+      "The averaging used to assign cell material properties must be appropriate; no mathematical criterion for appropriateness is given. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'an appropriate averaging'.]",
+      "For the described extended Riemann problem, the medium has a discontinuity at x = 0 and the initial data also have a discontinuity. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, third sentence.]"
+    ],
+    "conclusions": [
+      "Finite volume methods allow individual cells to receive potentially different material properties by appropriately averaging material parameters over each cell's enclosed volume; this makes them a natural choice for heterogeneous media. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second sentence.]",
+      "High-resolution finite volume methods based on solving Riemann problems can be an attractive alternative for the heterogeneous wave-propagation problems under discussion. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, opening sentence.]",
+      "The Riemann-problem idea extends to a discontinuity in the medium at x = 0 together with a discontinuity in initial data. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, third sentence.]",
+      "Solving the Riemann problem at a two-cell interface decomposes the data into waves moving into each cell, including reflection and transmission effects as waves pass between different materials. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, fourth sentence.]",
+      "Classical reflection and transmission coefficients for various problems can be derived and understood using particular Riemann solutions. The claim is qualified by 'various problems', without a universal coefficient formula. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, fifth sentence.]"
+    ],
+    "definitions_and_conventions": [
+      "The averaging region is the volume enclosed by the individual grid cell. The paragraph provides no integral formula, normalization, weighting rule, or measure convention. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second sentence.]",
+      "The coordinate x = 0 locates the medium discontinuity in the described Riemann problem; it is not a specified location for every grid interface. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, third and fourth sentences.]",
+      "Material parameters and assigned material properties concern the medium; initial data are separately identified in the Riemann-problem discussion. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second and third sentences.]"
+    ],
+    "implicit_context": [
+      "Heterogeneity can be smooth or can involve jump discontinuities in material parameters; the preceding discussion includes both possibilities. [Raw PDF page 29, printed page 7, Section 1.4, final paragraph.]",
+      "The selected passage is explanatory prose, not a numbered theorem or averaging identity. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, structure.]",
+      "The references to Chapter 9 and Section 21.5 indicate later discussion of variable-coefficient linear problems; the selected paragraph does not invoke a numbered result from either as a hypothesis. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, final sentence.]",
+      "Conservation form is not a standing requirement for the variable-coefficient equations discussed here. [Raw PDF page 30, printed page 8, Section 1.4, second paragraph: 'may not be in conservation form'.]"
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Cellwise assignment and permitted variation",
+        "details": [
+          "The assignment is available for each cell and permits different properties between cells; the wording does not require pairwise distinct properties. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'can be assigned different material properties'.]"
+        ]
+      },
+      {
+        "topic": "Averaging specification",
+        "details": [
+          "The text specifies the averaged objects and spatial region, but leaves the averaging operation unspecified beyond appropriateness. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second sentence.]",
+          "No cell geometry, positive-volume condition, integrability condition, scalar codomain, or matrix codomain is supplied in the selected averaging sentence. These would be additional mathematical specifications. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second sentence.]"
+        ]
+      },
+      {
+        "topic": "Interface physics",
+        "details": [
+          "The medium discontinuity is included alongside the initial-data discontinuity, and the resulting wave decomposition includes reflection and transmission. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, third and fourth sentences.]"
+        ]
+      },
+      {
+        "topic": "Strength of the methodological claim",
+        "details": [
+          "The paragraph describes suitability and capability, without a quantitative accuracy, convergence, stability, or uniqueness assertion. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'can be an attractive alternative' and 'a natural choice'.]"
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve material parameters as the quantities being averaged and each cell's enclosed volume as the averaging region. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, second sentence.]",
+    "Do not treat a particular normalized integral, arithmetic mean, harmonic mean, or weighting convention as explicitly specified by this passage. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'an appropriate averaging'.]",
+    "Preserve the permissive nature of different cell properties; no requirement that all cells differ is stated. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph: 'can be assigned different material properties'.]",
+    "If representing the enclosing paragraph, retain both medium and initial-data discontinuities and the reflection/transmission content of the interface wave decomposition. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, third through fifth sentences.]",
+    "Do not convert the qualitative suitability claim into an unconditional numerical performance theorem. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph, opening two sentences.]"
+  ],
+  "ambiguities": [
+    {
+      "issue": "The appropriate averaging operation is not defined.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph specifies only 'an appropriate averaging' over the cell volume.",
+      "impact": "A precise averaging formula requires an additional modeling choice and cannot be recovered uniquely from this passage."
+    },
+    {
+      "issue": "The mathematical domains of the parameters and admissible cells are unspecified.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph names material parameters and cell volumes without supplying types, regularity assumptions, geometric restrictions, or exceptional cases.",
+      "impact": "A formal statement must distinguish added well-definedness assumptions from assumptions explicitly supplied by the source."
+    },
+    {
+      "issue": "The class of problems supporting the coefficient derivation is not enumerated.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph says 'for various problems' and 'particular Riemann solutions'.",
+      "impact": "The coefficient claim does not support a universal formula or an unrestricted assertion for every heterogeneous system."
+    }
+  ],
+  "contract_plain_english": "The selected passage says that finite volume methods suit heterogeneous media because each grid cell can receive material properties obtained through appropriate averaging of material parameters over that cell's enclosed volume. It does not specify the averaging formula or its analytic assumptions. The enclosing paragraph also explains that Riemann problems can incorporate a medium discontinuity together with an initial-data discontinuity, producing interface waves that include reflection and transmission, and that particular Riemann solutions explain classical coefficients for various problems. These are qualitative methodological claims, not a numbered averaging theorem. [Raw PDF page 30, printed page 8, Section 1.4, first paragraph; heterogeneous-media context on raw PDF page 29, printed page 7, final paragraph.]"
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 4e5a17bec6084f74cd8eccfdf328432179d2f87087c9a0577abf3efe48db87fb
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "c30afb7f80c0ca9be9e9acb16a55472ffe917a07b801cd522acc174650161f12",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "A record of cell properties containing one value of type Parameter, as specified by its constructor D007 and projection D002.",
+      "effect_on_target": "The existential witness assigns such a record to each cell. The final inequality compares entire records.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "The first projection of a cell-property record, returning its Parameter value.",
+      "effect_on_target": "The first two conclusions constrain the assigned record's averagedParameter field.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "A structure consisting of a Parameter-valued operation on a model, measure, cell, and parameter field, together with locality and conditional constant-preservation laws specified by D008.",
+      "effect_on_target": "Quantification over averagingRule includes both laws as bundled assumptions; the operation is not defined by an integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "The first projection of an averaging-rule structure: an operation Model → Measure Point → Cell → (Point → Parameter) → Parameter.",
+      "effect_on_target": "This operation supplies all cell averages in the hypotheses and conclusions.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "A grid structure containing a domain and cell regions, with a nonempty cell type, measurable regions, disjoint regions for distinct cells, and exact coverage of the domain, as specified by D009.",
+      "effect_on_target": "The grid binder imposes these partition properties on the regions used for locality and measure restrictions.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "LocalDef006",
+      "meaning": "The second projection of a grid, assigning to each cell a subset of Point.",
+      "effect_on_target": "These subsets determine which region is measured and where parameter fields must agree.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "LocalDef007",
+      "meaning": "Constructs a cell-property record from a single Parameter value.",
+      "effect_on_target": "An average can be packaged as a cell-property record without supplying any further data or conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LocalDef008",
+      "meaning": "Constructs an averaging rule from an operation A and two laws: for every model, measure, cell, and pair of fields agreeing pointwise on that cell's region, their A-values are equal; for every model, measure, cell, and parameter p, if the region's measure is neither zero nor infinity, then A applied to the globally constant field p equals p.",
+      "effect_on_target": "Locality is assumed for all measures and fields. Constant preservation is assumed on cells of positive finite measure. These bundled laws support the second and third conclusions.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "LocalDef009",
+      "meaning": "Constructs a grid from a domain Ω, a family R of cell regions, a proof that Cell is nonempty, measurability of every R(c), disjointness of R(c₁) and R(c₂) whenever c₁ ≠ c₂, and the equivalence x ∈ Ω if and only if there exists c with x ∈ R(c).",
+      "effect_on_target": "The regions form an exactly disjoint measurable partition of the stored domain. No finiteness, countability, geometry, or coverage of all Point is required.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "And",
+      "meaning": "Logical conjunction.",
+      "effect_on_target": "All four conclusions must hold for the same assigned-cell-properties function.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "DFunLike.coe",
+      "meaning": "Extracts the function represented by a function-like object.",
+      "effect_on_target": "Allows the measure to be evaluated on a cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "ENNReal",
+      "meaning": "The extended nonnegative real numbers, obtained by adjoining a top element infinity to the nonnegative reals.",
+      "effect_on_target": "Cell measures take values in [0, ∞]; excluding zero and infinity means positive finite measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Eq",
+      "meaning": "Equality of two elements of the same type.",
+      "effect_on_target": "The conclusions assert exact equality of Parameter values, not approximation or equality almost everywhere.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "Exists",
+      "meaning": "Existential quantification over a specified type.",
+      "effect_on_target": "The hypothesis supplies two cells with unequal averages; the conclusion supplies one assignment and two cells with unequal assigned records.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "MeasurableSpace",
+      "meaning": "A measurable-space structure specifying a sigma-algebra on a type.",
+      "effect_on_target": "Point carries a measurable structure used by the measure and the measurability requirements on cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "MeasureTheory.Measure",
+      "meaning": "A measure on the supplied measurable space, with values in the extended nonnegative reals.",
+      "effect_on_target": "volumeMeasure is an arbitrary measure on Point; its name does not impose a geometric volume interpretation.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "meaning": "Represents a measure as a function from sets to extended nonnegative reals by evaluating its underlying outer measure.",
+      "effect_on_target": "The expressions volumeMeasure(R(c)) are set-measure evaluations. Grid regions are additionally known to be measurable.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Ne",
+      "meaning": "Inequality, defined as the negation of equality.",
+      "effect_on_target": "Expresses exclusion of zero and infinity for cell measures and exact inequality of averages and assigned records.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "OfNat.ofNat",
+      "meaning": "Extracts the interpretation of a natural-number literal from its type's numeral instance.",
+      "effect_on_target": "Interprets the literal 0 in the cell-measure hypothesis as zero in ENNReal.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Set",
+      "meaning": "A set of elements of a type is a predicate on that type.",
+      "effect_on_target": "The domain and cell regions are subsets of Point without any additional geometric structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Set.EqOn",
+      "meaning": "Two functions agree on a set when their values are equal at every point belonging to that set.",
+      "effect_on_target": "The second conclusion requires pointwise agreement throughout the selected cell region; it does not use almost-everywhere agreement.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Top.top",
+      "meaning": "Extracts the distinguished top element of a type with a Top instance.",
+      "effect_on_target": "Together with D024, denotes infinity in the finiteness hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "Zero.toOfNat0",
+      "meaning": "Uses a type's zero element as its interpretation of the numeral 0.",
+      "effect_on_target": "Connects the written zero in the measure hypothesis to the ENNReal zero instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "instTopENNReal",
+      "meaning": "The top element of ENNReal is the adjoined top of WithTop, namely infinity.",
+      "effect_on_target": "Each cell measure must differ from infinity.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "instZeroENNReal",
+      "meaning": "The zero of ENNReal is the embedded zero of the nonnegative reals.",
+      "effect_on_target": "Each cell measure must differ from zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "meaning": "Projects the complete Boolean algebra structure from a complete atomic Boolean algebra.",
+      "effect_on_target": "Participates in obtaining the ordinary set-order structure used to interpret disjointness of cell regions.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "meaning": "Builds the complete distributive lattice structure from a complete Boolean algebra, retaining its complete lattice and associated operations.",
+      "effect_on_target": "Provides inherited order infrastructure for sets; it introduces no additional restriction on the grid.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "meaning": "Projects the complete lattice underlying a complete Boolean algebra.",
+      "effect_on_target": "Supplies part of the inherited set-order structure used in grid disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "CompleteDistribLattice.toFrame",
+      "meaning": "Projects the frame structure underlying a complete distributive lattice.",
+      "effect_on_target": "Participates in obtaining the bottom element and order structure on sets used in disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "meaning": "Equips a complete lattice with an omega-complete partial order whose increasing-chain supremum is the indexed supremum of the chain.",
+      "effect_on_target": "Provides an inherited partial-order instance for sets; the proposition makes no separate assertion about chains or limits.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "Disjoint",
+      "meaning": "Two elements of a partial order with bottom are disjoint if every common lower bound lies below bottom. For sets ordered by inclusion, this means their intersection is empty.",
+      "effect_on_target": "Distinct cell indices have regions with no common point, rather than merely overlap of measure zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "HeytingAlgebra.toOrderBot",
+      "meaning": "Projects the order-with-bottom structure from a Heyting algebra.",
+      "effect_on_target": "Supplies the empty set as bottom in the set-disjointness condition.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "Iff",
+      "meaning": "Logical equivalence, requiring implication in both directions.",
+      "effect_on_target": "The grid's domain consists exactly of the points in at least one cell region.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "MeasurableSet",
+      "meaning": "Membership of a set in the sigma-algebra specified by the measurable-space instance.",
+      "effect_on_target": "Every cell region is measurable as a bundled grid requirement.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Membership.mem",
+      "meaning": "Extracts the membership relation of a membership instance.",
+      "effect_on_target": "Interprets point membership in the grid's domain and cell regions, including the set on which fields agree.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "Nonempty",
+      "meaning": "The proposition that a type has at least one element.",
+      "effect_on_target": "A grid includes a proof that Cell is inhabited. The unequal-average hypothesis further forces at least two distinct cells.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "OmegaCompletePartialOrder.toPartialOrder",
+      "meaning": "Projects the partial order underlying an omega-complete partial order.",
+      "effect_on_target": "Provides set inclusion as the order used in the disjointness definition.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "Order.Frame.toHeytingAlgebra",
+      "meaning": "Extracts a Heyting algebra from a frame using its lattice, top, implication, bottom, and complement structure.",
+      "effect_on_target": "Provides inherited set-order infrastructure, including bottom, for interpreting cell disjointness.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "Set.instCompleteAtomicBooleanAlgebra",
+      "meaning": "Equips sets with their complete atomic Boolean algebra structure: inclusion order, unions, intersections, whole set, empty set, and complements.",
+      "effect_on_target": "Ensures that the order-theoretic disjointness condition on cell regions has its ordinary set-theoretic meaning.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "Set.instMembership",
+      "meaning": "Uses set membership as the membership relation for predicate-valued sets.",
+      "effect_on_target": "Membership in a region or domain means that its defining predicate holds at the point.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "Universally quantify over arbitrary types Model, Cell, Point, and Parameter, in potentially different universes.",
+      "Equip Point with a measurable-space structure.",
+      "Universally quantify over a grid with domain Ω ⊆ Point and cell-region function R : Cell → Set Point, subject to its bundled partition conditions.",
+      "Universally quantify over a measure μ on Point and an averaging-rule structure for Model, Cell, Point, Parameter, and this particular region function R.",
+      "Universally quantify over a model m ∈ Model and a field f : Point → Parameter.",
+      "Under the stated hypotheses, existentially quantify over a single function P : Cell → LocalDef001 Parameter. P may depend on all the preceding data.",
+      "For this same P, quantify universally over cells in the first conclusion, over cells and alternative fields in the second, and over cells and parameter values in the third; existentially quantify over two cells in the fourth."
+    ],
+    "hypotheses": [
+      "Bundled grid conditions: Cell is nonempty; each R(c) is measurable; R(c₁) ∩ R(c₂) is empty whenever c₁ ≠ c₂; and x ∈ Ω if and only if there exists c with x ∈ R(c).",
+      "Write A(m, μ, c, f) for the averaging-rule operation. Its bundled locality law states that for every model m′, measure ν, cell c, and fields g and h, pointwise equality of g and h on R(c) implies A(m′, ν, c, g) = A(m′, ν, c, h).",
+      "Its bundled constant-preservation law states that for every model m′, measure ν, cell c, and p ∈ Parameter, if ν(R(c)) ≠ 0 and ν(R(c)) ≠ ∞, then A(m′, ν, c, x ↦ p) = p.",
+      "For every c ∈ Cell, μ(R(c)) ≠ 0.",
+      "For every c ∈ Cell, μ(R(c)) ≠ ∞.",
+      "There exist c₁ and c₂ in Cell such that A(m, μ, c₁, f) ≠ A(m, μ, c₂, f)."
+    ],
+    "conclusions": [
+      "There exists P : Cell → LocalDef001 Parameter satisfying all four following properties simultaneously.",
+      "For every cell c, P(c).averagedParameter = A(m, μ, c, f).",
+      "For every cell c and every alternative field g : Point → Parameter, if f(x) = g(x) for every x ∈ R(c), then P(c).averagedParameter = A(m, μ, c, g).",
+      "For every cell c and every p ∈ Parameter, A(m, μ, c, x ↦ p) = p.",
+      "There exist cells d₁ and d₂ such that P(d₁) ≠ P(d₂). These witnesses are not explicitly required to be the witnesses from the unequal-average hypothesis."
+    ],
+    "mathematical_definitions": [
+      "LocalDef001 Parameter is a single-Parameter record; averagedParameter extracts that value.",
+      "The grid is a nonempty indexed measurable partition of its stored domain, with exact pairwise disjointness. Its index type need not be finite or countable.",
+      "The averaging operation is an abstract Parameter-valued function equipped with locality and conditional constant-preservation laws.",
+      "Set.EqOn f g R(c) means exact pointwise agreement of the fields on R(c).",
+      "Measures take values in the extended nonnegative reals. The two cell-measure hypotheses together mean 0 < μ(R(c)) < ∞ for every cell."
+    ],
+    "proposition_plain_english": "For any measurable point space, any grid consisting of a nonempty family of pairwise disjoint measurable regions covering its stored domain, any measure, any abstract averaging rule satisfying pointwise locality and preservation of constant fields on regions of positive finite measure, any model, and any parameter field, suppose every cell has positive finite measure and two cells have unequal averages of that field. Then there is an assignment of one-parameter property records to all cells such that each assigned parameter equals that cell's average of the given field, and also equals its average of any alternative field agreeing with the given field throughout that cell. The rule preserves every globally constant parameter field on every cell for the chosen model and measure, and two cells have unequal assigned property records."
+  },
+  "restrictions_and_vacuity_risks": [
+    "Parameter and Model are arbitrary types. No algebraic, topological, metric, measurable, or physical structure is imposed on them.",
+    "No integral formula, arithmetic averaging, linearity, positivity of parameter values, continuity, conservation law, or invariance under changing the measure or model is encoded for A.",
+    "The parameter fields are arbitrary total functions on Point. They are not required to be measurable or integrable.",
+    "Locality concerns exact pointwise agreement on a cell region. Invariance under changes on measure-zero subsets is not encoded.",
+    "Distinct cell regions are exactly disjoint, including their boundary points if any; disjointness only up to null sets is insufficient.",
+    "Every cell must have positive finite measure. Empty or zero-measure cells and infinite-measure cells are excluded. The total measure of the domain need not be finite.",
+    "The grid's domain need not be all of Point, and no geometric shape, dimension, mesh size, finiteness, or countability condition is imposed.",
+    "The unequal-average hypothesis is essential to the stated nonuniformity: the proposition assumes two unequal cell averages rather than deriving them from a weaker claim that the input field varies.",
+    "The unequal-average hypothesis forces at least two distinct cells and at least two distinct Parameter values. If all cell averages coincide, including when Cell has only one element or Parameter has at most one element, the implication is vacuous.",
+    "Positive cell measure together with the grid's nonempty index type forces nonempty cell regions and hence a nonempty point space and domain in any instance satisfying the hypotheses.",
+    "Quantification over a grid and an averaging-rule structure is conditional on those structures existing. The proposition does not assert their existence for arbitrary choices of the underlying types and regions.",
+    "The existential assignment is chosen before the universally quantified alternative fields, so a single assignment works for all such fields and all cells.",
+    "Constant preservation is asserted for the averaging operation on globally constant fields; it does not assert that the already assigned records equal every constant parameter.",
+    "The conclusion specifies no additional properties beyond the one stored parameter, and does not explicitly assert uniqueness of the assignment."
+  ],
+  "ambiguities": []
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract and blind translation.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
