@@ -1,0 +1,1591 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 dd96220549ebf60572e1f44bcc1e7a6f786f61fb250252aded7f4e6033934242
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Sentence stating that the eigenvalues of A give the speeds of the component waves",
+      "location": "raw PDF page 25; printed Chapter 1 page 3"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-EIGENVALUES-GENERAL-PROPAGATION-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 de07c9ec4156605d2dbffd70ae40cafcc4b9eab70012cc138b9e6792b66eeeda
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-EIGENVALUES-GENERAL-PROPAGATION-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and following paragraph",
+      "anchor": "q_t(x,t) + A q_x(x,t) = 0; q : R × R → R^m; A is a constant m × m real matrix",
+      "observation": "The inherited setting is a homogeneous first-order linear system with constant coefficients, one spatial variable x, time t, and a real vector-valued unknown. Subscripts denote partial derivatives."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; equations (1.2)–(1.3) and following paragraph",
+      "anchor": "q(x,t) = q̃(x − ū t); propagates with constant speed ū and unchanged shape",
+      "observation": "Scalar propagation is explained as translation of a profile by the coefficient multiplying its spatial derivative."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; equations (1.5)–(1.6)",
+      "anchor": "q = [p,u]^T; A = [[0,K],[1/ρ,0]]",
+      "observation": "The preceding example is a two-component acoustic system, with pressure perturbation p, particle velocity u, bulk modulus K, and density ρ."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; displayed definitions and equations following (1.6)",
+      "anchor": "w¹ = p + ρcu; c = √(K/ρ); w¹_t + cw¹_x = 0; w² = p − ρcu; w²_t − cw²_x = 0",
+      "observation": "The acoustic system separates into scalar quantities propagating with signed velocities +c and −c. The final paragraph explicitly associates −c with propagation to the left."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph",
+      "anchor": "hyperbolic if the matrix A has real eigenvalues and a corresponding set of m linearly independent eigenvectors",
+      "observation": "The applicable hyperbolicity condition includes a complete set of independent eigenvectors, not merely reality of the eigenvalues."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph",
+      "anchor": "any vector in R^m can be uniquely decomposed as a linear combination of these eigenvectors",
+      "observation": "The source explicitly states unique expansion relative to the corresponding eigenvector basis."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph, selected sentence and immediate context",
+      "anchor": "As we will see in Chapter 3, this provides the decomposition into distinct waves. The corresponding eigenvalues of A give the wave speeds at which each wave propagates.",
+      "observation": "The selected claim identifies the speed of each wave in the eigenvector decomposition with its corresponding eigenvalue. Its development is deferred to Chapter 3."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph, final sentence",
+      "anchor": "the acoustics matrix A of (1.6) has eigenvalues −c and +c",
+      "observation": "The source illustrates the general correspondence by identifying these two eigenvalues with the acoustic propagation speeds."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "A finite component count m, with vectors in R^m and an m × m coefficient matrix; the page does not give an explicit numerical quantifier or lower bound for m (printed page 1, paragraph following (1.1)).",
+      "A constant real matrix A and an unknown q : R × R → R^m satisfying the system, with x the spatial variable and t time (printed page 1, equation (1.1) and following paragraph).",
+      "A corresponding set of m real eigenvalues and linearly independent eigenvectors, understood as paired spectral data; the source does not introduce indexed notation for these pairs (printed page 3, opening paragraph, hyperbolicity definition and selected sentence).",
+      "Every vector in R^m for the unique linear-combination assertion, and each component wave for the speed assertion (printed page 3, opening paragraph, 'any vector' and 'each wave')."
+    ],
+    "hypotheses": [
+      "The system is q_t + A q_x = 0, homogeneous, linear, and constant-coefficient in one space dimension (printed page 1, equation (1.1) and its introduction).",
+      "A has real eigenvalues and a corresponding set of m linearly independent eigenvectors, making the system hyperbolic in the stated sense (printed page 3, opening paragraph)."
+    ],
+    "conclusions": [
+      "Every vector in R^m has a unique expansion as a linear combination of the chosen eigenvectors (printed page 3, opening paragraph, 'uniquely decomposed').",
+      "This eigenvector decomposition provides a decomposition into component waves, with the detailed development referred to Chapter 3 (printed page 3, opening paragraph, 'this provides the decomposition into distinct waves').",
+      "Each such component wave propagates at the speed given by its corresponding eigenvalue of A (printed page 3, selected sentence).",
+      "For the illustrative acoustics matrix (1.6), the eigenvalues −c and +c are the two acoustic wave speeds (printed page 3, sentence immediately following the selected claim)."
+    ],
+    "definitions_and_conventions": [
+      "The subscripts t and x denote partial derivatives with respect to time and space (printed page 1, paragraph following (1.1)).",
+      "Hyperbolicity here requires real eigenvalues together with a complete independent eigenvector set (printed page 3, opening paragraph).",
+      "Wave speed is signed: the preceding acoustic example calls −c a propagation speed and associates it with motion to the left (printed page 2, final paragraph).",
+      "The scalar model explains propagation as q̃(x − ū t), preserving the profile's shape while translating it (printed page 1, equation (1.3) and following paragraph).",
+      "In the acoustic illustration, q consists of p and u, A = [[0,K],[1/ρ,0]], and c = √(K/ρ) (printed page 2, equation (1.6) and subsequent definition of c)."
+    ],
+    "implicit_context": [
+      "The general assertion extends the preceding separation of the acoustic system into two scalar propagation equations (printed page 2, displays for w¹ and w²; printed page 3, opening two sentences).",
+      "The selected passage is introductory prose rather than a separately numbered theorem; it announces the general wave decomposition and refers to Chapter 3 for its development (printed page 3, opening paragraph).",
+      "Interpreting the general component waves as scalar characteristic quantities is supported by the acoustic example, but the selected paragraph itself supplies no general characteristic-variable formula (printed page 2, displays for w¹ and w²; printed page 3, selected paragraph)."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Scope of the spectral condition",
+        "details": [
+          "The correspondence concerns the constant real matrix in (1.1), under the full hyperbolicity condition (printed pages 1 and 3, equation (1.1) and opening paragraph).",
+          "Pairwise distinct eigenvalues are not required by the stated definition; the explicit independence requirement concerns eigenvectors (printed page 3, 'm linearly independent eigenvectors')."
+        ]
+      },
+      {
+        "topic": "Meaning of decomposition and uniqueness",
+        "details": [
+          "Unique coefficients are asserted for expansion relative to the corresponding eigenvectors; uniqueness of the choice of eigenvector basis is not asserted (printed page 3, 'linear combination of these eigenvectors').",
+          "The speed correspondence applies to the component waves obtained from that decomposition, rather than assigning a single speed to an arbitrary superposition (printed page 3, 'decomposition into distinct waves' and 'each wave')."
+        ]
+      },
+      {
+        "topic": "Propagation semantics",
+        "details": [
+          "The eigenvalue specifies signed propagation along the spatial coordinate, as confirmed by the acoustic speeds −c and +c (printed pages 2–3, acoustic propagation discussion).",
+          "An analyst can express the anticipated scalar model using a component equation w_t + λw_x = 0 and profile w̃(x − λt), but neither general formula appears in the selected paragraph; the supplied pages give scalar and acoustic instances (printed page 1, (1.2)–(1.3); printed page 2, equations for w¹ and w²; printed page 3, selected sentence)."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Retain the homogeneous constant-coefficient real system q_t + A q_x = 0 as the setting (printed page 1, equation (1.1) and following paragraph).",
+    "Retain both real eigenvalues and a complete independent eigenvector set; reality alone is not the stated hypothesis (printed page 3, hyperbolicity definition).",
+    "Associate each component wave with its corresponding eigenvalue, preserving the eigenvalue's sign (printed page 3, selected sentence and acoustic illustration; printed page 2, leftward propagation at −c).",
+    "Do not infer pairwise distinct eigenvalues from the phrase 'distinct waves'; the stated spectral requirement is independence of m eigenvectors (printed page 3, opening paragraph).",
+    "Preserve the distinction between unique expansion in a chosen eigenvector basis and uniqueness of the basis itself (printed page 3, 'these eigenvectors').",
+    "Do not present a general characteristic-variable formula or a solution regularity class as explicitly stated in the selected passage (printed page 3, opening paragraph, which announces the correspondence and refers to Chapter 3)."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The general component-wave construction is announced but not specified on the supplied pages.",
+      "evidence": "Printed page 3 says 'As we will see in Chapter 3' before asserting decomposition into distinct waves; the supplied renderings contain only printed pages 1–3.",
+      "impact": "The contract can recover the spectral speed correspondence, but cannot certify a particular general construction, normalization, or solution representation from the supplied pages."
+    },
+    {
+      "issue": "Solution regularity and solution concept are unspecified.",
+      "evidence": "Printed page 1 uses partial derivatives in (1.1) and says (1.3) applies 'for any function q̃(ξ)' without stating differentiability or a weak-solution convention.",
+      "impact": "A precise analytic formulation needs a solution concept or regularity assumptions that these pages do not settle."
+    },
+    {
+      "issue": "The phrase 'distinct waves' does not specify treatment of repeated eigenvalues.",
+      "evidence": "Printed page 3 requires m independent eigenvectors and real eigenvalues, but does not require different eigenvalues or discuss multiplicities.",
+      "impact": "Different components may share a speed under the stated assumptions; the passage does not justify strengthening the hypothesis to distinct eigenvalues."
+    },
+    {
+      "issue": "The acoustic example relies on physical parameter conventions without explicit inequalities.",
+      "evidence": "Printed page 2 identifies K as bulk modulus and ρ as density, defines c = √(K/ρ), and uses 1/ρ, but does not display assumptions K > 0 or ρ > 0.",
+      "impact": "Such inequalities should not be represented as explicit hypotheses of the selected general claim."
+    }
+  ],
+  "contract_plain_english": "For the one-dimensional homogeneous constant-coefficient real system q_t + A q_x = 0 introduced in (1.1) on printed page 1, assume A has real eigenvalues and m corresponding linearly independent eigenvectors, as required by the hyperbolicity definition on printed page 3. Every vector has a unique expansion in that chosen eigenvector basis. The opening paragraph on printed page 3 states that this yields component waves, each propagating at the signed speed equal to its corresponding eigenvalue. The acoustic example gives speeds −c and +c. The paragraph refers the general decomposition to Chapter 3 and does not itself specify general component formulas or analytic regularity assumptions."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 502b5572805314a1961707766ec4f6263f72861145b0d6ad208c1fa8e4a35d70
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "4e7e2daa30c8e9295f4576d64a68cd37bd0126e46a0b695fdbd83e2a984fea31",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "At (x,t), there exist vectors qt and qx that are respectively the derivatives of τ ↦ q(x,τ) at t and ξ ↦ q(ξ,t) at x, and qt + A qx = 0.",
+      "effect_on_target": "The vector PDE includes existence of both partial derivatives, not just a formal equation between derivative operators.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "For a function taking values in a real normed vector space, both partial derivatives exist at (x,t), with values qt and qx satisfying qt + speed · qx = 0.",
+      "effect_on_target": "Applied with scalar codomain Real, this expresses the scalar transport equation for each basis coordinate, including partial derivative existence.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "There exist real eigenvalues indexed by the finite index type and a real basis of its real coordinate space such that each basis vector is an eigenvector with the corresponding eigenvalue.",
+      "effect_on_target": "The hypothesis is diagonalizability over the reals. It does not require distinct eigenvalues, symmetry, or an orthonormal basis.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "Real scalar multiplication on the space of real-valued functions on any index type is jointly continuous.",
+      "effect_on_target": "Supplies continuity of scalar multiplication needed for the vector-valued partial derivative predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "Scalar multiplication is jointly continuous in every real normed vector space.",
+      "effect_on_target": "Supplies the continuity structure needed in LocalDef002; it is not an additional assumption on q.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Algebra.id",
+      "meaning": "A commutative semiring is an algebra over itself with identity algebra map and scalar action given by multiplication.",
+      "effect_on_target": "Real scalars acting on real coordinates use ordinary real multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Algebra.toSMul",
+      "meaning": "Extracts the scalar action from an algebra structure.",
+      "effect_on_target": "Selects the usual real scalar action underlying vector scaling.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "And",
+      "meaning": "Logical conjunction: both propositions hold.",
+      "effect_on_target": "All three main properties hold for the same witnesses; both characteristic formulas hold under their shared hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "CommSemiring.toSemiring",
+      "meaning": "Retains the semiring structure of a commutative semiring.",
+      "effect_on_target": "Provides the ordinary real semiring operations for algebra and module constructions.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "DFinsupp.instEquivLikeLinearEquiv",
+      "meaning": "Provides the equivalence-like interface for a linear equivalence, including its underlying bijection.",
+      "effect_on_target": "Allows the basis coordinate equivalence to be applied to q(x,t).",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "DFunLike.coe",
+      "meaning": "Extracts the underlying function from a function-like object.",
+      "effect_on_target": "Interprets b(i) as a basis vector and b.equivFun(v)(i) as a scalar coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "meaning": "A densely normed field has a nontrivial normed-field structure with the same field and norm.",
+      "effect_on_target": "Supplies the real scalar-field structure required for differentiability.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Differentiable",
+      "meaning": "The function is differentiable at every point of its domain.",
+      "effect_on_target": "The characteristic formulas require joint real differentiability of (x,t) ↦ q(x,t) everywhere on R²; continuity of its derivative is not required.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "DivisionSemiring.toSemiring",
+      "meaning": "Extracts the underlying semiring from a division semiring.",
+      "effect_on_target": "Supplies unchanged real arithmetic in the module structures used by differentiability.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "All eigenvector, PDE, coordinate, and reconstruction equalities are exact; vector equality means equality at every coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "EquivLike.toFunLike",
+      "meaning": "Views an equivalence-like object as a function-like object using its forward map.",
+      "effect_on_target": "The coordinate expressions use the forward basis coordinate map.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Exists",
+      "meaning": "Existential quantification over a witness satisfying the stated predicate.",
+      "effect_on_target": "One speed family and one basis are chosen before q, x, and t; derivative witnesses in the PDE predicates are local to each function and point.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Field.toSemifield",
+      "meaning": "Retains the semifield operations and laws of a field.",
+      "effect_on_target": "Provides a structural path to the standard real semiring used for differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Fin",
+      "meaning": "Fin m is the type of natural-number indices i with 0 ≤ i < m.",
+      "effect_on_target": "Vectors, basis vectors, speeds, and matrix rows and columns have exactly m indices; m may be zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Fin.fintype",
+      "meaning": "Enumerates all indices in Fin n using the finite range of length n.",
+      "effect_on_target": "Makes matrix products and reconstruction sums finite sums over all m indices.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Finite.of_fintype",
+      "meaning": "An explicitly finitely enumerated type is finite.",
+      "effect_on_target": "Enables the full function-valued coordinate equivalence for the finite basis index set.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Finset.sum",
+      "meaning": "Adds the values of a function over a finite set in an additive commutative monoid.",
+      "effect_on_target": "Reconstructs q as a finite vector sum, with the empty sum equal to the zero vector.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "Finset.univ",
+      "meaning": "The finite set containing every element of a finitely enumerated type.",
+      "effect_on_target": "The reconstruction includes every basis index exactly once.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Function.hasSMul",
+      "meaning": "Lifts scalar multiplication on a codomain to pointwise scalar multiplication on functions.",
+      "effect_on_target": "Multiplying a vector by a speed or coefficient scales each real coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Function.uncurry",
+      "meaning": "Transforms q into the function (x,t) ↦ q(x)(t) on ordered pairs.",
+      "effect_on_target": "The regularity assumption concerns joint differentiability in space and time.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "HMul.hMul",
+      "meaning": "Extracts the multiplication operation from its instance.",
+      "effect_on_target": "The characteristic displacement contains the real product speeds(i) · t.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "HSMul.hSMul",
+      "meaning": "Extracts a scalar multiplication operation.",
+      "effect_on_target": "Expresses real scaling of eigenvectors and reconstructed basis terms, and scalar multiplication in the transport equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "HSub.hSub",
+      "meaning": "Extracts the subtraction operation.",
+      "effect_on_target": "The initial spatial argument is x minus speeds(i) times t.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Iff",
+      "meaning": "Logical equivalence, asserting implication in both directions.",
+      "effect_on_target": "At each point, the vector PDE holds exactly when every scalar coordinate PDE holds.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "LinearEquiv",
+      "meaning": "An invertible semilinear map, with scalar maps specified by mutually inverse ring homomorphisms.",
+      "effect_on_target": "Here both scalar maps are the identity on R, so the coordinate map is an ordinary real-linear bijection.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "Matrix",
+      "meaning": "A matrix is a function from a row index and a column index to an entry.",
+      "effect_on_target": "A is an arbitrary fixed m-by-m array of real entries subject to the real eigenbasis hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "Matrix.mulVec",
+      "meaning": "For a matrix A and vector v, the row-j coordinate of A v is the dot product of row j with v, namely the sum of A(j,k)v(k) over k.",
+      "effect_on_target": "Fixes left matrix action on column vectors in the eigenvector equations and in ∂t q + A ∂x q = 0.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "Module.Basis",
+      "meaning": "An indexed algebraic basis of a module, providing unique finitely supported scalar coordinates.",
+      "effect_on_target": "b is a linearly independent spanning family of m vectors in R^m, not merely a collection of eigenvectors.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "Module.Basis.equivFun",
+      "meaning": "For a finite basis index set, sends a vector to its basis representation viewed as an ordinary coordinate function.",
+      "effect_on_target": "b.equivFun(q(x,t))(i) is the coefficient of b(i) in q(x,t), not necessarily its i-th standard coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Module.Basis.instFunLike",
+      "meaning": "The i-th basis vector is the inverse representation image of the coefficient function supported at i with value one.",
+      "effect_on_target": "The eigenvector and reconstruction expressions refer to the basis vectors associated with the same coordinate map.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "Nat",
+      "meaning": "The natural numbers, including zero.",
+      "effect_on_target": "The dimension m is universally quantified without a positivity requirement.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "Ne",
+      "meaning": "Negation of equality.",
+      "effect_on_target": "Each indexed basis vector is explicitly asserted to differ from the zero vector.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "NonAssocSemiring.toNonUnitalNonAssocSemiring",
+      "meaning": "Forgets the designated unit while retaining addition and multiplication.",
+      "effect_on_target": "Provides unchanged real operations to algebraic infrastructure.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "meaning": "Retains a nonunital commutative ring's operations while dropping the associativity requirement from the interface.",
+      "effect_on_target": "Part of the structural route supplying real arithmetic for matrix multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "meaning": "Forgets multiplication commutativity while preserving the underlying ring operations.",
+      "effect_on_target": "Does not alter the real operations used in A.mulVec.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "meaning": "Retains addition, zero, multiplication, and distributive laws without requiring additive inverses in the resulting interface.",
+      "effect_on_target": "Supplies the algebraic structure required by matrix-vector multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "meaning": "Extracts the additive commutative monoid of a semiring-like structure.",
+      "effect_on_target": "Coordinates and coordinate functions use ordinary additive structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "meaning": "Forgets norm data and retains the nonunital commutative ring operations.",
+      "effect_on_target": "Links the standard real normed structure to the arithmetic used by A.mulVec.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "meaning": "Forgets multiplication commutativity from a nonunital seminormed commutative ring.",
+      "effect_on_target": "Preserves the real norm and operations used to obtain the scalar normed additive structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "meaning": "Extracts the additive group, norm, and associated pseudometric from a seminormed ring.",
+      "effect_on_target": "Provides the real seminormed additive structure underlying real normed vector spaces.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "NonUnitalSemiring.toNonUnitalNonAssocSemiring",
+      "meaning": "Drops the associativity requirement from the interface while retaining operations.",
+      "effect_on_target": "Provides unchanged real addition and multiplication for module infrastructure.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "NontriviallyNormedField.toNormedField",
+      "meaning": "Extracts the underlying normed field.",
+      "effect_on_target": "Differentiation and module operations use the same real normed field.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "meaning": "Retains a normed commutative ring's norm, metric, and ring operations while forgetting its designated unit.",
+      "effect_on_target": "Does not change real arithmetic or topology in the matrix expressions.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "meaning": "Views a normed commutative ring as seminormed with the same norm and operations.",
+      "effect_on_target": "Preserves the standard real norm used in the module structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "NormedField.toField",
+      "meaning": "Extracts the field structure from a normed field.",
+      "effect_on_target": "The real arithmetic underlying differentiability is unchanged.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "NormedField.toNormedSpace",
+      "meaning": "A normed field is a normed vector space over itself with scalar action given by multiplication.",
+      "effect_on_target": "The scalar transport functions take values in the standard real normed vector space.",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "NormedSpace.toModule",
+      "meaning": "Extracts the module structure from a normed vector space.",
+      "effect_on_target": "Basis and differentiability constructions use the same real scalar action.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural-number literal using the specified instance.",
+      "effect_on_target": "The displayed zero literals denote either real zero or the zero vector according to their types.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "Pi.Function.module",
+      "meaning": "Functions into a module form a module under pointwise operations.",
+      "effect_on_target": "Fin m → Real is the usual real vector space R^m.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "Pi.addCommGroup",
+      "meaning": "Functions into additive commutative groups form an additive commutative group pointwise.",
+      "effect_on_target": "Vector addition, subtraction, and negation are coordinatewise.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "Pi.addCommMonoid",
+      "meaning": "Functions into additive commutative monoids form an additive commutative monoid pointwise.",
+      "effect_on_target": "The reconstruction sum is a coordinatewise vector sum.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "Pi.instZero",
+      "meaning": "The zero function assigns zero to every index.",
+      "effect_on_target": "The excluded zero eigenvector and the PDE zero vector have every component zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "Pi.topologicalSpace",
+      "meaning": "The function space carries the product topology induced by all coordinate evaluations.",
+      "effect_on_target": "The finite-dimensional target R^m has its usual topology for differentiability and vector derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "Prod",
+      "meaning": "The Cartesian product type of ordered pairs.",
+      "effect_on_target": "The jointly differentiated domain consists of pairs (x,t) in R².",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "Prod.instAddCommGroup",
+      "meaning": "The Cartesian product of additive commutative groups has componentwise group operations.",
+      "effect_on_target": "The space-time domain has ordinary vector addition on R².",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "Prod.instModule",
+      "meaning": "The product of two modules is a module under componentwise scalar multiplication.",
+      "effect_on_target": "Joint differentiation uses the usual real vector-space structure on R².",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the uniform structure associated with a pseudometric.",
+      "effect_on_target": "Connects the real absolute-value metric to the topology used in differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "Real",
+      "meaning": "The real number type.",
+      "effect_on_target": "Matrix entries, speeds, coordinates, space, and time are all real.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "Real.denselyNormedField",
+      "meaning": "The standard real normed field has norms attaining values between any two positive real bounds.",
+      "effect_on_target": "Supplies the nontrivial norm required for real differentiation; adds no hypothesis on q or A.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "Real.instAddCommGroup",
+      "meaning": "The additive commutative group structure of the reals.",
+      "effect_on_target": "Provides real addition and additive inverses for the domain and codomain.",
+      "status": "understood"
+    },
+    {
+      "id": "D066",
+      "name": "Real.instAddCommMonoid",
+      "meaning": "The additive commutative monoid structure of the reals.",
+      "effect_on_target": "Supports vector-space and finite-sum constructions with ordinary real addition.",
+      "status": "understood"
+    },
+    {
+      "id": "D067",
+      "name": "Real.instCommSemiring",
+      "meaning": "The commutative semiring structure of the reals.",
+      "effect_on_target": "Supports the identity real algebra and ordinary scalar multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D068",
+      "name": "Real.instMul",
+      "meaning": "Real multiplication.",
+      "effect_on_target": "Determines the displacement speeds(i) times t.",
+      "status": "understood"
+    },
+    {
+      "id": "D069",
+      "name": "Real.instRing",
+      "meaning": "The ring structure of the reals.",
+      "effect_on_target": "Provides the standard arithmetic for the real module used in differentiability.",
+      "status": "understood"
+    },
+    {
+      "id": "D070",
+      "name": "Real.instSub",
+      "meaning": "Real subtraction, defined as addition of the additive inverse.",
+      "effect_on_target": "Determines the sign in the characteristic foot x − speeds(i)t.",
+      "status": "understood"
+    },
+    {
+      "id": "D071",
+      "name": "Real.instZero",
+      "meaning": "The real number zero.",
+      "effect_on_target": "The formulas evaluate q at time zero and use real zero in the scalar PDE.",
+      "status": "understood"
+    },
+    {
+      "id": "D072",
+      "name": "Real.normedAddCommGroup",
+      "meaning": "The real additive group with its standard absolute-value norm and metric.",
+      "effect_on_target": "Scalar partial derivatives use the usual real topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D073",
+      "name": "Real.normedCommRing",
+      "meaning": "The usual real commutative ring equipped with its standard norm and metric.",
+      "effect_on_target": "Ensures algebraic and analytic structures in the target use ordinary real operations.",
+      "status": "understood"
+    },
+    {
+      "id": "D074",
+      "name": "Real.normedField",
+      "meaning": "The real field with its standard norm and metric.",
+      "effect_on_target": "Provides the scalar field for all derivatives and normed vector spaces.",
+      "status": "understood"
+    },
+    {
+      "id": "D075",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "The real distance is |x − y|, with its associated uniform structure.",
+      "effect_on_target": "Fixes the usual topology on space, time, and real coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D076",
+      "name": "Real.semiring",
+      "meaning": "The standard semiring structure of the reals.",
+      "effect_on_target": "Provides ordinary real addition and multiplication in the basis and coordinate modules.",
+      "status": "understood"
+    },
+    {
+      "id": "D077",
+      "name": "Ring.toSemiring",
+      "meaning": "Retains a ring's semiring structure.",
+      "effect_on_target": "No arithmetic change occurs when the real ring is used by module infrastructure.",
+      "status": "understood"
+    },
+    {
+      "id": "D078",
+      "name": "RingHom.id",
+      "meaning": "The identity ring homomorphism r ↦ r.",
+      "effect_on_target": "The basis coordinate equivalence preserves real scalars without any scalar twist.",
+      "status": "understood"
+    },
+    {
+      "id": "D079",
+      "name": "RingHomInvPair.ids",
+      "meaning": "The identity ring homomorphism is inverse to itself.",
+      "effect_on_target": "Supports the ordinary real-linear equivalence type of the coordinate map.",
+      "status": "understood"
+    },
+    {
+      "id": "D080",
+      "name": "Semifield.toDivisionSemiring",
+      "meaning": "Retains division-semiring structure and operations from a semifield.",
+      "effect_on_target": "Supplies unchanged real arithmetic through a structural conversion.",
+      "status": "understood"
+    },
+    {
+      "id": "D081",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "meaning": "Forgets the designated unit while preserving seminorm, pseudometric, and ring operations.",
+      "effect_on_target": "Preserves the scalar norm and additive structure used by real normed spaces.",
+      "status": "understood"
+    },
+    {
+      "id": "D082",
+      "name": "Semiring.toModule",
+      "meaning": "A semiring acts as a module over itself by multiplication.",
+      "effect_on_target": "Real coefficients act on real coordinates by ordinary multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D083",
+      "name": "Semiring.toNonAssocSemiring",
+      "meaning": "Retains semiring operations while omitting the associativity requirement from the interface.",
+      "effect_on_target": "Supports identity ring homomorphisms and additive structures without changing real operations.",
+      "status": "understood"
+    },
+    {
+      "id": "D084",
+      "name": "Semiring.toNonUnitalSemiring",
+      "meaning": "Retains semiring operations while forgetting the designated unit.",
+      "effect_on_target": "Provides a structural route to the real additive monoid used in differentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D085",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology belonging to a uniform space.",
+      "effect_on_target": "The real and product topologies used in derivative predicates come from the standard metric.",
+      "status": "understood"
+    },
+    {
+      "id": "D086",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral 0 as the zero of the given type.",
+      "effect_on_target": "Zero literals are the real zero or coordinatewise vector zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D087",
+      "name": "instHMul",
+      "meaning": "Uses ordinary multiplication as the heterogeneous multiplication operation on one type.",
+      "effect_on_target": "The speed-time product is ordinary real multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D088",
+      "name": "instHSMul",
+      "meaning": "Uses a scalar action as the heterogeneous scalar multiplication operation.",
+      "effect_on_target": "The displayed scalar products use the selected usual real scalar actions.",
+      "status": "understood"
+    },
+    {
+      "id": "D089",
+      "name": "instHSub",
+      "meaning": "Uses ordinary subtraction as the heterogeneous subtraction operation on one type.",
+      "effect_on_target": "The spatial shift is ordinary real subtraction.",
+      "status": "understood"
+    },
+    {
+      "id": "D090",
+      "name": "instTopologicalSpaceProd",
+      "meaning": "The product topology is generated by the topologies induced by the two coordinate projections.",
+      "effect_on_target": "The domain of joint differentiability is R² with its usual product topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D091",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "meaning": "Constructs subtraction-commutative-monoid structure from an additive commutative group, retaining its subtraction and negation.",
+      "effect_on_target": "Supplies inherited additive infrastructure for the PDE codomains without additional restrictions.",
+      "status": "understood"
+    },
+    {
+      "id": "D092",
+      "name": "AddCommMagma.toAdd",
+      "meaning": "Extracts addition from a commutative additive magma.",
+      "effect_on_target": "The additions in the PDE residuals are the inherited additions of their codomains.",
+      "status": "understood"
+    },
+    {
+      "id": "D093",
+      "name": "AddCommMonoid.toAddCommSemigroup",
+      "meaning": "Retains associative commutative addition from an additive commutative monoid.",
+      "effect_on_target": "Preserves the scalar or vector addition appearing in the PDE definitions.",
+      "status": "understood"
+    },
+    {
+      "id": "D094",
+      "name": "AddCommSemigroup.toAddCommMagma",
+      "meaning": "Retains commutative addition while forgetting the associativity requirement from the interface.",
+      "effect_on_target": "Does not change the addition used in the PDE residuals.",
+      "status": "understood"
+    },
+    {
+      "id": "D095",
+      "name": "AddMonoid.toAddZeroClass",
+      "meaning": "Extracts addition and its zero identity from an additive monoid.",
+      "effect_on_target": "Provides the zero and addition used by the PDE codomains.",
+      "status": "understood"
+    },
+    {
+      "id": "D096",
+      "name": "AddZero.toZero",
+      "meaning": "Extracts the zero element from an addition-with-zero structure.",
+      "effect_on_target": "Selects the codomain zero in the PDE equations.",
+      "status": "understood"
+    },
+    {
+      "id": "D097",
+      "name": "AddZeroClass.toAddZero",
+      "meaning": "Retains addition and zero from a structure asserting the zero identity laws.",
+      "effect_on_target": "Preserves the usual zero in the scalar and vector PDEs.",
+      "status": "understood"
+    },
+    {
+      "id": "D098",
+      "name": "CommRing.toNonUnitalCommRing",
+      "meaning": "Forgets the designated unit of a commutative ring while retaining its arithmetic.",
+      "effect_on_target": "Supplies ordinary real matrix arithmetic within the local definitions.",
+      "status": "understood"
+    },
+    {
+      "id": "D099",
+      "name": "DistribMulAction.toDistribSMul",
+      "meaning": "Retains the scalar action and its preservation of zero and addition from a distributive multiplicative action.",
+      "effect_on_target": "Supports the scalar action used in the transport residual qt + speed · qx.",
+      "status": "understood"
+    },
+    {
+      "id": "D100",
+      "name": "DistribSMul.toSMulZeroClass",
+      "meaning": "Retains a scalar action and its preservation of zero.",
+      "effect_on_target": "Provides the same scalar multiplication in LocalDef002.",
+      "status": "understood"
+    },
+    {
+      "id": "D101",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "meaning": "Views an extended-normed additive commutative monoid as extended-seminormed, preserving its structure.",
+      "effect_on_target": "An inherited analytic structure for the scalar PDE codomain; it adds no new q hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D102",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "meaning": "Extracts the additive commutative monoid from an extended-seminormed additive commutative monoid.",
+      "effect_on_target": "Supplies the inherited addition and zero in the generic transport definition.",
+      "status": "understood"
+    },
+    {
+      "id": "D103",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "meaning": "Forgets additive commutativity from the interface of an extended-seminormed additive commutative monoid.",
+      "effect_on_target": "Preserves codomain operations and analytic structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D104",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "meaning": "Extracts the additive monoid from an extended-seminormed additive monoid.",
+      "effect_on_target": "Provides ordinary inherited addition and zero for LocalDef002.",
+      "status": "understood"
+    },
+    {
+      "id": "D105",
+      "name": "Fintype",
+      "meaning": "A finite enumeration containing every element of a type.",
+      "effect_on_target": "The generic matrix definitions have finite index types; the target instantiates this with Fin m.",
+      "status": "understood"
+    },
+    {
+      "id": "D106",
+      "name": "HAdd.hAdd",
+      "meaning": "Extracts the addition operation.",
+      "effect_on_target": "Both PDE residuals add the time derivative to the matrix or speed multiple of the spatial derivative.",
+      "status": "understood"
+    },
+    {
+      "id": "D107",
+      "name": "HasDerivAt",
+      "meaning": "The function has the specified derivative at the specified point, using the neighborhood of that point and a fixed base point.",
+      "effect_on_target": "The local PDEs require genuine ordinary derivatives of the one-variable slices, with two-sided real differentiation and no restricted domain.",
+      "status": "understood"
+    },
+    {
+      "id": "D108",
+      "name": "Module.toDistribMulAction",
+      "meaning": "Extracts the distributive scalar action of a module.",
+      "effect_on_target": "The generic transport speed acts through the normed space's real module structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D109",
+      "name": "NegZeroClass.toZero",
+      "meaning": "Extracts zero from a structure whose negation preserves zero.",
+      "effect_on_target": "Provides the inherited codomain zero in the local definitions.",
+      "status": "understood"
+    },
+    {
+      "id": "D110",
+      "name": "NormedAddCommGroup",
+      "meaning": "An additive commutative group equipped with a norm and its compatible metric.",
+      "effect_on_target": "LocalDef002 is defined for normed additive codomains; the target uses the standard real one.",
+      "status": "understood"
+    },
+    {
+      "id": "D111",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "meaning": "Extracts the additive commutative group from a normed additive commutative group.",
+      "effect_on_target": "Supplies addition and inverses for scalar derivative predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D112",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "meaning": "Views a normed additive commutative group as an extended-normed additive commutative monoid with the corresponding norm.",
+      "effect_on_target": "Provides inherited analytic and additive structure in LocalDef002 without changing its real specialization.",
+      "status": "understood"
+    },
+    {
+      "id": "D113",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "meaning": "Retains the same norm, additive group, and pseudometric while viewing a normed group as seminormed.",
+      "effect_on_target": "Supports the normed-space scalar structure and its associated topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D114",
+      "name": "NormedSpace",
+      "meaning": "A module over a normed field whose scalar action is compatible with the norm.",
+      "effect_on_target": "The generic scalar transport predicate uses real normed vector spaces; here it is specialized to E = R.",
+      "status": "understood"
+    },
+    {
+      "id": "D115",
+      "name": "Pi.instAdd",
+      "meaning": "Function addition is defined pointwise by (f + g)(i) = f(i) + g(i).",
+      "effect_on_target": "The vector PDE residual is zero exactly when every standard component of qt + A qx is zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D116",
+      "name": "Real.commRing",
+      "meaning": "The usual commutative ring structure of the reals, built from real addition, multiplication, zero, one, negation, and subtraction.",
+      "effect_on_target": "Fixes the real arithmetic used throughout the local matrix and scalar equations.",
+      "status": "understood"
+    },
+    {
+      "id": "D117",
+      "name": "Real.instAdd",
+      "meaning": "Real addition.",
+      "effect_on_target": "Determines the scalar additions in the transport equation and vector components.",
+      "status": "understood"
+    },
+    {
+      "id": "D118",
+      "name": "Real.instMonoid",
+      "meaning": "The multiplicative monoid of the reals.",
+      "effect_on_target": "Supports real scalar actions; it imposes no nonzero requirement on speeds.",
+      "status": "understood"
+    },
+    {
+      "id": "D119",
+      "name": "SMulZeroClass.toSMul",
+      "meaning": "Extracts the scalar action from a scalar-action structure that preserves zero.",
+      "effect_on_target": "The transport residual uses the underlying real scalar multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D120",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "meaning": "Extracts the pseudometric belonging to a seminormed additive commutative group.",
+      "effect_on_target": "Derivative predicates on the generic normed codomain use its norm-induced topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D121",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "meaning": "Retains zero and negation together with the law that negating zero gives zero.",
+      "effect_on_target": "Provides an inherited zero structure in the derivative codomain.",
+      "status": "understood"
+    },
+    {
+      "id": "D122",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "meaning": "Forgets the commutativity requirement while retaining subtraction-monoid structure.",
+      "effect_on_target": "An additive structural conversion that does not change the PDE meaning.",
+      "status": "understood"
+    },
+    {
+      "id": "D123",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "meaning": "Retains subtraction and negation and supplies the law that negation fixes zero.",
+      "effect_on_target": "Supports extraction of the usual codomain zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D124",
+      "name": "instHAdd",
+      "meaning": "Uses ordinary addition as the heterogeneous addition operation on one type.",
+      "effect_on_target": "PDE residual addition is ordinary scalar or pointwise vector addition.",
+      "status": "understood"
+    },
+    {
+      "id": "D125",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "meaning": "Retains the additive commutative monoid structure of an additive commutative group.",
+      "effect_on_target": "Supplies unchanged addition and zero for derivative and scalar-action infrastructure.",
+      "status": "understood"
+    },
+    {
+      "id": "D126",
+      "name": "AddCommGroup.toAddGroup",
+      "meaning": "Forgets commutativity while retaining additive group structure.",
+      "effect_on_target": "Does not change codomain addition, subtraction, or zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D127",
+      "name": "AddCommMonoid.toAddMonoid",
+      "meaning": "Extracts the additive monoid from an additive commutative monoid.",
+      "effect_on_target": "Provides the same addition and zero to inherited structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D128",
+      "name": "AddGroup.toSubNegMonoid",
+      "meaning": "Retains an additive group's addition, zero, negation, and subtraction structure.",
+      "effect_on_target": "Supports the ordinary additive operations used in the derivative codomains.",
+      "status": "understood"
+    },
+    {
+      "id": "D129",
+      "name": "ContinuousSMul",
+      "meaning": "The map (a,v) ↦ a · v is jointly continuous.",
+      "effect_on_target": "Required structurally by HasDerivAt and supplied for the real scalar and vector codomains; it does not assert continuity of q.",
+      "status": "understood"
+    },
+    {
+      "id": "D130",
+      "name": "DistribMulAction.toMulAction",
+      "meaning": "Extracts a multiplicative scalar action from a distributive multiplicative action.",
+      "effect_on_target": "Preserves the real action underlying module scalar multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D131",
+      "name": "Monoid.toSemigroup",
+      "meaning": "Retains associative multiplication while forgetting the designated identity.",
+      "effect_on_target": "Supplies unchanged scalar multiplication infrastructure.",
+      "status": "understood"
+    },
+    {
+      "id": "D132",
+      "name": "MonoidWithZero.toMonoid",
+      "meaning": "Extracts the multiplicative monoid from a monoid with zero.",
+      "effect_on_target": "The real scalar monoid still includes zero as an element; speeds are unrestricted real numbers.",
+      "status": "understood"
+    },
+    {
+      "id": "D133",
+      "name": "MulAction.toSemigroupAction",
+      "meaning": "Retains the associative scalar action while forgetting its identity law from the interface.",
+      "effect_on_target": "Provides the same module scalar action through inherited structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D134",
+      "name": "NormedField.toNormedCommRing",
+      "meaning": "Retains the normed commutative ring structure of a normed field.",
+      "effect_on_target": "Connects the real field norm to its standard ring topology and arithmetic.",
+      "status": "understood"
+    },
+    {
+      "id": "D135",
+      "name": "Pi.instSMul",
+      "meaning": "Scalar multiplication of functions is pointwise: (a · f)(i) = a · f(i).",
+      "effect_on_target": "Vector eigenvalue multiplication and reconstruction coefficients act componentwise.",
+      "status": "understood"
+    },
+    {
+      "id": "D136",
+      "name": "SemigroupAction.toSMul",
+      "meaning": "Extracts scalar multiplication from a semigroup action.",
+      "effect_on_target": "Preserves the real scalar action used by the local transport definition.",
+      "status": "understood"
+    },
+    {
+      "id": "D137",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "meaning": "Forgets multiplication commutativity while retaining the seminormed ring structure.",
+      "effect_on_target": "Preserves the real seminorm and topology in inherited analytic structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D138",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "meaning": "Extracts the pseudometric of a seminormed ring.",
+      "effect_on_target": "Supplies the standard norm-induced topology used by derivatives.",
+      "status": "understood"
+    },
+    {
+      "id": "D139",
+      "name": "Semiring.toMonoidWithZero",
+      "meaning": "Retains semiring multiplication, one, and absorbing zero as a monoid-with-zero structure.",
+      "effect_on_target": "Supports ordinary real scalar action, including multiplication by zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D140",
+      "name": "SubNegMonoid.toAddMonoid",
+      "meaning": "Extracts the additive monoid from a structure carrying subtraction and negation.",
+      "effect_on_target": "Preserves addition and zero in the derivative codomain infrastructure.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every natural number m, including m = 0, let I = {0,...,m−1} and V = R^I.",
+      "For every real matrix A indexed by I × I satisfying the stated real eigenbasis hypothesis, there exist a function λ : I → R, corresponding to speeds, and a real basis b = (b_i)_{i∈I} of V.",
+      "The same λ and b are chosen before all subsequent universal quantifiers and work simultaneously for every q : R → R → V and all real x and t.",
+      "In the pointwise PDE equivalence, q, x, and t are arbitrary, and the scalar equations are quantified over every i ∈ I.",
+      "In the characteristic conclusion, q is universally quantified subject to joint differentiability and the vector PDE everywhere; the coordinate identity is universal in i, x, and t, and reconstruction is universal in x and t.",
+      "Within each local PDE predicate, the derivative witnesses qt and qx are existentially quantified and may depend on the function, coefficient or speed, and point; scalar witnesses also depend on i."
+    ],
+    "hypotheses": [
+      "A has a real eigenbasis: there exist μ : I → R and a real basis e of V such that A e_i = μ_i e_i for every i ∈ I.",
+      "For the characteristic and reconstruction conclusions only, Q : R² → V, Q(x,t) = q(x,t), is real differentiable at every point.",
+      "For those same conclusions, q satisfies the vector PDE at every real (x,t): both partial derivatives exist and ∂t q(x,t) + A ∂x q(x,t) = 0."
+    ],
+    "conclusions": [
+      "There exist λ : I → R and a real basis b of V satisfying all following properties together.",
+      "For every i ∈ I, b_i ≠ 0 and A b_i = λ_i b_i.",
+      "Write c_b(v)_i for the coefficient of b_i in v, and u_i(x,t) = c_b(q(x,t))_i. For every q and every real (x,t), existence of the two vector partial derivatives with ∂t q(x,t) + A ∂x q(x,t) = 0 is equivalent to the assertion that, for every i ∈ I, both partial derivatives of u_i exist there and ∂t u_i(x,t) + λ_i ∂x u_i(x,t) = 0.",
+      "For every jointly differentiable q satisfying the vector PDE everywhere, u_i(x,t) = u_i(x − λ_i t,0) for every i ∈ I and every real x,t.",
+      "For the same q, q(x,t) = Σ_{i∈I} c_b(q(x − λ_i t,0))_i b_i for every real x,t."
+    ],
+    "mathematical_definitions": [
+      "V = R^I has coordinatewise addition and real scalar multiplication and its usual finite product topology.",
+      "Matrix action is (A v)_j = Σ_{k∈I} A_{jk} v_k.",
+      "A basis is a linearly independent spanning family; its coordinate map c_b is the real-linear bijection characterized by v = Σ_{i∈I} c_b(v)_i b_i.",
+      "The vector PDE at (x,t) means that there exist qt,qx ∈ V with d/dτ q(x,τ)|_{τ=t} = qt and d/dξ q(ξ,t)|_{ξ=x} = qx, and qt + A qx = 0.",
+      "The scalar transport PDE at speed λ_i means that there exist a,d ∈ R with d/dτ u_i(x,τ)|_{τ=t} = a and d/dξ u_i(ξ,t)|_{ξ=x} = d, and a + λ_i d = 0.",
+      "All slice derivatives are ordinary derivatives on the whole real line. Joint differentiability refers to differentiability of Q on R², not merely separate differentiability.",
+      "The constant 0 in q(x − λ_i t,0) is the initial time; the minus sign specifies translation by λ_i t from that initial profile."
+    ],
+    "proposition_plain_english": "Every finite real square matrix possessing a real eigenbasis admits a choice of real speeds λ_i and a basis b_i of nonzero eigenvectors such that the constant-coefficient system ∂t q + A ∂x q = 0 is pointwise equivalent, for every function q, to the scalar equations ∂t u_i + λ_i ∂x u_i = 0 for its coordinates u_i in that basis. Both sides of this equivalence include existence of the relevant partial derivatives. With this same choice of speeds and basis, every everywhere jointly differentiable solution on all of R² has each coordinate transported from time zero according to u_i(x,t) = u_i(x − λ_i t,0), and its vector value is the sum of these transported initial coordinates multiplied by their respective basis vectors."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The matrix is finite-dimensional, real, square, and constant in x and t. The claim is conditional on diagonalizability over R, not merely on real eigenvalues.",
+    "There is no positivity assumption on m. When m = 0, the index set is empty, V has only the zero vector, indexed assertions are vacuous, and reconstruction is the empty sum.",
+    "For matrices without a real eigenbasis, the implication supplies no conclusion.",
+    "Eigenvalues may repeat or be zero or negative. The basis need not be orthogonal or normalized, and its vectors need not have every standard coordinate nonzero.",
+    "The pointwise PDE equivalence has no independent continuity or joint differentiability assumption on q. Its two sides themselves assert existence of the relevant slice derivatives.",
+    "The characteristic formulas apply only to everywhere jointly differentiable solutions on the whole plane. Separate differentiability alone is not the stated hypothesis, and continuous differentiability is not required.",
+    "Space and time range over all real numbers, including negative time. No boundary, restricted spatial domain, or finite time interval is encoded.",
+    "The formulas use the existing solution's trace at time zero. There is no separately quantified prescribed initial datum and no explicit assertion that arbitrary initial data generate a differentiable solution.",
+    "The reconstruction determines any solution in the stated class from its time-zero trace, but the target does not separately quantify a uniqueness theorem comparing two solutions.",
+    "No weak, distributional, discontinuous-solution, stability, or continuous-dependence statement is encoded.",
+    "The speed family and basis are common to all functions and points; they are existential choices, not asserted to be canonical or unique.",
+    "For a q failing either global hypothesis of the characteristic implication, that implication gives no characteristic or reconstruction constraint. Constant functions do satisfy the hypotheses, so the solution class is not intrinsically empty."
+  ],
+  "ambiguities": []
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract and blind translation.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 24.
+
+Attached primary source rendering: raw PDF page 25.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
