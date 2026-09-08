@@ -104,30 +104,12 @@ fun w c x t => NumStability.IsLinearAdvectionSolutionAt w c x t
 - Distance from target type: `2`
 - Semantic SHA-256: `de66a86c2ecf305cf1671383f03d73969b60775294075abac7328c909216e754`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_1} → [inst : NormedAddCommGroup E] → [NormedSpace Real E] → (Real → Real → E) → Real → Real → Real → Prop
-```
+- Reuse SHA-256: `1003891d7237a41254f0437728a1122ae16de3a80b6e5a86b003192e2cc3d225`
+- Reviewed interpretation: There exist qt and qx that are respectively derivatives of the time and space slices at t and x, and qt + speed • qx = 0.
 
-Fully explicit type:
-
-```lean
-{E : Type u_1} →
-  [inst : NormedAddCommGroup.{u_1} E] →
-    [@NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)] →
-      (q : Real → Real → E) → (speed x t : Real) → Prop
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {E} [NormedAddCommGroup E] [NormedSpace Real E] q speed x t =>
-  Exists fun qt =>
-    Exists fun qx =>
-      And (HasDerivAt (fun τ => q x τ) qt t)
-        (And (HasDerivAt (fun ξ => q ξ t) qx x) (Eq (instHAdd.hAdd qt (instHSMul.hSMul speed qx)) 0))
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D004: `NumStability.IsLinearAdvectionSolutionAt._proof_1`
 
@@ -137,58 +119,12 @@ fun {E} [NormedAddCommGroup E] [NormedSpace Real E] q speed x t =>
 - Distance from target type: `3`
 - Semantic SHA-256: `627af0185f9dc545c0feb87577da62578e1f74ad79dcdc19dbbce58a2e697e79`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-∀ {E : Type u_1} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace Real E], ContinuousSMul Real E
-```
+- Reuse SHA-256: `e396008a3af6e24f74831e18a5e7edbe78dc72a4c12344d0ab1182aaf2327f4c`
+- Reviewed interpretation: For a real normed vector space, its displayed scalar action is jointly continuous in the norm-induced topologies.
 
-Fully explicit type:
-
-```lean
-∀ {E : Type u_1} [inst : NormedAddCommGroup.{u_1} E]
-  [inst_1 : @NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)],
-  @ContinuousSMul.{0, u_1} Real E
-    (@SMulZeroClass.toSMul.{0, u_1} Real E
-      (@AddZero.toZero.{u_1} E
-        (@AddZeroClass.toAddZero.{u_1} E
-          (@AddMonoid.toAddZeroClass.{u_1} E
-            (@SubNegMonoid.toAddMonoid.{u_1} E
-              (@AddGroup.toSubNegMonoid.{u_1} E
-                (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst)))))))
-      (@DistribSMul.toSMulZeroClass.{0, u_1} Real E
-        (@AddMonoid.toAddZeroClass.{u_1} E
-          (@SubNegMonoid.toAddMonoid.{u_1} E
-            (@AddGroup.toSubNegMonoid.{u_1} E
-              (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst)))))
-        (@DistribMulAction.toDistribSMul.{0, u_1} Real E
-          (@MonoidWithZero.toMonoid.{0} Real
-            (@Semiring.toMonoidWithZero.{0} Real
-              (@DivisionSemiring.toSemiring.{0} Real
-                (@Semifield.toDivisionSemiring.{0} Real
-                  (@Field.toSemifield.{0} Real
-                    (@NormedField.toField.{0} Real
-                      (@NontriviallyNormedField.toNormedField.{0} Real
-                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
-          (@SubNegMonoid.toAddMonoid.{u_1} E
-            (@AddGroup.toSubNegMonoid.{u_1} E
-              (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst))))
-          (@Module.toDistribMulAction.{0, u_1} Real E
-            (@DivisionSemiring.toSemiring.{0} Real
-              (@Semifield.toDivisionSemiring.{0} Real
-                (@Field.toSemifield.{0} Real
-                  (@NormedField.toField.{0} Real
-                    (@NontriviallyNormedField.toNormedField.{0} Real
-                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
-            (@AddCommGroup.toAddCommMonoid.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst))
-            (@NormedSpace.toModule.{0, u_1} Real E Real.normedField
-              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst) inst_1)))))
-    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
-    (@UniformSpace.toTopologicalSpace.{u_1} E
-      (@PseudoMetricSpace.toUniformSpace.{u_1} E
-        (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
-          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D005: `Iff`
 
@@ -400,23 +336,12 @@ fun {𝕜} [NormedField 𝕜] => { toModule := Semiring.toModule, norm_smul_le :
 - Distance from target type: `2`
 - Semantic SHA-256: `9ff0d896c635e2a38531d689d24ee70cfffa41565354ce15f6ff59b51650bd93`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-NormedAddCommGroup Real
-```
+- Reuse SHA-256: `fa1e6fbdef28eabe4b284f5db00835c7382eb7783495dc5fdd0c31f356e2d9a2`
+- Reviewed interpretation: Combines Real.norm, the real additive group, and Real.metricSpace.
 
-Fully explicit type:
-
-```lean
-NormedAddCommGroup.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ toNorm := Real.norm, toAddCommGroup := Real.instAddCommGroup, toMetricSpace := Real.metricSpace, dist_eq := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D014: `Real.normedField`
 
@@ -468,26 +393,12 @@ let __src_1 := Real.instField;
 - Distance from target type: `3`
 - Semantic SHA-256: `72951116f9ecb1048b235282fec669b8c3dfd809e3810c987dc6f18968d013d3`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u_1} → [AddCommGroup G] → SubtractionCommMonoid G
-```
+- Reuse SHA-256: `763839726d76cf881cd83f597161d3d94dfd208890a089e0868a3be6c8b02c36`
+- Reviewed interpretation: Builds a commutative subtraction structure retaining the group's existing additive operations.
 
-Fully explicit type:
-
-```lean
-{G : Type u_1} → [AddCommGroup.{u_1} G] → SubtractionCommMonoid.{u_1} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {G} [inst : AddCommGroup G] =>
-  let __src := inst;
-  let __src_1 := AddGroup.toSubtractionMonoid;
-  { toSubNegMonoid := __src.toSubNegMonoid, neg_neg := ⋯, neg_add_rev := ⋯, neg_eq_of_add := ⋯, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D016: `AddCommMagma.toAdd`
 
@@ -497,23 +408,12 @@ fun {G} [inst : AddCommGroup G] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `78a12fabc3611bc39705a2dcf3fa82ed1f226d804e888d57546b885fefae4453`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : AddCommMagma G] → Add G
-```
+- Reuse SHA-256: `82edd4441aad1bd9bc813a4347860da42ab1e0b76c1af3ae7fd7feb2b61ba018`
+- Reviewed interpretation: Projects the existing addition operation.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : AddCommMagma.{u} G] → Add.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : AddCommMagma G] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D017: `AddCommMonoid.toAddCommSemigroup`
 
@@ -523,23 +423,12 @@ fun G [self : AddCommMagma G] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `dc7cae9f3611bf7a48fc6ba815db5cffeba3ac95ae33d26bec77b827bd041f26`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u} → [self : AddCommMonoid M] → AddCommSemigroup M
-```
+- Reuse SHA-256: `b6a58945f92a9880e9d72ff3061fd56347675a1c4aac9a5988847042e487029d`
+- Reviewed interpretation: Retains associative commutative addition while forgetting the zero laws.
 
-Fully explicit type:
-
-```lean
-{M : Type u} → [self : AddCommMonoid.{u} M] → AddCommSemigroup.{u} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M self => { toAddSemigroup := self.toAddSemigroup, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D018: `AddCommSemigroup.toAddCommMagma`
 
@@ -549,23 +438,12 @@ fun M self => { toAddSemigroup := self.toAddSemigroup, add_comm := ⋯ }
 - Distance from target type: `3`
 - Semantic SHA-256: `78f90c6bc01ad86e28d84a9011670656947204c6d8963785407a1b8eb54844ab`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : AddCommSemigroup G] → AddCommMagma G
-```
+- Reuse SHA-256: `2ff66468a3d2baec4feb91b6bfc6ff9ea6cb29668f50a7e69030047a9d2e441e`
+- Reviewed interpretation: Retains addition and commutativity while forgetting associativity structure.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : AddCommSemigroup.{u} G] → AddCommMagma.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G self => { toAdd := self.toAdd, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D019: `AddMonoid.toAddZeroClass`
 
@@ -575,23 +453,12 @@ fun G self => { toAdd := self.toAdd, add_comm := ⋯ }
 - Distance from target type: `3`
 - Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u} → [self : AddMonoid M] → AddZeroClass M
-```
+- Reuse SHA-256: `a4f7f41ccba1a447bc0cfebaf39526b47d3bf6c0df2f84a56497aee7334662e1`
+- Reviewed interpretation: Copies addition, zero, and their identity laws from the monoid.
 
-Fully explicit type:
-
-```lean
-{M : Type u} → [self : AddMonoid.{u} M] → AddZeroClass.{u} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D020: `AddZero.toZero`
 
@@ -601,23 +468,12 @@ fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add
 - Distance from target type: `3`
 - Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u_2} → [self : AddZero M] → Zero M
-```
+- Reuse SHA-256: `a830856bc47b0426602dcefa4524abbbb08d5a4c514434d647eecae011abb38f`
+- Reviewed interpretation: Projects the supplied zero element.
 
-Fully explicit type:
-
-```lean
-{M : Type u_2} → [self : AddZero.{u_2} M] → Zero.{u_2} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M [self : AddZero M] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D021: `AddZeroClass.toAddZero`
 
@@ -627,23 +483,12 @@ fun M [self : AddZero M] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u} → [self : AddZeroClass M] → AddZero M
-```
+- Reuse SHA-256: `e64b36571a6c00c07503cae6d9ef025e1ad7e7d8cd7a0dccb583e2dd4f221a17`
+- Reviewed interpretation: Projects the existing addition-and-zero data.
 
-Fully explicit type:
-
-```lean
-{M : Type u} → [self : AddZeroClass.{u} M] → AddZero.{u} M
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M [self : AddZeroClass M] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D022: `And`
 
@@ -699,30 +544,12 @@ fun {α} [inst : DenselyNormedField α] => { toNormedField := inst.toNormedField
 - Distance from target type: `3`
 - Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A
-```
+- Reuse SHA-256: `a24cbbcb6af24cc1955e88c99cc1415afa071a94bf279304baf8b70ced4fe7d8`
+- Reviewed interpretation: Retains scalar multiplication and its distributivity and zero-preservation laws.
 
-Fully explicit type:
-
-```lean
-{M : Type u_1} →
-  {A : Type u_7} →
-    [inst : Monoid.{u_1} M] →
-      [inst_1 : AddMonoid.{u_7} A] →
-        [@DistribMulAction.{u_1, u_7} M A inst inst_1] →
-          @DistribSMul.{u_1, u_7} M A (@AddMonoid.toAddZeroClass.{u_7} A inst_1)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
-  let __src := inst_2;
-  { toSMul := __src.toSMul, smul_zero := ⋯, smul_add := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D025: `DistribSMul.toSMulZeroClass`
 
@@ -732,27 +559,12 @@ fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A
-```
+- Reuse SHA-256: `dcf4917b1d7e49e3bf301ed2bb0bf234bb571b2f253f5a578ce20fb9303a9ce4`
+- Reviewed interpretation: Projects the scalar action with its zero-preservation property.
 
-Fully explicit type:
-
-```lean
-{M : Type u_12} →
-  {A : Type u_13} →
-    {inst : AddZeroClass.{u_13} A} →
-      [self : @DistribSMul.{u_12, u_13} M A inst] →
-        @SMulZeroClass.{u_12, u_13} M A (@AddZero.toZero.{u_13} A (@AddZeroClass.toAddZero.{u_13} A inst))
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M A {inst} [self : DistribSMul M A] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D026: `ENormedAddCommMonoid.toESeminormedAddCommMonoid`
 
@@ -762,25 +574,12 @@ fun M A {inst} [self : DistribSMul M A] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → {inst : TopologicalSpace E} → [self : ENormedAddCommMonoid E] → ESeminormedAddCommMonoid E
-```
+- Reuse SHA-256: `0dcd831d111f0ad1a7e2907c0aa652cfc685dc1557208d0cd2f030e9300968f6`
+- Reviewed interpretation: Projects the underlying extended-seminormed commutative additive structure.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} →
-  {inst : TopologicalSpace.{u_8} E} →
-    [self : @ENormedAddCommMonoid.{u_8} E inst] → @ESeminormedAddCommMonoid.{u_8} E inst
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E {inst} [self : ENormedAddCommMonoid E] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D027: `ESeminormedAddCommMonoid.toAddCommMonoid`
 
@@ -790,24 +589,12 @@ fun E {inst} [self : ENormedAddCommMonoid E] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → [inst : TopologicalSpace E] → [self : ESeminormedAddCommMonoid E] → AddCommMonoid E
-```
+- Reuse SHA-256: `0a2c815d576803c29368c558e067e5e2db13631e0256c3287482481d040d0dea`
+- Reviewed interpretation: Retains the additive monoid and commutativity.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} →
-  [inst : TopologicalSpace.{u_8} E] → [self : @ESeminormedAddCommMonoid.{u_8} E inst] → AddCommMonoid.{u_8} E
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D028: `ESeminormedAddCommMonoid.toESeminormedAddMonoid`
 
@@ -817,25 +604,12 @@ fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm :
 - Distance from target type: `3`
 - Semantic SHA-256: `ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddCommMonoid E] → ESeminormedAddMonoid E
-```
+- Reuse SHA-256: `e034148af12d73b8e4bb2fd0c8e322df85e76a14e7bd278d5af0b57668dec810`
+- Reviewed interpretation: Projects the underlying extended-seminormed additive monoid.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} →
-  {inst : TopologicalSpace.{u_8} E} →
-    [self : @ESeminormedAddCommMonoid.{u_8} E inst] → @ESeminormedAddMonoid.{u_8} E inst
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D029: `ESeminormedAddMonoid.toAddMonoid`
 
@@ -845,23 +619,12 @@ fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddMonoid E] → AddMonoid E
-```
+- Reuse SHA-256: `39d08460e6fddfc02e88e9d6617d58024cf6446feb63e27c19b552f280636a0b`
+- Reviewed interpretation: Projects the existing additive monoid.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} → {inst : TopologicalSpace.{u_8} E} → [self : @ESeminormedAddMonoid.{u_8} E inst] → AddMonoid.{u_8} E
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E {inst} [self : ESeminormedAddMonoid E] => self.2
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D030: `Eq`
 
@@ -937,23 +700,12 @@ fun α β {γ} [self : HAdd α β γ] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSMul α β γ] → α → β → γ
-```
+- Reuse SHA-256: `5fb263b1a3645d5d3fb5815fb02bccb0c405792ff068bb610ae9d365ff5a31fd`
+- Reviewed interpretation: Projects the scalar multiplication operation from its supplied instance.
 
-Fully explicit type:
-
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HSMul.{u, v, w} α β γ] → α → β → γ
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α β {γ} [self : HSMul α β γ] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D034: `HasDerivAt`
 
@@ -1074,23 +826,12 @@ fun R M {inst} {inst_1} [self : Module R M] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `881414a459dbdc250afc9bc468e98b17f776dfd31f2aa5eb9acee71a8d1543f7`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u_2} → [self : NegZeroClass G] → Zero G
-```
+- Reuse SHA-256: `54603d68e7c6d3e3a99416713674c08fe265e5a5ba6a2f815409c0a0694ae5eb`
+- Reviewed interpretation: Projects zero from the supplied negation-and-zero structure.
 
-Fully explicit type:
-
-```lean
-{G : Type u_2} → [self : NegZeroClass.{u_2} G] → Zero.{u_2} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : NegZeroClass G] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D037: `NormedAddCommGroup`
 
@@ -1100,17 +841,12 @@ fun G [self : NegZeroClass G] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Type u_8 → Type u_8
-```
+- Reuse SHA-256: `acf97d9e6bba2699a902c13483ba6a97ed35e06d468d031b565babae85016148`
+- Reviewed interpretation: The structure type instantiated by D018; the supplied construction and projections expose its norm, additive group, and metric data.
 
-Fully explicit type:
-
-```lean
-(E : Type u_8) → Type u_8
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D038: `NormedAddCommGroup.toAddCommGroup`
 
@@ -1120,23 +856,12 @@ Fully explicit type:
 - Distance from target type: `3`
 - Semantic SHA-256: `c92bdde4376567f29ebdebaf4a7dd986bfb96211cd0306e14540b80cd23009d2`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → [self : NormedAddCommGroup E] → AddCommGroup E
-```
+- Reuse SHA-256: `467f2f354fbe063d0a27fb2d0e8a088ccd34bee648d40eb1a512f27b861724fc`
+- Reviewed interpretation: Projects the existing additive commutative group.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} → [self : NormedAddCommGroup.{u_8} E] → AddCommGroup.{u_8} E
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E [self : NormedAddCommGroup E] => self.2
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D039: `NormedAddCommGroup.toENormedAddCommMonoid`
 
@@ -1146,32 +871,12 @@ fun E [self : NormedAddCommGroup E] => self.2
 - Distance from target type: `3`
 - Semantic SHA-256: `eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_4} → [inst : NormedAddCommGroup E] → ENormedAddCommMonoid E
-```
+- Reuse SHA-256: `370ec8132a7ab59332b81281a8c83eea6adc08696fda95fba589c294c16b98a4`
+- Reviewed interpretation: Builds an extended-norm additive structure from the existing normed group, retaining its additive data and topology.
 
-Fully explicit type:
-
-```lean
-{E : Type u_4} →
-  [inst : NormedAddCommGroup.{u_4} E] →
-    @ENormedAddCommMonoid.{u_4} E
-      (@UniformSpace.toTopologicalSpace.{u_4} E
-        (@PseudoMetricSpace.toUniformSpace.{u_4} E
-          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_4} E
-            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_4} E inst))))
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {E} [inst : NormedAddCommGroup E] =>
-  let __spread.0 := NormedAddGroup.toENormedAddMonoid;
-  have __spread.1 := inst;
-  { toESeminormedAddMonoid := __spread.0.toESeminormedAddMonoid, add_comm := ⋯, enorm_eq_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D040: `NormedAddCommGroup.toSeminormedAddCommGroup`
 
@@ -1181,26 +886,12 @@ fun {E} [inst : NormedAddCommGroup E] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_5} → [NormedAddCommGroup E] → SeminormedAddCommGroup E
-```
+- Reuse SHA-256: `8622f08bab0d6366e9ff423d1d627888580ab24e1f010f479f64cdc4d5207fb5`
+- Reviewed interpretation: Copies the norm, additive group, and pseudometric from the normed group.
 
-Fully explicit type:
-
-```lean
-{E : Type u_5} → [NormedAddCommGroup.{u_5} E] → SeminormedAddCommGroup.{u_5} E
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {E} [inst : NormedAddCommGroup E] =>
-  have __src := inst;
-  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
-    dist_eq := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D041: `NormedSpace`
 
@@ -1210,17 +901,12 @@ fun {E} [inst : NormedAddCommGroup E] =>
 - Distance from target type: `3`
 - Semantic SHA-256: `6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-(𝕜 : Type u_6) → (E : Type u_7) → [NormedField 𝕜] → [SeminormedAddCommGroup E] → Type (max u_6 u_7)
-```
+- Reuse SHA-256: `7fc85f43d338df91857c28e7771e08dcb59a437ed022c1d688e270c45d284e3e`
+- Reviewed interpretation: The normed-space structure type over the displayed field and additive space; D017 supplies its real self-module instance and D063 exposes its module.
 
-Fully explicit type:
-
-```lean
-(𝕜 : Type u_6) → (E : Type u_7) → [NormedField.{u_6} 𝕜] → [SeminormedAddCommGroup.{u_7} E] → Type (max u_6 u_7)
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D042: `NormedSpace.toModule`
 
@@ -1317,23 +1003,12 @@ Definition body (one-level semantic boundary):
 - Distance from target type: `3`
 - Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Monoid Real
-```
+- Reuse SHA-256: `508f74f873ec69cd019bf5264bcf5625671c07680aa02400e50f0127d357b3f6`
+- Reviewed interpretation: Supplies the inferred multiplicative monoid on Real at the external library boundary.
 
-Fully explicit type:
-
-```lean
-Monoid.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D046: `Real.semiring`
 
@@ -1343,23 +1018,12 @@ inferInstance
 - Distance from target type: `3`
 - Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-Semiring Real
-```
+- Reuse SHA-256: `a1049584240e7fc168a7660986fd7290b7bb3144c9f44000370d4c954f627dd8`
+- Reviewed interpretation: Supplies the inferred semiring structure on Real at the external library boundary.
 
-Fully explicit type:
-
-```lean
-Semiring.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D047: `SMulZeroClass.toSMul`
 
@@ -1369,24 +1033,12 @@ inferInstance
 - Distance from target type: `3`
 - Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A
-```
+- Reuse SHA-256: `553e0baa9cd6ce2e268bde58e6437b6d3e8308119a31ba95c99d65819bdab133`
+- Reviewed interpretation: Projects the existing scalar multiplication operation.
 
-Fully explicit type:
-
-```lean
-{M : Type u_12} →
-  {A : Type u_13} → {inst : Zero.{u_13} A} → [self : @SMulZeroClass.{u_12, u_13} M A inst] → SMul.{u_12, u_13} M A
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun M A {inst} [self : SMulZeroClass M A] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D048: `SeminormedAddCommGroup.toPseudoMetricSpace`
 
@@ -1396,23 +1048,12 @@ fun M A {inst} [self : SMulZeroClass M A] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{E : Type u_8} → [self : SeminormedAddCommGroup E] → PseudoMetricSpace E
-```
+- Reuse SHA-256: `dc2ef7e3942b6090fa8dbc28b71ed0cc1ea86a818432de531d70da1220043342`
+- Reviewed interpretation: Projects the supplied pseudometric space.
 
-Fully explicit type:
-
-```lean
-{E : Type u_8} → [self : SeminormedAddCommGroup.{u_8} E] → PseudoMetricSpace.{u_8} E
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun E [self : SeminormedAddCommGroup E] => self.3
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D049: `SubNegZeroMonoid.toNegZeroClass`
 
@@ -1422,23 +1063,12 @@ fun E [self : SeminormedAddCommGroup E] => self.3
 - Distance from target type: `3`
 - Semantic SHA-256: `0ca9c4737492ec2a9a5ab16ab065d00204507f2caf80997692c360afbf962577`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u_2} → [self : SubNegZeroMonoid G] → NegZeroClass G
-```
+- Reuse SHA-256: `d05b0d66833eba4d97075aa85e5576824a6e9076d69fd19d7045e895f7a89021`
+- Reviewed interpretation: Copies zero and negation together with the negation-of-zero law.
 
-Fully explicit type:
-
-```lean
-{G : Type u_2} → [self : SubNegZeroMonoid.{u_2} G] → NegZeroClass.{u_2} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G self => { toZero := self.toZero, toNeg := self.toNeg, neg_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D050: `SubtractionCommMonoid.toSubtractionMonoid`
 
@@ -1448,23 +1078,12 @@ fun G self => { toZero := self.toZero, toNeg := self.toNeg, neg_zero := ⋯ }
 - Distance from target type: `3`
 - Semantic SHA-256: `e56d8d718ddbe8a62b0e5b703adfd59bd19f46dac79c341b3d3742ed6ee462c9`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : SubtractionCommMonoid G] → SubtractionMonoid G
-```
+- Reuse SHA-256: `a70ca93361450b292ddc2b9482ecd77768bef734e8531acd583af590ce3acb04`
+- Reviewed interpretation: Projects the existing subtraction structure.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : SubtractionCommMonoid.{u} G] → SubtractionMonoid.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : SubtractionCommMonoid G] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D051: `SubtractionMonoid.toSubNegZeroMonoid`
 
@@ -1474,25 +1093,12 @@ fun G [self : SubtractionCommMonoid G] => self.1
 - Distance from target type: `3`
 - Semantic SHA-256: `700a470249543a704f0b5910309b7d1f4c918e3b645f806242c291c98eff4e28`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_1} → [SubtractionMonoid α] → SubNegZeroMonoid α
-```
+- Reuse SHA-256: `9b3f59f119ca425bc524647e459cb83ea27fa0ed1cef0f6ba85e67fd964e9a7c`
+- Reviewed interpretation: Retains the subtraction-and-negation monoid and supplies its negation-of-zero law.
 
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [SubtractionMonoid.{u_1} α] → SubNegZeroMonoid.{u_1} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : SubtractionMonoid α] =>
-  let __src := inst.toSubNegMonoid;
-  { toSubNegMonoid := __src, neg_zero := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D052: `UniformSpace.toTopologicalSpace`
 
@@ -1554,23 +1160,12 @@ fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
 - Distance from target type: `3`
 - Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β
-```
+- Reuse SHA-256: `142263803735e354a1392582a23f0b7b967e186d38581dee17a103f04c392d5f`
+- Reviewed interpretation: Wraps the supplied scalar multiplication as heterogeneous scalar multiplication with unchanged result type.
 
-Fully explicit type:
-
-```lean
-{α : Type u_1} → {β : Type u_2} → [SMul.{u_1, u_2} α β] → HSMul.{u_1, u_2, u_2} α β β
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D055: `AddCommGroup.toAddCommMonoid`
 
@@ -1580,23 +1175,12 @@ fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
 - Distance from target type: `4`
 - Semantic SHA-256: `f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : AddCommGroup G] → AddCommMonoid G
-```
+- Reuse SHA-256: `242900479b3f5ed16c6e3a8d05c244df51fa91c12e4642b4341877ff5e6d10ee`
+- Reviewed interpretation: Retains the additive monoid and commutativity from the group.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : AddCommGroup.{u} G] → AddCommMonoid.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D056: `AddCommGroup.toAddGroup`
 
@@ -1606,23 +1190,12 @@ fun G self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
 - Distance from target type: `4`
 - Semantic SHA-256: `7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : AddCommGroup G] → AddGroup G
-```
+- Reuse SHA-256: `eb1e82bb6143f7a936541bcaf66cfa6457e44a3ba8437a0b906201c24ba4197d`
+- Reviewed interpretation: Projects the existing additive group.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : AddCommGroup.{u} G] → AddGroup.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : AddCommGroup G] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D057: `AddGroup.toSubNegMonoid`
 
@@ -1632,23 +1205,12 @@ fun G [self : AddCommGroup G] => self.1
 - Distance from target type: `4`
 - Semantic SHA-256: `8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{A : Type u} → [self : AddGroup A] → SubNegMonoid A
-```
+- Reuse SHA-256: `b3ee30326a31d0c3a0043b8dd214894a68eb4266eda84360262a21e6f2fda145`
+- Reviewed interpretation: Projects the group's existing subtraction, negation, and additive monoid structure.
 
-Fully explicit type:
-
-```lean
-{A : Type u} → [self : AddGroup.{u} A] → SubNegMonoid.{u} A
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun A [self : AddGroup A] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
 
 ### D058: `ContinuousSMul`
 
@@ -1898,20 +1460,9 @@ fun α self =>
 - Distance from target type: `4`
 - Semantic SHA-256: `9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b`
 
-Type:
+Hash-verified prior declaration review:
 
-```lean
-{G : Type u} → [self : SubNegMonoid G] → AddMonoid G
-```
+- Reuse SHA-256: `72d2dc326ab695229ff82b60aa0c306583643f7913bab2d5f7fd296c3f294ee2`
+- Reviewed interpretation: Projects the existing additive monoid.
 
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : SubNegMonoid.{u} G] → AddMonoid.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : SubNegMonoid G] => self.1
-```
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.

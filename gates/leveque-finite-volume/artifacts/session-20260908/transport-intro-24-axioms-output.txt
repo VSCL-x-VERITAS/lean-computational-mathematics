@@ -1,0 +1,198 @@
+NumStability.IsRectangleHyperbolicRiemannSolution.{u_1} {Component : Type u_1} [Fintype Component]
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw Component)
+  (problem : NumStability.HyperbolicRiemannProblem law) (solution : ℝ → ℝ → Component → ℝ) : Prop
+'NumStability.IsRectangleHyperbolicRiemannSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CertifiedRectangleRiemannSolution.{u_1} {Component : Type u_1} [Fintype Component]
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw Component)
+  (problem : NumStability.HyperbolicRiemannProblem law) : Type u_1
+'NumStability.CertifiedRectangleRiemannSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RectangleRiemannInterfaceFluxMethod.{u_1, u_2} {Component : Type u_1} [Fintype Component]
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw Component) (Information : Type u_2) : Type (max u_1 u_2)
+'NumStability.RectangleRiemannInterfaceFluxMethod' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.adjacentCellRectangleRiemannInformation.{u_1, u_2} {Component : Type u_1} {Information : Type u_2}
+  [Fintype Component] {law : NumStability.OneDimensionalHyperbolicConservationLaw Component}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) (cellAverages : ℤ → Component → ℝ)
+  (hdomain : ∀ (i : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law cellAverages i)) (i : ℤ) :
+  Information
+'NumStability.adjacentCellRectangleRiemannInformation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.rectangleRiemannInterfaceFlux.{u_1, u_2} {Component : Type u_1} {Information : Type u_2}
+  [Fintype Component] {law : NumStability.OneDimensionalHyperbolicConservationLaw Component}
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information) (cellAverages : ℤ → Component → ℝ)
+  (hdomain : ∀ (i : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law cellAverages i)) (i : ℤ) :
+  Component → ℝ
+'NumStability.rectangleRiemannInterfaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.rectangleRiemannInterface_finiteVolumeStep.{u_1, u_2} {Component : Type u_1} {Information : Type u_2}
+  [Fintype Component] (law : NumStability.OneDimensionalHyperbolicConservationLaw Component)
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (initialState : ℝ → Component → ℝ)
+  (hintegrable : ∀ (i : ℤ), IntervalIntegrable initialState MeasureTheory.volume (grid.cellLeft i) (grid.cellRight i))
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (hdomain :
+    ∀ (i : ℤ),
+      method.domain
+        (NumStability.adjacentCellRiemannProblem law (NumStability.finiteVolumeCellAverageOn grid initialState) i))
+  (timeStep : ℝ) :
+  ∃ cellAverages,
+    (∀ (i : ℤ),
+        NumStability.IsOneDimensionalCellAverage initialState (grid.cellLeft i) (grid.cellRight i) (cellAverages i)) ∧
+      (∀ (i : ℤ), grid.cellRight (i - 1) = grid.cellLeft i) ∧
+        (∀ (i : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law cellAverages i)) ∧
+          ∃ solved,
+            (∀ (i : ℤ),
+                NumStability.IsRiemannData (fun x => (solved i).solution x 0) (cellAverages (i - 1)) (cellAverages i)) ∧
+              (∀ (i : ℤ), NumStability.IsRectangleConservationLawSolution (solved i).solution law.physicalFlux) ∧
+                ∃ information,
+                  (∀ (i : ℤ), information i = method.extractInformation (solved i)) ∧
+                    ∃ numericalFlux,
+                      (∀ (i : ℤ), numericalFlux i = method.numericalFluxFromInformation (information i)) ∧
+                        (∀ (state : Component → ℝ),
+                            method.numericalFluxFromInformation
+                                (method.extractInformation
+                                  (method.solve { leftState := state, rightState := state } ⋯)) =
+                              law.physicalFlux state) ∧
+                          ∃ updatedCellAverages,
+                            ∀ (i : ℤ),
+                              updatedCellAverages i =
+                                NumStability.riemannFiniteVolumeUpdate grid timeStep cellAverages numericalFlux i
+'NumStability.rectangleRiemannInterface_finiteVolumeStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearHyperbolicConservationLaw.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) : NumStability.OneDimensionalHyperbolicConservationLaw ι
+'NumStability.linearHyperbolicConservationLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearRiemannSolution_constant.{u_1} {ι : Type u_1} [Fintype ι] (eigenbasis : Module.Basis ι ℝ (ι → ℝ))
+  (eigenvalues state : ι → ℝ) (x t : ℝ) :
+  NumStability.linearRiemannSolution eigenbasis eigenvalues state state state x t = state
+'NumStability.linearRiemannSolution_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.certifiedLinearRectangleRiemannSolution.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p)
+  (problem : NumStability.HyperbolicRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA)) :
+  NumStability.CertifiedRectangleRiemannSolution (NumStability.linearHyperbolicConservationLaw A hA) problem
+'NumStability.certifiedLinearRectangleRiemannSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) :
+  NumStability.RectangleRiemannInterfaceFluxMethod (NumStability.linearHyperbolicConservationLaw A hA) (ι → ℝ)
+'NumStability.linearRectangleRiemannInterfaceFluxMethod' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod_exists_total.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) :
+  ∃ method,
+    ∀ (problem : NumStability.HyperbolicRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA)),
+      method.domain problem
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_exists_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod_nonempty.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) :
+  Nonempty
+    (NumStability.RectangleRiemannInterfaceFluxMethod (NumStability.linearHyperbolicConservationLaw A hA) (ι → ℝ))
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearRectangleRiemannInterfaceFluxMethod_information.{u_1} {ι : Type u_1} [Fintype ι] (A : Matrix ι ι ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+  (heigen : ∀ (p : ι), A.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p)
+  (problem : NumStability.HyperbolicRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA)) {t : ℝ}
+  (ht : 0 < t) :
+  (NumStability.linearRectangleRiemannInterfaceFluxMethod A hA eigenbasis eigenvalues heigen).extractInformation
+      ((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA eigenbasis eigenvalues heigen).solve problem
+        trivial) =
+    NumStability.linearRiemannSolution eigenbasis eigenvalues problem.leftState problem.leftState problem.rightState 0 t
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_information' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_rectangleRiemannInterfaceFlux_sourceContract.{u_1} {m : ℕ} (hm : 0 < m) {Information : Type u_1}
+  (law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m))
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (initialState : ℝ → Fin m → ℝ)
+  (hintegrable : ∀ (i : ℤ), IntervalIntegrable initialState MeasureTheory.volume (grid.cellLeft i) (grid.cellRight i))
+  (method : NumStability.RectangleRiemannInterfaceFluxMethod law Information)
+  (hdomain :
+    ∀ (i : ℤ),
+      method.domain
+        (NumStability.adjacentCellRiemannProblem law (NumStability.finiteVolumeCellAverageOn grid initialState) i))
+  (timeStep : ℝ) (htimeStep : 0 < timeStep) :
+  0 < m ∧
+    0 < timeStep ∧
+      ∃ cellAverages,
+        (∀ (i : ℤ),
+            NumStability.IsOneDimensionalCellAverage initialState (grid.cellLeft i) (grid.cellRight i)
+              (cellAverages i)) ∧
+          (∀ (i : ℤ), grid.cellRight (i - 1) = grid.cellLeft i) ∧
+            (∀ (i : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law cellAverages i)) ∧
+              ∃ solved,
+                (∀ (i : ℤ),
+                    NumStability.IsRiemannData (fun x => (solved i).solution x 0) (cellAverages (i - 1))
+                      (cellAverages i)) ∧
+                  (∀ (i : ℤ), NumStability.IsRectangleConservationLawSolution (solved i).solution law.physicalFlux) ∧
+                    ∃ information,
+                      (∀ (i : ℤ), information i = method.extractInformation (solved i)) ∧
+                        ∃ numericalFlux,
+                          (∀ (i : ℤ), numericalFlux i = method.numericalFluxFromInformation (information i)) ∧
+                            (∀ (state : Fin m → ℝ),
+                                method.numericalFluxFromInformation
+                                    (method.extractInformation
+                                      (method.solve { leftState := state, rightState := state } ⋯)) =
+                                  law.physicalFlux state) ∧
+                              ∃ updatedCellAverages,
+                                ∀ (i : ℤ),
+                                  updatedCellAverages i =
+                                    NumStability.riemannFiniteVolumeUpdate grid timeStep cellAverages numericalFlux i
+'NumStability.leveque01_rectangleRiemannInterfaceFlux_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.travelingWave_characteristic_translate.{u_1} {E : Type u_1} (profile : ℝ → E) (speed x t h : ℝ) :
+  NumStability.travelingWave profile speed (x + speed * h) (t + h) = NumStability.travelingWave profile speed x t
+'NumStability.travelingWave_characteristic_translate' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.travelingWave_hasDerivAt_characteristic.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (profile : ℝ → E) (speed x t : ℝ) :
+  HasDerivAt (fun τ => NumStability.travelingWave profile speed (x + speed * τ) τ) 0 t
+'NumStability.travelingWave_hasDerivAt_characteristic' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.travelingWave_isLinearAdvectionSolution_iff.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (profile : ℝ → E) (speed : ℝ) :
+  NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile speed) speed ↔ Differentiable ℝ profile
+'NumStability.travelingWave_isLinearAdvectionSolution_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.travelingWave_isRectangleConservationLawSolution_iff.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] (profile : ℝ → E) (speed : ℝ) :
+  (NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile speed) fun state =>
+      speed • state) ↔
+    ∀ (a b : ℝ), IntervalIntegrable profile MeasureTheory.volume a b
+'NumStability.travelingWave_isRectangleConservationLawSolution_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_equation03_transportSolution (profile : ℝ → ℝ) (speed : ℝ) :
+  (∀ (x : ℝ), NumStability.travelingWave profile speed x 0 = profile x) ∧
+    (∀ (x t : ℝ), NumStability.travelingWave profile speed (x + speed * t) t = profile x) ∧
+      (∀ (x t : ℝ), HasDerivAt (fun τ => NumStability.travelingWave profile speed (x + speed * τ) τ) 0 t) ∧
+        (Differentiable ℝ profile →
+            NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile speed) speed) ∧
+          ((∀ (a b : ℝ), IntervalIntegrable profile MeasureTheory.volume a b) →
+            NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile speed) fun state =>
+              speed * state)
+'NumStability.leveque01_equation03_transportSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+NumStability.IsUniformAdvection.{u_1} {E : Type u_1} (q : ℝ → ℝ → E) (speed : ℝ) : Prop
+'NumStability.IsUniformAdvection' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.isUniformAdvection_iff_eq_travelingWave.{u_1} {E : Type u_1} (q : ℝ → ℝ → E) (speed : ℝ) :
+  NumStability.IsUniformAdvection q speed ↔ q = NumStability.travelingWave (fun x => q x 0) speed
+'NumStability.isUniformAdvection_iff_eq_travelingWave' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.IsUniformAdvection.isLinearAdvectionSolution.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {q : ℝ → ℝ → E} {speed : ℝ} (h : NumStability.IsUniformAdvection q speed) (hdiff : Differentiable ℝ fun x => q x 0) :
+  NumStability.IsLinearAdvectionSolution q speed
+'NumStability.IsUniformAdvection.isLinearAdvectionSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.IsUniformAdvection.isRectangleConservationLawSolution.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {q : ℝ → ℝ → E} {speed : ℝ} (h : NumStability.IsUniformAdvection q speed)
+  (hintegrable : ∀ (a b : ℝ), IntervalIntegrable (fun x => q x 0) MeasureTheory.volume a b) :
+  NumStability.IsRectangleConservationLawSolution q fun state => speed • state
+'NumStability.IsUniformAdvection.isRectangleConservationLawSolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.leveque01_equation02_uniformTransportModel (speed : ℝ) :
+  NumStability.IsRealHyperbolicMatrix (NumStability.constantCoefficientScalarMatrix speed) ∧
+    (∀ (q : ℝ → ℝ → ℝ) (x t : ℝ),
+        NumStability.leveque01_equation01_constantLinearSystemAt (NumStability.scalarAsOneComponentSystem q)
+            (NumStability.constantCoefficientScalarMatrix speed) x t ↔
+          NumStability.leveque01_equation02_scalarAdvectionAt q speed x t) ∧
+      ∀ (q : ℝ → ℝ → ℝ),
+        NumStability.IsUniformAdvection q speed →
+          ((Differentiable ℝ fun x => q x 0) → NumStability.IsLinearAdvectionSolution q speed) ∧
+            ((∀ (a b : ℝ), IntervalIntegrable (fun x => q x 0) MeasureTheory.volume a b) →
+              NumStability.IsRectangleConservationLawSolution q fun state => speed * state)
+'NumStability.leveque01_equation02_uniformTransportModel' depends on axioms: [propext, Classical.choice, Quot.sound]

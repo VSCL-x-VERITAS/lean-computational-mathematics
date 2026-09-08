@@ -1,0 +1,13 @@
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Transport.UniformAdvection
+import ComputationalMathematics.Source.LeVeque.Chapter01.Equation02UniformTransport
+
+#check NumStability.IsUniformAdvection
+#print axioms NumStability.IsUniformAdvection
+#check NumStability.isUniformAdvection_iff_eq_travelingWave
+#print axioms NumStability.isUniformAdvection_iff_eq_travelingWave
+#check NumStability.IsUniformAdvection.isLinearAdvectionSolution
+#print axioms NumStability.IsUniformAdvection.isLinearAdvectionSolution
+#check NumStability.IsUniformAdvection.isRectangleConservationLawSolution
+#print axioms NumStability.IsUniformAdvection.isRectangleConservationLawSolution
+#check NumStability.leveque01_equation02_uniformTransportModel
+#print axioms NumStability.leveque01_equation02_uniformTransportModel

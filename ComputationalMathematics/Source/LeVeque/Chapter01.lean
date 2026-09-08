@@ -13,8 +13,10 @@ import ComputationalMathematics.Source.LeVeque.Chapter01.EigenbasisDecoupling
 import ComputationalMathematics.Source.LeVeque.Chapter01.EigenvalueWaveSpeeds
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation02
+import ComputationalMathematics.Source.LeVeque.Chapter01.Equation02UniformTransport
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03AdvectedProfile
+import ComputationalMathematics.Source.LeVeque.Chapter01.Equation03TransportSolution
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04Model
 import ComputationalMathematics.Source.LeVeque.Chapter01.Equation05
@@ -38,6 +40,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter01.MaterialInterfaceRieman
 import ComputationalMathematics.Source.LeVeque.Chapter01.NonconservationSourceTerms
 import ComputationalMathematics.Source.LeVeque.Chapter01.NonlinearShockFormation
 import ComputationalMathematics.Source.LeVeque.Chapter01.OneStepMethod
+import ComputationalMathematics.Source.LeVeque.Chapter01.RectangleRiemannInterfaceFlux
 import ComputationalMathematics.Source.LeVeque.Chapter01.RiemannInitialConfiguration
 import ComputationalMathematics.Source.LeVeque.Chapter01.RiemannInterfaceFlux
 import ComputationalMathematics.Source.LeVeque.Chapter01.RiemannRayZero

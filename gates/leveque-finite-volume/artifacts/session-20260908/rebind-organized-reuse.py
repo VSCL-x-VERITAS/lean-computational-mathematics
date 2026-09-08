@@ -6,7 +6,7 @@ R = S.parents[3]
 G = R / 'gates/leveque-finite-volume/chapter-01.json'
 C = R.parent / 'formalization-collaboration-v5.0.1/books/candidates/leveque-finite-volume/module/scripts/gate.py'
 rows = [r for r in json.loads(G.read_text())['rows'] if r['status'] == 'REUSED']
-assert len(rows) == 4
+assert len(rows) >= 4
 records = []
 label = sys.argv[1] if len(sys.argv) > 1 else 'organized'
 for row in rows:

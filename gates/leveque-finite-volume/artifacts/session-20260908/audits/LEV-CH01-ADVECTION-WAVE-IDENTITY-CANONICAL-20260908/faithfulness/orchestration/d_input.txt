@@ -1,0 +1,3243 @@
+
+
+Exact role prompt SHA256 e8fc01dc20710b1b6634a745a340c6a7b4d461047e09ee662cbf3c0afc518ba9
+# Role: direct source-versus-Lean judge
+
+You are a fresh, independent judge. Compare the selected source result directly
+with the Lean proposition. The authoritative source and elaborated declaration
+dossier are primary evidence; the source contract supports extraction but does
+not replace checking the source.
+
+## Required analysis
+
+1. Re-read the cited source passage and relevant inherited context.
+2. Read the proof-free source header, readable target type, and fully explicit
+   target type in `direct_review_packet.md`.
+3. Inspect every `Dxxx` dependency. A full section requires an
+   `interpretation`; a reuse section requires its exact `reuse_sha256`. Reuse
+   covers declaration meaning only. Independently determine each dependency's
+   effect on this target and whether it matches the selected source result.
+4. Complete every configured semantic check, in order, with direct evidence.
+   Use `not-applicable` only with a concrete reason.
+5. Decide Lean-implies-source and source-implies-Lean separately.
+6. Classify with the fixed vocabulary.
+
+Additional hypotheses and narrower domains are reduced applicability, not
+stronger theorems. Test satisfiability and nonvacuity. Request adjudication for
+any unresolved evidence, dependency, semantic check, or implication.
+
+Return only JSON conforming to `schemas/direct_judge.schema.json`.
+
+
+Exact output schema SHA256 6e31ec9d39783d43bc0cacbca8ee2512a7f3d75cb59f26265111372c6ded6693
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Direct source-versus-Lean judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "dossier_sha256", "dependency_coverage", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "direct-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "dossier_sha256": {"$ref": "#/$defs/sha256"},
+    "dependency_coverage": {"type": "array", "minItems": 1, "items": {"oneOf": [{"$ref": "#/$defs/reviewedDependency"}, {"$ref": "#/$defs/reusedDependency"}]}},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "reviewedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "interpretation", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "interpretation": {"type": "string", "minLength": 1},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "reusedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "reuse_sha256", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "reuse_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "lean_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "lean_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 97a67bc3b4e54e66318d422fbde9a0e5f1978c06c4147ade90ce3bb1fc8049c8
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Sentence immediately after equation (1.4) stating that equations (1.2) and (1.4) are mathematically identical",
+      "location": "raw PDF page 24; printed Chapter 1 page 2"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-ADVECTION-WAVE-IDENTITY-CANONICAL-20260908"
+}
+
+
+Source contract SHA256 45df8b1618a485d5709edcdd2aa821d5d23ccd7ac7bbdea9401db77c31f498a4
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-ADVECTION-WAVE-IDENTITY-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and following paragraph",
+      "anchor": "q_t(x,t) + A q_x(x,t) = 0; q : R × R → R^m",
+      "observation": "The enclosing framework is a homogeneous first-order, constant-coefficient linear system in one spatial variable x and time t. A is a constant real matrix, and subscripts denote partial derivatives."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; paragraph preceding equation (1.2)",
+      "anchor": "constant-coefficient scalar problem, in which m = 1",
+      "observation": "For the scalar case, A is a real scalar. The text states that this equation can model either advective transport or wave motion, depending on context."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.2) and its introductory paragraph",
+      "anchor": "constant velocity ū; q_t(x,t) + ū q_x(x,t) = 0",
+      "observation": "The advection equation uses a constant transport velocity ū and an unknown concentration or density q(x,t) for a contaminant transported through a one-dimensional pipe."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; opening paragraph and equation (1.4)",
+      "anchor": "to the right with speed c > 0; w_t(x,t) + c w_x(x,t) = 0",
+      "observation": "The one-way wave model describes a sound wave propagating to the right with positive speed c."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; paragraph immediately following equation (1.4)",
+      "anchor": "w(x,t) is an appropriate combination of the pressure and particle velocity",
+      "observation": "The dependent variable w has a wave interpretation. The equation is again a scalar first-order hyperbolic equation and is sometimes called the one-way wave equation because it models propagation in one particular direction."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2; paragraph beginning 'Mathematically'",
+      "anchor": "the advection equation (1.2) and the one-way wave equation (1.4) are identical",
+      "observation": "The selected passage asserts mathematical identity of the two equations and suggests that advective transport and wave phenomena can consequently be handled by similar mathematical and numerical techniques."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "x and t are the real spatial and temporal variables inherited from q : R × R → R^m; the present equations use the scalar case m = 1 (printed page 1, equation (1.1), its explanatory paragraph, and the scalar-case paragraph).",
+      "q(x,t) is the scalar advection unknown, interpreted as concentration or density (printed page 1, introduction to equation (1.2)).",
+      "ū is the constant real transport velocity (printed page 1, scalar-case paragraph and introduction to equation (1.2)).",
+      "w(x,t) is the scalar wave unknown, interpreted as an appropriate combination of pressure and particle velocity (printed page 2, equation (1.4) and its following paragraph).",
+      "c is the wave propagation speed, with c > 0 in the right-going model displayed in equation (1.4) (printed page 2, opening paragraph).",
+      "The identity sentence is a prose comparison of the displayed equations and contains no explicit universal or existential quantifiers (printed page 2, paragraph beginning 'Mathematically')."
+    ],
+    "hypotheses": [
+      "The compared equations are homogeneous, linear, scalar first-order equations in one spatial dimension within the constant-coefficient setting (printed page 1, equation (1.1) and scalar-case paragraph; printed page 2, paragraph following equation (1.4)).",
+      "The advection model has constant velocity ū (printed page 1, introduction to equation (1.2)).",
+      "The displayed wave model describes propagation to the right with c > 0 (printed page 2, opening paragraph and equation (1.4))."
+    ],
+    "conclusions": [
+      "The advection equation q_t(x,t) + ū q_x(x,t) = 0 and the one-way wave equation w_t(x,t) + c w_x(x,t) = 0 are mathematically identical (printed page 2, paragraph beginning 'Mathematically', explicitly referencing equations (1.2) and (1.4)).",
+      "This identity suggests that advective transport and wave phenomena can be handled by similar mathematical and numerical techniques; the source presents this as a suggestion, without specifying a technique or proving a numerical guarantee (printed page 2, same paragraph)."
+    ],
+    "definitions_and_conventions": [
+      "Subscripts t and x denote partial derivatives with respect to time and space respectively (printed page 1, paragraph following equation (1.1)).",
+      "Advection refers to a substance being carried along with fluid motion (printed page 1, paragraph beginning 'Advective transport').",
+      "The name one-way wave equation refers to modeling waves propagating in one particular direction (printed page 2, paragraph following equation (1.4)).",
+      "Analyst interpretation of the asserted mathematical identity: renaming q to w and the constant coefficient ū to c makes the two displayed differential expressions coincide. The source anchors this interpretation in the two formulas and the explicit identity sentence, but does not state a formal substitution rule (printed pages 1–2, equations (1.2), (1.4), and paragraph beginning 'Mathematically')."
+    ],
+    "implicit_context": [
+      "The variables have different physical meanings: q measures a transported substance, while w combines pressure and particle velocity. The identity claim concerns their mathematical equations (printed page 1, introduction to equation (1.2); printed page 2, paragraph following equation (1.4) and identity paragraph).",
+      "The wave context distinguishes wave propagation speed from material-particle motion: the opening paragraph says the wave speed can be much larger than particle velocity (printed page 2, opening paragraph).",
+      "No initial conditions, boundary conditions, spatial boundary, or finite time interval are specified for the comparison (printed pages 1–2, displayed equations (1.2), (1.4), and identity paragraph)."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Meaning of mathematical identity",
+        "details": [
+          "Both expressions have a time derivative plus a constant scalar multiple of a spatial derivative, equal to zero (printed page 1, equation (1.2); printed page 2, equation (1.4)).",
+          "The comparison identifies equation form under correspondence of unknown and coefficient names; it does not explicitly assert equality of independently chosen physical fields or independently chosen speeds (printed page 2, identity paragraph, read together with equations (1.2) and (1.4); analyst interpretation)."
+        ]
+      },
+      {
+        "topic": "Direction and coefficient scope",
+        "details": [
+          "The wave equation displayed in (1.4) is introduced with c > 0 for rightward propagation (printed page 2, opening paragraph).",
+          "The advection coefficient is explicitly constant, but equation (1.2) and its introduction impose no explicit positivity condition on ū (printed page 1, introduction to equation (1.2))."
+        ]
+      },
+      {
+        "topic": "Scope of the methodological consequence",
+        "details": [
+          "The text suggests similar mathematical and numerical treatment, without selecting an algorithm, establishing convergence, or asserting equality of outputs from numerical methods (printed page 2, identity paragraph)."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve both displayed PDEs, including the plus sign, zero right-hand side, and coefficient multiplying the spatial derivative (printed page 1, equation (1.2); printed page 2, equation (1.4)).",
+    "Preserve the correspondence between scalar unknowns q and w and between coefficients ū and c when expressing mathematical identity; equality for arbitrary unmatched coefficient values is not stated (printed pages 1–2, equations (1.2), (1.4), and identity paragraph).",
+    "Preserve the constant-coefficient, one-dimensional scalar setting and the explicit c > 0 condition of the displayed right-going wave model (printed page 1, scalar-case paragraph and introduction to equation (1.2); printed page 2, opening paragraph).",
+    "Do not replace mathematical identity of the equations with physical identity of transported concentration and acoustic quantities (printed page 1, introduction to equation (1.2); printed page 2, description of w and identity paragraph).",
+    "Retain the suggestion of similar mathematical and numerical techniques without strengthening it to a theorem about a particular method (printed page 2, identity paragraph)."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The source does not formally define 'mathematically identical'.",
+      "evidence": "Printed page 2, identity paragraph compares equations (1.2) and (1.4), whose unknowns and coefficients have different names.",
+      "impact": "Identity under renaming is the directly supported interpretation; a formal equivalence of solution predicates requires specifying the correspondence of fields and coefficients."
+    },
+    {
+      "issue": "The required regularity and solution concept are not specified for the identity claim.",
+      "evidence": "Printed page 1 defines derivative subscripts after equation (1.1), but printed pages 1–2 give no function-space assumptions or classical-versus-weak distinction for equations (1.2) and (1.4).",
+      "impact": "Any precise regularity assumptions needed by a formal derivative-based formulation must be identified as formalization choices rather than explicit source hypotheses."
+    },
+    {
+      "issue": "The displayed wave model has an explicit positivity restriction that is absent from the advection coefficient's introduction.",
+      "evidence": "Printed page 2 introduces equation (1.4) with c > 0; printed page 1 introduces equation (1.2) with constant velocity ū.",
+      "impact": "The identity sentence does not itself resolve how a quantified formal statement should relate the parameter domains; coefficient correspondence must account for the displayed right-going wave context."
+    }
+  ],
+  "contract_plain_english": "In the one-dimensional scalar constant-coefficient setting, the advection equation q_t + ū q_x = 0 and the right-going one-way wave equation w_t + c w_x = 0, introduced with c > 0, have the same mathematical form under correspondence of the unknown and coefficient names. Their physical unknowns have different interpretations. The source explicitly calls the equations mathematically identical and suggests that similar mathematical and numerical techniques can handle the associated transport and wave phenomena (printed page 1, equation (1.2) and its context; printed page 2, equation (1.4), its context, and the paragraph beginning 'Mathematically')."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 d4ca08032ffd05b464dc619adeb48d9c168a026b5f4fd3e80a1bbedfbdca6ada
+# Declaration dossier for LEV-CH01-ADVECTION-WAVE-IDENTITY-CANONICAL-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_advectionWaveIdentity
+    (field : ℝ → ℝ → ℝ) (speed x t : ℝ) (_hspeed : 0 < speed) :
+    leveque01_equation02_scalarAdvectionAt field speed x t ↔
+      leveque01_equation04_oneWayWaveAt field speed x t
+```
+
+## Elaborated target type
+
+```lean
+∀ (field : Real → Real → Real) (speed x t : Real),
+  Real.instLT.lt 0 speed →
+    Iff (NumStability.leveque01_equation02_scalarAdvectionAt field speed x t)
+      (NumStability.leveque01_equation04_oneWayWaveAt field speed x t)
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ (field : Real → Real → Real) (speed x t : Real)
+  (_hspeed :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) speed),
+  Iff (NumStability.leveque01_equation02_scalarAdvectionAt field speed x t)
+    (NumStability.leveque01_equation04_oneWayWaveAt field speed x t)
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Source.LeVeque.Chapter01.Equation02`, `ComputationalMathematics.Source.LeVeque.Chapter01.Equation04`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection` imports: `Mathlib.Analysis.Calculus.Deriv.Add`, `Mathlib.Analysis.Calculus.Deriv.Comp`, `Mathlib.Analysis.Calculus.Deriv.Mul`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.ConstantCoefficientLinearSystem` imports: `Mathlib.Analysis.Calculus.Deriv.Prod`, `Mathlib.Data.Matrix.Basic`
+- `ComputationalMathematics.Source.LeVeque.Chapter01.Equation01` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.ConstantCoefficientLinearSystem`
+- `ComputationalMathematics.Source.LeVeque.Chapter01.Equation02` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection`, `ComputationalMathematics.Source.LeVeque.Chapter01.Equation01`
+- `ComputationalMathematics.Source.LeVeque.Chapter01.Equation04` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.leveque01_equation02_scalarAdvectionAt`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Source.LeVeque.Chapter01.Equation02`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4e3983532e0fa0daf8dc155b900857fd57e290643769823d189dda9c594769e3`
+
+Type:
+
+```lean
+(Real → Real → Real) → Real → Real → Real → Prop
+```
+
+Fully explicit type:
+
+```lean
+(q : Real → Real → Real) → (speed x t : Real) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun q speed x t => NumStability.IsLinearAdvectionSolutionAt q speed x t
+```
+
+### D002: `NumStability.leveque01_equation04_oneWayWaveAt`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Source.LeVeque.Chapter01.Equation04`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `5ce0ce02e511519f3bd00c355edc5b7961659bc4d31b81c60778f29e5661b1a7`
+
+Type:
+
+```lean
+(Real → Real → Real) → Real → Real → Real → Prop
+```
+
+Fully explicit type:
+
+```lean
+(w : Real → Real → Real) → (c x t : Real) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun w c x t => NumStability.IsLinearAdvectionSolutionAt w c x t
+```
+
+### D003: `NumStability.IsLinearAdvectionSolutionAt`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `de66a86c2ecf305cf1671383f03d73969b60775294075abac7328c909216e754`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `1003891d7237a41254f0437728a1122ae16de3a80b6e5a86b003192e2cc3d225`
+- Reviewed interpretation: There exist qt and qx that are respectively derivatives of the time and space slices at t and x, and qt + speed • qx = 0.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D004: `NumStability.IsLinearAdvectionSolutionAt._proof_1`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection`
+- Declaration kind: `theorem`
+- Distance from target type: `3`
+- Semantic SHA-256: `627af0185f9dc545c0feb87577da62578e1f74ad79dcdc19dbbce58a2e697e79`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `e396008a3af6e24f74831e18a5e7edbe78dc72a4c12344d0ab1182aaf2327f4c`
+- Reviewed interpretation: For a real normed vector space, its displayed scalar action is jointly continuous in the norm-induced topologies.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D005: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D006: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D007: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D008: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D009: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D010: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D011: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D012: `NormedField.toNormedSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `9e0629e665c648aac86a6d587dab809d81c8bb691b9b016c7808244edbccdc92`
+
+Type:
+
+```lean
+{𝕜 : Type u_1} → [inst : NormedField 𝕜] → NormedSpace 𝕜 𝕜
+```
+
+Fully explicit type:
+
+```lean
+{𝕜 : Type u_1} →
+  [inst : NormedField.{u_1} 𝕜] →
+    @NormedSpace.{u_1, u_1} 𝕜 𝕜 inst
+      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{u_1} 𝕜
+        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{u_1} 𝕜
+          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{u_1} 𝕜
+            (@NormedCommRing.toSeminormedCommRing.{u_1} 𝕜 (@NormedField.toNormedCommRing.{u_1} 𝕜 inst)))))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {𝕜} [NormedField 𝕜] => { toModule := Semiring.toModule, norm_smul_le := ⋯ }
+```
+
+### D013: `Real.normedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Real`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `9ff0d896c635e2a38531d689d24ee70cfffa41565354ce15f6ff59b51650bd93`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `fa1e6fbdef28eabe4b284f5db00835c7382eb7783495dc5fdd0c31f356e2d9a2`
+- Reviewed interpretation: Combines Real.norm, the real additive group, and Real.metricSpace.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D014: `Real.normedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b`
+
+Type:
+
+```lean
+NormedField Real
+```
+
+Fully explicit type:
+
+```lean
+NormedField.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+let __src := Real.normedAddCommGroup;
+let __src_1 := Real.instField;
+{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,
+  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,
+  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,
+  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,
+  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,
+  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,
+  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,
+  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,
+  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,
+  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,
+  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,
+  toDiv := __src_1.toDiv, div_eq_mul_inv := ⋯, zpow := __src_1.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯,
+  toNontrivial := ⋯, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := ⋯,
+  inv_zero := ⋯, nnratCast_def := ⋯, nnqsmul := __src_1.nnqsmul, nnqsmul_def := ⋯, ratCast_def := ⋯,
+  qsmul := __src_1.qsmul, qsmul_def := ⋯, toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul := ⋯ }
+```
+
+### D015: `AddCommGroup.toDivisionAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `72951116f9ecb1048b235282fec669b8c3dfd809e3810c987dc6f18968d013d3`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `763839726d76cf881cd83f597161d3d94dfd208890a089e0868a3be6c8b02c36`
+- Reviewed interpretation: Builds a commutative subtraction structure retaining the group's existing additive operations.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D016: `AddCommMagma.toAdd`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `78a12fabc3611bc39705a2dcf3fa82ed1f226d804e888d57546b885fefae4453`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `82edd4441aad1bd9bc813a4347860da42ab1e0b76c1af3ae7fd7feb2b61ba018`
+- Reviewed interpretation: Projects the existing addition operation.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D017: `AddCommMonoid.toAddCommSemigroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `dc7cae9f3611bf7a48fc6ba815db5cffeba3ac95ae33d26bec77b827bd041f26`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `b6a58945f92a9880e9d72ff3061fd56347675a1c4aac9a5988847042e487029d`
+- Reviewed interpretation: Retains associative commutative addition while forgetting the zero laws.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D018: `AddCommSemigroup.toAddCommMagma`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `78f90c6bc01ad86e28d84a9011670656947204c6d8963785407a1b8eb54844ab`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `2ff66468a3d2baec4feb91b6bfc6ff9ea6cb29668f50a7e69030047a9d2e441e`
+- Reviewed interpretation: Retains addition and commutativity while forgetting associativity structure.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D019: `AddMonoid.toAddZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a4f7f41ccba1a447bc0cfebaf39526b47d3bf6c0df2f84a56497aee7334662e1`
+- Reviewed interpretation: Copies addition, zero, and their identity laws from the monoid.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D020: `AddZero.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a830856bc47b0426602dcefa4524abbbb08d5a4c514434d647eecae011abb38f`
+- Reviewed interpretation: Projects the supplied zero element.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D021: `AddZeroClass.toAddZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `e64b36571a6c00c07503cae6d9ef025e1ad7e7d8cd7a0dccb583e2dd4f221a17`
+- Reviewed interpretation: Projects the existing addition-and-zero data.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D022: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D023: `DenselyNormedField.toNontriviallyNormedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `22b7c7d8fc79e8fdde53f4c5f0f7e47a5b48886ac404b11b983a20e9fe547215`
+
+Type:
+
+```lean
+{α : Type u_2} → [DenselyNormedField α] → NontriviallyNormedField α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} → [DenselyNormedField.{u_2} α] → NontriviallyNormedField.{u_2} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : DenselyNormedField α] => { toNormedField := inst.toNormedField, non_trivial := ⋯ }
+```
+
+### D024: `DistribMulAction.toDistribSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a24cbbcb6af24cc1955e88c99cc1415afa071a94bf279304baf8b70ced4fe7d8`
+- Reviewed interpretation: Retains scalar multiplication and its distributivity and zero-preservation laws.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D025: `DistribSMul.toSMulZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `dcf4917b1d7e49e3bf301ed2bb0bf234bb571b2f253f5a578ce20fb9303a9ce4`
+- Reviewed interpretation: Projects the scalar action with its zero-preservation property.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D026: `ENormedAddCommMonoid.toESeminormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `0dcd831d111f0ad1a7e2907c0aa652cfc685dc1557208d0cd2f030e9300968f6`
+- Reviewed interpretation: Projects the underlying extended-seminormed commutative additive structure.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D027: `ESeminormedAddCommMonoid.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `0a2c815d576803c29368c558e067e5e2db13631e0256c3287482481d040d0dea`
+- Reviewed interpretation: Retains the additive monoid and commutativity.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D028: `ESeminormedAddCommMonoid.toESeminormedAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `e034148af12d73b8e4bb2fd0c8e322df85e76a14e7bd278d5af0b57668dec810`
+- Reviewed interpretation: Projects the underlying extended-seminormed additive monoid.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D029: `ESeminormedAddMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `39d08460e6fddfc02e88e9d6617d58024cf6446feb63e27c19b552f280636a0b`
+- Reviewed interpretation: Projects the existing additive monoid.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D030: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D031: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D032: `HAdd.hAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HAdd.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HAdd α β γ] => self.1
+```
+
+### D033: `HSMul.hSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `5fb263b1a3645d5d3fb5815fb02bccb0c405792ff068bb610ae9d365ff5a31fd`
+- Reviewed interpretation: Projects the scalar multiplication operation from its supplied instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D034: `HasDerivAt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Calculus.Deriv.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `425ec9578fd20d63923b9588cbb7761a6e92f281528630fe03d0dc3dc1bc60a2`
+
+Type:
+
+```lean
+{𝕜 : Type u} →
+  [inst : NontriviallyNormedField 𝕜] →
+    {F : Type v} →
+      [inst_1 : AddCommGroup F] →
+        [inst_2 : Module 𝕜 F] → [inst_3 : TopologicalSpace F] → [ContinuousSMul 𝕜 F] → (𝕜 → F) → F → 𝕜 → Prop
+```
+
+Fully explicit type:
+
+```lean
+{𝕜 : Type u} →
+  [inst : NontriviallyNormedField.{u} 𝕜] →
+    {F : Type v} →
+      [inst_1 : AddCommGroup.{v} F] →
+        [inst_2 :
+            @Module.{u, v} 𝕜 F
+              (@DivisionSemiring.toSemiring.{u} 𝕜
+                (@Semifield.toDivisionSemiring.{u} 𝕜
+                  (@Field.toSemifield.{u} 𝕜
+                    (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))
+              (@AddCommGroup.toAddCommMonoid.{v} F inst_1)] →
+          [inst_3 : TopologicalSpace.{v} F] →
+            [@ContinuousSMul.{u, v} 𝕜 F
+                  (@SMulZeroClass.toSMul.{u, v} 𝕜 F
+                    (@AddZero.toZero.{v} F
+                      (@AddZeroClass.toAddZero.{v} F
+                        (@AddMonoid.toAddZeroClass.{v} F
+                          (@SubNegMonoid.toAddMonoid.{v} F
+                            (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))))
+                    (@DistribSMul.toSMulZeroClass.{u, v} 𝕜 F
+                      (@AddMonoid.toAddZeroClass.{v} F
+                        (@SubNegMonoid.toAddMonoid.{v} F
+                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))
+                      (@DistribMulAction.toDistribSMul.{u, v} 𝕜 F
+                        (@MonoidWithZero.toMonoid.{u} 𝕜
+                          (@Semiring.toMonoidWithZero.{u} 𝕜
+                            (@DivisionSemiring.toSemiring.{u} 𝕜
+                              (@Semifield.toDivisionSemiring.{u} 𝕜
+                                (@Field.toSemifield.{u} 𝕜
+                                  (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))))
+                        (@SubNegMonoid.toAddMonoid.{v} F
+                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1)))
+                        (@Module.toDistribMulAction.{u, v} 𝕜 F
+                          (@DivisionSemiring.toSemiring.{u} 𝕜
+                            (@Semifield.toDivisionSemiring.{u} 𝕜
+                              (@Field.toSemifield.{u} 𝕜
+                                (@NormedField.toField.{u} 𝕜 (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))
+                          (@AddCommGroup.toAddCommMonoid.{v} F inst_1) inst_2))))
+                  (@UniformSpace.toTopologicalSpace.{u} 𝕜
+                    (@PseudoMetricSpace.toUniformSpace.{u} 𝕜
+                      (@SeminormedRing.toPseudoMetricSpace.{u} 𝕜
+                        (@SeminormedCommRing.toSeminormedRing.{u} 𝕜
+                          (@NormedCommRing.toSeminormedCommRing.{u} 𝕜
+                            (@NormedField.toNormedCommRing.{u} 𝕜
+                              (@NontriviallyNormedField.toNormedField.{u} 𝕜 inst)))))))
+                  inst_3] →
+              (f : 𝕜 → F) → (f' : F) → (x : 𝕜) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {𝕜} [NontriviallyNormedField 𝕜] {F} [AddCommGroup F] [Module 𝕜 F] [TopologicalSpace F] [ContinuousSMul 𝕜 F] f f'
+    x =>
+  HasDerivAtFilter f f' (Filter.instSProd.sprod (nhds x) (Filter.instPure.pure x))
+```
+
+### D035: `Module.toDistribMulAction`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
+
+Type:
+
+```lean
+{R : Type u} →
+  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u} →
+  {M : Type v} →
+    {inst : Semiring.{u} R} →
+      {inst_1 : AddCommMonoid.{v} M} →
+        [self : @Module.{u, v} R M inst inst_1] →
+          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))
+            (@AddCommMonoid.toAddMonoid.{v} M inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R M {inst} {inst_1} [self : Module R M] => self.1
+```
+
+### D036: `NegZeroClass.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `881414a459dbdc250afc9bc468e98b17f776dfd31f2aa5eb9acee71a8d1543f7`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `54603d68e7c6d3e3a99416713674c08fe265e5a5ba6a2f815409c0a0694ae5eb`
+- Reviewed interpretation: Projects zero from the supplied negation-and-zero structure.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D037: `NormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `acf97d9e6bba2699a902c13483ba6a97ed35e06d468d031b565babae85016148`
+- Reviewed interpretation: The structure type instantiated by D018; the supplied construction and projections expose its norm, additive group, and metric data.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D038: `NormedAddCommGroup.toAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `c92bdde4376567f29ebdebaf4a7dd986bfb96211cd0306e14540b80cd23009d2`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `467f2f354fbe063d0a27fb2d0e8a088ccd34bee648d40eb1a512f27b861724fc`
+- Reviewed interpretation: Projects the existing additive commutative group.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D039: `NormedAddCommGroup.toENormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `370ec8132a7ab59332b81281a8c83eea6adc08696fda95fba589c294c16b98a4`
+- Reviewed interpretation: Builds an extended-norm additive structure from the existing normed group, retaining its additive data and topology.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D040: `NormedAddCommGroup.toSeminormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `8622f08bab0d6366e9ff423d1d627888580ab24e1f010f479f64cdc4d5207fb5`
+- Reviewed interpretation: Copies the norm, additive group, and pseudometric from the normed group.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D041: `NormedSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `7fc85f43d338df91857c28e7771e08dcb59a437ed022c1d688e270c45d284e3e`
+- Reviewed interpretation: The normed-space structure type over the displayed field and additive space; D017 supplies its real self-module instance and D063 exposes its module.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D042: `NormedSpace.toModule`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4`
+
+Type:
+
+```lean
+{𝕜 : Type u_6} →
+  {E : Type u_7} → {inst : NormedField 𝕜} → {inst_1 : SeminormedAddCommGroup E} → [self : NormedSpace 𝕜 E] → Module 𝕜 E
+```
+
+Fully explicit type:
+
+```lean
+{𝕜 : Type u_6} →
+  {E : Type u_7} →
+    {inst : NormedField.{u_6} 𝕜} →
+      {inst_1 : SeminormedAddCommGroup.{u_7} E} →
+        [self : @NormedSpace.{u_6, u_7} 𝕜 E inst inst_1] →
+          @Module.{u_6, u_7} 𝕜 E
+            (@DivisionSemiring.toSemiring.{u_6} 𝕜
+              (@Semifield.toDivisionSemiring.{u_6} 𝕜 (@Field.toSemifield.{u_6} 𝕜 (@NormedField.toField.{u_6} 𝕜 inst))))
+            (@AddCommGroup.toAddCommMonoid.{u_7} E (@SeminormedAddCommGroup.toAddCommGroup.{u_7} E inst_1))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun 𝕜 E {inst} {inst_1} [self : NormedSpace 𝕜 E] => self.1
+```
+
+### D043: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D044: `Real.denselyNormedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `4e05f43f0aeaac135f86bed438060268b7a1c7e5a288939a5075d7a9f7b2e105`
+
+Type:
+
+```lean
+DenselyNormedField Real
+```
+
+Fully explicit type:
+
+```lean
+DenselyNormedField.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ toNormedField := Real.normedField, lt_norm_lt := Real.denselyNormedField._proof_1 }
+```
+
+### D045: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `508f74f873ec69cd019bf5264bcf5625671c07680aa02400e50f0127d357b3f6`
+- Reviewed interpretation: Supplies the inferred multiplicative monoid on Real at the external library boundary.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D046: `Real.semiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a1049584240e7fc168a7660986fd7290b7bb3144c9f44000370d4c954f627dd8`
+- Reviewed interpretation: Supplies the inferred semiring structure on Real at the external library boundary.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D047: `SMulZeroClass.toSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `553e0baa9cd6ce2e268bde58e6437b6d3e8308119a31ba95c99d65819bdab133`
+- Reviewed interpretation: Projects the existing scalar multiplication operation.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D048: `SeminormedAddCommGroup.toPseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `dc2ef7e3942b6090fa8dbc28b71ed0cc1ea86a818432de531d70da1220043342`
+- Reviewed interpretation: Projects the supplied pseudometric space.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D049: `SubNegZeroMonoid.toNegZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `0ca9c4737492ec2a9a5ab16ab065d00204507f2caf80997692c360afbf962577`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `d05b0d66833eba4d97075aa85e5576824a6e9076d69fd19d7045e895f7a89021`
+- Reviewed interpretation: Copies zero and negation together with the negation-of-zero law.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D050: `SubtractionCommMonoid.toSubtractionMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `e56d8d718ddbe8a62b0e5b703adfd59bd19f46dac79c341b3d3742ed6ee462c9`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a70ca93361450b292ddc2b9482ecd77768bef734e8531acd583af590ce3acb04`
+- Reviewed interpretation: Projects the existing subtraction structure.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D051: `SubtractionMonoid.toSubNegZeroMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Basic`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `700a470249543a704f0b5910309b7d1f4c918e3b645f806242c291c98eff4e28`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `9b3f59f119ca425bc524647e459cb83ea27fa0ed1cef0f6ba85e67fd964e9a7c`
+- Reviewed interpretation: Retains the subtraction-and-negation monoid and supplies its negation-of-zero law.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D052: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D053: `instHAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+
+Type:
+
+```lean
+{α : Type u_1} → [Add α] → HAdd α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Add.{u_1} α] → HAdd.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
+```
+
+### D054: `instHSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `142263803735e354a1392582a23f0b7b967e186d38581dee17a103f04c392d5f`
+- Reviewed interpretation: Wraps the supplied scalar multiplication as heterogeneous scalar multiplication with unchanged result type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D055: `AddCommGroup.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `242900479b3f5ed16c6e3a8d05c244df51fa91c12e4642b4341877ff5e6d10ee`
+- Reviewed interpretation: Retains the additive monoid and commutativity from the group.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D056: `AddCommGroup.toAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `eb1e82bb6143f7a936541bcaf66cfa6457e44a3ba8437a0b906201c24ba4197d`
+- Reviewed interpretation: Projects the existing additive group.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D057: `AddGroup.toSubNegMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `b3ee30326a31d0c3a0043b8dd214894a68eb4266eda84360262a21e6f2fda145`
+- Reviewed interpretation: Projects the group's existing subtraction, negation, and additive monoid structure.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D058: `ContinuousSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Algebra.MulAction`
+- Declaration kind: `inductive`
+- Distance from target type: `4`
+- Semantic SHA-256: `b36800b38dbbf71323d517896ed68ecf785e1c2dc2b52f5265b6b5be545cb4c1`
+
+Type:
+
+```lean
+(M : Type u_1) → (X : Type u_2) → [SMul M X] → [TopologicalSpace M] → [TopologicalSpace X] → Prop
+```
+
+Fully explicit type:
+
+```lean
+(M : Type u_1) → (X : Type u_2) → [SMul.{u_1, u_2} M X] → [TopologicalSpace.{u_1} M] → [TopologicalSpace.{u_2} X] → Prop
+```
+
+### D059: `DivisionSemiring.toSemiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Field.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `587c80a71f9aa5749b5d6c35c97cdae1067fa669257c865951843b747c511934`
+
+Type:
+
+```lean
+{K : Type u_2} → [self : DivisionSemiring K] → Semiring K
+```
+
+Fully explicit type:
+
+```lean
+{K : Type u_2} → [self : DivisionSemiring.{u_2} K] → Semiring.{u_2} K
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun K [self : DivisionSemiring K] => self.1
+```
+
+### D060: `Field.toSemifield`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Field.Defs`
+- Declaration kind: `def`
+- Distance from target type: `4`
+- Semantic SHA-256: `9a6353c2087dc0f4123f4079d947842f8b7bc1fc0c77de170382c04e31608fd4`
+
+Type:
+
+```lean
+{K : Type u_1} → [Field K] → Semifield K
+```
+
+Fully explicit type:
+
+```lean
+{K : Type u_1} → [Field.{u_1} K] → Semifield.{u_1} K
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {K} [inst : Field K] =>
+  let __src := inst;
+  { toSemiring := __src.toSemiring, mul_comm := ⋯, toInv := __src.toInv, toDiv := __src.toDiv, div_eq_mul_inv := ⋯,
+    zpow := __src.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯, toNontrivial := ⋯, inv_zero := ⋯,
+    mul_inv_cancel := ⋯, toNNRatCast := __src.toNNRatCast, nnratCast_def := ⋯, nnqsmul := __src.nnqsmul,
+    nnqsmul_def := ⋯ }
+```
+
+### D061: `MonoidWithZero.toMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `c0f91ccdc0415c148969849b7a83ce67d87cf4c402704186fa19f6313928d90f`
+
+Type:
+
+```lean
+{M₀ : Type u} → [self : MonoidWithZero M₀] → Monoid M₀
+```
+
+Fully explicit type:
+
+```lean
+{M₀ : Type u} → [self : MonoidWithZero.{u} M₀] → Monoid.{u} M₀
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M₀ [self : MonoidWithZero M₀] => self.1
+```
+
+### D062: `NontriviallyNormedField.toNormedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `dc08b02d757cccbd21bce550b40d3f76d2ee704ec2cd7f5507023d827296474f`
+
+Type:
+
+```lean
+{α : Type u_5} → [self : NontriviallyNormedField α] → NormedField α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_5} → [self : NontriviallyNormedField.{u_5} α] → NormedField.{u_5} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : NontriviallyNormedField α] => self.1
+```
+
+### D063: `NormedField.toField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `ec9eab2d54099c52c160e626a54324e8c9a07675797f0926435031098f363e5f`
+
+Type:
+
+```lean
+{α : Type u_5} → [self : NormedField α] → Field α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_5} → [self : NormedField.{u_5} α] → Field.{u_5} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : NormedField α] => self.2
+```
+
+### D064: `Real.pseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `def`
+- Distance from target type: `4`
+- Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
+
+Type:
+
+```lean
+PseudoMetricSpace Real
+```
+
+Fully explicit type:
+
+```lean
+PseudoMetricSpace.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
+  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
+  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
+```
+
+### D065: `Semifield.toDivisionSemiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Field.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `a1b771abeff9bbbdcce988134973a1a367c44a340bcd29acb0cc44b8d6a2e55c`
+
+Type:
+
+```lean
+{K : Type u_2} → [self : Semifield K] → DivisionSemiring K
+```
+
+Fully explicit type:
+
+```lean
+{K : Type u_2} → [self : Semifield.{u_2} K] → DivisionSemiring.{u_2} K
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun K self =>
+  { toSemiring := self.toSemiring, toInv := self.toInv, toDiv := self.toDiv, div_eq_mul_inv := ⋯, zpow := self.zpow,
+    zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯, toNontrivial := ⋯, inv_zero := ⋯, mul_inv_cancel := ⋯,
+    toNNRatCast := self.toNNRatCast, nnratCast_def := ⋯, nnqsmul := self.nnqsmul, nnqsmul_def := ⋯ }
+```
+
+### D066: `Semiring.toMonoidWithZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Ring.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `bf0d463c55fbfcd762eb28ad6f1672fe482a72dfed67d13a797c09f1f0431e64`
+
+Type:
+
+```lean
+{α : Type u} → [self : Semiring α] → MonoidWithZero α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : Semiring.{u} α] → MonoidWithZero.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α self =>
+  { toMul := self.toMul, mul_assoc := ⋯, toOne := self.toOne, one_mul := ⋯, mul_one := ⋯, npow := self.npow,
+    npow_zero := ⋯, npow_succ := ⋯, toZero := self.toZero, zero_mul := ⋯, mul_zero := ⋯ }
+```
+
+### D067: `SubNegMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `72d2dc326ab695229ff82b60aa0c306583643f7913bab2d5f7fd296c3f294ee2`
+- Reviewed interpretation: Projects the existing additive monoid.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+
+Complete dependency inventory SHA256 57e6430b735fdabee71345f3ee5bddc8c6ff5a9e88b64a4f1eb2b8784beaf19b
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun q speed x t => NumStability.IsLinearAdvectionSolutionAt q speed x t",
+      "distance": 1,
+      "id": "D001",
+      "kind": "abbrev",
+      "name": "NumStability.leveque01_equation02_scalarAdvectionAt",
+      "owner_module": "ComputationalMathematics.Source.LeVeque.Chapter01.Equation02",
+      "role": "local",
+      "semantic_sha256": "4e3983532e0fa0daf8dc155b900857fd57e290643769823d189dda9c594769e3",
+      "type_explicit": "(q : Real \u2192 Real \u2192 Real) \u2192 (speed x t : Real) \u2192 Prop",
+      "type_readable": "(Real \u2192 Real \u2192 Real) \u2192 Real \u2192 Real \u2192 Real \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef002",
+      "body_readable": "fun w c x t => NumStability.IsLinearAdvectionSolutionAt w c x t",
+      "distance": 1,
+      "id": "D002",
+      "kind": "abbrev",
+      "name": "NumStability.leveque01_equation04_oneWayWaveAt",
+      "owner_module": "ComputationalMathematics.Source.LeVeque.Chapter01.Equation04",
+      "role": "local",
+      "semantic_sha256": "5ce0ce02e511519f3bd00c355edc5b7961659bc4d31b81c60778f29e5661b1a7",
+      "type_explicit": "(w : Real \u2192 Real \u2192 Real) \u2192 (c x t : Real) \u2192 Prop",
+      "type_readable": "(Real \u2192 Real \u2192 Real) \u2192 Real \u2192 Real \u2192 Real \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef003",
+      "body_readable": "fun {E} [NormedAddCommGroup E] [NormedSpace Real E] q speed x t =>\n  Exists fun qt =>\n    Exists fun qx =>\n      And (HasDerivAt (fun \u03c4 => q x \u03c4) qt t)\n        (And (HasDerivAt (fun \u03be => q \u03be t) qx x) (Eq (instHAdd.hAdd qt (instHSMul.hSMul speed qx)) 0))",
+      "distance": 2,
+      "id": "D003",
+      "kind": "def",
+      "name": "NumStability.IsLinearAdvectionSolutionAt",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection",
+      "role": "local",
+      "semantic_sha256": "de66a86c2ecf305cf1671383f03d73969b60775294075abac7328c909216e754",
+      "type_explicit": "{E : Type u_1} \u2192\n  [inst : NormedAddCommGroup.{u_1} E] \u2192\n    [@NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)] \u2192\n      (q : Real \u2192 Real \u2192 E) \u2192 (speed x t : Real) \u2192 Prop",
+      "type_readable": "{E : Type u_1} \u2192 [inst : NormedAddCommGroup E] \u2192 [NormedSpace Real E] \u2192 (Real \u2192 Real \u2192 E) \u2192 Real \u2192 Real \u2192 Real \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef004",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D004",
+      "kind": "theorem",
+      "name": "NumStability.IsLinearAdvectionSolutionAt._proof_1",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAdvection",
+      "role": "local",
+      "semantic_sha256": "627af0185f9dc545c0feb87577da62578e1f74ad79dcdc19dbbce58a2e697e79",
+      "type_explicit": "\u2200 {E : Type u_1} [inst : NormedAddCommGroup.{u_1} E]\n  [inst_1 : @NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)],\n  @ContinuousSMul.{0, u_1} Real E\n    (@SMulZeroClass.toSMul.{0, u_1} Real E\n      (@AddZero.toZero.{u_1} E\n        (@AddZeroClass.toAddZero.{u_1} E\n          (@AddMonoid.toAddZeroClass.{u_1} E\n            (@SubNegMonoid.toAddMonoid.{u_1} E\n              (@AddGroup.toSubNegMonoid.{u_1} E\n                (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst)))))))\n      (@DistribSMul.toSMulZeroClass.{0, u_1} Real E\n        (@AddMonoid.toAddZeroClass.{u_1} E\n          (@SubNegMonoid.toAddMonoid.{u_1} E\n            (@AddGroup.toSubNegMonoid.{u_1} E\n              (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst)))))\n        (@DistribMulAction.toDistribSMul.{0, u_1} Real E\n          (@MonoidWithZero.toMonoid.{0} Real\n            (@Semiring.toMonoidWithZero.{0} Real\n              (@DivisionSemiring.toSemiring.{0} Real\n                (@Semifield.toDivisionSemiring.{0} Real\n                  (@Field.toSemifield.{0} Real\n                    (@NormedField.toField.{0} Real\n                      (@NontriviallyNormedField.toNormedField.{0} Real\n                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))\n          (@SubNegMonoid.toAddMonoid.{u_1} E\n            (@AddGroup.toSubNegMonoid.{u_1} E\n              (@AddCommGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst))))\n          (@Module.toDistribMulAction.{0, u_1} Real E\n            (@DivisionSemiring.toSemiring.{0} Real\n              (@Semifield.toDivisionSemiring.{0} Real\n                (@Field.toSemifield.{0} Real\n                  (@NormedField.toField.{0} Real\n                    (@NontriviallyNormedField.toNormedField.{0} Real\n                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))\n            (@AddCommGroup.toAddCommMonoid.{u_1} E (@NormedAddCommGroup.toAddCommGroup.{u_1} E inst))\n            (@NormedSpace.toModule.{0, u_1} Real E Real.normedField\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst) inst_1)))))\n    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n    (@UniformSpace.toTopologicalSpace.{u_1} E\n      (@PseudoMetricSpace.toUniformSpace.{u_1} E\n        (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))",
+      "type_readable": "\u2200 {E : Type u_1} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace Real E], ContinuousSMul Real E"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D005",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "LT.lt",
+      "body_readable": "fun \u03b1 [self : LT \u03b1] => self.1",
+      "distance": 1,
+      "id": "D006",
+      "kind": "abbrev",
+      "name": "LT.lt",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : LT.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : LT \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D007",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D008",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Real.instLT",
+      "body_readable": "{ lt := Real.lt\u271d }",
+      "distance": 1,
+      "id": "D009",
+      "kind": "def",
+      "name": "Real.instLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a",
+      "type_explicit": "LT.{0} Real",
+      "type_readable": "LT Real"
+    },
+    {
+      "blind_name": "Real.instZero",
+      "body_readable": "{ zero := Real.zero\u271d }",
+      "distance": 1,
+      "id": "D010",
+      "kind": "def",
+      "name": "Real.instZero",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "type_explicit": "Zero.{0} Real",
+      "type_readable": "Zero Real"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 1,
+      "id": "D011",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    },
+    {
+      "blind_name": "NormedField.toNormedSpace",
+      "body_readable": "fun {\ud835\udd5c} [NormedField \ud835\udd5c] => { toModule := Semiring.toModule, norm_smul_le := \u22ef }",
+      "distance": 2,
+      "id": "D012",
+      "kind": "def",
+      "name": "NormedField.toNormedSpace",
+      "owner_module": "Mathlib.Analysis.Normed.Module.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "9e0629e665c648aac86a6d587dab809d81c8bb691b9b016c7808244edbccdc92",
+      "type_explicit": "{\ud835\udd5c : Type u_1} \u2192\n  [inst : NormedField.{u_1} \ud835\udd5c] \u2192\n    @NormedSpace.{u_1, u_1} \ud835\udd5c \ud835\udd5c inst\n      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{u_1} \ud835\udd5c\n        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{u_1} \ud835\udd5c\n          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{u_1} \ud835\udd5c\n            (@NormedCommRing.toSeminormedCommRing.{u_1} \ud835\udd5c (@NormedField.toNormedCommRing.{u_1} \ud835\udd5c inst)))))",
+      "type_readable": "{\ud835\udd5c : Type u_1} \u2192 [inst : NormedField \ud835\udd5c] \u2192 NormedSpace \ud835\udd5c \ud835\udd5c"
+    },
+    {
+      "blind_name": "Real.normedAddCommGroup",
+      "body_readable": "{ toNorm := Real.norm, toAddCommGroup := Real.instAddCommGroup, toMetricSpace := Real.metricSpace, dist_eq := \u22ef }",
+      "distance": 2,
+      "id": "D013",
+      "kind": "def",
+      "name": "Real.normedAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Real",
+      "role": "external-frontier",
+      "semantic_sha256": "9ff0d896c635e2a38531d689d24ee70cfffa41565354ce15f6ff59b51650bd93",
+      "type_explicit": "NormedAddCommGroup.{0} Real",
+      "type_readable": "NormedAddCommGroup Real"
+    },
+    {
+      "blind_name": "Real.normedField",
+      "body_readable": "let __src := Real.normedAddCommGroup;\nlet __src_1 := Real.instField;\n{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,\n  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,\n  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,\n  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,\n  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,\n  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,\n  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,\n  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,\n  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,\n  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,\n  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,\n  toDiv := __src_1.toDiv, div_eq_mul_inv := \u22ef, zpow := __src_1.zpow, zpow_zero' := \u22ef, zpow_succ' := \u22ef, zpow_neg' := \u22ef,\n  toNontrivial := \u22ef, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := \u22ef,\n  inv_zero := \u22ef, nnratCast_def := \u22ef, nnqsmul := __src_1.nnqsmul, nnqsmul_def := \u22ef, ratCast_def := \u22ef,\n  qsmul := __src_1.qsmul, qsmul_def := \u22ef, toMetricSpace := __src.toMetricSpace, dist_eq := \u22ef, norm_mul := \u22ef }",
+      "distance": 2,
+      "id": "D014",
+      "kind": "def",
+      "name": "Real.normedField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b",
+      "type_explicit": "NormedField.{0} Real",
+      "type_readable": "NormedField Real"
+    },
+    {
+      "blind_name": "AddCommGroup.toDivisionAddCommMonoid",
+      "body_readable": "fun {G} [inst : AddCommGroup G] =>\n  let __src := inst;\n  let __src_1 := AddGroup.toSubtractionMonoid;\n  { toSubNegMonoid := __src.toSubNegMonoid, neg_neg := \u22ef, neg_add_rev := \u22ef, neg_eq_of_add := \u22ef, add_comm := \u22ef }",
+      "distance": 3,
+      "id": "D015",
+      "kind": "def",
+      "name": "AddCommGroup.toDivisionAddCommMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "72951116f9ecb1048b235282fec669b8c3dfd809e3810c987dc6f18968d013d3",
+      "type_explicit": "{G : Type u_1} \u2192 [AddCommGroup.{u_1} G] \u2192 SubtractionCommMonoid.{u_1} G",
+      "type_readable": "{G : Type u_1} \u2192 [AddCommGroup G] \u2192 SubtractionCommMonoid G"
+    },
+    {
+      "blind_name": "AddCommMagma.toAdd",
+      "body_readable": "fun G [self : AddCommMagma G] => self.1",
+      "distance": 3,
+      "id": "D016",
+      "kind": "abbrev",
+      "name": "AddCommMagma.toAdd",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "78a12fabc3611bc39705a2dcf3fa82ed1f226d804e888d57546b885fefae4453",
+      "type_explicit": "{G : Type u} \u2192 [self : AddCommMagma.{u} G] \u2192 Add.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : AddCommMagma G] \u2192 Add G"
+    },
+    {
+      "blind_name": "AddCommMonoid.toAddCommSemigroup",
+      "body_readable": "fun M self => { toAddSemigroup := self.toAddSemigroup, add_comm := \u22ef }",
+      "distance": 3,
+      "id": "D017",
+      "kind": "abbrev",
+      "name": "AddCommMonoid.toAddCommSemigroup",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "dc7cae9f3611bf7a48fc6ba815db5cffeba3ac95ae33d26bec77b827bd041f26",
+      "type_explicit": "{M : Type u} \u2192 [self : AddCommMonoid.{u} M] \u2192 AddCommSemigroup.{u} M",
+      "type_readable": "{M : Type u} \u2192 [self : AddCommMonoid M] \u2192 AddCommSemigroup M"
+    },
+    {
+      "blind_name": "AddCommSemigroup.toAddCommMagma",
+      "body_readable": "fun G self => { toAdd := self.toAdd, add_comm := \u22ef }",
+      "distance": 3,
+      "id": "D018",
+      "kind": "abbrev",
+      "name": "AddCommSemigroup.toAddCommMagma",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "78f90c6bc01ad86e28d84a9011670656947204c6d8963785407a1b8eb54844ab",
+      "type_explicit": "{G : Type u} \u2192 [self : AddCommSemigroup.{u} G] \u2192 AddCommMagma.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : AddCommSemigroup G] \u2192 AddCommMagma G"
+    },
+    {
+      "blind_name": "AddMonoid.toAddZeroClass",
+      "body_readable": "fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := \u22ef, add_zero := \u22ef }",
+      "distance": 3,
+      "id": "D019",
+      "kind": "abbrev",
+      "name": "AddMonoid.toAddZeroClass",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a",
+      "type_explicit": "{M : Type u} \u2192 [self : AddMonoid.{u} M] \u2192 AddZeroClass.{u} M",
+      "type_readable": "{M : Type u} \u2192 [self : AddMonoid M] \u2192 AddZeroClass M"
+    },
+    {
+      "blind_name": "AddZero.toZero",
+      "body_readable": "fun M [self : AddZero M] => self.1",
+      "distance": 3,
+      "id": "D020",
+      "kind": "abbrev",
+      "name": "AddZero.toZero",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc",
+      "type_explicit": "{M : Type u_2} \u2192 [self : AddZero.{u_2} M] \u2192 Zero.{u_2} M",
+      "type_readable": "{M : Type u_2} \u2192 [self : AddZero M] \u2192 Zero M"
+    },
+    {
+      "blind_name": "AddZeroClass.toAddZero",
+      "body_readable": "fun M [self : AddZeroClass M] => self.1",
+      "distance": 3,
+      "id": "D021",
+      "kind": "abbrev",
+      "name": "AddZeroClass.toAddZero",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213",
+      "type_explicit": "{M : Type u} \u2192 [self : AddZeroClass.{u} M] \u2192 AddZero.{u} M",
+      "type_readable": "{M : Type u} \u2192 [self : AddZeroClass M] \u2192 AddZero M"
+    },
+    {
+      "blind_name": "And",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D022",
+      "kind": "inductive",
+      "name": "And",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "DenselyNormedField.toNontriviallyNormedField",
+      "body_readable": "fun {\u03b1} [inst : DenselyNormedField \u03b1] => { toNormedField := inst.toNormedField, non_trivial := \u22ef }",
+      "distance": 3,
+      "id": "D023",
+      "kind": "def",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "22b7c7d8fc79e8fdde53f4c5f0f7e47a5b48886ac404b11b983a20e9fe547215",
+      "type_explicit": "{\u03b1 : Type u_2} \u2192 [DenselyNormedField.{u_2} \u03b1] \u2192 NontriviallyNormedField.{u_2} \u03b1",
+      "type_readable": "{\u03b1 : Type u_2} \u2192 [DenselyNormedField \u03b1] \u2192 NontriviallyNormedField \u03b1"
+    },
+    {
+      "blind_name": "DistribMulAction.toDistribSMul",
+      "body_readable": "fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>\n  let __src := inst_2;\n  { toSMul := __src.toSMul, smul_zero := \u22ef, smul_add := \u22ef }",
+      "distance": 3,
+      "id": "D024",
+      "kind": "def",
+      "name": "DistribMulAction.toDistribSMul",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02",
+      "type_explicit": "{M : Type u_1} \u2192\n  {A : Type u_7} \u2192\n    [inst : Monoid.{u_1} M] \u2192\n      [inst_1 : AddMonoid.{u_7} A] \u2192\n        [@DistribMulAction.{u_1, u_7} M A inst inst_1] \u2192\n          @DistribSMul.{u_1, u_7} M A (@AddMonoid.toAddZeroClass.{u_7} A inst_1)",
+      "type_readable": "{M : Type u_1} \u2192 {A : Type u_7} \u2192 [inst : Monoid M] \u2192 [inst_1 : AddMonoid A] \u2192 [DistribMulAction M A] \u2192 DistribSMul M A"
+    },
+    {
+      "blind_name": "DistribSMul.toSMulZeroClass",
+      "body_readable": "fun M A {inst} [self : DistribSMul M A] => self.1",
+      "distance": 3,
+      "id": "D025",
+      "kind": "abbrev",
+      "name": "DistribSMul.toSMulZeroClass",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf",
+      "type_explicit": "{M : Type u_12} \u2192\n  {A : Type u_13} \u2192\n    {inst : AddZeroClass.{u_13} A} \u2192\n      [self : @DistribSMul.{u_12, u_13} M A inst] \u2192\n        @SMulZeroClass.{u_12, u_13} M A (@AddZero.toZero.{u_13} A (@AddZeroClass.toAddZero.{u_13} A inst))",
+      "type_readable": "{M : Type u_12} \u2192 {A : Type u_13} \u2192 {inst : AddZeroClass A} \u2192 [self : DistribSMul M A] \u2192 SMulZeroClass M A"
+    },
+    {
+      "blind_name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "body_readable": "fun E {inst} [self : ENormedAddCommMonoid E] => self.1",
+      "distance": 3,
+      "id": "D026",
+      "kind": "abbrev",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642",
+      "type_explicit": "{E : Type u_8} \u2192\n  {inst : TopologicalSpace.{u_8} E} \u2192\n    [self : @ENormedAddCommMonoid.{u_8} E inst] \u2192 @ESeminormedAddCommMonoid.{u_8} E inst",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ENormedAddCommMonoid E] \u2192 ESeminormedAddCommMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "body_readable": "fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm := \u22ef }",
+      "distance": 3,
+      "id": "D027",
+      "kind": "abbrev",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220",
+      "type_explicit": "{E : Type u_8} \u2192\n  [inst : TopologicalSpace.{u_8} E] \u2192 [self : @ESeminormedAddCommMonoid.{u_8} E inst] \u2192 AddCommMonoid.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 [inst : TopologicalSpace E] \u2192 [self : ESeminormedAddCommMonoid E] \u2192 AddCommMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "body_readable": "fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1",
+      "distance": 3,
+      "id": "D028",
+      "kind": "abbrev",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4",
+      "type_explicit": "{E : Type u_8} \u2192\n  {inst : TopologicalSpace.{u_8} E} \u2192\n    [self : @ESeminormedAddCommMonoid.{u_8} E inst] \u2192 @ESeminormedAddMonoid.{u_8} E inst",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ESeminormedAddCommMonoid E] \u2192 ESeminormedAddMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddMonoid.toAddMonoid",
+      "body_readable": "fun E {inst} [self : ESeminormedAddMonoid E] => self.2",
+      "distance": 3,
+      "id": "D029",
+      "kind": "abbrev",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901",
+      "type_explicit": "{E : Type u_8} \u2192 {inst : TopologicalSpace.{u_8} E} \u2192 [self : @ESeminormedAddMonoid.{u_8} E inst] \u2192 AddMonoid.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ESeminormedAddMonoid E] \u2192 AddMonoid E"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D030",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Exists",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D031",
+      "kind": "inductive",
+      "name": "Exists",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (p : \u03b1 \u2192 Prop) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (\u03b1 \u2192 Prop) \u2192 Prop"
+    },
+    {
+      "blind_name": "HAdd.hAdd",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HAdd \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 3,
+      "id": "D032",
+      "kind": "abbrev",
+      "name": "HAdd.hAdd",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HAdd.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HAdd \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "HSMul.hSMul",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HSMul \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 3,
+      "id": "D033",
+      "kind": "abbrev",
+      "name": "HSMul.hSMul",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HSMul.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HSMul \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "HasDerivAt",
+      "body_readable": "fun {\ud835\udd5c} [NontriviallyNormedField \ud835\udd5c] {F} [AddCommGroup F] [Module \ud835\udd5c F] [TopologicalSpace F] [ContinuousSMul \ud835\udd5c F] f f'\n    x =>\n  HasDerivAtFilter f f' (Filter.instSProd.sprod (nhds x) (Filter.instPure.pure x))",
+      "distance": 3,
+      "id": "D034",
+      "kind": "def",
+      "name": "HasDerivAt",
+      "owner_module": "Mathlib.Analysis.Calculus.Deriv.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "425ec9578fd20d63923b9588cbb7761a6e92f281528630fe03d0dc3dc1bc60a2",
+      "type_explicit": "{\ud835\udd5c : Type u} \u2192\n  [inst : NontriviallyNormedField.{u} \ud835\udd5c] \u2192\n    {F : Type v} \u2192\n      [inst_1 : AddCommGroup.{v} F] \u2192\n        [inst_2 :\n            @Module.{u, v} \ud835\udd5c F\n              (@DivisionSemiring.toSemiring.{u} \ud835\udd5c\n                (@Semifield.toDivisionSemiring.{u} \ud835\udd5c\n                  (@Field.toSemifield.{u} \ud835\udd5c\n                    (@NormedField.toField.{u} \ud835\udd5c (@NontriviallyNormedField.toNormedField.{u} \ud835\udd5c inst)))))\n              (@AddCommGroup.toAddCommMonoid.{v} F inst_1)] \u2192\n          [inst_3 : TopologicalSpace.{v} F] \u2192\n            [@ContinuousSMul.{u, v} \ud835\udd5c F\n                  (@SMulZeroClass.toSMul.{u, v} \ud835\udd5c F\n                    (@AddZero.toZero.{v} F\n                      (@AddZeroClass.toAddZero.{v} F\n                        (@AddMonoid.toAddZeroClass.{v} F\n                          (@SubNegMonoid.toAddMonoid.{v} F\n                            (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))))\n                    (@DistribSMul.toSMulZeroClass.{u, v} \ud835\udd5c F\n                      (@AddMonoid.toAddZeroClass.{v} F\n                        (@SubNegMonoid.toAddMonoid.{v} F\n                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1))))\n                      (@DistribMulAction.toDistribSMul.{u, v} \ud835\udd5c F\n                        (@MonoidWithZero.toMonoid.{u} \ud835\udd5c\n                          (@Semiring.toMonoidWithZero.{u} \ud835\udd5c\n                            (@DivisionSemiring.toSemiring.{u} \ud835\udd5c\n                              (@Semifield.toDivisionSemiring.{u} \ud835\udd5c\n                                (@Field.toSemifield.{u} \ud835\udd5c\n                                  (@NormedField.toField.{u} \ud835\udd5c (@NontriviallyNormedField.toNormedField.{u} \ud835\udd5c inst)))))))\n                        (@SubNegMonoid.toAddMonoid.{v} F\n                          (@AddGroup.toSubNegMonoid.{v} F (@AddCommGroup.toAddGroup.{v} F inst_1)))\n                        (@Module.toDistribMulAction.{u, v} \ud835\udd5c F\n                          (@DivisionSemiring.toSemiring.{u} \ud835\udd5c\n                            (@Semifield.toDivisionSemiring.{u} \ud835\udd5c\n                              (@Field.toSemifield.{u} \ud835\udd5c\n                                (@NormedField.toField.{u} \ud835\udd5c (@NontriviallyNormedField.toNormedField.{u} \ud835\udd5c inst)))))\n                          (@AddCommGroup.toAddCommMonoid.{v} F inst_1) inst_2))))\n                  (@UniformSpace.toTopologicalSpace.{u} \ud835\udd5c\n                    (@PseudoMetricSpace.toUniformSpace.{u} \ud835\udd5c\n                      (@SeminormedRing.toPseudoMetricSpace.{u} \ud835\udd5c\n                        (@SeminormedCommRing.toSeminormedRing.{u} \ud835\udd5c\n                          (@NormedCommRing.toSeminormedCommRing.{u} \ud835\udd5c\n                            (@NormedField.toNormedCommRing.{u} \ud835\udd5c\n                              (@NontriviallyNormedField.toNormedField.{u} \ud835\udd5c inst)))))))\n                  inst_3] \u2192\n              (f : \ud835\udd5c \u2192 F) \u2192 (f' : F) \u2192 (x : \ud835\udd5c) \u2192 Prop",
+      "type_readable": "{\ud835\udd5c : Type u} \u2192\n  [inst : NontriviallyNormedField \ud835\udd5c] \u2192\n    {F : Type v} \u2192\n      [inst_1 : AddCommGroup F] \u2192\n        [inst_2 : Module \ud835\udd5c F] \u2192 [inst_3 : TopologicalSpace F] \u2192 [ContinuousSMul \ud835\udd5c F] \u2192 (\ud835\udd5c \u2192 F) \u2192 F \u2192 \ud835\udd5c \u2192 Prop"
+    },
+    {
+      "blind_name": "Module.toDistribMulAction",
+      "body_readable": "fun R M {inst} {inst_1} [self : Module R M] => self.1",
+      "distance": 3,
+      "id": "D035",
+      "kind": "abbrev",
+      "name": "Module.toDistribMulAction",
+      "owner_module": "Mathlib.Algebra.Module.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60",
+      "type_explicit": "{R : Type u} \u2192\n  {M : Type v} \u2192\n    {inst : Semiring.{u} R} \u2192\n      {inst_1 : AddCommMonoid.{v} M} \u2192\n        [self : @Module.{u, v} R M inst inst_1] \u2192\n          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))\n            (@AddCommMonoid.toAddMonoid.{v} M inst_1)",
+      "type_readable": "{R : Type u} \u2192\n  {M : Type v} \u2192 {inst : Semiring R} \u2192 {inst_1 : AddCommMonoid M} \u2192 [self : Module R M] \u2192 DistribMulAction R M"
+    },
+    {
+      "blind_name": "NegZeroClass.toZero",
+      "body_readable": "fun G [self : NegZeroClass G] => self.1",
+      "distance": 3,
+      "id": "D036",
+      "kind": "abbrev",
+      "name": "NegZeroClass.toZero",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "881414a459dbdc250afc9bc468e98b17f776dfd31f2aa5eb9acee71a8d1543f7",
+      "type_explicit": "{G : Type u_2} \u2192 [self : NegZeroClass.{u_2} G] \u2192 Zero.{u_2} G",
+      "type_readable": "{G : Type u_2} \u2192 [self : NegZeroClass G] \u2192 Zero G"
+    },
+    {
+      "blind_name": "NormedAddCommGroup",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D037",
+      "kind": "inductive",
+      "name": "NormedAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741",
+      "type_explicit": "(E : Type u_8) \u2192 Type u_8",
+      "type_readable": "Type u_8 \u2192 Type u_8"
+    },
+    {
+      "blind_name": "NormedAddCommGroup.toAddCommGroup",
+      "body_readable": "fun E [self : NormedAddCommGroup E] => self.2",
+      "distance": 3,
+      "id": "D038",
+      "kind": "abbrev",
+      "name": "NormedAddCommGroup.toAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "c92bdde4376567f29ebdebaf4a7dd986bfb96211cd0306e14540b80cd23009d2",
+      "type_explicit": "{E : Type u_8} \u2192 [self : NormedAddCommGroup.{u_8} E] \u2192 AddCommGroup.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 [self : NormedAddCommGroup E] \u2192 AddCommGroup E"
+    },
+    {
+      "blind_name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "body_readable": "fun {E} [inst : NormedAddCommGroup E] =>\n  let __spread.0 := NormedAddGroup.toENormedAddMonoid;\n  have __spread.1 := inst;\n  { toESeminormedAddMonoid := __spread.0.toESeminormedAddMonoid, add_comm := \u22ef, enorm_eq_zero := \u22ef }",
+      "distance": 3,
+      "id": "D039",
+      "kind": "def",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "role": "external-frontier",
+      "semantic_sha256": "eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb",
+      "type_explicit": "{E : Type u_4} \u2192\n  [inst : NormedAddCommGroup.{u_4} E] \u2192\n    @ENormedAddCommMonoid.{u_4} E\n      (@UniformSpace.toTopologicalSpace.{u_4} E\n        (@PseudoMetricSpace.toUniformSpace.{u_4} E\n          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_4} E\n            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_4} E inst))))",
+      "type_readable": "{E : Type u_4} \u2192 [inst : NormedAddCommGroup E] \u2192 ENormedAddCommMonoid E"
+    },
+    {
+      "blind_name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "body_readable": "fun {E} [inst : NormedAddCommGroup E] =>\n  have __src := inst;\n  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,\n    dist_eq := \u22ef }",
+      "distance": 3,
+      "id": "D040",
+      "kind": "def",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be",
+      "type_explicit": "{E : Type u_5} \u2192 [NormedAddCommGroup.{u_5} E] \u2192 SeminormedAddCommGroup.{u_5} E",
+      "type_readable": "{E : Type u_5} \u2192 [NormedAddCommGroup E] \u2192 SeminormedAddCommGroup E"
+    },
+    {
+      "blind_name": "NormedSpace",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D041",
+      "kind": "inductive",
+      "name": "NormedSpace",
+      "owner_module": "Mathlib.Analysis.Normed.Module.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960",
+      "type_explicit": "(\ud835\udd5c : Type u_6) \u2192 (E : Type u_7) \u2192 [NormedField.{u_6} \ud835\udd5c] \u2192 [SeminormedAddCommGroup.{u_7} E] \u2192 Type (max u_6 u_7)",
+      "type_readable": "(\ud835\udd5c : Type u_6) \u2192 (E : Type u_7) \u2192 [NormedField \ud835\udd5c] \u2192 [SeminormedAddCommGroup E] \u2192 Type (max u_6 u_7)"
+    },
+    {
+      "blind_name": "NormedSpace.toModule",
+      "body_readable": "fun \ud835\udd5c E {inst} {inst_1} [self : NormedSpace \ud835\udd5c E] => self.1",
+      "distance": 3,
+      "id": "D042",
+      "kind": "abbrev",
+      "name": "NormedSpace.toModule",
+      "owner_module": "Mathlib.Analysis.Normed.Module.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4",
+      "type_explicit": "{\ud835\udd5c : Type u_6} \u2192\n  {E : Type u_7} \u2192\n    {inst : NormedField.{u_6} \ud835\udd5c} \u2192\n      {inst_1 : SeminormedAddCommGroup.{u_7} E} \u2192\n        [self : @NormedSpace.{u_6, u_7} \ud835\udd5c E inst inst_1] \u2192\n          @Module.{u_6, u_7} \ud835\udd5c E\n            (@DivisionSemiring.toSemiring.{u_6} \ud835\udd5c\n              (@Semifield.toDivisionSemiring.{u_6} \ud835\udd5c (@Field.toSemifield.{u_6} \ud835\udd5c (@NormedField.toField.{u_6} \ud835\udd5c inst))))\n            (@AddCommGroup.toAddCommMonoid.{u_7} E (@SeminormedAddCommGroup.toAddCommGroup.{u_7} E inst_1))",
+      "type_readable": "{\ud835\udd5c : Type u_6} \u2192\n  {E : Type u_7} \u2192 {inst : NormedField \ud835\udd5c} \u2192 {inst_1 : SeminormedAddCommGroup E} \u2192 [self : NormedSpace \ud835\udd5c E] \u2192 Module \ud835\udd5c E"
+    },
+    {
+      "blind_name": "PseudoMetricSpace.toUniformSpace",
+      "body_readable": "fun \u03b1 [self : PseudoMetricSpace \u03b1] => self.7",
+      "distance": 3,
+      "id": "D043",
+      "kind": "abbrev",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "owner_module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace.{u} \u03b1] \u2192 UniformSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace \u03b1] \u2192 UniformSpace \u03b1"
+    },
+    {
+      "blind_name": "Real.denselyNormedField",
+      "body_readable": "{ toNormedField := Real.normedField, lt_norm_lt := Real.denselyNormedField._proof_1 }",
+      "distance": 3,
+      "id": "D044",
+      "kind": "def",
+      "name": "Real.denselyNormedField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "4e05f43f0aeaac135f86bed438060268b7a1c7e5a288939a5075d7a9f7b2e105",
+      "type_explicit": "DenselyNormedField.{0} Real",
+      "type_readable": "DenselyNormedField Real"
+    },
+    {
+      "blind_name": "Real.instMonoid",
+      "body_readable": "inferInstance",
+      "distance": 3,
+      "id": "D045",
+      "kind": "def",
+      "name": "Real.instMonoid",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8",
+      "type_explicit": "Monoid.{0} Real",
+      "type_readable": "Monoid Real"
+    },
+    {
+      "blind_name": "Real.semiring",
+      "body_readable": "inferInstance",
+      "distance": 3,
+      "id": "D046",
+      "kind": "def",
+      "name": "Real.semiring",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c",
+      "type_explicit": "Semiring.{0} Real",
+      "type_readable": "Semiring Real"
+    },
+    {
+      "blind_name": "SMulZeroClass.toSMul",
+      "body_readable": "fun M A {inst} [self : SMulZeroClass M A] => self.1",
+      "distance": 3,
+      "id": "D047",
+      "kind": "abbrev",
+      "name": "SMulZeroClass.toSMul",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6",
+      "type_explicit": "{M : Type u_12} \u2192\n  {A : Type u_13} \u2192 {inst : Zero.{u_13} A} \u2192 [self : @SMulZeroClass.{u_12, u_13} M A inst] \u2192 SMul.{u_12, u_13} M A",
+      "type_readable": "{M : Type u_12} \u2192 {A : Type u_13} \u2192 {inst : Zero A} \u2192 [self : SMulZeroClass M A] \u2192 SMul M A"
+    },
+    {
+      "blind_name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "body_readable": "fun E [self : SeminormedAddCommGroup E] => self.3",
+      "distance": 3,
+      "id": "D048",
+      "kind": "abbrev",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126",
+      "type_explicit": "{E : Type u_8} \u2192 [self : SeminormedAddCommGroup.{u_8} E] \u2192 PseudoMetricSpace.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 [self : SeminormedAddCommGroup E] \u2192 PseudoMetricSpace E"
+    },
+    {
+      "blind_name": "SubNegZeroMonoid.toNegZeroClass",
+      "body_readable": "fun G self => { toZero := self.toZero, toNeg := self.toNeg, neg_zero := \u22ef }",
+      "distance": 3,
+      "id": "D049",
+      "kind": "abbrev",
+      "name": "SubNegZeroMonoid.toNegZeroClass",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "0ca9c4737492ec2a9a5ab16ab065d00204507f2caf80997692c360afbf962577",
+      "type_explicit": "{G : Type u_2} \u2192 [self : SubNegZeroMonoid.{u_2} G] \u2192 NegZeroClass.{u_2} G",
+      "type_readable": "{G : Type u_2} \u2192 [self : SubNegZeroMonoid G] \u2192 NegZeroClass G"
+    },
+    {
+      "blind_name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "body_readable": "fun G [self : SubtractionCommMonoid G] => self.1",
+      "distance": 3,
+      "id": "D050",
+      "kind": "abbrev",
+      "name": "SubtractionCommMonoid.toSubtractionMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "e56d8d718ddbe8a62b0e5b703adfd59bd19f46dac79c341b3d3742ed6ee462c9",
+      "type_explicit": "{G : Type u} \u2192 [self : SubtractionCommMonoid.{u} G] \u2192 SubtractionMonoid.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : SubtractionCommMonoid G] \u2192 SubtractionMonoid G"
+    },
+    {
+      "blind_name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "body_readable": "fun {\u03b1} [inst : SubtractionMonoid \u03b1] =>\n  let __src := inst.toSubNegMonoid;\n  { toSubNegMonoid := __src, neg_zero := \u22ef }",
+      "distance": 3,
+      "id": "D051",
+      "kind": "def",
+      "name": "SubtractionMonoid.toSubNegZeroMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "700a470249543a704f0b5910309b7d1f4c918e3b645f806242c291c98eff4e28",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [SubtractionMonoid.{u_1} \u03b1] \u2192 SubNegZeroMonoid.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [SubtractionMonoid \u03b1] \u2192 SubNegZeroMonoid \u03b1"
+    },
+    {
+      "blind_name": "UniformSpace.toTopologicalSpace",
+      "body_readable": "fun \u03b1 [self : UniformSpace \u03b1] => self.1",
+      "distance": 3,
+      "id": "D052",
+      "kind": "abbrev",
+      "name": "UniformSpace.toTopologicalSpace",
+      "owner_module": "Mathlib.Topology.UniformSpace.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : UniformSpace.{u} \u03b1] \u2192 TopologicalSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : UniformSpace \u03b1] \u2192 TopologicalSpace \u03b1"
+    },
+    {
+      "blind_name": "instHAdd",
+      "body_readable": "fun {\u03b1} [inst : Add \u03b1] => { hAdd := fun a b => inst.add a b }",
+      "distance": 3,
+      "id": "D053",
+      "kind": "def",
+      "name": "instHAdd",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Add.{u_1} \u03b1] \u2192 HAdd.{u_1, u_1, u_1} \u03b1 \u03b1 \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Add \u03b1] \u2192 HAdd \u03b1 \u03b1 \u03b1"
+    },
+    {
+      "blind_name": "instHSMul",
+      "body_readable": "fun {\u03b1} {\u03b2} [inst : SMul \u03b1 \u03b2] => { hSMul := inst.smul }",
+      "distance": 3,
+      "id": "D054",
+      "kind": "def",
+      "name": "instHSMul",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [SMul.{u_1, u_2} \u03b1 \u03b2] \u2192 HSMul.{u_1, u_2, u_2} \u03b1 \u03b2 \u03b2",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [SMul \u03b1 \u03b2] \u2192 HSMul \u03b1 \u03b2 \u03b2"
+    },
+    {
+      "blind_name": "AddCommGroup.toAddCommMonoid",
+      "body_readable": "fun G self => { toAddMonoid := self.toAddMonoid, add_comm := \u22ef }",
+      "distance": 4,
+      "id": "D055",
+      "kind": "abbrev",
+      "name": "AddCommGroup.toAddCommMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd",
+      "type_explicit": "{G : Type u} \u2192 [self : AddCommGroup.{u} G] \u2192 AddCommMonoid.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : AddCommGroup G] \u2192 AddCommMonoid G"
+    },
+    {
+      "blind_name": "AddCommGroup.toAddGroup",
+      "body_readable": "fun G [self : AddCommGroup G] => self.1",
+      "distance": 4,
+      "id": "D056",
+      "kind": "abbrev",
+      "name": "AddCommGroup.toAddGroup",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729",
+      "type_explicit": "{G : Type u} \u2192 [self : AddCommGroup.{u} G] \u2192 AddGroup.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : AddCommGroup G] \u2192 AddGroup G"
+    },
+    {
+      "blind_name": "AddGroup.toSubNegMonoid",
+      "body_readable": "fun A [self : AddGroup A] => self.1",
+      "distance": 4,
+      "id": "D057",
+      "kind": "abbrev",
+      "name": "AddGroup.toSubNegMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1",
+      "type_explicit": "{A : Type u} \u2192 [self : AddGroup.{u} A] \u2192 SubNegMonoid.{u} A",
+      "type_readable": "{A : Type u} \u2192 [self : AddGroup A] \u2192 SubNegMonoid A"
+    },
+    {
+      "blind_name": "ContinuousSMul",
+      "body_readable": "",
+      "distance": 4,
+      "id": "D058",
+      "kind": "inductive",
+      "name": "ContinuousSMul",
+      "owner_module": "Mathlib.Topology.Algebra.MulAction",
+      "role": "external-frontier",
+      "semantic_sha256": "b36800b38dbbf71323d517896ed68ecf785e1c2dc2b52f5265b6b5be545cb4c1",
+      "type_explicit": "(M : Type u_1) \u2192 (X : Type u_2) \u2192 [SMul.{u_1, u_2} M X] \u2192 [TopologicalSpace.{u_1} M] \u2192 [TopologicalSpace.{u_2} X] \u2192 Prop",
+      "type_readable": "(M : Type u_1) \u2192 (X : Type u_2) \u2192 [SMul M X] \u2192 [TopologicalSpace M] \u2192 [TopologicalSpace X] \u2192 Prop"
+    },
+    {
+      "blind_name": "DivisionSemiring.toSemiring",
+      "body_readable": "fun K [self : DivisionSemiring K] => self.1",
+      "distance": 4,
+      "id": "D059",
+      "kind": "abbrev",
+      "name": "DivisionSemiring.toSemiring",
+      "owner_module": "Mathlib.Algebra.Field.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "587c80a71f9aa5749b5d6c35c97cdae1067fa669257c865951843b747c511934",
+      "type_explicit": "{K : Type u_2} \u2192 [self : DivisionSemiring.{u_2} K] \u2192 Semiring.{u_2} K",
+      "type_readable": "{K : Type u_2} \u2192 [self : DivisionSemiring K] \u2192 Semiring K"
+    },
+    {
+      "blind_name": "Field.toSemifield",
+      "body_readable": "fun {K} [inst : Field K] =>\n  let __src := inst;\n  { toSemiring := __src.toSemiring, mul_comm := \u22ef, toInv := __src.toInv, toDiv := __src.toDiv, div_eq_mul_inv := \u22ef,\n    zpow := __src.zpow, zpow_zero' := \u22ef, zpow_succ' := \u22ef, zpow_neg' := \u22ef, toNontrivial := \u22ef, inv_zero := \u22ef,\n    mul_inv_cancel := \u22ef, toNNRatCast := __src.toNNRatCast, nnratCast_def := \u22ef, nnqsmul := __src.nnqsmul,\n    nnqsmul_def := \u22ef }",
+      "distance": 4,
+      "id": "D060",
+      "kind": "def",
+      "name": "Field.toSemifield",
+      "owner_module": "Mathlib.Algebra.Field.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "9a6353c2087dc0f4123f4079d947842f8b7bc1fc0c77de170382c04e31608fd4",
+      "type_explicit": "{K : Type u_1} \u2192 [Field.{u_1} K] \u2192 Semifield.{u_1} K",
+      "type_readable": "{K : Type u_1} \u2192 [Field K] \u2192 Semifield K"
+    },
+    {
+      "blind_name": "MonoidWithZero.toMonoid",
+      "body_readable": "fun M\u2080 [self : MonoidWithZero M\u2080] => self.1",
+      "distance": 4,
+      "id": "D061",
+      "kind": "abbrev",
+      "name": "MonoidWithZero.toMonoid",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "c0f91ccdc0415c148969849b7a83ce67d87cf4c402704186fa19f6313928d90f",
+      "type_explicit": "{M\u2080 : Type u} \u2192 [self : MonoidWithZero.{u} M\u2080] \u2192 Monoid.{u} M\u2080",
+      "type_readable": "{M\u2080 : Type u} \u2192 [self : MonoidWithZero M\u2080] \u2192 Monoid M\u2080"
+    },
+    {
+      "blind_name": "NontriviallyNormedField.toNormedField",
+      "body_readable": "fun \u03b1 [self : NontriviallyNormedField \u03b1] => self.1",
+      "distance": 4,
+      "id": "D062",
+      "kind": "abbrev",
+      "name": "NontriviallyNormedField.toNormedField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "dc08b02d757cccbd21bce550b40d3f76d2ee704ec2cd7f5507023d827296474f",
+      "type_explicit": "{\u03b1 : Type u_5} \u2192 [self : NontriviallyNormedField.{u_5} \u03b1] \u2192 NormedField.{u_5} \u03b1",
+      "type_readable": "{\u03b1 : Type u_5} \u2192 [self : NontriviallyNormedField \u03b1] \u2192 NormedField \u03b1"
+    },
+    {
+      "blind_name": "NormedField.toField",
+      "body_readable": "fun \u03b1 [self : NormedField \u03b1] => self.2",
+      "distance": 4,
+      "id": "D063",
+      "kind": "abbrev",
+      "name": "NormedField.toField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "ec9eab2d54099c52c160e626a54324e8c9a07675797f0926435031098f363e5f",
+      "type_explicit": "{\u03b1 : Type u_5} \u2192 [self : NormedField.{u_5} \u03b1] \u2192 Field.{u_5} \u03b1",
+      "type_readable": "{\u03b1 : Type u_5} \u2192 [self : NormedField \u03b1] \u2192 Field \u03b1"
+    },
+    {
+      "blind_name": "Real.pseudoMetricSpace",
+      "body_readable": "{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := \u22ef,\n  dist_triangle := \u22ef, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,\n  cobounded_sets := Real.pseudoMetricSpace._proof_4 }",
+      "distance": 4,
+      "id": "D064",
+      "kind": "def",
+      "name": "Real.pseudoMetricSpace",
+      "owner_module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e",
+      "type_explicit": "PseudoMetricSpace.{0} Real",
+      "type_readable": "PseudoMetricSpace Real"
+    },
+    {
+      "blind_name": "Semifield.toDivisionSemiring",
+      "body_readable": "fun K self =>\n  { toSemiring := self.toSemiring, toInv := self.toInv, toDiv := self.toDiv, div_eq_mul_inv := \u22ef, zpow := self.zpow,\n    zpow_zero' := \u22ef, zpow_succ' := \u22ef, zpow_neg' := \u22ef, toNontrivial := \u22ef, inv_zero := \u22ef, mul_inv_cancel := \u22ef,\n    toNNRatCast := self.toNNRatCast, nnratCast_def := \u22ef, nnqsmul := self.nnqsmul, nnqsmul_def := \u22ef }",
+      "distance": 4,
+      "id": "D065",
+      "kind": "abbrev",
+      "name": "Semifield.toDivisionSemiring",
+      "owner_module": "Mathlib.Algebra.Field.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a1b771abeff9bbbdcce988134973a1a367c44a340bcd29acb0cc44b8d6a2e55c",
+      "type_explicit": "{K : Type u_2} \u2192 [self : Semifield.{u_2} K] \u2192 DivisionSemiring.{u_2} K",
+      "type_readable": "{K : Type u_2} \u2192 [self : Semifield K] \u2192 DivisionSemiring K"
+    },
+    {
+      "blind_name": "Semiring.toMonoidWithZero",
+      "body_readable": "fun \u03b1 self =>\n  { toMul := self.toMul, mul_assoc := \u22ef, toOne := self.toOne, one_mul := \u22ef, mul_one := \u22ef, npow := self.npow,\n    npow_zero := \u22ef, npow_succ := \u22ef, toZero := self.toZero, zero_mul := \u22ef, mul_zero := \u22ef }",
+      "distance": 4,
+      "id": "D066",
+      "kind": "abbrev",
+      "name": "Semiring.toMonoidWithZero",
+      "owner_module": "Mathlib.Algebra.Ring.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "bf0d463c55fbfcd762eb28ad6f1672fe482a72dfed67d13a797c09f1f0431e64",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : Semiring.{u} \u03b1] \u2192 MonoidWithZero.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : Semiring \u03b1] \u2192 MonoidWithZero \u03b1"
+    },
+    {
+      "blind_name": "SubNegMonoid.toAddMonoid",
+      "body_readable": "fun G [self : SubNegMonoid G] => self.1",
+      "distance": 4,
+      "id": "D067",
+      "kind": "abbrev",
+      "name": "SubNegMonoid.toAddMonoid",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b",
+      "type_explicit": "{G : Type u} \u2192 [self : SubNegMonoid.{u} G] \u2192 AddMonoid.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : SubNegMonoid G] \u2192 AddMonoid G"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 12834123e39a38c118674dccf79d34ef8b1a703fa7569dfcc9f1e3f6f1441c7e
+{
+  "entries": [
+    {
+      "interpretation": "There exist qt and qx that are respectively derivatives of the time and space slices at t and x, and qt + speed \u2022 qx = 0.",
+      "reuse_sha256": "1003891d7237a41254f0437728a1122ae16de3a80b6e5a86b003192e2cc3d225",
+      "semantic_sha256": "de66a86c2ecf305cf1671383f03d73969b60775294075abac7328c909216e754",
+      "source_dependency_id": "D006",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D003"
+    },
+    {
+      "interpretation": "For a real normed vector space, its displayed scalar action is jointly continuous in the norm-induced topologies.",
+      "reuse_sha256": "e396008a3af6e24f74831e18a5e7edbe78dc72a4c12344d0ab1182aaf2327f4c",
+      "semantic_sha256": "627af0185f9dc545c0feb87577da62578e1f74ad79dcdc19dbbce58a2e697e79",
+      "source_dependency_id": "D008",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D004"
+    },
+    {
+      "interpretation": "Combines Real.norm, the real additive group, and Real.metricSpace.",
+      "reuse_sha256": "fa1e6fbdef28eabe4b284f5db00835c7382eb7783495dc5fdd0c31f356e2d9a2",
+      "semantic_sha256": "9ff0d896c635e2a38531d689d24ee70cfffa41565354ce15f6ff59b51650bd93",
+      "source_dependency_id": "D018",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D013"
+    },
+    {
+      "interpretation": "Builds a commutative subtraction structure retaining the group's existing additive operations.",
+      "reuse_sha256": "763839726d76cf881cd83f597161d3d94dfd208890a089e0868a3be6c8b02c36",
+      "semantic_sha256": "72951116f9ecb1048b235282fec669b8c3dfd809e3810c987dc6f18968d013d3",
+      "source_dependency_id": "D020",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D015"
+    },
+    {
+      "interpretation": "Projects the existing addition operation.",
+      "reuse_sha256": "82edd4441aad1bd9bc813a4347860da42ab1e0b76c1af3ae7fd7feb2b61ba018",
+      "semantic_sha256": "78a12fabc3611bc39705a2dcf3fa82ed1f226d804e888d57546b885fefae4453",
+      "source_dependency_id": "D021",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D016"
+    },
+    {
+      "interpretation": "Retains associative commutative addition while forgetting the zero laws.",
+      "reuse_sha256": "b6a58945f92a9880e9d72ff3061fd56347675a1c4aac9a5988847042e487029d",
+      "semantic_sha256": "dc7cae9f3611bf7a48fc6ba815db5cffeba3ac95ae33d26bec77b827bd041f26",
+      "source_dependency_id": "D022",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D017"
+    },
+    {
+      "interpretation": "Retains addition and commutativity while forgetting associativity structure.",
+      "reuse_sha256": "2ff66468a3d2baec4feb91b6bfc6ff9ea6cb29668f50a7e69030047a9d2e441e",
+      "semantic_sha256": "78f90c6bc01ad86e28d84a9011670656947204c6d8963785407a1b8eb54844ab",
+      "source_dependency_id": "D023",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D018"
+    },
+    {
+      "interpretation": "Copies addition, zero, and their identity laws from the monoid.",
+      "reuse_sha256": "a4f7f41ccba1a447bc0cfebaf39526b47d3bf6c0df2f84a56497aee7334662e1",
+      "semantic_sha256": "4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a",
+      "source_dependency_id": "D024",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D019"
+    },
+    {
+      "interpretation": "Projects the supplied zero element.",
+      "reuse_sha256": "a830856bc47b0426602dcefa4524abbbb08d5a4c514434d647eecae011abb38f",
+      "semantic_sha256": "aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc",
+      "source_dependency_id": "D025",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D020"
+    },
+    {
+      "interpretation": "Projects the existing addition-and-zero data.",
+      "reuse_sha256": "e64b36571a6c00c07503cae6d9ef025e1ad7e7d8cd7a0dccb583e2dd4f221a17",
+      "semantic_sha256": "8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213",
+      "source_dependency_id": "D026",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D021"
+    },
+    {
+      "interpretation": "Retains scalar multiplication and its distributivity and zero-preservation laws.",
+      "reuse_sha256": "a24cbbcb6af24cc1955e88c99cc1415afa071a94bf279304baf8b70ced4fe7d8",
+      "semantic_sha256": "17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02",
+      "source_dependency_id": "D029",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D024"
+    },
+    {
+      "interpretation": "Projects the scalar action with its zero-preservation property.",
+      "reuse_sha256": "dcf4917b1d7e49e3bf301ed2bb0bf234bb571b2f253f5a578ce20fb9303a9ce4",
+      "semantic_sha256": "f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf",
+      "source_dependency_id": "D030",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D025"
+    },
+    {
+      "interpretation": "Projects the underlying extended-seminormed commutative additive structure.",
+      "reuse_sha256": "0dcd831d111f0ad1a7e2907c0aa652cfc685dc1557208d0cd2f030e9300968f6",
+      "semantic_sha256": "7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642",
+      "source_dependency_id": "D032",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D026"
+    },
+    {
+      "interpretation": "Retains the additive monoid and commutativity.",
+      "reuse_sha256": "0a2c815d576803c29368c558e067e5e2db13631e0256c3287482481d040d0dea",
+      "semantic_sha256": "38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220",
+      "source_dependency_id": "D033",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D027"
+    },
+    {
+      "interpretation": "Projects the underlying extended-seminormed additive monoid.",
+      "reuse_sha256": "e034148af12d73b8e4bb2fd0c8e322df85e76a14e7bd278d5af0b57668dec810",
+      "semantic_sha256": "ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4",
+      "source_dependency_id": "D034",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D028"
+    },
+    {
+      "interpretation": "Projects the existing additive monoid.",
+      "reuse_sha256": "39d08460e6fddfc02e88e9d6617d58024cf6446feb63e27c19b552f280636a0b",
+      "semantic_sha256": "bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901",
+      "source_dependency_id": "D035",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D029"
+    },
+    {
+      "interpretation": "Projects the scalar multiplication operation from its supplied instance.",
+      "reuse_sha256": "5fb263b1a3645d5d3fb5815fb02bccb0c405792ff068bb610ae9d365ff5a31fd",
+      "semantic_sha256": "f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4",
+      "source_dependency_id": "D041",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D033"
+    },
+    {
+      "interpretation": "Projects zero from the supplied negation-and-zero structure.",
+      "reuse_sha256": "54603d68e7c6d3e3a99416713674c08fe265e5a5ba6a2f815409c0a0694ae5eb",
+      "semantic_sha256": "881414a459dbdc250afc9bc468e98b17f776dfd31f2aa5eb9acee71a8d1543f7",
+      "source_dependency_id": "D045",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D036"
+    },
+    {
+      "interpretation": "The structure type instantiated by D018; the supplied construction and projections expose its norm, additive group, and metric data.",
+      "reuse_sha256": "acf97d9e6bba2699a902c13483ba6a97ed35e06d468d031b565babae85016148",
+      "semantic_sha256": "7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741",
+      "source_dependency_id": "D055",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D037"
+    },
+    {
+      "interpretation": "Projects the existing additive commutative group.",
+      "reuse_sha256": "467f2f354fbe063d0a27fb2d0e8a088ccd34bee648d40eb1a512f27b861724fc",
+      "semantic_sha256": "c92bdde4376567f29ebdebaf4a7dd986bfb96211cd0306e14540b80cd23009d2",
+      "source_dependency_id": "D056",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D038"
+    },
+    {
+      "interpretation": "Builds an extended-norm additive structure from the existing normed group, retaining its additive data and topology.",
+      "reuse_sha256": "370ec8132a7ab59332b81281a8c83eea6adc08696fda95fba589c294c16b98a4",
+      "semantic_sha256": "eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb",
+      "source_dependency_id": "D057",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D039"
+    },
+    {
+      "interpretation": "Copies the norm, additive group, and pseudometric from the normed group.",
+      "reuse_sha256": "8622f08bab0d6366e9ff423d1d627888580ab24e1f010f479f64cdc4d5207fb5",
+      "semantic_sha256": "7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be",
+      "source_dependency_id": "D058",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D040"
+    },
+    {
+      "interpretation": "The normed-space structure type over the displayed field and additive space; D017 supplies its real self-module instance and D063 exposes its module.",
+      "reuse_sha256": "7fc85f43d338df91857c28e7771e08dcb59a437ed022c1d688e270c45d284e3e",
+      "semantic_sha256": "6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960",
+      "source_dependency_id": "D062",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D041"
+    },
+    {
+      "interpretation": "Supplies the inferred multiplicative monoid on Real at the external library boundary.",
+      "reuse_sha256": "508f74f873ec69cd019bf5264bcf5625671c07680aa02400e50f0127d357b3f6",
+      "semantic_sha256": "37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8",
+      "source_dependency_id": "D073",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D045"
+    },
+    {
+      "interpretation": "Supplies the inferred semiring structure on Real at the external library boundary.",
+      "reuse_sha256": "a1049584240e7fc168a7660986fd7290b7bb3144c9f44000370d4c954f627dd8",
+      "semantic_sha256": "c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c",
+      "source_dependency_id": "D078",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D046"
+    },
+    {
+      "interpretation": "Projects the existing scalar multiplication operation.",
+      "reuse_sha256": "553e0baa9cd6ce2e268bde58e6437b6d3e8308119a31ba95c99d65819bdab133",
+      "semantic_sha256": "a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6",
+      "source_dependency_id": "D080",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D047"
+    },
+    {
+      "interpretation": "Projects the supplied pseudometric space.",
+      "reuse_sha256": "dc2ef7e3942b6090fa8dbc28b71ed0cc1ea86a818432de531d70da1220043342",
+      "semantic_sha256": "3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126",
+      "source_dependency_id": "D082",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D048"
+    },
+    {
+      "interpretation": "Copies zero and negation together with the negation-of-zero law.",
+      "reuse_sha256": "d05b0d66833eba4d97075aa85e5576824a6e9076d69fd19d7045e895f7a89021",
+      "semantic_sha256": "0ca9c4737492ec2a9a5ab16ab065d00204507f2caf80997692c360afbf962577",
+      "source_dependency_id": "D085",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D049"
+    },
+    {
+      "interpretation": "Projects the existing subtraction structure.",
+      "reuse_sha256": "a70ca93361450b292ddc2b9482ecd77768bef734e8531acd583af590ce3acb04",
+      "semantic_sha256": "e56d8d718ddbe8a62b0e5b703adfd59bd19f46dac79c341b3d3742ed6ee462c9",
+      "source_dependency_id": "D086",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D050"
+    },
+    {
+      "interpretation": "Retains the subtraction-and-negation monoid and supplies its negation-of-zero law.",
+      "reuse_sha256": "9b3f59f119ca425bc524647e459cb83ea27fa0ed1cef0f6ba85e67fd964e9a7c",
+      "semantic_sha256": "700a470249543a704f0b5910309b7d1f4c918e3b645f806242c291c98eff4e28",
+      "source_dependency_id": "D087",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D051"
+    },
+    {
+      "interpretation": "Wraps the supplied scalar multiplication as heterogeneous scalar multiplication with unchanged result type.",
+      "reuse_sha256": "142263803735e354a1392582a23f0b7b967e186d38581dee17a103f04c392d5f",
+      "semantic_sha256": "04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3",
+      "source_dependency_id": "D091",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D054"
+    },
+    {
+      "interpretation": "Retains the additive monoid and commutativity from the group.",
+      "reuse_sha256": "242900479b3f5ed16c6e3a8d05c244df51fa91c12e4642b4341877ff5e6d10ee",
+      "semantic_sha256": "f727c3f01db957bd004eab61d742db6d02c6f9b2cdad465fa6f0ac214e09ccfd",
+      "source_dependency_id": "D092",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D055"
+    },
+    {
+      "interpretation": "Projects the existing additive group.",
+      "reuse_sha256": "eb1e82bb6143f7a936541bcaf66cfa6457e44a3ba8437a0b906201c24ba4197d",
+      "semantic_sha256": "7f49725cf4bc16610110860af8f38e6d0fe472c7c1af93721407bad8c7375729",
+      "source_dependency_id": "D093",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D056"
+    },
+    {
+      "interpretation": "Projects the group's existing subtraction, negation, and additive monoid structure.",
+      "reuse_sha256": "b3ee30326a31d0c3a0043b8dd214894a68eb4266eda84360262a21e6f2fda145",
+      "semantic_sha256": "8c0fca6ee264d934b25c679f16be6b83bb2a2f7c58a8ac0afab0c146219e16a1",
+      "source_dependency_id": "D095",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D057"
+    },
+    {
+      "interpretation": "Projects the existing additive monoid.",
+      "reuse_sha256": "72d2dc326ab695229ff82b60aa0c306583643f7913bab2d5f7fd296c3f294ee2",
+      "semantic_sha256": "9e6f6ef922e3c39bdc8dcf74fa873f2e393c916c08aa49739c9dcafb3f96877b",
+      "source_dependency_id": "D107",
+      "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+      "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+      "target_dependency_id": "D067"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "216a52ff0b17ebd8e2068e8469921216d6e6496b71af7b2756f74aee223d16e9",
+  "source_task_id": "LEV-CH01-EQ-1.2-ADVECTION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-ADVECTION-WAVE-IDENTITY-CANONICAL-20260908"
+}
+
+Direct isolation: do not read blind translation, roundtrip judgment, or prior judgments.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 24.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
