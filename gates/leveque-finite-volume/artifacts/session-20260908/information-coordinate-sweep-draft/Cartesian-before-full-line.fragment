@@ -1,0 +1,97 @@
+namespace NumStability.InformationCoordinateSweepDraft
+
+open TensorLinesDraft MeasureTheory
+open scoped BigOperators
+
+variable {D : Type*} [Fintype D] [DecidableEq D] {m : ℕ}
+
+variable {laws : D → OneDimensionalHyperbolicConservationLaw (Fin m)}
+variable {Result : (d : D) → HyperbolicRiemannProblem (laws d) → Type*}
+variable {Information : D → Type*}
+variable (methods : (d : D) → ℝ → RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+
+omit [Fintype D] in
+theorem line_admission (d : D) (dt : ℝ) (state : Cell D → Fin m → ℝ)
+    (h : StageAdmitted methods d dt state) (base : Cell D) (j : ℤ) :
+    (methods d dt).domain (adjacentCellRiemannProblem (laws d) (line d base state) j) := by
+  simpa only [FaceAdmitted, line, Function.update_self, Function.update_idem] using
+    h (Function.update base d j)
+
+omit [Fintype D] in
+theorem selectedFaceFlux_on_line (d : D) (dt : ℝ) (state : Cell D → Fin m → ℝ)
+    (h : StageAdmitted methods d dt state) (base : Cell D) (j : ℤ) :
+    selectedFaceFlux methods d dt state (Function.update base d j) (h _) =
+      (methods d dt).interfaceFlux (line d base state)
+        (line_admission methods d dt state h base) j := by
+  have hcongr (p q : HyperbolicRiemannProblem (laws d))
+      (hp : (methods d dt).domain p) (hq : (methods d dt).domain q) (heq : p = q) :
+      (methods d dt).numericalFlux ((methods d dt).extract ((methods d dt).solve p hp)) =
+        (methods d dt).numericalFlux ((methods d dt).extract ((methods d dt).solve q hq)) := by
+    cases heq
+    rfl
+  unfold selectedFaceFlux RiemannInformationFluxMethod.interfaceFlux
+  apply hcongr
+  simp only [Function.update_self, Function.update_idem]
+  rfl
+
+/-- Actual Cartesian line restriction, now for admitted inexact returned methods. -/
+theorem cartesian_line_update (grid : TensorGrid D)
+    (fallback : D → Cell D → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (d : D) (dt : ℝ) (state : Cell D → Fin m → ℝ)
+    (h : StageAdmitted methods d dt state) (base : Cell D) :
+    line d base (CoordinateLineBalance.advance grid.cellVolume
+        (guardedRule methods grid.faceArea fallback) d dt state) =
+      riemannFiniteVolumeUpdate (grid.axis d) dt (line d base state)
+        ((methods d dt).interfaceFlux (line d base state) (line_admission methods d dt state h base)) := by
+  funext j
+  let flux := (methods d dt).interfaceFlux (line d base state)
+    (line_admission methods d dt state h base)
+  have hline : (grid.axis d).cellVolume j •
+      riemannFiniteVolumeUpdate (grid.axis d) dt (line d base state) flux j =
+      (grid.axis d).cellVolume j • line d base state j - dt • (flux (j + 1) - flux j) :=
+    cellVolume_smul_finiteVolumeCellAverageUpdate dt ((grid.axis d).cellVolume j)
+      (line d base state j) (flux (j + 1) - flux j) ((grid.axis d).cellVolume_pos j).ne'
+  have harea := congrArg (fun value => grid.faceArea d base • value) hline
+  have hreference : grid.cellVolume (Function.update base d j) •
+      riemannFiniteVolumeUpdate (grid.axis d) dt (line d base state) flux j =
+      grid.cellVolume (Function.update base d j) • state (Function.update base d j) -
+        dt • (grid.faceArea d base • flux (j + 1) - grid.faceArea d base • flux j) := by
+    rw [grid.cellVolume_eq_width_mul_area d (Function.update base d j)]
+    simp only [Function.update_self, CartesianLineCompositionDraft.faceArea_update]
+    simpa only [line, smul_sub, smul_smul, mul_comm] using harea
+  have hactual := admitted_cell_mass_balance methods grid.cellVolume grid.cellVolume_pos
+    grid.faceArea fallback d dt state h (Function.update base d j)
+  have hcellFlux :
+      selectedFaceFlux methods d dt state
+          (Function.update (Function.update base d j) d ((Function.update base d j) d + 1)) (h _) =
+        selectedFaceFlux methods d dt state (Function.update base d (j + 1)) (h _) :=
+    congrArg (fun cell => selectedFaceFlux methods d dt state cell (h cell)) (by simp)
+  rw [hcellFlux] at hactual
+  simp only [Function.update_self, Function.update_idem,
+    CartesianLineCompositionDraft.faceArea_update] at hactual
+  rw [selectedFaceFlux_on_line methods d dt state h base (j + 1),
+    selectedFaceFlux_on_line methods d dt state h base j] at hactual
+  have heq := hactual.trans hreference.symm
+  have hc := congrArg (fun value => (grid.cellVolume (Function.update base d j))⁻¹ • value) heq
+  simpa only [smul_smul, inv_mul_cancel₀ (grid.cellVolume_pos _).ne', one_smul] using hc
+
+/-- Supplied volumes and face weights are the already measured Cartesian boxes. -/
+theorem cartesian_measured_balance (grid : TensorGrid D)
+    (fallback : D → Cell D → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (d : D) (dt : ℝ) (state : Cell D → Fin m → ℝ)
+    (h : StageAdmitted methods d dt state) (cell : Cell D) :
+    (volume (grid.cellBox cell)).toReal • CoordinateLineBalance.advance grid.cellVolume
+      (guardedRule methods grid.faceArea fallback) d dt state cell =
+      (volume (grid.cellBox cell)).toReal • state cell - dt •
+        ((volume (CartesianLineCompositionDraft.tangentialFaceBox grid d
+            (Function.update cell d (cell d + 1)))).toReal •
+          selectedFaceFlux methods d dt state (Function.update cell d (cell d + 1)) (h _) -
+        (volume (CartesianLineCompositionDraft.tangentialFaceBox grid d cell)).toReal •
+          selectedFaceFlux methods d dt state cell (h cell)) := by
+  rw [grid.cellBox_volume, CartesianLineCompositionDraft.tangentialFaceBox_volume,
+    CartesianLineCompositionDraft.tangentialFaceBox_volume]
+  exact admitted_cell_mass_balance methods grid.cellVolume grid.cellVolume_pos
+    grid.faceArea fallback d dt state h cell
+
+
+end NumStability.InformationCoordinateSweepDraft

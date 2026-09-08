@@ -1,0 +1,119 @@
+/-!
+# Information-only and existing-field instances
+
+The first routine stores the two ordered states, not a space-time field.
+Its optional unit-speed comparison uses an independently supplied exact
+reference. The second instance retains an existing field method unchanged.
+-/
+
+namespace NumStability.InformationOnlyRiemannDraft.Witness
+
+variable {m : ℕ} {law : OneDimensionalHyperbolicConservationLaw (Fin m)}
+
+structure OrderedResult (problem : HyperbolicRiemannProblem law) where
+  left : Fin m → ℝ
+  right : Fin m → ℝ
+  left_eq : left = problem.leftState
+  right_eq : right = problem.rightState
+
+/-- A concrete routine returning only two ordered vectors and their indexing
+facts. Constant consistency does not claim physical accuracy for every law. -/
+def method (law : OneDimensionalHyperbolicConservationLaw (Fin m)) :
+    Method law OrderedResult ((Fin m → ℝ) × (Fin m → ℝ)) where
+  domain := fun _ => True
+  solve := fun problem _ => ⟨problem.leftState, problem.rightState, rfl, rfl⟩
+  extract := fun result => (result.left, result.right)
+  numericalFlux := fun info => law.physicalFlux info.1
+  constants_in_domain := fun _ => trivial
+  consistent := fun _ => rfl
+
+theorem selected_pair (law : OneDimensionalHyperbolicConservationLaw (Fin m))
+    (old : ℤ → Fin m → ℝ) (j : ℤ) :
+    (method law).extract (Method.selectedResult (method law) old (fun _ => trivial) j) =
+      (old (j - 1), old j) := rfl
+
+theorem selected_flux (law : OneDimensionalHyperbolicConservationLaw (Fin m))
+    (old : ℤ → Fin m → ℝ) (j : ℤ) :
+    Method.interfaceFlux (method law) old (fun _ => trivial) j =
+      law.physicalFlux (old (j - 1)) := rfl
+
+/-- The nonconstant one-component problem returns the actual pair `(0,1)`.
+The flux is zero for unit-speed transport; no returned field is part of it. -/
+theorem concrete_information_only :
+    let law := StationaryRiemannField.transportLaw (m := 1)
+    let problem : HyperbolicRiemannProblem law := ⟨0, 1⟩
+    let result := (method law).solve problem trivial
+    (method law).domain problem ∧ (method law).extract result = (0, 1) ∧
+      (method law).numericalFlux ((method law).extract result) = 0 := by
+  exact ⟨trivial, rfl, StationaryRiemannField.physicalFlux 0⟩
+
+/-- This optional trace is computed from the actual returned left component.
+Its introduction is separate from the method's execution contract. -/
+def localTrace {problem : HyperbolicRiemannProblem law} (result : OrderedResult problem)
+    (_τ : ℝ) : Fin m → ℝ := law.physicalFlux result.left
+
+theorem localTrace_integrable {problem : HyperbolicRiemannProblem law}
+    (result : OrderedResult problem) (s t : ℝ) :
+    IntervalIntegrable (localTrace result) volume s t := intervalIntegrable_const
+
+theorem extraction_eq_localTrace {problem : HyperbolicRiemannProblem law}
+    (result : OrderedResult problem) (τ : ℝ) :
+    (method law).numericalFlux ((method law).extract result) = localTrace result τ := rfl
+
+/-- Separate physical evidence is available for this specific unit-speed law.
+It compares the optional result trace with the existing conserved reference. -/
+theorem localTrace_eq_transport_reference
+    {problem : HyperbolicRiemannProblem (StationaryRiemannField.transportLaw (m := m))}
+    (result : OrderedResult problem) {τ : ℝ} (hτ : 0 < τ) :
+    localTrace result τ = StationaryRiemannField.transportLaw.physicalFlux
+      (StationaryRiemannField.reference problem.leftState problem.rightState 0 τ) := by
+  simpa only [localTrace, result.left_eq, StationaryRiemannField.stationary, riemannData_zero] using
+    congrArg StationaryRiemannField.transportLaw.physicalFlux
+      (StationaryRiemannField.stationary_trace_eq_reference problem.leftState problem.rightState hτ)
+
+/-- The finite-step comparison assumptions are themselves inhabited: both
+trace errors vanish for the independent translating unit-speed reference. -/
+theorem selected_flux_eq_reference_average
+    (problem : HyperbolicRiemannProblem (StationaryRiemannField.transportLaw (m := m)))
+    {dt : ℝ} (hdt : 0 < dt) :
+    (method StationaryRiemannField.transportLaw).numericalFlux
+      ((method StationaryRiemannField.transportLaw).extract
+        ((method StationaryRiemannField.transportLaw).solve problem trivial)) =
+    oneDimensionalCellAverage (fun τ => StationaryRiemannField.transportLaw.physicalFlux
+      (StationaryRiemannField.reference problem.leftState problem.rightState 0 τ)) 0 dt := by
+  let result := (method StationaryRiemannField.transportLaw).solve problem trivial
+  have hl := localTrace_integrable result 0 dt
+  have hp := (StationaryRiemannField.reference_rectangle problem.leftState problem.rightState).2.1 0 0 dt
+  have hn : ∀ τ ∈ Set.uIoc 0 dt,
+      ‖(method StationaryRiemannField.transportLaw).numericalFlux
+        ((method StationaryRiemannField.transportLaw).extract result) - localTrace result τ‖ ≤ 0 := by
+    intro τ _
+    rw [extraction_eq_localTrace result τ]
+    simp
+  have he : ∀ τ ∈ Set.uIoc 0 dt, ‖localTrace result τ -
+      StationaryRiemannField.transportLaw.physicalFlux
+        (StationaryRiemannField.reference problem.leftState problem.rightState 0 τ)‖ ≤ 0 := by
+    intro τ hτ
+    rw [Set.uIoc_of_le hdt.le] at hτ
+    rw [localTrace_eq_transport_reference result hτ.1]
+    simp
+  have hb := norm_sub_oneDimensionalCellAverage_le_of_trace hdt hl hp hn he
+  apply sub_eq_zero.mp
+  apply norm_eq_zero.mp
+  exact le_antisymm (by simpa using hb) (norm_nonneg _)
+
+/-- The existing field method embeds with its original selected result and
+its established nonexactness. No field is manufactured by the adapter. -/
+theorem existing_field_embedding :
+    ∃ problem : HyperbolicRiemannProblem (StationaryRiemannField.transportLaw (m := 1)),
+      (Method.ofField StationaryRiemannField.method).domain problem ∧
+      (Method.ofField StationaryRiemannField.method).solve problem trivial =
+        StationaryRiemannField.method.solve problem trivial ∧
+      ¬ IsRectangleConservationLawSolution
+        (StationaryRiemannField.method.field
+          ((Method.ofField StationaryRiemannField.method).solve problem trivial))
+        StationaryRiemannField.transportLaw.physicalFlux := by
+  obtain ⟨problem, hp, hnot⟩ := StationaryRiemannField.nonexact_instance
+  exact ⟨problem, hp, rfl, hnot⟩
+
+end NumStability.InformationOnlyRiemannDraft.Witness

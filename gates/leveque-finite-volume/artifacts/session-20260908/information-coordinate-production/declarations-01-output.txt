@@ -1,0 +1,416 @@
+NumStability.RiemannInformationCoordinate.FaceAdmitted.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d)) (d : D)
+  (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ) : Prop
+'NumStability.RiemannInformationCoordinate.FaceAdmitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannInformationCoordinate.StageAdmitted.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d)) (d : D)
+  (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) : Prop
+'NumStability.RiemannInformationCoordinate.StageAdmitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannInformationCoordinate.selectedFaceFlux.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d)) (d : D)
+  (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ)
+  (h : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt state cell) : Fin m → ℝ
+'NumStability.RiemannInformationCoordinate.selectedFaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannInformationCoordinate.guardedRule.{u_1, u_2, u_3} {D : Type u_1} {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (cell : D → ℤ) (dt : ℝ)
+  (line : ℤ → Fin m → ℝ) : Fin m → ℝ
+'NumStability.RiemannInformationCoordinate.guardedRule' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannInformationCoordinate.normalFaceFlux_of_admitted.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ)
+  (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ)
+  (h : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt state cell) :
+  NumStability.CoordinateLineBalance.normalFaceFlux
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state cell =
+    area d cell • NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state cell h
+'NumStability.RiemannInformationCoordinate.normalFaceFlux_of_admitted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.admitted_face_observation.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ)
+  (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ)
+  (h : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt state cell) :
+  let problem := NumStability.adjacentCellRiemannProblem (laws d) (fun j => state (Function.update cell d j)) (cell d);
+  have result := (methods d dt).solve problem h;
+  problem.leftState = state (Function.update cell d (cell d - 1)) ∧
+    problem.rightState = state cell ∧
+      NumStability.CoordinateLineBalance.normalFaceFlux
+          (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state cell =
+        area d cell • (methods d dt).numericalFlux ((methods d dt).extract result)
+'NumStability.RiemannInformationCoordinate.admitted_face_observation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.normalFaceFlux_fallback_independent.{u_1, u_2, u_3} {D : Type u_1}
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (area : D → (D → ℤ) → ℝ) (fallback other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ)
+  (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ)
+  (h : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt state cell) :
+  NumStability.CoordinateLineBalance.normalFaceFlux
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state cell =
+    NumStability.CoordinateLineBalance.normalFaceFlux
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area other) d dt state cell
+'NumStability.RiemannInformationCoordinate.normalFaceFlux_fallback_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.advance_fallback_independent.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) :
+  NumStability.CoordinateLineBalance.advance volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state =
+    NumStability.CoordinateLineBalance.advance volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area other) d dt state
+'NumStability.RiemannInformationCoordinate.advance_fallback_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.admitted_cell_mass_balance.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell) (area : D → (D → ℤ) → ℝ)
+  (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (cell : D → ℤ) :
+  volume cell •
+      NumStability.CoordinateLineBalance.advance volume
+        (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state cell =
+    volume cell • state cell -
+      dt •
+        (area d (Function.update cell d (cell d + 1)) •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state
+              (Function.update cell d (cell d + 1)) ⋯ -
+          area d cell • NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state cell ⋯)
+'NumStability.RiemannInformationCoordinate.admitted_cell_mass_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.admitted_finite_line_mass_balance.{u_1, u_2, u_3} {D : Type u_1}
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell) (area : D → (D → ℤ) → ℝ)
+  (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (base : D → ℤ) (start : ℤ)
+  (count : ℕ) :
+  ∑ k ∈ Finset.range count,
+      volume (Function.update base d (start + ↑k)) •
+        NumStability.CoordinateLineBalance.advance volume
+          (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state
+          (Function.update base d (start + ↑k)) =
+    ∑ k ∈ Finset.range count,
+        volume (Function.update base d (start + ↑k)) • state (Function.update base d (start + ↑k)) -
+      dt •
+        (area d (Function.update base d (start + ↑count)) •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state
+              (Function.update base d (start + ↑count)) ⋯ -
+          area d (Function.update base d start) •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state (Function.update base d start)
+              ⋯)
+'NumStability.RiemannInformationCoordinate.admitted_finite_line_mass_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.SweepAdmitted.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) :
+  List (D × ℝ) → ((D → ℤ) → Fin m → ℝ) → Prop
+'NumStability.RiemannInformationCoordinate.SweepAdmitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.RiemannInformationCoordinate.sweepAdmitted_fallback_independent.{u_1, u_2, u_3} {D : Type u_1}
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area fallback stages state) :
+  NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area other stages state
+'NumStability.RiemannInformationCoordinate.sweepAdmitted_fallback_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.sweep_fallback_independent.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area fallback stages state) :
+  NumStability.CoordinateLineBalance.sweep volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) stages state =
+    NumStability.CoordinateLineBalance.sweep volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area other) stages state
+'NumStability.RiemannInformationCoordinate.sweep_fallback_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.admission_at_prefix.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ)
+  (h :
+    NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area fallback (before ++ (d, dt) :: after)
+      state) :
+  NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt
+    (NumStability.CoordinateLineBalance.sweep volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) before state)
+'NumStability.RiemannInformationCoordinate.admission_at_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.executed_face_uses_selected_solve.{u_1, u_2, u_3} {D : Type u_1}
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ)
+  (h :
+    NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area fallback (before ++ (d, dt) :: after)
+      state)
+  (cell : D → ℤ) :
+  have current :=
+    NumStability.CoordinateLineBalance.sweep volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) before state;
+  ∃ (admitted : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt current cell),
+    NumStability.CoordinateLineBalance.normalFaceFlux
+        (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt current cell =
+      area d cell • NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt current cell admitted
+'NumStability.RiemannInformationCoordinate.executed_face_uses_selected_solve' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.RiemannInformationCoordinate.admitted_two_stage_balance.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell) (area : D → (D → ℤ) → ℝ)
+  (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d e : D) (dt ds : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.SweepAdmitted methods volume area fallback [(d, dt), (e, ds)] state)
+  (cell : D → ℤ) :
+  let first :=
+    NumStability.CoordinateLineBalance.advance volume
+      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt state;
+  volume cell •
+      NumStability.CoordinateLineBalance.sweep volume
+        (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) [(d, dt), (e, ds)] state cell =
+    volume cell • state cell -
+        dt •
+          (area d (Function.update cell d (cell d + 1)) •
+              NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state
+                (Function.update cell d (cell d + 1)) ⋯ -
+            area d cell • NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state cell ⋯) -
+      ds •
+        (area e (Function.update cell e (cell e + 1)) •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods e ds first
+              (Function.update cell e (cell e + 1)) ⋯ -
+          area e cell • NumStability.RiemannInformationCoordinate.selectedFaceFlux methods e ds first cell ⋯)
+'NumStability.RiemannInformationCoordinate.admitted_two_stage_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianGrid.cellBox.{u_1} {D : Type u_1} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+  (cell : D → ℤ) : Set (D → ℝ)
+'NumStability.CartesianGrid.cellBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.cellVolume.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ) : ℝ
+'NumStability.CartesianGrid.cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.faceArea.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) : ℝ
+'NumStability.CartesianGrid.faceArea' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.cellVolume_pos.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ) :
+  0 < NumStability.CartesianGrid.cellVolume axes cell
+'NumStability.CartesianGrid.cellVolume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.cellVolume_eq_width_mul_area.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  NumStability.CartesianGrid.cellVolume axes cell =
+    (axes d).cellVolume (cell d) * NumStability.CartesianGrid.faceArea axes d cell
+'NumStability.CartesianGrid.cellVolume_eq_width_mul_area' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.cellBox_volume.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ) :
+  (MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =
+    NumStability.CartesianGrid.cellVolume axes cell
+'NumStability.CartesianGrid.cellBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.faceArea_update.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (j : ℤ) :
+  NumStability.CartesianGrid.faceArea axes d (Function.update cell d j) =
+    NumStability.CartesianGrid.faceArea axes d cell
+'NumStability.CartesianGrid.faceArea_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.tangentialFaceBox.{u_1} {D : Type u_1}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) : Set ({ e // e ≠ d } → ℝ)
+'NumStability.CartesianGrid.tangentialFaceBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.tangentialFaceBox_volume.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  (MeasureTheory.volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+    NumStability.CartesianGrid.faceArea axes d cell
+'NumStability.CartesianGrid.tangentialFaceBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.tangentialFaceBox_update.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (j : ℤ) :
+  NumStability.CartesianGrid.tangentialFaceBox axes d (Function.update cell d j) =
+    NumStability.CartesianGrid.tangentialFaceBox axes d cell
+'NumStability.CartesianGrid.tangentialFaceBox_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.facePoint.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ) : D → ℝ
+'NumStability.CartesianGrid.facePoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.facePoint_normal.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ) :
+  NumStability.CartesianGrid.facePoint axes d cell point d = (axes d).cellLeft (cell d)
+'NumStability.CartesianGrid.facePoint_normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.facePoint_transverse.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ) (e : D)
+  (h : e ≠ d) : NumStability.CartesianGrid.facePoint axes d cell point e = point ⟨e, h⟩
+'NumStability.CartesianGrid.facePoint_transverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.shared_face_position.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  (axes d).cellRight (cell d) = (axes d).cellLeft (Function.update cell d (cell d + 1) d)
+'NumStability.CartesianGrid.shared_face_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianCoordinateUpdate.areaWeightedRule.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (d : D) (cell : D → ℤ) (dt : ℝ) (old : ℤ → Fin m → ℝ) : Fin m → ℝ
+'NumStability.CartesianCoordinateUpdate.areaWeightedRule' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianCoordinateUpdate.cartesian_full_line_update.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (base : D → ℤ) :
+  (fun d base state j => state (Function.update base d j)) d base
+      (NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+        (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt state) =
+    NumStability.riemannFiniteVolumeUpdate (axes d) dt
+      ((fun d base state j => state (Function.update base d j)) d base state) fun j =>
+      rule d (Function.update base d j) dt ((fun d base state j => state (Function.update base d j)) d base state)
+'NumStability.CartesianCoordinateUpdate.cartesian_full_line_update' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianCoordinateUpdate.line_admission.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d)) (d : D)
+  (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (base : D → ℤ) (j : ℤ) :
+  (methods d dt).domain
+    (NumStability.adjacentCellRiemannProblem (laws d)
+      ((fun d base state j => state (Function.update base d j)) d base state) j)
+'NumStability.CartesianCoordinateUpdate.line_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianCoordinateUpdate.selectedFaceFlux_on_line.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d)) (d : D)
+  (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (base : D → ℤ) (j : ℤ) :
+  NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state (Function.update base d j) ⋯ =
+    (methods d dt).interfaceFlux ((fun d base state j => state (Function.update base d j)) d base state) ⋯ j
+'NumStability.CartesianCoordinateUpdate.selectedFaceFlux_on_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianCoordinateUpdate.guardedRule_eq_areaWeightedRule.{u_1, u_2, u_3} {D : Type u_1} [Fintype D]
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) :
+  NumStability.RiemannInformationCoordinate.guardedRule methods (NumStability.CartesianGrid.faceArea axes) fallback =
+    NumStability.CartesianCoordinateUpdate.areaWeightedRule axes
+      (NumStability.RiemannInformationCoordinate.guardedRule methods (fun x x_1 => 1) fun d cell dt old =>
+        (NumStability.CartesianGrid.faceArea axes d cell)⁻¹ • fallback d cell dt old)
+'NumStability.CartesianCoordinateUpdate.guardedRule_eq_areaWeightedRule' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianCoordinateUpdate.cartesian_line_update.{u_1, u_2, u_3} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (base : D → ℤ) :
+  (fun d base state j => state (Function.update base d j)) d base
+      (NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+        (NumStability.RiemannInformationCoordinate.guardedRule methods (NumStability.CartesianGrid.faceArea axes)
+          fallback)
+        d dt state) =
+    NumStability.riemannFiniteVolumeUpdate (axes d) dt
+      ((fun d base state j => state (Function.update base d j)) d base state)
+      ((methods d dt).interfaceFlux ((fun d base state j => state (Function.update base d j)) d base state) ⋯)
+'NumStability.CartesianCoordinateUpdate.cartesian_line_update' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianCoordinateUpdate.cartesian_measured_balance.{u_1, u_2, u_3} {D : Type u_1} [Fintype D]
+  [DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+  (h : NumStability.RiemannInformationCoordinate.StageAdmitted methods d dt state) (cell : D → ℤ) :
+  (MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes cell)).toReal •
+      NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+        (NumStability.RiemannInformationCoordinate.guardedRule methods (NumStability.CartesianGrid.faceArea axes)
+          fallback)
+        d dt state cell =
+    (MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes cell)).toReal • state cell -
+      dt •
+        ((MeasureTheory.volume
+                (NumStability.CartesianGrid.tangentialFaceBox axes d (Function.update cell d (cell d + 1)))).toReal •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state
+              (Function.update cell d (cell d + 1)) ⋯ -
+          (MeasureTheory.volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal •
+            NumStability.RiemannInformationCoordinate.selectedFaceFlux methods d dt state cell ⋯)
+'NumStability.CartesianCoordinateUpdate.cartesian_measured_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_rule (area : Fin 2 → (Fin 2 → ℤ) → ℝ)
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ) (d : Fin 2) (cell : Fin 2 → ℤ) (dt : ℝ)
+  (old : ℤ → Fin 1 → ℝ) :
+  NumStability.RiemannInformationCoordinate.guardedRule
+      (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw) area
+      fallback d cell dt old =
+    area d cell • old (cell d - 1)
+'NumStability.LeftStateCoordinateSweep.left_rule' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_sweep_admitted (volume : (Fin 2 → ℤ) → ℝ) (area : Fin 2 → (Fin 2 → ℤ) → ℝ)
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ) (stages : List (Fin 2 × ℝ))
+  (state : (Fin 2 → ℤ) → Fin 1 → ℝ) :
+  NumStability.RiemannInformationCoordinate.SweepAdmitted
+    (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw) volume
+    area fallback stages state
+'NumStability.LeftStateCoordinateSweep.left_sweep_admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_unit_update
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ) (d : Fin 2) (state : (Fin 2 → ℤ) → Fin 1 → ℝ)
+  (cell : Fin 2 → ℤ) :
+  NumStability.CoordinateLineBalance.advance (fun x => 1)
+      (NumStability.RiemannInformationCoordinate.guardedRule
+        (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+        (fun x x_1 => 1) fallback)
+      d 1 state cell =
+    state (Function.update cell d (cell d - 1))
+'NumStability.LeftStateCoordinateSweep.left_unit_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ) :
+  (NumStability.RiemannInformationCoordinate.SweepAdmitted
+      (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+      (fun x => 1) (fun x x_1 => 1) fallback [(0, 1), (1, 1)] fun cell => if cell 1 = 0 then 0 else 1) ∧
+    NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 1] =
+        0 ∧
+      NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 2] =
+        1
+'NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

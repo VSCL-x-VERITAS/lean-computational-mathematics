@@ -1,0 +1,73 @@
+namespace NumStability.InformationCoordinateSweepDraft
+
+variable {D : Type*} [DecidableEq D] {m : ℕ}
+variable {laws : D → OneDimensionalHyperbolicConservationLaw (Fin m)}
+variable {Result : (d : D) → HyperbolicRiemannProblem (laws d) → Type*}
+variable {Information : D → Type*}
+
+/-- The existing canonical forgetful adapter preserves the actual selected routine. -/
+def fieldMethods
+    (fields : (d : D) → ℝ → RiemannFieldFluxMethod (laws d) (Result d) (Information d))
+    (d : D) (dt : ℝ) : RiemannInformationFluxMethod (laws d) (Result d) (Information d) :=
+  RiemannInformationFluxMethod.ofField (fields d dt)
+
+variable (fields : (d : D) → ℝ → RiemannFieldFluxMethod (laws d) (Result d) (Information d))
+
+theorem faceAdmitted_ofField_iff (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+    (cell : D → ℤ) :
+    FaceAdmitted (fieldMethods fields) d dt state cell ↔
+      ReturnedFieldCoordinateSweepDraft.FaceAdmitted fields d dt state cell := Iff.rfl
+
+theorem selectedFaceFlux_ofField (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ)
+    (cell : D → ℤ) (h : FaceAdmitted (fieldMethods fields) d dt state cell) :
+    selectedFaceFlux (fieldMethods fields) d dt state cell h =
+      ReturnedFieldCoordinateSweepDraft.selectedFaceFlux fields d dt state cell h := rfl
+
+omit [DecidableEq D] in
+theorem guardedRule_ofField (area : D → (D → ℤ) → ℝ)
+    (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) :
+    guardedRule (fieldMethods fields) area fallback =
+      ReturnedFieldCoordinateSweepDraft.guardedRule fields area fallback := rfl
+
+theorem advance_ofField (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ)
+    (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) :
+    CoordinateLineBalance.advance volume (guardedRule (fieldMethods fields) area fallback) d dt state =
+      CoordinateLineBalance.advance volume
+        (ReturnedFieldCoordinateSweepDraft.guardedRule fields area fallback) d dt state := by
+  rw [guardedRule_ofField]
+
+theorem sweep_ofField (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ)
+    (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ) :
+    CoordinateLineBalance.sweep volume (guardedRule (fieldMethods fields) area fallback) stages state =
+      CoordinateLineBalance.sweep volume
+        (ReturnedFieldCoordinateSweepDraft.guardedRule fields area fallback) stages state := by
+  rw [guardedRule_ofField]
+
+theorem sweepAdmitted_ofField_iff (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ)
+    (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ) :
+    SweepAdmitted (fieldMethods fields) volume area fallback stages state ↔
+      ReturnedFieldCoordinateSweepDraft.SweepAdmitted fields volume area fallback stages state := by
+  induction stages generalizing state with
+  | nil => rfl
+  | cons step stages ih =>
+    rcases step with ⟨d, dt⟩
+    simp only [SweepAdmitted, ReturnedFieldCoordinateSweepDraft.SweepAdmitted, guardedRule_ofField]
+    exact and_congr Iff.rfl (ih _)
+
+/-- The old exact Tensor sweep remains an explicit special case through both adapters. -/
+theorem exact_sweep_eq_tensor [Fintype D] (grid : TensorLinesDraft.TensorGrid D)
+    (solvers : D → TensorLinesDraft.LineSolver m)
+    (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+    (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ) :
+    CoordinateLineBalance.sweep grid.cellVolume
+      (guardedRule (fieldMethods (ReturnedFieldCoordinateSweepDraft.exactMethods solvers))
+        grid.faceArea fallback) stages state =
+      orderedOperatorSweep (stages.map fun stage =>
+        TensorLinesDraft.advanceDirection grid solvers stage.1 stage.2) state := by
+  rw [sweep_ofField]
+  exact ReturnedFieldCoordinateSweepDraft.exact_sweep_eq_tensor grid solvers fallback stages state
+
+end NumStability.InformationCoordinateSweepDraft
