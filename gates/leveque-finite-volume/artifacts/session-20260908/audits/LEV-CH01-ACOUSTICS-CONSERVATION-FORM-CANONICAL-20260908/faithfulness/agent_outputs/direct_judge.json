@@ -1,0 +1,871 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-ACOUSTICS-CONSERVATION-FORM-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "c3733e8f329ed3a66abfdd73ddcd4bb85de1cd8e35780e267f22724a1514b793",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.constantLinearFlux",
+      "interpretation": "Maps a state vector to coefficient.mulVec state.",
+      "effect_on_target": "Fixes the flux to A q, hence (K u, ρ⁻¹ p).",
+      "source_match": "Matches the linear flux on printed page 4 and matrix (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.leveque01_equation05_linearAcousticsAt",
+      "reuse_sha256": "a3077ac54ccdd4e2bcda4a8819d944e09f108efcebf92732b4fa1c6c51bf614d",
+      "effect_on_target": "Introduces the acoustic premise through IsLinearAcousticsSolutionAt. The supplied inventory body resolves the reused interpretation's old D006 reference to current D007.",
+      "source_match": "The actual abbreviation preserves both equations (1.5), their parameters, and their evaluation point.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.leveque01_equation08_conservationLawAt",
+      "interpretation": "Abbreviates IsConservationLawSolutionAt for a Fin m state.",
+      "effect_on_target": "The conclusion uses D006 with m = 2.",
+      "source_match": "Matches the differential conservation form (1.8).",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.linearAcousticsMatrix",
+      "reuse_sha256": "a378bdc08c7bb3f0476c05cd79d442ec0528938a731329c94fbbad9112d9ac6b",
+      "effect_on_target": "Selects rows (0,K) and (ρ⁻¹,0) for the flux matrix.",
+      "source_match": "Exactly the matrix in (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.linearAcousticsState",
+      "reuse_sha256": "390dc00d7ed798ba82c3be2baabab7cb81a7ac24e6a26ec95fa374f04e657d6e",
+      "effect_on_target": "Places pressure first and particle velocity second at the same x,t.",
+      "source_match": "Preserves q = (p,u) in (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.IsConservationLawSolutionAt",
+      "interpretation": "There exist vector derivatives qt and fluxx of the time slice of q and spatial slice of flux composed with q, respectively, with qt + fluxx = 0.",
+      "effect_on_target": "Requires actual derivatives and both component conservation equations at x,t.",
+      "source_match": "Represents (1.8) with the acoustic flux; does not assert an integral identity without analytic hypotheses.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "NumStability.IsLinearAcousticsSolutionAt",
+      "reuse_sha256": "d85a8e4b01b42877f5faf14ca92760a6058742a4d0ec3f535dd859e566cab16b",
+      "effect_on_target": "Requires all four scalar slice derivatives and the equalities pt + K ux = 0 and ut + ρ⁻¹ px = 0.",
+      "source_match": "Exactly the classical acoustic equations (1.5) with their derivative existence made explicit.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "NumStability.IsConservationLawSolutionAt._proof_1",
+      "interpretation": "Certifies continuity of pointwise real scalar multiplication on real-valued functions with the product topology.",
+      "effect_on_target": "Supplies the continuity instance for vector-valued derivatives.",
+      "source_match": "Supports ordinary differentiation of the finite real state vector in (1.8).",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "NumStability.IsLinearAcousticsSolutionAt._proof_1",
+      "reuse_sha256": "f5df6babdaab390c40564f2bb69d668d83bc11eb32e0121cc6b5e18534108584",
+      "effect_on_target": "Supplies continuous real scalar multiplication for the scalar derivative predicates.",
+      "source_match": "Matches the real calculus used in (1.5).",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "Fin",
+      "interpretation": "The standard finite index type Fin n, used here at n = 2.",
+      "effect_on_target": "Indexes exactly the two state components and matrix rows and columns.",
+      "source_match": "Matches the two-dimensional state in (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "Fin.fintype",
+      "interpretation": "Enumerates Fin n using List.finRange n, with completeness and no duplicates.",
+      "effect_on_target": "Matrix-vector multiplication sums over both indices of Fin 2.",
+      "source_match": "Matches ordinary multiplication of the two-by-two acoustic matrix.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Nat",
+      "interpretation": "The standard natural-number type at the library frontier.",
+      "effect_on_target": "Provides the dimension parameter 2.",
+      "source_match": "Encodes the number of components in (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Ne",
+      "reuse_sha256": "1634be3503d90ffe3079bd2b27d3503b6899e174a1b54659b925aa53879d5443",
+      "effect_on_target": "Excludes density = 0.",
+      "source_match": "Makes explicit the ordinary reciprocal's implicit domain in (1.5).",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "OfNat.ofNat",
+      "interpretation": "Projects the numeral value from its OfNat instance.",
+      "effect_on_target": "Interprets the displayed zero and dimension literals in their selected types.",
+      "source_match": "Preserves numerical constants in the acoustic system.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "Real",
+      "interpretation": "The library real-number type at the external frontier.",
+      "effect_on_target": "All function arguments, values, and coefficients are real.",
+      "source_match": "Matches the inherited real setting following (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Real.instZero",
+      "interpretation": "Selects Real.zero as the real zero.",
+      "effect_on_target": "Supplies zero for the density exclusion and scalar equations.",
+      "source_match": "Matches zero in (1.5) and (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "Zero.toOfNat0",
+      "interpretation": "Interprets numeral 0 using the selected Zero instance.",
+      "effect_on_target": "Connects literal zeros to scalar or vector zero.",
+      "source_match": "Preserves the zero right-hand sides.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "instOfNatNat",
+      "reuse_sha256": "e258efeadde08c88420178b71188035dbc3de153c4c11b7a72059be5fee0691e",
+      "effect_on_target": "Makes Fin 2 use the natural number two.",
+      "source_match": "Matches the two acoustic components.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "DFunLike.coe",
+      "reuse_sha256": "f321b7d8024d6e7d8bedd31301ee8c4c2e16dc1e72564287f8992ebf4988d867",
+      "effect_on_target": "Permits applying the Matrix.of equivalence to the entry function.",
+      "source_match": "Introduces no change to the entries of (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "Equiv",
+      "reuse_sha256": "e81100ebf087f03b494a5bebbcc234026d4d27e1e9894987cedb6dc34cebf117",
+      "effect_on_target": "Packages the identity conversion from entry functions to matrices.",
+      "source_match": "Does not transform the acoustic state or change its basis.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "Equiv.instEquivLike",
+      "reuse_sha256": "cab16237673e8a03570fc7058593aa5ec2b0d733a6c8685dafa3f13f5bd8eb27",
+      "effect_on_target": "Uses Matrix.of's forward function.",
+      "source_match": "Preserves the displayed acoustic matrix entries.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "EquivLike.toFunLike",
+      "reuse_sha256": "247ccd5c009e102fecc38165f5c36fdaaf3f7b451fbc20d34e6739b663f00eaf",
+      "effect_on_target": "Retains the forward coercion used to construct D004.",
+      "source_match": "Leaves matrix (1.6) unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "Fintype",
+      "interpretation": "The library structure providing a complete finite enumeration of a type.",
+      "effect_on_target": "Supports finite matrix sums over Fin 2.",
+      "source_match": "Matches the finite-dimensional matrix operation in (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "Inv.inv",
+      "reuse_sha256": "8baea9e41749c380625824bbf863a0e952b08e092c425f9a4eb1bc6076ab1a47",
+      "effect_on_target": "Applies real inversion to density.",
+      "source_match": "Represents 1/ρ in (1.5) and (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "Matrix",
+      "interpretation": "A matrix is a function from a row index to a column index to an entry.",
+      "effect_on_target": "D004 is a Fin 2 by Fin 2 real entry function.",
+      "source_match": "Matches the shape and row-column roles of (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "Matrix.mulVec",
+      "interpretation": "At each row, takes the dot product of that row with the input vector.",
+      "effect_on_target": "Computes flux components 0p + Ku and ρ⁻¹p + 0u.",
+      "source_match": "Implements f(q) = Aq with the source's orientation.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "Matrix.of",
+      "reuse_sha256": "008383e869df4087726bc5f500b14935a3ddc22b0a9d5d6b6c85e5f56d208eb4",
+      "effect_on_target": "Converts the specified entry function into a matrix by identity.",
+      "source_match": "No transpose or permutation of (1.6) occurs.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "Matrix.vecCons",
+      "reuse_sha256": "06312230ed6867d536569a897ace84db8fcbe94be4a598f1a45a5dfa0fb54533",
+      "effect_on_target": "Builds the state and matrix in their displayed order.",
+      "source_match": "Preserves pressure before velocity and the rows of (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "Matrix.vecEmpty",
+      "reuse_sha256": "5dfd503a45e3f1be29b728722ecb717397df8cf14de463cf7300a6b7d19fc8ce",
+      "effect_on_target": "Terminates the finite vector constructors after the specified entries.",
+      "source_match": "Adds no hidden components to (1.6).",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "interpretation": "Forgets associativity structure while retaining the underlying ring operations and commutativity.",
+      "effect_on_target": "Part of the real arithmetic instance used for matrix multiplication.",
+      "source_match": "Leaves ordinary real arithmetic unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "interpretation": "Projects the underlying nonunital nonassociative ring.",
+      "effect_on_target": "Preserves addition and multiplication along the matrix arithmetic instance path.",
+      "source_match": "No change to the arithmetic in Aq.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "interpretation": "Retains the additive monoid and multiplication with distributivity and zero laws.",
+      "effect_on_target": "Supplies the operations required by Matrix.mulVec.",
+      "source_match": "Computes standard real row dot products.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "interpretation": "Extracts the underlying nonunital commutative ring.",
+      "effect_on_target": "Connects real normed structure to matrix arithmetic.",
+      "source_match": "Preserves the real coefficient algebra.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "interpretation": "Retains norm, metric, addition, and multiplication while forgetting the unit requirement.",
+      "effect_on_target": "Provides a compatible parent instance for real matrix arithmetic.",
+      "source_match": "Introduces no modified norm or arithmetic into the conservation law.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "Real.instInv",
+      "reuse_sha256": "85306232d1e49322285e8dcea891e276765e5e1f9a97408d261ed4ab1d496b15",
+      "effect_on_target": "Selects the real reciprocal in the acoustic coefficient.",
+      "source_match": "With density ≠ 0, matches ordinary 1/ρ.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "Real.normedCommRing",
+      "interpretation": "Combines the real normed additive group with real commutative ring operations.",
+      "effect_on_target": "Provides real arithmetic and metric structure for flux multiplication and calculus.",
+      "source_match": "Matches the source's real vector calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "Requires all derivative conditions and both scalar equations together.",
+      "source_match": "Neither acoustic equation is optional.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "DenselyNormedField.toNontriviallyNormedField",
+      "interpretation": "Retains the normed field and supplies nontriviality of its norm.",
+      "effect_on_target": "Instantiates real scalar calculus.",
+      "source_match": "Uses the ordinary real field for derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "DivisionSemiring.toSemiring",
+      "interpretation": "Projects the underlying semiring.",
+      "effect_on_target": "Supplies real addition and multiplication for module instances.",
+      "source_match": "Preserves real linear calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "Eq",
+      "interpretation": "Equality of two values of the same type.",
+      "effect_on_target": "Requires exact zero residuals, including equality of the entire vector.",
+      "source_match": "Matches exact mathematical PDE equalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Exists",
+      "interpretation": "Existential quantification over a witness satisfying a predicate.",
+      "effect_on_target": "Binds actual derivative values locally after the functions and point are fixed.",
+      "source_match": "Expresses existence of the derivatives implicit in classical PDE notation.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "Field.toSemifield",
+      "interpretation": "Retains field addition, multiplication, inverse, and division in a semifield structure.",
+      "effect_on_target": "Supplies compatible scalar algebra to derivative instances.",
+      "source_match": "No change to the real coefficients or their reciprocal.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "HAdd.hAdd",
+      "interpretation": "Projects the selected heterogeneous addition operation.",
+      "effect_on_target": "Uses real addition in the premise and pointwise vector addition in the conclusion.",
+      "source_match": "Matches the plus signs in (1.5) and (1.8).",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "HMul.hMul",
+      "reuse_sha256": "7cd56939992aca7736e51b62d813fb42ce559f0819ac1e67eb9c22b28c872296",
+      "effect_on_target": "Multiplies scalar acoustic coefficients by derivative values.",
+      "source_match": "Matches K u_x and (1/ρ)p_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "HasDerivAt",
+      "interpretation": "The derivative predicate at a point, defined through HasDerivAtFilter with the neighborhood of that point and the fixed base point.",
+      "effect_on_target": "Requires genuine ordinary slice derivatives, using real or finite-product codomains.",
+      "source_match": "Matches partial differentiation in (1.5) and (1.8), with the other variable held fixed.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "interpretation": "Projects the additive commutative monoid structure.",
+      "effect_on_target": "Provides scalar addition and zero in module construction.",
+      "source_match": "Preserves the real additive structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "Projects the underlying seminormed ring without the commutativity field.",
+      "effect_on_target": "Carries the same real norm and algebra into calculus instances.",
+      "source_match": "No change to the real analytic setting.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "Retains norm, additive group, and pseudometric.",
+      "effect_on_target": "Supplies the real additive analytic structure used by derivatives.",
+      "source_match": "Matches ordinary real differentiation.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "NonUnitalSemiring.toNonUnitalNonAssocSemiring",
+      "interpretation": "Projects a weaker semiring structure without changing operations.",
+      "effect_on_target": "Preserves the real arithmetic needed by module instances.",
+      "source_match": "No coefficient or operation is altered.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "NontriviallyNormedField.toNormedField",
+      "interpretation": "Projects the underlying normed field.",
+      "effect_on_target": "Retains real field and metric data for calculus.",
+      "source_match": "Matches the real domain and codomain.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "Retains norm, ring, and pseudometric data.",
+      "effect_on_target": "Provides compatible real analytic parent instances.",
+      "source_match": "No alternative topology is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "NormedField.toField",
+      "interpretation": "Projects the field structure from a normed field.",
+      "effect_on_target": "Supplies standard real field algebra to derivative modules.",
+      "source_match": "Matches the source's real scalar field.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "Makes a normed field a normed space over itself through its multiplication module.",
+      "effect_on_target": "Real scalar multiplication on scalar derivative values is real multiplication.",
+      "source_match": "Matches scalar real calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "NormedSpace.toModule",
+      "interpretation": "Projects the underlying scalar module.",
+      "effect_on_target": "Retains real scalar multiplication for derivative predicates.",
+      "source_match": "No change to scalar action in the PDE.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "Pi.Function.module",
+      "interpretation": "Uses the pointwise module structure on functions I → β.",
+      "effect_on_target": "Makes Fin 2 → Real the usual real vector space.",
+      "source_match": "Matches the state space ℝ².",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "Pi.addCommGroup",
+      "interpretation": "Constructs the function-space additive commutative group from pointwise groups.",
+      "effect_on_target": "Supports vector-valued derivatives with componentwise additive operations.",
+      "source_match": "Matches addition of real state vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "Pi.instAdd",
+      "interpretation": "Adds two functions separately at each index.",
+      "effect_on_target": "The conservation residual has components pt + K ux and ut + ρ⁻¹ px.",
+      "source_match": "Preserves both equations individually.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "Pi.instZero",
+      "interpretation": "The zero function with value zero at every index.",
+      "effect_on_target": "The vector residual must vanish in both components.",
+      "source_match": "Matches the zero vector in (1.8).",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "Pi.topologicalSpace",
+      "interpretation": "The product topology generated by coordinate evaluation maps.",
+      "effect_on_target": "Vector derivative convergence is coordinatewise for the two real components.",
+      "source_match": "Matches the ordinary finite-dimensional topology of ℝ².",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "Projects the uniform structure underlying a pseudometric space.",
+      "effect_on_target": "Transfers the real metric to the topology used in differentiation.",
+      "source_match": "Preserves ordinary real neighborhoods.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "Real.denselyNormedField",
+      "interpretation": "Extends Real.normedField with density of norm values.",
+      "effect_on_target": "Provides the real scalar field instance required by HasDerivAt.",
+      "source_match": "Uses the source's real calculus setting.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "Real.instAdd",
+      "interpretation": "Selects real addition.",
+      "effect_on_target": "Adds the scalar terms in both residuals.",
+      "source_match": "Matches addition in the source equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "Real.instAddCommGroup",
+      "interpretation": "Supplies the inferred standard real additive commutative group.",
+      "effect_on_target": "Supports scalar and vector derivative codomains.",
+      "source_match": "Matches the additive group of ℝ.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "Real.instMul",
+      "interpretation": "Selects real multiplication.",
+      "effect_on_target": "Forms coefficient products and scalar actions.",
+      "source_match": "Matches multiplication in (1.5) and Aq.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Real.instRing",
+      "interpretation": "Supplies the inferred standard real ring structure.",
+      "effect_on_target": "Provides compatible algebra for derivative module instances.",
+      "source_match": "Matches real coefficient arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Real.normedField",
+      "interpretation": "Combines the real field with its standard normed additive group and metric.",
+      "effect_on_target": "Fixes the field, inverse, norm, and metric used in real differentiation.",
+      "source_match": "Matches classical real calculus; density ≠ 0 avoids the totalized inverse at zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "Uses distance |x − y| on the reals.",
+      "effect_on_target": "Supplies the coordinate topology on the state vector.",
+      "source_match": "Matches the standard topology of each real component.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Ring.toSemiring",
+      "interpretation": "Projects the underlying semiring.",
+      "effect_on_target": "Retains real addition and multiplication for scalar modules.",
+      "source_match": "Preserves the source arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "Semifield.toDivisionSemiring",
+      "interpretation": "Retains semiring operations, inverse, and division in the parent structure.",
+      "effect_on_target": "Carries real field operations into the calculus instance chain.",
+      "source_match": "Does not modify the reciprocal or coefficient algebra.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "Retains norm, additive operations, multiplication, and pseudometric while forgetting the unit.",
+      "effect_on_target": "Provides compatible additive analytic instances.",
+      "source_match": "Leaves ordinary real calculus unchanged.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "Semiring.toNonUnitalSemiring",
+      "interpretation": "Projects the underlying nonunital semiring.",
+      "effect_on_target": "Provides unchanged real arithmetic for the additive module path.",
+      "source_match": "No mathematical restriction or altered operation results.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "Projects the topology from a uniform space.",
+      "effect_on_target": "Supplies real neighborhood topology to derivative predicates.",
+      "source_match": "Matches ordinary partial derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "instHAdd",
+      "interpretation": "Uses a type's Add operation as its same-type HAdd operation.",
+      "effect_on_target": "Resolves addition notation to scalar or pointwise vector addition.",
+      "source_match": "Preserves the plus signs and component structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "instHMul",
+      "reuse_sha256": "0130a6d5cd0ad656212ee661eecc7b2f64f03da40607d260fbb6a815f0af3601",
+      "effect_on_target": "Resolves coefficient products to real multiplication.",
+      "source_match": "Matches K u_x and ρ⁻¹ p_x.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "AddCommMonoid.toAddMonoid",
+      "interpretation": "Projects the additive monoid without changing addition or zero.",
+      "effect_on_target": "Supplies additive structure for scalar actions.",
+      "source_match": "Preserves real addition in calculus.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "ContinuousSMul",
+      "interpretation": "The library proposition that the selected scalar action is jointly continuous.",
+      "effect_on_target": "A discharged structural requirement of derivative codomains.",
+      "source_match": "Does not add a hypothesis on pressure or velocity beyond their stated derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "DistribMulAction.toMulAction",
+      "interpretation": "Projects the multiplicative action from a distributive action.",
+      "effect_on_target": "Retains the real scalar action used in D008.",
+      "source_match": "Matches ordinary scalar multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "Module.toDistribMulAction",
+      "interpretation": "Projects the distributive scalar action of a module.",
+      "effect_on_target": "Carries real module multiplication to the continuity instance.",
+      "source_match": "Preserves standard linear structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "Monoid.toSemigroup",
+      "interpretation": "Projects the semigroup operation from a monoid.",
+      "effect_on_target": "Retains multiplication in the scalar-action instance path.",
+      "source_match": "No change to real multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "MonoidWithZero.toMonoid",
+      "interpretation": "Projects the multiplicative monoid.",
+      "effect_on_target": "Supplies the scalar monoid for module actions.",
+      "source_match": "Preserves the source's real scalar algebra.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "MulAction.toSemigroupAction",
+      "interpretation": "Projects the underlying semigroup action.",
+      "effect_on_target": "Retains the real action when forming scalar multiplication.",
+      "source_match": "Introduces no transformed scalar action.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "NormedField.toNormedCommRing",
+      "interpretation": "Retains norm, ring, and metric from a normed field.",
+      "effect_on_target": "Supplies the real metric structure underlying domain topology.",
+      "source_match": "Matches the standard topology for real derivatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "Pi.instSMul",
+      "interpretation": "Acts on a function by scalar multiplication at each coordinate.",
+      "effect_on_target": "Makes vector differentiation use the same real scalar on both components.",
+      "source_match": "Matches the usual scalar action on ℝ².",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "SemigroupAction.toSMul",
+      "interpretation": "Projects scalar multiplication from a semigroup action.",
+      "effect_on_target": "Selects the action underlying vector-coordinate scalar multiplication.",
+      "source_match": "Preserves ordinary real multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "SeminormedCommRing.toSeminormedRing",
+      "interpretation": "Projects the seminormed ring with the same norm and operations.",
+      "effect_on_target": "Provides the real metric parent used by derivative topology.",
+      "source_match": "No alternative notion of convergence is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "SeminormedRing.toPseudoMetricSpace",
+      "interpretation": "Projects the underlying pseudometric space.",
+      "effect_on_target": "Connects the standard real norm to neighborhoods.",
+      "source_match": "Matches classical real derivative limits.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "Semiring.toMonoidWithZero",
+      "interpretation": "Retains multiplication, one, zero, and natural powers in a multiplicative parent structure.",
+      "effect_on_target": "Provides the scalar monoid underlying module actions.",
+      "source_match": "Preserves real scalar multiplication and zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D088",
+      "name": "instSMulOfMul",
+      "reuse_sha256": "ee8475fea59ff240ad90f8f9c03a0c6b5da1b8ead46e9937b797c43d1e2c5e3e",
+      "effect_on_target": "Identifies scalar multiplication on Real with real multiplication in the acoustic derivative predicate.",
+      "source_match": "Matches the scalar calculus used for p and u.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached rendering of raw page 26, printed page 4, explicitly identifies constant-coefficient equations (1.5) as conservation laws for pressure and velocity. Raw pages 23–25 provide (1.1), (1.5), (1.6), and (1.8); page 26 begins with f(q) = Aq.",
+      "lean_evidence": "The proof-free header and both elaborated types assert that the acoustic premise yields conservation form for the acoustic state with its constant matrix flux.",
+      "reasoning": "The selected mathematical assertion and inherited definitions agree. Source and dossier hashes are supplied provenance; I did not independently recompute them."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Printed page 1 sets real space and time and real vector states; (1.6) fixes q = (p,u).",
+      "lean_evidence": "pressure and velocity have type Real → Real → Real; K, density, x, and t are Real; the explicit conclusion fixes m = 2 and Fin 2.",
+      "reasoning": "Currying preserves the two real arguments. The state has exactly the intended two real components."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "Equations (1.5) and (1.8) apply at the space-time point for arbitrary state functions satisfying the respective PDE.",
+      "lean_evidence": "All functions, coefficients, and x,t are universally quantified before the premises; derivative witnesses in D007 and D006 depend on those choices.",
+      "reasoning": "No derivative witness is required uniformly across different points. Applying the theorem at every point gives the corresponding assertion for a classical solution."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The source calls K and ρ constants, uses 1/ρ, and uses classical partial derivative notation in (1.5). It specifies no positivity inequalities for this algebraic rewriting.",
+      "lean_evidence": "K and density are scalar parameters; hdensity excludes zero; D007 requires all four indicated partial derivatives and both acoustic equations.",
+      "reasoning": "Nonzero density makes the ordinary reciprocal domain explicit. Actual derivative existence is appropriate for the classical differential claim. No global smoothness or positivity assumption is added."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected sentence concerns pressure and velocity together. Equations (1.6), (1.8), and f(q) = Aq identify their differential conservation form.",
+      "lean_evidence": "D006 concludes a two-component vector equation for q = (p,u) and flux (Ku,ρ⁻¹p).",
+      "reasoning": "Both component conservation equations are represented. The surrounding integral framework and qualitative physical limitation are context, not additional conclusions of this differential rewriting; the target asserts neither unconditional integral equivalence nor exact physical conservation."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source specifies partial derivatives, a matrix acting on a column state, and the spatial derivative of flux composed with state.",
+      "lean_evidence": "D001, D025, and D026 implement row matrix-vector multiplication; D006 and D045 implement genuine slice derivatives; D057–D059 implement componentwise vector operations and product topology.",
+      "reasoning": "The declarations give the intended operators. The D002 reuse text contains an old task-local dependency number, but the supplied complete inventory explicitly resolves its body to current D007."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The acoustic system can be expressed as a conservation law, with exact equality to zero in (1.5) and (1.8).",
+      "lean_evidence": "The theorem is an implication from the acoustic predicate to the conservation predicate; D006 requires exact vector equality qt + fluxx = 0.",
+      "reasoning": "The target has the selected assertion's direction and exact mathematical strength. It does not replace simultaneous equations with a disjunction or an approximate residual."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "Printed page 2 distinguishes pressure perturbation p, particle velocity u, and material constants K and ρ; (1.6) orders the state as (p,u).",
+      "lean_evidence": "D005 uses the original pressure and velocity functions in that order; D004 and D001 construct their flux without changing the state.",
+      "reasoning": "The state is not replaced by characteristic variables, momentum, or energy. The arbitrary real pressure function can represent the stated pressure perturbation."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (1.6) has rows (0,K) and (1/ρ,0), and printed page 4 gives f(q) = Aq.",
+      "lean_evidence": "D004 has those rows and D026 multiplies rows by the column state.",
+      "reasoning": "The flux is exactly (Ku,p/ρ), with the same constant coefficients and no transpose, sign change, or index offset."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The selected claim is the one-dimensional, two-component, constant-coefficient acoustic conservation-form observation. Its inherited linear-flux explanation is algebraic.",
+      "lean_evidence": "The target fixes the same dimension and scalar field, quantifies arbitrary real x,t and constant K,ρ, and excludes only zero density.",
+      "reasoning": "Pointwise formulation is a natural expression of the local differential identity. The lack of positivity restrictions is consistent with the algebraic claim and is not treated as a separate claim about physically realizable materials."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The displayed reciprocal 1/ρ is undefined at zero in ordinary real notation. The conservation-form observation does not use a sound-speed square root or inverse of K.",
+      "lean_evidence": "hdensity excludes zero. K may be zero; derivative existence is asserted rather than inferred from a totalized derivative function.",
+      "reasoning": "The undefined reciprocal case is excluded. K = 0 remains an algebraically valid rewriting. No boundary or discontinuous-solution assertion is silently added."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The acoustic equations describe nontrivial waves, and the conservation-law description is a structural rewriting of them.",
+      "lean_evidence": "For K = ρ = 1, p(x,t) = u(x,t) = x − t has pt = ut = −1 and px = ux = 1, satisfying D007 everywhere. Its flux derivative is (1,1) and time derivative is (−1,−1).",
+      "reasoning": "The premises have nonconstant solutions with nonzero derivatives. Fin 2 is nonempty, and the derivative witnesses are constrained by HasDerivAt, so the conclusion is not vacuous."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage identifies a continuous PDE conservation form without specifying a numerical algorithm or discretization.",
+      "lean_evidence": "The target contains functions, derivatives, a constant matrix, and a flux predicate only.",
+      "reasoning": "There is no algorithm, recurrence, or execution semantics to preserve."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "Equations (1.5) and (1.6) specify two component equations with state order pressure then velocity.",
+      "lean_evidence": "D005 preserves that order; D026 uses row dot products; D057 and D058 make vector equality to zero componentwise; D059 uses the finite product topology.",
+      "reasoning": "Neither a scalar aggregate residual nor a norm replaces the two equations. Analytic instances provide the usual topology and introduce no norm estimate."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected mathematical assertion is a conservation-form identity, with no numerical error or stability estimate.",
+      "lean_evidence": "There is no error, conditioning, stability, or truncation quantity in the target.",
+      "reasoning": "No numerical error or stability notion is being formalized."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "Printed page 4 separates mathematical conservation-law form from the approximate physical conservation interpretation for small disturbances in uniform media.",
+      "lean_evidence": "The target asserts exact equations for the functions satisfying the linear acoustic model and contains no claim identifying them with exact conserved quantities of the full physical system.",
+      "reasoning": "Exactness within the stated model is preserved without turning the physical approximation into an exact physical law."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The physical qualification is qualitative; the selected algebraic conservation-form claim has no asymptotic parameter, remainder, or limit.",
+      "lean_evidence": "The proposition has no asymptotic or approximation operator.",
+      "reasoning": "No quantitative asymptotic statement is selected, and none is silently promoted to an exact identity."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The classical equations use partial derivatives. Section 1.1.2 separately invokes sufficient smoothness for passage between integral and differential descriptions.",
+      "lean_evidence": "D007 requires the relevant scalar derivatives; D006 requires the resulting vector derivatives. No solution existence, uniqueness, matrix invertibility, or integral equivalence is asserted.",
+      "reasoning": "The regularity needed for this local constant-flux rewriting is present. The theorem does not rely on unsupported well-posedness or differentiation-under-the-integral assumptions."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "For any classical acoustic solution with constant K and nonzero ρ, instantiate the theorem at each x,t. Expanding the supplied state, matrix, flux, and conservation predicate gives ∂t(p,u) + ∂x(Ku,ρ⁻¹p) = (0,0). These are the pressure and velocity conservation equations obtained from (1.6), (1.8), and f(q) = Aq. This establishes the selected mathematical conservation-form observation. It neither asserts exact physical conservation nor claims an integral identity from a single pointwise hypothesis."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's acoustic equations (1.5), matrix (1.6), and constant linear flux explanation identify the same local rewriting. For the derivative witnesses required by D007, ordinary differentiation of constant multiples yields time derivative (pt,ut) of the state and spatial derivative (Kux,ρ⁻¹px) of its flux. Both components of their sum vanish by (1.5), providing exactly D006. The explicit nonzero density premise reflects the ordinary reciprocal domain, and the derivative witnesses make the classical notation precise."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "reuse-local-id-reference",
+      "source_evidence": "Equation (1.5) is the two-equation acoustic premise.",
+      "lean_evidence": "D002's reused interpretation says 'Abbreviation for D006', using its earlier task-local numbering. The complete supplied inventory explicitly defines D002 as IsLinearAcousticsSolutionAt, which is D007 in this packet.",
+      "impact": "The inline declaration resolves the numbering discrepancy completely. The current target's premise is the acoustic predicate, not the conservation predicate, and the assessment does not treat the implication as a tautological abbreviation."
+    },
+    {
+      "severity": "note",
+      "category": "scope-of-conservation-form",
+      "source_evidence": "Printed pages 3–4 supply differential form (1.8), linear flux Aq, surrounding integral form (1.10), and a separate physical qualification.",
+      "lean_evidence": "The target concludes differential conservation form at an arbitrary point for the original two-component acoustic state.",
+      "impact": "Acceptance concerns the selected mathematical conservation-form assertion. The target does not separately formalize endpoint integral identities or the qualitative accuracy of the physical approximation."
+    }
+  ],
+  "rationale": "Inspection of the four attached primary-source pages and all supplied dependencies shows that the target preserves the real domain, both acoustic components, their order, constant coefficients, genuine partial derivatives, and the flux (Ku,p/ρ). Nonzero density is the reciprocal's implicit source domain, and the premises admit nonconstant solutions. The differential conservation-form assertion is equivalent to the selected source claim in its classical mathematical context. The only reuse-numbering discrepancy is resolved by the exact inline declaration body; no semantic uncertainty remains."
+}

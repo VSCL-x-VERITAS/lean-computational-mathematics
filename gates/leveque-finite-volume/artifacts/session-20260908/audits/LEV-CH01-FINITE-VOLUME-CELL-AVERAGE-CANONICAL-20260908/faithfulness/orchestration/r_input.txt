@@ -1,0 +1,996 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 fd098efa88ec8ed5949e91cbf1b8d074b2c6ae85917099121657cec188944fc8
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.2 paragraph defining the cell average as the cell integral divided by cell volume",
+      "location": "raw PDF page 27; printed Chapter 1 page 5"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-FINITE-VOLUME-CELL-AVERAGE-CANONICAL-20260908"
+}
+
+
+Source contract SHA256 578ac94df58a9d37e80588306504347b1a54fb2fe1e2c1b91de882285fab1f89
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-FINITE-VOLUME-CELL-AVERAGE-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "“cell average of q, which is this integral divided by the volume of the cell”",
+      "observation": "The selected passage defines the cell average as the integral of q over that cell divided by the cell's volume."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "“break the domain into grid cells” and “approximate the total integral of q over each grid cell”",
+      "observation": "The definition applies separately to each grid cell. Finite volume methods approximate these integral quantities, or their normalized cell averages."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "“based on the integral form (1.10)” and “modified in each time step by the flux through the edges”",
+      "observation": "The definition is embedded in a description of finite volume methods for conservation laws, with approximate cell averages updated using fluxes through cell edges."
+    },
+    {
+      "location": "Raw PDF page 26; printed page 4; Section 1.1.1, equation (1.10) and following paragraph",
+      "anchor": "d/dt ∫ from x₁ to x₂ q(x,t) dx = f(q(x₁,t)) − f(q(x₂,t)); “Each component of q measures the density”",
+      "observation": "The inherited integral formulation integrates the spatial variable at a given time. The components of q represent densities of conserved quantities."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; paragraph following equation (1.1)",
+      "anchor": "“q : ℝ × ℝ → ℝᵐ” and “a vector with m components”",
+      "observation": "The chapter introduces q as a time-dependent, vector-valued function of one spatial variable and time; the subsequent scalar case has m = 1."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; paragraph preceding Section 1.2 and first paragraph of Section 1.2",
+      "anchor": "“At a discontinuity in q” and “the integral conservation law (1.10) is the more fundamental equation”",
+      "observation": "The surrounding discussion explicitly includes discontinuous solutions and motivates using integral quantities."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "q is the quantity being averaged, inherited from the chapter's solution field q(x,t); it may have m real components, including the scalar case m = 1 [printed page 1, paragraph following (1.1)].",
+      "A grid cell C is selected from the division of the spatial domain; the definition applies to each such cell [printed page 5, Section 1.2, first paragraph, 'each grid cell'].",
+      "Time t is a parameter when averaging the time-dependent field spatially; this is inherited from the spatial integral q(x,t) dx in (1.10), rather than explicitly bound in the selected sentence [printed page 4, equation (1.10)]."
+    ],
+    "hypotheses": [
+      "The spatial domain is divided into grid cells [printed page 5, Section 1.2, first paragraph, 'break the domain into grid cells'].",
+      "The cell integral and division by cell volume must be meaningful. This is an analyst-explicated prerequisite of the stated quotient, not an explicit source hypothesis specifying integrability or nonzero volume [printed page 5, Section 1.2, definition of cell average]."
+    ],
+    "conclusions": [
+      "For each grid cell, the cell average of q is its integral over that cell divided by that same cell's volume. Using analyst-introduced notation C and Avg, the one-dimensional contextual expression is Avg_C(q,t) = (∫_C q(x,t) dx) / volume(C) [printed page 5, Section 1.2, definition of cell average; printed page 4, equation (1.10), for the spatial integration convention]."
+    ],
+    "definitions_and_conventions": [
+      "A cell average is a normalized cell integral; its normalizing quantity is the volume of the cell being integrated over [printed page 5, Section 1.2, 'this integral divided by the volume of the cell'].",
+      "The exact cell average and the numerical approximation to it have distinct roles: the passage defines the former and describes methods approximating it [printed page 5, Section 1.2, 'approximate' and 'approximate cell averages'].",
+      "For vector-valued q, division by cell volume is scalar normalization of the integrated vector; this interpretation combines the chapter's vector-valued convention with the selected definition [printed page 1, paragraph following (1.1); printed page 5, Section 1.2]."
+    ],
+    "implicit_context": [
+      "The chapter's displayed integral law uses one spatial dimension, although the selected sentence uses the geometric term 'volume' without a dimension-specific formula [printed page 4, (1.10); printed page 5, Section 1.2].",
+      "Conservation laws and numerical flux updates motivate the definition; satisfying a particular PDE is not stated as a separate prerequisite for the averaging operation [printed page 5, Section 1.2, first paragraph].",
+      "Discontinuous solutions are within the intended application context; classical differentiability is not imposed by the selected definition [printed page 5, paragraph preceding Section 1.2 and Section 1.2 opening]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Spatial extent and normalization",
+        "details": [
+          "The integral covers the grid cell, and the denominator is that cell's volume; it is not a pointwise sample or the unnormalized integral [printed page 5, Section 1.2, first paragraph].",
+          "The definition is local to each cell and gives no explicit requirement that different cells have equal volumes [printed page 5, Section 1.2, 'each grid cell' and 'volume of the cell']."
+        ]
+      },
+      {
+        "topic": "Time and value type",
+        "details": [
+          "The inherited integral is spatial at a given time, not a time average [printed page 4, equation (1.10)].",
+          "The inherited q convention includes systems with multiple real components and the scalar special case [printed page 1, discussion following (1.1)]."
+        ]
+      },
+      {
+        "topic": "Nature of the claim",
+        "details": [
+          "The selected claim is a definition of cell average, not an error estimate, convergence theorem, or explicit numerical update formula [printed page 5, Section 1.2, first paragraph]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve both operations: integration over the cell and normalization by that cell's volume [printed page 5, Section 1.2, definition of cell average].",
+    "Preserve application to each grid cell, rather than replacing the cell by the entire computational domain [printed page 5, Section 1.2, 'each grid cell'].",
+    "Distinguish the exact average being defined from its numerical approximation [printed page 5, Section 1.2, 'approximate' and 'approximate cell averages'].",
+    "Do not attribute explicit smoothness, equal-cell-volume, or numerical flux formulas to this definition; the paragraph supplies none and is motivated by discontinuous solutions [printed page 5, Section 1.2, first paragraph]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The analytic domain of the averaging operation is not formally specified.",
+      "evidence": "Printed page 5, Section 1.2 defines a quotient of a cell integral by cell volume without stating an integration theory, integrability assumption, or finite positive volume hypothesis.",
+      "impact": "A formal statement must choose conditions making the quotient meaningful, but these conditions must be identified as formal explications rather than explicit source hypotheses. No convention for zero-volume cells is supplied."
+    },
+    {
+      "issue": "Cell geometry and dimension are not made explicit in the selected definition.",
+      "evidence": "Printed page 5, Section 1.2 uses 'grid cells' and 'volume'; the inherited integral law on printed page 4, (1.10), is over a one-dimensional interval.",
+      "impact": "An interval formulation follows the displayed context. A formulation for general measurable cells requires additional mathematical choices not expressly supplied by the selected sentence."
+    }
+  ],
+  "contract_plain_english": "For each spatial grid cell, the cell average of q is the integral of q over that cell divided by the cell's volume. Finite volume methods approximate this quantity [printed page 5, Section 1.2, first paragraph]. The chapter's context permits vector-valued q and treats spatial integration at a given time [printed page 1, paragraph following (1.1); printed page 4, (1.10)]. The selected passage does not specify analytic assumptions or conventions for degenerate cells [printed page 5, Section 1.2, definition of cell average]."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 9ece9ddb27db9592cb3fe7520e7d533e1e3c90e06df56947f772d312c1dc0ab5
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "62de33638fafec98124c7f90b54e3ad33222e4e8fedc457d80333ae5567b17c5",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "For a real normed vector space E, a function field : ℝ → E, endpoints left and right, and a vector average, this predicate means left < right and field is interval integrable between these endpoints and average equals LocalDef003 field left right.",
+      "effect_on_target": "The conclusion is a conjunction repeating both hypotheses and asserting equality with the specified normalized integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "The abbreviation sends state, left, and right to LocalDef003 state left right.",
+      "effect_on_target": "The candidate average is fixed by definition; the equality in the conclusion reduces to equality of an expression with itself.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "The vector obtained by multiplying the oriented interval integral of field from left to right by the real scalar (right − left)⁻¹.",
+      "effect_on_target": "Defines the exact candidate average, including its interval orientation and normalization.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "Fin",
+      "meaning": "Fin m is the finite index type of natural numbers i with 0 ≤ i < m.",
+      "effect_on_target": "State values are real coordinate vectors indexed by 0 through m − 1; when m = 0 there are no coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "Fin.fintype",
+      "meaning": "Provides a complete finite enumeration of Fin n using List.finRange n.",
+      "effect_on_target": "Supplies the finite indexing required by the product norm and normed vector space structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "InnerProductSpace.toNormedSpace",
+      "meaning": "Extracts the underlying normed vector space structure from an inner product space.",
+      "effect_on_target": "Supplies the real scalar normed space structure on each real coordinate; no inner product assertion is made.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "IntervalIntegrable",
+      "meaning": "IntervalIntegrable f μ a b means that f is integrable on (a,b] with respect to μ and also integrable on (b,a] with respect to μ.",
+      "effect_on_target": "Both the hypothesis and the conclusion require this conjunction. Since left < right, the second interval is empty.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LT.lt",
+      "meaning": "Extracts the strict comparison relation supplied by an LT instance.",
+      "effect_on_target": "With Real.instLT, expresses the strict ordering left < right.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "MeasureTheory.MeasureSpace.volume",
+      "meaning": "Extracts the distinguished measure from the selected measure space structure.",
+      "effect_on_target": "Fixes the same measure μ from Real.measureSpace for all integrability and integration expressions.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Nat",
+      "meaning": "The type of natural numbers, including zero.",
+      "effect_on_target": "The proposition quantifies over every finite dimension m, without a positivity assumption.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "meaning": "Extracts a nonunital seminormed ring structure by forgetting the commutativity requirement.",
+      "effect_on_target": "Part of the structure conversion supplying the seminormed additive structure on real coordinates; adds no hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "meaning": "Retains the norm, additive commutative group, and pseudometric of a nonunital seminormed ring.",
+      "effect_on_target": "Provides the additive seminormed structure used to construct the product real normed space.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "NormedAddCommGroup.toNormedAddGroup",
+      "meaning": "Retains the norm, additive group, and metric while forgetting additive commutativity as a required field.",
+      "effect_on_target": "Supplies coordinate normed additive groups for the product structure used in the integrability hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "NormedAddGroup.toENormedAddMonoid",
+      "meaning": "Builds an extended-normed additive monoid from a normed additive group using its associated continuous extended norm and addition.",
+      "effect_on_target": "Provides the extended norm structure required by IntervalIntegrable on the vector-valued state.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "meaning": "Retains the norm, ring operations, and pseudometric of a normed commutative ring as a seminormed commutative ring.",
+      "effect_on_target": "Participates in constructing the real coordinate seminormed additive structure without changing its operations.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "Pi.normedAddCommGroup",
+      "meaning": "Constructs the normed additive commutative group of a finite family of coordinate groups, using the norm and pseudometric inherited from Pi.seminormedAddGroup.",
+      "effect_on_target": "Makes Fin m → ℝ the normed additive commutative group in which the average and integral take values.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Pi.normedAddGroup",
+      "meaning": "Constructs a normed additive group on a finite product, retaining the norm, addition, and pseudometric from Pi.seminormedAddGroup.",
+      "effect_on_target": "Provides the product normed group underlying the integrability hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Pi.normedSpace",
+      "meaning": "Constructs a normed vector space on a finite product using the product module structure.",
+      "effect_on_target": "Supplies coordinatewise real scalar multiplication on Fin m → ℝ, including multiplication by (right − left)⁻¹.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Pi.topologicalSpace",
+      "meaning": "Defines the product topology through the topologies induced by all coordinate evaluation maps.",
+      "effect_on_target": "Uses the product of the real coordinate topologies for the state integrability condition.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the uniform space underlying a pseudometric space.",
+      "effect_on_target": "Transfers the real metric structure into the topology used on each coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "RCLike.toInnerProductSpaceReal",
+      "meaning": "Builds a real inner product space on an RCLike field using its real inner product and underlying normed algebra.",
+      "effect_on_target": "For ℝ, supplies an intermediate structure used to obtain the normed space of real coordinates; the target asserts no inner product property.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "The independent variable, endpoints, scalar coefficients, and every state coordinate are real.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "Real.instLT",
+      "meaning": "Supplies the strict order relation on ℝ through Real.lt.",
+      "effect_on_target": "Requires the left endpoint to be strictly smaller than the right endpoint.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Real.instRCLike",
+      "meaning": "Equips ℝ with an RCLike structure whose real-part map is the identity, imaginary-part map is zero, and distinguished imaginary element is zero.",
+      "effect_on_target": "Supports the real coordinate normed space construction; introduces no complex coordinates or extra variables.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Real.measureSpace",
+      "meaning": "A fixed measure space instance on ℝ, supplied here only by inferInstance; the resolved measure construction is not displayed.",
+      "effect_on_target": "Determines μ for both integrability and the average. Its identification and normalization as a particular concrete measure cannot be checked from the displayed body.",
+      "status": "unclear"
+    },
+    {
+      "id": "D026",
+      "name": "Real.normedAddCommGroup",
+      "meaning": "Equips ℝ with its real norm, additive commutative group, and metric.",
+      "effect_on_target": "Supplies the normed additive structure on every coordinate and the underlying norm used by the product construction.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "Real.normedCommRing",
+      "meaning": "Combines the real normed additive commutative group with the real commutative ring operations and their norm compatibility.",
+      "effect_on_target": "Provides the structural source for the real seminormed additive groups used in Pi.normedSpace.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "Real.normedField",
+      "meaning": "Equips ℝ with field operations and its norm, including multiplicative norm compatibility and the total inverse convention inv_zero.",
+      "effect_on_target": "Makes ℝ the scalar normed field. The strict endpoint inequality ensures that the particular scalar being inverted is nonzero.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "Defines real distance by d(x,y) = |x − y|, with the associated uniform structure.",
+      "effect_on_target": "Fixes the usual metric topology on the real coordinates used by the product topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "meaning": "Retains the seminorm, additive operations, multiplication, and pseudometric while forgetting the requirement of a multiplicative identity.",
+      "effect_on_target": "An intermediate conversion in the real coordinate structure; adds no restriction to state.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology associated with a uniform space.",
+      "effect_on_target": "Completes the passage from the real metric to the coordinate topology in the integrability hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "And",
+      "meaning": "Logical conjunction: both propositions must hold.",
+      "effect_on_target": "Combines the strict endpoint inequality, interval integrability, and average equality; also combines the two integrability conditions in IntervalIntegrable.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "Requires exact equality of coordinate vectors, equivalently equality at every index, between the candidate average and its defining expression.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "NormedAddCommGroup",
+      "meaning": "A commutative additive group equipped with a norm and compatible metric.",
+      "effect_on_target": "Provides the additive and analytic structure needed for vector integration and LocalDef001; the target uses the specified finite product instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "meaning": "Retains a normed additive commutative group's norm, additive operations, and pseudometric as a seminormed structure.",
+      "effect_on_target": "Makes the same vector norm and addition available to the generic normed space and topology constructions.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "NormedSpace",
+      "meaning": "A vector space over a normed field whose scalar action satisfies the required norm compatibility.",
+      "effect_on_target": "Allows real scalar multiplication of the vector-valued integral and supplies the module used in LocalDef003.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "meaning": "Extracts the pseudometric structure of a seminormed additive commutative group.",
+      "effect_on_target": "Provides the norm-derived analytic topology needed by the generic definitions.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "AddMonoid.toAddZeroClass",
+      "meaning": "Retains addition, zero, and the left and right additive identity laws of an additive monoid.",
+      "effect_on_target": "Supplies underlying zero and addition infrastructure for vector scalar multiplication and integration.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "AddZero.toZero",
+      "meaning": "Extracts the distinguished zero element from an additive structure with zero.",
+      "effect_on_target": "Provides the zero vector used by the underlying algebraic and integral structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "AddZeroClass.toAddZero",
+      "meaning": "Extracts addition and zero while forgetting the additive identity laws as explicit fields.",
+      "effect_on_target": "An intermediate projection supplying the zero vector; imposes no additional proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "DistribMulAction.toDistribSMul",
+      "meaning": "Retains scalar multiplication and its preservation of zero and addition from a distributive multiplicative action.",
+      "effect_on_target": "Passes the real vector space scalar action toward the scalar multiplication operation used to normalize the integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "DistribSMul.toSMulZeroClass",
+      "meaning": "Extracts scalar multiplication together with preservation of zero.",
+      "effect_on_target": "Part of the projection chain exposing the existing real scalar action.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "meaning": "Extracts the extended-seminormed additive commutative monoid underlying an extended-normed one.",
+      "effect_on_target": "Provides weaker analytic and additive infrastructure for the same vector space without changing its operations.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "meaning": "Retains the additive commutative monoid of an extended-seminormed additive commutative monoid.",
+      "effect_on_target": "Supplies commutative vector addition and zero for the module-related structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "meaning": "Extracts the extended-seminormed additive monoid while forgetting the commutativity requirement.",
+      "effect_on_target": "Part of the structure chain supplying the vector additive monoid.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "meaning": "Extracts the additive monoid underlying an extended-seminormed additive monoid.",
+      "effect_on_target": "Makes the same vector addition and zero available to scalar action constructions.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "HSMul.hSMul",
+      "meaning": "Extracts the scalar multiplication operation from a heterogeneous scalar multiplication instance.",
+      "effect_on_target": "Applies the real reciprocal of the interval length to the vector-valued integral.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "HSub.hSub",
+      "meaning": "Extracts the subtraction operation from a heterogeneous subtraction instance.",
+      "effect_on_target": "Expresses right − left in the normalization and the difference of the two restricted integrals in intervalIntegral.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "Inv.inv",
+      "meaning": "Extracts the inverse operation from an inverse instance.",
+      "effect_on_target": "Forms the real reciprocal (right − left)⁻¹.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "Module.toDistribMulAction",
+      "meaning": "Extracts the distributive multiplicative scalar action underlying a module.",
+      "effect_on_target": "Ensures the scalar multiplication in the average is the one from the selected real vector space.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "meaning": "Builds an extended-normed additive commutative monoid from a normed additive commutative group, preserving its additive structure and using its associated extended norm.",
+      "effect_on_target": "Supplies the analytic and additive structures needed inside the generic definitions.",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "NormedSpace.toModule",
+      "meaning": "Extracts the module underlying a normed vector space.",
+      "effect_on_target": "Provides the real scalar multiplication used in LocalDef003.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "Real.instInv",
+      "meaning": "Supplies the real inverse operation through Real.inv'.",
+      "effect_on_target": "Specifies that the normalization uses inversion in ℝ; under left < right this is the reciprocal of a positive length.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "Real.instMonoid",
+      "meaning": "Supplies the multiplicative monoid structure on ℝ by instance inference.",
+      "effect_on_target": "Supports composition and identity of real scalar actions; no separate monoid variable or hypothesis is introduced.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "Real.instSub",
+      "meaning": "Defines real subtraction a − b as a + (−b).",
+      "effect_on_target": "Fixes the denominator as right plus the negation of left.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "Real.semiring",
+      "meaning": "Supplies the semiring structure on ℝ by instance inference.",
+      "effect_on_target": "Provides scalar arithmetic required by the real module structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "SMulZeroClass.toSMul",
+      "meaning": "Extracts scalar multiplication from a scalar action that preserves zero.",
+      "effect_on_target": "Exposes the scalar multiplication subsequently used by instHSMul.",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "instHSMul",
+      "meaning": "Uses an ordinary scalar multiplication operation as a heterogeneous scalar multiplication with unchanged target type.",
+      "effect_on_target": "The normalization produces another vector in Fin m → ℝ.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "instHSub",
+      "meaning": "Uses ordinary subtraction as heterogeneous subtraction with all three types equal.",
+      "effect_on_target": "Preserves the usual subtraction operations on reals and on the vector space.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "intervalIntegral",
+      "meaning": "The oriented interval integral of f from a to b with respect to μ is the integral of f against μ restricted to (a,b], minus its integral against μ restricted to (b,a].",
+      "effect_on_target": "Since left < right, the reverse interval is empty, so the average is the integral over (left,right] scaled by the reciprocal of right − left.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every natural number m, including m = 0.",
+      "For every function state : ℝ → (Fin m → ℝ), assigning a real coordinate vector to each real argument.",
+      "For every pair of real endpoints left and right.",
+      "The explicit proof binders hcell and hstate witness the two hypotheses; they introduce no additional mathematical objects or existential choices."
+    ],
+    "hypotheses": [
+      "left < right.",
+      "State is interval integrable with respect to μ, where μ is the measure selected by Real.measureSpace.volume: state is integrable on (left,right] and on (right,left]."
+    ],
+    "conclusions": [
+      "left < right.",
+      "State is integrable with respect to μ on both (left,right] and (right,left].",
+      "The prescribed vector LocalDef002 state left right equals (right − left)⁻¹ times the oriented interval integral of state from left to right with respect to μ. By the definition of LocalDef002, both sides are the same expression."
+    ],
+    "mathematical_definitions": [
+      "Write V = Fin m → ℝ, the real vector space of m coordinates, with the supplied finite product normed group structure, product topology, and coordinatewise vector operations.",
+      "Write μ for the distinguished measure extracted from Real.measureSpace.",
+      "For a function f : ℝ → V, define J(f,a,b) = ∫ f d(μ restricted to (a,b]) − ∫ f d(μ restricted to (b,a]).",
+      "Define A(f,a,b) = (b − a)⁻¹ · J(f,a,b), where the dot denotes real scalar multiplication of a vector.",
+      "LocalDef003 f a b is A(f,a,b), and LocalDef002 state left right is exactly A(state,left,right).",
+      "LocalDef001 f a b v means (a < b) ∧ (IntervalIntegrable f μ a b ∧ v = A(f,a,b)).",
+      "Under left < right, (right,left] is empty and A(state,left,right) = (right − left)⁻¹ · ∫ state d(μ restricted to (left,right])."
+    ],
+    "proposition_plain_english": "For every finite dimension m, every real-vector-valued function state on ℝ, and every pair of real numbers left < right such that state is interval integrable with respect to the fixed measure μ, the vector defined to be (right − left)⁻¹ times the oriented interval integral of state satisfies the predicate requiring these same endpoint and integrability conditions and equality to that same normalized integral. Expanded completely, the assertion is that the two given hypotheses imply their conjunction with A(state,left,right) = A(state,left,right)."
+  },
+  "restrictions_and_vacuity_risks": [
+    "Only strictly ordered endpoints are covered. Equal or reversed endpoints cannot satisfy the antecedent; the asserted averaging interpretation therefore never uses a zero or negative interval length.",
+    "No positive-dimension assumption appears. For m = 0, the vector space contains just the empty coordinate function, and coordinatewise equalities have no coordinates to check.",
+    "The integrability assumption concerns the stated intervals only. No global integrability, continuity, differentiability, boundedness, or differential equation is assumed.",
+    "The reverse interval (right,left] is empty under the endpoint hypothesis, so its integrability requirement is automatic.",
+    "The conclusion repeats the assumptions and adds a definitional identity. It establishes no independent property beyond this packaging.",
+    "There is no existential witness, selected sample point, claim that the average is attained by state, positivity claim, error estimate, approximation bound, or dynamical interpretation.",
+    "The function is defined on all of ℝ, but the displayed integral expressions depend only on its values on the two specified intervals, through measure-theoretic integration.",
+    "The normalization is by the real endpoint difference right − left, not explicitly by μ((left,right]). Equating those two quantities requires information about the selected measure."
+  ],
+  "ambiguities": [
+    "D025 displays only inferInstance, so the packet does not expose the resolved construction or normalization of Real.measureSpace. The exact translation therefore keeps its selected measure as μ rather than independently certifying that it is Lebesgue measure.",
+    "Some external semantic boundaries remain unexpanded, including MeasureTheory.IntegrableOn, MeasureTheory.integral, and Pi.seminormedAddGroup. The translation uses their conventional integrability, integral, and finite product structure roles; their internal definitions, totalization conventions, and exact product norm formula cannot be independently checked from the packet."
+  ]
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract and blind translation.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 26.
+
+Attached primary source rendering: raw PDF page 27.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

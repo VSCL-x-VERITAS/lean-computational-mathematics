@@ -1,0 +1,1231 @@
+
+
+Exact role prompt SHA256 e8fc01dc20710b1b6634a745a340c6a7b4d461047e09ee662cbf3c0afc518ba9
+# Role: direct source-versus-Lean judge
+
+You are a fresh, independent judge. Compare the selected source result directly
+with the Lean proposition. The authoritative source and elaborated declaration
+dossier are primary evidence; the source contract supports extraction but does
+not replace checking the source.
+
+## Required analysis
+
+1. Re-read the cited source passage and relevant inherited context.
+2. Read the proof-free source header, readable target type, and fully explicit
+   target type in `direct_review_packet.md`.
+3. Inspect every `Dxxx` dependency. A full section requires an
+   `interpretation`; a reuse section requires its exact `reuse_sha256`. Reuse
+   covers declaration meaning only. Independently determine each dependency's
+   effect on this target and whether it matches the selected source result.
+4. Complete every configured semantic check, in order, with direct evidence.
+   Use `not-applicable` only with a concrete reason.
+5. Decide Lean-implies-source and source-implies-Lean separately.
+6. Classify with the fixed vocabulary.
+
+Additional hypotheses and narrower domains are reduced applicability, not
+stronger theorems. Test satisfiability and nonvacuity. Request adjudication for
+any unresolved evidence, dependency, semantic check, or implication.
+
+Return only JSON conforming to `schemas/direct_judge.schema.json`.
+
+
+Exact output schema SHA256 6e31ec9d39783d43bc0cacbca8ee2512a7f3d75cb59f26265111372c6ded6693
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Direct source-versus-Lean judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "dossier_sha256", "dependency_coverage", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "direct-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "dossier_sha256": {"$ref": "#/$defs/sha256"},
+    "dependency_coverage": {"type": "array", "minItems": 1, "items": {"oneOf": [{"$ref": "#/$defs/reviewedDependency"}, {"$ref": "#/$defs/reusedDependency"}]}},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "reviewedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "interpretation", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "interpretation": {"type": "string", "minLength": 1},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "reusedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "reuse_sha256", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "reuse_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "lean_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "lean_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 da39265df8521b54eca1ee486865edc2e21bf9063b18c14703267cb0be41afc0
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.7 notation paragraph explaining one-step methods: the solution at the next time level is determined entirely by data at the current time level.",
+      "location": "raw PDF page 32; printed Chapter 1 page 10"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-ONE-STEP-METHOD-DEFINITION-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 7d40684bb762e22c6220a64d84566a7080ecec1c41e259de3771733968ccc26e
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-ONE-STEP-METHOD-DEFINITION-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, first paragraph",
+      "anchor": "“I use q to denote the solution to the partial differential equation under study.”",
+      "observation": "The underlying solution is denoted by q; the passage concerns numerical methods for a PDE."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "“The symbol Q_i^n (in one dimension) or Q_ij^n (in two dimensions) is used to denote the numerical approximation to the solution q.”",
+      "observation": "Q denotes a numerical approximation, with spatial subscripts and a temporal superscript."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "“Subscripts on Q denote spatial locations (e.g., the ith grid cell), and superscript n denotes time level t_n.”",
+      "observation": "Spatial indices identify locations; n identifies a time level."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "“we primarily consider one-step methods where the solution at time t_{n+1} is determined entirely by data at time t_n.”",
+      "observation": "The selected claim characterizes one-step methods by complete determination of the next-time solution from current-time data."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "“When Q or other numerical quantities lack a temporal superscript it is generally clear that the current time level t_n is intended.”",
+      "observation": "Omitting a temporal superscript generally indicates the current time level."
+    },
+    {
+      "location": "Raw PDF page 33, printed page 11, Section 1.7, first paragraph",
+      "anchor": "“For a system of m equations, q and Q are m-vectors”",
+      "observation": "The notation accommodates vector-valued solutions and numerical approximations for systems."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "n is a generic time-level index, with current time t_n and next time t_{n+1}; no explicit index set or quantified range is supplied (printed page 10, Section 1.7, “superscript n denotes time level t_n” and the one-step sentence).",
+      "i, or i and j in two dimensions, index spatial locations of Q; no index domains are specified (printed page 10, Section 1.7, “Subscripts on Q denote spatial locations”)."
+    ],
+    "hypotheses": [
+      "The characterization concerns a one-step numerical method; the author says such methods are primarily considered, without asserting that every method in the book is one-step (printed page 10, Section 1.7, “we primarily consider one-step methods”)."
+    ],
+    "conclusions": [
+      "For a one-step method, the solution at time t_{n+1} is determined entirely by data at time t_n (printed page 10, Section 1.7, one-step sentence)."
+    ],
+    "definitions_and_conventions": [
+      "q denotes the solution of the PDE under study (printed page 10, Section 1.7, first paragraph, “I use q to denote the solution”).",
+      "Q_i^n in one dimension and Q_ij^n in two dimensions denote the numerical approximation to q (printed page 10, Section 1.7, second paragraph, opening sentence).",
+      "Subscripts on Q denote spatial locations, such as grid cells; superscript n denotes time level t_n (printed page 10, Section 1.7, second paragraph, spatial and temporal index sentence).",
+      "A missing temporal superscript on Q or another numerical quantity generally means the current time level t_n (printed page 10, Section 1.7, second paragraph, final sentence).",
+      "For a system of m equations, q and Q are m-vectors; superscripts can also denote vector components (printed page 11, Section 1.7, first paragraph, opening two sentences)."
+    ],
+    "implicit_context": [
+      "The selected sentence occurs in a discussion of notation for numerical approximations, so its reference to the solution at the next time level is understood in the numerical-method context; this is a contextual reading rather than an additional explicit equation (printed page 10, Section 1.7, second paragraph, opening sentence and one-step sentence).",
+      "This is a prose characterization explaining temporal-index suppression, rather than a numbered theorem or an explicit update formula (printed page 10, Section 1.7, second paragraph, “Often the temporal index is suppressed”)."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Temporal dependence",
+        "details": [
+          "The relevant transition is from t_n to t_{n+1}, and current-time data entirely determine the next-time solution (printed page 10, Section 1.7, one-step sentence).",
+          "The exclusion of independently required earlier-time solution history is an interpretation of “determined entirely by data at time t_n”; the passage does not separately formulate a history-independence theorem (printed page 10, Section 1.7, one-step sentence)."
+        ]
+      },
+      {
+        "topic": "Spatial scope",
+        "details": [
+          "The paragraph distinguishes spatial locations from time levels but does not assert that the next value at a cell depends only on the current value at that same cell (printed page 10, Section 1.7, spatial-index sentence followed by the one-step sentence)."
+        ]
+      },
+      {
+        "topic": "Level of specification",
+        "details": [
+          "The characterization provides no update operator, state-space type, time-step restriction, or numerical accuracy assertion (printed page 10, Section 1.7, complete one-step sentence).",
+          "The passage specifies dependence between time levels without specifying whether computation of the next solution is explicit or implicit (printed page 10, Section 1.7, “determined entirely”)."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the direction of determination: data at t_n determine the solution at t_{n+1} (printed page 10, Section 1.7, one-step sentence).",
+    "Preserve “entirely”: dependence on current-time data is the defining content supplied for one-step methods (printed page 10, Section 1.7, one-step sentence).",
+    "Do not replace current-time data with a single cell value without an additional source assumption; spatial indices denote locations, while the one-step sentence imposes only a temporal dependence condition (printed page 10, Section 1.7, second paragraph).",
+    "Do not attribute a particular update formula, fixed time increment, convergence guarantee, or explicit computational scheme to this passage (printed page 10, Section 1.7, one-step sentence, which supplies none of these).",
+    "Retain the distinction between q, the PDE solution, and Q, its numerical approximation, when expressing the surrounding notation (printed page 10, Section 1.7, first paragraph and second paragraph opening sentence)."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The contents of “data at time t_n” are not enumerated.",
+      "evidence": "Printed page 10, Section 1.7, one-step sentence uses “data at time t_n” without defining a data object.",
+      "impact": "A precise formal state representation requires a modeling choice; the source does not identify current-time data with one scalar, one cell, or a specified tuple."
+    },
+    {
+      "issue": "Time dependence and auxiliary method parameters are unspecified.",
+      "evidence": "Printed page 10, Section 1.7, one-step sentence names t_n and t_{n+1} but gives no update operator or parameter list.",
+      "impact": "The passage does not establish that one time-independent operator applies at every step, or specify how time increments and prescribed method parameters enter an update."
+    },
+    {
+      "issue": "“Determined entirely” is not expanded into formal existence and uniqueness quantifiers.",
+      "evidence": "Printed page 10, Section 1.7, one-step sentence provides a prose characterization without specifying admissible input data or an output relation.",
+      "impact": "The text conveys determination of the next solution, but does not explicitly assert a total function on all conceivable states or an existence-and-uniqueness theorem over a stated domain."
+    }
+  ],
+  "contract_plain_english": "Section 1.7 characterizes a one-step numerical method by saying that the solution at the next time level t_{n+1} is determined entirely by data at the current time level t_n (printed page 10, second paragraph, one-step sentence). In the surrounding notation, Q approximates the PDE solution q, spatial subscripts identify locations, and the superscript n identifies time; an omitted temporal superscript generally means the current time level (printed page 10, Section 1.7, first and second paragraphs). The selected sentence does not specify the data structure, update formula, or admissible-state domain."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 8e4c808d84cccdc3610f6e5dbc0487d63d4caf17e09eb72535dbdaad1a171011
+# Declaration dossier for LEV-CH01-ONE-STEP-METHOD-DEFINITION-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_oneStepMethod_iff_currentStateMap
+    {Cell : Type*} {m : ℕ} (n : ℕ)
+    (advance : (Fin (n + 1) → (Cell → Fin m → ℝ)) → (Cell → Fin m → ℝ)) :
+    leveque01IsOneStepMethodAt n advance ↔
+      ∃ step : (Cell → Fin m → ℝ) → (Cell → Fin m → ℝ),
+        advance = step ∘ (fun history => history (Fin.last n))
+```
+
+## Elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {m : Nat} (n : Nat)
+  (advance : (Fin (instHAdd.hAdd n 1) → Cell → Fin m → Real) → Cell → Fin m → Real),
+  Iff (NumStability.leveque01IsOneStepMethodAt n advance)
+    (Exists fun step => Eq advance (Function.comp step fun history => history (Fin.last n)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {m : Nat} (n : Nat)
+  (advance :
+    (Fin
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+        Cell → Fin m → Real) →
+      Cell → Fin m → Real),
+  Iff (@NumStability.leveque01IsOneStepMethodAt.{u_1} Cell m n advance)
+    (@Exists.{u_1 + 1} ((Cell → Fin m → Real) → Cell → Fin m → Real)
+      fun (step : (Cell → Fin m → Real) → Cell → Fin m → Real) =>
+      @Eq.{u_1 + 1}
+        ((Fin
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+            Cell → Fin m → Real) →
+          Cell → Fin m → Real)
+        advance
+        (@Function.comp.{u_1 + 1, u_1 + 1, u_1 + 1}
+          (Fin
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+            Cell → Fin m → Real)
+          (Cell → Fin m → Real) (Cell → Fin m → Real) step
+          fun
+            (history :
+              Fin
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+                Cell → Fin m → Real) =>
+          history (Fin.last n)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `Mathlib.Data.Fin.Basic`, `Mathlib.Data.Real.Basic`, `Mathlib.Logic.Function.Basic`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.leveque01IsOneStepMethodAt`
+
+- Role: `local`
+- Owner module: `AuditTarget`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `8870f1101dc65d8b0c68c49a38f663184b2b93710482f5d63dc72959d48af5c1`
+
+Type:
+
+```lean
+{Cell : Type u_1} →
+  {m : Nat} → (n : Nat) → ((Fin (instHAdd.hAdd n 1) → Cell → Fin m → Real) → Cell → Fin m → Real) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{Cell : Type u_1} →
+  {m : Nat} →
+    (n : Nat) →
+      (advance :
+          (Fin
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+              Cell → Fin m → Real) →
+            Cell → Fin m → Real) →
+        Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {Cell} {m} n advance => Function.FactorsThrough advance fun history => history (Fin.last n)
+```
+
+### D002: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `39e5d712f8b9aad981a3e0033fb34773c91d2d18aa78ceae215fff254098f57c`
+- Reviewed interpretation: Equality of two objects of the same type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D003: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `6359bd4891661a259e43b293071b870dfaf8d2663a00ef2b860ca97590591ec3`
+- Reviewed interpretation: Existential quantification over a specified type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D004: `Fin`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `59788903be5da78a88e4dc3844df38effdaabdfa82bb364602790d2271da7fda`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `42f7e9d2dc9ef433c72f636953d97095440cad97655560bc45332db987086dc7`
+- Reviewed interpretation: The standard finite index type of natural numbers below its parameter.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D005: `Fin.last`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Fin.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `b7cf2c761ad02a28a34dfdeee30ac4ec7bd4c3ff77700313e3ed2f37d473f5f2`
+
+Type:
+
+```lean
+(n : Nat) → Fin (instHAdd.hAdd n 1)
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) →
+  Fin
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => ⟨n, ⋯⟩
+```
+
+### D006: `Function.comp`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd`
+
+Type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (β → δ) → (α → β) → α → δ
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (f : β → δ) → (g : α → β) → α → δ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} {δ} f g x => f (g x)
+```
+
+### D007: `HAdd.hAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `53176a5fdb3ab4aa2f268a561a58a549dc054913e8becee255de6c912d398329`
+- Reviewed interpretation: Extracts the addition operation from the supplied HAdd instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D008: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `9e39ec4853ddf029e9f8baacdc334db243e376c5cff18854e467480afbace6dd`
+- Reviewed interpretation: Logical equivalence.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D009: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `8ff28ee246e10f28be0ab7a8e23423d7b51e962a547cf5fe9c3cea6ce359a162`
+- Reviewed interpretation: Natural numbers, including zero.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D010: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `f5569c7fe350971b4ea22c6995e80aebbff91bc37ff5dc40b33406c739e1a489`
+- Reviewed interpretation: Extracts the value assigned to a natural-number literal by its instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D011: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `0d347da13527e70df7c0618f099de0a3ba95c1b1982bbae9852c91d1c5a57d2d`
+- Reviewed interpretation: The standard library real-number type at the external semantic frontier.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D012: `instAddNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `a1534bcd3e1888406ac787d30eeff8a284cb6688c23f5e8de09351dda91a280c`
+
+Type:
+
+```lean
+Add Nat
+```
+
+Fully explicit type:
+
+```lean
+Add.{0} Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ add := Nat.add }
+```
+
+### D013: `instHAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `960f87c7c53933b2acf4803d94f9778313cfbc9ad9db91e0fb8010d571f48495`
+- Reviewed interpretation: Uses the supplied homogeneous addition as heterogeneous addition with all types equal.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D014: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) → OfNat.{0} Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```
+
+### D015: `Function.FactorsThrough`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Logic.Function.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `929f34222497a270368cee65f4dd92ceb45c1ecb32b09372ed13ca5be7753930`
+
+Type:
+
+```lean
+{α : Sort u_1} → {β : Sort u_2} → {γ : Sort u_3} → (α → γ) → (α → β) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → {β : Sort u_2} → {γ : Sort u_3} → (g : α → γ) → (f : α → β) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} {γ} g f => ∀ ⦃a b : α⦄, Eq (f a) (f b) → Eq (g a) (g b)
+```
+
+
+Complete dependency inventory SHA256 25d22c4abafc5b9f4e5f20fa4f30444eab81209283e50ed1dbac20209ef118fc
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun {Cell} {m} n advance => Function.FactorsThrough advance fun history => history (Fin.last n)",
+      "distance": 1,
+      "id": "D001",
+      "kind": "abbrev",
+      "name": "NumStability.leveque01IsOneStepMethodAt",
+      "owner_module": "AuditTarget",
+      "role": "local",
+      "semantic_sha256": "8870f1101dc65d8b0c68c49a38f663184b2b93710482f5d63dc72959d48af5c1",
+      "type_explicit": "{Cell : Type u_1} \u2192\n  {m : Nat} \u2192\n    (n : Nat) \u2192\n      (advance :\n          (Fin\n                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) \u2192\n              Cell \u2192 Fin m \u2192 Real) \u2192\n            Cell \u2192 Fin m \u2192 Real) \u2192\n        Prop",
+      "type_readable": "{Cell : Type u_1} \u2192\n  {m : Nat} \u2192 (n : Nat) \u2192 ((Fin (instHAdd.hAdd n 1) \u2192 Cell \u2192 Fin m \u2192 Real) \u2192 Cell \u2192 Fin m \u2192 Real) \u2192 Prop"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D002",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Exists",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D003",
+      "kind": "inductive",
+      "name": "Exists",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (p : \u03b1 \u2192 Prop) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (\u03b1 \u2192 Prop) \u2192 Prop"
+    },
+    {
+      "blind_name": "Fin",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D004",
+      "kind": "inductive",
+      "name": "Fin",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "59788903be5da78a88e4dc3844df38effdaabdfa82bb364602790d2271da7fda",
+      "type_explicit": "(n : Nat) \u2192 Type",
+      "type_readable": "Nat \u2192 Type"
+    },
+    {
+      "blind_name": "Fin.last",
+      "body_readable": "fun n => \u27e8n, \u22ef\u27e9",
+      "distance": 1,
+      "id": "D005",
+      "kind": "def",
+      "name": "Fin.last",
+      "owner_module": "Init.Data.Fin.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "b7cf2c761ad02a28a34dfdeee30ac4ec7bd4c3ff77700313e3ed2f37d473f5f2",
+      "type_explicit": "(n : Nat) \u2192\n  Fin\n    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+      "type_readable": "(n : Nat) \u2192 Fin (instHAdd.hAdd n 1)"
+    },
+    {
+      "blind_name": "Function.comp",
+      "body_readable": "fun {\u03b1} {\u03b2} {\u03b4} f g x => f (g x)",
+      "distance": 1,
+      "id": "D006",
+      "kind": "def",
+      "name": "Function.comp",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 {\u03b2 : Sort v} \u2192 {\u03b4 : Sort w} \u2192 (f : \u03b2 \u2192 \u03b4) \u2192 (g : \u03b1 \u2192 \u03b2) \u2192 \u03b1 \u2192 \u03b4",
+      "type_readable": "{\u03b1 : Sort u} \u2192 {\u03b2 : Sort v} \u2192 {\u03b4 : Sort w} \u2192 (\u03b2 \u2192 \u03b4) \u2192 (\u03b1 \u2192 \u03b2) \u2192 \u03b1 \u2192 \u03b4"
+    },
+    {
+      "blind_name": "HAdd.hAdd",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HAdd \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 1,
+      "id": "D007",
+      "kind": "abbrev",
+      "name": "HAdd.hAdd",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HAdd.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HAdd \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D008",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "Nat",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D009",
+      "kind": "inductive",
+      "name": "Nat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D010",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D011",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "instAddNat",
+      "body_readable": "{ add := Nat.add }",
+      "distance": 1,
+      "id": "D012",
+      "kind": "def",
+      "name": "instAddNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "a1534bcd3e1888406ac787d30eeff8a284cb6688c23f5e8de09351dda91a280c",
+      "type_explicit": "Add.{0} Nat",
+      "type_readable": "Add Nat"
+    },
+    {
+      "blind_name": "instHAdd",
+      "body_readable": "fun {\u03b1} [inst : Add \u03b1] => { hAdd := fun a b => inst.add a b }",
+      "distance": 1,
+      "id": "D013",
+      "kind": "def",
+      "name": "instHAdd",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Add.{u_1} \u03b1] \u2192 HAdd.{u_1, u_1, u_1} \u03b1 \u03b1 \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Add \u03b1] \u2192 HAdd \u03b1 \u03b1 \u03b1"
+    },
+    {
+      "blind_name": "instOfNatNat",
+      "body_readable": "fun n => { ofNat := n }",
+      "distance": 1,
+      "id": "D014",
+      "kind": "def",
+      "name": "instOfNatNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92",
+      "type_explicit": "(n : Nat) \u2192 OfNat.{0} Nat n",
+      "type_readable": "(n : Nat) \u2192 OfNat Nat n"
+    },
+    {
+      "blind_name": "Function.FactorsThrough",
+      "body_readable": "fun {\u03b1} {\u03b2} {\u03b3} g f => \u2200 \u2983a b : \u03b1\u2984, Eq (f a) (f b) \u2192 Eq (g a) (g b)",
+      "distance": 2,
+      "id": "D015",
+      "kind": "def",
+      "name": "Function.FactorsThrough",
+      "owner_module": "Mathlib.Logic.Function.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "929f34222497a270368cee65f4dd92ceb45c1ecb32b09372ed13ca5be7753930",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 {\u03b2 : Sort u_2} \u2192 {\u03b3 : Sort u_3} \u2192 (g : \u03b1 \u2192 \u03b3) \u2192 (f : \u03b1 \u2192 \u03b2) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 {\u03b2 : Sort u_2} \u2192 {\u03b3 : Sort u_3} \u2192 (\u03b1 \u2192 \u03b3) \u2192 (\u03b1 \u2192 \u03b2) \u2192 Prop"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 129af8dca2569c5f95b54f3c20f5c9ba21584b2cb2744cb5fefd4aeccc5fd05b
+{
+  "entries": [
+    {
+      "interpretation": "Equality of two objects of the same type.",
+      "reuse_sha256": "39e5d712f8b9aad981a3e0033fb34773c91d2d18aa78ceae215fff254098f57c",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "source_dependency_id": "D010",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D002"
+    },
+    {
+      "interpretation": "Existential quantification over a specified type.",
+      "reuse_sha256": "6359bd4891661a259e43b293071b870dfaf8d2663a00ef2b860ca97590591ec3",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "source_dependency_id": "D011",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D003"
+    },
+    {
+      "interpretation": "The standard finite index type of natural numbers below its parameter.",
+      "reuse_sha256": "42f7e9d2dc9ef433c72f636953d97095440cad97655560bc45332db987086dc7",
+      "semantic_sha256": "59788903be5da78a88e4dc3844df38effdaabdfa82bb364602790d2271da7fda",
+      "source_dependency_id": "D013",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D004"
+    },
+    {
+      "interpretation": "Extracts the addition operation from the supplied HAdd instance.",
+      "reuse_sha256": "53176a5fdb3ab4aa2f268a561a58a549dc054913e8becee255de6c912d398329",
+      "semantic_sha256": "e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59",
+      "source_dependency_id": "D015",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D007"
+    },
+    {
+      "interpretation": "Logical equivalence.",
+      "reuse_sha256": "9e39ec4853ddf029e9f8baacdc334db243e376c5cff18854e467480afbace6dd",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "source_dependency_id": "D017",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D008"
+    },
+    {
+      "interpretation": "Natural numbers, including zero.",
+      "reuse_sha256": "8ff28ee246e10f28be0ab7a8e23423d7b51e962a547cf5fe9c3cea6ce359a162",
+      "semantic_sha256": "2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c",
+      "source_dependency_id": "D026",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D009"
+    },
+    {
+      "interpretation": "Extracts the value assigned to a natural-number literal by its instance.",
+      "reuse_sha256": "f5569c7fe350971b4ea22c6995e80aebbff91bc37ff5dc40b33406c739e1a489",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "source_dependency_id": "D042",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D010"
+    },
+    {
+      "interpretation": "The standard library real-number type at the external semantic frontier.",
+      "reuse_sha256": "0d347da13527e70df7c0618f099de0a3ba95c1b1982bbae9852c91d1c5a57d2d",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "source_dependency_id": "D049",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D011"
+    },
+    {
+      "interpretation": "Uses the supplied homogeneous addition as heterogeneous addition with all types equal.",
+      "reuse_sha256": "960f87c7c53933b2acf4803d94f9778313cfbc9ad9db91e0fb8010d571f48495",
+      "semantic_sha256": "38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981",
+      "source_dependency_id": "D070",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D013"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+  "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-ONE-STEP-METHOD-DEFINITION-PRODUCTION-20260908"
+}
+
+Direct isolation: do not read blind translation, roundtrip judgment, or prior judgments.
+
+Attached primary source rendering: raw PDF page 31.
+
+Attached primary source rendering: raw PDF page 32.
+
+Attached primary source rendering: raw PDF page 33.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

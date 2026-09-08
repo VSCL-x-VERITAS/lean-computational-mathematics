@@ -1,0 +1,1766 @@
+
+
+Exact role prompt SHA256 ccf143729c0f0bf0a915ed685976036d82a26c6d09f279be1ac4e1c6019d4574
+# Role: faithfulness adjudicator
+
+You are a fresh adjudicator. Resolve the supplied disagreements and unresolved
+items using primary source and Lean declaration evidence. Do not use majority
+vote.
+
+Read the exact trigger reasons, source locator and source, source contract,
+complete direct and blind dossiers, any dependency-reuse records, blind
+translation, and both judgments. Recheck every disputed dependency and semantic
+item. A reuse hash establishes provenance, not task-specific correctness.
+
+Confirm both implication directions, classification consistency, nonvacuity,
+and whether any purportedly stronger theorem is genuine strength rather than
+reduced applicability. Copy every trigger reason verbatim into `trigger` and
+return at least one resolved item per trigger.
+
+Return only JSON conforming to `schemas/adjudicator.schema.json`. Preserve
+remaining uncertainty instead of forcing a binary answer.
+
+
+Exact output schema SHA256 a858fc72ab5a49ab6e47b920f1dc878af8bc82bb04417527e61f1dba31099217
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Formalization faithfulness adjudication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "trigger", "resolved_items", "implications", "classification", "accepted", "remaining_uncertainties", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "adjudicator"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "trigger": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "resolved_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item", "resolution", "primary_evidence"],
+        "properties": {
+          "item": {"type": "string", "minLength": 1},
+          "resolution": {"type": "string", "minLength": 1},
+          "primary_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "remaining_uncertainties": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 914d7767f96581983c22a583bcd6d75244cce0856a6c540d288882b6163925b5
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.7 notation paragraph explaining one-step methods: the solution at the next time level is determined entirely by data at the current time level.",
+      "location": "raw PDF page 32; printed Chapter 1 page 10"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 c60ee72210da5f15263d2d2d78cb3f864f19344421ee1c2af791710186eb6164
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, first paragraph",
+      "anchor": "I use q to denote the solution to the partial differential equation under study",
+      "observation": "The lowercase symbol q denotes the PDE solution."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "The symbol Q_i^n (in one dimension) or Q_ij^n (in two dimensions)",
+      "observation": "Q denotes a numerical approximation to q; spatial subscripts identify locations, and the superscript n identifies time level t_n."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph",
+      "anchor": "we primarily consider one-step methods where the solution at time t_{n+1} is determined entirely by data at time t_n",
+      "observation": "The selected passage characterizes the one-step methods primarily considered by their dependence on current-time data."
+    },
+    {
+      "location": "Raw PDF page 32, printed page 10, Section 1.7, second paragraph, final sentence",
+      "anchor": "When Q or other numerical quantities lack a temporal superscript",
+      "observation": "An omitted temporal superscript generally means the current time level t_n is intended."
+    },
+    {
+      "location": "Raw PDF page 33, printed page 11, Section 1.7, first paragraph",
+      "anchor": "For a system of m equations, q and Q are m-vectors",
+      "observation": "The notation includes systems; superscripts can also identify vector components, with their meaning resolved by context."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "n identifies the current time level t_n, and n+1 identifies the next time level t_{n+1}; the paragraph does not explicitly specify an index set or write a universal quantifier (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchor: 'superscript n denotes time level t_n').",
+      "i, or i and j in two dimensions, are spatial indices in Q_i^n and Q_ij^n (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchor: 'Subscripts on Q denote spatial locations')."
+    ],
+    "hypotheses": [
+      "The dependence claim concerns a one-step numerical method of the kind primarily considered in the book (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchor: 'we primarily consider one-step methods')."
+    ],
+    "conclusions": [
+      "For such a one-step method, the numerical solution at the next time level t_{n+1} is determined entirely by data at the current time level t_n (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchor: 'determined entirely by data at time t_n').",
+      "When Q or another numerical quantity has no temporal superscript, the intended time level is generally the current t_n (raw PDF page 32, printed page 10, Section 1.7, final sentence, anchor: 'it is generally clear that the current time level t_n is intended')."
+    ],
+    "definitions_and_conventions": [
+      "q denotes the solution of the PDE under study, and Q denotes its numerical approximation (raw PDF page 32, printed page 10, Section 1.7, anchors: 'use q to denote the solution' and 'numerical approximation to the solution q').",
+      "Q_i^n is the one-dimensional notation and Q_ij^n the two-dimensional notation; spatial subscripts can identify grid cells, and n denotes time level t_n (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchor: 'the ith grid cell').",
+      "For a system of m equations, q and Q are m-vectors; superscripts also denote components, so not every superscript is a time index (raw PDF page 33, printed page 11, Section 1.7, first paragraph, anchor: 'superscripts are also used to denote the components')."
+    ],
+    "implicit_context": [
+      "The selected claim is explanatory prose in a notation section, rather than a numbered theorem or a specified update formula (raw PDF page 32, printed page 10, heading '1.7 Notation' and second paragraph).",
+      "Interpreting 'solution' in the one-step sentence as the numerical solution is supported by the enclosing paragraph's introduction of Q and its subsequent reference to 'other numerical quantities' (raw PDF page 32, printed page 10, Section 1.7, second paragraph)."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Temporal dependence",
+        "details": [
+          "The stated dependence runs from data at t_n to the numerical solution at t_{n+1} (raw PDF page 32, printed page 10, Section 1.7, anchor: 'determined entirely by data at time t_n').",
+          "As an analyst inference from 'determined entirely', a separate earlier-time history is not required once the relevant current-time data and method are fixed; the passage does not enumerate that data (same location and anchor)."
+        ]
+      },
+      {
+        "topic": "Scope of the convention",
+        "details": [
+          "The book 'primarily' considers one-step methods; this is not a claim that every method discussed is one-step (raw PDF page 32, printed page 10, Section 1.7, second paragraph).",
+          "The current-time interpretation of missing temporal superscripts is qualified by 'generally', rather than stated as an exceptionless rule (raw PDF page 32, printed page 10, Section 1.7, final sentence)."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the current-to-next time relation t_n to t_{n+1} (raw PDF page 32, printed page 10, Section 1.7, anchor: 'solution at time t_{n+1}').",
+    "Preserve the source's general wording 'data at time t_n'; the passage does not identify this data exclusively with Q, a single cell value, or a specified spatial stencil (raw PDF page 32, printed page 10, Section 1.7, second paragraph).",
+    "Do not attribute a particular update formula, time-independent update map, time-step size, or stability condition to this passage: its stated characterization is determination by current-time data (raw PDF page 32, printed page 10, Section 1.7, second paragraph).",
+    "Retain the qualifications 'primarily' for the methods considered and 'generally' for the notation convention (raw PDF page 32, printed page 10, Section 1.7, second paragraph)."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The contents and mathematical type of current-time data are unspecified.",
+      "evidence": "Raw PDF page 32, printed page 10, Section 1.7 says 'data at time t_n' without an accompanying definition or list.",
+      "impact": "A formal representation of the data is an additional modeling choice; restricting it to the numerical solution alone requires support beyond this passage."
+    },
+    {
+      "issue": "The passage does not specify whether the update operation depends explicitly on time or other fixed method parameters.",
+      "evidence": "Raw PDF page 32, printed page 10, Section 1.7 characterizes one-step dependence verbally and supplies no update operator.",
+      "impact": "A single autonomous map, or a particular treatment of parameters, is not explicitly asserted by the source."
+    },
+    {
+      "issue": "The precise domain on which an update is defined is not given.",
+      "evidence": "Raw PDF page 32, printed page 10, Section 1.7 refers to the methods primarily considered without stating admissibility conditions or quantifying over all possible data.",
+      "impact": "The passage does not by itself assert totality on an arbitrary state space."
+    }
+  ],
+  "contract_plain_english": "Section 1.7 explains that the book primarily considers one-step numerical methods: the numerical solution at t_{n+1} is determined entirely by data at t_n. This explains why temporal superscripts are often suppressed; Q and other numerical quantities without such a superscript generally refer to the current time level. The passage does not specify the contents of that data or an update formula (raw PDF page 32, printed page 10, Section 1.7, second paragraph, anchors: 'one-step methods', 'data at time t_n', and 'current time level t_n is intended')."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 49af125e6e9e6f448a7e92c12a9db69977e76d237b0de2f8acff2af2ac3ebaa6
+# Declaration dossier for LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_oneStepMethod_iff_attainableCurrentDataMap
+    {History : Sort*} {CurrentData : Type*} {NextData : Sort*}
+    (current : History → CurrentData) (advance : History → NextData) :
+    (∀ history₁ history₂, current history₁ = current history₂ →
+      advance history₁ = advance history₂) ↔
+      ∃ step : Set.range current → NextData,
+        advance = step ∘ Set.rangeFactorization current
+```
+
+## Elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      Eq (current history₁) (current history₂) → Eq (advance history₁) (advance history₂))
+    (Exists fun step => Eq advance (Function.comp step (Set.rangeFactorization current)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      @Eq.{u_2 + 1} CurrentData (current history₁) (current history₂) →
+        @Eq.{u_3} NextData (advance history₁) (advance history₂))
+    (@Exists.{imax (u_2 + 1) u_3}
+      (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData)
+      fun (step : @Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData) =>
+      @Eq.{imax u_1 u_3} (History → NextData) advance
+        (@Function.comp.{u_1, u_2 + 1, u_3} History
+          (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current)) NextData step
+          (@Set.rangeFactorization.{u_2, u_1} CurrentData History current)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Logic.Function.RangeFactorization`
+- `ComputationalMathematics.Logic.Function.RangeFactorization` imports: `Mathlib.Data.Set.Operations`, `Mathlib.Logic.Function.Basic`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `63522a7f14c7909bdc3b74e40f3dff8106b1aeec727b838bb5857305fb16dbba`
+- Reviewed interpretation: Equality of two objects of the same type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D002: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `b8e037b7ee8454967abd5ede341767dc41b18fd412a2ea7e9d3856f010a1dd5f`
+- Reviewed interpretation: Existential quantification over a specified type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D003: `Function.comp`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd`
+
+Type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (β → δ) → (α → β) → α → δ
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (f : β → δ) → (g : α → β) → α → δ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} {δ} f g x => f (g x)
+```
+
+### D004: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `385655c0e31bfe0bd19fe9a99c72f90b960c605078ce507320f666f7270060f6`
+- Reviewed interpretation: Logical equivalence.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D005: `Set.Elem`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.CoeSort`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `2fa7a863ddf7e954e2026c0d7547ac9d781f4a5cb94968d0c9ed2c720b524fdb`
+
+Type:
+
+```lean
+{α : Type u} → Set α → Type u
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (s : Set.{u} α) → Type u
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} s => Subtype fun x => Set.instMembership.mem s x
+```
+
+### D006: `Set.range`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `85783c4cf857eb087b23ac8fe18ab901afaa196ccbca332e40a92bd4915afe59`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (ι → α) → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → Set.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f => setOf fun x => Exists fun y => Eq (f y) x
+```
+
+### D007: `Set.rangeFactorization`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3390776f8db1bdf6312efcd770634e44fa5cc6b6c786c90e2b63d1cfd9054fa8`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → ι → (Set.range f).Elem
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → ι → @Set.Elem.{u} α (@Set.range.{u, u_1} α ι f)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f i => ⟨f i, ⋯⟩
+```
+
+
+Complete dependency inventory SHA256 da4ad1096a4f9b5a902af7c9de4252d8f229228b0dd2d8e84664f691c8d2eb3f
+{
+  "dependencies": [
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D001",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Exists",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D002",
+      "kind": "inductive",
+      "name": "Exists",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (p : \u03b1 \u2192 Prop) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (\u03b1 \u2192 Prop) \u2192 Prop"
+    },
+    {
+      "blind_name": "Function.comp",
+      "body_readable": "fun {\u03b1} {\u03b2} {\u03b4} f g x => f (g x)",
+      "distance": 1,
+      "id": "D003",
+      "kind": "def",
+      "name": "Function.comp",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 {\u03b2 : Sort v} \u2192 {\u03b4 : Sort w} \u2192 (f : \u03b2 \u2192 \u03b4) \u2192 (g : \u03b1 \u2192 \u03b2) \u2192 \u03b1 \u2192 \u03b4",
+      "type_readable": "{\u03b1 : Sort u} \u2192 {\u03b2 : Sort v} \u2192 {\u03b4 : Sort w} \u2192 (\u03b2 \u2192 \u03b4) \u2192 (\u03b1 \u2192 \u03b2) \u2192 \u03b1 \u2192 \u03b4"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D004",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "Set.Elem",
+      "body_readable": "fun {\u03b1} s => Subtype fun x => Set.instMembership.mem s x",
+      "distance": 1,
+      "id": "D005",
+      "kind": "def",
+      "name": "Set.Elem",
+      "owner_module": "Mathlib.Data.Set.CoeSort",
+      "role": "external-frontier",
+      "semantic_sha256": "2fa7a863ddf7e954e2026c0d7547ac9d781f4a5cb94968d0c9ed2c720b524fdb",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (s : Set.{u} \u03b1) \u2192 Type u",
+      "type_readable": "{\u03b1 : Type u} \u2192 Set \u03b1 \u2192 Type u"
+    },
+    {
+      "blind_name": "Set.range",
+      "body_readable": "fun {\u03b1} {\u03b9} f => setOf fun x => Exists fun y => Eq (f y) x",
+      "distance": 1,
+      "id": "D006",
+      "kind": "def",
+      "name": "Set.range",
+      "owner_module": "Mathlib.Data.Set.Operations",
+      "role": "external-frontier",
+      "semantic_sha256": "85783c4cf857eb087b23ac8fe18ab901afaa196ccbca332e40a92bd4915afe59",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b9 : Sort u_1} \u2192 (f : \u03b9 \u2192 \u03b1) \u2192 Set.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b9 : Sort u_1} \u2192 (\u03b9 \u2192 \u03b1) \u2192 Set \u03b1"
+    },
+    {
+      "blind_name": "Set.rangeFactorization",
+      "body_readable": "fun {\u03b1} {\u03b9} f i => \u27e8f i, \u22ef\u27e9",
+      "distance": 1,
+      "id": "D007",
+      "kind": "def",
+      "name": "Set.rangeFactorization",
+      "owner_module": "Mathlib.Data.Set.Operations",
+      "role": "external-frontier",
+      "semantic_sha256": "3390776f8db1bdf6312efcd770634e44fa5cc6b6c786c90e2b63d1cfd9054fa8",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b9 : Sort u_1} \u2192 (f : \u03b9 \u2192 \u03b1) \u2192 \u03b9 \u2192 @Set.Elem.{u} \u03b1 (@Set.range.{u, u_1} \u03b1 \u03b9 f)",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b9 : Sort u_1} \u2192 (f : \u03b9 \u2192 \u03b1) \u2192 \u03b9 \u2192 (Set.range f).Elem"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 8309075d3c4e128e7a04b6ec9231bbb1f0a035da11f380d4856d70d1a13a1089
+{
+  "entries": [
+    {
+      "interpretation": "Equality of two objects of the same type.",
+      "reuse_sha256": "63522a7f14c7909bdc3b74e40f3dff8106b1aeec727b838bb5857305fb16dbba",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "source_dependency_id": "D010",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D001"
+    },
+    {
+      "interpretation": "Existential quantification over a specified type.",
+      "reuse_sha256": "b8e037b7ee8454967abd5ede341767dc41b18fd412a2ea7e9d3856f010a1dd5f",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "source_dependency_id": "D011",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D002"
+    },
+    {
+      "interpretation": "Logical equivalence.",
+      "reuse_sha256": "385655c0e31bfe0bd19fe9a99c72f90b960c605078ce507320f666f7270060f6",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "source_dependency_id": "D017",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D004"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+  "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908"
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 d62334b387de7f0b27cd0839afe09fbc1b326e37a331c4bac1a18d47ca693c6d
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "a141799decc1ece52d876b550bdbafbba00e91724e02e44cfacf8cde80bda6c4",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "Eq",
+      "meaning": "Equality between two terms of the same type or sort.",
+      "effect_on_target": "Expresses equality of current values, equality of advance values, and equality of advance with the composite function. The last equality is equivalent to agreement at every history.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "Exists",
+      "meaning": "Existential quantification: there is a term satisfying the specified predicate.",
+      "effect_on_target": "Quantifies a function step from the range of current to NextData. Within the range definition, it also requires a history whose current value equals the specified value.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "Function.comp",
+      "meaning": "Function composition, defined by (f ∘ g)(x) = f(g(x)).",
+      "effect_on_target": "The composite first sends a history to its current value regarded as an element of the range, and then applies step.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "Iff",
+      "meaning": "Logical equivalence: each of the two propositions implies the other.",
+      "effect_on_target": "Asserts both that constancy of advance on fibers of current implies the factorization and that the factorization implies this constancy.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "Set.Elem",
+      "meaning": "The subtype of elements of a given set, consisting of an underlying value together with a proof of membership.",
+      "effect_on_target": "Restricts the domain of step to current values that occur for some history. Its inputs contain membership proofs, not chosen histories.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Set.range",
+      "meaning": "The range of f is the set of values x for which there exists an input y with f(y) = x.",
+      "effect_on_target": "Defines the domain of step as precisely the attained values of current.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Set.rangeFactorization",
+      "meaning": "The function sending each input i to f(i) equipped with a proof that f(i) belongs to the range of f.",
+      "effect_on_target": "Provides the canonical map from History to the range subtype of current used in the factorization equation.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "Universally quantify History : Sort u_1, CurrentData : Type u_2, and NextData : Sort u_3.",
+      "Universally quantify functions current : History → CurrentData and advance : History → NextData.",
+      "On the left side, universally quantify two histories history₁ and history₂.",
+      "On the right side, existentially quantify step : R → NextData, where R is the subtype of values in the range of current. This witness is chosen for the fixed types and functions and must work for every history."
+    ],
+    "hypotheses": [
+      "There are no additional global hypotheses.",
+      "Within the left-hand proposition, equality current(history₁) = current(history₂) is the premise of an implication."
+    ],
+    "conclusions": [
+      "The following are equivalent: (1) for every history₁ and history₂, current(history₁) = current(history₂) implies advance(history₁) = advance(history₂); (2) there exists step : R → NextData such that advance = step ∘ q, where q(h) is current(h) equipped with its range-membership proof."
+    ],
+    "mathematical_definitions": [
+      "R = {c : CurrentData | there exists h : History such that current(h) = c}, regarded as a subtype.",
+      "q : History → R is defined by q(h) = ⟨current(h), proof that current(h) belongs to the range of current⟩.",
+      "The equation advance = step ∘ q is equivalently the assertion that advance(h) = step(q(h)) for every h : History.",
+      "Constancy on fibers of current means that any two histories with the same current value have the same advance value."
+    ],
+    "proposition_plain_english": "For arbitrary sorts History and NextData, an arbitrary type CurrentData, and arbitrary functions current : History → CurrentData and advance : History → NextData, advance is constant on each fiber of current if and only if there exists a function from the attained current values to NextData whose composition with the canonical map sending each history to its attained current value equals advance."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The function step is defined only on the range of current; the proposition does not assert an extension to all of CurrentData.",
+    "No nonemptiness assumption is imposed. If History is empty, the left side holds vacuously, the range is empty, and the right side holds using the empty-domain function.",
+    "The given functions constrain possible empty types: if History is inhabited, both CurrentData and NextData must be inhabited.",
+    "History and NextData are arbitrary sorts and may be propositions; CurrentData is a type. No additional mathematical structure is assumed.",
+    "The existential witness is one function that works simultaneously for all histories. No computable construction or algorithm for obtaining it is asserted.",
+    "Uniqueness of step is not explicitly asserted, although it follows because the canonical map onto the range is surjective.",
+    "The names current and advance impose no temporal, dynamical, or causal semantics. The proposition asserts only a factorization of functions, with no iteration, ordering of histories, or transition relation."
+  ],
+  "ambiguities": []
+}
+
+Complete direct declaration dossier SHA256 bf68f5a837b7ca7596dbc1c52ede3d358ed62e14195127dcb15bea8d14454ac5
+# Declaration dossier for LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_oneStepMethod_iff_attainableCurrentDataMap
+    {History : Sort*} {CurrentData : Type*} {NextData : Sort*}
+    (current : History → CurrentData) (advance : History → NextData) :
+    (∀ history₁ history₂, current history₁ = current history₂ →
+      advance history₁ = advance history₂) ↔
+      ∃ step : Set.range current → NextData,
+        advance = step ∘ Set.rangeFactorization current
+```
+
+## Elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      Eq (current history₁) (current history₂) → Eq (advance history₁) (advance history₂))
+    (Exists fun step => Eq advance (Function.comp step (Set.rangeFactorization current)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      @Eq.{u_2 + 1} CurrentData (current history₁) (current history₂) →
+        @Eq.{u_3} NextData (advance history₁) (advance history₂))
+    (@Exists.{imax (u_2 + 1) u_3}
+      (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData)
+      fun (step : @Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData) =>
+      @Eq.{imax u_1 u_3} (History → NextData) advance
+        (@Function.comp.{u_1, u_2 + 1, u_3} History
+          (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current)) NextData step
+          (@Set.rangeFactorization.{u_2, u_1} CurrentData History current)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Logic.Function.RangeFactorization`
+- `ComputationalMathematics.Logic.Function.RangeFactorization` imports: `Mathlib.Data.Set.Operations`, `Mathlib.Logic.Function.Basic`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D002: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D003: `Function.comp`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd`
+
+Type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (β → δ) → (α → β) → α → δ
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (f : β → δ) → (g : α → β) → α → δ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} {δ} f g x => f (g x)
+```
+
+### D004: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D005: `Set.Elem`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.CoeSort`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `2fa7a863ddf7e954e2026c0d7547ac9d781f4a5cb94968d0c9ed2c720b524fdb`
+
+Type:
+
+```lean
+{α : Type u} → Set α → Type u
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (s : Set.{u} α) → Type u
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} s => Subtype fun x => Set.instMembership.mem s x
+```
+
+### D006: `Set.range`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `85783c4cf857eb087b23ac8fe18ab901afaa196ccbca332e40a92bd4915afe59`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (ι → α) → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → Set.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f => setOf fun x => Exists fun y => Eq (f y) x
+```
+
+### D007: `Set.rangeFactorization`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3390776f8db1bdf6312efcd770634e44fa5cc6b6c786c90e2b63d1cfd9054fa8`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → ι → (Set.range f).Elem
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → ι → @Set.Elem.{u} α (@Set.range.{u, u_1} α ι f)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f i => ⟨f i, ⋯⟩
+```
+
+## Complete local imported sources
+
+### `ComputationalMathematics.Logic.Function.RangeFactorization`
+
+Path: `ComputationalMathematics/Logic/Function/RangeFactorization.lean`
+SHA-256: `11513a0f14c5248ff60f9de1400e998129dd315109af2ea88ce123ad501d58f3`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Data.Set.Operations
+import Mathlib.Logic.Function.Basic
+
+/-!
+# Factorization through attainable values
+
+A function constant on the fibers of another function factors through its range.
+The factor is defined only on attainable values, so no nonempty codomain or
+extension to unattainable values is needed.
+-/
+
+namespace NumStability.Function
+
+/-- Constancy on fibers is equivalent to factorization through the actual range. -/
+theorem factorsThrough_iff_rangeFactorization
+    {History : Sort*} {CurrentData : Type*} {NextData : Sort*}
+    (current : History → CurrentData) (advance : History → NextData) :
+    _root_.Function.FactorsThrough advance current ↔
+      ∃ step : Set.range current → NextData,
+        advance = step ∘ Set.rangeFactorization current := by
+  constructor
+  · intro hdependence
+    obtain ⟨representative, hrepresentative⟩ :=
+      (Set.rangeFactorization_surjective (f := current)).hasRightInverse
+    refine ⟨advance ∘ representative, ?_⟩
+    funext history
+    apply hdependence
+    exact (congrArg Subtype.val (hrepresentative (Set.rangeFactorization current history))).symm
+  · rintro ⟨step, hstep⟩ history₁ history₂ hcurrent
+    rw [hstep, _root_.Function.comp_apply, _root_.Function.comp_apply]
+    exact congrArg step (Subtype.ext hcurrent)
+
+end NumStability.Function
+```
+
+
+Complete blind declaration dossier SHA256 a141799decc1ece52d876b550bdbafbba00e91724e02e44cfacf8cde80bda6c4
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      Eq (current history₁) (current history₂) → Eq (advance history₁) (advance history₂))
+    (Exists fun step => Eq advance (Function.comp step (Set.rangeFactorization current)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {History : Sort u_1} {CurrentData : Type u_2} {NextData : Sort u_3} (current : History → CurrentData)
+  (advance : History → NextData),
+  Iff
+    (∀ (history₁ history₂ : History),
+      @Eq.{u_2 + 1} CurrentData (current history₁) (current history₂) →
+        @Eq.{u_3} NextData (advance history₁) (advance history₂))
+    (@Exists.{imax (u_2 + 1) u_3}
+      (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData)
+      fun (step : @Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current) → NextData) =>
+      @Eq.{imax u_1 u_3} (History → NextData) advance
+        (@Function.comp.{u_1, u_2 + 1, u_3} History
+          (@Set.Elem.{u_2} CurrentData (@Set.range.{u_2, u_1} CurrentData History current)) NextData step
+          (@Set.rangeFactorization.{u_2, u_1} CurrentData History current)))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D002: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+### D003: `Function.comp`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0cee10cad7daccc2e737572bb186d4e7e6af6dcbe0fe4e13ecc99929689d81cd`
+
+Type:
+
+```lean
+{α : Sort u} → {β : Sort v} → {δ : Sort w} → (β → δ) → (α → β) → α → δ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} {δ} f g x => f (g x)
+```
+
+### D004: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D005: `Set.Elem`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.CoeSort`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `2fa7a863ddf7e954e2026c0d7547ac9d781f4a5cb94968d0c9ed2c720b524fdb`
+
+Type:
+
+```lean
+{α : Type u} → Set α → Type u
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} s => Subtype fun x => Set.instMembership.mem s x
+```
+
+### D006: `Set.range`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `85783c4cf857eb087b23ac8fe18ab901afaa196ccbca332e40a92bd4915afe59`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (ι → α) → Set α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f => setOf fun x => Exists fun y => Eq (f y) x
+```
+
+### D007: `Set.rangeFactorization`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3390776f8db1bdf6312efcd770634e44fa5cc6b6c786c90e2b63d1cfd9054fa8`
+
+Type:
+
+```lean
+{α : Type u} → {ι : Sort u_1} → (f : ι → α) → ι → (Set.range f).Elem
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ι} f i => ⟨f i, ⋯⟩
+```
+
+
+Mechanical adjudication triggers SHA256 499b91ed192b220386ca98aeb8fe0d9b8aba7fa80e375e0856ae8e6c235a698a
+{
+  "required": true,
+  "reasons": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C03 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C05 unclear",
+    "round-trip judge left semantic_checklist item C08 unclear",
+    "round-trip judge left semantic_checklist item C09 unclear",
+    "round-trip judge left semantic_checklist item N01 unclear",
+    "round-trip judge left semantic_checklist item N04 unclear",
+    "round-trip judge left implication translation_implies_source unclear"
+  ]
+}
+
+
+Direct judgment SHA256 dc732726f65cb26633796a9d6425915d2c8eea3c7e745689e3301008c1f0a5b7
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "49af125e6e9e6f448a7e92c12a9db69977e76d237b0de2f8acff2af2ac3ebaa6",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "Eq",
+      "reuse_sha256": "63522a7f14c7909bdc3b74e40f3dff8106b1aeec727b838bb5857305fb16dbba",
+      "effect_on_target": "Expresses identical current data, identical next outputs, and equality of the advance function with its factorization.",
+      "source_match": "Exact equality expresses determination: fixing current data fixes the next numerical solution. Function equality states this for every modeled history.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "Exists",
+      "reuse_sha256": "b8e037b7ee8454967abd5ede341767dc41b18fd412a2ea7e9d3856f010a1dd5f",
+      "effect_on_target": "Quantifies a step function on attainable current data, separately for each choice of current and advance.",
+      "source_match": "Represents determination by current data without requiring a specified formula or an update on unattainable inputs.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "Function.comp",
+      "interpretation": "The supplied body maps f, g, and x to f (g x).",
+      "effect_on_target": "The factored advance first extracts the current data with its range-membership certificate and then applies step.",
+      "source_match": "The next output receives information from the history through current data alone, matching the selected dependence claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "Iff",
+      "reuse_sha256": "385655c0e31bfe0bd19fe9a99c72f90b960c605078ce507320f666f7270060f6",
+      "effect_on_target": "Equates constancy of advance on equal-current-data histories with factorization through attainable current data.",
+      "source_match": "These are equivalent mathematical readings of determination by current data. The equivalence does not assert that an arbitrary advance is one-step.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "Set.Elem",
+      "interpretation": "The supplied body constructs the subtype of values satisfying membership in the given set.",
+      "effect_on_target": "Restricts the argument of step to current-data values that occur for some history.",
+      "source_match": "The source does not demand a total update on an arbitrary ambient data space. Membership certificates do not supply distinct history information: they are proofs of a proposition.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "Set.range",
+      "interpretation": "The supplied body defines the set of x for which some input y satisfies f y = x.",
+      "effect_on_target": "The update domain contains exactly the values current history for modeled histories.",
+      "source_match": "This preserves all data represented by the modeled process and avoids an unsupported extension to unattainable data.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "Set.rangeFactorization",
+      "interpretation": "The supplied body sends i to the subtype value whose underlying value is f i and whose certificate proves membership in the range.",
+      "effect_on_target": "Feeds step the actual current data of each history. Its proof component certifies attainability without selecting an additional historical input.",
+      "source_match": "Preserves the current-data object and the direction from current data to next output.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Attached raw PDF page 32, printed page 10, Section 1.7, second paragraph introduces Q, its spatial and temporal indices, and the one-step dependence sentence. Page 33 continues with vector-component conventions; page 31 supplies preceding reference-section context.",
+      "lean_evidence": "The proof-free header and both elaborated types present the same equivalence between current-data determination and attainable-domain factorization.",
+      "reasoning": "The selected result is the one-step characterization within explanatory notation prose. The adjacent notation conventions clarify its interpretation. Source identity and hashes are supplied provenance, not independently recomputed here."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Page 32 leaves the contents of current-time data unspecified and identifies the resulting solution as numerical through the surrounding Q paragraph.",
+      "lean_evidence": "History and NextData are arbitrary sorts; CurrentData is an arbitrary type; current and advance share the History domain.",
+      "reasoning": "History can represent admissible executions or contexts at a fixed transition, current extracts their current-time data, and advance gives their next numerical solution. No scalar, stencil, or dimensional restriction is imposed."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The next numerical solution is determined entirely by current-time data for the one-step methods under discussion.",
+      "lean_evidence": "For each current and advance, all pairs of histories are compared; the existential step is outside the history comparisons and satisfies a function equality.",
+      "reasoning": "One step function serves all histories for the chosen process. It may depend on the selected process and fixed transition; the theorem does not require a single map shared by different times or methods."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The passage concerns one-step methods and gives no stability, positivity, regularity, or ambient-domain admissibility assumptions.",
+      "lean_evidence": "The left side is the equal-current-data determination property. No numerical side conditions are added, and step is defined on Set.range current.",
+      "reasoning": "The left side formalizes the relevant one-step condition rather than assuming every process has it. Admissible histories can be represented by History without requiring an extension to inadmissible data."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected anchor is the dependence of the solution at t_{n+1} on data at t_n. The neighboring sentences explain suppression of temporal superscripts.",
+      "lean_evidence": "The left side expresses determination, and the right side expresses a function of current data producing every advance output.",
+      "reasoning": "The entire selected dependence characterization is represented. The surrounding conventions about omitted superscripts and the book's choice of methods are contextual prose, not additional mathematical conclusions of this selected result."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The passage supplies a verbal dependence claim without a numerical update formula.",
+      "lean_evidence": "D001-D007 consist of equality, existence, equivalence, composition, the range subtype, its defining existential membership, and its canonical factorization.",
+      "reasoning": "Each dependency has been interpreted from its supplied body or exact validated meaning reuse. Together they express functional dependence without introducing a numerical operator."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Entire determination by current data requires the same next solution whenever that data is the same.",
+      "lean_evidence": "current history₁ = current history₂ implies advance history₁ = advance history₂, equivalently advance = step composed with rangeFactorization current.",
+      "reasoning": "Equality has the appropriate strength. The reverse direction of the equivalence is a definitional consequence of dependence through a function, not an extra numerical assertion."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "Page 32 distinguishes q, its numerical approximation Q, and the more general current-time data.",
+      "lean_evidence": "CurrentData and NextData are separate parameters, and current and advance have distinct roles.",
+      "reasoning": "The formalization does not identify current data exclusively with Q or equate the next numerical output with the exact PDE solution. History provides the domain over which dependence is tested."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The stated transition is from t_n to t_{n+1}; no step size or time-independent update is specified.",
+      "lean_evidence": "current and advance encode the input and output of a selected transition. No time index, coefficient, or step-size constant occurs.",
+      "reasoning": "Abstracting a fixed transition preserves the current-to-next relation. Separate instantiations may represent different n, so the existential step imposes no autonomy across time."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "Pages 32-33 permit different spatial indexing and vector-valued systems, while leaving current data unspecified.",
+      "lean_evidence": "All three object domains are generic; the update domain is the exact range of current.",
+      "reasoning": "The type abstraction covers these source cases. Restriction to the range excludes no modeled history and avoids asserting totality beyond the modeled data. The generic formulation is a logical abstraction of the selected dependence property."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The source gives no rule for unattainable current data or degenerate abstract domains.",
+      "lean_evidence": "Set.range current admits exactly attained values; History is not assumed inhabited.",
+      "reasoning": "No undefined application is required. Empty-history instances yield an empty update domain, while all nonempty intended instances remain covered. If History is inhabited, the supplied advance already entails available NextData values."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The one-step sentence describes a substantive restriction on temporal dependence.",
+      "lean_evidence": "The equal-current-data condition is an operand of Iff, not an unconditional assertion about advance.",
+      "reasoning": "Nontrivial satisfying instances exist: histories (x, p), current (x, p) = x, and advance (x, p) = x + 1 over natural numbers. With advance (x, p) = p instead, equal current data can give different outputs, and neither side holds. Thus the characterization distinguishes dependence from history dependence and does not rely on empty domains."
+    },
+    {
+      "id": "N01",
+      "status": "pass",
+      "source_evidence": "The passage characterizes one-step methods without specifying a particular discretization or recurrence.",
+      "lean_evidence": "advance is the modeled next output, and the factorization asserts that its dependence on a history passes through current.",
+      "reasoning": "This is the execution-dependence property selected from the source. Since no concrete numerical scheme is selected, no further formula linkage is required."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence contains no norm or metric. Adjacent vector notation does not impose a componentwise numerical relation here.",
+      "lean_evidence": "The target uses equality of generic objects, without a norm, metric, or component operator.",
+      "reasoning": "There is no norm or component convention to compare in this dependence characterization."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage makes no error, conditioning, or stability claim.",
+      "lean_evidence": "No error or stability predicate appears.",
+      "reasoning": "The proposition concerns information dependence only."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "The enclosing paragraph identifies Q as a numerical approximation to q before discussing the next-time solution.",
+      "lean_evidence": "advance returns a NextData object; the theorem asserts only equality between such outputs and their factored representation.",
+      "reasoning": "Interpreting NextData as numerical solution data preserves the source role. Exact equality here concerns identical computed outputs for identical inputs, not exact agreement with q."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "No limiting process, asymptotic estimate, or omitted higher-order term occurs in the selected passage.",
+      "lean_evidence": "The target is an exact logical equivalence without asymptotic operators.",
+      "reasoning": "There is no asymptotic status to preserve."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "Determination by current data entails a unique next output for that data, but the source specifies no update on arbitrary unattainable values.",
+      "lean_evidence": "advance supplies outputs for modeled histories; the left side enforces agreement on each current-data fiber, and step is required only on that range.",
+      "reasoning": "A representative history supplies existence for each attained datum, while fiber constancy makes its output independent of the representative. Conversely a step function ensures that agreement. No PDE well-posedness or computable construction is asserted."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Under the selected source context, interpret History as admissible histories for a fixed method and transition, current as their data at t_n, and advance as their numerical solution at t_{n+1}. The equivalence identifies independence from histories sharing current data with an update using only attainable current data. This is the selected verbal characterization of one-step dependence; it does not claim every advance has that property."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The source's determination condition means that histories with identical current data have identical next outputs. On each attained datum, choosing a history produces a well-defined output because of that condition, giving the factored step map. Conversely, a factored map necessarily gives equal outputs on equal current data. This is the classical functional reformulation of the selected characterization, without additional totality or time-independence requirements."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [],
+  "rationale": "The attached authoritative page images support a general characterization of one-step dependence, not a specific numerical formula. The target represents that characterization by the equivalence between fiber constancy and factorization through attained current data. Its abstract domains preserve general current data, and a fixed-transition interpretation permits explicit time and method dependence across instantiations. It asserts neither that arbitrary methods are one-step nor that updates extend to unattainable inputs. All supplied dependencies and configured checks are resolved. The supplied hashes identify the evidence; they were not independently recomputed."
+}
+
+Roundtrip judgment SHA256 05d7359000e3e441f91f021140f22d218ce12a0aebdefada32699db930443f1a
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-ONE-STEP-GENERAL-CURRENT-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "d62334b387de7f0b27cd0839afe09fbc1b326e37a331c4bac1a18d47ca693c6d",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached raw PDF page 32, printed page 10, contains Section 1.7 and the selected sentence about one-step methods. Pages 31 and 33 provide surrounding context.",
+      "translation_evidence": "The translation concerns determination of an advance value by current data, matching the selected topic.",
+      "reasoning": "The selected passage and enclosing notation discussion are identifiable directly in the attached source images. Source and rendering hashes were supplied, not independently recomputed."
+    },
+    {
+      "id": "C02",
+      "status": "unclear",
+      "source_evidence": "The source describes numerical approximations indexed by spatial location and time; the following page permits vector-valued systems.",
+      "translation_evidence": "History and NextData are arbitrary sorts, CurrentData is an arbitrary type, and current and advance are arbitrary functions.",
+      "reasoning": "These types can represent general current data and numerical outputs without restricting dimension, but the supplied translation does not establish their interpretation as histories and next-time numerical solutions."
+    },
+    {
+      "id": "C03",
+      "status": "unclear",
+      "source_evidence": "The characterization concerns the one-step methods primarily considered, with current and next time levels identified by n and n+1.",
+      "translation_evidence": "For every pair of functions, fiber constancy is equivalent to existence of one factorization function working for every history.",
+      "reasoning": "The witness dependence correctly expresses determination for fixed functions. Whether those functions are fixed separately for each time level and method is unspecified, so the temporal quantifier correspondence cannot be established."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "The dependence description applies to one-step numerical methods, rather than all numerical methods.",
+      "translation_evidence": "There are no global hypotheses; fiber constancy is one side of an equivalence.",
+      "reasoning": "This can characterize the one-step property, but it does not assert that any numerical method has that property. The evidence does not settle whether the selected source claim is represented solely as a characterization or as a property of the methods under discussion."
+    },
+    {
+      "id": "C05",
+      "status": "unclear",
+      "source_evidence": "The numerical solution at t_{n+1} is determined entirely by data at t_n. Suppressing temporal superscripts generally indicates the current time level.",
+      "translation_evidence": "The conclusion is an equivalence between fiber constancy and factorization through attained current values.",
+      "reasoning": "The mathematical dependence relation is represented conditionally, but its current-to-next temporal interpretation is absent. The notation convention is contextual to the selected dependence claim and is not itself formalized."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The passage supplies a verbal dependence characterization without an update formula.",
+      "translation_evidence": "D001-D007 explain equality, existential quantification, composition, equivalence, set membership subtypes, range, and the canonical map into the range.",
+      "reasoning": "Every supplied dependency is accounted for, and the definitions consistently express factorization through attained data. No meaning is inferred solely from a declaration name."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Determination entirely by current data excludes different next outputs for identical relevant current data, with the method and applicable parameters fixed.",
+      "translation_evidence": "Equal current values imply equal advance values, equivalently advance factors through the range of current.",
+      "reasoning": "Under the intended object interpretation, exact equality and functional factorization express the stated determination relation."
+    },
+    {
+      "id": "C08",
+      "status": "unclear",
+      "source_evidence": "The source distinguishes the PDE solution q, its numerical approximation Q, and potentially other current numerical data.",
+      "translation_evidence": "CurrentData and NextData are separate arbitrary types or sorts, but advance has no specified numerical interpretation.",
+      "reasoning": "The translation does not restrict current data to Q or conflate it with a single cell value. It nevertheless leaves unresolved whether advance represents the numerical solution rather than some other output."
+    },
+    {
+      "id": "C09",
+      "status": "unclear",
+      "source_evidence": "The selected sentence explicitly relates t_n to t_{n+1}.",
+      "translation_evidence": "There is no temporal index, successor operation, or explicit time parameter.",
+      "reasoning": "An arbitrary fixed-step abstraction could preserve this relation through interpretation, but no such correspondence is established in the permitted evidence."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The source leaves the contents of current data unspecified and discusses both spatial dimensions and systems.",
+      "translation_evidence": "The theorem is an abstract factorization result for arbitrary functions and types or sorts.",
+      "reasoning": "The abstraction introduces no scalar-field, dimensional, stencil, or finite-state restriction. Its additional generality is identifiable, although numerical linkage remains a separate unresolved issue."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The passage does not assert that an update is defined on every conceivable datum.",
+      "translation_evidence": "The factorization function is defined only on the range of current; empty histories and empty ranges are explicitly covered.",
+      "reasoning": "Restricting the update to attained data avoids imposing unsupported totality outside the represented domain. The translated definitions handle empty cases consistently."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The intended discussion concerns numerical methods with current and next numerical values.",
+      "translation_evidence": "The equivalence permits empty histories but also applies to inhabited histories with nonconstant current and advance functions.",
+      "reasoning": "The statement is not true only because of empty domains or impossible premises. Its failure to assert either side of the equivalence is a conclusion-linkage issue, rather than an empty-domain defect."
+    },
+    {
+      "id": "N01",
+      "status": "unclear",
+      "source_evidence": "The source explicitly concerns one-step numerical methods advancing from the current time level to the next.",
+      "translation_evidence": "The translation expressly notes that the proposition contains no temporal, dynamical, causal, iterative, or transition semantics.",
+      "reasoning": "The dependence abstraction is suitable for a one-step characterization, but the evidence does not connect the arbitrary functions to that numerical construction."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected dependence claim uses no norm, metric, or componentwise estimate.",
+      "translation_evidence": "Only equality of abstract values and functions is used.",
+      "reasoning": "There is no quantitative or componentwise comparison whose convention needs preservation."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage states no error, conditioning, or stability result.",
+      "translation_evidence": "The translation asserts only functional dependence and factorization.",
+      "reasoning": "No error or stability notion is present on either side."
+    },
+    {
+      "id": "N04",
+      "status": "unclear",
+      "source_evidence": "The enclosing paragraph identifies Q as a numerical approximation to q.",
+      "translation_evidence": "NextData and advance are arbitrary and are not identified as numerical approximations.",
+      "reasoning": "No explicit substitution of exact for computed quantities occurs, but preservation of the numerical-output role is not established."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage contains no asymptotic expansion, limit, or remainder.",
+      "translation_evidence": "The factorization equivalence contains no asymptotic quantities.",
+      "reasoning": "There is no asymptotic logical status to compare."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "Determination by current data expresses a unique next output for the relevant data, without a claim of PDE well-posedness or update existence on arbitrary inputs.",
+      "translation_evidence": "Given advance, fiber constancy is equivalent to existence of a factorization on attained data; the factorization is necessarily unique there.",
+      "reasoning": "The abstract formulation does not add global PDE existence, regularity, or an extension to unattained data. It correctly captures deterministic output on the represented domain when fiber constancy holds."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "The translated equivalence provides a correct abstract characterization of functional dependence. With histories interpreted as admissible executions at a fixed time and method, current as all relevant current-time data, and advance as the next numerical solution, it expresses the mathematical content of being one-step. Those identifications are not supplied, however. The equivalence alone holds even when both fiber constancy and factorization are false, so it cannot establish that a particular numerical method is determined by current data. The source is explanatory characterization prose, leaving unresolved whether this abstract equivalence alone fulfills the selected claim."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "The translated proposition is a general mathematical factorization equivalence. If advance is constant on each fiber, assigning to an attained current value the advance value of any representing history is well-defined; conversely, a factorization gives equal outputs for equal current values. Thus it imposes no additional condition on the source methods, and the source's determination property supports this factorization when the numerical objects are instantiated appropriately. This direction does not establish the missing temporal interpretation in the reverse direction."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "unresolved-temporal-and-object-linkage",
+      "source_evidence": "Raw PDF page 32, printed page 10, Section 1.7 relates current-time data at t_n to the numerical solution at t_{n+1}.",
+      "translation_evidence": "The proposition quantifies arbitrary current and advance functions without time indices or a numerical interpretation; the translation explicitly identifies the absence of temporal and execution semantics.",
+      "impact": "The evidence does not establish preservation of the current-to-next relation or of the numerical-output role. Adjudication must determine whether the abstract object correspondence is sufficiently supported."
+    },
+    {
+      "severity": "major",
+      "category": "characterization-versus-property-assertion",
+      "source_evidence": "The source characterizes the one-step methods primarily considered by determination from current-time data.",
+      "translation_evidence": "The proposition asserts fiber constancy if and only if a factorization exists, without asserting either condition.",
+      "impact": "The translation is suitable as an abstract definition-equivalence, but does not establish the one-step property for any method. Whether that matches the selected explanatory source claim remains unresolved."
+    }
+  ],
+  "rationale": "The attached source images support a general current-data dependence characterization without a specified update formula or total state-space domain. The translation accurately expresses an abstract dependence equivalence and appropriately restricts its factorization to attained data. Acceptance remains unresolved because the permitted evidence does not identify the abstract functions with current-time data and next-time numerical solutions, or settle whether a characterization equivalence alone represents the selected source claim. Adjudication is required."
+}
+Attached primary source rendering: raw PDF page 31.
+
+Attached primary source rendering: raw PDF page 32.
+
+Attached primary source rendering: raw PDF page 33.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
