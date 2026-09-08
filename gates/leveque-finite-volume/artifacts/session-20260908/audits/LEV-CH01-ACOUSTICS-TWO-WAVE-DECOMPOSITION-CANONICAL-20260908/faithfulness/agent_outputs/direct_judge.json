@@ -1,0 +1,267 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-ACOUSTICS-TWO-WAVE-DECOMPOSITION-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "7fdbdc6ce55f59cfae923e06d32b0a2df6f7398bc44ecf7b2e8fec4128fae1a3",
+  "dependency_coverage": [
+    {"id":"D001","name":"NumStability.LinearAcousticsSolution","interpretation":"By its constructor D008, packages nonzero density, two real fields, and the acoustic equations everywhere.","effect_on_target":"Restricts the input to classical acoustic solutions with fixed parameters.","source_match":"Matches equation (1.5) and its constant-material context on printed page 2.","status":"pass"},
+    {"id":"D002","name":"NumStability.LinearAcousticsSolution.pressure","interpretation":"Projects the second constructor field, the pressure function.","effect_on_target":"Supplies the same pressure to both scalar combinations.","source_match":"Matches p in both displayed combinations on page 2.","status":"pass"},
+    {"id":"D003","name":"NumStability.LinearAcousticsSolution.velocity","interpretation":"Projects the third constructor field, the velocity function.","effect_on_target":"Supplies the same velocity to both scalar combinations.","source_match":"Matches u in both displayed combinations on page 2.","status":"pass"},
+    {"id":"D004","name":"NumStability.leveque01_equation04_oneWayWaveAt","interpretation":"Abbreviation for IsLinearAdvectionSolutionAt with unchanged field, speed, space, and time.","effect_on_target":"Each conclusion asserts the scalar transport equation through D007.","source_match":"Matches the two one-way equations on page 2.","status":"pass"},
+    {"id":"D005","name":"NumStability.linearAcousticsLeftInvariant","interpretation":"The function p(x,t)−(density·soundSpeed)u(x,t).","effect_on_target":"Constructs the second scalar field using the prescribed negative combination.","source_match":"Exactly w²=p−ρcu on page 2.","status":"pass"},
+    {"id":"D006","name":"NumStability.linearAcousticsRightInvariant","interpretation":"The function p(x,t)+(density·soundSpeed)u(x,t).","effect_on_target":"Constructs the first scalar field using the prescribed positive combination.","source_match":"Exactly w¹=p+ρcu on page 2.","status":"pass"},
+    {"id":"D007","name":"NumStability.IsLinearAdvectionSolutionAt","interpretation":"There exist genuine time and space slice derivatives qt and qx satisfying qt+speed • qx=0.","effect_on_target":"At E=Real, asserts w_t+speed·w_x=0 and existence of both derivatives.","source_match":"Matches classical partial derivatives and the two transport equations on page 2.","status":"pass"},
+    {"id":"D008","name":"NumStability.LinearAcousticsSolution.mk","interpretation":"Constructs the solution package from density≠0, pressure, velocity, and pointwise acoustic satisfaction for every real x,t.","effect_on_target":"Makes all input equations and first partial derivatives available everywhere; adds no initial or boundary data.","source_match":"Matches (1.5), with the real-coordinate convention inherited from page 1 and nonzero physical density.","status":"pass"},
+    {"id":"D009","name":"NumStability.IsLinearAcousticsSolutionAt","reuse_sha256":"a223ee592cd9f2f47909a3e39ad389836292b0f1d6a2f4df8b7d715b9fa9bd61","effect_on_target":"Requires actual pt,px,ut,ux with pt+Kux=0 and ut+ρ⁻¹px=0 at every point.","source_match":"Both component equations and their derivative roles agree exactly with (1.5).","status":"pass"},
+    {"id":"D010","name":"NumStability.IsLinearAdvectionSolutionAt._proof_1","interpretation":"Establishes continuity of scalar multiplication for a real normed space.","effect_on_target":"Provides derivative infrastructure for D007, instantiated on ordinary reals.","source_match":"Consistent with classical real differentiation; adds no hypothesis about the fields.","status":"pass"},
+    {"id":"D011","name":"NumStability.IsLinearAcousticsSolutionAt._proof_1","reuse_sha256":"2d65f9ea887e2bcf7e5f3ce360246bdb61c4814e6ff4a4c4343290c490c5464c","effect_on_target":"Provides continuity of ordinary real multiplication for the acoustic derivative predicates.","source_match":"Matches the real calculus implicit in (1.5).","status":"pass"},
+    {"id":"D012","name":"And","interpretation":"Logical conjunction of two propositions.","effect_on_target":"Requires both directional equations and all constituent derivative and equation conditions.","source_match":"Preserves the two simultaneous conclusions and two simultaneous input equations.","status":"pass"},
+    {"id":"D013","name":"DivInvMonoid.toDiv","interpretation":"Projects division from the supplied division/inverse monoid.","effect_on_target":"Selects real division for K/ρ.","source_match":"Matches the ratio inside the source sound speed.","status":"pass"},
+    {"id":"D014","name":"HDiv.hDiv","interpretation":"Projects the binary division operation from an HDiv instance.","effect_on_target":"Evaluates bulkModulus divided by density in Real.","source_match":"Matches K/ρ rather than its reciprocal.","status":"pass"},
+    {"id":"D015","name":"LT.lt","interpretation":"Projects the selected strict order relation.","effect_on_target":"Expresses strict positivity of the two real parameters.","source_match":"Makes the physical positive-material setting explicit.","status":"pass"},
+    {"id":"D016","name":"Neg.neg","interpretation":"Projects unary negation.","effect_on_target":"Negates the sound speed in the second transport equation.","source_match":"Matches propagation coefficient −c.","status":"pass"},
+    {"id":"D017","name":"OfNat.ofNat","interpretation":"Projects the interpretation of a natural-number literal in its target type.","effect_on_target":"Interprets displayed zero literals as real zero through the supplied instances.","source_match":"Matches zero in positivity conditions and homogeneous equations.","status":"pass"},
+    {"id":"D018","name":"Real","interpretation":"The library real-number type at the external semantic frontier.","effect_on_target":"All coordinates, fields, parameters, and derivative values are real.","source_match":"Matches the real system and real-coordinate convention on page 1.","status":"pass"},
+    {"id":"D019","name":"Real.instDivInvMonoid","interpretation":"Real multiplicative structure with inverse and division satisfying division as multiplication by inverse.","effect_on_target":"Provides exact real K/ρ.","source_match":"Matches the source ratio for positive density.","status":"pass"},
+    {"id":"D020","name":"Real.instLT","interpretation":"Selects the library strict real order.","effect_on_target":"Gives the ordinary meaning to 0<K and 0<ρ.","source_match":"Matches the positive physical parameter interpretation.","status":"pass"},
+    {"id":"D021","name":"Real.instNeg","interpretation":"Selects real additive negation.","effect_on_target":"Forms the negative sound speed and ordinary subtraction.","source_match":"Preserves the source signs.","status":"pass"},
+    {"id":"D022","name":"Real.instZero","interpretation":"Selects real zero.","effect_on_target":"Fixes the zero in parameter tests and equations.","source_match":"Matches the homogeneous equations' zero.","status":"pass"},
+    {"id":"D023","name":"Real.sqrt","interpretation":"Takes the nonnegative square root after conversion to nonnegative reals, then returns a real.","effect_on_target":"At positive K/ρ, produces its positive square root; truncation of negative inputs is irrelevant.","source_match":"Matches c=√(K/ρ) and positive sound speed.","status":"pass"},
+    {"id":"D024","name":"Zero.toOfNat0","interpretation":"Builds the numeral-zero instance from the selected zero operation.","effect_on_target":"Ensures literal 0 denotes the supplied real zero.","source_match":"No coefficient or zero-value change.","status":"pass"},
+    {"id":"D025","name":"instHDiv","interpretation":"Builds homogeneous HDiv using the original Div operation.","effect_on_target":"Routes division notation to real division.","source_match":"Preserves K/ρ.","status":"pass"},
+    {"id":"D026","name":"HAdd.hAdd","interpretation":"Projects addition from its HAdd instance.","effect_on_target":"Adds pressure to ρcu and adds the transport terms.","source_match":"Matches the source sums.","status":"pass"},
+    {"id":"D027","name":"HMul.hMul","reuse_sha256":"4b6440abc6ffddecd028370f87e89913beb9662db764e440ad34a0ed66f96457","effect_on_target":"Forms ordinary real products ρcu, Kux, and ρ⁻¹px.","source_match":"Matches all multiplicative coefficients in the source.","status":"pass"},
+    {"id":"D028","name":"HSub.hSub","interpretation":"Projects subtraction from its HSub instance.","effect_on_target":"Forms p−ρcu.","source_match":"Matches the leftward invariant.","status":"pass"},
+    {"id":"D029","name":"NormedField.toNormedSpace","interpretation":"Equips a normed field with its natural module over itself and compatible norm.","effect_on_target":"Instantiates the generic advection predicate with the natural real scalar action.","source_match":"The scalar transport coefficient acts by ordinary real multiplication.","status":"pass"},
+    {"id":"D030","name":"Real.instAdd","interpretation":"Selects ordinary real addition.","effect_on_target":"Determines sums in the invariant and PDE expressions.","source_match":"Matches real addition in the printed equations.","status":"pass"},
+    {"id":"D031","name":"Real.instMul","interpretation":"Selects ordinary real multiplication.","effect_on_target":"Determines products of parameters, fields, and derivatives.","source_match":"Matches real multiplication in (1.5) and the transformations.","status":"pass"},
+    {"id":"D032","name":"Real.instSub","interpretation":"Defines subtraction as addition of the real negative.","effect_on_target":"The left invariant is exactly p+(−ρcu).","source_match":"Matches p−ρcu.","status":"pass"},
+    {"id":"D033","name":"Real.normedAddCommGroup","interpretation":"Combines the standard real norm, additive group, and metric.","effect_on_target":"Supplies standard real analytic structure to the scalar PDE predicate.","source_match":"Consistent with ordinary real partial derivatives.","status":"pass"},
+    {"id":"D034","name":"Real.normedField","interpretation":"Combines real field operations with the standard real norm and metric.","effect_on_target":"Fixes the analytic and algebraic scalar structure used for derivatives.","source_match":"No alternative field, topology, or arithmetic is introduced.","status":"pass"},
+    {"id":"D035","name":"instHAdd","interpretation":"Builds homogeneous HAdd from Add without changing its operation.","effect_on_target":"Routes sums to real addition.","source_match":"Preserves the printed sums.","status":"pass"},
+    {"id":"D036","name":"instHMul","reuse_sha256":"c5a84d6a1a0e6c7f2d15dce2874afcf868d19cd259f02ad9d50e479fc8d23211","effect_on_target":"Routes coefficient products to the same real multiplication.","source_match":"Preserves ρcu and both acoustic coefficients.","status":"pass"},
+    {"id":"D037","name":"instHSub","interpretation":"Builds homogeneous HSub from Sub without changing its operation.","effect_on_target":"Routes the left invariant's subtraction to real subtraction.","source_match":"Preserves its negative sign.","status":"pass"},
+    {"id":"D038","name":"AddCommGroup.toDivisionAddCommMonoid","interpretation":"Builds a commutative subtraction structure retaining the additive group's subtraction and negation.","effect_on_target":"Supports inherited additive and zero structure in derivative expressions.","source_match":"Retains ordinary real additive operations.","status":"pass"},
+    {"id":"D039","name":"AddCommMagma.toAdd","interpretation":"Projects the addition operation from a commutative additive magma.","effect_on_target":"Supplies inherited addition in the generic derivative infrastructure.","source_match":"At Real this is the same addition used in the source.","status":"pass"},
+    {"id":"D040","name":"AddCommMonoid.toAddCommSemigroup","interpretation":"Forgets zero laws while retaining the additive semigroup and commutativity.","effect_on_target":"Provides an inherited addition instance.","source_match":"Does not modify the equation's addition.","status":"pass"},
+    {"id":"D041","name":"AddCommSemigroup.toAddCommMagma","interpretation":"Retains addition and commutativity from the semigroup.","effect_on_target":"Connects inherited additive instances.","source_match":"Preserves ordinary real addition.","status":"pass"},
+    {"id":"D042","name":"AddMonoid.toAddZeroClass","interpretation":"Retains zero, addition, and their identity laws.","effect_on_target":"Supplies zero and addition to derivative equations and scalar actions.","source_match":"Preserves homogeneous zero right-hand sides.","status":"pass"},
+    {"id":"D043","name":"AddZero.toZero","interpretation":"Projects zero from an additive-zero structure.","effect_on_target":"Selects the inherited zero for the PDE codomain.","source_match":"At Real this is numerical zero.","status":"pass"},
+    {"id":"D044","name":"AddZeroClass.toAddZero","interpretation":"Projects the underlying addition-and-zero data.","effect_on_target":"Preserves zero through the algebraic instance chain.","source_match":"No altered zero or equation meaning.","status":"pass"},
+    {"id":"D045","name":"DenselyNormedField.toNontriviallyNormedField","interpretation":"Retains the normed field and supplies nontriviality of its norm.","effect_on_target":"Provides the scalar-field structure required by HasDerivAt.","source_match":"Matches ordinary real differentiation.","status":"pass"},
+    {"id":"D046","name":"DistribMulAction.toDistribSMul","interpretation":"Retains scalar multiplication and its distributivity over addition and zero.","effect_on_target":"Supplies the scalar action used in qt+speed • qx.","source_match":"Preserves multiplication by the real wave speed.","status":"pass"},
+    {"id":"D047","name":"DistribSMul.toSMulZeroClass","interpretation":"Projects the scalar action with its zero-preservation law.","effect_on_target":"Carries the same scalar action into derivative infrastructure.","source_match":"No change to multiplication by c.","status":"pass"},
+    {"id":"D048","name":"ENormedAddCommMonoid.toESeminormedAddCommMonoid","interpretation":"Projects the corresponding extended seminormed additive structure.","effect_on_target":"Provides inherited additive infrastructure without changing its data.","source_match":"At Real the PDE still uses the standard additive structure.","status":"pass"},
+    {"id":"D049","name":"ESeminormedAddCommMonoid.toAddCommMonoid","interpretation":"Extracts the additive monoid and commutativity.","effect_on_target":"Supplies addition and zero through an analytic instance path.","source_match":"Preserves the real scalar equation operations.","status":"pass"},
+    {"id":"D050","name":"ESeminormedAddCommMonoid.toESeminormedAddMonoid","interpretation":"Projects the underlying extended seminormed additive monoid.","effect_on_target":"Carries existing additive data through the instance hierarchy.","source_match":"Introduces no new mathematical condition on the acoustic fields.","status":"pass"},
+    {"id":"D051","name":"ESeminormedAddMonoid.toAddMonoid","interpretation":"Projects the additive monoid field.","effect_on_target":"Provides existing addition and zero.","source_match":"Matches the scalar real arithmetic of the PDEs.","status":"pass"},
+    {"id":"D052","name":"Eq","interpretation":"Ordinary propositional equality of two terms of the same type.","effect_on_target":"Requires exact vanishing of each PDE expression.","source_match":"Matches equality to zero, with no tolerance or inequality.","status":"pass"},
+    {"id":"D053","name":"Exists","interpretation":"Existential quantification over a witness satisfying a predicate.","effect_on_target":"Binds actual derivative values separately at each point.","source_match":"Makes the existence implicit in the printed partial derivatives explicit.","status":"pass"},
+    {"id":"D054","name":"HSMul.hSMul","interpretation":"Projects a heterogeneous scalar multiplication operation.","effect_on_target":"Forms the transport speed times the spatial derivative.","source_match":"At the supplied real self-action this is c·w_x.","status":"pass"},
+    {"id":"D055","name":"HasDerivAt","interpretation":"Derivative predicate using the neighborhood filter at the point with fixed base point.","effect_on_target":"Requires ordinary derivatives of the time and space slices, not default-valued derivative expressions.","source_match":"Matches the classical first partial derivatives used on pages 1–2.","status":"pass"},
+    {"id":"D056","name":"Module.toDistribMulAction","interpretation":"Projects a module's distributive scalar action.","effect_on_target":"Connects the natural real module to scalar multiplication notation.","source_match":"Preserves the real transport coefficient's action.","status":"pass"},
+    {"id":"D057","name":"Ne","reuse_sha256":"98da9b1c2b006244117ec4ab2b22756059f8eaab1580f95385ac88eae18c4a89","effect_on_target":"Requires density unequal to zero inside the solution package; positivity already entails it.","source_match":"Consistent with 1/ρ in (1.5), without an additional effective restriction here.","status":"pass"},
+    {"id":"D058","name":"NegZeroClass.toZero","interpretation":"Projects zero from a structure relating negation and zero.","effect_on_target":"Supplies inherited zero to additive expressions.","source_match":"Keeps the ordinary real zero.","status":"pass"},
+    {"id":"D059","name":"NormedAddCommGroup","interpretation":"Library structure for an additive commutative group with compatible norm and metric, instantiated by D033.","effect_on_target":"Supports D007's general codomain interface, specialized to Real.","source_match":"No vector-valued or quotient-valued substitution occurs.","status":"pass"},
+    {"id":"D060","name":"NormedAddCommGroup.toAddCommGroup","interpretation":"Projects the additive commutative group field.","effect_on_target":"Supplies algebra for derivative values.","source_match":"At Real this retains the source's ordinary arithmetic.","status":"pass"},
+    {"id":"D061","name":"NormedAddCommGroup.toENormedAddCommMonoid","interpretation":"Builds the extended-norm additive structure from the existing normed group.","effect_on_target":"Provides an alternate inherited analytic structure using the same underlying operations.","source_match":"Does not replace scalar equations by norm equations.","status":"pass"},
+    {"id":"D062","name":"NormedAddCommGroup.toSeminormedAddCommGroup","interpretation":"Retains norm, additive group, and pseudometric from the normed group.","effect_on_target":"Supplies the module and topology interfaces without changing their data.","source_match":"Preserves standard real calculus.","status":"pass"},
+    {"id":"D063","name":"NormedSpace","interpretation":"Library structure of a module compatible with the supplied normed field and seminormed additive group.","effect_on_target":"Instantiated by the real field acting on itself.","source_match":"Only supplies ordinary scalar calculus; imposes no new field regularity assumption.","status":"pass"},
+    {"id":"D064","name":"NormedSpace.toModule","interpretation":"Projects the underlying module.","effect_on_target":"Determines the scalar action on derivative values.","source_match":"Through D029 this is ordinary real multiplication.","status":"pass"},
+    {"id":"D065","name":"PseudoMetricSpace.toUniformSpace","interpretation":"Projects the uniform structure of the pseudometric space.","effect_on_target":"Supplies the neighborhood infrastructure for derivatives.","source_match":"At the real instances this is the usual real uniformity.","status":"pass"},
+    {"id":"D066","name":"Real.denselyNormedField","interpretation":"Extends the standard real normed field with density of norm values.","effect_on_target":"Provides the nontrivial normed scalar field required for differentiation.","source_match":"Matches real-coordinate calculus.","status":"pass"},
+    {"id":"D067","name":"Real.instMonoid","interpretation":"The inferred library multiplicative monoid on Real.","effect_on_target":"Supports real inverse/division and scalar actions.","source_match":"Uses the existing real multiplication and identity.","status":"pass"},
+    {"id":"D068","name":"Real.semiring","interpretation":"The inferred library semiring on Real.","effect_on_target":"Supplies the standard scalar algebra underlying module operations.","source_match":"No change from the source's real arithmetic.","status":"pass"},
+    {"id":"D069","name":"SMulZeroClass.toSMul","interpretation":"Projects the scalar multiplication operation.","effect_on_target":"Exposes the natural real action in derivative expressions.","source_match":"Preserves multiplication by the wave speed.","status":"pass"},
+    {"id":"D070","name":"SeminormedAddCommGroup.toPseudoMetricSpace","interpretation":"Projects the existing pseudometric space.","effect_on_target":"Determines the codomain topology used by derivatives.","source_match":"The real instance gives the usual absolute-distance topology.","status":"pass"},
+    {"id":"D071","name":"SubNegZeroMonoid.toNegZeroClass","interpretation":"Retains zero and negation with the negation-of-zero law.","effect_on_target":"Provides consistent inherited zero and negation.","source_match":"Preserves the signs and homogeneous zero values.","status":"pass"},
+    {"id":"D072","name":"SubtractionCommMonoid.toSubtractionMonoid","interpretation":"Projects the underlying subtraction monoid.","effect_on_target":"Carries the same subtraction data through the instance hierarchy.","source_match":"No modification of the left invariant's subtraction.","status":"pass"},
+    {"id":"D073","name":"SubtractionMonoid.toSubNegZeroMonoid","interpretation":"Retains the subtraction/negation monoid and supplies the negation-of-zero law.","effect_on_target":"Supports the inherited additive zero structure.","source_match":"Consistent with real subtraction and zero.","status":"pass"},
+    {"id":"D074","name":"UniformSpace.toTopologicalSpace","interpretation":"Projects the topology from the uniform structure.","effect_on_target":"Fixes the neighborhoods appearing in HasDerivAt.","source_match":"The selected real topology is the classical one.","status":"pass"},
+    {"id":"D075","name":"instHSMul","interpretation":"Builds HSMul using the unchanged SMul operation.","effect_on_target":"Routes scalar multiplication notation in D007.","source_match":"The speed still multiplies the spatial derivative in Real.","status":"pass"},
+    {"id":"D076","name":"AddCommGroup.toAddCommMonoid","interpretation":"Retains the additive monoid and commutativity.","effect_on_target":"Supplies additive structure needed by the module.","source_match":"Retains real addition and zero.","status":"pass"},
+    {"id":"D077","name":"AddCommGroup.toAddGroup","interpretation":"Projects the additive group.","effect_on_target":"Provides subtraction and negation infrastructure for derivatives.","source_match":"Preserves the source's real additive operations.","status":"pass"},
+    {"id":"D078","name":"AddGroup.toSubNegMonoid","interpretation":"Projects the underlying subtraction-and-negation monoid.","effect_on_target":"Carries the same additive operations into derivative instances.","source_match":"No altered signs or equation semantics.","status":"pass"},
+    {"id":"D079","name":"ContinuousSMul","interpretation":"Library proposition that the supplied scalar action is continuous for the supplied topologies.","effect_on_target":"Satisfied by D010 and D011 for the relevant real actions.","source_match":"Analytic infrastructure only; not an extra premise on solutions.","status":"pass"},
+    {"id":"D080","name":"DivisionSemiring.toSemiring","interpretation":"Projects the underlying semiring.","effect_on_target":"Supplies real scalar algebra for the module instance.","source_match":"Preserves the source arithmetic.","status":"pass"},
+    {"id":"D081","name":"Field.toSemifield","interpretation":"Retains semiring operations, inverse, division, and their field laws in a semifield structure.","effect_on_target":"Carries ordinary real scalar operations through the derivative instance chain.","source_match":"No replacement of real division or multiplication.","status":"pass"},
+    {"id":"D082","name":"Inv.inv","reuse_sha256":"416fbc93a56fbf4d361ecf424e7d97c24cdf124604889bebaf067f88433c6ffd","effect_on_target":"Forms the reciprocal of density in the input velocity equation.","source_match":"Matches 1/ρ in (1.5).","status":"pass"},
+    {"id":"D083","name":"MonoidWithZero.toMonoid","interpretation":"Projects the multiplicative monoid.","effect_on_target":"Supplies the scalar-action monoid with unchanged multiplication.","source_match":"Matches ordinary multiplication by real coefficients.","status":"pass"},
+    {"id":"D084","name":"NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing","interpretation":"Projects the underlying nonunital seminormed ring.","effect_on_target":"Preserves arithmetic and norm data along the self-module instance path.","source_match":"Does not alter the scalar field or its topology.","status":"pass"},
+    {"id":"D085","name":"NonUnitalSeminormedRing.toSeminormedAddCommGroup","interpretation":"Retains the norm, additive group, and pseudometric.","effect_on_target":"Provides the additive analytic structure for the real self-module.","source_match":"Matches ordinary real scalar differentiation.","status":"pass"},
+    {"id":"D086","name":"NontriviallyNormedField.toNormedField","interpretation":"Projects the underlying normed field.","effect_on_target":"Provides the standard real field to derivative instances.","source_match":"No new scalar domain or arithmetic.","status":"pass"},
+    {"id":"D087","name":"NormedCommRing.toSeminormedCommRing","interpretation":"Retains norm, ring, and pseudometric while forgetting metric separation strength.","effect_on_target":"Supplies inherited real analytic structure without changing the metric data.","source_match":"No seminorm quotient or weakened equality enters the PDE.","status":"pass"},
+    {"id":"D088","name":"NormedField.toField","interpretation":"Projects the underlying field.","effect_on_target":"Supplies exact real arithmetic to the derivative infrastructure.","source_match":"Matches source real arithmetic.","status":"pass"},
+    {"id":"D089","name":"Real.instAddCommGroup","interpretation":"The inferred standard real additive commutative group.","effect_on_target":"Provides the additive operations on fields and derivative values.","source_match":"Matches scalar addition, subtraction, and zero.","status":"pass"},
+    {"id":"D090","name":"Real.instInv","reuse_sha256":"7a37edfeff514ed763c3a09167a65a7737fb00c93a8ee0616b8001a03f25dc03","effect_on_target":"Selects ordinary real reciprocal for nonzero density.","source_match":"Matches 1/ρ; the zero-inverse convention is excluded by the hypotheses.","status":"pass"},
+    {"id":"D091","name":"Real.normedCommRing","interpretation":"Combines the standard real commutative ring with the standard real norm and metric.","effect_on_target":"Supplies compatible arithmetic and topology along derivative instance paths.","source_match":"Matches the same real calculus as the source.","status":"pass"},
+    {"id":"D092","name":"Real.pseudoMetricSpace","interpretation":"Uses distance |x−y| with its induced uniform structure.","effect_on_target":"Fixes ordinary real neighborhoods for differentiation.","source_match":"Matches classical real limits; no discrete or degenerate topology.","status":"pass"},
+    {"id":"D093","name":"Semifield.toDivisionSemiring","interpretation":"Retains semiring, inverse, division, and their laws.","effect_on_target":"Supplies scalar algebra in the derivative instance chain.","source_match":"Preserves exact real operations.","status":"pass"},
+    {"id":"D094","name":"SeminormedCommRing.toNonUnitalSeminormedCommRing","interpretation":"Retains norm, additive operations, multiplication, and pseudometric while forgetting the unit interface.","effect_on_target":"Supports the real self-module's inherited analytic structure.","source_match":"Does not change coefficients, field values, or derivatives.","status":"pass"},
+    {"id":"D095","name":"Semiring.toMonoidWithZero","interpretation":"Retains multiplication, one, powers, and zero with their laws.","effect_on_target":"Supplies the scalar-action multiplicative structure.","source_match":"Ordinary real multiplication remains the action.","status":"pass"},
+    {"id":"D096","name":"SubNegMonoid.toAddMonoid","interpretation":"Projects the additive monoid.","effect_on_target":"Supplies addition and zero for derivative values and scalar actions.","source_match":"Preserves the source sums and zero.","status":"pass"},
+    {"id":"D097","name":"NormedField.toNormedCommRing","interpretation":"Retains the norm, ring, and metric of a normed field.","effect_on_target":"Provides one of the real derivative topology paths.","source_match":"Uses the same standard real metric and arithmetic.","status":"pass"},
+    {"id":"D098","name":"SeminormedCommRing.toSeminormedRing","interpretation":"Projects the underlying seminormed ring.","effect_on_target":"Preserves metric and ring data in the derivative topology chain.","source_match":"No different topology or operation is introduced.","status":"pass"},
+    {"id":"D099","name":"SeminormedRing.toPseudoMetricSpace","interpretation":"Projects the ring's pseudometric space.","effect_on_target":"Supplies the usual real metric for HasDerivAt through the selected instances.","source_match":"Matches classical partial differentiation.","status":"pass"},
+    {"id":"D100","name":"instSMulOfMul","reuse_sha256":"0133169eccb6686e93bd47c2d46471c6bbc7c3e6c701f435e0f237bb81a1f84c","effect_on_target":"Identifies the real self-action with real multiplication, including in acoustic derivative infrastructure.","source_match":"Confirms that scalar action introduces no coefficient reinterpretation.","status":"pass"}
+  ],
+  "semantic_checklist": [
+    {
+      "id":"C01",
+      "status":"pass",
+      "source_evidence":"Attached raw pages 23–25, printed pages 1–3: page 2 displays (1.5), both invariants, and both transport equations; page 3 opens with their two-direction decomposition interpretation.",
+      "lean_evidence":"The proof-free header and both elaborated types assert the two transformed scalar equations for a LinearAcousticsSolution.",
+      "reasoning":"The selected opening sentence is read together with its immediately preceding construction and page 1's real-coordinate convention. Source and dossier hashes are supplied provenance, not independently recomputed."
+    },
+    {
+      "id":"C02",
+      "status":"pass",
+      "source_evidence":"Page 1 specifies q:ℝ×ℝ→ℝ^m; page 2 specializes to pressure and velocity in one spatial dimension with constants K and ρ.",
+      "lean_evidence":"K,ρ,x,t are Real; D002 and D003 are Real→Real→Real; D008 packages both fields.",
+      "reasoning":"Currying preserves the two real coordinates. The acoustic state has exactly its two scalar components."
+    },
+    {
+      "id":"C03",
+      "status":"pass",
+      "source_evidence":"Page 2 constructs both combinations from the same pressure and velocity solution and the same fixed material constants.",
+      "lean_evidence":"The target universally quantifies parameters and system before x,t; c is the fixed expression sqrt(K/ρ). D007 and D009 bind derivative witnesses locally.",
+      "reasoning":"Neither parameters nor transformed fields vary through point-dependent choices. Local derivative witnesses have the appropriate dependence on x,t."
+    },
+    {
+      "id":"C04",
+      "status":"pass",
+      "source_evidence":"Page 2 identifies K as bulk modulus, ρ as density, uses 1/ρ, defines the sound speed, and places the construction in the positive-speed physical acoustic setting. Classical partial differentiation is implicit.",
+      "lean_evidence":"The target assumes K>0 and ρ>0. D008 requires density≠0 and D009 requires all four first partial derivatives and both acoustic equations everywhere.",
+      "reasoning":"Positivity makes the ordinary physical material context explicit, rather than claiming a stronger theorem. Separate first partial derivatives suffice; no C1, second-derivative, boundary, or initial-data assumption is added. Density≠0 is redundant under positivity."
+    },
+    {
+      "id":"C05",
+      "status":"pass",
+      "source_evidence":"Page 2 gives w¹=p+ρcu with w¹_t+cw¹_x=0 and w²=p−ρcu with w²_t−cw²_x=0; page 3 describes the two-wave decomposition.",
+      "lean_evidence":"Both exact combinations occur in a conjunction, with respective coefficients sqrt(K/ρ) and its negative, at every x,t.",
+      "reasoning":"Both displayed scalar equations are represented. Positivity makes the speeds distinct and the displayed transformation invertible: p=(w¹+w²)/2 and u=(w¹−w²)/(2ρc). These inverse identities are algebraic consequences, not quoted source displays or additional target conjuncts. The selected passage does not require each mode to have nonzero amplitude."
+    },
+    {
+      "id":"C06",
+      "status":"pass",
+      "source_evidence":"Pages 1–2 explain derivative subscripts and display ordinary real arithmetic in the coupled and scalar equations.",
+      "lean_evidence":"D004 unfolds to D007; D005 and D006 give the exact combinations; D009 gives the acoustic input; D055 enforces real slice derivatives; the instance paths preserve real operations.",
+      "reasoning":"All D001–D100 entries are covered. The eight reuse entries retain their exact reuse hashes while their target effects are independently assessed. No predicate is interpreted solely from its name."
+    },
+    {
+      "id":"C07",
+      "status":"pass",
+      "source_evidence":"The two scalar equations on page 2 are exact equalities to zero and are asserted together for an acoustic solution.",
+      "lean_evidence":"D007 uses Eq with zero, and the target uses And for the positive- and negative-speed equations.",
+      "reasoning":"The relation strength and simultaneous forward conclusions match. The source's decomposition wording is supported by the nondegenerate explicit change of variables; no separate printed converse theorem is being omitted."
+    },
+    {
+      "id":"C08",
+      "status":"pass",
+      "source_evidence":"Page 2 distinguishes p, u, w¹, and w², while its final traveling-profile sentence switches notation to q².",
+      "lean_evidence":"Distinct pressure and velocity projections feed two distinct fixed transformation definitions; no traveling-profile variable occurs.",
+      "reasoning":"The target preserves each field's role and does not depend on identifying the source's apparent q² notation change with a new unknown."
+    },
+    {
+      "id":"C09",
+      "status":"pass",
+      "source_evidence":"Equation (1.5) uses K and 1/ρ; the combinations use ρc; c=√(K/ρ); the transport coefficients are +c and −c.",
+      "lean_evidence":"D009 has Kux and density inverse times px; D005–D006 use density·soundSpeed; the target substitutes sqrt(K/ρ) consistently.",
+      "reasoning":"Every coefficient, sign, and parameter dependence matches. The superscripts are mode labels, represented by the two conjuncts."
+    },
+    {
+      "id":"C10",
+      "status":"pass",
+      "source_evidence":"Page 1 supplies the real full-coordinate convention; page 2 discusses the one-dimensional classical physical acoustic system.",
+      "lean_evidence":"The target is scalar-real in both fields and real in both coordinates, with positive physical constants and ordinary partial derivatives.",
+      "reasoning":"The generic vector-valued D007 is specialized to Real exactly as needed. No weak-solution or arbitrary-domain theorem is asserted in the selected passage. The judgment concerns its inherited classical physical setting, not an extrapolation to negative material parameters."
+    },
+    {
+      "id":"C11",
+      "status":"pass",
+      "source_evidence":"The source uses reciprocal density and a positive sound speed to distinguish opposite directions.",
+      "lean_evidence":"K>0 and ρ>0 imply ρ≠0, K/ρ>0, c>0, and ρc≠0.",
+      "reasoning":"Zero density, vanishing speed, and negative square-root arguments cannot enter the effective domain. Totalized real inverse and square root therefore do not produce unintended boundary cases."
+    },
+    {
+      "id":"C12",
+      "status":"pass",
+      "source_evidence":"The construction concerns genuine acoustic solutions and does not require either mode's amplitude to be nonzero.",
+      "lean_evidence":"For K=ρ=1, p(x,t)=x²+t² and u(x,t)=−2xt satisfy D009 everywhere; the invariants are (x−t)² and (x+t)².",
+      "reasoning":"Here pt+ux=2t−2t=0 and ut+px=−2x+2x=0. Both transformed fields are nonconstant and have the correct opposite transport speeds. Thus the packaged hypotheses are satisfiable without forcing trivial fields or assuming the conclusion."
+    },
+    {
+      "id":"N01",
+      "status":"not-applicable",
+      "source_evidence":"The selected pages state an exact continuous acoustic change of variables, with no numerical recurrence or discretization.",
+      "lean_evidence":"The target contains real fields and derivative predicates only.",
+      "reasoning":"There is no algorithm or execution semantics to preserve."
+    },
+    {
+      "id":"N02",
+      "status":"pass",
+      "source_evidence":"Equation (1.5) is the two-component pressure–velocity system, and the outputs are scalar equations.",
+      "lean_evidence":"D009 explicitly preserves both components; D007 is instantiated at Real. D092 uses |x−y| for the derivative topology.",
+      "reasoning":"Component roles match, and normed-space infrastructure serves ordinary real differentiation rather than substituting a norm identity for a scalar equation."
+    },
+    {
+      "id":"N03",
+      "status":"not-applicable",
+      "source_evidence":"The selected construction states no error estimate or stability notion.",
+      "lean_evidence":"No approximation error, perturbation measure, or stability predicate occurs.",
+      "reasoning":"There is no numerical error or stability classification to compare."
+    },
+    {
+      "id":"N04",
+      "status":"pass",
+      "source_evidence":"The source defines exact scalar combinations and the exact sound speed √(K/ρ).",
+      "lean_evidence":"The target uses exact Real arithmetic and Real.sqrt, with exact derivative equations.",
+      "reasoning":"No computed approximation, rounding, or perturbed material quantity replaces an exact source object."
+    },
+    {
+      "id":"N05",
+      "status":"not-applicable",
+      "source_evidence":"The transformation of the stated linear acoustic system contains no asymptotic remainder or truncation.",
+      "lean_evidence":"The target consists of exact equalities for the given linear system.",
+      "reasoning":"The physical origin of linear acoustics does not turn this selected exact transformation into an asymptotic claim."
+    },
+    {
+      "id":"N06",
+      "status":"pass",
+      "source_evidence":"Page 3 calls the construction a decomposition and subsequently discusses unique eigenvector decomposition; page 2 supplies the concrete acoustic transformation.",
+      "lean_evidence":"The explicit transformation has determinant −2ρc, nonzero under the target assumptions. D009 and D007 require genuine first partial derivatives.",
+      "reasoning":"The two transformed values determine p and u uniquely by the inverse formulas. The two scalar equations conversely reconstruct the coupled equations by constant linear combinations using c²=K/ρ. This is a direct algebraic inference supporting the decomposition interpretation; the selected statement asserts no initial-value existence or general well-posedness theorem."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict":"yes",
+      "reasoning":"In the inherited classical real-coordinate physical setting, package p,u and their equations (1.5) using D008–D009. Unfolding the target yields precisely the two displayed transport equations for p±ρ√(K/ρ)u. Positive material parameters give positive c, hence distinct opposite coefficients. The transformation's determinant −2ρc is nonzero, so its explicit formulas retain the full state and support the source's decomposition interpretation. This implication does not extend the claim to nonphysical negative parameters or unspecified weak solutions."
+    },
+    "source_implies_lean": {
+      "verdict":"yes",
+      "reasoning":"Given any target system and its positive parameters, its fields satisfy the source's coupled classical acoustic equations at every real x,t. Applying the two page-2 assertions with c=√(K/ρ) gives both scalar equations. Ordinary differentiation of the fixed linear combinations provides exactly the derivative-existence witnesses required by D007. D004 is merely an alias, so the resulting conjunction at every point is the elaborated target."
+    }
+  },
+  "classification":"faithful-equivalent",
+  "accepted":true,
+  "requires_adjudication":false,
+  "findings":[
+    {
+      "severity":"note",
+      "category":"implicit-physical-context",
+      "source_evidence":"Printed page 2 identifies density and bulk modulus as material constants and uses positive sound speed, without separately displaying K>0 and ρ>0.",
+      "lean_evidence":"The target states both positivity assumptions explicitly.",
+      "impact":"These assumptions express the ordinary physical setting of this passage. Acceptance does not assert coverage of an algebraic extension to negative density and negative bulk modulus, nor classify additional assumptions as stronger conclusions."
+    },
+    {
+      "severity":"note",
+      "category":"decomposition-interpretation",
+      "source_evidence":"Printed page 3 calls the two equations a decomposition; the inverse formulas are not printed in the selected passage.",
+      "lean_evidence":"The target explicitly concludes the forward pair of scalar equations using a transformation whose determinant is −2ρc≠0.",
+      "impact":"Completeness of the change of variables follows algebraically from its exact definitions and the parameter assumptions. The judgment does not claim that inverse formulas, a converse theorem, or an initial-value uniqueness theorem appear as explicit target conjuncts."
+    }
+  ],
+  "rationale":"The attached primary-source pages and the proof-free readable and explicit target types agree on the coupled input system, both transformed fields, their sound-speed dependence, and their paired transport signs. All 100 dependencies preserve this meaning, including genuine derivative existence and standard real arithmetic. The inherited page-1 domain and classical physical context justify the explicit formal setting. Nondegeneracy supports the decomposition interpretation, and an explicit nonconstant two-mode example establishes nonvacuity. Both implications hold in that setting. No tools, proofs, prior judgments, or independent hash recomputation were used."
+}
