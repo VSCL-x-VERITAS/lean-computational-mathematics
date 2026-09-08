@@ -1,0 +1,198 @@
+NumStability.timeAveragedPhysicalFaceFlux {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ) (s t : ℝ) (j : ℤ) : Fin m → ℝ
+'NumStability.timeAveragedPhysicalFaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.physicalFaceAverage => NumStability.timeAveragedPhysicalFaceFlux
+NumStability.timeAveragedPhysicalFaceFlux_isCellAverage {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  {s t : ℝ} (hst : s < t) (j : ℤ) :
+  NumStability.IsOneDimensionalCellAverage (fun τ => flux (q (grid.cellLeft j) τ)) s t
+    (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t j)
+'NumStability.timeAveragedPhysicalFaceFlux_isCellAverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.physicalFaceAverage_spec => NumStability.timeAveragedPhysicalFaceFlux_isCellAverage
+NumStability.timeStep_smul_timeAveragedPhysicalFaceFlux {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ) {s t : ℝ} (hst : s < t) (j : ℤ) :
+  (t - s) • NumStability.timeAveragedPhysicalFaceFlux grid q flux s t j =
+    ∫ (τ : ℝ) in s..t, flux (q (grid.cellLeft j) τ)
+'NumStability.timeStep_smul_timeAveragedPhysicalFaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.timeStep_smul_physicalFaceAverage => NumStability.timeStep_smul_timeAveragedPhysicalFaceFlux
+NumStability.finiteVolumeCellAverageOn_mass_balance {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  {s t : ℝ} (hst : s < t) (i : ℤ) :
+  grid.cellVolume i • NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i -
+      grid.cellVolume i • NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i =
+    (t - s) •
+      (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i -
+        NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1))
+'NumStability.finiteVolumeCellAverageOn_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.exactCellAverage_mass_balance => NumStability.finiteVolumeCellAverageOn_mass_balance
+NumStability.cellVolume_smul_riemannFiniteVolumeUpdate_fromRule✝ {m : ℕ}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) (s t : ℝ)
+  (old : ℤ → Fin m → ℝ) (i : ℤ) :
+  grid.cellVolume i • NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i =
+    grid.cellVolume i • old i - (t - s) • (rule s t old (i + 1) - rule s t old i)
+'_private.ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxUpdateError.0.NumStability.cellVolume_smul_riemannFiniteVolumeUpdate_fromRule' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.numericalUpdate_mass_balance => _private.ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxUpdateError.0.NumStability.cellVolume_smul_riemannFiniteVolumeUpdate_fromRule
+NumStability.riemannFiniteVolumeUpdate_weighted_error {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ} (hst : s < t) (old : ℤ → Fin m → ℝ) (i : ℤ) :
+  grid.cellVolume i •
+      (NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) =
+    grid.cellVolume i • (old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) +
+      (t - s) •
+        (rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i -
+          (rule s t old (i + 1) - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1)))
+'NumStability.riemannFiniteVolumeUpdate_weighted_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.numericalUpdate_weighted_error => NumStability.riemannFiniteVolumeUpdate_weighted_error
+NumStability.riemannFiniteVolumeUpdate_block_error {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ} (hst : s < t) (old : ℤ → Fin m → ℝ) (start : ℤ)
+  (count : ℕ) :
+  ∑ k ∈ Finset.range count,
+      grid.cellVolume (start + ↑k) •
+        (NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) (start + ↑k) -
+          NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) (start + ↑k)) =
+    ∑ k ∈ Finset.range count,
+        grid.cellVolume (start + ↑k) •
+          (old (start + ↑k) - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) (start + ↑k)) +
+      (t - s) •
+        (rule s t old start - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t start -
+          (rule s t old (start + ↑count) - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (start + ↑count)))
+'NumStability.riemannFiniteVolumeUpdate_block_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxUpdateDraft.numericalUpdate_block_error => NumStability.riemannFiniteVolumeUpdate_block_error
+NumStability.riemannFiniteVolumeUpdate_error_le {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ} (hst : s < t) (old : ℤ → Fin m → ℝ) (i : ℤ)
+  {oldBound leftBound rightBound : ℝ}
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤ oldBound)
+  (hleft : ‖rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i‖ ≤ leftBound)
+  (hright : ‖rule s t old (i + 1) - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1)‖ ≤ rightBound) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+    oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.riemannFiniteVolumeUpdate_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.numericalUpdate_error_bound => NumStability.riemannFiniteVolumeUpdate_error_le
+NumStability.riemannFiniteVolumeUpdate_block_mass_error_le {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ} (hst : s < t) (old : ℤ → Fin m → ℝ) (start : ℤ) (count : ℕ)
+  (oldBound : ℕ → ℝ) {leftBound rightBound : ℝ}
+  (hold :
+    ∀ k ∈ Finset.range count,
+      ‖old (start + ↑k) - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) (start + ↑k)‖ ≤ oldBound k)
+  (hleft : ‖rule s t old start - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t start‖ ≤ leftBound)
+  (hright :
+    ‖rule s t old (start + ↑count) - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (start + ↑count)‖ ≤
+      rightBound) :
+  ‖∑ k ∈ Finset.range count,
+        grid.cellVolume (start + ↑k) •
+          (NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) (start + ↑k) -
+            NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) (start + ↑k))‖ ≤
+    ∑ k ∈ Finset.range count, grid.cellVolume (start + ↑k) * oldBound k + (t - s) * (leftBound + rightBound)
+'NumStability.riemannFiniteVolumeUpdate_block_mass_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.numericalUpdate_block_mass_error_bound => NumStability.riemannFiniteVolumeUpdate_block_mass_error_le
+NumStability.norm_oneDimensionalCellAverage_sub_le.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] {f g : ℝ → E} {s t bound : ℝ} (hst : s < t) (hf : IntervalIntegrable f volume s t)
+  (hg : IntervalIntegrable g volume s t) (herror : ∀ τ ∈ Set.uIoc s t, ‖f τ - g τ‖ ≤ bound) :
+  ‖NumStability.oneDimensionalCellAverage f s t - NumStability.oneDimensionalCellAverage g s t‖ ≤ bound
+'NumStability.norm_oneDimensionalCellAverage_sub_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.average_difference_norm_le => NumStability.norm_oneDimensionalCellAverage_sub_le
+NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_physicalTrace {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p)
+  (problem : NumStability.HyperbolicRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA)) {τ : ℝ}
+  (hτ : 0 < τ) :
+  (NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).numericalFluxFromInformation
+      ((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).extractInformation
+        ((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve problem trivial)) =
+    A.mulVec
+      (((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve problem
+            trivial).solution
+        0 τ)
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_physicalTrace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.selectedLinearFlux_eq_physical_trace => NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_physicalTrace
+NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_timeAverage {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p)
+  (problem : NumStability.HyperbolicRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA)) {dt : ℝ}
+  (hdt : 0 < dt) :
+  (NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).numericalFluxFromInformation
+      ((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).extractInformation
+        ((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve problem trivial)) =
+    NumStability.oneDimensionalCellAverage
+      (fun τ =>
+        A.mulVec
+          (((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve problem
+                trivial).solution
+            0 τ))
+      0 dt
+'NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_timeAverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.selectedLinearFlux_eq_solver_average => NumStability.linearRectangleRiemannInterfaceFluxMethod_flux_eq_timeAverage
+NumStability.linearRectangleRiemannInterfaceFlux_error_le {m : ℕ} (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+  (A : Matrix (Fin m) (Fin m) ℝ) (hA : NumStability.IsRealHyperbolicMatrix A)
+  (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q A.mulVec) (old : ℤ → Fin m → ℝ) {dt bound : ℝ} (hdt : 0 < dt)
+  (j : ℤ)
+  (htrace :
+    ∀ τ ∈ Set.uIoc 0 dt,
+      ‖A.mulVec
+              (((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve
+                    (NumStability.adjacentCellRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA) old j)
+                    trivial).solution
+                0 τ) -
+            A.mulVec (q (grid.cellLeft j) τ)‖ ≤
+        bound) :
+  ‖NumStability.rectangleRiemannInterfaceFlux
+          (NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen) old ⋯ j -
+        NumStability.timeAveragedPhysicalFaceFlux grid q A.mulVec 0 dt j‖ ≤
+    bound
+'NumStability.linearRectangleRiemannInterfaceFlux_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.linearRule_flux_error_le => NumStability.linearRectangleRiemannInterfaceFlux_error_le
+NumStability.linearRectangleRiemannInterfaceFlux_update_error_le {m : ℕ}
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p) {q : ℝ → ℝ → Fin m → ℝ}
+  (hq : NumStability.IsRectangleConservationLawSolution q A.mulVec) (old : ℤ → Fin m → ℝ) {dt oldBound : ℝ}
+  (hdt : 0 < dt) (i : ℤ) (faceBound : ℤ → ℝ)
+  (hold : ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x 0) i‖ ≤ oldBound)
+  (htrace :
+    ∀ (j : ℤ),
+      ∀ τ ∈ Set.uIoc 0 dt,
+        ‖A.mulVec
+                (((NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen).solve
+                      (NumStability.adjacentCellRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA) old
+                        j)
+                      trivial).solution
+                  0 τ) -
+              A.mulVec (q (grid.cellLeft j) τ)‖ ≤
+          faceBound j) :
+  ‖NumStability.riemannFiniteVolumeUpdate grid dt old
+          (NumStability.rectangleRiemannInterfaceFlux
+            (NumStability.linearRectangleRiemannInterfaceFluxMethod A hA basis speeds heigen) old ⋯)
+          i -
+        NumStability.finiteVolumeCellAverageOn grid (fun x => q x dt) i‖ ≤
+    oldBound + dt / grid.cellVolume i * (faceBound i + faceBound (i + 1))
+'NumStability.linearRectangleRiemannInterfaceFlux_update_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TYPE_BRIDGE_BELOW NumStability.FVFluxEstimateDraft.linearRule_next_error_bound => NumStability.linearRectangleRiemannInterfaceFlux_update_error_le: sub_zero normalization
+NumStability.norm_le_of_weighted_balance✝.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {width dt oldBound leftBound rightBound : ℝ} (hw : 0 < width) (hdt : 0 ≤ dt)
+  {nextError oldError leftError rightError : E}
+  (hbalance : width • nextError = width • oldError + dt • (leftError - rightError)) (hold : ‖oldError‖ ≤ oldBound)
+  (hleft : ‖leftError‖ ≤ leftBound) (hright : ‖rightError‖ ≤ rightBound) :
+  ‖nextError‖ ≤ oldBound + dt / width * (leftBound + rightBound)
+'_private.ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxUpdateErrorBounds.0.NumStability.norm_le_of_weighted_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TYPE_PRESERVED NumStability.FVFluxEstimateDraft.norm_le_of_weighted_balance => _private.ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxUpdateErrorBounds.0.NumStability.norm_le_of_weighted_balance
+CHECKED_CANONICAL_DECLARATIONS 15
+'NumStability.FVFluxEstimateDraft.linearRule_next_error_bound_statement_preserved' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
