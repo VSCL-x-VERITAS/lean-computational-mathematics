@@ -1,0 +1,143 @@
+gates\leveque-finite-volume\artifacts\session-20260908\logical-line-balance-draft\final-03-input.lean:172:40: error: `simp` made no progress
+NumStability.LogicalLineBalanceDraft.normalFaceFlux.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (rightCell : D → ℤ) : E
+'NumStability.LogicalLineBalanceDraft.normalFaceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.netOutwardFlux.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (cell : D → ℤ) : E
+'NumStability.LogicalLineBalanceDraft.netOutwardFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.advance.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D] [AddCommGroup E]
+  [Module ℝ E] (volume : (D → ℤ) → ℝ) (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E)
+  (cell : D → ℤ) : E
+'NumStability.LogicalLineBalanceDraft.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.advance_mass_balance.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (cell : D → ℤ) :
+  volume cell • NumStability.LogicalLineBalanceDraft.advance volume rule d dt state cell =
+    volume cell • state cell - dt • NumStability.LogicalLineBalanceDraft.netOutwardFlux rule d dt state cell
+'NumStability.LogicalLineBalanceDraft.advance_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.advance_line_local.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ)
+  (state other : (D → ℤ) → E) (base : D → ℤ)
+  (hline : ∀ (j : ℤ), state (Function.update base d j) = other (Function.update base d j)) (j : ℤ) :
+  NumStability.LogicalLineBalanceDraft.advance volume rule d dt state (Function.update base d j) =
+    NumStability.LogicalLineBalanceDraft.advance volume rule d dt other (Function.update base d j)
+'NumStability.LogicalLineBalanceDraft.advance_line_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.finite_line_mass_balance.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (base : D → ℤ) (start : ℤ) (count : ℕ) :
+  ∑ k ∈ Finset.range count,
+      volume (Function.update base d (start + ↑k)) •
+        NumStability.LogicalLineBalanceDraft.advance volume rule d dt state (Function.update base d (start + ↑k)) =
+    ∑ k ∈ Finset.range count,
+        volume (Function.update base d (start + ↑k)) • state (Function.update base d (start + ↑k)) -
+      dt •
+        (NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state (Function.update base d (start + ↑count)) -
+          NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state (Function.update base d start))
+'NumStability.LogicalLineBalanceDraft.finite_line_mass_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LogicalLineBalanceDraft.finite_line_mass_preserved.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (base : D → ℤ) (start : ℤ) (count : ℕ)
+  (hboundary :
+    NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state (Function.update base d (start + ↑count)) =
+      NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state (Function.update base d start)) :
+  ∑ k ∈ Finset.range count,
+      volume (Function.update base d (start + ↑k)) •
+        NumStability.LogicalLineBalanceDraft.advance volume rule d dt state (Function.update base d (start + ↑k)) =
+    ∑ k ∈ Finset.range count, volume (Function.update base d (start + ↑k)) • state (Function.update base d (start + ↑k))
+'NumStability.LogicalLineBalanceDraft.finite_line_mass_preserved' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LogicalLineBalanceDraft.adjacent_cells_mass_balance.{u_1, u_2} {D : Type u_1} {E : Type u_2}
+  [DecidableEq D] [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ) (state : (D → ℤ) → E) (cell : D → ℤ) :
+  volume cell • NumStability.LogicalLineBalanceDraft.advance volume rule d dt state cell +
+      volume (Function.update cell d (cell d + 1)) •
+        NumStability.LogicalLineBalanceDraft.advance volume rule d dt state (Function.update cell d (cell d + 1)) =
+    volume cell • state cell +
+        volume (Function.update cell d (cell d + 1)) • state (Function.update cell d (cell d + 1)) -
+      dt •
+        (NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state (Function.update cell d (cell d + 2)) -
+          NumStability.LogicalLineBalanceDraft.normalFaceFlux rule d dt state cell)
+'NumStability.LogicalLineBalanceDraft.adjacent_cells_mass_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LogicalLineBalanceDraft.sweep.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D] [AddCommGroup E]
+  [Module ℝ E] (volume : (D → ℤ) → ℝ) (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (stages : List (D × ℝ))
+  (state : (D → ℤ) → E) : (D → ℤ) → E
+'NumStability.LogicalLineBalanceDraft.sweep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.sweep_cons.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d : D) (dt : ℝ)
+  (stages : List (D × ℝ)) (state : (D → ℤ) → E) :
+  NumStability.LogicalLineBalanceDraft.sweep volume rule ((d, dt) :: stages) state =
+    NumStability.LogicalLineBalanceDraft.sweep volume rule stages
+      (NumStability.LogicalLineBalanceDraft.advance volume rule d dt state)
+'NumStability.LogicalLineBalanceDraft.sweep_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.sweep_two.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D] [AddCommGroup E]
+  [Module ℝ E] (volume : (D → ℤ) → ℝ) (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d e : D) (dt ds : ℝ)
+  (state : (D → ℤ) → E) :
+  NumStability.LogicalLineBalanceDraft.sweep volume rule [(d, dt), (e, ds)] state =
+    NumStability.LogicalLineBalanceDraft.advance volume rule e ds
+      (NumStability.LogicalLineBalanceDraft.advance volume rule d dt state)
+'NumStability.LogicalLineBalanceDraft.sweep_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.sweep_two_mass_balance.{u_1, u_2} {D : Type u_1} {E : Type u_2} [DecidableEq D]
+  [AddCommGroup E] [Module ℝ E] (volume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < volume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (d e : D) (dt ds : ℝ) (state : (D → ℤ) → E) (cell : D → ℤ) :
+  volume cell • NumStability.LogicalLineBalanceDraft.sweep volume rule [(d, dt), (e, ds)] state cell =
+    volume cell • state cell - dt • NumStability.LogicalLineBalanceDraft.netOutwardFlux rule d dt state cell -
+      ds •
+        NumStability.LogicalLineBalanceDraft.netOutwardFlux rule e ds
+          (NumStability.LogicalLineBalanceDraft.advance volume rule d dt state) cell
+'NumStability.LogicalLineBalanceDraft.sweep_two_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume (cell : Unit → ℤ) : ℝ
+'NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LogicalLineBalanceDraft.Witness.interiorFlux (_d : Unit) (rightCell : Unit → ℤ) (_dt : ℝ) (_line : ℤ → ℝ) :
+  ℝ
+'NumStability.LogicalLineBalanceDraft.Witness.interiorFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume_pos (cell : Unit → ℤ) :
+  0 < NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume cell
+'NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LogicalLineBalanceDraft.Witness.unequal_volumes_nonzero_update :
+  (NumStability.LogicalLineBalanceDraft.advance NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume
+        NumStability.LogicalLineBalanceDraft.Witness.interiorFlux () 1 (fun x => 0) fun x => 0) =
+      -1 ∧
+    (NumStability.LogicalLineBalanceDraft.advance NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume
+          NumStability.LogicalLineBalanceDraft.Witness.interiorFlux () 1 (fun x => 0) fun x => 1) =
+        1 / 2 ∧
+      (((NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume fun x => 0) •
+            NumStability.LogicalLineBalanceDraft.advance NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume
+              NumStability.LogicalLineBalanceDraft.Witness.interiorFlux () 1 (fun x => 0) fun x => 0) +
+          (NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume fun x => 1) •
+            NumStability.LogicalLineBalanceDraft.advance NumStability.LogicalLineBalanceDraft.Witness.nonuniformVolume
+              NumStability.LogicalLineBalanceDraft.Witness.interiorFlux () 1 (fun x => 0) fun x => 1) =
+        0
+'NumStability.LogicalLineBalanceDraft.Witness.unequal_volumes_nonzero_update' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+NumStability.cellVolume_smul_finiteVolumeCellAverageUpdate.{u_1} {E : Type u_1} [AddCommGroup E] [Module ℝ E]
+  (timeStep cellVolume : ℝ) (oldAverage netOutwardFlux : E) (hcellVolume : cellVolume ≠ 0) :
+  cellVolume • NumStability.finiteVolumeCellAverageUpdate timeStep cellVolume oldAverage netOutwardFlux =
+    cellVolume • oldAverage - timeStep • netOutwardFlux
+'NumStability.cellVolume_smul_finiteVolumeCellAverageUpdate' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.sum_conservativeFluxDifferenceUpdate.{u_1} {E : Type u_1} [AddCommGroup E] [Module ℝ E]
+  (timeStepOverCellWidth : ℝ) (cellAverages edgeFlux : ℕ → E) (cellCount : ℕ) :
+  ∑ i ∈ Finset.range cellCount,
+      NumStability.conservativeFluxDifferenceUpdate timeStepOverCellWidth cellAverages edgeFlux i =
+    ∑ i ∈ Finset.range cellCount, cellAverages i - timeStepOverCellWidth • (edgeFlux cellCount - edgeFlux 0)
+'NumStability.sum_conservativeFluxDifferenceUpdate' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.orderedOperatorSweep_two.{u_1} {State : Type u_1} (first second : State → State) (state : State) :
+  NumStability.orderedOperatorSweep [first, second] state = second (first state)
+'NumStability.orderedOperatorSweep_two' does not depend on any axioms
+Function.update_self.{u, v} {α : Sort u} {β : α → Sort v} [DecidableEq α] (a : α) (v : β a) (f : (a : α) → β a) :
+  Function.update f a v a = v
+'Function.update_self' does not depend on any axioms
+Function.update_idem.{u_1, u_2} {α : Sort u_2} [DecidableEq α] {β : α → Sort u_1} {a : α} (v w : β a)
+  (f : (a : α) → β a) : Function.update (Function.update f a v) a w = Function.update f a w
+'Function.update_idem' depends on axioms: [propext, Classical.choice, Quot.sound]
+gates\leveque-finite-volume\artifacts\session-20260908\logical-line-balance-draft\final-03-input.lean:221:0: error: Disallowed axiom sorryAx in NumStability.LogicalLineBalanceDraft.Witness.unequal_volumes_nonzero_update

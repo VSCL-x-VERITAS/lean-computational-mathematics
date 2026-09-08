@@ -1,0 +1,137 @@
+NumStability.HasJumpAt.{u_1} {E : Type u_1} [TopologicalSpace E] (data : ℝ → E) (a : ℝ) (left right : E) : Prop
+'NumStability.HasJumpAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HasJumpAt.not_continuousAt.{u_1} {E : Type u_1} [TopologicalSpace E] [T2Space E] {data : ℝ → E} {a : ℝ}
+  {left right : E} (h : NumStability.HasJumpAt data a left right) : ¬ContinuousAt data a
+'NumStability.HasJumpAt.not_continuousAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HasJumpAt.congr.{u_1} {E : Type u_1} [TopologicalSpace E] {data other : ℝ → E} {a : ℝ} {left right : E}
+  (h : NumStability.HasJumpAt data a left right) (hl : data =ᶠ[nhdsWithin a (Set.Iio a)] other)
+  (hr : data =ᶠ[nhdsWithin a (Set.Ioi a)] other) : NumStability.HasJumpAt other a left right
+'NumStability.HasJumpAt.congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.IsRiemannData.hasJumpAt.{u_1} {E : Type u_1} [TopologicalSpace E] {data : ℝ → E} {left right : E}
+  (h : NumStability.IsRiemannData data left right) (hne : left ≠ right) : NumStability.HasJumpAt data 0 left right
+'NumStability.IsRiemannData.hasJumpAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.hasJumpAt_and_iff_product_traces.{u_1, u_2} {Material : Type u_1} {State : Type u_2}
+  [TopologicalSpace Material] [TopologicalSpace State] (medium : ℝ → Material) (initialState : ℝ → State) (a : ℝ)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State) :
+  NumStability.HasJumpAt medium a leftMaterial rightMaterial ∧
+      NumStability.HasJumpAt initialState a leftState rightState ↔
+    Filter.Tendsto (fun x => (medium x, initialState x)) (nhdsWithin a (Set.Iio a)) (nhds (leftMaterial, leftState)) ∧
+      Filter.Tendsto (fun x => (medium x, initialState x)) (nhdsWithin a (Set.Ioi a))
+          (nhds (rightMaterial, rightState)) ∧
+        leftMaterial ≠ rightMaterial ∧ leftState ≠ rightState
+'NumStability.hasJumpAt_and_iff_product_traces' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalMaterialInterface.varyingMedium (origin x : ℝ) : ℝ
+'NumStability.LocalMaterialInterface.varyingMedium' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalMaterialInterface.varyingMedium_hasJumpAt (origin : ℝ) :
+  NumStability.HasJumpAt (NumStability.LocalMaterialInterface.varyingMedium origin) 0 0 1
+'NumStability.LocalMaterialInterface.varyingMedium_hasJumpAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalMaterialInterface.varyingMedium_not_isRiemannData (origin : ℝ) :
+  ¬∃ left right, NumStability.IsRiemannData (NumStability.LocalMaterialInterface.varyingMedium origin) left right
+'NumStability.LocalMaterialInterface.varyingMedium_not_isRiemannData' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalMaterialInterface.varyingMedium_interface_witness (originMaterial originState : ℝ) :
+  (NumStability.HasJumpAt (NumStability.LocalMaterialInterface.varyingMedium originMaterial) 0 0 1 ∧
+      NumStability.HasJumpAt (NumStability.riemannData 2 originState 3) 0 2 3) ∧
+    NumStability.IsRiemannData (NumStability.riemannData 2 originState 3) 2 3 ∧
+      ¬ContinuousAt (NumStability.LocalMaterialInterface.varyingMedium originMaterial) 0 ∧
+        ¬ContinuousAt (NumStability.riemannData 2 originState 3) 0 ∧
+          (¬∃ left right,
+                NumStability.IsRiemannData (NumStability.LocalMaterialInterface.varyingMedium originMaterial) left
+                  right) ∧
+            NumStability.LocalMaterialInterface.varyingMedium originMaterial 0 = originMaterial ∧
+              NumStability.riemannData 2 originState 3 0 = originState
+'NumStability.LocalMaterialInterface.varyingMedium_interface_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalMaterialInterface.product_jump_with_constant_medium (originState : ℝ) :
+  NumStability.HasJumpAt (fun x => (0, NumStability.riemannData 0 originState 1 x)) 0 (0, 0) (0, 1) ∧
+    ¬(NumStability.HasJumpAt (fun x => 0) 0 0 0 ∧
+        NumStability.HasJumpAt (NumStability.riemannData 0 originState 1) 0 0 1)
+'NumStability.LocalMaterialInterface.product_jump_with_constant_medium' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E] (q : ℝ → ℝ → E)
+  (flux : E → E) (production : ℝ → ℝ → E) : Prop
+'NumStability.IsRectangleBalanceLawSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.integrated_source_eq_mass_defect.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {q : ℝ → ℝ → E} {flux : E → E} {production : ℝ → ℝ → E}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production) (a b s t : ℝ) :
+  ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ =
+    ((∫ (x : ℝ) in a..b, q x t) - ∫ (x : ℝ) in a..b, q x s) - ∫ (τ : ℝ) in s..t, flux (q a τ) - flux (q b τ)
+'NumStability.IsRectangleBalanceLawSolution.integrated_source_eq_mass_defect' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.rectangle_conservation_iff_source_integral_zero.{u_1} {E : Type u_1}
+  [NormedAddCommGroup E] [NormedSpace ℝ E] {q : ℝ → ℝ → E} {flux : E → E} {production : ℝ → ℝ → E}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production) (a b s t : ℝ) :
+  (∫ (x : ℝ) in a..b, q x t) - ∫ (x : ℝ) in a..b, q x s = ∫ (τ : ℝ) in s..t, flux (q a τ) - flux (q b τ) ↔
+    ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ = 0
+'NumStability.IsRectangleBalanceLawSolution.rectangle_conservation_iff_source_integral_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.conservation_iff_source_integrals_zero.{u_1} {E : Type u_1}
+  [NormedAddCommGroup E] [NormedSpace ℝ E] {q : ℝ → ℝ → E} {flux : E → E} {production : ℝ → ℝ → E}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production) :
+  NumStability.IsRectangleConservationLawSolution q flux ↔
+    ∀ (a b s t : ℝ), ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ = 0
+'NumStability.IsRectangleBalanceLawSolution.conservation_iff_source_integrals_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.not_conservation_iff_exists_nonzero_source_integral.{u_1} {E : Type u_1}
+  [NormedAddCommGroup E] [NormedSpace ℝ E] {q : ℝ → ℝ → E} {flux : E → E} {production : ℝ → ℝ → E}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production) :
+  ¬NumStability.IsRectangleConservationLawSolution q flux ↔
+    ∃ a b s t, ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ ≠ 0
+'NumStability.IsRectangleBalanceLawSolution.not_conservation_iff_exists_nonzero_source_integral' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.integrated_source_unique.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {q : ℝ → ℝ → E} {flux : E → E} {production other : ℝ → ℝ → E}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production)
+  (hother : NumStability.IsRectangleBalanceLawSolution q flux other) (a b s t : ℝ) :
+  ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ = ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, other x τ
+'NumStability.IsRectangleBalanceLawSolution.integrated_source_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.IsRectangleBalanceLawSolution.hasDerivAt_mass_ae.{u_1} {ι : Type u_1} [Fintype ι] {q : ℝ → ℝ → ι → ℝ}
+  {flux : (ι → ℝ) → ι → ℝ} {production : ℝ → ℝ → ι → ℝ}
+  (h : NumStability.IsRectangleBalanceLawSolution q flux production) (a b : ℝ) :
+  ∀ᵐ (t : ℝ),
+    HasDerivAt (fun s => ∫ (x : ℝ) in a..b, q x s) (flux (q a t) - flux (q b t) + ∫ (x : ℝ) in a..b, production x t) t
+'NumStability.IsRectangleBalanceLawSolution.hasDerivAt_mass_ae' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.isRectangleBalanceLawSolution_zero_iff.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (q : ℝ → ℝ → E) (flux : E → E) :
+  (NumStability.IsRectangleBalanceLawSolution q flux fun x x_1 => 0) ↔
+    NumStability.IsRectangleConservationLawSolution q flux
+'NumStability.isRectangleBalanceLawSolution_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearAmplitude_isRectangleBalanceLawSolution.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] (profile : ℝ → E) (hprofile : ∀ (a b : ℝ), IntervalIntegrable profile MeasureTheory.volume a b)
+  (rate : ℝ) :
+  NumStability.IsRectangleBalanceLawSolution (fun x t => (rate * t) • profile x) (fun x => 0) fun x x_1 =>
+    rate • profile x
+'NumStability.linearAmplitude_isRectangleBalanceLawSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearAmplitude_hasDerivAt_mass.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (profile : ℝ → E) (rate a b t : ℝ) :
+  HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, (rate * τ) • profile x) (rate • ∫ (x : ℝ) in a..b, profile x) t
+'NumStability.linearAmplitude_hasDerivAt_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.linearAmplitude_isBalanceLawSolutionAt {m : ℕ} (profile : ℝ → Fin m → ℝ) (rate x t : ℝ) :
+  NumStability.IsBalanceLawSolutionAt (fun ξ τ => (rate * τ) • profile ξ) (fun x => 0) (rate • profile x) x t
+'NumStability.linearAmplitude_isBalanceLawSolutionAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannStep_unitCell : ∫ (x : ℝ) in 1..2, NumStability.riemannData 0 0 1 x = 1
+'NumStability.riemannStep_unitCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannStep_signed_source_integral (rate : ℝ) :
+  ∫ (_τ : ℝ) (x : ℝ) in 1..2, rate * NumStability.riemannData 0 0 1 x = rate
+'NumStability.riemannStep_signed_source_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.riemannStep_source_nonvacuity :
+  (NumStability.IsRectangleBalanceLawSolution (fun x t => t * NumStability.riemannData 0 0 1 x) (fun x => 0)
+      fun x x_1 => NumStability.riemannData 0 0 1 x) ∧
+    ¬ContinuousAt (fun x => 1 * NumStability.riemannData 0 0 1 x) 0 ∧
+      (∀ (a b t : ℝ),
+          HasDerivAt (fun τ => ∫ (x : ℝ) in a..b, τ * NumStability.riemannData 0 0 1 x)
+            (∫ (x : ℝ) in a..b, NumStability.riemannData 0 0 1 x) t) ∧
+        ∫ (_τ : ℝ) (x : ℝ) in 1..2, NumStability.riemannData 0 0 1 x = 1 ∧
+          ¬NumStability.IsRectangleConservationLawSolution (fun x t => t * NumStability.riemannData 0 0 1 x) fun x => 0
+'NumStability.riemannStep_source_nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
