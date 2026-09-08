@@ -1,0 +1,51 @@
+NumStability.leveque01_linearRiemann_eigensolution.{u_1} {ι : Type u_1} [Fintype ι] {coefficient : Matrix ι ι ℝ}
+  (hcoefficient : NumStability.IsRealHyperbolicMatrix coefficient) (leftState valueAtOrigin rightState : ι → ℝ) :
+  ∃ eigenvalues eigenbasis,
+    (∀ (p : ι), coefficient.mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+      NumStability.IsRectangleConservationLawSolution
+          (NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState)
+          coefficient.mulVec ∧
+        (∀ (x : ℝ),
+            NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState x 0 =
+              NumStability.riemannData leftState valueAtOrigin rightState x) ∧
+          ∀ (x t : ℝ),
+            0 < t →
+              NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState x t =
+                NumStability.linearRiemannSolution eigenbasis eigenvalues leftState valueAtOrigin rightState (x / t) 1
+'NumStability.leveque01_linearRiemann_eigensolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_nonlinear_shock_formation :
+  ∃ flux q T ξ qL qR,
+    ContDiff ℝ 1 flux ∧
+      (¬∃ a b, ∀ (u : ℝ), flux u = a * u + b) ∧
+        NumStability.IsRectangleConservationLawSolution q flux ∧
+          (ContDiff ℝ ⊤ fun x => q x 0) ∧
+            0 < T ∧
+              (∀ (t : ℝ), 0 ≤ t → t < T → Continuous fun x => q x t) ∧
+                Tendsto (fun x => q x T) (𝓝[<] ξ) (𝓝 qL) ∧ Tendsto (fun x => q x T) (𝓝[>] ξ) (𝓝 qR) ∧ qR < qL
+'NumStability.leveque01_nonlinear_shock_formation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.Chapter01Evidence.linearRiemann_nonvacuous_instance :
+  ∃ eigenvalues eigenbasis,
+    (∀ (p : Fin 1),
+        (NumStability.constantCoefficientScalarMatrix 1).mulVec (eigenbasis p) = eigenvalues p • eigenbasis p) ∧
+      NumStability.IsRectangleConservationLawSolution (NumStability.linearRiemannSolution eigenbasis eigenvalues 0 3 1)
+          (NumStability.constantCoefficientScalarMatrix 1).mulVec ∧
+        (∀ (x : ℝ),
+            NumStability.linearRiemannSolution eigenbasis eigenvalues 0 3 1 x 0 = NumStability.riemannData 0 3 1 x) ∧
+          ∀ (x t : ℝ),
+            0 < t →
+              NumStability.linearRiemannSolution eigenbasis eigenvalues 0 3 1 x t =
+                NumStability.linearRiemannSolution eigenbasis eigenvalues 0 3 1 (x / t) 1
+'NumStability.Chapter01Evidence.linearRiemann_nonvacuous_instance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.Chapter01Evidence.huberShock_nonvacuous_instance :
+  ContDiff ℝ 1 NumStability.huberFlux ∧
+    (¬∃ a b, ∀ (u : ℝ), NumStability.huberFlux u = a * u + b) ∧
+      NumStability.IsRectangleConservationLawSolution NumStability.HuberShock.shockState NumStability.huberFlux ∧
+        (ContDiff ℝ ⊤ fun x => NumStability.HuberShock.shockState x 0) ∧
+          (∀ (t : ℝ), 0 ≤ t → t < 1 → Continuous fun x => NumStability.HuberShock.shockState x t) ∧
+            Tendsto (fun x => NumStability.HuberShock.shockState x 1) (𝓝[<] 0) (𝓝 1) ∧
+              Tendsto (fun x => NumStability.HuberShock.shockState x 1) (𝓝[>] 0) (𝓝 (-1))
+'NumStability.Chapter01Evidence.huberShock_nonvacuous_instance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

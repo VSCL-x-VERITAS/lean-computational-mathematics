@@ -1,0 +1,926 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-LINEAR-RIEMANN-MEASURE-CONTEXT-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "06e82dde7c9c90a4e7096f915133d48bfc044fffa00d3cfde37acd618d254d95",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.IsRealHyperbolicMatrix",
+      "interpretation": "Existence of real eigenvalues and a real basis whose vectors satisfy A r_p = lambda_p r_p.",
+      "effect_on_target": "Requires real diagonalizability, including completeness of the eigenvectors, without distinctness, ordering, normalization, or invertibility of A.",
+      "source_match": "Matches the definition of hyperbolicity in the opening paragraph of printed page 3.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.IsRectangleConservationLawSolution",
+      "interpretation": "Every spatial state slice and every temporal flux slice is interval integrable for the explicitly selected real volume measure. For all real a,b,s,t, the change of spatial integral equals the temporal integral of flux at a minus flux at b.",
+      "effect_on_target": "Gives an actual integral conservation assertion for flux A q, including rectangles crossing discontinuities and negative times. Integrability is a conclusion, not an additional hypothesis.",
+      "source_match": "Implements the integral conservation interpretation required by printed page 5 at discontinuities. The explicit all-real-time rectangle formulation is additional precision and strength beyond the selected qualitative assertion.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.linearRiemannSolution",
+      "interpretation": "The finite sum over p of r_p multiplied by the scalar Riemann profile of the pth eigenbasis coordinates of the left, origin, and right states, evaluated at x-lambda_p t.",
+      "effect_on_target": "Specifies the solution itself using the spectral data, with finitely many characteristic lines and a pointwise convention induced by valueAtOrigin.",
+      "source_match": "Realizes the spectral solution and eigenvalue wave speeds described on printed pages 3 and 5–6. Its exact formula and characteristic-line convention are explicit additions to the selected passage.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.riemannData",
+      "interpretation": "Returns leftState when x<0, rightState when x>0, and valueAtOrigin when x=0.",
+      "effect_on_target": "Preserves both strict initial-data branches and permits every value at the previously unspecified interface.",
+      "source_match": "Matches equation (1.11) on its stated domain. Universal quantification of the origin value adds a representative-extension assertion without restricting either source state.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.eigenmodeTravelingWave",
+      "interpretation": "Multiplies a translated scalar profile by a fixed vector.",
+      "effect_on_target": "Assembles each scalar characteristic component into a vector eigenmode.",
+      "source_match": "Matches decomposition into eigenvector waves on printed page 3 and spectral solution on pages 5–6.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.travelingWave",
+      "interpretation": "Evaluates profile at x-speed*t.",
+      "effect_on_target": "Places the pth characteristic at x=lambda_p t and preserves its profile.",
+      "source_match": "Matches equation (1.3) on printed page 1 and the signed constant wave speeds on printed page 3.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "Algebra.id",
+      "interpretation": "The identity algebra of a commutative semiring over itself, with scalar action given by multiplication.",
+      "effect_on_target": "Makes real scalar multiplication on real components ordinary multiplication.",
+      "source_match": "Matches the real-vector arithmetic of equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "Algebra.toSMul",
+      "interpretation": "Projects the scalar action from an algebra structure.",
+      "effect_on_target": "Selects the identity real algebra action used in eigenvector scaling.",
+      "source_match": "Preserves ordinary real scalar multiplication.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "Requires the spectral equation, conservation, initial condition, and similarity property simultaneously.",
+      "source_match": "Does not replace any required property with an alternative.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "CommSemiring.toSemiring",
+      "interpretation": "Projects the underlying semiring without changing its operations.",
+      "effect_on_target": "Supplies real semiring operations for the module structures.",
+      "source_match": "Preserves the real scalar field operations used by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "DFunLike.coe",
+      "interpretation": "Projects the underlying function of a function-like object.",
+      "effect_on_target": "Allows evaluation of a basis at a mode index.",
+      "source_match": "Evaluates the eigenvector family without changing the vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "DivInvMonoid.toDiv",
+      "interpretation": "Projects division from the division-with-inverse structure.",
+      "effect_on_target": "Supplies real division in x/t.",
+      "source_match": "Matches the similarity variable on printed page 5; the theorem uses it only when t>0.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Eq",
+      "interpretation": "Equality of two objects of the same type.",
+      "effect_on_target": "States exact vector, initial-data, similarity, and integral identities.",
+      "source_match": "Preserves exact solution assertions rather than introducing approximation.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Exists",
+      "interpretation": "Existential quantification over a witness satisfying a predicate.",
+      "effect_on_target": "Provides eigenvalues and an eigenbasis supporting the constructed solution.",
+      "source_match": "Matches spectral solvability; it makes no uniqueness claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "Fintype",
+      "interpretation": "A finite type with a complete finite enumeration.",
+      "effect_on_target": "Makes the state dimension and eigenmode sum finite. The empty index type is also allowed.",
+      "source_match": "Represents finite-dimensional R^m up to relabeling. The empty case adds a harmless degenerate case and removes no source dimension.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Function.hasSMul",
+      "interpretation": "Lifts scalar multiplication to functions pointwise.",
+      "effect_on_target": "Scales every vector component by the same real eigenvalue or profile value.",
+      "source_match": "Matches scalar multiplication in R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "HDiv.hDiv",
+      "interpretation": "Projects the selected binary division operation.",
+      "effect_on_target": "Evaluates x/t using the explicit real division instance.",
+      "source_match": "Matches the source similarity ratio.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "HSMul.hSMul",
+      "interpretation": "Projects the selected scalar multiplication operation.",
+      "effect_on_target": "Expresses eigenvalue scaling and eigenmode amplitudes.",
+      "source_match": "Matches real scalar-vector products.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "InnerProductSpace.toNormedSpace",
+      "interpretation": "Projects the normed vector-space structure from an inner-product space.",
+      "effect_on_target": "Supplies standard real normed-space infrastructure.",
+      "source_match": "Introduces no orthogonality requirement on the eigenbasis and no additional source hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "LT.lt",
+      "interpretation": "Projects a strict-order relation.",
+      "effect_on_target": "Expresses positive time and the strict Riemann half-lines using the real order.",
+      "source_match": "Preserves strictness in equation (1.11) and excludes t=0 from division.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "Matrix",
+      "interpretation": "A function from a row index and a column index to an entry.",
+      "effect_on_target": "Matrix ι ι Real is a square real matrix independent of x and t.",
+      "source_match": "Matches the constant real m by m matrix in equation (1.1).",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "Matrix.mulVec",
+      "interpretation": "At row i, takes the dot product of matrix row i with the input vector.",
+      "effect_on_target": "Uses the same linear action A in the eigenvector equation and in the flux.",
+      "source_match": "Matches A q and A r_p, without transposition or a sign reversal.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "Module.Basis",
+      "interpretation": "An indexed algebraic basis, providing unique coordinates and reconstruction.",
+      "effect_on_target": "Requires a spanning, linearly independent real eigenvector family.",
+      "source_match": "Matches the complete eigenvector family and unique vector decomposition on printed page 3; does not require an orthonormal basis.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "Module.Basis.instFunLike",
+      "interpretation": "Evaluates a basis by applying its inverse coordinate representation to the unit coordinate vector.",
+      "effect_on_target": "Selects the actual pth basis vector for the eigenrelation and reconstruction.",
+      "source_match": "Preserves the distinction between an eigenvector and its coordinate label.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "interpretation": "Forgets ring structure while retaining its addition and multiplication.",
+      "effect_on_target": "Supplies part of the real arithmetic instance chain for matrix action.",
+      "source_match": "Does not alter the real matrix arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "interpretation": "Projects the underlying nonunital nonassociative ring.",
+      "effect_on_target": "Retains the real operations needed by matrix-vector multiplication.",
+      "source_match": "No scalar-domain or operator change occurs.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "interpretation": "Retains additive-monoid and multiplication operations while forgetting subtraction structure.",
+      "effect_on_target": "Supplies the arithmetic interface required by Matrix.mulVec.",
+      "source_match": "Matrix sums and products remain the source real sums and products.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "interpretation": "Forgets norm information and retains the commutative ring operations.",
+      "effect_on_target": "Connects real normed arithmetic to matrix multiplication.",
+      "source_match": "Adds no condition on the coefficient matrix.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing",
+      "interpretation": "Projects the underlying seminormed ring.",
+      "effect_on_target": "Retains the standard real norm and operations in the module instance chain.",
+      "source_match": "No mathematical source object changes.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NonUnitalSeminormedRing.toSeminormedAddCommGroup",
+      "interpretation": "Retains the norm, additive group, and pseudometric of the ring.",
+      "effect_on_target": "Provides additive analytic structure on real scalars.",
+      "source_match": "Supports ordinary finite-dimensional real integration without imposing regularity assumptions.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "interpretation": "Forgets the distinguished multiplicative identity while retaining norm and ring operations.",
+      "effect_on_target": "Supplies the real normed-ring instance needed by downstream projections.",
+      "source_match": "Preserves real arithmetic and topology.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "NormedCommRing.toSeminormedCommRing",
+      "interpretation": "Retains the same norm, ring, and underlying pseudometric.",
+      "effect_on_target": "Supplies the seminormed real structure used in scalar modules.",
+      "source_match": "No weakened equality or quotient of the state space is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "NormedSpace.toModule",
+      "interpretation": "Projects the underlying scalar module.",
+      "effect_on_target": "Makes the basis and coordinates use the ordinary real vector-space structure.",
+      "source_match": "Matches linear combinations in R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "OfNat.ofNat",
+      "interpretation": "Projects the interpretation of a natural-number literal.",
+      "effect_on_target": "Interprets 0 and 1 as real constants in the initial and similarity identities.",
+      "source_match": "Uses the initial time zero and a unit-time similarity profile.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "One.toOfNat1",
+      "interpretation": "Interprets the literal 1 using the selected multiplicative identity.",
+      "effect_on_target": "Sets the comparison profile time to real one.",
+      "source_match": "Evaluation at time one is a valid explicit representation of dependence on x/t.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "Pi.Function.module",
+      "interpretation": "The pointwise module structure on functions.",
+      "effect_on_target": "Gives ι→Real its real vector-space operations.",
+      "source_match": "Matches the componentwise realization of R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "Pi.addCommMonoid",
+      "interpretation": "Pointwise addition and zero on a family of additive commutative monoids.",
+      "effect_on_target": "Adds eigenmodes componentwise.",
+      "source_match": "Matches addition of source state vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "Pi.normedAddCommGroup",
+      "interpretation": "The finite-product normed additive group with the inherited product norm and pointwise group operations.",
+      "effect_on_target": "Provides the standard finite-product analytic structure for vector integrability.",
+      "source_match": "No norm estimate is asserted. In finite dimension this structure supports the same vector integrals as the usual realization of R^m.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "Pi.normedSpace",
+      "interpretation": "Pointwise scalar action on a finite product, equipped with the product norm.",
+      "effect_on_target": "Permits real vector-valued interval integration.",
+      "source_match": "Preserves the real finite-dimensional state space and adds no state restrictions.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "RCLike.toInnerProductSpaceReal",
+      "interpretation": "Builds a real inner-product structure from the real part of the scalar inner product; here the scalar type is Real.",
+      "effect_on_target": "Supplies the usual one-dimensional real normed-space and measure construction infrastructure.",
+      "source_match": "Does not change to complex states or impose orthogonality on the eigenvectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Real",
+      "interpretation": "The real-number type at the external library boundary.",
+      "effect_on_target": "Types all state components, matrix entries, speeds, spatial positions, and times as real.",
+      "source_match": "Matches the real setting explicitly stated on printed page 1.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "Real.instAddCommMonoid",
+      "interpretation": "The inferred additive commutative monoid on Real.",
+      "effect_on_target": "Supplies real addition and zero to the vector module.",
+      "source_match": "Matches real component arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "Real.instCommSemiring",
+      "interpretation": "The inferred commutative semiring structure on Real.",
+      "effect_on_target": "Supplies real multiplication and addition to the identity algebra.",
+      "source_match": "Preserves the source scalar operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Real.instDivInvMonoid",
+      "interpretation": "Real multiplication and inverse, with division given by multiplication by the inverse.",
+      "effect_on_target": "Determines x/t in the similarity conclusion.",
+      "source_match": "Agrees with ordinary real division for the stipulated t>0.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Real.instLT",
+      "interpretation": "The strict real order.",
+      "effect_on_target": "Selects the left and right branches and positive-time domain.",
+      "source_match": "Matches the source strict inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Real.instOne",
+      "interpretation": "The real multiplicative identity.",
+      "effect_on_target": "Provides the unit-time profile reference.",
+      "source_match": "Correctly normalizes the similarity representation.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "Real.instRCLike",
+      "interpretation": "Real numbers as a real-or-complex-like scalar type, with identity real part and zero imaginary part.",
+      "effect_on_target": "Provides real analytic structures used in the explicit instances.",
+      "source_match": "Introduces no complex eigenvalues or complex state space.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "Real.instZero",
+      "interpretation": "The real additive identity.",
+      "effect_on_target": "Sets the initial time, interface location, and positivity comparison threshold.",
+      "source_match": "Matches the origin and initial time in equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "Real.normedAddCommGroup",
+      "interpretation": "Real addition equipped with the standard real norm and metric.",
+      "effect_on_target": "Supplies analytic structure for scalars and their finite products.",
+      "source_match": "Matches ordinary real analysis.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "Real.normedCommRing",
+      "interpretation": "Combines the standard real normed additive group and real commutative ring.",
+      "effect_on_target": "Keeps algebraic and analytic operations consistent throughout the target.",
+      "source_match": "Preserves the source real arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "Real.normedField",
+      "interpretation": "The standard real field with its norm; its inverse is totalized at zero.",
+      "effect_on_target": "Supports real normed spaces and division.",
+      "source_match": "The positive-time premise prevents totalized division at zero from affecting similarity.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "Real.semiring",
+      "interpretation": "The inferred underlying semiring of the real numbers.",
+      "effect_on_target": "Types the real basis and module structures.",
+      "source_match": "No scalar-field substitution occurs.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "SeminormedCommRing.toNonUnitalSeminormedCommRing",
+      "interpretation": "Retains the same norm, additive operations, multiplication, and pseudometric while forgetting the unit.",
+      "effect_on_target": "Supplies the seminormed real structure used in analytic instances.",
+      "source_match": "No mathematical restriction or change of operations results.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "Zero.toOfNat0",
+      "interpretation": "Interprets literal zero using the selected zero element.",
+      "effect_on_target": "Makes initial time and interface comparisons use real zero.",
+      "source_match": "Matches equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "instHDiv",
+      "interpretation": "Wraps homogeneous division as heterogeneous division with identical input and output types.",
+      "effect_on_target": "Routes similarity division to real division.",
+      "source_match": "Does not change x/t.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "instHSMul",
+      "interpretation": "Wraps scalar multiplication in the heterogeneous scalar-action interface.",
+      "effect_on_target": "Routes eigenvalue and amplitude scaling to the pointwise real action.",
+      "source_match": "Preserves scalar multiplication of eigenvectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "AddGroup.toSubNegMonoid",
+      "interpretation": "Projects subtraction and negation structure from an additive group.",
+      "effect_on_target": "Supports vector subtraction in the conservation balance.",
+      "source_match": "Preserves the difference of total states and the difference of boundary fluxes.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "CommRing.toNonUnitalCommRing",
+      "interpretation": "Retains the commutative ring operations while forgetting the unit.",
+      "effect_on_target": "Supplies real arithmetic infrastructure within dependency elaboration.",
+      "source_match": "No change to real coefficients or vector arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "DFinsupp.instEquivLikeLinearEquiv",
+      "interpretation": "Provides the equivalence-like interface for a linear equivalence.",
+      "effect_on_target": "Allows evaluation of the eigenbasis coordinate equivalence.",
+      "source_match": "Preserves invertible coordinate conversion rather than replacing it with a projection.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "EquivLike.toFunLike",
+      "interpretation": "Uses the forward function of an equivalence-like object as a function-like object.",
+      "effect_on_target": "Evaluates the coordinates of each of the three state vectors.",
+      "source_match": "Keeps coordinate extraction distinct from reconstruction by eigenvectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "Finite.of_fintype",
+      "interpretation": "A finitely enumerated type is finite.",
+      "effect_on_target": "Discharges the finiteness requirement of the coordinate equivalence.",
+      "source_match": "Uses the existing finite dimension; adds no new hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "Finset.sum",
+      "interpretation": "Sums a function over the elements of a finite set using additive commutative monoid addition.",
+      "effect_on_target": "Superposes all eigenmodes exactly.",
+      "source_match": "Matches finite linear combination of eigenvector waves.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "Finset.univ",
+      "interpretation": "The complete finite set of elements supplied by Fintype.",
+      "effect_on_target": "Includes every eigenmode once in the solution.",
+      "source_match": "No characteristic component is omitted.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "HSub.hSub",
+      "interpretation": "Projects the selected subtraction operation.",
+      "effect_on_target": "Forms both the conservation differences and the characteristic displacement.",
+      "source_match": "The target uses later-minus-earlier state, left-minus-right flux, and x-speed*t with the correct signs.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "IntervalIntegrable",
+      "interpretation": "Integrability on both half-open intervals Ioc a b and Ioc b a for the supplied measure.",
+      "effect_on_target": "Requires genuine finite-interval integrability regardless of endpoint orientation.",
+      "source_match": "The finite step-wave construction satisfies this regularity. It prevents the integral assertion from relying on a default value for nonintegrable functions.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "LinearEquiv",
+      "interpretation": "An invertible semilinear map; with identity scalar homomorphisms here it is an ordinary real linear equivalence.",
+      "effect_on_target": "Makes coordinate extraction invertible and real linear.",
+      "source_match": "Matches unique decomposition in the eigenvector basis on printed page 3.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "MeasureTheory.MeasureSpace.volume",
+      "interpretation": "Projects the measure field of the explicitly supplied measure-space instance.",
+      "effect_on_target": "Every integral and integrability predicate in D002 uses Real.measureSpace.volume, not a universally quantified or locally selectable measure.",
+      "source_match": "The native supplement identifies this exact instance with the ordinary real length measure, matching spatial and temporal conservation integrals.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Module.Basis.equivFun",
+      "interpretation": "Composes basis coordinates in finitely supported functions with their finite-index identification as ordinary functions.",
+      "effect_on_target": "Extracts the actual eigenbasis coefficients of leftState, valueAtOrigin, and rightState.",
+      "source_match": "Matches the unique spectral vector decomposition in the inherited context.",
+      "status": "pass"
+    },
+    {
+      "id": "D069",
+      "name": "NonAssocSemiring.toNonUnitalNonAssocSemiring",
+      "interpretation": "Projects the additive and multiplicative semiring structure without the unit.",
+      "effect_on_target": "Supports the scalar arithmetic used by the coordinate equivalence.",
+      "source_match": "Retains ordinary real operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "NonUnitalNonAssocSemiring.toAddCommMonoid",
+      "interpretation": "Projects the additive commutative monoid.",
+      "effect_on_target": "Provides addition for scalar coordinate vectors.",
+      "source_match": "Matches addition of real coordinates.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "NormedAddCommGroup",
+      "interpretation": "An additive commutative group with a compatible norm and metric.",
+      "effect_on_target": "The generic conservation predicate needs this structure; the target supplies the concrete finite real product instance.",
+      "source_match": "Does not quantify over arbitrary state spaces or impose an extra hypothesis on the source states.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "NormedAddCommGroup.toNormedAddGroup",
+      "interpretation": "Retains the same norm, additive group, and metric while forgetting commutativity as a stored field.",
+      "effect_on_target": "Provides the normed-group interface needed for integrability and subtraction.",
+      "source_match": "Preserves the state-space analytic structure.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "interpretation": "Retains the norm, additive commutative group, and induced pseudometric.",
+      "effect_on_target": "Supplies analytic instances for vector-valued integrals.",
+      "source_match": "Does not identify distinct source state vectors.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "NormedAddGroup.toAddGroup",
+      "interpretation": "Projects the underlying additive group.",
+      "effect_on_target": "Supplies state and integral subtraction.",
+      "source_match": "Matches ordinary vector differences.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "NormedAddGroup.toENormedAddMonoid",
+      "interpretation": "Provides the extended nonnegative norm and additive structure induced by a normed additive group.",
+      "effect_on_target": "Supports the norm-integrability condition used by IntervalIntegrable.",
+      "source_match": "Adds no error metric or modified physical quantity; it encodes ordinary integrability.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "NormedSpace",
+      "interpretation": "A scalar module with norm-compatible scalar action.",
+      "effect_on_target": "Supports Bochner integration in the concrete real vector state space.",
+      "source_match": "No norm bound is added to the input data.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "Projects the uniform structure induced by a pseudometric.",
+      "effect_on_target": "Supplies topology infrastructure for integrability.",
+      "source_match": "Uses the ordinary real and finite-product analytic structures.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "Real.commRing",
+      "interpretation": "The real commutative ring using the displayed real addition, multiplication, negation, and subtraction.",
+      "effect_on_target": "Determines the arithmetic in characteristic coordinates and integral balances.",
+      "source_match": "Matches exact real arithmetic in the source equations.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "Real.decidableLT",
+      "interpretation": "A decision procedure at the logical level for strict real comparison.",
+      "effect_on_target": "Enables the conditional branches in the Riemann profile.",
+      "source_match": "Does not approximate the interface or replace strict inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "Real.measureSpace",
+      "interpretation": "The native supplement expands this inferred instance to measureSpaceOfInnerProductSpace on Real, with Borel measurable sets and Haar measure normalized by an orthonormal basis. The supplied exact declarations identify its volume with StieltjesFunction.id.measure and give volume(Ioc a b)=ENNReal.ofReal(b-a).",
+      "effect_on_target": "Fixes a nonzero, nonatomic real length measure for every spatial and temporal integral. In particular, volume(Ioc 0 1)=1; the conservation assertion cannot collapse through a zero-measure instance.",
+      "source_match": "Matches ordinary dx and dt integration in the inherited integral-conservation interpretation. The printed passage need not introduce a measure parameter for this concrete analytic realization.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "RingHom.id",
+      "interpretation": "The identity ring homomorphism, with underlying function id.",
+      "effect_on_target": "Makes the basis coordinate equivalence real linear rather than involving a scalar transformation.",
+      "source_match": "Preserves the real scalar field.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "RingHomInvPair.ids",
+      "interpretation": "The identity ring homomorphism is inverse to itself.",
+      "effect_on_target": "Supplies scalar-compatibility evidence for the ordinary linear equivalence.",
+      "source_match": "Adds no invertibility condition on A.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "interpretation": "Projects the pseudometric associated with the seminormed additive group.",
+      "effect_on_target": "Provides the topology used by vector integrability.",
+      "source_match": "Preserves standard finite-dimensional real topology.",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "Semiring.toModule",
+      "interpretation": "A semiring acts on itself by multiplication.",
+      "effect_on_target": "Supplies the real scalar action on coordinate values.",
+      "source_match": "Matches multiplication of real coefficients.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "Semiring.toNonAssocSemiring",
+      "interpretation": "Retains the same semiring operations while forgetting stored associativity structure.",
+      "effect_on_target": "Provides the arithmetic interface for identity scalar homomorphisms.",
+      "source_match": "No change of arithmetic or domain occurs.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "SubNegMonoid.toSub",
+      "interpretation": "Projects subtraction from the subtraction-negation structure.",
+      "effect_on_target": "Selects the subtraction used in conservation balances.",
+      "source_match": "Matches vector differences and boundary flux differences.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "Projects the topology carried by a uniform space.",
+      "effect_on_target": "Supplies the topological structure used in integration.",
+      "source_match": "No alternative topology on physical space or state space is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D088",
+      "name": "instHSub",
+      "interpretation": "Wraps homogeneous subtraction in the heterogeneous subtraction interface.",
+      "effect_on_target": "Routes differences to the selected real or vector subtraction.",
+      "source_match": "Preserves the conservation and characteristic-displacement signs.",
+      "status": "pass"
+    },
+    {
+      "id": "D089",
+      "name": "intervalIntegral",
+      "interpretation": "The Bochner integral over Ioc a b minus the Bochner integral over Ioc b a, each using the supplied restricted measure.",
+      "effect_on_target": "Gives oriented interval integrals in D002. Reversing endpoints reverses the integral sign.",
+      "source_match": "Implements spatial and temporal integration with ordinary length measure. Integrability is separately required, and half-open endpoint conventions do not affect these integrals.",
+      "status": "pass"
+    },
+    {
+      "id": "D090",
+      "name": "ite",
+      "interpretation": "Selects the first value when its proposition is true and the second when false.",
+      "effect_on_target": "Implements the two strict half-lines and the remaining origin case.",
+      "source_match": "Preserves equation (1.11) on x<0 and x>0.",
+      "status": "pass"
+    },
+    {
+      "id": "D091",
+      "name": "HMul.hMul",
+      "interpretation": "Projects the selected binary multiplication operation.",
+      "effect_on_target": "Forms speed*t in the traveling-wave displacement.",
+      "source_match": "Matches constant-speed propagation.",
+      "status": "pass"
+    },
+    {
+      "id": "D092",
+      "name": "Real.instMul",
+      "interpretation": "Ordinary real multiplication.",
+      "effect_on_target": "Multiplies the eigenvalue speed by time.",
+      "source_match": "Matches x-lambda_p t characteristic coordinates.",
+      "status": "pass"
+    },
+    {
+      "id": "D093",
+      "name": "Real.instSub",
+      "interpretation": "Real subtraction defined as addition of the negated second argument.",
+      "effect_on_target": "Forms x-speed*t.",
+      "source_match": "Matches equation (1.3), including the propagation sign.",
+      "status": "pass"
+    },
+    {
+      "id": "D094",
+      "name": "instHMul",
+      "interpretation": "Wraps homogeneous multiplication in the heterogeneous multiplication interface.",
+      "effect_on_target": "Routes speed-time multiplication to real multiplication.",
+      "source_match": "Does not change the characteristic speed or time variable.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Independently inspected the attached renderings of raw pages 23, 25, 27, and 28: equation (1.1), the hyperbolicity definition, equation (1.11), and the spectral-solvability sentence spanning printed pages 5–6.",
+      "lean_evidence": "The proof-free source header, readable target, fully explicit target, all D001–D094 sections, and native environment supplement were inspected as supplied inline.",
+      "reasoning": "The selected result is the constant-coefficient linear Riemann assertion, with its inherited real system, complete eigenbasis, and discontinuous integral-conservation context. The supplied source hash is recorded without claiming independent byte verification."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Printed page 1 specifies a constant real m by m matrix and q:R×R→R^m; printed page 3 specifies real eigenvalues and m independent eigenvectors.",
+      "lean_evidence": "The explicit target uses a finite index type ι, Matrix ι ι Real, real state functions ι→Real, real eigenvalues, and Module.Basis ι Real (ι→Real).",
+      "reasoning": "Finite indexing is a relabeling of finite-dimensional real coordinates. The extra origin-state binder is unrestricted and does not narrow the left or right states. No measure binder or hidden matrix regularity hypothesis occurs."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The source describes Riemann data by two constant states and asserts spectral solvability for linear hyperbolic systems.",
+      "lean_evidence": "For every hyperbolic coefficient matrix and every leftState, valueAtOrigin, and rightState, the target supplies eigenvalues and an eigenbasis satisfying all four conjuncts.",
+      "reasoning": "Every source pair of states is covered. The existential spectral witnesses may depend on the data, but the source does not demand a single quantified choice shared across all data. Universal origin values are additional output coverage, not an assumption."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "Printed page 3 requires a complete real eigenvector family but does not require distinct or nonzero eigenvalues. Printed page 5 imposes piecewise-constant Riemann data.",
+      "lean_evidence": "D001 requires exactly an eigenbasis with real eigenvalues. No differentiability, eigenvalue separation, nonzero-speed, state inequality, or integrability premise is added.",
+      "reasoning": "The essential hypotheses match. Integrability is asserted for the constructed solution. The t>0 condition governs only the similarity identity and avoids division at initial time."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Printed pages 5–6 assert spectral solvability; printed page 3 identifies eigenvalues as wave speeds; printed page 5 describes similarity and finitely many constant-speed waves.",
+      "lean_evidence": "The target asserts eigenrelations, integral conservation, exact initial data, and positive-time similarity. D003–D006 construct a finite sum of waves with characteristic lines x=lambda_p t.",
+      "reasoning": "All selected linear conclusions are represented, including finite wave structure through the solution definition. Numerical flux updates and nonlinear approximate solvers are surrounding applications rather than omitted conclusions of this selected assertion."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The inherited context uses real matrix action, eigenvector decomposition, translated profiles, and integral conservation at discontinuities.",
+      "lean_evidence": "D001–D006 expose the local semantics; D022 and D068 give matrix action and coordinate extraction; D065, D067, D080, and D089 give integrability and the exact measure and integral conventions.",
+      "reasoning": "Every listed dependency was interpreted. The native supplement resolves the otherwise opaque inferInstance in Real.measureSpace: the selected volume is real length measure on the Borel space, with unit interval mass one. There is no arbitrary or zero measure hidden in the conservation assertion."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses strict half-lines; equation (1.1) has q_t+Aq_x=0; the selected passage asserts exact spectral solvability.",
+      "lean_evidence": "D004 preserves both strict branches. D002 uses later-minus-earlier spatial integral equal to left-minus-right temporal flux. The initial and similarity conclusions use exact equality.",
+      "reasoning": "Signs, strictness, and exactness agree. The target additionally certifies a specified representative and all-real-time rectangle balances; this is assessed as nonvacuous strengthening rather than equivalence or reduced applicability."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes A, its eigenvalues and eigenvectors, the physical state, and the two Riemann states.",
+      "lean_evidence": "The same coefficient.mulVec appears in the eigenrelation and conservation flux. D068 converts physical states into eigenbasis coordinates, and D003 reconstructs using the actual basis vectors.",
+      "reasoning": "Physical components are not confused with characteristic coefficients. The origin value is explicitly separate from both source states, and the similarity assertion evaluates the same constructed solution."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The initial interface is x=0 at t=0. Printed page 3 identifies signed eigenvalues as speeds; printed page 1 gives the translation x-speed*t.",
+      "lean_evidence": "D003 sums over Finset.univ, with each p using its own coordinate, eigenvalue, and eigenvector. D006 uses x-speed*t; the similarity identity compares with time 1.",
+      "reasoning": "All modes are included, the speed sign is correct, and time-one evaluation encodes a profile in x/t. No ordering, offset, normalization factor, or numerical discretization parameter is introduced."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The selected claim concerns finite-dimensional real constant-coefficient linear hyperbolic systems. The general similarity description is qualified as typical.",
+      "lean_evidence": "The target retains real finite-dimensional constant coefficients and proves similarity only for its explicit linear solution. It also allows empty ι, arbitrary origin values, and conservation for every real time interval.",
+      "reasoning": "No source system or state pair is excluded. The empty-dimensional extension is harmless; arbitrary representative values and all-real-time conservation add conclusions. No universal claim about nonlinear hyperbolic systems is made."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) leaves x=0 unspecified. The hyperbolicity definition permits repeated and zero eigenvalues. Printed page 5 explicitly rejects classical PDE satisfaction at discontinuities.",
+      "lean_evidence": "D004 takes a free origin value; D003 propagates its coordinates on their characteristic lines. Similarity requires t>0. D001 imposes no speed separation, and D002 is an integral assertion.",
+      "reasoning": "Moving characteristic-line values affect each spatial slice at finitely many points and each fixed-position temporal flux slice at isolated crossing times. For zero-speed modes the flux contribution is lambda_p times the mode, hence zero even along the stationary line. Thus the arbitrary origin convention is compatible with rectangle conservation. Equal states and repeated speeds remain meaningful, and the empty index type gives a harmless zero-dimensional case."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "Printed page 1 includes scalar real advection; printed page 5 allows distinct constant left and right states.",
+      "lean_evidence": "Take a singleton ι, coefficient [1], leftState 0, and rightState 1. D001 is satisfied and D003 gives a moving step. The supplement states volume(Ioc 0 1)=1, while D002 requires integrability.",
+      "reasoning": "There are nonempty-dimensional, nonconstant, moving-wave instances. Conservation is substantive: for the indicated step on spatial interval [0,2] between times 0 and 1, the state integral changes from 2 to 1 and the integrated boundary flux difference is -1. Neither impossible premises nor a zero measure trivializes the assertion."
+    },
+    {
+      "id": "N01",
+      "status": "pass",
+      "source_evidence": "Printed pages 5–6 identify solving the linear Riemann problem through spectral data as the construction relevant to finite-volume methods.",
+      "lean_evidence": "D003 constructs the exact solution by extracting characteristic coordinates, translating each scalar profile, and summing eigenmodes.",
+      "reasoning": "The formal assertion remains linked to the spectral solution process. The selected source result does not specify a discrete flux formula or time-stepping recurrence that would also need representation."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "The source state space is R^m, and the selected passage asserts no quantitative norm estimate.",
+      "lean_evidence": "The explicit instances use pointwise vector operations and the finite-product normed-space structure for Bochner integration.",
+      "reasoning": "Component arithmetic agrees. The norm is infrastructure for integrability, not a substituted error measure. Finite step profiles are integrable on finite intervals under the standard finite-dimensional norm conventions."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected linear Riemann assertion contains no forward-error, backward-error, conditioning, or stability estimate.",
+      "lean_evidence": "The target contains exact spectral, conservation, initial-data, and similarity assertions without any error predicate.",
+      "reasoning": "There is no error or stability notion to compare."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "The selected sentence concerns the spectral solution of linear systems. Approximate nonlinear solvers are discussed separately on printed page 6.",
+      "lean_evidence": "The target uses exact real spectral data and exact equality for the explicitly constructed solution.",
+      "reasoning": "No computed, rounded, approximate, or perturbed quantity replaces the exact linear solution."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected claim gives no asymptotic expansion, truncation order, or limiting error regime.",
+      "lean_evidence": "The target contains no asymptotic notation or remainder term; x/t is an exact similarity coordinate.",
+      "reasoning": "No asymptotic or higher-order statement requires preservation."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The source asserts solvability and unique decomposition of vectors in an eigenbasis, but does not state uniqueness of PDE solutions or require A to be invertible.",
+      "lean_evidence": "The target existentially supplies spectral witnesses and certifies their constructed solution. Module.Basis gives unique coordinates. No Unique or ExistsUnique assertion, inverse of A, or nonzero-eigenvalue condition appears.",
+      "reasoning": "Existence and complete spectral structure are preserved. The target does not confuse uniqueness of coordinates with uniqueness of discontinuous PDE representatives. Its integrability conclusions are additional verified properties of the constructed solution."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Represent a source m-dimensional real system by a finite coordinate index type. The source hyperbolicity assumption is exactly D001. For any left and right states, choose any origin value and apply the target. Its witnesses give a complete real eigenbasis of the same A, and D003–D006 explicitly construct a finite superposition of translated characteristic step profiles with speeds equal to the corresponding eigenvalues. D002 supplies nontrivial integral conservation for flux A q with the fixed ordinary real length measure, thereby respecting the source warning about discontinuities. The initial-data conjunct yields both branches of (1.11), and the positive-time identity gives dependence on x/t. Restricting the all-real-time construction to forward evolution yields the selected spectral Riemann solution without extra source hypotheses."
+    },
+    "source_implies_lean": {
+      "verdict": "no",
+      "reasoning": "The selected passage asserts qualitative spectral solvability and describes wave structure, but does not assert this exact eigenmode formula with a universally prescribed origin value propagated on every characteristic line, nor interval integrability of every state and flux slice and rectangle conservation for all real time endpoints, including negative times. These additions are compatible with the source and can be established for the displayed finite-wave construction, but recovering the entire Lean proposition requires additional mathematical construction and verification beyond the selected assertion. This is a difference in asserted conclusion strength, not a counterexample to the target or a restriction of the source domain."
+    }
+  },
+  "classification": "faithful-stronger",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "explicit-construction-and-temporal-strengthening",
+      "source_evidence": "Printed pages 5–6 assert solvability using eigenvalues and eigenvectors and defer detailed development to Chapter 3; the displayed initial data are at t=0.",
+      "lean_evidence": "D003 specifies a particular finite eigenmode construction, and D002 certifies its integrability and rectangle conservation for every real a,b,s,t.",
+      "impact": "The target entails the selected source result and additionally certifies an explicit globally defined construction, including negative-time conservation. This is conclusion strengthening without reduced applicability."
+    },
+    {
+      "severity": "note",
+      "category": "unrestricted-interface-representative",
+      "source_evidence": "Equation (1.11) specifies only x<0 and x>0 and leaves the origin and later characteristic-line values unspecified.",
+      "lean_evidence": "The target universally quantifies valueAtOrigin; D004 uses it at zero, and D003 transports its characteristic coordinates.",
+      "impact": "The theorem supplies a stronger representative-extension property while preserving every source state pair. Moving-line changes are negligible in the relevant slices, and stationary-mode changes have zero flux, so this convention does not invalidate integral conservation."
+    },
+    {
+      "severity": "note",
+      "category": "fixed-measure-and-nonvacuity",
+      "source_evidence": "Printed page 5 identifies integral conservation as the equation that continues to hold across discontinuities.",
+      "lean_evidence": "D002 explicitly uses Real.measureSpace.volume. The native supplement expands that instance and identifies its volume with StieltjesFunction.id.measure, with volume(Ioc a b)=ENNReal.ofReal(b-a) and unit interval mass one.",
+      "impact": "The measure is the ordinary nonzero real length measure, not an arbitrary parameter. Together with explicit interval-integrability conjuncts, this rules out zero-measure or nonintegrability-default trivialization."
+    }
+  ],
+  "rationale": "The supplied primary-source images and proof-free declaration evidence support acceptance as faithful-stronger. The target preserves the constant real system, complete real eigenbasis, unrestricted left and right states, strict initial half-lines, spectral construction, eigenvalue wave speeds, and forward similarity. Its integral formulation respects the source's discontinuity context, and the native supplement resolves the concrete measure selection. All 94 listed dependencies and all configured checks have been accounted for. The additional pointwise representative coverage, explicit construction, and all-real-time integral certification strengthen the conclusion without adding hypotheses or excluding source cases. The target is nonvacuous for ordinary nonconstant scalar advection. Hashes and native provenance are taken from the supplied evidence; no independent filesystem, runtime, or hash verification was performed."
+}

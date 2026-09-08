@@ -1,0 +1,884 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-DIMENSIONAL-SPLITTING-CANONICAL-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "b59c819ab80e9f589bb25732359dd7311bd1d850e0eeb8b45c78048a766b2456",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.CoordinateFiniteVolumeGrid",
+      "interpretation": "By D016, packages a measurable cell partition, an exhaustive direction enumeration, coordinate geometry, and positive-width coordinate boxes.",
+      "effect_on_target": "Restricts admissible grids, but the conclusion uses only their direction enumeration.",
+      "source_match": "Represents some grid structure from Section 1.3; equivalence of the logical geometry representation to the source condition is unresolved.",
+      "status": "unclear"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.CoordinateFiniteVolumeGrid.coordinateDirections",
+      "interpretation": "Projects the grid's second field, its direction family.",
+      "effect_on_target": "Supplies the enumeration used to construct the schedule.",
+      "source_match": "Corresponds to enumerating each coordinate direction.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.CoordinateFractionalStep",
+      "interpretation": "By D017, bundles a direction, a real fraction in (0,1], and a constant-preserving state transformation.",
+      "effect_on_target": "Determines the schedule element type.",
+      "source_match": "Captures labeled substeps, but does not ensure that their transformations solve one-dimensional problems.",
+      "status": "fail"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.CoordinateFractionalStep.direction",
+      "interpretation": "Projects the step's direction field.",
+      "effect_on_target": "Checks that every direction has a corresponding scheduled step.",
+      "source_match": "Correctly represents directional coverage as bookkeeping.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.CoordinateFractionalStep.oneDimensionalSolve",
+      "interpretation": "Projects the transformation package stored in a step.",
+      "effect_on_target": "Equates this package with the method's package for that direction.",
+      "source_match": "Package identity is preserved, but D022 supplies insufficient semantics for a directional solve.",
+      "status": "fail"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.CoordinateFractionalStep.timeFraction",
+      "interpretation": "Projects the step's real-valued fraction.",
+      "effect_on_target": "Ensures that the scheduled fraction equals the supplied method fraction.",
+      "source_match": "Consistent substep bookkeeping; the source specifies no numerical fractions.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "NumStability.CoordinateHighResolutionMethod",
+      "interpretation": "By D019, a direction-indexed family of constant-preserving transformations and fractions in (0,1].",
+      "effect_on_target": "Universally quantifies over these supplied transformation families.",
+      "source_match": "Neither high resolution nor association with directional hyperbolic problems is required.",
+      "status": "fail"
+    },
+    {
+      "id": "D008",
+      "name": "NumStability.CoordinateHighResolutionMethod.solveDirection",
+      "interpretation": "Projects the direction-indexed transformation family.",
+      "effect_on_target": "Selects the package associated with each label.",
+      "source_match": "Indexing matches the directional organization, but supplies no mathematical linkage to that coordinate direction.",
+      "status": "fail"
+    },
+    {
+      "id": "D009",
+      "name": "NumStability.CoordinateHighResolutionMethod.timeFraction",
+      "interpretation": "Projects the direction-indexed real fraction function.",
+      "effect_on_target": "Supplies fractions to the canonical schedule.",
+      "source_match": "A permissible scheduling parameterization, without a source-specified value.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "NumStability.CoordinateSweepExecution",
+      "interpretation": "By D020–D021, records successive applications of scheduled transformations, including initial and final states.",
+      "effect_on_target": "Requires actual sequential composition rather than merely a list of labels.",
+      "source_match": "Matches 'in turn' structurally; the transformations themselves lack directional problem semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "NumStability.FiniteVolumeCellState",
+      "interpretation": "The function type Cell → Value.",
+      "effect_on_target": "Represents initial, intermediate, and final data with arbitrary value type.",
+      "source_match": "Can store cell averages, but provides no connection to the source's integrals, volumes, or numerical approximation.",
+      "status": "fail"
+    },
+    {
+      "id": "D012",
+      "name": "NumStability.OneDimensionalHighResolutionFiniteVolumeSolve",
+      "interpretation": "By D022, a real-parameterized total state map preserving constant states.",
+      "effect_on_target": "Provides all execution semantics attributed to a one-dimensional solver.",
+      "source_match": "Constant preservation alone does not characterize a one-dimensional high-resolution finite volume method.",
+      "status": "fail"
+    },
+    {
+      "id": "D013",
+      "name": "NumStability.coordinateFractionalSchedule",
+      "interpretation": "Maps method.fractionalStep over the supplied direction list.",
+      "effect_on_target": "Fixes the existential schedule to one step per enumerated direction, in list order.",
+      "source_match": "A natural single-sweep realization of successive directional processing.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "NumStability.CoordinateDirectionFamily",
+      "interpretation": "By D023, a nonempty, duplicate-free, exhaustive finite list of directions.",
+      "effect_on_target": "Forces the direction type to be finite and inhabited.",
+      "source_match": "Supports finite coordinate enumeration; also permits one direction although the passage concerns multiple dimensions.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "NumStability.CoordinateDirectionFamily.directions",
+      "interpretation": "Projects the underlying direction list.",
+      "effect_on_target": "Determines sweep order and length.",
+      "source_match": "Makes an unspecified source order explicit as input data.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "NumStability.CoordinateFiniteVolumeGrid.mk",
+      "interpretation": "Constructs a grid whose partition cells equal positive-width boxes in the chosen coordinates.",
+      "effect_on_target": "Introduces geometric and partition side conditions through the grid binder.",
+      "source_match": "Rectangular boxes are recognizable; arbitrary bijective logical coordinates may not capture the source's geometric setting.",
+      "status": "unclear"
+    },
+    {
+      "id": "D017",
+      "name": "NumStability.CoordinateFractionalStep.mk",
+      "interpretation": "Constructs a labeled transformation with 0 < timeFraction ≤ 1.",
+      "effect_on_target": "Excludes zero, negative, and greater-than-one fractions.",
+      "source_match": "Adds a particular substep convention absent from the selected passage; this is a restriction, not theorem strength.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "NumStability.CoordinateHighResolutionMethod.fractionalStep",
+      "interpretation": "Copies a direction's fraction and transformation into a step, retaining the bound proofs.",
+      "effect_on_target": "Makes the target's field equalities follow from schedule construction.",
+      "source_match": "Correct transfer of supplied directional data; does not improve their solver semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "NumStability.CoordinateHighResolutionMethod.mk",
+      "interpretation": "Constructs a family from transformations and positive fractions bounded by one.",
+      "effect_on_target": "Requires no PDE, flux, grid compatibility, or accuracy property.",
+      "source_match": "Admits transformations unrelated to the source's one-dimensional high-resolution methods.",
+      "status": "fail"
+    },
+    {
+      "id": "D020",
+      "name": "NumStability.CoordinateSweepExecution.cons",
+      "interpretation": "Executes the head step first, then the tail from the resulting state, prepending the initial state to the trace.",
+      "effect_on_target": "Enforces state dependence between consecutive steps.",
+      "source_match": "Faithfully captures successive rather than independent or simultaneous updates.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "NumStability.CoordinateSweepExecution.nil",
+      "interpretation": "An empty schedule leaves its state unchanged and has a singleton trace.",
+      "effect_on_target": "Terminates recursive execution and accounts for the extra trace entry.",
+      "source_match": "Harmless execution convention; the target separately excludes an empty full schedule.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "NumStability.OneDimensionalHighResolutionFiniteVolumeSolve.mk",
+      "interpretation": "Accepts any total real-parameterized state map that fixes all constant states.",
+      "effect_on_target": "Allows identity maps and maps broadcasting one selected cell's value to every cell, independently of time.",
+      "source_match": "Such maps need not solve a directional problem, approximate a hyperbolic equation, or update through cell-edge fluxes.",
+      "status": "fail"
+    },
+    {
+      "id": "D023",
+      "name": "NumStability.CoordinateDirectionFamily.mk",
+      "interpretation": "Requires nonemptiness, no repeated directions, and membership of every direction.",
+      "effect_on_target": "Guarantees the schedule is nonempty and covers each direction exactly once.",
+      "source_match": "Matches a simple sweep through all coordinate directions.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "NumStability.CoordinateFractionalStep.advance",
+      "interpretation": "Applies the stored transformation at the stored fraction to the current state.",
+      "effect_on_target": "Fractions influence execution as actual arguments rather than unused annotations.",
+      "source_match": "Appropriate substep execution structure, subject to the missing solver linkage.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "NumStability.CoordinateGridGeometry",
+      "interpretation": "A choice between equality of the point type with a real coordinate space and a bare equivalence to that space.",
+      "effect_on_target": "Provides coordinates for defining grid cells.",
+      "source_match": "The source names rectangular and logically rectangular grids but does not identify logical rectangularity with an arbitrary set equivalence.",
+      "status": "unclear"
+    },
+    {
+      "id": "D026",
+      "name": "NumStability.CoordinateHighResolutionMethod.positive_timeFraction",
+      "interpretation": "Every supplied direction fraction is strictly positive.",
+      "effect_on_target": "Certifies positivity in constructed steps.",
+      "source_match": "Compatible with an ordinary forward sweep, but a chosen convention rather than an explicit source hypothesis.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "NumStability.CoordinateHighResolutionMethod.timeFraction_le_one",
+      "interpretation": "Every supplied direction fraction is at most one.",
+      "effect_on_target": "Certifies the step upper bound.",
+      "source_match": "An additional scheduling convention; no source numerical bound is being reproduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "NumStability.FiniteVolumeCellPartition",
+      "interpretation": "By D034, a nonempty family of measurable, pairwise disjoint sets covering a specified domain.",
+      "effect_on_target": "Supplies the grid's partition structure.",
+      "source_match": "Captures partitioning the domain, but supplies no volume measure or averaging operation.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "NumStability.FiniteVolumeCellPartition.cellRegion",
+      "interpretation": "Projects each cell's point set.",
+      "effect_on_target": "Used in the coordinate-box compatibility condition.",
+      "source_match": "Correctly distinguishes cell labels from their regions.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NumStability.coordinateCellBox",
+      "interpretation": "Points whose listed coordinates satisfy lowerFace ≤ coordinate < upperFace.",
+      "effect_on_target": "Defines half-open coordinate boxes; exhaustive directions impose every coordinate bound.",
+      "source_match": "Reasonable rectangular cell boundary convention; geometric validity of arbitrary logical coordinates remains unresolved.",
+      "status": "unclear"
+    },
+    {
+      "id": "D031",
+      "name": "NumStability.CoordinateGridGeometry.coordinates",
+      "interpretation": "Returns the cast equivalence in the rectangular case and the supplied equivalence in the logical case.",
+      "effect_on_target": "Both geometry cases produce a coordinate function.",
+      "source_match": "Correct case handling, but does not establish regularity or adjacency properties of logical coordinates.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "NumStability.CoordinateGridGeometry.logicallyRectangular",
+      "interpretation": "Accepts any equivalence Point ≃ (Direction → Real).",
+      "effect_on_target": "Requires bijectivity but no continuity, measurable inverse, or adjacency preservation.",
+      "source_match": "The supplied source does not settle whether this is an adequate abstraction of logical rectangularity.",
+      "status": "unclear"
+    },
+    {
+      "id": "D033",
+      "name": "NumStability.CoordinateGridGeometry.rectangular",
+      "interpretation": "Requires equality of the point type and real coordinate function space.",
+      "effect_on_target": "Supports literal Cartesian coordinate space.",
+      "source_match": "A concrete representation of rectangular ambient coordinates.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "NumStability.FiniteVolumeCellPartition.mk",
+      "interpretation": "Requires inhabited cell labels, measurable regions, disjoint distinct cells, and exact coverage of the domain.",
+      "effect_on_target": "Prevents empty cell indexing and overlapping partition cells.",
+      "source_match": "Compatible with dividing the domain into cells; does not enforce the source's volume and flux semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "NumStability.OneDimensionalHighResolutionFiniteVolumeSolve.advanceCellAverages",
+      "interpretation": "Projects the packaged real-parameterized state map.",
+      "effect_on_target": "Is the transformation actually executed.",
+      "source_match": "Its declaration does not ensure that its inputs or outputs are numerical cell averages or that it solves any equation.",
+      "status": "fail"
+    },
+    {
+      "id": "D036",
+      "name": "NumStability.CoordinateGridGeometry.coordinates.match_1",
+      "interpretation": "Case analysis selecting the supplied rectangular or logical branch.",
+      "effect_on_target": "Implements coordinate extraction.",
+      "source_match": "No additional source claim or restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "NumStability.CoordinateGridGeometry.casesOn",
+      "interpretation": "Case eliminator for the two geometry constructors.",
+      "effect_on_target": "Supports the coordinate extraction match.",
+      "source_match": "Preserves both encoded geometry cases.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "NumStability.CoordinateGridGeometry.rec",
+      "interpretation": "Dependent eliminator for equality-based and equivalence-based geometry.",
+      "effect_on_target": "Provides the underlying elimination principle.",
+      "source_match": "Administrative elimination adds no geometric guarantee.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "Requires all schedule, coverage, execution, and trace conditions together.",
+      "source_match": "No connective reversal or replacement by alternatives.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "Eq",
+      "interpretation": "Equality at the indicated type, including function and structure equality.",
+      "effect_on_target": "Identifies schedules and fields and gives an exact trace count.",
+      "source_match": "These are bookkeeping equalities, not an asserted equality with full PDE evolution.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Exists",
+      "interpretation": "Existential quantification.",
+      "effect_on_target": "Provides schedule, final state, trace, and a step witness for each direction.",
+      "source_match": "Witness dependence is consistent with constructing an execution from supplied inputs.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "HAdd.hAdd",
+      "interpretation": "Projects the selected addition operation; here natural-number addition.",
+      "effect_on_target": "Adds one to schedule length.",
+      "source_match": "Correct trace bookkeeping.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "List",
+      "interpretation": "Finite ordered sequences.",
+      "effect_on_target": "Represents both execution order and state history.",
+      "source_match": "Appropriate for successive directional processing.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "List.instMembership",
+      "interpretation": "List membership through List.Mem.",
+      "effect_on_target": "Expresses occurrence of a step or direction.",
+      "source_match": "Supports coverage of each coordinate direction.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "List.length",
+      "interpretation": "Counts list entries, with zero for nil and one added per cons.",
+      "effect_on_target": "Counts scheduled updates and recorded states.",
+      "source_match": "The additional initial state explains the offset one.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "List.nil",
+      "interpretation": "The empty list.",
+      "effect_on_target": "Used to exclude an empty schedule and terminate execution.",
+      "source_match": "A full coordinate sweep is nonempty.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "MeasurableSpace",
+      "interpretation": "A measurable-set structure on the point type.",
+      "effect_on_target": "Allows the grid to require measurable cells.",
+      "source_match": "Compatible with integration context, but is not a volume measure.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "Membership.mem",
+      "interpretation": "Projects the membership relation selected by the instance.",
+      "effect_on_target": "Uses list occurrence and set membership in their respective contexts.",
+      "source_match": "No confusion between list and spatial membership.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "Nat",
+      "interpretation": "Natural numbers.",
+      "effect_on_target": "The type of schedule and trace lengths.",
+      "source_match": "Appropriate discrete counts.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "Ne",
+      "reuse_sha256": "83c2b2835e2c70e9de4ed8287da69e8528b9c02a736e1ffa1218a9b88cccd8cf",
+      "effect_on_target": "Excludes empty direction lists and schedules and distinguishes cell labels.",
+      "source_match": "Correct nonemptiness and distinctness conditions.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "OfNat.ofNat",
+      "interpretation": "Selects the numeral value supplied by an OfNat instance.",
+      "effect_on_target": "Interprets natural one and real zero and one.",
+      "source_match": "No numeral coercion changes their values.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "Real",
+      "interpretation": "The library real-number type.",
+      "effect_on_target": "Used for coordinate bounds and substep parameters.",
+      "source_match": "Compatible with real spatial coordinates and continuous time parameters.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "instAddNat",
+      "interpretation": "Selects Nat.add.",
+      "effect_on_target": "Makes the trace-length addition ordinary natural addition.",
+      "source_match": "Correct count arithmetic.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "instHAdd",
+      "interpretation": "Lifts a homogeneous Add operation to HAdd.",
+      "effect_on_target": "Resolves the target's addition to Nat.add.",
+      "source_match": "No altered arithmetic semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "instOfNatNat",
+      "reuse_sha256": "5afb464ea638155c9233a0ef270e582be38648a0592bc2de4c98dfefad487def",
+      "effect_on_target": "Interprets the trace offset as the natural number one.",
+      "source_match": "Correctly accounts for the initial state.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "List.map",
+      "interpretation": "Applies a function entrywise while preserving list order and length.",
+      "effect_on_target": "Constructs one step for every listed direction.",
+      "source_match": "Appropriate construction for a single directional sweep.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "LE.le",
+      "interpretation": "Projects the selected non-strict order relation.",
+      "effect_on_target": "Expresses real lower coordinate bounds and fraction upper bounds.",
+      "source_match": "Correct non-strict comparisons for the chosen conventions.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "LT.lt",
+      "interpretation": "Projects the selected strict order relation.",
+      "effect_on_target": "Expresses positive widths, positive fractions, and open upper faces.",
+      "source_match": "No reversal of positivity or boundary comparisons.",
+      "status": "pass"
+    },
+    {
+      "id": "D059",
+      "name": "List.cons",
+      "interpretation": "Prepends an entry to a list.",
+      "effect_on_target": "Constructs schedules and state traces in execution order.",
+      "source_match": "Preserves chronological sequencing.",
+      "status": "pass"
+    },
+    {
+      "id": "D060",
+      "name": "One.toOfNat1",
+      "interpretation": "Uses the One instance to interpret numeral one.",
+      "effect_on_target": "Provides the real upper bound on fractions.",
+      "source_match": "Correct value for the chosen fraction convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D061",
+      "name": "Real.instLE",
+      "interpretation": "Selects the real non-strict order.",
+      "effect_on_target": "Makes fraction and coordinate inequalities ordinary real inequalities.",
+      "source_match": "No order mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D062",
+      "name": "Real.instLT",
+      "interpretation": "Selects the real strict order.",
+      "effect_on_target": "Gives ordinary real positivity and strict upper coordinate bounds.",
+      "source_match": "No order mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D063",
+      "name": "Real.instOne",
+      "interpretation": "Provides real one.",
+      "effect_on_target": "Fixes the fraction upper endpoint.",
+      "source_match": "Correct numeral meaning; the endpoint convention is added by the formalization.",
+      "status": "pass"
+    },
+    {
+      "id": "D064",
+      "name": "Real.instZero",
+      "interpretation": "Provides real zero.",
+      "effect_on_target": "Fixes the fraction lower reference value.",
+      "source_match": "Correct positivity reference.",
+      "status": "pass"
+    },
+    {
+      "id": "D065",
+      "name": "Set",
+      "interpretation": "Predicates on a type.",
+      "effect_on_target": "Represents domains, cell regions, and boxes.",
+      "source_match": "Appropriate spatial subsets.",
+      "status": "pass"
+    },
+    {
+      "id": "D066",
+      "name": "Zero.toOfNat0",
+      "interpretation": "Uses the Zero instance to interpret numeral zero.",
+      "effect_on_target": "Provides real zero in positive fraction conditions.",
+      "source_match": "No numeral mismatch.",
+      "status": "pass"
+    },
+    {
+      "id": "D067",
+      "name": "DFunLike.coe",
+      "reuse_sha256": "b3b0f9c22d43e1045ec44f03e430d6c65241d4a3e14515560a15d671a99ebc54",
+      "effect_on_target": "Applies the coordinate equivalence as a function.",
+      "source_match": "Correct function application; it adds no geometric regularity.",
+      "status": "pass"
+    },
+    {
+      "id": "D068",
+      "name": "Equiv",
+      "reuse_sha256": "97ea4d0d004fc5f012c3beae4446e9b5a7e902f06b5be1670b183b6e17065efd",
+      "effect_on_target": "Here supplies a bijection from points to real coordinate tuples; the reused interpretation's Matrix.of context has no role.",
+      "source_match": "Bijectivity alone is not established by the supplied passage as a sufficient definition of logical rectangularity.",
+      "status": "unclear"
+    },
+    {
+      "id": "D069",
+      "name": "Equiv.instEquivLike",
+      "reuse_sha256": "55a81f67644efac84e1e7e0d4069a0daf8f3b902be4ce84a1c35868751ceda2a",
+      "effect_on_target": "Supplies forward and inverse functions for coordinate equivalences.",
+      "source_match": "Correct equivalence coercion, without additional spatial guarantees.",
+      "status": "pass"
+    },
+    {
+      "id": "D070",
+      "name": "EquivLike.toFunLike",
+      "reuse_sha256": "42d3e10a239813e571f56888491c04a9dc77de773b423c9c7c1c8e58c782ebc7",
+      "effect_on_target": "Retains the coordinate equivalence's forward function for box tests.",
+      "source_match": "Correct direction of coordinate evaluation.",
+      "status": "pass"
+    },
+    {
+      "id": "D071",
+      "name": "List.Nodup",
+      "interpretation": "Pairwise inequality of list entries.",
+      "effect_on_target": "Prevents repeated coordinate directions in the canonical sweep.",
+      "source_match": "Compatible with a single visit to each direction; not a representation of every possible splitting schedule.",
+      "status": "pass"
+    },
+    {
+      "id": "D072",
+      "name": "setOf",
+      "interpretation": "Treats a predicate as its corresponding set.",
+      "effect_on_target": "Forms coordinate boxes from coordinate inequalities.",
+      "source_match": "No change in set membership meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D073",
+      "name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "interpretation": "Projects the underlying complete Boolean algebra.",
+      "effect_on_target": "Participates in resolving the set order used by disjointness.",
+      "source_match": "Preserves ordinary set operations.",
+      "status": "pass"
+    },
+    {
+      "id": "D074",
+      "name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "interpretation": "Retains the underlying complete lattice and associated operations.",
+      "effect_on_target": "Supplies an inheritance path to the bottom element for set disjointness.",
+      "source_match": "No change to spatial disjointness.",
+      "status": "pass"
+    },
+    {
+      "id": "D075",
+      "name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "interpretation": "Projects the complete lattice.",
+      "effect_on_target": "Supplies set order through the explicit instance chain.",
+      "source_match": "Preserves subset order.",
+      "status": "pass"
+    },
+    {
+      "id": "D076",
+      "name": "CompleteDistribLattice.toFrame",
+      "interpretation": "Projects the underlying frame structure.",
+      "effect_on_target": "Part of the set bottom-instance chain.",
+      "source_match": "Adds no extra condition to cell partitioning.",
+      "status": "pass"
+    },
+    {
+      "id": "D077",
+      "name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "interpretation": "Builds an omega-complete order using the existing partial order and indexed suprema.",
+      "effect_on_target": "Its partial-order projection resolves the set order in Disjoint.",
+      "source_match": "No asymptotic or convergence assertion is introduced by this instance.",
+      "status": "pass"
+    },
+    {
+      "id": "D078",
+      "name": "Disjoint",
+      "interpretation": "Every common lower bound is below bottom; for sets, their intersection is empty.",
+      "effect_on_target": "Requires distinct cell regions to be disjoint.",
+      "source_match": "Compatible with the half-open partition convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D079",
+      "name": "Equiv.cast",
+      "interpretation": "Builds a type equivalence by transport along type equality.",
+      "effect_on_target": "Supplies coordinates in the rectangular geometry case.",
+      "source_match": "Harmless transport for the literal Cartesian representation.",
+      "status": "pass"
+    },
+    {
+      "id": "D080",
+      "name": "HeytingAlgebra.toOrderBot",
+      "interpretation": "Projects the ordered bottom structure.",
+      "effect_on_target": "Provides the empty set as bottom in disjointness.",
+      "source_match": "Correct empty-intersection semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D081",
+      "name": "Iff",
+      "interpretation": "Logical equivalence.",
+      "effect_on_target": "Makes domain membership equivalent to membership in some cell.",
+      "source_match": "Expresses exact coverage rather than one-sided inclusion.",
+      "status": "pass"
+    },
+    {
+      "id": "D082",
+      "name": "MeasurableSet",
+      "interpretation": "Membership in the measurable-space structure's measurable sets.",
+      "effect_on_target": "Requires each cell region to be measurable.",
+      "source_match": "Supports integration context but does not supply cell volumes.",
+      "status": "pass"
+    },
+    {
+      "id": "D083",
+      "name": "Nonempty",
+      "interpretation": "Existence of an inhabitant of the indicated type.",
+      "effect_on_target": "Requires at least one cell label.",
+      "source_match": "Excludes an empty grid index type.",
+      "status": "pass"
+    },
+    {
+      "id": "D084",
+      "name": "OmegaCompletePartialOrder.toPartialOrder",
+      "interpretation": "Projects the underlying partial order.",
+      "effect_on_target": "Exposes subset order for Disjoint.",
+      "source_match": "No change to partition semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D085",
+      "name": "Order.Frame.toHeytingAlgebra",
+      "interpretation": "Retains the frame's lattice, top, bottom, and implication operations.",
+      "effect_on_target": "Supplies the bottom used in the disjointness instance chain.",
+      "source_match": "Preserves ordinary set bottom.",
+      "status": "pass"
+    },
+    {
+      "id": "D086",
+      "name": "Set.instCompleteAtomicBooleanAlgebra",
+      "interpretation": "The complete Boolean algebra of sets with ordinary set operations.",
+      "effect_on_target": "Grounds the explicit order and bottom instances in subset order and the empty set.",
+      "source_match": "Ensures Disjoint has ordinary spatial set-disjointness meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D087",
+      "name": "Set.instMembership",
+      "interpretation": "Uses ordinary Set.Mem as the membership relation.",
+      "effect_on_target": "Interprets points belonging to domains and cell regions.",
+      "source_match": "Correct spatial membership semantics.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Attached raw page 28, printed page 6, Section 1.3 contains the defining paragraph; raw page 29 continues its qualification. Raw pages 23 and 27 supply hyperbolic-equation and finite volume context.",
+      "lean_evidence": "The supplied proof-free header and both elaborated types identify the dimensional-splitting target.",
+      "reasoning": "The selected passage and inherited context were inspected directly in the images. Source and dossier hashes are supplied provenance, not independently recomputed hashes."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "Section 1.3 concerns multidimensional hyperbolic problems and extension of one-dimensional high-resolution methods; Section 1.2 describes cell averages and flux updates.",
+      "lean_evidence": "Value is an arbitrary type; D011 is Cell → Value; D022 requires only preservation of constant states.",
+      "reasoning": "The method and state binders admit objects without the defining numerical roles. Direction is finite and inhabited through D023, but need not have at least two elements."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "Section 1.3 describes processing each coordinate direction successively without fixing a particular order.",
+      "lean_evidence": "For each grid, method, and initialState, schedule, finalState, and trace exist; each direction then has a step witness in that same schedule.",
+      "reasoning": "There is no witness-scope reversal. The equality fixes the schedule from grid directions and method, while the resulting states depend on the initial state."
+    },
+    {
+      "id": "C04",
+      "status": "fail",
+      "source_evidence": "The setting is a rectangular or logically rectangular finite volume grid with one-dimensional high-resolution methods for multidimensional hyperbolic problems.",
+      "lean_evidence": "D016 supplies coordinate-box conditions, but D019 and D022 impose no hyperbolic problem, directional compatibility, or high-resolution condition; they impose fraction bounds and constant preservation.",
+      "reasoning": "The principal numerical side conditions are replaced by much weaker transformation properties. Added parameter restrictions are not stronger conclusions."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The defining clause requires one-dimensional coordinate problems to be solved in turn. The paragraph also describes a simple extension, qualified practical effectiveness, and cases needing a fuller multidimensional method.",
+      "lean_evidence": "The conclusion provides labeled transformations, an execution trace, and its length, with no predicate linking any transformation to solving a coordinate problem.",
+      "reasoning": "Sequential execution and coverage are present, but the essential meaning of the executed solves is absent. The surrounding practical assessments are also unrepresented, although they do not justify adding a universal numerical guarantee."
+    },
+    {
+      "id": "C06",
+      "status": "fail",
+      "source_evidence": "Sections 1.2–1.3 connect numerical cell-average updates to finite volume methods and directional problems.",
+      "lean_evidence": "D022 explicitly permits every real-parameterized constant-preserving state map; D024 merely applies it; D020 sequences such applications.",
+      "reasoning": "All listed declarations were interpreted, including constructors and reuse entries. Their actual definitions do not support the numerical meaning suggested by their names."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "Section 1.3 offers a fractional-step description, without an exact factorization of full multidimensional evolution.",
+      "lean_evidence": "Equalities concern the constructed schedule, stored fields, and trace length; no full PDE solution occurs.",
+      "reasoning": "The target does not incorrectly assert exact agreement between split and unsplit evolution. Its deficiency is missing numerical content, not an exact-evolution equality."
+    },
+    {
+      "id": "C08",
+      "status": "fail",
+      "source_evidence": "The directional problems belong to the multidimensional hyperbolic problem, and the state data have finite volume meaning.",
+      "lean_evidence": "method is independent of grid except for shared Cell and Direction types; no equation or coordinate compatibility relation appears. State values are unconstrained.",
+      "reasoning": "A direction label is substituted for a mathematical association with a coordinate subproblem. Arbitrary cell-indexed data are assigned the role of cell averages without a bridge."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Section 1.3 requires each direction and succession but gives no coefficients or step durations.",
+      "lean_evidence": "D023 enumerates every direction once; D013 preserves that order; D020–D021 imply a trace with one more state than steps. Fractions lie in (0,1].",
+      "reasoning": "The indexing and trace offset are internally correct. Fractions and the once-per-direction schedule are explicit modeling choices rather than numerical constants quoted from the source."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The selected setting is an extension of numerical methods to multiple spatial dimensions.",
+      "lean_evidence": "The target permits singleton Direction, arbitrary Value, and arbitrary constant-preserving total maps, while restricting schedules to one bounded positive fraction per direction.",
+      "reasoning": "This is a generalization to abstract transformations combined with scheduling restrictions. Neither should be counted as genuine stronger numerical content."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "Section 1.3 includes logically rectangular grids but does not define their geometry or boundary conventions.",
+      "lean_evidence": "D030 uses half-open boxes and D032 accepts an arbitrary point-space equivalence. D023 excludes empty directions, and D016 imposes positive widths.",
+      "reasoning": "Half-open cells and positivity are coherent. Whether bare equivalences adequately cover the source's logically rectangular grids cannot be settled from the supplied passage; adjudication is required for that representation."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The source describes numerical directional solves, not merely the existence of a history for arbitrary total transformations.",
+      "lean_evidence": "D020–D021 construct a trace for every finite list of total state maps. Neither constant preservation nor coordinate-box geometry is needed for this execution fact.",
+      "reasoning": "The premises are satisfiable: take Direction = Fin 2, Point = Direction → Real with measurable boxes, two adjacent half-open unit cells, Value = Real, fractions one, and identity updates. More decisively, the update A(f,s)(c) = s(c0) also satisfies D022 for every fraction but can erase nonconstant data immediately and ignore direction. The target remains true for this unrelated process. Failure is semantic trivialization, not inconsistent hypotheses."
+    },
+    {
+      "id": "N01",
+      "status": "fail",
+      "source_evidence": "Section 1.3 specifies successive solution of one-dimensional coordinate problems within the finite volume setting.",
+      "lean_evidence": "D020 and D024 enforce succession, but D022 has no grid, directional equation, numerical flux, or solver correctness condition.",
+      "reasoning": "Execution is linked to the supplied transformation family, but that family is not linked to the source's numerical construction."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected paragraph contains no norm, metric, or componentwise bound.",
+      "lean_evidence": "The target contains no norm or metric expression.",
+      "reasoning": "No quantitative norm convention is at issue."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "Section 1.3 gives qualified practical effectiveness, without a defined error or stability estimate.",
+      "lean_evidence": "No forward error, backward error, residual, or stability predicate appears.",
+      "reasoning": "There is no stated quantitative error notion to compare. Missing solver semantics are assessed separately."
+    },
+    {
+      "id": "N04",
+      "status": "fail",
+      "source_evidence": "Section 1.2 describes approximate cell averages updated through numerical fluxes; Section 1.3 extends those numerical methods.",
+      "lean_evidence": "D011 provides arbitrary functions and D022 arbitrary constant-preserving maps, without an exact solution, average functional, flux, or approximation relation.",
+      "reasoning": "No false exact-factorization assertion is made, but the source's approximate numerical role is not established for the executed quantities."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage has no asymptotic expansion, limit, remainder, or accuracy-order claim.",
+      "lean_evidence": "The target contains only finite execution and bookkeeping assertions.",
+      "reasoning": "No higher-order or asymptotic status requires preservation."
+    },
+    {
+      "id": "N06",
+      "status": "fail",
+      "source_evidence": "The source discusses numerical solution of coordinate problems, without asserting unrestricted analytic solvability or specifying a total solver interface.",
+      "lean_evidence": "D022 assumes total state transformations on every real parameter and every state; the existential conclusion merely executes those already supplied functions.",
+      "reasoning": "The existence of a finite execution is not existence or well-posedness of the directional problems. Total function data supply the very operational availability needed for the conclusion, without a numerical linkage."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "no",
+      "reasoning": "The target ensures a finite sequential execution of direction-labeled, constant-preserving total transformations. D022 admits the map A(f,s)(c) = s(c0), which broadcasts one cell's value to every cell, ignores the fraction, and need not solve any directional hyperbolic problem. The target has no equation, flux, grid-to-solver compatibility, or high-resolution requirement that excludes this example. Thus its truth does not recover the source's defining assertion about solving one-dimensional coordinate problems. It also does not recover the surrounding practical assessments."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Under the supplied Lean definitions, the proposition follows from elementary finite-list execution independently of any substantive source assertion. Map fractionalStep over the nonempty exhaustive direction list, choose the final state by successive application of the total stored maps, and record the initial state followed by each intermediate state. D020–D021 give execution, the trace has length schedule.length + 1, and D018 plus direction exhaustiveness give the field and coverage conditions. Consequently the source entails this strictly weaker bookkeeping proposition when those definitions are admitted; this implication does not validate the definitions as representations of numerical solvers."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "missing-directional-solver-semantics",
+      "source_evidence": "Raw page 28, printed page 6, Section 1.3 defines dimensional splitting through successive solution of one-dimensional problems along each coordinate direction.",
+      "lean_evidence": "D022 requires only a total real-parameterized state map preserving constants. D019 merely indexes these packages by direction.",
+      "impact": "The target accepts transformations unrelated to coordinate problems. Direction coverage and sequential execution cannot compensate for the missing numerical meaning."
+    },
+    {
+      "severity": "major",
+      "category": "execution-existence-trivialization",
+      "source_evidence": "The selected source concerns extending numerical solution methods in a multidimensional finite volume setting.",
+      "lean_evidence": "D013 constructs a finite schedule, and D020–D021 give a trace for any total transformations. The target does not need constant preservation, cell geometry, fluxes, or numerical accuracy to establish its conclusion.",
+      "impact": "The proposition is satisfiable but establishes generic execution bookkeeping. Identity and one-cell-broadcast maps demonstrate that its conclusion can hold without implementing the source construction."
+    },
+    {
+      "severity": "major",
+      "category": "missing-cell-average-and-grid-linkage",
+      "source_evidence": "Raw page 27, printed page 5, Section 1.2 defines cell averages through integrals and volumes and describes their update by edge fluxes.",
+      "lean_evidence": "D011 is Cell → Value for unrestricted Value. D034 supplies measurable sets but no volume measure. The method has no compatibility relation with the grid beyond shared index types.",
+      "impact": "The data representation can store numerical averages, but the declaration does not establish that the stored values and updates have the source's finite volume roles."
+    },
+    {
+      "severity": "minor",
+      "category": "unresolved-logical-grid-representation",
+      "source_evidence": "Section 1.3 includes logically rectangular grids without defining that term on the supplied pages.",
+      "lean_evidence": "D032 accepts any equivalence Point ≃ (Direction → Real), and D030 defines cells by pulling back coordinate boxes. No regularity or adjacency condition is required.",
+      "impact": "The adequacy of this abstraction remains unresolved and requires adjudication. This uncertainty does not repair the independently established solver-semantic failure."
+    },
+    {
+      "severity": "note",
+      "category": "schedule-conventions-and-source-scope",
+      "source_evidence": "Section 1.3 supplies no particular ordering, substep duration, or repetition pattern and qualifies practical adequacy.",
+      "lean_evidence": "D013 and D023 select one visit per direction in a supplied order; D019 restricts fractions to (0,1]. The conclusion contains no practical-effectiveness assessment.",
+      "impact": "The schedule is a coherent simple realization, but its conventions and omitted prose assessments must not be presented as a complete equivalent formalization of the paragraph."
+    }
+  ],
+  "rationale": "Direct inspection of the attached source pages and all supplied dependencies shows that the target preserves directional coverage, actual sequential state dependence, and correct trace bookkeeping. It also avoids asserting exact equality with full multidimensional PDE evolution. However, its purported solver interface requires only constant preservation, and its cell-state interface is an arbitrary function type. These definitions allow processes unrelated to the source's one-dimensional high-resolution finite volume solves. The target is therefore a strictly weaker execution fact, not an accepted faithful formalization. Adjudication is requested for the unresolved interpretation of logically rectangular geometry; the principal rejection does not depend on resolving that issue."
+}
