@@ -1,0 +1,120 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "86afccc2d1f62321ccf0ce12693b12f99a1d32d78b17d01afde55e8bd86745ac",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "For a function data from the real numbers to any type and two specified values leftState and rightState, this predicate means that data(x) = leftState for every x < 0 and data(x) = rightState for every x > 0.",
+      "effect_on_target": "Applies this same condition to the pair-valued function and to each of its two coordinate functions. It imposes no condition at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "And",
+      "meaning": "Logical conjunction: both propositions hold.",
+      "effect_on_target": "Requires both half-line conditions in each LocalDef001 predicate and both coordinate predicates on the right side of the equivalence.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "Iff",
+      "meaning": "Logical equivalence: each proposition implies the other.",
+      "effect_on_target": "Asserts both directions between the pair-valued condition and the conjunction of the coordinate conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "Prod",
+      "meaning": "The Cartesian product of two types, consisting of ordered pairs with one component in each type.",
+      "effect_on_target": "The combined function takes values in Material × State, with Material as the first coordinate and State as the second.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "Prod.mk",
+      "meaning": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Forms (medium(x), initialState(x)), (leftMaterial, leftState), and (rightMaterial, rightState).",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "Provides the common domain of the functions and the domain of the universally quantified half-line variables.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Eq",
+      "meaning": "Equality between two elements of the same type.",
+      "effect_on_target": "The conditions require exact equality to the specified values. Equality of the ordered pairs is equivalent to equality of their respective coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LT.lt",
+      "meaning": "The binary relation supplied by an LT instance, obtained by projecting its relation field.",
+      "effect_on_target": "With the supplied real-number instance, specifies the strict inequalities x < 0 and 0 < x.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural-number numeral in a type by projecting the value supplied by its OfNat instance.",
+      "effect_on_target": "Interprets the numeral 0 as a real number through the zero-derived OfNat instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Real.instLT",
+      "meaning": "The LT instance for the real numbers, whose relation field is Real.lt✝, the real strict-order relation.",
+      "effect_on_target": "Makes the inequalities select the negative and positive real half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "Real.instZero",
+      "meaning": "The Zero instance for the real numbers, whose zero field is Real.zero✝.",
+      "effect_on_target": "Supplies the real zero used as the dividing point between the two half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "Zero.toOfNat0",
+      "meaning": "Converts a Zero instance into an OfNat instance for the numeral 0, using the same zero element.",
+      "effect_on_target": "Connects the written numeral 0 to the zero supplied by Real.instZero.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "Universally quantify over arbitrary types Material : Type u_1 and State : Type u_2, with no additional mathematical structure.",
+      "Universally quantify over functions medium : ℝ → Material and initialState : ℝ → State.",
+      "Universally quantify over specified values leftMaterial, rightMaterial ∈ Material and leftState, rightState ∈ State.",
+      "Each half-line condition independently quantifies over every real number x."
+    ],
+    "hypotheses": [
+      "There are no additional hypotheses on the types, functions, or specified values. The inequalities x < 0 and 0 < x are antecedents within the defining universal conditions."
+    ],
+    "conclusions": [
+      "The conjunction [∀ x ∈ ℝ, x < 0 ⇒ (medium(x), initialState(x)) = (leftMaterial, leftState)] and [∀ x ∈ ℝ, 0 < x ⇒ (medium(x), initialState(x)) = (rightMaterial, rightState)] is equivalent to the conjunction of [∀ x ∈ ℝ, x < 0 ⇒ medium(x) = leftMaterial], [∀ x ∈ ℝ, 0 < x ⇒ medium(x) = rightMaterial], [∀ x ∈ ℝ, x < 0 ⇒ initialState(x) = leftState], and [∀ x ∈ ℝ, 0 < x ⇒ initialState(x) = rightState]."
+    ],
+    "mathematical_definitions": [
+      "For any type A, function f : ℝ → A, and elements a₋, a₊ ∈ A, define P(f, a₋, a₊) to mean (∀ x ∈ ℝ, x < 0 ⇒ f(x) = a₋) ∧ (∀ x ∈ ℝ, 0 < x ⇒ f(x) = a₊).",
+      "The combined function is F : ℝ → Material × State defined by F(x) = (medium(x), initialState(x)).",
+      "The target is P(F, (leftMaterial, leftState), (rightMaterial, rightState)) ↔ (P(medium, leftMaterial, rightMaterial) ∧ P(initialState, leftState, rightState))."
+    ],
+    "proposition_plain_english": "For any two types, any real-indexed function into each type, and any specified left and right value in each type, the function pairing their values equals the specified left pair at every negative real number and the specified right pair at every positive real number if and only if each coordinate function separately equals its specified left value at every negative real number and its specified right value at every positive real number."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The functions are defined on all real numbers, but all displayed conditions leave their values at x = 0 unrestricted.",
+    "Both half-lines are nonempty. At zero, both inequality antecedents are false, so their implications impose no constraint there.",
+    "No inequality between left and right values is assumed or concluded; the specified values may coincide.",
+    "Material and State have no required topology, order, algebraic operations, or other structure. The proposition encodes no continuity, limits, regularity, physical interpretation, or evolution equation.",
+    "All functions and left and right values are universally supplied parameters; there are no existential witnesses or assertions that such parameters exist for every type.",
+    "If either type is empty, the corresponding function and value parameters cannot be supplied, so the universal statement for that choice of types is vacuous."
+  ],
+  "ambiguities": []
+}

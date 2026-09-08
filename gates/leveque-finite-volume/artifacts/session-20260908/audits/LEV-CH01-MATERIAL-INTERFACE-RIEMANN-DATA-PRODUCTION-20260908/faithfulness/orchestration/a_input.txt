@@ -1,0 +1,2380 @@
+
+
+Exact role prompt SHA256 ccf143729c0f0bf0a915ed685976036d82a26c6d09f279be1ac4e1c6019d4574
+# Role: faithfulness adjudicator
+
+You are a fresh adjudicator. Resolve the supplied disagreements and unresolved
+items using primary source and Lean declaration evidence. Do not use majority
+vote.
+
+Read the exact trigger reasons, source locator and source, source contract,
+complete direct and blind dossiers, any dependency-reuse records, blind
+translation, and both judgments. Recheck every disputed dependency and semantic
+item. A reuse hash establishes provenance, not task-specific correctness.
+
+Confirm both implication directions, classification consistency, nonvacuity,
+and whether any purportedly stronger theorem is genuine strength rather than
+reduced applicability. Copy every trigger reason verbatim into `trigger` and
+return at least one resolved item per trigger.
+
+Return only JSON conforming to `schemas/adjudicator.schema.json`. Preserve
+remaining uncertainty instead of forcing a binary answer.
+
+
+Exact output schema SHA256 a858fc72ab5a49ab6e47b920f1dc878af8bc82bb04417527e61f1dba31099217
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Formalization faithfulness adjudication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "trigger", "resolved_items", "implications", "classification", "accepted", "remaining_uncertainties", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "adjudicator"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "trigger": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "resolved_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item", "resolution", "primary_evidence"],
+        "properties": {
+          "item": {"type": "string", "minLength": 1},
+          "resolution": {"type": "string", "minLength": 1},
+          "primary_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "remaining_uncertainties": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 1e295c40724e86dab517e4079ebb7cfe51ab04bd1c6f6153a8c1fd485902d200
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "The extension of Riemann initial data to a discontinuity in the medium at x=0 as well as a discontinuity in initial data; the subsequent wave dynamics is a separate claim.",
+      "location": "raw PDF page 30; printed Chapter 1 page 8"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 0b8f439fe0095666f6edc34ec542b1e9d2e5b476bc59965e830641beb6401d1d
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph",
+      "anchor": "The idea of a Riemann problem is easily extended",
+      "observation": "The selected sentence extends the Riemann problem to a discontinuity in the medium at x = 0 together with a discontinuity in the initial data."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, opening paragraph and equation (1.11)",
+      "anchor": "piecewise constant with a single jump discontinuity",
+      "observation": "A Riemann problem consists of the hyperbolic equation and special initial data: q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0. The location zero is introduced as a choice of jump location."
+    },
+    {
+      "location": "Raw PDF page 29; printed page 7; Section 1.4, final paragraph",
+      "anchor": "sharp interfaces between different materials",
+      "observation": "The preceding context concerns wave propagation in heterogeneous materials whose material parameters have jump discontinuities at interfaces."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph",
+      "anchor": "each grid cell can be assigned different material properties",
+      "observation": "The surrounding numerical context permits different material properties in different cells, obtained by averaging material parameters over each cell."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and following paragraph",
+      "anchor": "q : R × R → R^m",
+      "observation": "The introductory system notation uses a vector-valued state q depending on position x and time t, with m unknown components. A constant real m by m matrix A describes the simplest constant-coefficient linear case."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, sentence immediately following the selected sentence",
+      "anchor": "Solving the Riemann problem at the interface",
+      "observation": "Decomposition into waves and reflection and transmission are subsequent solution claims, separate from the selected extension of the initial-data setup."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "x is the one-dimensional spatial coordinate, and t is time; the initial data are evaluated at t = 0 (printed page 5, equation (1.11)).",
+      "q is the state; q_l and q_r denote its constant left and right initial states (printed page 5, equation (1.11)). The introductory system notation takes state values in R^m (printed page 1, paragraph following equation (1.1)).",
+      "The medium has material properties that may differ across an interface; the selected passage introduces no named parameter tuple or quantified coefficient function (printed pages 7–8, Section 1.4, 'material parameters' and 'discontinuity in the medium')."
+    ],
+    "hypotheses": [
+      "The inherited setting is a hyperbolic equation equipped with Riemann initial data (printed page 5, Section 1.2.1, opening definition).",
+      "The initial state is piecewise constant: q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0 (printed page 5, equation (1.11)).",
+      "In the extension under discussion, the medium also has a discontinuity at x = 0, coinciding with the initial-data discontinuity (printed page 8, Section 1.4, 'at x = 0 as well as a discontinuity in the initial data')."
+    ],
+    "conclusions": [
+      "The Riemann-problem setup extends to an interface at which both the medium and the initial state are discontinuous, retaining the inherited left and right constant initial states on the two open half-lines (printed page 8, selected extension sentence, together with printed page 5, equation (1.11))."
+    ],
+    "definitions_and_conventions": [
+      "A Riemann problem is the hyperbolic equation together with the specified special initial data, rather than the initial data alone (printed page 5, Section 1.2.1, opening sentence).",
+      "The subscripts l and r identify the states on x < 0 and x > 0, respectively (printed page 5, equation (1.11)).",
+      "Equation (1.11) assigns no value at x = 0 (printed page 5, the two strict inequalities in the displayed cases).",
+      "The origin is a chosen interface location: the original definition says 'at some point, say x = 0' (printed page 5, paragraph preceding equation (1.11)).",
+      "A discontinuity in the medium refers to material heterogeneity, distinct from a discontinuity in the state data (printed page 7, discussion of material-parameter jumps; printed page 8, selected sentence)."
+    ],
+    "implicit_context": [
+      "The selected extension occurs in the discussion of linear waves and discontinuous media, motivated by acoustic and seismic propagation across material interfaces (printed page 7, Section 1.4 heading and final paragraph).",
+      "Finite volume cells may represent differing material properties through cell averages of material parameters; this motivates the interface setup but is not an additional hypothesis on equation (1.11) (printed page 8, first paragraph, sentences preceding the selected sentence).",
+      "The constant matrix in introductory equation (1.1) is explicitly restricted to the simplest constant-coefficient case; it does not prescribe a globally constant medium for the selected extension (printed page 1, equation (1.1) and accompanying qualification; printed page 8, selected sentence)."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Coincident state and material interfaces",
+        "details": [
+          "The extension allows a material discontinuity at the same spatial origin used for the initial-state jump (printed page 8, selected sentence; printed page 5, equation (1.11)).",
+          "Material properties and state values have distinct roles; the source does not identify q_l and q_r with material parameters (printed page 7, material-parameter discussion; printed page 5, equation (1.11))."
+        ]
+      },
+      {
+        "topic": "Scope of the initial-data specification",
+        "details": [
+          "The inherited data specify the entire negative and positive half-lines at initial time (printed page 5, equation (1.11)).",
+          "The selected sentence supplies no explicit coefficient formula, named pair of medium matrices, or value of the medium at the interface (printed page 8, selected extension sentence)."
+        ]
+      },
+      {
+        "topic": "Separation from solution dynamics",
+        "details": [
+          "Wave decomposition, reflection, and transmission belong to the following sentence and are outside this selected initial-data claim (printed page 8, sentence beginning 'Solving the Riemann problem').",
+          "The selected extension sentence gives no explicit existence, uniqueness, or interface matching theorem (printed page 8, selected extension sentence)."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve both discontinuities and their common interface location x = 0 (printed page 8, selected extension sentence).",
+    "Preserve the inherited initial-state cases q_l on x < 0 and q_r on x > 0 at t = 0 (printed page 5, equation (1.11)).",
+    "Do not attribute an initial-state value at x = 0 to the source; the displayed cases omit that point (printed page 5, equation (1.11)).",
+    "Do not identify material parameters with the state components; the source discusses material jumps separately from initial-data jumps (printed pages 7–8, Section 1.4).",
+    "Do not treat wave decomposition or reflection and transmission formulas as conclusions of this selected setup claim (printed page 8, selected sentence and immediately following sentence)."
+  ],
+  "ambiguities": [
+    {
+      "issue": "Whether unequal left and right states must be an explicit formal hypothesis.",
+      "evidence": "Printed page 5 calls the data a 'single jump discontinuity', and printed page 8 again says 'discontinuity in the initial data', but equation (1.11) does not explicitly state q_l ≠ q_r.",
+      "impact": "A literal nontrivial jump requires distinct states. Allowing equal states is a degenerate extension of the displayed data template, not an explicitly discussed exceptional case."
+    },
+    {
+      "issue": "The precise mathematical representation of the discontinuous medium is unspecified.",
+      "evidence": "Printed page 7 discusses material-parameter jumps; printed page 8 states that the medium is discontinuous at x = 0 without displaying a coefficient function or specifying its behavior throughout each half-line.",
+      "impact": "Piecewise constant medium coefficients, their parameter space, and any positivity or spectral assumptions require additional specification; the selected sentence does not explicitly provide them."
+    },
+    {
+      "issue": "Interface values and interface laws are not specified by the selected setup.",
+      "evidence": "Printed page 5, equation (1.11), uses only x < 0 and x > 0; printed page 8's extension sentence supplies no value or matching condition at zero.",
+      "impact": "Any chosen point value or imposed transmission condition must be identified as an additional convention or as coming from further source material."
+    }
+  ],
+  "contract_plain_english": "The source extends the usual one-dimensional Riemann setup to a material interface: at initial time the state has constant left and right values on x < 0 and x > 0, and the medium itself is also discontinuous at x = 0 (printed page 5, equation (1.11); printed page 8, Section 1.4, selected extension sentence). It does not specify the state value at the interface or an explicit mathematical model for the medium there. The following discussion of waves, reflection, and transmission is a separate solution claim (printed page 8, immediately following sentence)."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 daa04586961ee34da6b50e6c351089cc7901b2e3d7eeb5a8ec7586cd562e6931
+# Declaration dossier for LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_materialInterfaceRiemannData_iff {Material State : Type*}
+    (medium : ℝ → Material) (initialState : ℝ → State)
+    (leftMaterial rightMaterial : Material) (leftState rightState : State) :
+    IsRiemannData (fun x => (medium x, initialState x))
+        (leftMaterial, leftState) (rightMaterial, rightState) ↔
+      IsRiemannData medium leftMaterial rightMaterial ∧
+        IsRiemannData initialState leftState rightState
+```
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (NumStability.IsRiemannData (fun x => { fst := medium x, snd := initialState x })
+      { fst := leftMaterial, snd := leftState } { fst := rightMaterial, snd := rightState })
+    (And (NumStability.IsRiemannData medium leftMaterial rightMaterial)
+      (NumStability.IsRiemannData initialState leftState rightState))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (@NumStability.IsRiemannData.{max u_2 u_1} (Prod.{u_1, u_2} Material State)
+      (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+      (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)
+      (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState))
+    (And (@NumStability.IsRiemannData.{u_1} Material medium leftMaterial rightMaterial)
+      (@NumStability.IsRiemannData.{u_2} State initialState leftState rightState))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D002: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a29a7bc1772fa6c04b57a6149adac0a7e66ffcec9fdc5c09facb37f92d028de9`
+- Reviewed interpretation: Logical conjunction.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D003: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `8c207acb2f3c33282cddbf0d2acb94510339b3207855feaee362ff25d8f5828b`
+- Reviewed interpretation: Logical equivalence.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D004: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → (β : Type v) → Type (max u v)
+```
+
+### D005: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → (fst : α) → (snd : β) → Prod.{u, v} α β
+```
+
+### D006: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `7b102f9dd7960e48c346a659c3eea24e055508443883e0874890869abfaa0053`
+- Reviewed interpretation: The standard library real-number type at the external semantic frontier.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D007: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `96b06d8f4a0b9d42c63d27deaa1fd88d8004070d2860a0975888569514ea8ca2`
+- Reviewed interpretation: Equality of two objects of the same type.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D008: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D009: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `9e506b30a29cce8ac3e38881488c7146323b5d8f72f47345be81eedefe40ba35`
+- Reviewed interpretation: Extracts the value assigned to a natural-number literal by its instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D010: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D011: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `d08b7a921bef1d7898c11931c0180d5a572e70dc084be186e4224ab084bfd3dc`
+- Reviewed interpretation: Selects Real.zero.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D012: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `4cab96c7d3ba85dcabaed043dad67f453ba7d4dc4468e28347312ff2b9cd876d`
+- Reviewed interpretation: Interprets the literal 0 as the supplied zero element.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+
+Complete dependency inventory SHA256 c10b9547604c8a45a92098c580cd43d3597e53816c24d92adb4399afc04fbece
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun {State} data leftState rightState =>\n  And (\u2200 (x : Real), Real.instLT.lt x 0 \u2192 Eq (data x) leftState)\n    (\u2200 (x : Real), Real.instLT.lt 0 x \u2192 Eq (data x) rightState)",
+      "distance": 1,
+      "id": "D001",
+      "kind": "def",
+      "name": "NumStability.IsRiemannData",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData",
+      "role": "local",
+      "semantic_sha256": "9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712",
+      "type_explicit": "{State : Type u_1} \u2192 (data : Real \u2192 State) \u2192 (leftState rightState : State) \u2192 Prop",
+      "type_readable": "{State : Type u_1} \u2192 (Real \u2192 State) \u2192 State \u2192 State \u2192 Prop"
+    },
+    {
+      "blind_name": "And",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D002",
+      "kind": "inductive",
+      "name": "And",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D003",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "Prod",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D004",
+      "kind": "inductive",
+      "name": "Prod",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347",
+      "type_explicit": "(\u03b1 : Type u) \u2192 (\u03b2 : Type v) \u2192 Type (max u v)",
+      "type_readable": "Type u \u2192 Type v \u2192 Type (max u v)"
+    },
+    {
+      "blind_name": "Prod.mk",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D005",
+      "kind": "constructor",
+      "name": "Prod.mk",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 (fst : \u03b1) \u2192 (snd : \u03b2) \u2192 Prod.{u, v} \u03b1 \u03b2",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 \u03b1 \u2192 \u03b2 \u2192 Prod \u03b1 \u03b2"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D006",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 2,
+      "id": "D007",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "LT.lt",
+      "body_readable": "fun \u03b1 [self : LT \u03b1] => self.1",
+      "distance": 2,
+      "id": "D008",
+      "kind": "abbrev",
+      "name": "LT.lt",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : LT.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : LT \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 2,
+      "id": "D009",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Real.instLT",
+      "body_readable": "{ lt := Real.lt\u271d }",
+      "distance": 2,
+      "id": "D010",
+      "kind": "def",
+      "name": "Real.instLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a",
+      "type_explicit": "LT.{0} Real",
+      "type_readable": "LT Real"
+    },
+    {
+      "blind_name": "Real.instZero",
+      "body_readable": "{ zero := Real.zero\u271d }",
+      "distance": 2,
+      "id": "D011",
+      "kind": "def",
+      "name": "Real.instZero",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "type_explicit": "Zero.{0} Real",
+      "type_readable": "Zero Real"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 2,
+      "id": "D012",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 55ebfaf4d4959db43842afeb4b5d931ef79e3127c57dea804364fbd5071f9e9a
+{
+  "entries": [
+    {
+      "interpretation": "Logical conjunction.",
+      "reuse_sha256": "a29a7bc1772fa6c04b57a6149adac0a7e66ffcec9fdc5c09facb37f92d028de9",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "source_dependency_id": "D005",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D002"
+    },
+    {
+      "interpretation": "Logical equivalence.",
+      "reuse_sha256": "8c207acb2f3c33282cddbf0d2acb94510339b3207855feaee362ff25d8f5828b",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "source_dependency_id": "D017",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D003"
+    },
+    {
+      "interpretation": "The standard library real-number type at the external semantic frontier.",
+      "reuse_sha256": "7b102f9dd7960e48c346a659c3eea24e055508443883e0874890869abfaa0053",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "source_dependency_id": "D049",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D006"
+    },
+    {
+      "interpretation": "Equality of two objects of the same type.",
+      "reuse_sha256": "96b06d8f4a0b9d42c63d27deaa1fd88d8004070d2860a0975888569514ea8ca2",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "source_dependency_id": "D010",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D007"
+    },
+    {
+      "interpretation": "Extracts the value assigned to a natural-number literal by its instance.",
+      "reuse_sha256": "9e506b30a29cce8ac3e38881488c7146323b5d8f72f47345be81eedefe40ba35",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "source_dependency_id": "D042",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D009"
+    },
+    {
+      "interpretation": "Selects Real.zero.",
+      "reuse_sha256": "d08b7a921bef1d7898c11931c0180d5a572e70dc084be186e4224ab084bfd3dc",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "source_dependency_id": "D055",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D011"
+    },
+    {
+      "interpretation": "Interprets the literal 0 as the supplied zero element.",
+      "reuse_sha256": "4cab96c7d3ba85dcabaed043dad67f453ba7d4dc4468e28347312ff2b9cd876d",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "source_dependency_id": "D068",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D012"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+  "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908"
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 b66977475ec5c11e03732f8efb897fc7e68888e11d5229b0fc4eec39ddb42388
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "86afccc2d1f62321ccf0ce12693b12f99a1d32d78b17d01afde55e8bd86745ac",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "For a function data from the real numbers to any type and two specified values leftState and rightState, this predicate means that data(x) = leftState for every x < 0 and data(x) = rightState for every x > 0.",
+      "effect_on_target": "Applies this same condition to the pair-valued function and to each of its two coordinate functions. It imposes no condition at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "And",
+      "meaning": "Logical conjunction: both propositions hold.",
+      "effect_on_target": "Requires both half-line conditions in each LocalDef001 predicate and both coordinate predicates on the right side of the equivalence.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "Iff",
+      "meaning": "Logical equivalence: each proposition implies the other.",
+      "effect_on_target": "Asserts both directions between the pair-valued condition and the conjunction of the coordinate conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "Prod",
+      "meaning": "The Cartesian product of two types, consisting of ordered pairs with one component in each type.",
+      "effect_on_target": "The combined function takes values in Material × State, with Material as the first coordinate and State as the second.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "Prod.mk",
+      "meaning": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Forms (medium(x), initialState(x)), (leftMaterial, leftState), and (rightMaterial, rightState).",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "Provides the common domain of the functions and the domain of the universally quantified half-line variables.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Eq",
+      "meaning": "Equality between two elements of the same type.",
+      "effect_on_target": "The conditions require exact equality to the specified values. Equality of the ordered pairs is equivalent to equality of their respective coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LT.lt",
+      "meaning": "The binary relation supplied by an LT instance, obtained by projecting its relation field.",
+      "effect_on_target": "With the supplied real-number instance, specifies the strict inequalities x < 0 and 0 < x.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural-number numeral in a type by projecting the value supplied by its OfNat instance.",
+      "effect_on_target": "Interprets the numeral 0 as a real number through the zero-derived OfNat instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Real.instLT",
+      "meaning": "The LT instance for the real numbers, whose relation field is Real.lt✝, the real strict-order relation.",
+      "effect_on_target": "Makes the inequalities select the negative and positive real half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "Real.instZero",
+      "meaning": "The Zero instance for the real numbers, whose zero field is Real.zero✝.",
+      "effect_on_target": "Supplies the real zero used as the dividing point between the two half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "Zero.toOfNat0",
+      "meaning": "Converts a Zero instance into an OfNat instance for the numeral 0, using the same zero element.",
+      "effect_on_target": "Connects the written numeral 0 to the zero supplied by Real.instZero.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "Universally quantify over arbitrary types Material : Type u_1 and State : Type u_2, with no additional mathematical structure.",
+      "Universally quantify over functions medium : ℝ → Material and initialState : ℝ → State.",
+      "Universally quantify over specified values leftMaterial, rightMaterial ∈ Material and leftState, rightState ∈ State.",
+      "Each half-line condition independently quantifies over every real number x."
+    ],
+    "hypotheses": [
+      "There are no additional hypotheses on the types, functions, or specified values. The inequalities x < 0 and 0 < x are antecedents within the defining universal conditions."
+    ],
+    "conclusions": [
+      "The conjunction [∀ x ∈ ℝ, x < 0 ⇒ (medium(x), initialState(x)) = (leftMaterial, leftState)] and [∀ x ∈ ℝ, 0 < x ⇒ (medium(x), initialState(x)) = (rightMaterial, rightState)] is equivalent to the conjunction of [∀ x ∈ ℝ, x < 0 ⇒ medium(x) = leftMaterial], [∀ x ∈ ℝ, 0 < x ⇒ medium(x) = rightMaterial], [∀ x ∈ ℝ, x < 0 ⇒ initialState(x) = leftState], and [∀ x ∈ ℝ, 0 < x ⇒ initialState(x) = rightState]."
+    ],
+    "mathematical_definitions": [
+      "For any type A, function f : ℝ → A, and elements a₋, a₊ ∈ A, define P(f, a₋, a₊) to mean (∀ x ∈ ℝ, x < 0 ⇒ f(x) = a₋) ∧ (∀ x ∈ ℝ, 0 < x ⇒ f(x) = a₊).",
+      "The combined function is F : ℝ → Material × State defined by F(x) = (medium(x), initialState(x)).",
+      "The target is P(F, (leftMaterial, leftState), (rightMaterial, rightState)) ↔ (P(medium, leftMaterial, rightMaterial) ∧ P(initialState, leftState, rightState))."
+    ],
+    "proposition_plain_english": "For any two types, any real-indexed function into each type, and any specified left and right value in each type, the function pairing their values equals the specified left pair at every negative real number and the specified right pair at every positive real number if and only if each coordinate function separately equals its specified left value at every negative real number and its specified right value at every positive real number."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The functions are defined on all real numbers, but all displayed conditions leave their values at x = 0 unrestricted.",
+    "Both half-lines are nonempty. At zero, both inequality antecedents are false, so their implications impose no constraint there.",
+    "No inequality between left and right values is assumed or concluded; the specified values may coincide.",
+    "Material and State have no required topology, order, algebraic operations, or other structure. The proposition encodes no continuity, limits, regularity, physical interpretation, or evolution equation.",
+    "All functions and left and right values are universally supplied parameters; there are no existential witnesses or assertions that such parameters exist for every type.",
+    "If either type is empty, the corresponding function and value parameters cannot be supplied, so the universal statement for that choice of types is vacuous."
+  ],
+  "ambiguities": []
+}
+
+Complete direct declaration dossier SHA256 42658f4a12a9f2c86321ee776a9520961118a32d416989b6fdb9bc220860f1ec
+# Declaration dossier for LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_materialInterfaceRiemannData_iff {Material State : Type*}
+    (medium : ℝ → Material) (initialState : ℝ → State)
+    (leftMaterial rightMaterial : Material) (leftState rightState : State) :
+    IsRiemannData (fun x => (medium x, initialState x))
+        (leftMaterial, leftState) (rightMaterial, rightState) ↔
+      IsRiemannData medium leftMaterial rightMaterial ∧
+        IsRiemannData initialState leftState rightState
+```
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (NumStability.IsRiemannData (fun x => { fst := medium x, snd := initialState x })
+      { fst := leftMaterial, snd := leftState } { fst := rightMaterial, snd := rightState })
+    (And (NumStability.IsRiemannData medium leftMaterial rightMaterial)
+      (NumStability.IsRiemannData initialState leftState rightState))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (@NumStability.IsRiemannData.{max u_2 u_1} (Prod.{u_1, u_2} Material State)
+      (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+      (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)
+      (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState))
+    (And (@NumStability.IsRiemannData.{u_1} Material medium leftMaterial rightMaterial)
+      (@NumStability.IsRiemannData.{u_2} State initialState leftState rightState))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D002: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D003: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D004: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → (β : Type v) → Type (max u v)
+```
+
+### D005: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → (fst : α) → (snd : β) → Prod.{u, v} α β
+```
+
+### D006: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D007: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D008: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D009: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D010: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D011: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D012: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+## Complete local imported sources
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannData.lean`
+SHA-256: `35ab3a9c610ddbc90dec920888d39ff4bd36c54e7fe093e1bc4ace131950c3da`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Data.Real.Basic
+
+/-!
+# One-dimensional Riemann data
+
+Source-independent definitions for piecewise constant initial data with one
+jump at the origin.  The predicate intentionally imposes no condition at the
+origin, and `riemannData` exposes that free value as an explicit parameter.
+-/
+
+namespace NumStability
+
+/-- A field has left state `leftState` on `x < 0` and right state `rightState`
+on `x > 0`.  Its value at `x = 0` is deliberately unspecified. -/
+def IsRiemannData
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) : Prop :=
+  (∀ x : ℝ, x < 0 → data x = leftState) ∧
+    (∀ x : ℝ, 0 < x → data x = rightState)
+
+/-- Riemann data with an explicit, freely chosen value at the jump point. -/
+noncomputable def riemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    ℝ → State :=
+  fun x =>
+    if x < 0 then leftState
+    else if 0 < x then rightState
+    else valueAtOrigin
+
+/-- The parameterized construction satisfies the Riemann-data predicate. -/
+theorem riemannData_isRiemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    IsRiemannData
+      (riemannData leftState valueAtOrigin rightState)
+      leftState rightState := by
+  constructor
+  · intro x hx
+    simp [riemannData, hx]
+  · intro x hx
+    have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+    simp [riemannData, hx, hnotLeft]
+
+/-- The value of `riemannData` at the jump is exactly its free parameter. -/
+@[simp]
+theorem riemannData_zero
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    riemannData leftState valueAtOrigin rightState 0 = valueAtOrigin := by
+  simp [riemannData]
+
+/-- The Riemann-data predicate characterizes exactly the functions obtained by
+choosing an arbitrary value at the origin. -/
+theorem isRiemannData_iff_exists_valueAtOrigin
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) :
+    IsRiemannData data leftState rightState ↔
+      ∃ valueAtOrigin,
+        data = riemannData leftState valueAtOrigin rightState := by
+  constructor
+  · rintro ⟨hleft, hright⟩
+    refine ⟨data 0, funext ?_⟩
+    intro x
+    rcases lt_trichotomy x 0 with hx | hx | hx
+    · simpa [riemannData, hx] using hleft x hx
+    · subst x
+      simp
+    · have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+      simpa [riemannData, hx, hnotLeft] using hright x hx
+  · rintro ⟨valueAtOrigin, rfl⟩
+    exact riemannData_isRiemannData leftState valueAtOrigin rightState
+
+end NumStability
+```
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.InitialValue.Riemann`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/InitialValue/Riemann.lean`
+SHA-256: `9d07fe686b4dce6970394fe557a0dc492c51ac84ac0e52683f150019d23130fb`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
+
+/-!
+# Riemann initial configurations
+
+Two-state initial data is conjoined with an independently supplied evolution equation.
+Product data describes a common material/state interface and leaves the origin value free.
+-/
+
+namespace NumStability
+
+/-- Add Riemann initial data to an independently supplied evolution equation.
+The equation predicate is retained unchanged; this definition introduces no
+particular classical/weak solution convention or existence assertion. -/
+def IsRiemannInitialValueSolution {State : Type*}
+    (evolutionEquation : (ℝ → ℝ → State) → Prop)
+    (leftState rightState : State) (q : ℝ → ℝ → State) : Prop :=
+  evolutionEquation q ∧ IsRiemannData (fun x => q x 0) leftState rightState
+
+/-- Equation plus two-state initial data, with no condition at the origin. -/
+theorem isRiemannInitialValueSolution_iff {State : Type*}
+    (evolutionEquation : (ℝ → ℝ → State) → Prop)
+    (leftState rightState : State) (q : ℝ → ℝ → State) :
+    IsRiemannInitialValueSolution evolutionEquation leftState rightState q ↔
+      evolutionEquation q ∧
+        (∀ x, x < 0 → q x 0 = leftState) ∧
+        (∀ x, 0 < x → q x 0 = rightState) := Iff.rfl
+
+/-- Equivalently, the free origin parameter supplies the complete initial
+field; the independently supplied equation remains a separate requirement. -/
+theorem isRiemannInitialValueSolution_iff_exists_origin {State : Type*}
+    (evolutionEquation : (ℝ → ℝ → State) → Prop)
+    (leftState rightState : State) (q : ℝ → ℝ → State) :
+    IsRiemannInitialValueSolution evolutionEquation leftState rightState q ↔
+      evolutionEquation q ∧ ∃ origin,
+        (fun x => q x 0) = riemannData leftState origin rightState := by
+  exact and_congr_right' (isRiemannData_iff_exists_valueAtOrigin _ _ _)
+
+/-- A simultaneous material/state jump means the two component fields have
+their corresponding left and right data at the same spatial interface. -/
+theorem isRiemannData_prod_iff {Material State : Type*}
+    (medium : ℝ → Material) (initialState : ℝ → State)
+    (leftMaterial rightMaterial : Material) (leftState rightState : State) :
+    IsRiemannData (fun x => (medium x, initialState x))
+        (leftMaterial, leftState) (rightMaterial, rightState) ↔
+      IsRiemannData medium leftMaterial rightMaterial ∧
+        IsRiemannData initialState leftState rightState := by
+  constructor
+  · rintro ⟨hleft, hright⟩
+    exact ⟨⟨fun x hx => congrArg Prod.fst (hleft x hx),
+      fun x hx => congrArg Prod.fst (hright x hx)⟩,
+      ⟨fun x hx => congrArg Prod.snd (hleft x hx),
+      fun x hx => congrArg Prod.snd (hright x hx)⟩⟩
+  · rintro ⟨⟨hml, hmr⟩, ⟨hql, hqr⟩⟩
+    exact ⟨fun x hx => Prod.ext (hml x hx) (hql x hx),
+      fun x hx => Prod.ext (hmr x hx) (hqr x hx)⟩
+
+/-- Pairing two Riemann profiles gives exactly the joint profile, preserving
+both freely selected origin values. -/
+theorem riemannData_prod {Material State : Type*}
+    (leftMaterial originMaterial rightMaterial : Material)
+    (leftState originState rightState : State) :
+    (fun x => (riemannData leftMaterial originMaterial rightMaterial x,
+      riemannData leftState originState rightState x)) =
+      riemannData (leftMaterial, leftState) (originMaterial, originState)
+        (rightMaterial, rightState) := by
+  funext x
+  unfold riemannData
+  split_ifs <;> rfl
+
+
+end NumStability
+```
+
+
+Complete blind declaration dossier SHA256 86afccc2d1f62321ccf0ce12693b12f99a1d32d78b17d01afde55e8bd86745ac
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (LocalDef001 (fun x => { fst := medium x, snd := initialState x })
+      { fst := leftMaterial, snd := leftState } { fst := rightMaterial, snd := rightState })
+    (And (LocalDef001 medium leftMaterial rightMaterial)
+      (LocalDef001 initialState leftState rightState))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} (medium : Real → Material) (initialState : Real → State)
+  (leftMaterial rightMaterial : Material) (leftState rightState : State),
+  Iff
+    (@LocalDef001.{max u_2 u_1} (Prod.{u_1, u_2} Material State)
+      (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+      (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)
+      (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState))
+    (And (@LocalDef001.{u_1} Material medium leftMaterial rightMaterial)
+      (@LocalDef001.{u_2} State initialState leftState rightState))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `LocalDef001`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D002: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D003: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D004: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+### D005: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+### D006: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+### D007: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D008: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D009: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D010: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D011: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D012: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+
+Mechanical adjudication triggers SHA256 8051d2ea9da0b3139342b9a96e46b0b67ca1f23b95290ab318705ef1ed1ed38c
+{
+  "required": true,
+  "reasons": [
+    "judge classifications differ",
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "direct judge left dependency_coverage item D001 unclear",
+    "direct judge left dependency_coverage item D003 unclear",
+    "direct judge left semantic_checklist item C02 unclear",
+    "direct judge left semantic_checklist item C04 unclear",
+    "direct judge left semantic_checklist item C05 unclear",
+    "direct judge left semantic_checklist item C07 unclear",
+    "direct judge left semantic_checklist item C10 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "direct judge left implication lean_implies_source unclear"
+  ]
+}
+
+
+Direct judgment SHA256 5c0c9cf44b856aec9d9bc91abf4068299a5ed08cbd6b532dd2fd5659b1a1959c
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "daa04586961ee34da6b50e6c351089cc7901b2e3d7eeb5a8ec7586cd562e6931",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.IsRiemannData",
+      "interpretation": "The data function equals its designated left value at every negative real argument and its designated right value at every positive real argument. There is no constraint at zero and no requirement that the two values differ.",
+      "effect_on_target": "Applies the same global half-line constancy predicate to the medium, the initial state, and their ordered pair. The target equates paired constancy with separate constancy.",
+      "source_match": "Exactly matches the two initial-state cases in equation (1.11), including omission of zero. Applying this predicate to the medium additionally requires constant material values throughout both half-lines, which the selected sentence does not explicitly specify. It also does not itself express a nontrivial discontinuity.",
+      "status": "unclear"
+    },
+    {
+      "id": "D002",
+      "name": "And",
+      "reuse_sha256": "a29a7bc1772fa6c04b57a6149adac0a7e66ffcec9fdc5c09facb37f92d028de9",
+      "effect_on_target": "Requires both medium and initial-state data predicates; within each predicate requires both spatial cases.",
+      "source_match": "Preserves the simultaneous treatment of material and initial-state interfaces and the two cases of equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "Iff",
+      "reuse_sha256": "8c207acb2f3c33282cddbf0d2acb94510339b3207855feaee362ff25d8f5828b",
+      "effect_on_target": "States both directions of equivalence between a predicate on paired data and predicates on its components.",
+      "source_match": "This is a valid equivalence for the displayed half-line predicates. The source describes extending a Riemann problem to a material interface, without explicitly identifying that extension with this product equivalence.",
+      "status": "unclear"
+    },
+    {
+      "id": "D004",
+      "name": "Prod",
+      "interpretation": "The Cartesian product of two types, containing ordered pairs with one component of each type.",
+      "effect_on_target": "Provides a joint data space with distinct material and state components.",
+      "source_match": "Faithfully keeps material properties and initial-state values distinct. Pairing them is a reasonable representation choice, although the source does not prescribe it.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "Prod.mk",
+      "interpretation": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Pairs medium x with initialState x and pairs the corresponding left and right values in the same order.",
+      "source_match": "Preserves the common coordinate and corresponding left and right sides without conflating material and state.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "Real",
+      "reuse_sha256": "7b102f9dd7960e48c346a659c3eea24e055508443883e0874890869abfaa0053",
+      "effect_on_target": "Makes the spatial domain the real line.",
+      "source_match": "Matches the one-dimensional spatial coordinate and the half-lines in equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "Eq",
+      "reuse_sha256": "96b06d8f4a0b9d42c63d27deaa1fd88d8004070d2860a0975888569514ea8ca2",
+      "effect_on_target": "Expresses exact constancy of functions on each half-line and equality of paired values.",
+      "source_match": "Matches the exact state assignments in equation (1.11). The uncertainty concerning material constancy concerns D001's application, rather than equality itself.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "LT.lt",
+      "interpretation": "Projects the strict comparison relation from the supplied LT instance.",
+      "effect_on_target": "Uses the real strict order to select negative and positive spatial arguments.",
+      "source_match": "Matches x < 0 and x > 0 in equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "OfNat.ofNat",
+      "reuse_sha256": "9e506b30a29cce8ac3e38881488c7146323b5d8f72f47345be81eedefe40ba35",
+      "effect_on_target": "Interprets the numeral zero through the real zero instance.",
+      "source_match": "Matches the selected interface coordinate zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "Real.instLT",
+      "interpretation": "Supplies the real-number strict order through Real.lt at the external semantic frontier.",
+      "effect_on_target": "Ensures the half-line tests use real order.",
+      "source_match": "Matches the ordering of the real spatial coordinate used by the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "Real.instZero",
+      "reuse_sha256": "d08b7a921bef1d7898c11931c0180d5a572e70dc084be186e4224ab084bfd3dc",
+      "effect_on_target": "Selects real zero as the common boundary.",
+      "source_match": "Matches the interface at x = 0.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Zero.toOfNat0",
+      "reuse_sha256": "4cab96c7d3ba85dcabaed043dad67f453ba7d4dc4468e28347312ff2b9cd876d",
+      "effect_on_target": "Connects the literal 0 in the predicate to the supplied real zero.",
+      "source_match": "Preserves the same origin in every material and state condition.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Attached raw PDF page 30, printed page 8, Section 1.4 extends the Riemann problem to a medium discontinuity at zero together with an initial-data discontinuity. Printed page 5 supplies equation (1.11); printed pages 1 and 7 supply system and material context.",
+      "lean_evidence": "The supplied proof-free header and both elaborated types concern paired medium and initial-state Riemann data.",
+      "reasoning": "The selected passage and inherited context are identifiable directly in the attached primary-source renderings. Source and packet hashes are supplied provenance; I did not recompute them."
+    },
+    {
+      "id": "C02",
+      "status": "unclear",
+      "source_evidence": "Printed page 1 describes real vector-valued states. Printed pages 7–8 discuss material parameters without prescribing a parameter space or a globally piecewise constant material function.",
+      "lean_evidence": "Material and State are arbitrary types; medium and initialState are functions from Real, with independently supplied left and right values.",
+      "reasoning": "A time-zero slice and arbitrary state type are harmless abstractions for equality-only initial data. However, an arbitrary material type supplies no intrinsic discontinuity semantics, and the application of the half-line predicate to medium needs source justification."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) assigns fixed left and right states throughout the respective open half-lines.",
+      "lean_evidence": "The functions and side values are universally quantified before D001 quantifies over spatial arguments. Each component uses the same argument and corresponding side values.",
+      "reasoning": "No witness dependence, quantifier reversal, or point-dependent choice of side values is introduced. Whether the medium should have globally constant side values is addressed separately."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "Printed page 5 defines a Riemann problem using a hyperbolic equation and special initial data; printed page 8 specifies discontinuities in both medium and initial data.",
+      "lean_evidence": "The equivalence has no equation, hyperbolicity condition, topology, or unequal-side-value conditions. D001 only requires half-line constancy.",
+      "reasoning": "Omitting equation dynamics is potentially appropriate for the selected initial-data scope. Equal-state cases may be harmless generalizations of equation (1.11), but neither predicate guarantees the literal two discontinuities. The source does not settle whether the intended abstraction should encode them explicitly."
+    },
+    {
+      "id": "C05",
+      "status": "unclear",
+      "source_evidence": "The selected sentence extends a Riemann setup to a material discontinuity coinciding with the initial-data discontinuity. Wave decomposition is discussed in the following sentence.",
+      "lean_evidence": "The conclusion is solely an equivalence between paired half-line constancy and separate half-line constancy.",
+      "reasoning": "The target preserves the common location and the initial-state cases. It does not establish a material-interface setup beyond this encoding identity. Whether that identity exhausts the selected extension claim requires adjudication; omission of subsequent wave dynamics is appropriate."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses exact equality and strict spatial inequalities.",
+      "lean_evidence": "D001 expands to two universally quantified implications using real strict order and equality. D002–D012 supply the conjunction, equivalence, pairs, real domain, equality, ordering, and zero.",
+      "reasoning": "Every supplied dependency has been interpreted or covered using its exact reuse hash. No additional equation, discontinuity predicate, or interface law is hidden in the declaration."
+    },
+    {
+      "id": "C07",
+      "status": "unclear",
+      "source_evidence": "The source gives the two state assignments and describes an extension to discontinuous media, without stating a product-valued equivalence.",
+      "lean_evidence": "The target is an Iff between product and component versions of D001.",
+      "reasoning": "Equality directions and strict inequalities match exactly. Both directions of the product equivalence are mathematically justified, but their status as a complete reformulation of the source extension remains unresolved."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "Printed pages 7–8 distinguish material properties from the state data of equation (1.11).",
+      "lean_evidence": "Material and State are distinct type parameters; medium is the first component and initialState the second.",
+      "reasoning": "No material parameter is identified with a state component, and left and right values remain consistently paired."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses x < 0 and x > 0; the selected extension places the material interface at zero.",
+      "lean_evidence": "All three applications of D001 use the same real zero and the same negative/positive orientation.",
+      "reasoning": "The coordinate, side conventions, and interface location match. There are no additional coefficients or indices."
+    },
+    {
+      "id": "C10",
+      "status": "unclear",
+      "source_evidence": "The source explicitly makes initial states piecewise constant. Its material discussion includes heterogeneous media and material-parameter jumps but gives no formula requiring constant material values on entire half-lines.",
+      "lean_evidence": "The target generalizes the codomains to arbitrary types and uses D001 medium leftMaterial rightMaterial to require global constancy on both open half-lines.",
+      "reasoning": "The codomain generalization is harmless for a pairing identity. The medium condition may instead specialize the source to piecewise homogeneous media. Such a restriction would reduce applicability, not constitute genuine theorem strength. The selected passage does not resolve this interpretation."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "Equation (1.11) omits x = 0. The prose calls both interfaces discontinuities, while the displayed state formula does not explicitly require unequal states.",
+      "lean_evidence": "D001 leaves both function values at zero unconstrained and permits equal side values, including singleton codomains.",
+      "reasoning": "The treatment of zero matches exactly. Equal-value cases are a valid degenerate extension of the displayed formula, but do not encode literal jumps. Their effect on equivalence with the selected prose requires adjudication."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The selected setup concerns coincident jumps in material and state.",
+      "lean_evidence": "There are no contradictory premises. Taking both codomains to be Real, medium equal to 1 on x < 0 and 2 otherwise, and initialState equal to 0 on x < 0 and 1 otherwise, makes both sides true with distinct side values.",
+      "reasoning": "The statement covers nontrivial intended examples and is not vacuous. Its elementary product structure does not by itself invalidate it, though satisfiability does not resolve source completeness."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence specifies a Riemann initial-data extension; surrounding finite-volume algorithms are motivation.",
+      "lean_evidence": "No update rule, discretization, recurrence, or execution appears.",
+      "reasoning": "Algorithm linkage is outside the selected initial-data claim."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage and equation (1.11) use no norm or metric.",
+      "lean_evidence": "The target uses equality, products, and real order only.",
+      "reasoning": "No norm or componentwise numerical estimate requires comparison."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected setup states no error or stability result.",
+      "lean_evidence": "No error, residual, conditioning, or stability quantity appears.",
+      "reasoning": "There is no numerical error notion to preserve."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) gives exact initial data. The preceding discussion of averaged material properties motivates the interface problem without asserting an approximation theorem in the selected sentence.",
+      "lean_evidence": "Both medium and initialState are exact functions constrained by exact equalities.",
+      "reasoning": "The target does not substitute computed or rounded quantities for exact data."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence includes no asymptotic expansion or limiting regime.",
+      "lean_evidence": "The target contains no limits, remainders, or order notation.",
+      "reasoning": "No asymptotic semantics arise."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The selected initial-data sentence states no explicit solution existence, uniqueness, or interface matching theorem; subsequent wave claims are separate.",
+      "lean_evidence": "The target characterizes predicates on supplied functions and makes no solution existence or uniqueness assertion.",
+      "reasoning": "Solution well-posedness is outside the selected claim. The inherited hyperbolic setting is assessed under C04."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "Under an interpretation of the selected setup as two piecewise constant profiles represented by one ordered-pair profile, the equivalence supplies the expected data encoding. However, the source explicitly requires only the state to be constant on entire half-lines and describes the medium as discontinuous at zero. The Lean identity neither represents more general one-sided material variation nor guarantees either literal jump. It is unresolved whether the source extension is exhausted by this narrower encoding."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "The target's product equivalence follows from the supplied definition and ordinary ordered-pair equality: each prescribed pair equality gives the two component equalities, and the two component equalities give the pair equality, separately on each half-line. Thus it holds in every source-compatible instance and indeed independently for arbitrary codomains. This elementary logical consequence does not establish the converse semantic coverage of the source extension."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "unresolved-material-domain-specialization",
+      "source_evidence": "Printed page 8 introduces a discontinuity in the medium at zero; printed pages 7–8 do not explicitly require the medium to be constant throughout each open half-line.",
+      "lean_evidence": "D001 applied to medium requires medium x = leftMaterial for every x < 0 and medium x = rightMaterial for every x > 0.",
+      "impact": "If the selected extension includes media varying away from their interface, the target covers only a specialization. Adjudication must determine whether piecewise homogeneous media are justified by the inherited Riemann context."
+    },
+    {
+      "severity": "major",
+      "category": "unresolved-extension-versus-encoding",
+      "source_evidence": "Printed page 5 defines the Riemann problem using a hyperbolic equation and initial data; printed page 8 extends that setup to a material interface.",
+      "lean_evidence": "The entire proposition is the distributivity of a half-line constancy predicate over ordered pairs, with no separate material-interface or equation predicate.",
+      "impact": "The proposition is correct and useful as a data representation lemma. Whether it fully captures the selected setup sentence, rather than only an elementary consequence of a chosen representation, remains unresolved."
+    },
+    {
+      "severity": "minor",
+      "category": "degenerate-jumps",
+      "source_evidence": "The prose describes discontinuities in both medium and initial data, while equation (1.11) does not explicitly state inequality of the side states.",
+      "lean_evidence": "Neither D001 nor the target requires leftMaterial ≠ rightMaterial or leftState ≠ rightState.",
+      "impact": "The predicates permit globally constant profiles. This does not make the theorem vacuous or exclude genuine jumps, but it prevents interpreting either predicate alone as a guarantee of a nontrivial discontinuity."
+    }
+  ],
+  "rationale": "Direct inspection of the attached source pages and every supplied dependency confirms exact preservation of the initial-state half-lines, the common origin, distinct material and state roles, and unconstrained interface values. The Lean proposition is a nonvacuous product-encoding identity. The source leaves the medium's precise global representation unspecified, and it remains unresolved whether this identity captures the complete selected extension. Adjudication is required before acceptance."
+}
+
+Roundtrip judgment SHA256 27e078b23c78ea42d05c351858552e8c4d5990018264330fe2d7ebf26b724497
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "b66977475ec5c11e03732f8efb897fc7e68888e11d5229b0fc4eec39ddb42388",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Printed page 8 extends the Riemann problem to a medium discontinuity at x = 0 alongside an initial-data discontinuity. Printed page 5 supplies equation (1.11); pages 1 and 7 supply state and material context.",
+      "translation_evidence": "The translation concerns simultaneous material and initial-state half-line data at zero.",
+      "reasoning": "The attached primary-source images establish the selected passage and necessary inherited context. The following wave-dynamics sentence is outside the selected claim. Hashes are supplied provenance, not independently recomputed."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "Printed page 1 describes real vector-valued states; printed pages 5 and 7–8 concern a hyperbolic equation and material properties.",
+      "translation_evidence": "Material and State are arbitrary types with no mathematical structure; only real-indexed functions and specified values are bound.",
+      "reasoning": "The real spatial domain is preserved, but no structure or linkage gives the functions their required roles in a hyperbolic material-interface problem."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses fixed left and right states throughout the respective open half-lines.",
+      "translation_evidence": "Specified left and right values are outside the universal quantifiers over x.",
+      "reasoning": "The translated half-line predicates preserve the dependence of constant side values on the supplied data rather than on position. The missing substantive setup is assessed separately."
+    },
+    {
+      "id": "C04",
+      "status": "fail",
+      "source_evidence": "The inherited definition includes a hyperbolic equation, and the selected sentence explicitly concerns discontinuities in both medium and initial data.",
+      "translation_evidence": "There are no additional hypotheses, no evolution equation, and no inequalities between left and right values.",
+      "reasoning": "Neither the hyperbolic setting nor actual material and state jumps are required. The equivalence also holds for functions that satisfy neither half-line predicate."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "The selected sentence extends the Riemann-problem setup to coincident material and initial-data discontinuities.",
+      "translation_evidence": "The sole conclusion is an equivalence between a pair-valued half-line predicate and its coordinate predicates.",
+      "reasoning": "The conclusion establishes a representation identity without establishing or characterizing the source's hyperbolic interface setup sufficiently."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) specifies equality to constant states under strict sign conditions.",
+      "translation_evidence": "D001 explicitly defines the half-line predicate; D002–D012 explain conjunction, equivalence, products, equality, real strict order, and zero.",
+      "reasoning": "Every supplied dependency is accounted for. Their translated meanings support the stated product-predicate identity; none supplies hidden discontinuity or equation semantics."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "Equation (1.11) specifies actual initial data on each open half-line, and page 8 adds a medium discontinuity.",
+      "translation_evidence": "The target asserts P(pair) if and only if P(medium) and P(initialState), without asserting either side.",
+      "reasoning": "Exact equality and strict inequalities match locally, but an unconditional equivalence between predicates does not assert that the data have the source's properties."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "Pages 7–8 distinguish material parameters from the state data defined on page 5.",
+      "translation_evidence": "medium and initialState are separate functions, placed in the first and second coordinates respectively.",
+      "reasoning": "Material and state values are not conflated. Their missing physical and equation structure is a separate defect."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) assigns q_l for x < 0 and q_r for x > 0; the material interface is also at zero.",
+      "translation_evidence": "Both coordinate predicates use left values on x < 0 and right values on 0 < x.",
+      "reasoning": "The interface constant and left/right orientation match. initialState can represent the initial-time slice without a separate time binder."
+    },
+    {
+      "id": "C10",
+      "status": "fail",
+      "source_evidence": "The passage concerns hyperbolic waves in discontinuous media and does not explicitly prescribe globally constant material values on both half-lines.",
+      "translation_evidence": "The identity applies to arbitrary unstructured types, and P(medium) requires a single constant value throughout each half-line.",
+      "reasoning": "The translation generalizes away the governing mathematical setting while its proposed medium predicate imposes a global constancy model not explicitly supplied by the selected passage. These changes do not establish a stronger source theorem."
+    },
+    {
+      "id": "C11",
+      "status": "fail",
+      "source_evidence": "Equation (1.11) leaves zero unspecified; the prose describes jump discontinuities in both initial data and medium.",
+      "translation_evidence": "Zero is unrestricted, but equal left and right values and singleton codomains are allowed.",
+      "reasoning": "The interface-point convention is preserved. Degenerate cases are admitted without distinguishing them from actual jumps, so the source's discontinuities are not ensured."
+    },
+    {
+      "id": "C12",
+      "status": "fail",
+      "source_evidence": "The selected claim concerns the extension of a hyperbolic Riemann setup to a material interface.",
+      "translation_evidence": "The proposition follows solely from coordinatewise equality of ordered pairs, including when both sides of the equivalence are false.",
+      "reasoning": "Nonempty concrete instances exist, but truth requires neither a discontinuity nor a hyperbolic equation. The identity is a valid elementary fact whose truth does not certify the selected source claim."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "Finite volume methods motivate the passage, but the selected sentence specifies an interface-data setup rather than an update algorithm.",
+      "translation_evidence": "No recurrence, numerical flux, discretization, or execution process is asserted.",
+      "reasoning": "Algorithm linkage is outside this selected claim."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected setup contains no norm or metric assertion.",
+      "translation_evidence": "The translation uses equality and Cartesian-product coordinates only.",
+      "reasoning": "There is no norm, metric, or operator-norm convention to compare."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence gives no error estimate, conditioning result, or stability claim.",
+      "translation_evidence": "No error or stability quantity occurs.",
+      "reasoning": "No numerical error or stability notion is part of the audited statement."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) specifies exact initial states; preceding cell averaging is motivation rather than a condition on these states.",
+      "translation_evidence": "All half-line conditions use exact equality to supplied values.",
+      "reasoning": "No approximate or computed quantity replaces the exact initial data."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "The selected interface setup contains no asymptotic expansion or remainder.",
+      "translation_evidence": "The conclusion is an exact logical equivalence without asymptotic terms.",
+      "reasoning": "There is no asymptotic regime or truncation order to preserve."
+    },
+    {
+      "id": "N06",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence supplies no existence, uniqueness, or interface-matching theorem; solution dynamics appears in the following sentence.",
+      "translation_evidence": "No solution existence, uniqueness, or well-posedness assertion is made.",
+      "reasoning": "These solution claims are outside the selected scope. The missing inherited hyperbolic setting is already assessed under C02 and C04."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "The translated equivalence expresses only that equality of ordered pairs is coordinatewise. It remains true for constant functions into singleton types, where neither material nor state has a jump, and for functions for which both sides of the equivalence are false. It contains no hyperbolic equation or connection to material-interface data. Consequently, it does not establish the selected extension of the Riemann setup."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "The translated identity holds for arbitrary supplied functions and values independently of the source assumptions: each pair equality is equivalent to the two coordinate equalities, and the universal half-line conditions regroup by conjunction. Thus it also holds in every source instance. This direction does not mean that the source asserts globally piecewise-constant medium data or that either side of the equivalence actually holds."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "representation-identity-replaces-source-setup",
+      "source_evidence": "Printed page 5 defines a Riemann problem using a hyperbolic equation and special initial data; printed page 8 extends this setup to a coincident material discontinuity.",
+      "translation_evidence": "The only conclusion is P(pair) ↔ (P(medium) ∧ P(initialState)); no equation or satisfaction of these predicates is asserted.",
+      "impact": "The target establishes a general product identity insufficient to recover the selected source setup, supporting the weaker classification."
+    },
+    {
+      "severity": "major",
+      "category": "actual-discontinuities-not-represented",
+      "source_evidence": "Printed page 8 explicitly mentions discontinuities in both medium and initial data; page 5 describes a single jump.",
+      "translation_evidence": "Arbitrary types lack required topology, and left and right values may coincide. The equivalence holds even when its predicates are false.",
+      "impact": "Coincident interfaces are represented only as shared sign tests; actual jumps are not ensured."
+    },
+    {
+      "severity": "minor",
+      "category": "medium-model-scope",
+      "source_evidence": "Pages 7–8 discuss heterogeneous material parameters and a discontinuity at zero without explicitly fixing constant medium values throughout each half-line.",
+      "translation_evidence": "P(medium) requires one material value at every negative position and another at every positive position.",
+      "impact": "The proposed medium encoding selects a more specific model than the displayed source explicitly supplies. Adjudication should resolve whether surrounding source context licenses this model; that resolution would not repair the missing substantive conclusion."
+    }
+  ],
+  "rationale": "The primary-source images and supplied translation agree on exact left/right state values, the common origin, distinct material and state roles, and omission of a point value at zero. However, the translation proves only an unconditional product-predicate equivalence, which neither asserts the relevant data conditions nor connects them to a hyperbolic equation. Source-to-translation holds as an elementary logical identity; the reverse does not recover the selected source claim. Adjudication is requested for the source's unstated medium model and its treatment of degenerate equal-state data, while the principal insufficiency is independent of those interpretive issues."
+}
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 28.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
