@@ -67,8 +67,9 @@ complete: the findings below must be reconciled before coverage closure.
   discontinuities.
 - Printed page 7/raw page 29: typical second-order accuracy is a qualified claim
   about an unspecified method class, not a supplied error theorem.
-- Printed page 8/raw page 30: variable-coefficient equations may lack conservation
-  form; separate this assertion from the broad wave-propagation-method description.
+- Printed page 8/raw page 30: variable-coefficient equations may not be in
+  conservation form; this does not assert impossibility of reformulation.
+  Separate it from the broad wave-propagation-method description.
 - Printed page 3/raw page 25: system-level decomposition into scalar waves must
   be covered beyond mere algebraic vector decomposition if the selected
   eigenmode-speed row does not already provide that coverage.

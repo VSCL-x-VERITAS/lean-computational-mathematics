@@ -30,3 +30,29 @@ root and Basis/Pi.lean path were also absent, so those failed path probes are
 not negative semantic evidence; successful searches used the actual Analysis
 and LinearAlgebra paths. Further row-specific searches and Lean resolution
 remain required before subsequent implementations.
+
+## Resolved hyperbolicity prerequisites and next transport rows
+
+The native focused build of canonical and compatibility ScalarHyperbolicity
+and Hyperbolicity modules completed with exit code 0 (2064 jobs). The subsequent
+declaration/axiom check also exited 0; its exact input and output are retained
+as `hyperbolicity-declaration-checks.lean` and
+`hyperbolicity-declaration-checks.txt`. All five inspected public theorems use
+only `propext`, `Classical.choice`, and `Quot.sound`. This establishes Lean
+resolution; fresh semantic audit decisions remain separate.
+
+Further actual current-tree `rg` queries used
+`isOneDimensionalSpecialization|scalarAdvection_iff|linearAdvection.*iff|oneWayWave|scalarHyperbolic`
+over canonical PDE, LeVeque source, and pinned Mathlib Analysis files. Direct
+reads selected the following integrated declarations for new audits:
+
+| Row | Selected declaration and supporting producer | Rejected substitution |
+| --- | --- | --- |
+| EQ-1.2-ADVECTION | `NumStability.leveque01_equation02_isOneDimensionalSpecialization`; the existing componentwise derivative bridge uses `hasDerivAt_pi`, `scalarAsOneComponentSystem`, and `constantCoefficientScalarMatrix`. | A theorem asserting that every unconstrained field solves advection is false; the selected source object is the scalar equation form and specialization. |
+| EQ-1.4-ONE-WAY-WAVE | `NumStability.leveque01_equation04_scalarHyperbolicOneWayModel`; reuses scalar hyperbolicity, `travelingWave_isLinearAdvectionSolutionAt`, and `travelingWave_at_translated_point`. | A direction-free residual omits the source's positive speed and rightward interpretation; no new scalar proof is needed. |
+| ADVECTION-WAVE-IDENTITY | `NumStability.leveque01_advectionWaveIdentity`; both source abbreviations refer to the same `IsLinearAdvectionSolutionAt`. | A new independent wave predicate or duplicate transport proof would add redundant ownership. |
+
+New task metadata retains each historical source locator and uses the current
+canonical owner module. Historical source contexts and decisions are not copied
+as judgments. The new metadata writer verifies the target is present and unchanged
+at the integrated baseline. No source equation is counted as reused by this search.
