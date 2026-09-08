@@ -1,0 +1,7 @@
+import ComputationalMathematics.Logic.Function.RangeFactorization
+import ComputationalMathematics.Source.LeVeque.Chapter01.OneStepCurrentData
+
+#check NumStability.Function.factorsThrough_iff_rangeFactorization
+#print axioms NumStability.Function.factorsThrough_iff_rangeFactorization
+#check NumStability.leveque01_oneStepMethod_iff_attainableCurrentDataMap
+#print axioms NumStability.leveque01_oneStepMethod_iff_attainableCurrentDataMap
