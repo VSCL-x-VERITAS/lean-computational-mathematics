@@ -1,0 +1,63 @@
+namespace NumStability.InformationInterfaceDraft.Witness
+
+/-- A literal application of the complete conditional capstone. For this
+unit-speed step and this cell only, 0 < dt < 1 makes both face errors vanish.
+It is not a generic accuracy or time-step requirement. -/
+theorem finite_step_comparison_applicability {dt : ℝ} (hdt : 0 < dt) (hdt1 : dt < 1) :
+    let method := LeftStateInformationFlux.method (StationaryRiemannField.transportLaw (m := 1))
+    let old := finiteVolumeCellAverageOn unitGrid initialState
+    riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old (fun _ => trivial)) 0 =
+      cellVolumeAverage volume (Set.Ioc (0 : ℝ) 1)
+        (fun x => StationaryRiemannField.reference 0 1 x dt) := by
+  dsimp only
+  let law := StationaryRiemannField.transportLaw (m := 1)
+  let method := LeftStateInformationFlux.method law
+  let old := finiteVolumeCellAverageOn unitGrid initialState
+  let localTrace : (j : ℤ) → LeftStateInformationFlux.OrderedResult
+      (adjacentCellRiemannProblem law old j) → ℝ → Fin 1 → ℝ :=
+    fun _ => LeftStateInformationFlux.localTrace
+  have hq := StationaryRiemannField.reference_rectangle (0 : Fin 1 → ℝ) 1
+  have hinit : (fun x => StationaryRiemannField.reference (0 : Fin 1 → ℝ) 1 x 0) = initialState := by
+    funext x
+    simp [StationaryRiemannField.reference, travelingWave, initialState]
+  have hold : ‖old 0 - cellVolumeAverage volume
+      (Set.Ioc (unitGrid.cellLeft 0) (unitGrid.cellRight 0))
+      (fun x => StationaryRiemannField.reference (0 : Fin 1 → ℝ) 1 x 0)‖ ≤ 0 := by
+    rw [hinit, ← normalized_spatial_average]
+    simp [old]
+  have hn (j : ℤ) (τ : ℝ) : ‖method.interfaceFlux old (fun _ => trivial) j -
+      localTrace j (method.selectedResult old (fun _ => trivial) j) τ‖ ≤ 0 := by
+    change ‖law.physicalFlux (old (j - 1)) - law.physicalFlux (old (j - 1))‖ ≤ 0
+    simp
+  have hel : ∀ τ ∈ Set.uIoc 0 dt,
+      ‖localTrace 0 (method.selectedResult old (fun _ => trivial) 0) τ -
+        law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft 0) τ)‖ ≤ 0 := by
+    intro τ hτ
+    rw [Set.uIoc_of_le hdt.le] at hτ
+    have href : StationaryRiemannField.reference (0 : Fin 1 → ℝ) 1 0 τ = 0 := by
+      simp [StationaryRiemannField.reference, travelingWave, riemannData, neg_lt_zero.mpr hτ.1]
+    change ‖law.physicalFlux (old (-1)) - law.physicalFlux (StationaryRiemannField.reference 0 1 0 τ)‖ ≤ 0
+    rw [show old (-1) = 0 from normalized_pair.1, href]
+    simp
+  have her : ∀ τ ∈ Set.uIoc 0 dt,
+      ‖localTrace (0 + 1) (method.selectedResult old (fun _ => trivial) (0 + 1)) τ -
+        law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft (0 + 1)) τ)‖ ≤ 0 := by
+    intro τ hτ
+    rw [Set.uIoc_of_le hdt.le] at hτ
+    have hpositive : 0 < 1 - τ := by linarith [hτ.2]
+    have href : StationaryRiemannField.reference (0 : Fin 1 → ℝ) 1 1 τ = 1 := by
+      simp [StationaryRiemannField.reference, travelingWave, riemannData, hpositive, not_lt.mpr hpositive.le]
+    change ‖law.physicalFlux (old 0) - law.physicalFlux (StationaryRiemannField.reference 0 1 1 τ)‖ ≤ 0
+    rw [show old 0 = 1 from normalized_pair.2, href]
+    simp
+  have hb := finite_step_reference_comparison unitGrid method old (fun _ => trivial) hq hdt 0 localTrace hold
+    (LeftStateInformationFlux.localTrace_integrable _ 0 dt)
+    (LeftStateInformationFlux.localTrace_integrable _ 0 dt)
+    (fun τ _ => hn 0 τ) hel (fun τ _ => hn (0 + 1) τ) her
+  have hbound : ‖riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old (fun _ => trivial)) 0 -
+      cellVolumeAverage volume (Set.Ioc (0 : ℝ) 1)
+        (fun x => StationaryRiemannField.reference 0 1 x dt)‖ ≤ 0 := by
+    simpa [unitGrid] using hb.2.2.2.2.2
+  exact sub_eq_zero.mp (norm_eq_zero.mp (le_antisymm hbound (norm_nonneg _)))
+
+end NumStability.InformationInterfaceDraft.Witness

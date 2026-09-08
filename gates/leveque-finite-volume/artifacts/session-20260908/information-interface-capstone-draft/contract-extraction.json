@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\gates\\leveque-finite-volume\\artifacts\\session-20260908\\information-interface-capstone-draft\\Candidate.lean",
+    "sha256": "19c222631ab637fa850f0359d3733f7d7175365fc4d20b7cccc5cc9bbf488043"
+  },
+  "contracts": {
+    "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\gates\\leveque-finite-volume\\artifacts\\session-20260908\\information-interface-capstone-draft\\contracts.proof-free.md",
+    "sha256": "73409984ce87067d80222a7096bdbc29da28356383e8c2ef63d01fc896a0122c"
+  },
+  "blocks": [
+    {
+      "name": "PureInterfaceContract",
+      "kind": "def",
+      "signature": "def PureInterfaceContract (method : RiemannInformationFluxMethod law Result Information)\n    (old : \u2124 \u2192 Fin m \u2192 \u211d)\n    (hdomain : \u2200 j, method.domain (adjacentCellRiemannProblem law old j)) (j : \u2124) : Prop :=\n  let problem := adjacentCellRiemannProblem law old j\n  let result := method.solve problem (hdomain j)\n  let information := method.extract result\n  problem.leftState = old (j - 1) \u2227 problem.rightState = old j \u2227\n    method.selectedResult old hdomain j = result \u2227\n    method.interfaceFlux old hdomain j = method.numericalFlux information"
+    },
+    {
+      "name": "pure_interface_execution",
+      "kind": "theorem",
+      "signature": "theorem pure_interface_execution (method : RiemannInformationFluxMethod law Result Information)\n    (old : \u2124 \u2192 Fin m \u2192 \u211d)\n    (hdomain : \u2200 j, method.domain (adjacentCellRiemannProblem law old j)) (j : \u2124) :\n    PureInterfaceContract method old hdomain j"
+    },
+    {
+      "name": "normalized_spatial_average",
+      "kind": "theorem",
+      "signature": "theorem normalized_spatial_average (grid : OneDimensionalFiniteVolumeGrid)\n    (field : \u211d \u2192 Fin m \u2192 \u211d) (i : \u2124) :\n    finiteVolumeCellAverageOn grid field i =\n      cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i)) field"
+    },
+    {
+      "name": "normalized_physical_face_flux",
+      "kind": "theorem",
+      "signature": "theorem normalized_physical_face_flux (grid : OneDimensionalFiniteVolumeGrid)\n    (q : \u211d \u2192 \u211d \u2192 Fin m \u2192 \u211d) (flux : (Fin m \u2192 \u211d) \u2192 Fin m \u2192 \u211d)\n    {s t : \u211d} (hst : s < t) (j : \u2124) :\n    timeAveragedPhysicalFaceFlux grid q flux s t j =\n      cellVolumeAverage volume (Set.Ioc s t) (fun \u03c4 => flux (q (grid.cellLeft j) \u03c4))"
+    },
+    {
+      "name": "normalized_interface_execution",
+      "kind": "theorem",
+      "signature": "theorem normalized_interface_execution (grid : OneDimensionalFiniteVolumeGrid)\n    (initialState : \u211d \u2192 Fin m \u2192 \u211d)\n    (hintegrable : \u2200 i, IntervalIntegrable initialState volume\n      (grid.cellLeft i) (grid.cellRight i))\n    (method : RiemannInformationFluxMethod law Result Information)\n    (hdomain : \u2200 j, method.domain\n      (adjacentCellRiemannProblem law (finiteVolumeCellAverageOn grid initialState) j))\n    (dt : \u211d) :\n    let old := finiteVolumeCellAverageOn grid initialState\n    let numericalFlux := method.interfaceFlux old hdomain\n    \u2200 i, IsOneDimensionalCellAverage initialState (grid.cellLeft i) (grid.cellRight i) (old i) \u2227\n      old i = cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i)) initialState \u2227\n      grid.cellRight (i - 1) = grid.cellLeft i \u2227\n      PureInterfaceContract method old hdomain i \u2227\n      PureInterfaceContract method old hdomain (i + 1) \u2227\n      riemannFiniteVolumeUpdate grid dt old numericalFlux i =\n        old i - (dt / grid.cellVolume i) \u2022 (numericalFlux (i + 1) - numericalFlux i)"
+    },
+    {
+      "name": "constant_interface_consistency",
+      "kind": "theorem",
+      "signature": "theorem constant_interface_consistency (method : RiemannInformationFluxMethod law Result Information)\n    (state : Fin m \u2192 \u211d) (j : \u2124) :\n    method.interfaceFlux (fun _ => state) (fun _ => method.constants_in_domain state) j =\n      law.physicalFlux state"
+    },
+    {
+      "name": "field_adapter_contract",
+      "kind": "theorem",
+      "signature": "theorem field_adapter_contract (method : RiemannFieldFluxMethod law Result Information)\n    (old : \u2124 \u2192 Fin m \u2192 \u211d)\n    (hdomain : \u2200 j, method.domain (adjacentCellRiemannProblem law old j)) (j : \u2124) :\n    let adapted := RiemannInformationFluxMethod.ofField method\n    let problem := adjacentCellRiemannProblem law old j\n    let result := adapted.solve problem (hdomain j)\n    adapted.domain problem = method.domain problem \u2227\n      result = method.solve problem (hdomain j) \u2227\n      adapted.extract result = method.extract result \u2227\n      adapted.numericalFlux (adapted.extract result) = method.numericalFlux (method.extract result) \u2227\n      adapted.interfaceFlux old hdomain j = method.interfaceFlux old hdomain j"
+    },
+    {
+      "name": "finite_step_reference_comparison",
+      "kind": "theorem",
+      "signature": "theorem finite_step_reference_comparison (grid : OneDimensionalFiniteVolumeGrid)\n    (method : RiemannInformationFluxMethod law Result Information) (old : \u2124 \u2192 Fin m \u2192 \u211d)\n    (hdomain : \u2200 j, method.domain (adjacentCellRiemannProblem law old j))\n    {q : \u211d \u2192 \u211d \u2192 Fin m \u2192 \u211d} (hq : IsRectangleConservationLawSolution q law.physicalFlux)\n    {s t oldBound aLeft bLeft aRight bRight : \u211d} (hst : s < t) (i : \u2124)\n    (localTrace : (j : \u2124) \u2192 Result (adjacentCellRiemannProblem law old j) \u2192 \u211d \u2192 Fin m \u2192 \u211d)\n    (hold : \u2016old i - cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i))\n      (fun x => q x s)\u2016 \u2264 oldBound)\n    (hl : IntervalIntegrable (localTrace i (method.selectedResult old hdomain i)) volume s t)\n    (hr : IntervalIntegrable (localTrace (i + 1) (method.selectedResult old hdomain (i + 1))) volume s t)\n    (hnl : \u2200 \u03c4 \u2208 Set.uIoc s t, \u2016method.interfaceFlux old hdomain i -\n      localTrace i (method.selectedResult old hdomain i) \u03c4\u2016 \u2264 aLeft)\n    (hel : \u2200 \u03c4 \u2208 Set.uIoc s t, \u2016localTrace i (method.selectedResult old hdomain i) \u03c4 -\n      law.physicalFlux (q (grid.cellLeft i) \u03c4)\u2016 \u2264 bLeft)\n    (hnr : \u2200 \u03c4 \u2208 Set.uIoc s t, \u2016method.interfaceFlux old hdomain (i + 1) -\n      localTrace (i + 1) (method.selectedResult old hdomain (i + 1)) \u03c4\u2016 \u2264 aRight)\n    (her : \u2200 \u03c4 \u2208 Set.uIoc s t, \u2016localTrace (i + 1) (method.selectedResult old hdomain (i + 1)) \u03c4 -\n      law.physicalFlux (q (grid.cellLeft (i + 1)) \u03c4)\u2016 \u2264 bRight) :\n    PureInterfaceContract method old hdomain i \u2227 PureInterfaceContract method old hdomain (i + 1) \u2227\n    (\u2200 a b : \u211d, \u2200\u1d50 \u03c4, HasDerivAt (fun r => \u222b x in a..b, q x r)\n      (law.physicalFlux (q a \u03c4) - law.physicalFlux (q b \u03c4)) \u03c4) \u2227\n    (\u2016method.interfaceFlux old hdomain i - cellVolumeAverage volume (Set.Ioc s t)\n      (fun \u03c4 => law.physicalFlux (q (grid.cellLeft i) \u03c4))\u2016 \u2264 aLeft + bLeft) \u2227\n    (\u2016method.interfaceFlux old hdomain (i + 1) - cellVolumeAverage volume (Set.Ioc s t)\n      (fun \u03c4 => law.physicalFlux (q (grid.cellLeft (i + 1)) \u03c4))\u2016 \u2264 aRight + bRight) \u2227\n    (\u2016riemannFiniteVolumeUpdate grid (t - s) old (method.interfaceFlux old hdomain) i -\n      cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i)) (fun x => q x t)\u2016 \u2264\n      oldBound + (t - s) / grid.cellVolume i * ((aLeft + bLeft) + (aRight + bRight)))"
+    },
+    {
+      "name": "initialState",
+      "kind": "def",
+      "signature": "noncomputable def initialState : \u211d \u2192 Fin 1 \u2192 \u211d := riemannData 0 0 1"
+    },
+    {
+      "name": "initialState_integrable",
+      "kind": "theorem",
+      "signature": "theorem initialState_integrable (i : \u2124) :\n    IntervalIntegrable initialState volume (unitGrid.cellLeft i) (unitGrid.cellRight i)"
+    },
+    {
+      "name": "normalized_pair",
+      "kind": "theorem",
+      "signature": "theorem normalized_pair :\n    finiteVolumeCellAverageOn unitGrid initialState (-1) = 0 \u2227\n      finiteVolumeCellAverageOn unitGrid initialState 0 = 1"
+    },
+    {
+      "name": "information_only_applicability",
+      "kind": "theorem",
+      "signature": "theorem information_only_applicability (dt : \u211d) (hdt : 0 < dt) :\n    let law := StationaryRiemannField.transportLaw (m := 1)\n    let method := LeftStateInformationFlux.method law\n    let old := finiteVolumeCellAverageOn unitGrid initialState\n    (\u2200 i, IsOneDimensionalCellAverage initialState (unitGrid.cellLeft i) (unitGrid.cellRight i) (old i) \u2227\n      old i = cellVolumeAverage volume (Set.Ioc (unitGrid.cellLeft i) (unitGrid.cellRight i)) initialState \u2227\n      unitGrid.cellRight (i - 1) = unitGrid.cellLeft i \u2227\n      PureInterfaceContract method old (fun _ => trivial) i \u2227\n      PureInterfaceContract method old (fun _ => trivial) (i + 1) \u2227\n      riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old (fun _ => trivial)) i =\n        old i - (dt / unitGrid.cellVolume i) \u2022\n          (method.interfaceFlux old (fun _ => trivial) (i + 1) - method.interfaceFlux old (fun _ => trivial) i)) \u2227\n    method.extract (method.selectedResult old (fun _ => trivial) 0) = (0, 1) \u2227\n    method.interfaceFlux old (fun _ => trivial) 0 = 0 \u2227\n    method.interfaceFlux old (fun _ => trivial) 0 =\n      cellVolumeAverage volume (Set.Ioc 0 dt)\n        (fun \u03c4 => law.physicalFlux (StationaryRiemannField.reference 0 1 0 \u03c4))"
+    },
+    {
+      "name": "finite_step_comparison_applicability",
+      "kind": "theorem",
+      "signature": "theorem finite_step_comparison_applicability {dt : \u211d} (hdt : 0 < dt) (hdt1 : dt < 1) :\n    let method := LeftStateInformationFlux.method (StationaryRiemannField.transportLaw (m := 1))\n    let old := finiteVolumeCellAverageOn unitGrid initialState\n    riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old (fun _ => trivial)) 0 =\n      cellVolumeAverage volume (Set.Ioc (0 : \u211d) 1)\n        (fun x => StationaryRiemannField.reference 0 1 x dt)"
+    }
+  ],
+  "theorem_headers": 11,
+  "source_acceptance": false
+}
