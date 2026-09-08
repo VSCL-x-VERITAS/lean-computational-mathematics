@@ -1,0 +1,4054 @@
+
+
+Exact role prompt SHA256 ccf143729c0f0bf0a915ed685976036d82a26c6d09f279be1ac4e1c6019d4574
+# Role: faithfulness adjudicator
+
+You are a fresh adjudicator. Resolve the supplied disagreements and unresolved
+items using primary source and Lean declaration evidence. Do not use majority
+vote.
+
+Read the exact trigger reasons, source locator and source, source contract,
+complete direct and blind dossiers, any dependency-reuse records, blind
+translation, and both judgments. Recheck every disputed dependency and semantic
+item. A reuse hash establishes provenance, not task-specific correctness.
+
+Confirm both implication directions, classification consistency, nonvacuity,
+and whether any purportedly stronger theorem is genuine strength rather than
+reduced applicability. Copy every trigger reason verbatim into `trigger` and
+return at least one resolved item per trigger.
+
+Return only JSON conforming to `schemas/adjudicator.schema.json`. Preserve
+remaining uncertainty instead of forcing a binary answer.
+
+
+Exact output schema SHA256 a858fc72ab5a49ab6e47b920f1dc878af8bc82bb04417527e61f1dba31099217
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Formalization faithfulness adjudication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "trigger", "resolved_items", "implications", "classification", "accepted", "remaining_uncertainties", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "adjudicator"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "trigger": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "resolved_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item", "resolution", "primary_evidence"],
+        "properties": {
+          "item": {"type": "string", "minLength": 1},
+          "resolution": {"type": "string", "minLength": 1},
+          "primary_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "remaining_uncertainties": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 62445013fdd0ddecb0e37563377defe50648753e33c4c7217a6f1185cbd9729c
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "The sound-speed definition after (1.6), equation (1.7), and the following sentence classifying it as hyperbolic under the standard second-order classification.",
+      "location": "raw PDF pages 24\u201325; printed Chapter 1 pages 2\u20133"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 d226eed74a63211672f1046b713ab936ea0ff08bef79d271e1a4717c4b80ecb5
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 23; printed page 1, paragraph following (1.1)",
+      "anchor": "subscripts are used to denote partial derivatives with respect to t and x",
+      "observation": "The independent variables are time t and one spatial variable x; subscripts denote partial differentiation."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2, (1.5) and its following paragraph",
+      "anchor": "p_t(x,t) + K u_x(x,t) = 0; u_t(x,t) + (1/rho) p_x(x,t) = 0",
+      "observation": "The acoustic system describes waves in both directions in a one-dimensional medium. Its unknowns are pressure perturbation p and particle velocity u. K and rho are constants describing bulk modulus of compressibility and density."
+    },
+    {
+      "location": "Raw PDF page 24; printed page 2, text after (1.6)",
+      "anchor": "where c = sqrt(K/rho)",
+      "observation": "The source defines c from the material constants and subsequently identifies c as the speed of sound."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3, opening paragraph",
+      "anchor": "real eigenvalues and a corresponding set of m linearly independent eigenvectors",
+      "observation": "The preceding first-order definition of hyperbolicity concerns a complete set of real characteristic modes. The acoustic matrix has eigenvalues -c and +c."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3, (1.7)",
+      "anchor": "second-order wave equation; p_tt = c^2 p_xx",
+      "observation": "The displayed second-order equation is an equation for the acoustic pressure."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3, paragraph immediately following (1.7)",
+      "anchor": "differentiating the first equation with respect to t and the second with respect to x",
+      "observation": "The source asserts that (1.7) follows from (1.5) by these differentiations and elimination of the u_xt terms."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3, paragraph immediately following (1.7)",
+      "anchor": "also called a hyperbolic equation according to the standard classification of second-order linear equations",
+      "observation": "The source classifies (1.7) as hyperbolic in the second-order linear classification into hyperbolic, parabolic, and elliptic equations, referring to [234] as an example reference."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "x and t are the spatial and temporal variables of the one-dimensional acoustic equations. [Printed pp. 1–2, (1.1), derivative convention, and (1.5).]",
+      "p(x,t) and u(x,t) are the unknown pressure perturbation and particle velocity. [Printed p. 2, paragraph following (1.5).]",
+      "K and rho are constant material parameters, respectively bulk modulus of compressibility and density. [Printed p. 2, paragraph following (1.5).]",
+      "c is defined by c = sqrt(K/rho), rather than introduced as an independent arbitrary coefficient. [Printed p. 2, text following (1.6).]"
+    ],
+    "hypotheses": [
+      "For the asserted derivation, p and u satisfy p_t + K u_x = 0 and u_t + (1/rho) p_x = 0. [Printed p. 2, (1.5); printed p. 3, derivation following (1.7).]",
+      "The material coefficients K and rho are constant. [Printed p. 2, paragraph following (1.5).]",
+      "The differentiation and elimination argument presupposes sufficient differentiability and compatibility of the mixed derivatives of u; this is an implicit analytical requirement, not an explicitly stated regularity hypothesis. [Printed p. 3, differentiation instructions following (1.7).]"
+    ],
+    "conclusions": [
+      "The pressure satisfies the second-order wave equation p_tt = c^2 p_xx, obtained from the acoustic system by differentiation and elimination of mixed velocity derivatives. [Printed p. 3, (1.7) and following sentence.]",
+      "Equation (1.7) is hyperbolic according to the standard classification of second-order linear equations into hyperbolic, parabolic, and elliptic types. [Printed p. 3, paragraph following (1.7).]"
+    ],
+    "definitions_and_conventions": [
+      "Subscripts indicate partial derivatives in x and t, so p_tt and p_xx are second partial derivatives. [Printed p. 1, paragraph following (1.1); printed p. 3, (1.7).]",
+      "Pressure p means, more precisely, perturbation from a constant background pressure. [Printed p. 2, paragraph following (1.5).]",
+      "c = sqrt(K/rho) is identified as the speed of sound. [Printed p. 2, text following (1.6).]",
+      "The hyperbolicity classification asserted for (1.7) is the second-order linear classification; the preceding definition for first-order systems uses real eigenvalues and a full set of independent eigenvectors. [Printed p. 3, opening paragraph and paragraph following (1.7).]"
+    ],
+    "implicit_context": [
+      "The selected statement concerns simple acoustic waves in a one-dimensional material with constant parameters. [Printed p. 2, introduction to (1.5); printed p. 3, introduction to (1.7).]",
+      "The passage is explanatory prose and a displayed equation, with no explicit universally quantified theorem or specified function space. [Printed p. 3, (1.7) and enclosing paragraphs.]",
+      "The supplied source hash is taken from the locator; inspection here is of the attached source renderings, without independent byte-hash verification."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Relationship between the two differential formulations",
+        "details": [
+          "The stated implication proceeds from the coupled first-order acoustic system to the scalar second-order pressure equation. [Printed p. 3, first sentence following (1.7).]",
+          "The passage does not assert a converse reconstruction of u from p or impose initial or boundary conditions. [Printed p. 3, (1.7) and its explanatory paragraph.]"
+        ]
+      },
+      {
+        "topic": "Meaning of the classification",
+        "details": [
+          "Hyperbolicity is a property of the second-order equation, not a condition on a particular pressure solution. [Printed p. 3, sentence classifying (1.7).]",
+          "No discriminant formula, coefficient normalization, or treatment of degenerate parameter values is given in the supplied classification sentence. [Printed p. 3, paragraph following (1.7).]"
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the coefficient c^2 and the defining relation c = sqrt(K/rho). [Printed p. 2, sound-speed definition; printed p. 3, (1.7).]",
+    "Preserve the distinction between the asserted derivation from (1.5) and the classification of (1.7). [Printed p. 3, first two sentences following (1.7).]",
+    "Interpret the selected hyperbolicity claim using the second-order linear classification named by the source. [Printed p. 3, paragraph following (1.7).]",
+    "Do not present explicit positivity assumptions, a discriminant convention, or a named regularity class as verbatim source hypotheses: none is supplied in the selected passage. [Printed pp. 2–3, definition of c and discussion of (1.7).]"
+  ],
+  "ambiguities": [
+    {
+      "issue": "Admissible material parameters and exclusion of zero sound speed are not stated as explicit inequalities.",
+      "evidence": "Printed p. 2 names K as bulk modulus and rho as density and defines c = sqrt(K/rho); printed p. 3 calls (1.7) hyperbolic without a parameter case split.",
+      "impact": "The physical context suggests positive material parameters and a nonzero real sound speed, but the supplied passage does not explicitly quantify these restrictions. Extending the claim to arbitrary real K and rho, or including c = 0, would require a separate interpretive decision."
+    },
+    {
+      "issue": "The regularity needed for the derivation is implicit.",
+      "evidence": "Printed p. 3 instructs differentiation of the two equations and elimination of u_xt terms, without specifying a function class.",
+      "impact": "A precise analytical statement must supply sufficient derivative existence and mixed-derivative compatibility, while identifying these as formalization choices for the stated argument."
+    },
+    {
+      "issue": "The referenced second-order classification is not defined in the supplied pages.",
+      "evidence": "Printed p. 3 invokes the standard classification and points to [234], without displaying its criterion.",
+      "impact": "The categorical claim of hyperbolicity is explicit, but an exact algebraic discriminant convention cannot be attributed to these pages."
+    }
+  ],
+  "contract_plain_english": "For the constant-material, one-dimensional acoustic system (1.5), with pressure perturbation p, particle velocity u, and sound speed c = sqrt(K/rho), the source states that differentiation and elimination of mixed velocity derivatives yield p_tt = c^2 p_xx. It then classifies this pressure equation as hyperbolic under the standard second-order linear classification. The supplied passage leaves parameter inequalities, differentiability assumptions, and the algebraic classification criterion unstated. [Printed p. 2, (1.5) and definition following (1.6); printed p. 3, (1.7) and following paragraph.]"
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 47f27e22ef1990123ae1ac9429e236df4cc1866200bc4756883f38cbaf8518a7
+# Declaration dossier for LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_equation07_secondOrderHyperbolic
+    (bulkModulus density : ℝ)
+    (hbulkModulus : 0 < bulkModulus) (hdensity : 0 < density) :
+    (wavePrincipalPart (Real.sqrt (bulkModulus / density))).IsHyperbolic
+```
+
+## Elaborated target type
+
+```lean
+∀ (bulkModulus density : Real),
+  Real.instLT.lt 0 bulkModulus →
+    Real.instLT.lt 0 density → (NumStability.wavePrincipalPart (instHDiv.hDiv bulkModulus density).sqrt).IsHyperbolic
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ (bulkModulus density : Real)
+  (hbulkModulus :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) bulkModulus)
+  (hdensity :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) density),
+  NumStability.SecondOrderPrincipalPart.IsHyperbolic
+    (NumStability.wavePrincipalPart
+      (Real.sqrt
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          bulkModulus density)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`, `Mathlib.Data.Real.Sqrt`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification` imports: `Mathlib.Algebra.QuadraticDiscriminant`, `Mathlib.Data.Real.Basic`, `Mathlib.Tactic.Positivity`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.SecondOrderPrincipalPart.IsHyperbolic`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ab0e1174a1338c2d9e8c383c9e610cacabadd72a7fe0d73b33c70bae2ad46a33`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Prop
+```
+
+Fully explicit type:
+
+```lean
+(part : NumStability.SecondOrderPrincipalPart) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun part => Real.instLT.lt 0 (discrim part.timeTime part.timeSpace part.spaceSpace)
+```
+
+### D002: `NumStability.wavePrincipalPart`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `90afdfe4e0d90f929f4cb53c0d44e6493610c44a7f8f89fa465098bb8a71f9ab`
+
+Type:
+
+```lean
+Real → NumStability.SecondOrderPrincipalPart
+```
+
+Fully explicit type:
+
+```lean
+(c : Real) → NumStability.SecondOrderPrincipalPart
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun c => { timeTime := 1, timeSpace := 0, spaceSpace := Real.instNeg.neg (instHPow.hPow c 2) }
+```
+
+### D003: `NumStability.SecondOrderPrincipalPart`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `c21d007bf144f6f84fc7aa043016e851352eebe7effe60547950ec6fb670f6eb`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D004: `NumStability.SecondOrderPrincipalPart.mk`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `a90c48a7922dca270312d576d90f8dc816b6429df8e61dd7ddd628cbb4765840`
+
+Type:
+
+```lean
+Real → Real → Real → NumStability.SecondOrderPrincipalPart
+```
+
+Fully explicit type:
+
+```lean
+(timeTime timeSpace spaceSpace : Real) → NumStability.SecondOrderPrincipalPart
+```
+
+### D005: `NumStability.SecondOrderPrincipalPart.spaceSpace`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `d561ac6dc0628d806eadb3833b75d937468280c8c8958c2fe69703128e287e53`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.3
+```
+
+### D006: `NumStability.SecondOrderPrincipalPart.timeSpace`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `ab590672c2e82efd4fe30d2d228221c6f1b3dbb58c12f9a68fb6e1f178bf0f88`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.2
+```
+
+### D007: `NumStability.SecondOrderPrincipalPart.timeTime`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `16f22a65feed2d8ebfdd69bf02f2a2d1a2c63fdf0f22273dabca823c2b372f1b`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.1
+```
+
+### D008: `DivInvMonoid.toDiv`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea`
+
+Type:
+
+```lean
+{G : Type u} → [self : DivInvMonoid G] → Div G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : DivInvMonoid.{u} G] → Div.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : DivInvMonoid G] => self.3
+```
+
+### D009: `HDiv.hDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HDiv α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HDiv.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HDiv α β γ] => self.1
+```
+
+### D010: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `b0ac4beedc868838232d4a0a08359a64074dc1c3a777d9d169413f4ab9a3c98f`
+- Reviewed interpretation: Extracts the value assigned to a natural-number literal by its instance.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D012: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `a606c856a8e65b952072e7b44d4d27e9dbd678fbce59f46427bb3fd1c5d6ff7b`
+- Reviewed interpretation: The standard library real-number type at the external semantic frontier.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D013: `Real.instDivInvMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3`
+
+Type:
+
+```lean
+DivInvMonoid Real
+```
+
+Fully explicit type:
+
+```lean
+DivInvMonoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',
+  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,
+  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
+```
+
+### D014: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D015: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `4c352ba117cde44cabbf202154cb6ba9b4660f215fe740079ad8572e3d500c5a`
+- Reviewed interpretation: Selects Real.zero.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D016: `Real.sqrt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Sqrt`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553`
+
+Type:
+
+```lean
+Real → Real
+```
+
+Fully explicit type:
+
+```lean
+(x : Real) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal
+```
+
+### D017: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `39193a190b377b8b060d52b39766f53d7703e4449bff79a2ef571fe975813d15`
+- Reviewed interpretation: Interprets the literal 0 as the supplied zero element.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D018: `instHDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871`
+
+Type:
+
+```lean
+{α : Type u_1} → [Div α] → HDiv α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Div.{u_1} α] → HDiv.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
+```
+
+### D019: `HPow.hPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6196b8cbb884c4f39841ba74b23d75f3c753fe0d044cc402bd6e4e3bd59d5cb8`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HPow α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HPow.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HPow α β γ] => self.1
+```
+
+### D020: `Monoid.toNatPow`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `5b7373fe2de26535c1cdbf1b953ce34faf30f68aac8abd83ade2e78e6ec65b8a`
+
+Type:
+
+```lean
+{M : Type u_2} → [Monoid M] → Pow M Nat
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_2} → [Monoid.{u_2} M] → Pow.{u_2, 0} M Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }
+```
+
+### D021: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `72e60ba86f2fdb1cfc04350a12e94d5b06a56e2f0619eda230d2076526a513d8`
+- Reviewed interpretation: Natural numbers, including zero.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D022: `Neg.neg`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `0c56662a5d917c211c3cb741ca747b4a6710082af615cf071342ef70dee3a2c7`
+
+Type:
+
+```lean
+{α : Type u} → [self : Neg α] → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : Neg.{u} α] → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Neg α] => self.1
+```
+
+### D023: `One.toOfNat1`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5`
+
+Type:
+
+```lean
+{α : Type u_1} → [One α] → OfNat α 1
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [One.{u_1} α] → OfNat.{u_1} α (nat_lit 1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : One α] => { ofNat := inst.one }
+```
+
+### D024: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Fully explicit type:
+
+```lean
+Monoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D025: `Real.instNeg`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `000951397468b3d1f8a2a1cca1de3812bc024916ff842cfd5454811130093b41`
+
+Type:
+
+```lean
+Neg Real
+```
+
+Fully explicit type:
+
+```lean
+Neg.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ neg := Real.neg✝ }
+```
+
+### D026: `Real.instOne`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81`
+
+Type:
+
+```lean
+One Real
+```
+
+Fully explicit type:
+
+```lean
+One.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ one := Real.one✝ }
+```
+
+### D027: `Real.instRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84`
+
+Hash-verified prior declaration review:
+
+- Reuse SHA-256: `92d62c8559b981235c0e625bf3cc4fc4faac1eb2f19acc590a75ae6b0a8a11c4`
+- Reviewed interpretation: Supplies the inferred ring structure on Real.
+
+Independently determine this declaration's effect on the current target and whether that effect matches the selected source result.
+
+### D028: `discrim`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.QuadraticDiscriminant`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `77440b74a511d0f2da71019cdc8129933e8218c25620c8f33aee511250ec6628`
+
+Type:
+
+```lean
+{R : Type u_1} → [Ring R] → R → R → R → R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_1} → [Ring.{u_1} R] → (a b c : R) → R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} [Ring R] a b c => instHSub.hSub (instHPow.hPow b 2) (instHMul.hMul (instHMul.hMul 4 a) c)
+```
+
+### D029: `instHPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `eb300d353d84392c776cad5e356479f878030744a43f9a1584942a89d16350b4`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [Pow α β] → HPow α β α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [Pow.{u_1, u_2} α β] → HPow.{u_1, u_2, u_1} α β α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : Pow α β] => { hPow := fun a b => inst.pow a b }
+```
+
+### D030: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) → OfNat.{0} Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```
+
+
+Complete dependency inventory SHA256 af11bb5cf22fa7365aa710a484e4566c55258a5586e681f2d2dbfd0bcc5a8b1f
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun part => Real.instLT.lt 0 (discrim part.timeTime part.timeSpace part.spaceSpace)",
+      "distance": 1,
+      "id": "D001",
+      "kind": "def",
+      "name": "NumStability.SecondOrderPrincipalPart.IsHyperbolic",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "ab0e1174a1338c2d9e8c383c9e610cacabadd72a7fe0d73b33c70bae2ad46a33",
+      "type_explicit": "(part : NumStability.SecondOrderPrincipalPart) \u2192 Prop",
+      "type_readable": "NumStability.SecondOrderPrincipalPart \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef002",
+      "body_readable": "fun c => { timeTime := 1, timeSpace := 0, spaceSpace := Real.instNeg.neg (instHPow.hPow c 2) }",
+      "distance": 1,
+      "id": "D002",
+      "kind": "def",
+      "name": "NumStability.wavePrincipalPart",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "90afdfe4e0d90f929f4cb53c0d44e6493610c44a7f8f89fa465098bb8a71f9ab",
+      "type_explicit": "(c : Real) \u2192 NumStability.SecondOrderPrincipalPart",
+      "type_readable": "Real \u2192 NumStability.SecondOrderPrincipalPart"
+    },
+    {
+      "blind_name": "LocalDef003",
+      "body_readable": "",
+      "distance": 2,
+      "id": "D003",
+      "kind": "inductive",
+      "name": "NumStability.SecondOrderPrincipalPart",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "c21d007bf144f6f84fc7aa043016e851352eebe7effe60547950ec6fb670f6eb",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "LocalDef004",
+      "body_readable": "",
+      "distance": 2,
+      "id": "D004",
+      "kind": "constructor",
+      "name": "NumStability.SecondOrderPrincipalPart.mk",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "a90c48a7922dca270312d576d90f8dc816b6429df8e61dd7ddd628cbb4765840",
+      "type_explicit": "(timeTime timeSpace spaceSpace : Real) \u2192 NumStability.SecondOrderPrincipalPart",
+      "type_readable": "Real \u2192 Real \u2192 Real \u2192 NumStability.SecondOrderPrincipalPart"
+    },
+    {
+      "blind_name": "LocalDef005",
+      "body_readable": "fun self => self.3",
+      "distance": 2,
+      "id": "D005",
+      "kind": "abbrev",
+      "name": "NumStability.SecondOrderPrincipalPart.spaceSpace",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "d561ac6dc0628d806eadb3833b75d937468280c8c8958c2fe69703128e287e53",
+      "type_explicit": "(self : NumStability.SecondOrderPrincipalPart) \u2192 Real",
+      "type_readable": "NumStability.SecondOrderPrincipalPart \u2192 Real"
+    },
+    {
+      "blind_name": "LocalDef006",
+      "body_readable": "fun self => self.2",
+      "distance": 2,
+      "id": "D006",
+      "kind": "abbrev",
+      "name": "NumStability.SecondOrderPrincipalPart.timeSpace",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "ab590672c2e82efd4fe30d2d228221c6f1b3dbb58c12f9a68fb6e1f178bf0f88",
+      "type_explicit": "(self : NumStability.SecondOrderPrincipalPart) \u2192 Real",
+      "type_readable": "NumStability.SecondOrderPrincipalPart \u2192 Real"
+    },
+    {
+      "blind_name": "LocalDef007",
+      "body_readable": "fun self => self.1",
+      "distance": 2,
+      "id": "D007",
+      "kind": "abbrev",
+      "name": "NumStability.SecondOrderPrincipalPart.timeTime",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification",
+      "role": "local",
+      "semantic_sha256": "16f22a65feed2d8ebfdd69bf02f2a2d1a2c63fdf0f22273dabca823c2b372f1b",
+      "type_explicit": "(self : NumStability.SecondOrderPrincipalPart) \u2192 Real",
+      "type_readable": "NumStability.SecondOrderPrincipalPart \u2192 Real"
+    },
+    {
+      "blind_name": "DivInvMonoid.toDiv",
+      "body_readable": "fun G [self : DivInvMonoid G] => self.3",
+      "distance": 1,
+      "id": "D008",
+      "kind": "abbrev",
+      "name": "DivInvMonoid.toDiv",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea",
+      "type_explicit": "{G : Type u} \u2192 [self : DivInvMonoid.{u} G] \u2192 Div.{u} G",
+      "type_readable": "{G : Type u} \u2192 [self : DivInvMonoid G] \u2192 Div G"
+    },
+    {
+      "blind_name": "HDiv.hDiv",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HDiv \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 1,
+      "id": "D009",
+      "kind": "abbrev",
+      "name": "HDiv.hDiv",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HDiv.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HDiv \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "LT.lt",
+      "body_readable": "fun \u03b1 [self : LT \u03b1] => self.1",
+      "distance": 1,
+      "id": "D010",
+      "kind": "abbrev",
+      "name": "LT.lt",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : LT.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : LT \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D011",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D012",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Real.instDivInvMonoid",
+      "body_readable": "{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',\n  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,\n  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }",
+      "distance": 1,
+      "id": "D013",
+      "kind": "def",
+      "name": "Real.instDivInvMonoid",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3",
+      "type_explicit": "DivInvMonoid.{0} Real",
+      "type_readable": "DivInvMonoid Real"
+    },
+    {
+      "blind_name": "Real.instLT",
+      "body_readable": "{ lt := Real.lt\u271d }",
+      "distance": 1,
+      "id": "D014",
+      "kind": "def",
+      "name": "Real.instLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a",
+      "type_explicit": "LT.{0} Real",
+      "type_readable": "LT Real"
+    },
+    {
+      "blind_name": "Real.instZero",
+      "body_readable": "{ zero := Real.zero\u271d }",
+      "distance": 1,
+      "id": "D015",
+      "kind": "def",
+      "name": "Real.instZero",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "type_explicit": "Zero.{0} Real",
+      "type_readable": "Zero Real"
+    },
+    {
+      "blind_name": "Real.sqrt",
+      "body_readable": "fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal",
+      "distance": 1,
+      "id": "D016",
+      "kind": "def",
+      "name": "Real.sqrt",
+      "owner_module": "Mathlib.Data.Real.Sqrt",
+      "role": "external-frontier",
+      "semantic_sha256": "67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553",
+      "type_explicit": "(x : Real) \u2192 Real",
+      "type_readable": "Real \u2192 Real"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 1,
+      "id": "D017",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    },
+    {
+      "blind_name": "instHDiv",
+      "body_readable": "fun {\u03b1} [inst : Div \u03b1] => { hDiv := fun a b => inst.div a b }",
+      "distance": 1,
+      "id": "D018",
+      "kind": "def",
+      "name": "instHDiv",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Div.{u_1} \u03b1] \u2192 HDiv.{u_1, u_1, u_1} \u03b1 \u03b1 \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Div \u03b1] \u2192 HDiv \u03b1 \u03b1 \u03b1"
+    },
+    {
+      "blind_name": "HPow.hPow",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HPow \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 2,
+      "id": "D019",
+      "kind": "abbrev",
+      "name": "HPow.hPow",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6196b8cbb884c4f39841ba74b23d75f3c753fe0d044cc402bd6e4e3bd59d5cb8",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HPow.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HPow \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "Monoid.toNatPow",
+      "body_readable": "fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }",
+      "distance": 2,
+      "id": "D020",
+      "kind": "def",
+      "name": "Monoid.toNatPow",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "5b7373fe2de26535c1cdbf1b953ce34faf30f68aac8abd83ade2e78e6ec65b8a",
+      "type_explicit": "{M : Type u_2} \u2192 [Monoid.{u_2} M] \u2192 Pow.{u_2, 0} M Nat",
+      "type_readable": "{M : Type u_2} \u2192 [Monoid M] \u2192 Pow M Nat"
+    },
+    {
+      "blind_name": "Nat",
+      "body_readable": "",
+      "distance": 2,
+      "id": "D021",
+      "kind": "inductive",
+      "name": "Nat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Neg.neg",
+      "body_readable": "fun \u03b1 [self : Neg \u03b1] => self.1",
+      "distance": 2,
+      "id": "D022",
+      "kind": "abbrev",
+      "name": "Neg.neg",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "0c56662a5d917c211c3cb741ca747b4a6710082af615cf071342ef70dee3a2c7",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : Neg.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : Neg \u03b1] \u2192 \u03b1 \u2192 \u03b1"
+    },
+    {
+      "blind_name": "One.toOfNat1",
+      "body_readable": "fun {\u03b1} [inst : One \u03b1] => { ofNat := inst.one }",
+      "distance": 2,
+      "id": "D023",
+      "kind": "def",
+      "name": "One.toOfNat1",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [One.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 1)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [One \u03b1] \u2192 OfNat \u03b1 1"
+    },
+    {
+      "blind_name": "Real.instMonoid",
+      "body_readable": "inferInstance",
+      "distance": 2,
+      "id": "D024",
+      "kind": "def",
+      "name": "Real.instMonoid",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8",
+      "type_explicit": "Monoid.{0} Real",
+      "type_readable": "Monoid Real"
+    },
+    {
+      "blind_name": "Real.instNeg",
+      "body_readable": "{ neg := Real.neg\u271d }",
+      "distance": 2,
+      "id": "D025",
+      "kind": "def",
+      "name": "Real.instNeg",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "000951397468b3d1f8a2a1cca1de3812bc024916ff842cfd5454811130093b41",
+      "type_explicit": "Neg.{0} Real",
+      "type_readable": "Neg Real"
+    },
+    {
+      "blind_name": "Real.instOne",
+      "body_readable": "{ one := Real.one\u271d }",
+      "distance": 2,
+      "id": "D026",
+      "kind": "def",
+      "name": "Real.instOne",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81",
+      "type_explicit": "One.{0} Real",
+      "type_readable": "One Real"
+    },
+    {
+      "blind_name": "Real.instRing",
+      "body_readable": "inferInstance",
+      "distance": 2,
+      "id": "D027",
+      "kind": "def",
+      "name": "Real.instRing",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84",
+      "type_explicit": "Ring.{0} Real",
+      "type_readable": "Ring Real"
+    },
+    {
+      "blind_name": "discrim",
+      "body_readable": "fun {R} [Ring R] a b c => instHSub.hSub (instHPow.hPow b 2) (instHMul.hMul (instHMul.hMul 4 a) c)",
+      "distance": 2,
+      "id": "D028",
+      "kind": "def",
+      "name": "discrim",
+      "owner_module": "Mathlib.Algebra.QuadraticDiscriminant",
+      "role": "external-frontier",
+      "semantic_sha256": "77440b74a511d0f2da71019cdc8129933e8218c25620c8f33aee511250ec6628",
+      "type_explicit": "{R : Type u_1} \u2192 [Ring.{u_1} R] \u2192 (a b c : R) \u2192 R",
+      "type_readable": "{R : Type u_1} \u2192 [Ring R] \u2192 R \u2192 R \u2192 R \u2192 R"
+    },
+    {
+      "blind_name": "instHPow",
+      "body_readable": "fun {\u03b1} {\u03b2} [inst : Pow \u03b1 \u03b2] => { hPow := fun a b => inst.pow a b }",
+      "distance": 2,
+      "id": "D029",
+      "kind": "def",
+      "name": "instHPow",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "eb300d353d84392c776cad5e356479f878030744a43f9a1584942a89d16350b4",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [Pow.{u_1, u_2} \u03b1 \u03b2] \u2192 HPow.{u_1, u_2, u_1} \u03b1 \u03b2 \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [Pow \u03b1 \u03b2] \u2192 HPow \u03b1 \u03b2 \u03b1"
+    },
+    {
+      "blind_name": "instOfNatNat",
+      "body_readable": "fun n => { ofNat := n }",
+      "distance": 2,
+      "id": "D030",
+      "kind": "def",
+      "name": "instOfNatNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92",
+      "type_explicit": "(n : Nat) \u2192 OfNat.{0} Nat n",
+      "type_readable": "(n : Nat) \u2192 OfNat Nat n"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact validated meaning reuse ledger; effects must be assessed freshly SHA256 386c05d03678942e2ab47331cefbc6891c47addc62cc973cd2ef6ede9563a9ab
+{
+  "entries": [
+    {
+      "interpretation": "Extracts the value assigned to a natural-number literal by its instance.",
+      "reuse_sha256": "b0ac4beedc868838232d4a0a08359a64074dc1c3a777d9d169413f4ab9a3c98f",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "source_dependency_id": "D042",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D011"
+    },
+    {
+      "interpretation": "The standard library real-number type at the external semantic frontier.",
+      "reuse_sha256": "a606c856a8e65b952072e7b44d4d27e9dbd678fbce59f46427bb3fd1c5d6ff7b",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "source_dependency_id": "D049",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D012"
+    },
+    {
+      "interpretation": "Selects Real.zero.",
+      "reuse_sha256": "4c352ba117cde44cabbf202154cb6ba9b4660f215fe740079ad8572e3d500c5a",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "source_dependency_id": "D055",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D015"
+    },
+    {
+      "interpretation": "Interprets the literal 0 as the supplied zero element.",
+      "reuse_sha256": "39193a190b377b8b060d52b39766f53d7703e4449bff79a2ef571fe975813d15",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "source_dependency_id": "D068",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D017"
+    },
+    {
+      "interpretation": "Natural numbers, including zero.",
+      "reuse_sha256": "72e60ba86f2fdb1cfc04350a12e94d5b06a56e2f0619eda230d2076526a513d8",
+      "semantic_sha256": "2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c",
+      "source_dependency_id": "D026",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D021"
+    },
+    {
+      "interpretation": "Supplies the inferred ring structure on Real.",
+      "reuse_sha256": "92d62c8559b981235c0e625bf3cc4fc4faac1eb2f19acc590a75ae6b0a8a11c4",
+      "semantic_sha256": "3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84",
+      "source_dependency_id": "D054",
+      "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+      "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+      "target_dependency_id": "D027"
+    }
+  ],
+  "role": "direct-dependency-reuse",
+  "schema_version": "formalization-faithfulness-1",
+  "source_output_sha256": "7fb786f2780dd55df5ef311e88ba04321ce72720939b9a5076fee1eb48a88a82",
+  "source_task_id": "LEV-CH01-EQ-1.1-DEFINITION-CANONICAL-20260908",
+  "task_id": "LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908"
+}
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 958d8a3717405e65d9ed3d2df348ea0b0d0bb20035297d27bd6bbb70392cfbb6
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "bea90ece7e23ccbc8d00cbcc153a31969fba817dddfd5331195fef938c7950d7",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "A predicate on coefficient records requiring discrim(timeTime, timeSpace, spaceSpace) > 0.",
+      "effect_on_target": "Defines the entire asserted hyperbolicity condition as strict positivity of the quadratic discriminant.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "Maps a real c to the coefficient record with timeTime = 1, timeSpace = 0, and spaceSpace = -(c^2).",
+      "effect_on_target": "Supplies the record (1, 0, -(sqrt(bulkModulus / density))^2) to the hyperbolicity predicate.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "The coefficient-record type used by the supplied constructor, record expression, and three coordinate projections.",
+      "effect_on_target": "Packages the three real coefficients tested by the discriminant predicate; the target does not quantify over arbitrary records.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "A constructor taking three real coordinates and producing a LocalDef003 record.",
+      "effect_on_target": "Supports construction of the particular three-coefficient object in LocalDef002.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "Returns the third coordinate of the coefficient record.",
+      "effect_on_target": "Extracts the spaceSpace coefficient, which is -(sqrt(bulkModulus / density))^2.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "LocalDef006",
+      "meaning": "Returns the second coordinate of the coefficient record.",
+      "effect_on_target": "Extracts the timeSpace coefficient, which is zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "LocalDef007",
+      "meaning": "Returns the first coordinate of the coefficient record.",
+      "effect_on_target": "Extracts the timeTime coefficient, which is one.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "DivInvMonoid.toDiv",
+      "meaning": "Extracts the division operation from a division-with-inverse monoid structure.",
+      "effect_on_target": "Provides real division for bulkModulus / density.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "HDiv.hDiv",
+      "meaning": "Extracts and applies the binary operation supplied by a heterogeneous division instance.",
+      "effect_on_target": "Evaluates the quotient of the two real parameters.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "LT.lt",
+      "meaning": "Extracts the strict comparison relation from an LT instance.",
+      "effect_on_target": "Expresses strict positivity in both hypotheses and the discriminant conclusion.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural-number numeral in the type specified by its OfNat instance.",
+      "effect_on_target": "Gives the typed numeric constants appearing in the hypotheses and coefficient computations.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "Both universally quantified parameters and all coefficient and discriminant values are real.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Real.instDivInvMonoid",
+      "meaning": "The real multiplicative structure with inversion and division, with division equal to multiplication by the inverse.",
+      "effect_on_target": "Determines the real quotient used as the square-root argument.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "Real.instLT",
+      "meaning": "Provides the strict order relation on real numbers.",
+      "effect_on_target": "Makes all positivity conditions ordinary strict real inequalities.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "Real.instZero",
+      "meaning": "Provides the real number zero.",
+      "effect_on_target": "Supplies the positivity threshold and the zero middle coefficient.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "Real.sqrt",
+      "meaning": "Converts a real to a nonnegative real, takes its nonnegative square root, and converts back to a real; equivalently, it is sqrt(max(x, 0)).",
+      "effect_on_target": "Selects the nonnegative square root of bulkModulus / density. The hypotheses make this argument strictly positive.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral 0 using the supplied Zero instance.",
+      "effect_on_target": "Ensures that the explicit zero literals denote real zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "instHDiv",
+      "meaning": "Turns a division operation on one type into heterogeneous-division notation with the same input and output type.",
+      "effect_on_target": "Connects the quotient notation to real division without changing its meaning.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "HPow.hPow",
+      "meaning": "Extracts and applies the exponentiation operation from an HPow instance.",
+      "effect_on_target": "Expresses squaring in the negative final coefficient and in the discriminant formula.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Monoid.toNatPow",
+      "meaning": "Supplies natural-number exponentiation from a monoid's iterated multiplication operation.",
+      "effect_on_target": "Makes the exponent 2 denote ordinary multiplicative squaring.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Nat",
+      "meaning": "The type of natural numbers.",
+      "effect_on_target": "Provides the exponent type and numeral indices; no natural-number variable is quantified in the proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Neg.neg",
+      "meaning": "Extracts and applies the unary negation operation.",
+      "effect_on_target": "Negates the square in the spaceSpace coefficient.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "One.toOfNat1",
+      "meaning": "Interprets the numeral 1 using the supplied One instance.",
+      "effect_on_target": "Supplies the unit timeTime coefficient.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Real.instMonoid",
+      "meaning": "Provides the multiplicative monoid structure on the real numbers.",
+      "effect_on_target": "Supports real multiplication, its identity, and natural powers used in the coefficient construction.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Real.instNeg",
+      "meaning": "Provides real additive negation.",
+      "effect_on_target": "Makes the final coefficient the additive inverse of the squared square root.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "Real.instOne",
+      "meaning": "Provides the real multiplicative identity one.",
+      "effect_on_target": "Fixes the first coefficient at real one.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "Real.instRing",
+      "meaning": "Provides the ring structure on the real numbers.",
+      "effect_on_target": "Instantiates the discriminant's arithmetic over the reals.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "discrim",
+      "meaning": "For ring elements a, b, and c, returns b^2 - 4*a*c.",
+      "effect_on_target": "Turns hyperbolicity into 0 < 0^2 - 4*1*(-(sqrt(bulkModulus / density))^2), which simplifies under the hypotheses to 0 < 4*bulkModulus/density.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "instHPow",
+      "meaning": "Turns an ordinary power operation into heterogeneous-power notation with the same base and result type.",
+      "effect_on_target": "Connects power notation to real natural-number exponentiation.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "instOfNatNat",
+      "meaning": "Interprets a natural-number numeral as that same natural number.",
+      "effect_on_target": "Makes the exponent literal 2 the natural number two.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every real number bulkModulus and every real number density.",
+      "The explicit binders hbulkModulus and hdensity are proofs of the two positivity assumptions, not additional mathematical parameters."
+    ],
+    "hypotheses": [
+      "bulkModulus > 0.",
+      "density > 0."
+    ],
+    "conclusions": [
+      "The coefficient record (timeTime, timeSpace, spaceSpace) = (1, 0, -(sqrt(bulkModulus / density))^2) has strictly positive quadratic discriminant.",
+      "Explicitly, 0 < 0^2 - 4*1*(-(sqrt(bulkModulus / density))^2). Under the hypotheses, this is equivalently 0 < 4*(bulkModulus / density)."
+    ],
+    "mathematical_definitions": [
+      "The coefficient object stores three real values named timeTime, timeSpace, and spaceSpace.",
+      "For a real parameter s, LocalDef002(s) is the record (1, 0, -(s^2)).",
+      "For a coefficient record (a, b, d), the predicate called IsHyperbolic means precisely b^2 - 4*a*d > 0.",
+      "Real.sqrt(x) is the nonnegative square root of max(x, 0); here its argument is positive."
+    ],
+    "proposition_plain_english": "For all strictly positive real numbers bulkModulus and density, set s = sqrt(bulkModulus / density). Then the three-coefficient record (1, 0, -s^2) is hyperbolic in the precise sense that its quadratic discriminant 0^2 - 4*1*(-s^2) is strictly positive. This discriminant equals 4*bulkModulus/density. The parameter s and the record are explicitly determined by the two universally quantified inputs; there are no existential witnesses or additional conjunctive requirements."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The claim applies only when both real parameters are strictly positive; parameter pairs failing either assumption yield a vacuous implication.",
+    "The admissible domain is nonempty, for example bulkModulus = density = 1, so the claim is not globally vacuous.",
+    "Positive density excludes division by zero, and the positive quotient excludes the truncated negative-input branch of Real.sqrt.",
+    "Strict positivity of the discriminant excludes the zero-discriminant case; no assertion is made about zero or negative parameter values.",
+    "The parameter names do not impose physical units, constitutive laws, or any interpretation beyond two real numbers.",
+    "The proposition concerns a coefficient record and its discriminant. It does not encode a differential equation, independent variables, a solution, regularity, initial or boundary data, or a well-posedness result.",
+    "The exact discriminant convention is b^2 - 4*a*d. No correspondence between the middle coefficient and a mixed-derivative normalization is specified."
+  ],
+  "ambiguities": []
+}
+
+Complete direct declaration dossier SHA256 02493140912e15b3156ce5486fad989b13b7e6140439f1d0835040a851600c12
+# Declaration dossier for LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_equation07_secondOrderHyperbolic
+    (bulkModulus density : ℝ)
+    (hbulkModulus : 0 < bulkModulus) (hdensity : 0 < density) :
+    (wavePrincipalPart (Real.sqrt (bulkModulus / density))).IsHyperbolic
+```
+
+## Elaborated target type
+
+```lean
+∀ (bulkModulus density : Real),
+  Real.instLT.lt 0 bulkModulus →
+    Real.instLT.lt 0 density → (NumStability.wavePrincipalPart (instHDiv.hDiv bulkModulus density).sqrt).IsHyperbolic
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ (bulkModulus density : Real)
+  (hbulkModulus :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) bulkModulus)
+  (hdensity :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) density),
+  NumStability.SecondOrderPrincipalPart.IsHyperbolic
+    (NumStability.wavePrincipalPart
+      (Real.sqrt
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          bulkModulus density)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`, `Mathlib.Data.Real.Sqrt`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification` imports: `Mathlib.Algebra.QuadraticDiscriminant`, `Mathlib.Data.Real.Basic`, `Mathlib.Tactic.Positivity`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.SecondOrderPrincipalPart.IsHyperbolic`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ab0e1174a1338c2d9e8c383c9e610cacabadd72a7fe0d73b33c70bae2ad46a33`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Prop
+```
+
+Fully explicit type:
+
+```lean
+(part : NumStability.SecondOrderPrincipalPart) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun part => Real.instLT.lt 0 (discrim part.timeTime part.timeSpace part.spaceSpace)
+```
+
+### D002: `NumStability.wavePrincipalPart`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `90afdfe4e0d90f929f4cb53c0d44e6493610c44a7f8f89fa465098bb8a71f9ab`
+
+Type:
+
+```lean
+Real → NumStability.SecondOrderPrincipalPart
+```
+
+Fully explicit type:
+
+```lean
+(c : Real) → NumStability.SecondOrderPrincipalPart
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun c => { timeTime := 1, timeSpace := 0, spaceSpace := Real.instNeg.neg (instHPow.hPow c 2) }
+```
+
+### D003: `NumStability.SecondOrderPrincipalPart`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `c21d007bf144f6f84fc7aa043016e851352eebe7effe60547950ec6fb670f6eb`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D004: `NumStability.SecondOrderPrincipalPart.mk`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `a90c48a7922dca270312d576d90f8dc816b6429df8e61dd7ddd628cbb4765840`
+
+Type:
+
+```lean
+Real → Real → Real → NumStability.SecondOrderPrincipalPart
+```
+
+Fully explicit type:
+
+```lean
+(timeTime timeSpace spaceSpace : Real) → NumStability.SecondOrderPrincipalPart
+```
+
+### D005: `NumStability.SecondOrderPrincipalPart.spaceSpace`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `d561ac6dc0628d806eadb3833b75d937468280c8c8958c2fe69703128e287e53`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.3
+```
+
+### D006: `NumStability.SecondOrderPrincipalPart.timeSpace`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `ab590672c2e82efd4fe30d2d228221c6f1b3dbb58c12f9a68fb6e1f178bf0f88`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.2
+```
+
+### D007: `NumStability.SecondOrderPrincipalPart.timeTime`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `16f22a65feed2d8ebfdd69bf02f2a2d1a2c63fdf0f22273dabca823c2b372f1b`
+
+Type:
+
+```lean
+NumStability.SecondOrderPrincipalPart → Real
+```
+
+Fully explicit type:
+
+```lean
+(self : NumStability.SecondOrderPrincipalPart) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.1
+```
+
+### D008: `DivInvMonoid.toDiv`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea`
+
+Type:
+
+```lean
+{G : Type u} → [self : DivInvMonoid G] → Div G
+```
+
+Fully explicit type:
+
+```lean
+{G : Type u} → [self : DivInvMonoid.{u} G] → Div.{u} G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : DivInvMonoid G] => self.3
+```
+
+### D009: `HDiv.hDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HDiv α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HDiv.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HDiv α β γ] => self.1
+```
+
+### D010: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D012: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D013: `Real.instDivInvMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3`
+
+Type:
+
+```lean
+DivInvMonoid Real
+```
+
+Fully explicit type:
+
+```lean
+DivInvMonoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',
+  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,
+  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
+```
+
+### D014: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D015: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D016: `Real.sqrt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Sqrt`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553`
+
+Type:
+
+```lean
+Real → Real
+```
+
+Fully explicit type:
+
+```lean
+(x : Real) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal
+```
+
+### D017: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D018: `instHDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871`
+
+Type:
+
+```lean
+{α : Type u_1} → [Div α] → HDiv α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Div.{u_1} α] → HDiv.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
+```
+
+### D019: `HPow.hPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6196b8cbb884c4f39841ba74b23d75f3c753fe0d044cc402bd6e4e3bd59d5cb8`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HPow α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HPow.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HPow α β γ] => self.1
+```
+
+### D020: `Monoid.toNatPow`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `5b7373fe2de26535c1cdbf1b953ce34faf30f68aac8abd83ade2e78e6ec65b8a`
+
+Type:
+
+```lean
+{M : Type u_2} → [Monoid M] → Pow M Nat
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_2} → [Monoid.{u_2} M] → Pow.{u_2, 0} M Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }
+```
+
+### D021: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D022: `Neg.neg`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `0c56662a5d917c211c3cb741ca747b4a6710082af615cf071342ef70dee3a2c7`
+
+Type:
+
+```lean
+{α : Type u} → [self : Neg α] → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : Neg.{u} α] → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Neg α] => self.1
+```
+
+### D023: `One.toOfNat1`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5`
+
+Type:
+
+```lean
+{α : Type u_1} → [One α] → OfNat α 1
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [One.{u_1} α] → OfNat.{u_1} α (nat_lit 1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : One α] => { ofNat := inst.one }
+```
+
+### D024: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Fully explicit type:
+
+```lean
+Monoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D025: `Real.instNeg`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `000951397468b3d1f8a2a1cca1de3812bc024916ff842cfd5454811130093b41`
+
+Type:
+
+```lean
+Neg Real
+```
+
+Fully explicit type:
+
+```lean
+Neg.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ neg := Real.neg✝ }
+```
+
+### D026: `Real.instOne`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81`
+
+Type:
+
+```lean
+One Real
+```
+
+Fully explicit type:
+
+```lean
+One.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ one := Real.one✝ }
+```
+
+### D027: `Real.instRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84`
+
+Type:
+
+```lean
+Ring Real
+```
+
+Fully explicit type:
+
+```lean
+Ring.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D028: `discrim`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.QuadraticDiscriminant`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `77440b74a511d0f2da71019cdc8129933e8218c25620c8f33aee511250ec6628`
+
+Type:
+
+```lean
+{R : Type u_1} → [Ring R] → R → R → R → R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u_1} → [Ring.{u_1} R] → (a b c : R) → R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} [Ring R] a b c => instHSub.hSub (instHPow.hPow b 2) (instHMul.hMul (instHMul.hMul 4 a) c)
+```
+
+### D029: `instHPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `eb300d353d84392c776cad5e356479f878030744a43f9a1584942a89d16350b4`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [Pow α β] → HPow α β α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [Pow.{u_1, u_2} α β] → HPow.{u_1, u_2, u_1} α β α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : Pow α β] => { hPow := fun a b => inst.pow a b }
+```
+
+### D030: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Fully explicit type:
+
+```lean
+(n : Nat) → OfNat.{0} Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```
+
+## Complete local imported sources
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.SecondOrder.Classification`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/SecondOrder/Classification.lean`
+SHA-256: `71e185e56b9e972517ad946769d322ac7457e825779f28b31436214134c75f56`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Algebra.QuadraticDiscriminant
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Positivity
+
+/-!
+# Classification of a two-variable second-order principal part
+
+The mixed coefficient is the full coefficient of the mixed derivative.
+Hyperbolicity means a positive quadratic discriminant.
+-/
+
+namespace NumStability
+
+/-- Coefficients of a homogeneous two-variable second-order principal part:
+`timeTime * p_tt + timeSpace * p_tx + spaceSpace * p_xx`. -/
+structure SecondOrderPrincipalPart where
+  timeTime : ℝ
+  timeSpace : ℝ
+  spaceSpace : ℝ
+
+/-- Positive discriminant is the hyperbolic case of the two-variable
+second-order principal-part classification. -/
+def SecondOrderPrincipalPart.IsHyperbolic
+    (part : SecondOrderPrincipalPart) : Prop :=
+  0 < discrim part.timeTime part.timeSpace part.spaceSpace
+
+/-- The principal part of `p_tt - c² p_xx = 0`. -/
+def wavePrincipalPart (c : ℝ) : SecondOrderPrincipalPart :=
+  ⟨1, 0, -(c ^ 2)⟩
+
+/-- A positive-speed wave principal part has positive discriminant. -/
+theorem wavePrincipalPart_isHyperbolic (c : ℝ) (hc : 0 < c) :
+    (wavePrincipalPart c).IsHyperbolic := by
+  change 0 < (0 : ℝ) ^ 2 - 4 * 1 * -(c ^ 2)
+  simp only [zero_pow (by decide : (2 : ℕ) ≠ 0), mul_one, mul_neg, zero_sub, neg_neg]
+  positivity
+
+end NumStability
+```
+
+
+Complete blind declaration dossier SHA256 bea90ece7e23ccbc8d00cbcc153a31969fba817dddfd5331195fef938c7950d7
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ (bulkModulus density : Real),
+  Real.instLT.lt 0 bulkModulus →
+    Real.instLT.lt 0 density → (LocalDef002 (instHDiv.hDiv bulkModulus density).sqrt).IsHyperbolic
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ (bulkModulus density : Real)
+  (hbulkModulus :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) bulkModulus)
+  (hdensity :
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) density),
+  LocalDef001
+    (LocalDef002
+      (Real.sqrt
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          bulkModulus density)))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `LocalDef001`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ab0e1174a1338c2d9e8c383c9e610cacabadd72a7fe0d73b33c70bae2ad46a33`
+
+Type:
+
+```lean
+LocalDef003 → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun part => Real.instLT.lt 0 (discrim part.timeTime part.timeSpace part.spaceSpace)
+```
+
+### D002: `LocalDef002`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `90afdfe4e0d90f929f4cb53c0d44e6493610c44a7f8f89fa465098bb8a71f9ab`
+
+Type:
+
+```lean
+Real → LocalDef003
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun c => { timeTime := 1, timeSpace := 0, spaceSpace := Real.instNeg.neg (instHPow.hPow c 2) }
+```
+
+### D003: `LocalDef003`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `c21d007bf144f6f84fc7aa043016e851352eebe7effe60547950ec6fb670f6eb`
+
+Type:
+
+```lean
+Type
+```
+
+### D004: `LocalDef004`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `a90c48a7922dca270312d576d90f8dc816b6429df8e61dd7ddd628cbb4765840`
+
+Type:
+
+```lean
+Real → Real → Real → LocalDef003
+```
+
+### D005: `LocalDef005`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `d561ac6dc0628d806eadb3833b75d937468280c8c8958c2fe69703128e287e53`
+
+Type:
+
+```lean
+LocalDef003 → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.3
+```
+
+### D006: `LocalDef006`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `ab590672c2e82efd4fe30d2d228221c6f1b3dbb58c12f9a68fb6e1f178bf0f88`
+
+Type:
+
+```lean
+LocalDef003 → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.2
+```
+
+### D007: `LocalDef007`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `16f22a65feed2d8ebfdd69bf02f2a2d1a2c63fdf0f22273dabca823c2b372f1b`
+
+Type:
+
+```lean
+LocalDef003 → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun self => self.1
+```
+
+### D008: `DivInvMonoid.toDiv`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea`
+
+Type:
+
+```lean
+{G : Type u} → [self : DivInvMonoid G] → Div G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun G [self : DivInvMonoid G] => self.3
+```
+
+### D009: `HDiv.hDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HDiv α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HDiv α β γ] => self.1
+```
+
+### D010: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D012: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+### D013: `Real.instDivInvMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3`
+
+Type:
+
+```lean
+DivInvMonoid Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',
+  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,
+  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
+```
+
+### D014: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D015: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D016: `Real.sqrt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Sqrt`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553`
+
+Type:
+
+```lean
+Real → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal
+```
+
+### D017: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D018: `instHDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871`
+
+Type:
+
+```lean
+{α : Type u_1} → [Div α] → HDiv α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
+```
+
+### D019: `HPow.hPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `6196b8cbb884c4f39841ba74b23d75f3c753fe0d044cc402bd6e4e3bd59d5cb8`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HPow α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HPow α β γ] => self.1
+```
+
+### D020: `Monoid.toNatPow`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `5b7373fe2de26535c1cdbf1b953ce34faf30f68aac8abd83ade2e78e6ec65b8a`
+
+Type:
+
+```lean
+{M : Type u_2} → [Monoid M] → Pow M Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }
+```
+
+### D021: `Nat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `2`
+- Semantic SHA-256: `2e1c25ca42e1e377a41827f0d2f09ae02cfb28ab155c30e277f1000f5e79b32c`
+
+Type:
+
+```lean
+Type
+```
+
+### D022: `Neg.neg`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `0c56662a5d917c211c3cb741ca747b4a6710082af615cf071342ef70dee3a2c7`
+
+Type:
+
+```lean
+{α : Type u} → [self : Neg α] → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Neg α] => self.1
+```
+
+### D023: `One.toOfNat1`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5`
+
+Type:
+
+```lean
+{α : Type u_1} → [One α] → OfNat α 1
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : One α] => { ofNat := inst.one }
+```
+
+### D024: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D025: `Real.instNeg`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `000951397468b3d1f8a2a1cca1de3812bc024916ff842cfd5454811130093b41`
+
+Type:
+
+```lean
+Neg Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ neg := Real.neg✝ }
+```
+
+### D026: `Real.instOne`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81`
+
+Type:
+
+```lean
+One Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ one := Real.one✝ }
+```
+
+### D027: `Real.instRing`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3ab5d2d0076694ed1c8a64f946e9fb3ea8227cbc632e9ed0a942bd0bdcbe0e84`
+
+Type:
+
+```lean
+Ring Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D028: `discrim`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.QuadraticDiscriminant`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `77440b74a511d0f2da71019cdc8129933e8218c25620c8f33aee511250ec6628`
+
+Type:
+
+```lean
+{R : Type u_1} → [Ring R] → R → R → R → R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} [Ring R] a b c => instHSub.hSub (instHPow.hPow b 2) (instHMul.hMul (instHMul.hMul 4 a) c)
+```
+
+### D029: `instHPow`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `eb300d353d84392c776cad5e356479f878030744a43f9a1584942a89d16350b4`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [Pow α β] → HPow α β α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : Pow α β] => { hPow := fun a b => inst.pow a b }
+```
+
+### D030: `instOfNatNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `7018dea92aae8c272f3a065f25e2bedb9732a0b602c3d54b166fa0cf2ce1ea92`
+
+Type:
+
+```lean
+(n : Nat) → OfNat Nat n
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun n => { ofNat := n }
+```
+
+
+Mechanical adjudication triggers SHA256 8173b41d3415f67001e596c5ba960ae12585b631ac8323f6e8b169d5bed586fd
+{
+  "required": true,
+  "reasons": [
+    "judge classifications differ",
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "direct judge classification is undetermined",
+    "direct judge left semantic_checklist item C04 unclear",
+    "direct judge left semantic_checklist item C05 unclear",
+    "direct judge left semantic_checklist item C10 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "direct judge left semantic_checklist item N06 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "direct judge left implication lean_implies_source unclear"
+  ]
+}
+
+
+Direct judgment SHA256 80a18960d5da07038c49d15fcc717c5a24cbb3b3ca034babfaafc8e337d2860a
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "47f27e22ef1990123ae1ac9429e236df4cc1866200bc4756883f38cbaf8518a7",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.SecondOrderPrincipalPart.IsHyperbolic",
+      "interpretation": "Requires strict positivity of the quadratic discriminant of the three principal coefficients.",
+      "effect_on_target": "The conclusion becomes 0 < 0^2 - 4 * 1 * (-(sqrt(K/rho))^2).",
+      "source_match": "Matches the second-order hyperbolicity classification of equation (1.7), rather than the preceding first-order eigenvector definition.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.wavePrincipalPart",
+      "interpretation": "Constructs the coefficient record (1, 0, -c^2).",
+      "effect_on_target": "Represents the principal coefficients of p_tt - c^2 p_xx = 0 at c = sqrt(K/rho).",
+      "source_match": "Exactly matches equation (1.7) after moving its right-hand side to the left.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.SecondOrderPrincipalPart",
+      "interpretation": "A type whose supplied constructor and projections represent three real principal coefficients.",
+      "effect_on_target": "Stores coefficients only; it contains no pressure function or satisfaction relation.",
+      "source_match": "Adequate for classifying equation (1.7). It does not itself express the neighboring derivation claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "NumStability.SecondOrderPrincipalPart.mk",
+      "interpretation": "Constructs the record from three real arguments in timeTime, timeSpace, spaceSpace order.",
+      "effect_on_target": "Places 1, 0, and -c^2 in the coefficient positions used by the discriminant.",
+      "source_match": "Preserves the coefficients of the time, mixed, and spatial second derivatives in (1.7).",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "NumStability.SecondOrderPrincipalPart.spaceSpace",
+      "interpretation": "Returns the third record component.",
+      "effect_on_target": "Supplies -c^2 as the last discriminant argument.",
+      "source_match": "Matches the spatial coefficient after rewriting (1.7) with zero right-hand side.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "NumStability.SecondOrderPrincipalPart.timeSpace",
+      "interpretation": "Returns the second record component.",
+      "effect_on_target": "Supplies zero as the middle discriminant argument.",
+      "source_match": "Equation (1.7) has no mixed pressure derivative term.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "NumStability.SecondOrderPrincipalPart.timeTime",
+      "interpretation": "Returns the first record component.",
+      "effect_on_target": "Supplies one as the leading discriminant argument.",
+      "source_match": "The coefficient of p_tt in (1.7) is one.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "DivInvMonoid.toDiv",
+      "interpretation": "Extracts the division structure from a division-inverse monoid.",
+      "effect_on_target": "Selects real division for the material-parameter quotient.",
+      "source_match": "Matches K/rho in the source definition of c.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "HDiv.hDiv",
+      "interpretation": "Extracts the division operation from its supplied instance.",
+      "effect_on_target": "Applies real division to bulkModulus and density, in that order.",
+      "source_match": "Preserves the numerator and denominator in sqrt(K/rho).",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "LT.lt",
+      "interpretation": "Extracts the strict comparison relation from the supplied order instance.",
+      "effect_on_target": "Expresses strict positivity of both parameters and the discriminant.",
+      "source_match": "Strict discriminant positivity gives the nondegenerate hyperbolic classification; the source does not explicitly state the parameter inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "OfNat.ofNat",
+      "reuse_sha256": "b0ac4beedc868838232d4a0a08359a64074dc1c3a777d9d169413f4ab9a3c98f",
+      "effect_on_target": "Interprets numeric literals through the displayed real and natural-number instances.",
+      "source_match": "Preserves the zero mixed coefficient, unit time coefficient, and square exponent.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Real",
+      "reuse_sha256": "a606c856a8e65b952072e7b44d4d27e9dbd678fbce59f46427bb3fd1c5d6ff7b",
+      "effect_on_target": "Makes the material parameters, sound speed, and principal coefficients real scalars.",
+      "source_match": "Matches the real acoustic setting inherited from pages 1–3.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Real.instDivInvMonoid",
+      "interpretation": "Supplies real multiplication, inversion, and division with division equal to multiplication by the inverse.",
+      "effect_on_target": "Provides the quotient K/rho; the positive-density hypothesis excludes zero denominator.",
+      "source_match": "Matches the ordinary material-parameter quotient in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "Real.instLT",
+      "interpretation": "Installs the real strict order as the LT relation.",
+      "effect_on_target": "All positivity conditions use ordinary real strict inequality.",
+      "source_match": "Matches the ordered-real interpretation of nondegenerate hyperbolicity.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "Real.instZero",
+      "reuse_sha256": "4c352ba117cde44cabbf202154cb6ba9b4660f215fe740079ad8572e3d500c5a",
+      "effect_on_target": "Supplies real zero for the hypotheses, discriminant threshold, and mixed coefficient.",
+      "source_match": "Matches the zero mixed term of (1.7) and the strict classification threshold.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Real.sqrt",
+      "interpretation": "Converts the input to a nonnegative real, takes its nonnegative square root, and returns a real; negative inputs are thereby truncated to zero.",
+      "effect_on_target": "For positive K and rho, yields the positive square root of K/rho without invoking the negative-input behavior.",
+      "source_match": "Matches the definition of c following (1.6) on the target's domain.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "Zero.toOfNat0",
+      "reuse_sha256": "39193a190b377b8b060d52b39766f53d7703e4449bff79a2ef571fe975813d15",
+      "effect_on_target": "Makes the literal zero denote the supplied real zero.",
+      "source_match": "Preserves the intended zero values in the coefficient record and inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "instHDiv",
+      "interpretation": "Lifts homogeneous division to the heterogeneous-division interface without changing the operation.",
+      "effect_on_target": "Connects the quotient notation to real division.",
+      "source_match": "Introduces no change to K/rho.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "HPow.hPow",
+      "interpretation": "Extracts the power operation from its supplied instance.",
+      "effect_on_target": "Applies natural-number exponentiation to real coefficients.",
+      "source_match": "Represents the square c^2 in (1.7).",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "Monoid.toNatPow",
+      "interpretation": "Defines natural powers using the monoid's npow operation.",
+      "effect_on_target": "Makes exponent two mean ordinary repeated real multiplication.",
+      "source_match": "Matches the algebraic square of sound speed.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "Nat",
+      "reuse_sha256": "72e60ba86f2fdb1cfc04350a12e94d5b06a56e2f0619eda230d2076526a513d8",
+      "effect_on_target": "Provides the exponent type for the square.",
+      "source_match": "No discretization or sequence indexing is introduced; two is the source exponent.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "Neg.neg",
+      "interpretation": "Extracts unary negation from the supplied instance.",
+      "effect_on_target": "Negates the square of c in the spatial coefficient.",
+      "source_match": "Matches moving c^2 p_xx to the left of (1.7).",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "One.toOfNat1",
+      "interpretation": "Interprets literal one using the supplied multiplicative identity.",
+      "effect_on_target": "Sets the leading principal coefficient to real one.",
+      "source_match": "Matches the coefficient of p_tt.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "Real.instMonoid",
+      "interpretation": "Supplies the inferred multiplicative monoid structure on the real numbers at the external frontier.",
+      "effect_on_target": "Supports ordinary multiplication and natural powers in the coefficients.",
+      "source_match": "Matches the real algebra used in c^2.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "Real.instNeg",
+      "interpretation": "Installs real additive negation.",
+      "effect_on_target": "Produces the negative spatial coefficient -c^2.",
+      "source_match": "Preserves the sign of the normalized wave equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "Real.instOne",
+      "interpretation": "Selects real one.",
+      "effect_on_target": "Supplies the unit time-time coefficient.",
+      "source_match": "Matches equation (1.7).",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "Real.instRing",
+      "reuse_sha256": "92d62c8559b981235c0e625bf3cc4fc4faac1eb2f19acc590a75ae6b0a8a11c4",
+      "effect_on_target": "Instantiates the discriminant's ring operations with real arithmetic.",
+      "source_match": "Classifies the real principal coefficients of the displayed acoustic wave equation.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "discrim",
+      "interpretation": "Computes b^2 - 4*a*c.",
+      "effect_on_target": "At coefficients (1, 0, -s^2), computes 4*s^2, hence 4*K/rho under the hypotheses.",
+      "source_match": "Has the correct positive sign for the standard second-order hyperbolic classification. The alternative mixed-coefficient convention changes a positive factor here, not the classification, because the mixed coefficient is zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "instHPow",
+      "interpretation": "Lifts a homogeneous power operation to the HPow interface.",
+      "effect_on_target": "Connects square notation to real natural powers.",
+      "source_match": "Introduces no change to c^2.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "instOfNatNat",
+      "interpretation": "Interprets a natural-number literal as that natural number itself.",
+      "effect_on_target": "Fixes the exponent literal at two.",
+      "source_match": "Matches the second power in (1.7), with no indexing shift.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached raw pages 23–25 show the derivative convention, acoustic system (1.5), c = sqrt(K/rho) after (1.6), equation (1.7), and its second-order hyperbolicity classification.",
+      "lean_evidence": "The proof-free header and both elaborated types classify wavePrincipalPart at sqrt(bulkModulus/density).",
+      "reasoning": "The located classification sentence and inherited acoustic context are the relevant primary evidence. Source-byte and rendering hashes are supplied by the orchestrator and were not independently recomputed."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Printed page 2 describes K and rho as constant material parameters and defines c from their quotient.",
+      "lean_evidence": "The target universally binds two real scalars and constructs a record of three real principal coefficients.",
+      "reasoning": "These types correctly encode the parameters and two-variable principal part for the classification claim. Functions p and u are unnecessary for classifying a fixed equation."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The classification applies to the constant-material acoustic equation with c determined by K and rho.",
+      "lean_evidence": "The target has forall K rho, 0 < K -> 0 < rho -> IsHyperbolic(wavePrincipalPart(sqrt(K/rho))).",
+      "reasoning": "The sound speed has exactly the stated parameter dependence; no independent speed witness or quantifier exchange is introduced."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "Printed page 2 calls K the bulk modulus and rho the density, but the selected pages do not state K > 0 and rho > 0 as standing inequalities.",
+      "lean_evidence": "Both strict positivity assumptions are explicit premises.",
+      "reasoning": "They are natural for the intended physical medium and ensure nonzero real sound speed. Nevertheless, exact equivalence of the source's unstated admissible domain with this explicit domain is not established by the supplied passage. These premises must not be counted as theorem strengthening."
+    },
+    {
+      "id": "C05",
+      "status": "unclear",
+      "source_evidence": "The locator emphasizes the definition of c, (1.7), and its classification sentence. The source also separately asserts derivation from (1.5), and the supplied source contract includes that derivation as a conclusion.",
+      "lean_evidence": "The target concludes only positivity of a coefficient discriminant. It contains no acoustic-system hypothesis or conclusion that pressure satisfies (1.7).",
+      "reasoning": "The classification conclusion is complete. If the selected result includes the derivation conclusion recorded in the contract, the target omits it. The locator and contract leave a material scope discrepancy requiring adjudication."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Equation (1.7) is p_tt = c^2 p_xx and the following sentence explicitly invokes second-order linear classification.",
+      "lean_evidence": "D001, D002, D004–D007, and D028 expand the target to strict positivity of the discriminant of (1, 0, -c^2); D016 supplies the sound-speed square root.",
+      "reasoning": "All thirty dependencies have been inspected or covered using their exact supplied reuse hashes. The target uses the appropriate second-order criterion."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source calls (1.7) hyperbolic, not parabolic or elliptic.",
+      "lean_evidence": "IsHyperbolic means discriminant > 0, yielding 4*c^2 > 0.",
+      "reasoning": "Strict positivity has the correct classification strength for nonzero real c; the target does not weaken this to nonnegativity."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes the pressure equation's second-order classification from the first-order system's eigenvalue and eigenvector criterion.",
+      "lean_evidence": "The target classifies a coefficient record and introduces neither a first-order matrix predicate nor a property of a particular solution.",
+      "reasoning": "The classification object and sound-speed role are preserved. The separate derivation scope issue is recorded in C05."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "After (1.6), c = sqrt(K/rho); equation (1.7) has coefficient c^2.",
+      "lean_evidence": "The target substitutes sqrt(bulkModulus/density) into (1, 0, -c^2).",
+      "reasoning": "The quotient order, square root, exponent, zero mixed coefficient, and normalized signs all match. The factor four comes from the supplied discriminant convention and preserves classification."
+    },
+    {
+      "id": "C10",
+      "status": "unclear",
+      "source_evidence": "The source concerns one-dimensional acoustics with physical material constants but gives no explicit parameter-domain case split.",
+      "lean_evidence": "Only the positive-positive quadrant of real parameter pairs is covered.",
+      "reasoning": "This may precisely expose inherited physical assumptions or may restrict the selected claim. The supplied evidence does not settle that domain decision; no stronger classification is warranted."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "The classification sentence supplies no treatment of zero sound speed, zero density, or nonpositive material constants.",
+      "lean_evidence": "Positive density excludes division by zero; positive K/rho excludes the truncated branch of Real.sqrt and guarantees a positive discriminant.",
+      "reasoning": "The formal domain handles all its boundary risks correctly. Whether its exclusions exactly match the selected source domain remains implicit: at K = 0 and rho = 1 the discriminant would be zero, so the issue is substantive."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The intended setting is a medium supporting acoustic waves with real sound speed.",
+      "lean_evidence": "K = rho = 1 satisfies both premises and gives c = 1 and discriminant 4.",
+      "reasoning": "The hypotheses are satisfiable and the conclusion expresses a nondegenerate coefficient classification, not an implication from impossible premises."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected classification is a property of a continuous differential equation, not a numerical algorithm or discretization.",
+      "lean_evidence": "The target contains only real parameters and an algebraic classification predicate.",
+      "reasoning": "No algorithmic execution semantics require preservation. The neighboring analytical derivation is addressed separately in C05."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage uses no norm, metric, or error magnitude.",
+      "lean_evidence": "The square is an algebraic coefficient square, with no norm operator.",
+      "reasoning": "There is no norm or metric convention to compare."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The source asserts PDE hyperbolicity, without a numerical error or stability statement.",
+      "lean_evidence": "The definition is strict discriminant positivity and contains no error or stability predicate.",
+      "reasoning": "No numerical error or stability notions are substituted."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "The source defines c exactly as sqrt(K/rho) and uses its exact square in (1.7).",
+      "lean_evidence": "The target uses real division, Real.sqrt, and real exponentiation.",
+      "reasoning": "No approximation, rounding, perturbation, or computed surrogate is introduced."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "Equation (1.7) and its classification contain no asymptotic notation or discarded remainder.",
+      "lean_evidence": "The conclusion is an exact algebraic inequality.",
+      "reasoning": "There is no asymptotic regime or higher-order truncation to preserve."
+    },
+    {
+      "id": "N06",
+      "status": "unclear",
+      "source_evidence": "The neighboring derivation differentiates (1.5) and eliminates mixed velocity derivatives, implicitly requiring sufficient regularity. The classification itself does not assert solution existence or uniqueness.",
+      "lean_evidence": "The coefficient-only target includes no functions, derivative hypotheses, existence claim, or uniqueness claim.",
+      "reasoning": "For classification alone these analytical conditions are unnecessary. If the selected result includes derivation, its regularity-dependent implication is absent. Resolution therefore depends on the scope issue in C05."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "On positive material parameters, the target correctly establishes the classification of (1.7): its discriminant is 4*(sqrt(K/rho))^2 = 4*K/rho > 0. Exact implication to the selected source result remains unresolved because the source's parameter domain is implicit and the contract includes a separate derivation claim that the target does not represent."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Restricting the source's acoustic classification to positive bulk modulus and density, substitute c = sqrt(K/rho) and normalize (1.7) to coefficients (1, 0, -c^2). Standard second-order hyperbolicity for this zero-mixed-term equation is precisely the positivity tested by the target. Including the additional derivation conclusion in the source would not invalidate this direction."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "selected-result-scope",
+      "source_evidence": "The locator singles out the sound-speed definition, equation (1.7), and the classification sentence; the supplied source contract additionally includes the preceding derivation from (1.5) among the selected conclusions.",
+      "lean_evidence": "The entire target conclusion is IsHyperbolic(wavePrincipalPart(sqrt(K/rho))); no pressure, velocity, derivatives, or acoustic-system implication occurs.",
+      "impact": "The target faithfully represents the classification component, but does not represent the derivation component if that component is part of the selected result. Adjudication must resolve the selection scope."
+    },
+    {
+      "severity": "minor",
+      "category": "implicit-material-domain",
+      "source_evidence": "The source identifies K and rho physically and calls the resulting equation hyperbolic, without explicitly stating their strict positivity or discussing degenerate parameters.",
+      "lean_evidence": "The theorem requires K > 0 and rho > 0.",
+      "impact": "The hypotheses are physically natural and nonvacuous, but their exact agreement with the source's inherited domain requires an interpretive decision. They restrict applicability and cannot justify a faithful-stronger classification."
+    }
+  ],
+  "rationale": "The attached primary-source images and all supplied declaration evidence establish that the target correctly encodes second-order wave-equation hyperbolicity for positive material parameters. Every dependency has a determinate meaning and the coefficient calculation is exact. Acceptance remains unresolved because the locator's classification focus and the contract's broader derivation conclusion do not unambiguously select the same result, and the explicit positive-parameter domain is only implicit in the source. Adjudication is requested for these scope and domain issues; no proof or external evidence was consulted."
+}
+
+Roundtrip judgment SHA256 51fa8c7d784d601f1861abaa6f5b08e2671c6293c6a8a2353e0122b29bddc3a2
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-SECOND-ORDER-WAVE-HYPERBOLICITY-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "958d8a3717405e65d9ed3d2df348ea0b0d0bb20035297d27bd6bbb70392cfbb6",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "Attached printed pages 2–3 contain the definition c = sqrt(K/rho), equation (1.7), and its derivation and classification sentences; printed page 1 establishes the derivative convention.",
+      "translation_evidence": "The translation uses sqrt(bulkModulus/density) and the coefficients (1, 0, -s^2).",
+      "reasoning": "The selected passage and necessary inherited context are identifiable from the attached primary-source renderings. Source identity and hashes are supplied provenance, not independently recomputed here."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "Equation (1.5) concerns pressure p(x,t), velocity u(x,t), and constant material parameters K and rho; equation (1.7) concerns second partial derivatives of p.",
+      "translation_evidence": "Only two real parameters are quantified. The conclusion concerns a three-real coefficient record, with no functions or independent variables.",
+      "reasoning": "The parameter types suit the coefficient classification, but the objects required for the source's asserted differential implication are absent."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The sound speed is defined from K and rho rather than independently chosen.",
+      "translation_evidence": "For each pair of parameters, s and the coefficient record are explicitly determined; there are no existential witnesses.",
+      "reasoning": "Within the represented coefficient claim, parameter dependence and quantifier scope are preserved."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "K and rho are constant bulk modulus and density. The passage gives no explicit positivity inequalities or regularity class.",
+      "translation_evidence": "Both parameters must be strictly positive. No acoustic-system or differentiability assumptions occur.",
+      "reasoning": "Positivity is consistent with the physical setting, but the passage does not explicitly settle its quantified parameter domain. Analytical assumptions belong to a derivation claim that the translation omits."
+    },
+    {
+      "id": "C05",
+      "status": "fail",
+      "source_evidence": "Immediately after (1.7), the source asserts both derivation from (1.5) by differentiation and elimination, and second-order hyperbolicity.",
+      "translation_evidence": "The sole conclusion is strict positivity of the discriminant of (1, 0, -s^2).",
+      "reasoning": "The coefficient classification is represented, but the asserted implication from acoustic solutions to the pressure wave equation is absent."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "Equation (1.7) rearranges to p_tt - c^2 p_xx = 0 and is classified using second-order linear classification.",
+      "translation_evidence": "D001–D007 specify the record and predicate; D016 specifies the square root; D028 explicitly gives b^2 - 4*a*d. The remaining ledger entries describe ordinary real arithmetic and supporting types.",
+      "reasoning": "The supplied ledger makes the translated operators explicit. On these coefficients the discriminant is 4c^2. A possible factor-of-two convention for the mixed coefficient has no effect because that coefficient is zero."
+    },
+    {
+      "id": "C07",
+      "status": "fail",
+      "source_evidence": "The source asserts the differential equality p_tt = c^2 p_xx and classifies the equation as hyperbolic.",
+      "translation_evidence": "The translation asserts only a strict discriminant inequality.",
+      "reasoning": "Strict positivity correctly represents the classification on positive parameters, but does not represent the additional differential equality implied by the acoustic system."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "K and rho determine c; hyperbolicity is a property of equation (1.7), not of an individual pressure solution.",
+      "translation_evidence": "The inputs determine a sound-speed expression and a coefficient record; hyperbolicity is asserted of that record.",
+      "reasoning": "The represented parameters and equation coefficients retain distinct roles. No solution-dependent classification is substituted."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "The source defines c = sqrt(K/rho) and writes p_tt = c^2 p_xx.",
+      "translation_evidence": "The coefficient record is (1, 0, -(sqrt(bulkModulus/density))^2).",
+      "reasoning": "The quotient order, square root, exponent, and negative spatial coefficient after rearrangement match."
+    },
+    {
+      "id": "C10",
+      "status": "unclear",
+      "source_evidence": "The source concerns one-dimensional acoustics with constant material parameters, without an explicit parameter-domain statement.",
+      "translation_evidence": "The proposition applies to all strictly positive real parameter pairs and only asserts a coefficient property.",
+      "reasoning": "The reduction to the classification component is explicit. Whether positivity merely makes inherited physical restrictions precise or narrows the source domain requires adjudication."
+    },
+    {
+      "id": "C11",
+      "status": "unclear",
+      "source_evidence": "The source does not discuss zero density, zero sound speed, negative material parameters, or degenerate classification.",
+      "translation_evidence": "Strict positivity excludes zero density and zero sound speed and avoids the truncated branch of real square root.",
+      "reasoning": "The translation is well-defined and nondegenerate on its stated domain, but the source's intended exclusions are not explicitly resolved."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source discusses ordinary acoustic media and a real sound speed.",
+      "translation_evidence": "bulkModulus = density = 1 satisfies both hypotheses and gives discriminant 4.",
+      "reasoning": "The translated claim has a nonempty admissible domain and expresses a substantive coefficient classification."
+    },
+    {
+      "id": "N01",
+      "status": "fail",
+      "source_evidence": "The source specifically links (1.7) to differentiating the two equations of (1.5) and eliminating mixed velocity derivatives.",
+      "translation_evidence": "No acoustic equations, differentiation, or relation between their solutions and the pressure equation is represented.",
+      "reasoning": "The selected passage includes a differential derivation process. Its mathematical input-output relationship is missing, independently of whether a proof must reproduce the printed steps."
+    },
+    {
+      "id": "N02",
+      "status": "not-applicable",
+      "source_evidence": "The selected passage states differential equations and their classification without norms or metrics.",
+      "translation_evidence": "The translated discriminant inequality uses no norm or metric.",
+      "reasoning": "There is no norm, metric, or componentwise estimate to compare."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "No error bound, conditioning claim, or numerical stability statement appears in the selected result.",
+      "translation_evidence": "The translation asserts only an exact coefficient inequality.",
+      "reasoning": "Second-order hyperbolicity here is an equation classification, not a numerical error or stability notion."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "The displayed sound-speed relation and wave equation are exact within the stated acoustic model.",
+      "translation_evidence": "All parameters and operations are exact real quantities.",
+      "reasoning": "No rounded or computed approximation replaces the exact sound speed or coefficients."
+    },
+    {
+      "id": "N05",
+      "status": "not-applicable",
+      "source_evidence": "Equation (1.7) and the classification sentence contain no asymptotic remainder or limiting regime.",
+      "translation_evidence": "The translated conclusion is an exact strict inequality.",
+      "reasoning": "There are no asymptotic terms whose logical status must be preserved."
+    },
+    {
+      "id": "N06",
+      "status": "fail",
+      "source_evidence": "The derivation requires sufficient differentiation of p and u and compatibility of the mixed velocity derivatives, although no function class is specified.",
+      "translation_evidence": "There are no functions, derivative-existence conditions, or mixed-derivative conditions.",
+      "reasoning": "The analytical content of the derivation is absent. Neither source nor translation asserts a separate existence, uniqueness, or well-posedness theorem."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "no",
+      "reasoning": "The translated coefficient inequality represents the hyperbolicity component for positive material parameters. It contains no assertion that pressure and velocity satisfying (1.5) yield p_tt = c^2 p_xx. Consequently it does not recover all conclusions of the selected passage as recorded in the supplied source contract."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "Restricting the source's acoustic setting to positive K and rho gives c = sqrt(K/rho) > 0. Equation (1.7) has coefficients (1, 0, -c^2), whose quadratic discriminant is 4c^2 = 4K/rho > 0. Thus the translated classification follows on its explicit domain; no claim about degenerate source cases is needed for this direction."
+    }
+  },
+  "classification": "not-faithful-weaker",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "missing-differential-conclusion",
+      "source_evidence": "Printed page 3 states that equation (1.7) follows from system (1.5) through differentiation and elimination, then separately classifies it as hyperbolic.",
+      "translation_evidence": "The complete translated proposition asserts only discriminant positivity for a coefficient record.",
+      "impact": "The translation captures the classification component but omits the source contract's differential implication. It is weaker than the combined selected result."
+    },
+    {
+      "severity": "minor",
+      "category": "unresolved-material-domain",
+      "source_evidence": "Printed page 2 identifies K and rho physically and defines c, without explicit inequalities; printed page 3 supplies no degenerate case split.",
+      "translation_evidence": "Both K and rho must be strictly positive.",
+      "impact": "Adjudication must determine whether these inequalities exactly express inherited physical assumptions or specialize an incompletely specified source domain."
+    }
+  ],
+  "rationale": "Inspection of the attached source pages supports a correct algebraic representation of the hyperbolicity component on positive material parameters. The supplied source contract also includes the derivation of the pressure equation from the acoustic system, which the complete blind translation does not express. The resulting judgment is weaker relative to that combined claim. Adjudication is requested for the unstated material-parameter domain and to resolve whether the audit's intended selection includes the derivation, as the source contract states, or only the classification sentence."
+}
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 24.
+
+Attached primary source rendering: raw PDF page 25.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.
