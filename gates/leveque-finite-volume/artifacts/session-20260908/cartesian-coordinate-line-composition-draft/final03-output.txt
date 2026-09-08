@@ -1,0 +1,420 @@
+NumStability.TensorLinesDraft.TensorGrid.cellVolume_pos.{u_1} {D : Type u_1} [Fintype D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  0 < grid.cellVolume cell
+'NumStability.TensorLinesDraft.TensorGrid.cellVolume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.TensorGrid.cellVolume_eq_width_mul_area.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  grid.cellVolume cell = (grid.axis d).cellVolume (cell d) * grid.faceArea d cell
+'NumStability.TensorLinesDraft.TensorGrid.cellVolume_eq_width_mul_area' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.TensorGrid.cellBox_volume.{u_1} {D : Type u_1} [Fintype D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  (volume (grid.cellBox cell)).toReal = grid.cellVolume cell
+'NumStability.TensorLinesDraft.TensorGrid.cellBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.TensorGrid.reference_spec.{u_1} {D : Type u_1} [Fintype D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (field : (D → ℝ) → Fin m → ℝ)
+  (cell : NumStability.TensorLinesDraft.Cell D) (hint : IntegrableOn field (grid.cellBox cell) volume) :
+  NumStability.IsCellVolumeAverage volume (grid.cellBox cell) field (grid.reference field cell)
+'NumStability.TensorLinesDraft.TensorGrid.reference_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.line_at_base.{u_1, u_2} {D : Type u_1} [DecidableEq D] {E : Type u_2} (d : D)
+  (base : NumStability.TensorLinesDraft.Cell D) (state : NumStability.TensorLinesDraft.Cell D → E) :
+  NumStability.TensorLinesDraft.line d base state (base d) = state base
+'NumStability.TensorLinesDraft.line_at_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.line_update_base.{u_1, u_2} {D : Type u_1} [DecidableEq D] {E : Type u_2} (d : D)
+  (base : NumStability.TensorLinesDraft.Cell D) (state : NumStability.TensorLinesDraft.Cell D → E) (j : ℤ) :
+  NumStability.TensorLinesDraft.line d (Function.update base d j) state =
+    NumStability.TensorLinesDraft.line d base state
+'NumStability.TensorLinesDraft.line_update_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.faceFlux_physical_trace {m : ℕ}
+  (solver : NumStability.TensorLinesDraft.LineSolver m) (old : ℤ → Fin m → ℝ) (j : ℤ) :
+  solver.faceFlux old j =
+    solver.law.physicalFlux
+      ((solver.method.solve (NumStability.adjacentCellRiemannProblem solver.law old j) ⋯).solution 0 1)
+'NumStability.TensorLinesDraft.LineSolver.faceFlux_physical_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.face_problem_solves {m : ℕ}
+  (solver : NumStability.TensorLinesDraft.LineSolver m) (old : ℤ → Fin m → ℝ) (j : ℤ) :
+  NumStability.IsRiemannData
+      (fun x => (solver.method.solve (NumStability.adjacentCellRiemannProblem solver.law old j) ⋯).solution x 0)
+      (old (j - 1)) (old j) ∧
+    NumStability.IsRectangleConservationLawSolution
+      (solver.method.solve (NumStability.adjacentCellRiemannProblem solver.law old j) ⋯).solution
+      solver.law.physicalFlux
+'NumStability.TensorLinesDraft.LineSolver.face_problem_solves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.faceFlux_constant {m : ℕ} (solver : NumStability.TensorLinesDraft.LineSolver m)
+  (value : Fin m → ℝ) (j : ℤ) : solver.faceFlux (fun x => value) j = solver.law.physicalFlux value
+'NumStability.TensorLinesDraft.LineSolver.faceFlux_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.advance_constant {m : ℕ} (solver : NumStability.TensorLinesDraft.LineSolver m)
+  (grid : NumStability.OneDimensionalFiniteVolumeGrid) (dt : ℝ) (value : Fin m → ℝ) :
+  (solver.advance grid dt fun x => value) = fun x => value
+'NumStability.TensorLinesDraft.LineSolver.advance_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.linear_faceFlux_eq_rule {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p) (old : ℤ → Fin m → ℝ) (s t : ℝ) (j : ℤ) :
+  (NumStability.TensorLinesDraft.LineSolver.linear A hA basis speeds heigen).faceFlux old j =
+    NumStability.FVFluxEstimateDraft.linearRule A hA basis speeds heigen s t old j
+'NumStability.TensorLinesDraft.LineSolver.linear_faceFlux_eq_rule' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.LineSolver.linear_faceFlux_eq_solver_average {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
+  (heigen : ∀ (p : Fin m), A.mulVec (basis p) = speeds p • basis p) (old : ℤ → Fin m → ℝ) {dt : ℝ} (hdt : 0 < dt)
+  (j : ℤ) :
+  (NumStability.TensorLinesDraft.LineSolver.linear A hA basis speeds heigen).faceFlux old j =
+    NumStability.oneDimensionalCellAverage
+      (fun τ =>
+        A.mulVec
+          ((NumStability.FVFluxEstimateDraft.selectedLinearSolve A hA basis speeds heigen
+                (NumStability.adjacentCellRiemannProblem (NumStability.linearHyperbolicConservationLaw A hA) old
+                  j)).solution
+            0 τ))
+      0 dt
+'NumStability.TensorLinesDraft.LineSolver.linear_faceFlux_eq_solver_average' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.line_advanceDirection.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (base : NumStability.TensorLinesDraft.Cell D) :
+  NumStability.TensorLinesDraft.line d base (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state) =
+    (solvers d).advance (grid.axis d) dt (NumStability.TensorLinesDraft.line d base state)
+'NumStability.TensorLinesDraft.line_advanceDirection' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.advanceDirection_line_local.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state other : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ)
+  (base : NumStability.TensorLinesDraft.Cell D)
+  (hline : NumStability.TensorLinesDraft.line d base state = NumStability.TensorLinesDraft.line d base other) :
+  NumStability.TensorLinesDraft.line d base (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state) =
+    NumStability.TensorLinesDraft.line d base (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt other)
+'NumStability.TensorLinesDraft.advanceDirection_line_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.advanceDirection_constant_line.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (base : NumStability.TensorLinesDraft.Cell D)
+  (value : Fin m → ℝ) (hline : NumStability.TensorLinesDraft.line d base state = fun x => value) :
+  NumStability.TensorLinesDraft.line d base (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state) =
+    fun x => value
+'NumStability.TensorLinesDraft.advanceDirection_constant_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.advanceDirection_preserves_constants.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (value : Fin m → ℝ) :
+  (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt fun x => value) = fun x => value
+'NumStability.TensorLinesDraft.advanceDirection_preserves_constants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.advanceDirection_mass_balance.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  (grid.axis d).cellVolume (cell d) • NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state cell =
+    (grid.axis d).cellVolume (cell d) • state cell -
+      dt •
+        ((solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d + 1) -
+          (solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d))
+'NumStability.TensorLinesDraft.advanceDirection_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.advanceDirection_full_volume_balance.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d : D) (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ)
+  (cell : NumStability.TensorLinesDraft.Cell D) :
+  grid.cellVolume cell • NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state cell =
+    grid.cellVolume cell • state cell -
+      dt •
+        grid.faceArea d cell •
+          ((solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d + 1) -
+            (solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d))
+'NumStability.TensorLinesDraft.advanceDirection_full_volume_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.scheduled_directions.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (dt : ℝ) :
+  List.map (fun step => step.direction) (NumStability.TensorLinesDraft.schedule grid solvers dt) =
+    grid.directions.directions
+'NumStability.TensorLinesDraft.scheduled_directions' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.scheduled_step_is_line_update.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (dt : ℝ) (step : NumStability.CoordinateFractionalStep D (NumStability.TensorLinesDraft.Cell D) (Fin m → ℝ))
+  (hstep : step ∈ NumStability.TensorLinesDraft.schedule grid solvers dt)
+  (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  step.advance state = NumStability.TensorLinesDraft.advanceDirection grid solvers step.direction dt state
+'NumStability.TensorLinesDraft.scheduled_step_is_line_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.scheduled_sweep_executes.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.CoordinateSweepExecution (NumStability.TensorLinesDraft.schedule grid solvers dt) state
+      (NumStability.coordinateFractionalSweep (NumStability.TensorLinesDraft.schedule grid solvers dt) state)
+      (NumStability.coordinateFractionalTrace (NumStability.TensorLinesDraft.schedule grid solvers dt) state) ∧
+    ∀ step ∈ NumStability.TensorLinesDraft.schedule grid solvers dt,
+      ∀ (current : NumStability.FiniteVolumeCellState (NumStability.TensorLinesDraft.Cell D) (Fin m → ℝ))
+        (base : NumStability.TensorLinesDraft.Cell D),
+        NumStability.TensorLinesDraft.line step.direction base (step.advance current) =
+          (solvers step.direction).advance (grid.axis step.direction) dt
+            (NumStability.TensorLinesDraft.line step.direction base current)
+'NumStability.TensorLinesDraft.scheduled_sweep_executes' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.two_direction_composition.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d e : D) (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.orderedOperatorSweep
+      [NumStability.TensorLinesDraft.advanceDirection grid solvers d dt,
+        NumStability.TensorLinesDraft.advanceDirection grid solvers e dt]
+      state =
+    NumStability.TensorLinesDraft.advanceDirection grid solvers e dt
+      (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state)
+'NumStability.TensorLinesDraft.two_direction_composition' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.TensorLinesDraft.Witness.broadcast_is_not_directional_update
+  (grid : NumStability.TensorLinesDraft.TensorGrid (Fin 2))
+  (solvers : Fin 2 → NumStability.TensorLinesDraft.LineSolver 1) (dt : ℝ) :
+  NumStability.TensorLinesDraft.advanceDirection grid solvers 0 dt NumStability.TensorLinesDraft.Witness.stripeState ≠
+    NumStability.TensorLinesDraft.Witness.broadcastOrigin NumStability.TensorLinesDraft.Witness.stripeState
+'NumStability.TensorLinesDraft.Witness.broadcast_is_not_directional_update' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.TensorLinesDraft.Witness.concrete_nonvacuity :
+  Nonempty (NumStability.TensorLinesDraft.LineSolver 1) ∧
+    NumStability.TensorLinesDraft.advanceDirection NumStability.TensorLinesDraft.Witness.tensorGrid
+          (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 0 1
+          NumStability.TensorLinesDraft.Witness.stripeState ≠
+        NumStability.TensorLinesDraft.Witness.broadcastOrigin NumStability.TensorLinesDraft.Witness.stripeState ∧
+      NumStability.CoordinateSweepExecution
+        (NumStability.TensorLinesDraft.schedule NumStability.TensorLinesDraft.Witness.tensorGrid
+          (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 1)
+        NumStability.TensorLinesDraft.Witness.stripeState
+        (NumStability.coordinateFractionalSweep
+          (NumStability.TensorLinesDraft.schedule NumStability.TensorLinesDraft.Witness.tensorGrid
+            (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 1)
+          NumStability.TensorLinesDraft.Witness.stripeState)
+        (NumStability.coordinateFractionalTrace
+          (NumStability.TensorLinesDraft.schedule NumStability.TensorLinesDraft.Witness.tensorGrid
+            (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 1)
+          NumStability.TensorLinesDraft.Witness.stripeState)
+'NumStability.TensorLinesDraft.Witness.concrete_nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.faceArea_update.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) (j : ℤ) :
+  grid.faceArea d (Function.update cell d j) = grid.faceArea d cell
+'NumStability.CartesianLineCompositionDraft.faceArea_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.tangentialFaceBox.{u_1} {D : Type u_1}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  Set ({ e // e ≠ d } → ℝ)
+'NumStability.CartesianLineCompositionDraft.tangentialFaceBox' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.tangentialFaceBox_volume.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  (volume (NumStability.CartesianLineCompositionDraft.tangentialFaceBox grid d cell)).toReal = grid.faceArea d cell
+'NumStability.CartesianLineCompositionDraft.tangentialFaceBox_volume' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.tangentialFaceBox_update.{u_1} {D : Type u_1} [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) (j : ℤ) :
+  NumStability.CartesianLineCompositionDraft.tangentialFaceBox grid d (Function.update cell d j) =
+    NumStability.CartesianLineCompositionDraft.tangentialFaceBox grid d cell
+'NumStability.CartesianLineCompositionDraft.tangentialFaceBox_update' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.facePoint.{u_1} {D : Type u_1} [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D)
+  (point : { e // e ≠ d } → ℝ) : D → ℝ
+'NumStability.CartesianLineCompositionDraft.facePoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.facePoint_normal.{u_1} {D : Type u_1} [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D)
+  (point : { e // e ≠ d } → ℝ) :
+  NumStability.CartesianLineCompositionDraft.facePoint grid d cell point d = (grid.axis d).cellLeft (cell d)
+'NumStability.CartesianLineCompositionDraft.facePoint_normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.facePoint_transverse.{u_1} {D : Type u_1} [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D)
+  (point : { e // e ≠ d } → ℝ) (e : D) (h : e ≠ d) :
+  NumStability.CartesianLineCompositionDraft.facePoint grid d cell point e = point ⟨e, h⟩
+'NumStability.CartesianLineCompositionDraft.facePoint_transverse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.shared_face_position.{u_1} {D : Type u_1} [DecidableEq D]
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (d : D) (cell : NumStability.TensorLinesDraft.Cell D) :
+  (grid.axis d).cellRight (cell d) = (grid.axis d).cellLeft (Function.update cell d (cell d + 1) d)
+'NumStability.CartesianLineCompositionDraft.shared_face_position' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.coordinate_normal_flux.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D) (value : Fin m → ℝ) :
+  ∑ e, (if e = d then 1 else 0) • (solvers e).law.physicalFlux value = (solvers d).law.physicalFlux value
+'NumStability.CartesianLineCompositionDraft.coordinate_normal_flux' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.cartesianRule.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (rightCell : NumStability.TensorLinesDraft.Cell D) (_dt : ℝ) (old : ℤ → Fin m → ℝ) : Fin m → ℝ
+'NumStability.CartesianLineCompositionDraft.cartesianRule' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.normalFaceFlux_eq.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  NumStability.CoordinateLineBalance.normalFaceFlux
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell =
+    grid.faceArea d cell • (solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d)
+'NumStability.CartesianLineCompositionDraft.normalFaceFlux_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.normalFaceFlux_physical_trace.{u_1} {D : Type u_1} [Fintype D]
+  [DecidableEq D] {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D)
+  (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D) (dt : ℝ)
+  (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  NumStability.CoordinateLineBalance.normalFaceFlux
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell =
+    (volume (NumStability.CartesianLineCompositionDraft.tangentialFaceBox grid d cell)).toReal •
+      (solvers d).law.physicalFlux
+        (((solvers d).method.solve
+              (NumStability.adjacentCellRiemannProblem (solvers d).law (NumStability.TensorLinesDraft.line d cell state)
+                (cell d))
+              ⋯).solution
+          0 1)
+'NumStability.CartesianLineCompositionDraft.normalFaceFlux_physical_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.selected_face_problem.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  have result :=
+    (solvers d).method.solve
+      (NumStability.adjacentCellRiemannProblem (solvers d).law (NumStability.TensorLinesDraft.line d cell state)
+        (cell d))
+      ⋯;
+  NumStability.IsRiemannData (fun x => result.solution x 0) (state (Function.update cell d (cell d - 1))) (state cell) ∧
+    NumStability.IsRectangleConservationLawSolution result.solution (solvers d).law.physicalFlux
+'NumStability.CartesianLineCompositionDraft.selected_face_problem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.netOutwardFlux_eq.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  NumStability.CoordinateLineBalance.netOutwardFlux
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell =
+    grid.faceArea d cell •
+      ((solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d + 1) -
+        (solvers d).faceFlux (NumStability.TensorLinesDraft.line d cell state) (cell d))
+'NumStability.CartesianLineCompositionDraft.netOutwardFlux_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.advance_eq_advanceDirection.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d : D) (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.CoordinateLineBalance.advance grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state =
+    NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state
+'NumStability.CartesianLineCompositionDraft.advance_eq_advanceDirection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.measured_cell_update.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (cell : NumStability.TensorLinesDraft.Cell D) :
+  (volume (grid.cellBox cell)).toReal •
+      NumStability.CoordinateLineBalance.advance grid.cellVolume
+        (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell =
+    (volume (grid.cellBox cell)).toReal • state cell -
+      dt •
+        NumStability.CoordinateLineBalance.netOutwardFlux
+          (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell
+'NumStability.CartesianLineCompositionDraft.measured_cell_update' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.line_advance.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) (base : NumStability.TensorLinesDraft.Cell D) :
+  NumStability.TensorLinesDraft.line d base
+      (NumStability.CoordinateLineBalance.advance grid.cellVolume
+        (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state) =
+    (solvers d).advance (grid.axis d) dt (NumStability.TensorLinesDraft.line d base state)
+'NumStability.CartesianLineCompositionDraft.line_advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianLineCompositionDraft.strict_line_locality.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m) (d : D)
+  (dt : ℝ) (state other : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ)
+  (base : NumStability.TensorLinesDraft.Cell D)
+  (h : NumStability.TensorLinesDraft.line d base state = NumStability.TensorLinesDraft.line d base other) :
+  NumStability.TensorLinesDraft.line d base
+      (NumStability.CoordinateLineBalance.advance grid.cellVolume
+        (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state) =
+    NumStability.TensorLinesDraft.line d base
+      (NumStability.CoordinateLineBalance.advance grid.cellVolume
+        (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt other)
+'NumStability.CartesianLineCompositionDraft.strict_line_locality' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.sweep_eq_tensor_operations.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (stages : List (D × ℝ)) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.CoordinateLineBalance.sweep grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) stages state =
+    NumStability.orderedOperatorSweep
+      (List.map (fun stage => NumStability.TensorLinesDraft.advanceDirection grid solvers stage.1 stage.2) stages) state
+'NumStability.CartesianLineCompositionDraft.sweep_eq_tensor_operations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.sweep_cons_actual_state.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d : D) (dt : ℝ) (stages : List (D × ℝ)) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.CoordinateLineBalance.sweep grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) ((d, dt) :: stages) state =
+    NumStability.CoordinateLineBalance.sweep grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) stages
+      (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state)
+'NumStability.CartesianLineCompositionDraft.sweep_cons_actual_state' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.sweep_two_actual_states.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d e : D) (dt ds : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  NumStability.CoordinateLineBalance.sweep grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) [(d, dt), (e, ds)] state =
+    NumStability.TensorLinesDraft.advanceDirection grid solvers e ds
+      (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state)
+'NumStability.CartesianLineCompositionDraft.sweep_two_actual_states' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.sweep_two_measured_mass.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (d e : D) (dt ds : ℝ) (state : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ)
+  (cell : NumStability.TensorLinesDraft.Cell D) :
+  (volume (grid.cellBox cell)).toReal •
+      NumStability.CoordinateLineBalance.sweep grid.cellVolume
+        (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) [(d, dt), (e, ds)] state cell =
+    (volume (grid.cellBox cell)).toReal • state cell -
+        dt •
+          NumStability.CoordinateLineBalance.netOutwardFlux
+            (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) d dt state cell -
+      ds •
+        NumStability.CoordinateLineBalance.netOutwardFlux
+          (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) e ds
+          (NumStability.TensorLinesDraft.advanceDirection grid solvers d dt state) cell
+'NumStability.CartesianLineCompositionDraft.sweep_two_measured_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.scheduled_step_eq_canonical.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  {m : ℕ} (grid : NumStability.TensorLinesDraft.TensorGrid D) (solvers : D → NumStability.TensorLinesDraft.LineSolver m)
+  (dt : ℝ) (step : NumStability.CoordinateFractionalStep D (NumStability.TensorLinesDraft.Cell D) (Fin m → ℝ))
+  (hstep : step ∈ NumStability.TensorLinesDraft.schedule grid solvers dt)
+  (current : NumStability.TensorLinesDraft.Cell D → Fin m → ℝ) :
+  step.advance current =
+    NumStability.CoordinateLineBalance.advance grid.cellVolume
+      (NumStability.CartesianLineCompositionDraft.cartesianRule grid solvers) step.direction dt current
+'NumStability.CartesianLineCompositionDraft.scheduled_step_eq_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianLineCompositionDraft.concrete_nonvacuity :
+  Nonempty (NumStability.TensorLinesDraft.LineSolver 1) ∧
+    NumStability.CoordinateLineBalance.advance NumStability.TensorLinesDraft.Witness.tensorGrid.cellVolume
+          (NumStability.CartesianLineCompositionDraft.cartesianRule NumStability.TensorLinesDraft.Witness.tensorGrid
+            fun x => NumStability.TensorLinesDraft.Witness.identitySolver)
+          0 1 NumStability.TensorLinesDraft.Witness.stripeState ≠
+        NumStability.TensorLinesDraft.Witness.broadcastOrigin NumStability.TensorLinesDraft.Witness.stripeState ∧
+      NumStability.CoordinateLineBalance.sweep NumStability.TensorLinesDraft.Witness.tensorGrid.cellVolume
+          (NumStability.CartesianLineCompositionDraft.cartesianRule NumStability.TensorLinesDraft.Witness.tensorGrid
+            fun x => NumStability.TensorLinesDraft.Witness.identitySolver)
+          [(0, 1), (1, 1)] NumStability.TensorLinesDraft.Witness.stripeState =
+        NumStability.TensorLinesDraft.advanceDirection NumStability.TensorLinesDraft.Witness.tensorGrid
+          (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 1 1
+          (NumStability.TensorLinesDraft.advanceDirection NumStability.TensorLinesDraft.Witness.tensorGrid
+            (fun x => NumStability.TensorLinesDraft.Witness.identitySolver) 0 1
+            NumStability.TensorLinesDraft.Witness.stripeState)
+'NumStability.CartesianLineCompositionDraft.concrete_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

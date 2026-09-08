@@ -1,0 +1,78 @@
+/-!
+# A literal finite-vector instance of the prospective density capstone
+
+The field and production take values in `Fin 1 → ℝ`, exactly the `m = 0`
+instance of the frozen positive-dimensional target. A signed real rate permits
+both production and depletion. This construction adopts no source convention.
+-/
+
+namespace NumStability.DensityCapstoneVectorWitness
+
+def unitState : Fin 1 → ℝ := fun _ => 1
+
+noncomputable def profile : ℝ → Fin 1 → ℝ := riemannData 0 0 unitState
+
+noncomputable def state (rate : ℝ) (x t : ℝ) : Fin 1 → ℝ :=
+  (rate * t) • profile x
+
+noncomputable def production (rate : ℝ) (x _t : ℝ) : Fin 1 → ℝ :=
+  rate • profile x
+
+theorem profile_eq_scalar_smul (x : ℝ) :
+    profile x = riemannData (0 : ℝ) 0 1 x • unitState := by
+  unfold profile riemannData
+  split_ifs <;> simp
+
+/-- The existing generic producer proves all four integrability conditions and
+the actual rectangle balance for these explicit finite-vector fields. -/
+theorem balance (rate : ℝ) :
+    IsRectangleBalanceLawSolution (state rate) (fun _ => 0) (production rate) :=
+  linearAmplitude_isRectangleBalanceLawSolution profile
+    (riemannData_intervalIntegrable 0 0 unitState) rate
+
+/-- The ordinary source integral on `[1,2] × [1,2]` keeps the supplied sign. -/
+theorem source_integral (rate : ℝ) :
+    (∫ _τ in (1 : ℝ)..2, ∫ x in (1 : ℝ)..2, production rate x _τ) =
+      rate • unitState := by
+  simp only [production, profile_eq_scalar_smul, smul_smul,
+    intervalIntegral.integral_smul_const, riemannStep_signed_source_integral]
+
+/-- This is the full frozen target at `m = 0`, with its actual premise supplied.
+It retains both equivalences, all rectangles and the fixed-interval a.e. rate. -/
+theorem capstone_instance (rate : ℝ) :
+    IsRectangleBalanceLawSolution (state rate) (fun _ => 0) (production rate) ∧
+    (∀ a b s t,
+      (∫ τ in s..t, ∫ x in a..b, production rate x τ) =
+        ((∫ x in a..b, state rate x t) - (∫ x in a..b, state rate x s)) -
+          (∫ _τ in s..t, (0 : Fin 1 → ℝ) - 0)) ∧
+    (IsRectangleConservationLawSolution (state rate) (fun _ => 0) ↔
+      ∀ a b s t, (∫ τ in s..t, ∫ x in a..b, production rate x τ) = 0) ∧
+    (¬ IsRectangleConservationLawSolution (state rate) (fun _ => 0) ↔
+      ∃ a b s t, (∫ τ in s..t, ∫ x in a..b, production rate x τ) ≠ 0) ∧
+    (∀ a b, ∀ᵐ t,
+      HasDerivAt (fun s => ∫ x in a..b, state rate x s)
+        ((0 : Fin 1 → ℝ) - 0 + ∫ x in a..b, production rate x t) t) :=
+  ProspectiveSourceAlternatives.density_rectangle_capstone (m := 0) (balance rate)
+
+/-- Nonconservation follows from the target's actual conclusion and the
+computed nonzero source integral, not an assumed adequacy or existence claim. -/
+theorem nonconservation (rate : ℝ) (hrate : rate ≠ 0) :
+    ¬ IsRectangleConservationLawSolution (state rate) (fun _ => 0) := by
+  apply (capstone_instance rate).2.2.2.1.mpr
+  refine ⟨1, 2, 1, 2, ?_⟩
+  rw [source_integral]
+  intro heq
+  apply hrate
+  simpa [unitState] using congrFun heq (0 : Fin 1)
+
+/-- Actual positive and negative instances have opposite unit-rectangle source
+contributions, and each fails the homogeneous conservation predicate. -/
+theorem positive_and_negative_instances :
+    ¬ IsRectangleConservationLawSolution (state 1) (fun _ => 0) ∧
+    ¬ IsRectangleConservationLawSolution (state (-1)) (fun _ => 0) ∧
+    ((∫ τ in (1 : ℝ)..2, ∫ x in (1 : ℝ)..2, production 1 x τ) (0 : Fin 1)) = 1 ∧
+    ((∫ τ in (1 : ℝ)..2, ∫ x in (1 : ℝ)..2, production (-1) x τ) (0 : Fin 1)) = -1 := by
+  refine ⟨nonconservation 1 (by norm_num), nonconservation (-1) (by norm_num), ?_, ?_⟩ <;>
+    simp [source_integral, unitState]
+
+end NumStability.DensityCapstoneVectorWitness
