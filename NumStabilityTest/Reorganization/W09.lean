@@ -1,3 +1,4 @@
+import NumStabilityTest.Reorganization.R09.OldOnly.NumStability_Algorithms_TestMatrices_Higham28OrthogonalCoordinates
 import NumStabilityTest.Reorganization.W09.Canonical.Analysis.TestMatrices.Cauchy.Basic
 import NumStabilityTest.Reorganization.W09.Canonical.Analysis.TestMatrices.Cauchy.Cauchy
 import NumStabilityTest.Reorganization.W09.Canonical.Analysis.TestMatrices.Cauchy.Contracts
@@ -116,7 +117,6 @@ import NumStabilityTest.Reorganization.W09.Focused.MixedHigham28Contracts
 import NumStabilityTest.Reorganization.W09.Focused.MixedHigham28Exact
 import NumStabilityTest.Reorganization.W09.Focused.RetainedPrivateClosure
 import NumStabilityTest.Reorganization.W09.Focused.ReusableTestMatrixTier
-import NumStabilityTest.Reorganization.W09.Focused.W10ProtectedSurface
 import NumStabilityTest.Reorganization.W09.OldPath.Higham28
 import NumStabilityTest.Reorganization.W09.OldPath.Higham28Asymptotics
 import NumStabilityTest.Reorganization.W09.OldPath.Higham28Cauchy

@@ -1,5 +1,11 @@
 # Architecture baseline tooling
 
+Four completed migration entrypoints were retired from this directory on
+2026-09-09. Their exact historical source, original paths, input pins and
+replay limitations are preserved in the
+[retired-tool archive](../../docs/architecture/retired-tools/2026-09-09/README.md).
+Use the active checkers below for current validation.
+
 This directory contains the reproducible measurements used during the
 book-formalization migration. The generator has two layers:
 

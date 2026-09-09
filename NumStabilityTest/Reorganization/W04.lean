@@ -1,3 +1,4 @@
+import NumStabilityTest.Reorganization.R03.Consumer.NumStability_Algorithms_Underdetermined_Higham21
 import NumStabilityTest.Reorganization.W04.Canonical.C001
 import NumStabilityTest.Reorganization.W04.Canonical.C002
 import NumStabilityTest.Reorganization.W04.Canonical.C003
@@ -93,7 +94,6 @@ import NumStabilityTest.Reorganization.W04.Focused.RetainedPrivateClosure
 import NumStabilityTest.Reorganization.W04.Focused.ReusableUnderdeterminedApi
 import NumStabilityTest.Reorganization.W04.Focused.SeminormalEquationsPipeline
 import NumStabilityTest.Reorganization.W04.Focused.SpecificationsAndSolvers
-import NumStabilityTest.Reorganization.W04.OldPath.O001
 import NumStabilityTest.Reorganization.W04.OldPath.O002
 import NumStabilityTest.Reorganization.W04.OldPath.O003
 import NumStabilityTest.Reorganization.W04.OldPath.O004

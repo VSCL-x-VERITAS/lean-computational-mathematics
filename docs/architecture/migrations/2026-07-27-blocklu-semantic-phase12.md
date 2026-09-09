@@ -935,7 +935,7 @@ Its reviewed import set also removes
 two former transitive names, that import is unnecessary and would create the
 source/SPD-closure cycle.
 
-`prepare_blocklu_phase12_source.py` now renders both complete shells from their
+[`prepare_blocklu_phase12_source.py`](../retired-tools/2026-09-09/prepare_blocklu_phase12_source.py) now renders both complete shells from their
 pinned git blobs under `collision-shells/`, while retaining the original
 source-ordered fragments as forensic output. A full replay against the current
 project reproduced `Equation25` byte-for-byte at 12,927 bytes with SHA-256
