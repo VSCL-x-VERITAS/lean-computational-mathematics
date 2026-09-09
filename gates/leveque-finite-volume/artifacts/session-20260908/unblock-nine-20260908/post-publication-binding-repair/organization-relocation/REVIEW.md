@@ -1,0 +1,11 @@
+# Constant-flux hyperbolicity: bounded organization placement
+
+Root explicitly authorized the three-source relocation and this two-file metadata/umbrella action at input commit `b8ccf0d8bd610b599b13708e8c8518771bcf71ab`. The source owner is `ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.ConstantFluxHyperbolicity`, classified by its source-independent mathematical role as reusable.
+
+The theorem `NumStability.constantFlux_isHyperbolicOn` retains its FQN, statement and proof. The old five declarations in `ConservationLaws.Hyperbolicity` return to their exact archived owner bytes. Root explicitly accepts the new direct-import requirement for the relocated additional theorem. A new historical `NumStability` forwarder would invent a legacy identity and is not required. The existing `Analysis` and its compatibility umbrella continue to expose the theorem through the new direct import.
+
+The new leaf has no matching tier prefix. Add one exact reusable entry and its complete review/introduction metadata; preserve all old rules and policy. `layout-exceptions.json` specifies `Analysis` as a complete aggregate for `ComputationalMathematics.Analysis.`. Insert its import between `BalanceLaw` and `Discontinuity`, preserving the existing casefold-sorted import sequence. No Lake, Chapter01, module-map, shim or layout-exception change is needed.
+
+The census uses the existing `project_roots.production_paths` filesystem producer so the newly created, unstaged leaf is included; it uses unchanged `check_tiers.resolve` and `check_tiers.validate` without invoking their Git-discovery wrapper or test suites. The old census must validate after excluding exactly the new leaf; the resulting complete census must validate after the one exact rule addition. No old prefix decision count is expected to change.
+
+The application writes only `ComputationalMathematics/Analysis.lean`, `docs/architecture/tiers.json`, and artifacts in this folder. It does not run Lean, audits, gate updates, organization measurement, or Git. Root owns native rebuilds, fresh global/organization evidence, current fingerprint transport, row binding and publication. Historical evidence is retained unchanged; this metadata placement makes no source-acceptance claim.

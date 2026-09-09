@@ -5,9 +5,7 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolicity
 import Mathlib.Analysis.Calculus.FDeriv.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Const
 import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.StdBasis
 
 /-!
 # Hyperbolicity of a flux derivative
@@ -81,18 +79,6 @@ theorem hyperbolicConservationLaw_isHyperbolicFluxAt {m : ℕ}
       law.fluxDerivative_eq_jacobian_mulVec state direction
   rw [hmatrix]
   exact law.jacobian_hyperbolic state
-
-
-/-- A constant flux has its actual zero derivative and a complete real
-standard eigenbasis; no strict separation of wave speeds is needed. -/
-theorem constantFlux_isHyperbolicOn {m : ℕ}
-    (constant : Fin m → ℝ) (states : Set (Fin m → ℝ)) :
-    IsHyperbolicFluxOn (fun _ : Fin m → ℝ => constant) states := by
-  intro state _
-  refine ⟨0, hasFDerivAt_const constant state, fun _ => 0, Pi.basisFun ℝ (Fin m), ?_⟩
-  intro p
-  simp [Matrix.col]
-  rfl
 
 
 end NumStability

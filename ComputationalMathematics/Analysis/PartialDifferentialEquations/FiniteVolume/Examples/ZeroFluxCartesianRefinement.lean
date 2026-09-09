@@ -2,7 +2,7 @@
 SPDX-License-Identifier: MIT
 -/
 
-import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Hyperbolicity
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.ConstantFluxHyperbolicity
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.RefiningCartesianBoundary
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalRefinementQuality
 
