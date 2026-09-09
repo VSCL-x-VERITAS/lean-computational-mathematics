@@ -1,0 +1,70 @@
+LocalRiemannWitness.law : LocalRiemannInformation.Law 1
+'LocalRiemannWitness.law' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.globalProblem (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law) :
+  HyperbolicRiemannProblem StationaryRiemannField.transportLaw
+'LocalRiemannWitness.globalProblem' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.Result (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law) : Type
+'LocalRiemannWitness.Result' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.nonconstantProblem : LocalRiemannInformation.Problem LocalRiemannWitness.law
+'LocalRiemannWitness.nonconstantProblem' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.longerProblem : LocalRiemannInformation.Problem LocalRiemannWitness.law
+'LocalRiemannWitness.longerProblem' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.proper_states :
+  0 ∈ LocalRiemannWitness.law.states ∧ 1 ∈ LocalRiemannWitness.law.states ∧ 2 ∉ LocalRiemannWitness.law.states
+'LocalRiemannWitness.proper_states' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.reference (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law) :
+  LocalRiemannInformation.Reference problem
+'LocalRiemannWitness.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.reference_mean (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law) :
+  (LocalRiemannWitness.reference problem).meanFlux = problem.left
+'LocalRiemannWitness.reference_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.method (θ : ℝ) :
+  LocalRiemannInformation.Method LocalRiemannWitness.law LocalRiemannWitness.Result ((Fin 1 → ℝ) × (Fin 1 → ℝ))
+'LocalRiemannWitness.method' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.selected_values (θ : ℝ) (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law)
+  (h : (LocalRiemannWitness.method θ).domain problem) :
+  (LocalRiemannWitness.method θ).extract ((LocalRiemannWitness.method θ).solve problem h) =
+    (problem.left, problem.right)
+'LocalRiemannWitness.selected_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.selected_flux (θ : ℝ) (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law)
+  (h : (LocalRiemannWitness.method θ).domain problem) :
+  (LocalRiemannWitness.method θ).flux problem h = problem.left + θ • (problem.right - problem.left)
+'LocalRiemannWitness.selected_flux' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.actual_error (θ : ℝ) (problem : LocalRiemannInformation.Problem LocalRiemannWitness.law)
+  (h : (LocalRiemannWitness.method θ).domain problem) :
+  ‖(LocalRiemannWitness.method θ).flux problem h - (LocalRiemannWitness.reference problem).meanFlux‖ =
+    (LocalRiemannWitness.method θ).errorBound problem
+'LocalRiemannWitness.actual_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.nonconstant_states :
+  LocalRiemannWitness.nonconstantProblem.left ≠ LocalRiemannWitness.nonconstantProblem.right
+'LocalRiemannWitness.nonconstant_states' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.exact_information_only :
+  (LocalRiemannWitness.method 0).domain LocalRiemannWitness.nonconstantProblem ∧
+    (LocalRiemannWitness.method 0).extract
+          ((LocalRiemannWitness.method 0).solve LocalRiemannWitness.nonconstantProblem ⋯) =
+        (0, 1) ∧
+      (LocalRiemannWitness.method 0).flux LocalRiemannWitness.nonconstantProblem ⋯ = 0 ∧
+        (LocalRiemannWitness.method 0).errorBound LocalRiemannWitness.nonconstantProblem = 0 ∧
+          ‖(LocalRiemannWitness.method 0).flux LocalRiemannWitness.nonconstantProblem ⋯ -
+                (LocalRiemannWitness.reference LocalRiemannWitness.nonconstantProblem).meanFlux‖ =
+            0
+'LocalRiemannWitness.exact_information_only' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.approximate_information_only :
+  (LocalRiemannWitness.method (1 / 2)).domain LocalRiemannWitness.nonconstantProblem ∧
+    (LocalRiemannWitness.method (1 / 2)).extract
+          ((LocalRiemannWitness.method (1 / 2)).solve LocalRiemannWitness.nonconstantProblem ⋯) =
+        (0, 1) ∧
+      ((LocalRiemannWitness.method (1 / 2)).flux LocalRiemannWitness.nonconstantProblem ⋯ = fun x => 1 / 2) ∧
+        (LocalRiemannWitness.method (1 / 2)).errorBound LocalRiemannWitness.nonconstantProblem = 1 / 2 ∧
+          ‖(LocalRiemannWitness.method (1 / 2)).flux LocalRiemannWitness.nonconstantProblem ⋯ -
+                (LocalRiemannWitness.reference LocalRiemannWitness.nonconstantProblem).meanFlux‖ =
+            1 / 2
+'LocalRiemannWitness.approximate_information_only' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.approximate_is_nonexact :
+  (LocalRiemannWitness.method (1 / 2)).flux LocalRiemannWitness.nonconstantProblem ⋯ ≠
+    (LocalRiemannWitness.reference LocalRiemannWitness.nonconstantProblem).meanFlux
+'LocalRiemannWitness.approximate_is_nonexact' depends on axioms: [propext, Classical.choice, Quot.sound]
+LocalRiemannWitness.proper_method_domain (θ : ℝ) :
+  (LocalRiemannWitness.method θ).domain LocalRiemannWitness.nonconstantProblem ∧
+    ¬(LocalRiemannWitness.method θ).domain LocalRiemannWitness.longerProblem
+'LocalRiemannWitness.proper_method_domain' depends on axioms: [propext, Classical.choice, Quot.sound]

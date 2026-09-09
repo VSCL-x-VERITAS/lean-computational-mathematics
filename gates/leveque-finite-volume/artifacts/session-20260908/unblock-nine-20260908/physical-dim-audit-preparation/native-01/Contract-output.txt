@@ -1,0 +1,688 @@
+structure NumStability.PhysicalRefinementQuality.Family.{u_3, u_4} (D : Type u_3) (FacePoint : Type u_4) [Fintype D]
+  [MeasurableSpace FacePoint] (m : ℕ) : Type (max (max 1 u_3) u_4)
+number of parameters: 5
+fields:
+  NumStability.PhysicalRefinementQuality.Family.Cell : ℕ → Type
+  NumStability.PhysicalRefinementQuality.Family.Face : ℕ → Type
+  NumStability.PhysicalRefinementQuality.Family.Line : ℕ → Type
+  NumStability.PhysicalRefinementQuality.Family.finiteCell : (n : ℕ) → Fintype (self.Cell n)
+  NumStability.PhysicalRefinementQuality.Family.data : (n : ℕ) →
+      NumStability.FiniteCoordinate.PhysicalData D (self.Cell n) (self.Face n) (D → ℝ) FacePoint m
+  NumStability.PhysicalRefinementQuality.Family.coordinates : (n : ℕ) →
+      NumStability.FiniteCoordinate.LineCoordinates D (self.Cell n) (self.Face n) (self.Line n)
+  NumStability.PhysicalRefinementQuality.Family.method : (n : ℕ) →
+      NumStability.CapacityCoordinate.Method (self.data n) (self.coordinates n)
+  NumStability.PhysicalRefinementQuality.Family.measure : MeasureTheory.Measure (D → ℝ)
+  NumStability.PhysicalRefinementQuality.Family.measure_eq : ∀ (n : ℕ), (self.data n).measure = self.measure
+  NumStability.PhysicalRefinementQuality.Family.states : D → Set (Fin m → ℝ)
+  NumStability.PhysicalRefinementQuality.Family.states_nonempty : ∀ (d : D), (self.states d).Nonempty
+  NumStability.PhysicalRefinementQuality.Family.states_eq : ∀ (n : ℕ) (d : D),
+      (self.data n).admissibleStates d = self.states d
+  NumStability.PhysicalRefinementQuality.Family.physicalFlux : (D → ℝ) → (Fin m → ℝ) → D → Fin m → ℝ
+  NumStability.PhysicalRefinementQuality.Family.normal : (n : ℕ) → D → self.Face n → FacePoint → D → ℝ
+  NumStability.PhysicalRefinementQuality.Family.normal_flux_eq : ∀ (n : ℕ) (d : D) (face : self.Face n)
+      (point : FacePoint) (state : Fin m → ℝ),
+      (self.data n).normalFlux d face point state =
+        ∑ k, self.normal n d face point k • self.physicalFlux ((self.data n).facePoint d face point) state k
+  NumStability.PhysicalRefinementQuality.Family.region : Set (D → ℝ)
+  NumStability.PhysicalRefinementQuality.Family.target : Set (D → ℝ)
+  NumStability.PhysicalRefinementQuality.Family.target_interior_nonempty : (interior self.target).Nonempty
+  NumStability.PhysicalRefinementQuality.Family.target_inside : self.target ⊆ self.region
+  NumStability.PhysicalRefinementQuality.Family.active_inside : ∀ (n : ℕ) (cell : self.Cell n),
+      (self.data n).cells.cellRegion cell ⊆ self.region
+  NumStability.PhysicalRefinementQuality.Family.target_covered : ∀ (n : ℕ),
+      ∀ x ∈ self.target, ∃ cell, x ∈ (self.data n).cells.cellRegion cell
+  NumStability.PhysicalRefinementQuality.Family.bounded_cells : ∀ (n : ℕ) (cell : self.Cell n),
+      Bornology.IsBounded ((self.data n).cells.cellRegion cell)
+  NumStability.PhysicalRefinementQuality.Family.mesh : ℕ → ℝ
+  NumStability.PhysicalRefinementQuality.Family.mesh_actual : ∀ (n : ℕ), self.mesh n = (self.data n).cells.mesh
+  NumStability.PhysicalRefinementQuality.Family.mesh_pos : ∀ (n : ℕ), 0 < self.mesh n
+  NumStability.PhysicalRefinementQuality.Family.mesh_tendsto : Filter.Tendsto self.mesh Filter.atTop (nhds 0)
+  NumStability.PhysicalRefinementQuality.Family.horizon : ℝ
+  NumStability.PhysicalRefinementQuality.Family.horizon_pos : 0 < self.horizon
+  NumStability.PhysicalRefinementQuality.Family.boundaryRegion : (n : ℕ) → D → self.Line n → ℤ → Set (D → ℝ)
+  NumStability.PhysicalRefinementQuality.Family.boundary_measurable : ∀ (n : ℕ) (d : D) (line : self.Line n) (j : ℤ),
+      MeasurableSet (self.boundaryRegion n d line j)
+  NumStability.PhysicalRefinementQuality.Family.boundary_positive : ∀ (n : ℕ) (d : D) (line : self.Line n) (j : ℤ),
+      self.measure (self.boundaryRegion n d line j) ≠ 0
+  NumStability.PhysicalRefinementQuality.Family.boundary_finite : ∀ (n : ℕ) (d : D) (line : self.Line n) (j : ℤ),
+      self.measure (self.boundaryRegion n d line j) ≠ ⊤
+  NumStability.PhysicalRefinementQuality.Family.boundary_inside : ∀ (n : ℕ) (d : D) (line : self.Line n) (j : ℤ),
+      self.boundaryRegion n d line j ⊆ self.region
+constructor:
+  NumStability.PhysicalRefinementQuality.Family.mk.{u_3, u_4} {D : Type u_3} {FacePoint : Type u_4} [Fintype D]
+    [MeasurableSpace FacePoint] {m : ℕ} (Cell Face Line : ℕ → Type) (finiteCell : (n : ℕ) → Fintype (Cell n))
+    (data : (n : ℕ) → NumStability.FiniteCoordinate.PhysicalData D (Cell n) (Face n) (D → ℝ) FacePoint m)
+    (coordinates : (n : ℕ) → NumStability.FiniteCoordinate.LineCoordinates D (Cell n) (Face n) (Line n))
+    (method : (n : ℕ) → NumStability.CapacityCoordinate.Method (data n) (coordinates n))
+    (measure : MeasureTheory.Measure (D → ℝ)) (measure_eq : ∀ (n : ℕ), (data n).measure = measure)
+    (states : D → Set (Fin m → ℝ)) (states_nonempty : ∀ (d : D), (states d).Nonempty)
+    (states_eq : ∀ (n : ℕ) (d : D), (data n).admissibleStates d = states d)
+    (physicalFlux : (D → ℝ) → (Fin m → ℝ) → D → Fin m → ℝ) (normal : (n : ℕ) → D → Face n → FacePoint → D → ℝ)
+    (normal_flux_eq :
+      ∀ (n : ℕ) (d : D) (face : Face n) (point : FacePoint) (state : Fin m → ℝ),
+        (data n).normalFlux d face point state =
+          ∑ k, normal n d face point k • physicalFlux ((data n).facePoint d face point) state k)
+    (region target : Set (D → ℝ)) (target_interior_nonempty : (interior target).Nonempty)
+    (target_inside : target ⊆ region)
+    (active_inside : ∀ (n : ℕ) (cell : Cell n), (data n).cells.cellRegion cell ⊆ region)
+    (target_covered : ∀ (n : ℕ), ∀ x ∈ target, ∃ cell, x ∈ (data n).cells.cellRegion cell)
+    (bounded_cells : ∀ (n : ℕ) (cell : Cell n), Bornology.IsBounded ((data n).cells.cellRegion cell)) (mesh : ℕ → ℝ)
+    (mesh_actual : ∀ (n : ℕ), mesh n = (data n).cells.mesh) (mesh_pos : ∀ (n : ℕ), 0 < mesh n)
+    (mesh_tendsto : Filter.Tendsto mesh Filter.atTop (nhds 0)) (horizon : ℝ) (horizon_pos : 0 < horizon)
+    (boundaryRegion : (n : ℕ) → D → Line n → ℤ → Set (D → ℝ))
+    (boundary_measurable : ∀ (n : ℕ) (d : D) (line : Line n) (j : ℤ), MeasurableSet (boundaryRegion n d line j))
+    (boundary_positive : ∀ (n : ℕ) (d : D) (line : Line n) (j : ℤ), measure (boundaryRegion n d line j) ≠ 0)
+    (boundary_finite : ∀ (n : ℕ) (d : D) (line : Line n) (j : ℤ), measure (boundaryRegion n d line j) ≠ ⊤)
+    (boundary_inside : ∀ (n : ℕ) (d : D) (line : Line n) (j : ℤ), boundaryRegion n d line j ⊆ region) :
+    NumStability.PhysicalRefinementQuality.Family D FacePoint m
+'NumStability.PhysicalRefinementQuality.Family' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.PhysicalRefinementQuality.Family.referenceGhost.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (n : ℕ) → ((D → ℝ) → ℝ → Fin m → ℝ) → D → family.Line n → ℤ → Fin m → ℝ :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family n q d line j =>
+  NumStability.cellVolumeAverage family.measure (family.boundaryRegion n d line j) fun x => q x 0
+'NumStability.PhysicalRefinementQuality.Family.referenceGhost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def NumStability.PhysicalRefinementQuality.Family.projected.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (n : ℕ) → ((D → ℝ) → ℝ → Fin m → ℝ) → ℝ → family.Cell n → Fin m → ℝ :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family n q t cell => (family.data n).cellMean q cell t
+'NumStability.PhysicalRefinementQuality.Family.projected' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.PhysicalRefinementQuality.Family.SmoothReference.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} → NumStability.PhysicalRefinementQuality.Family D FacePoint m → D → ((D → ℝ) → ℝ → Fin m → ℝ) → Prop :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family d q =>
+  ContDiffOn ℝ (↑⊤) (Function.uncurry q) (closure family.region ×ˢ Set.Icc 0 family.horizon) ∧
+    (∀ (n : ℕ), (family.data n).ReferenceOn d q 0 family.horizon) ∧
+      ∀ (n : ℕ) (line : family.Line n) (j : ℤ),
+        MeasureTheory.IntegrableOn (fun x => q x 0) (family.boundaryRegion n d line j) family.measure
+'NumStability.PhysicalRefinementQuality.Family.SmoothReference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+structure NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.{u_1, u_2} {D : Type u_1}
+  {FacePoint : Type u_2} [Fintype D] [MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) (d : D) (q : (D → ℝ) → ℝ → Fin m → ℝ) (p : ℝ) :
+  Type
+number of parameters: 9
+fields:
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.constant : ℝ
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.constant_nonneg : 0 ≤ self.constant
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.threshold : ℕ
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.projection_available : ∀ (n : ℕ),
+      self.threshold ≤ n →
+        ∃ dt,
+          0 < dt ∧
+            dt ≤ family.horizon ∧
+              ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0)
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.bound : ∀ (n : ℕ),
+      self.threshold ≤ n →
+        ∀ (dt : ℝ),
+          0 < dt →
+            dt ≤ family.horizon →
+              ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0) →
+                ∀ (cell : family.Cell n),
+                  ‖NumStability.FiniteCoordinate.advance (family.data n)
+                          ((family.method n).withGhost (family.referenceGhost n q)).rule d dt (family.projected n q 0)
+                          cell -
+                        family.projected n q dt cell‖ ≤
+                    self.constant * dt * family.mesh n ^ p
+constructor:
+  NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.mk.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+    [Fintype D] [MeasurableSpace FacePoint] {m : ℕ}
+    {family : NumStability.PhysicalRefinementQuality.Family D FacePoint m} {d : D} {q : (D → ℝ) → ℝ → Fin m → ℝ} {p : ℝ}
+    (constant : ℝ) (constant_nonneg : 0 ≤ constant) (threshold : ℕ)
+    (projection_available :
+      ∀ (n : ℕ),
+        threshold ≤ n →
+          ∃ dt,
+            0 < dt ∧
+              dt ≤ family.horizon ∧
+                ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0))
+    (bound :
+      ∀ (n : ℕ),
+        threshold ≤ n →
+          ∀ (dt : ℝ),
+            0 < dt →
+              dt ≤ family.horizon →
+                ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0) →
+                  ∀ (cell : family.Cell n),
+                    ‖NumStability.FiniteCoordinate.advance (family.data n)
+                            ((family.method n).withGhost (family.referenceGhost n q)).rule d dt (family.projected n q 0)
+                            cell -
+                          family.projected n q dt cell‖ ≤
+                      constant * dt * family.mesh n ^ p) :
+    family.AccuracyCertificate d q p
+'NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def NumStability.PhysicalRefinementQuality.Family.variation.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (n : ℕ) → D → family.Line n → (D → family.Line n → ℤ → Fin m → ℝ) → (family.Cell n → Fin m → ℝ) → ℝ :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family n d line ghost current =>
+  (family.coordinates n).onceEdgeVariation d line ghost current
+'NumStability.PhysicalRefinementQuality.Family.variation' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} {D : Type u_1}
+  {FacePoint : Type u_2} [Fintype D] [MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) : Prop
+number of parameters: 6
+fields:
+  NumStability.PhysicalRefinementQuality.Family.HasHighResolution.input_available : ∀ (n : ℕ) (d : D)
+      (ghost : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ),
+      (∀ (cell : family.Cell n), current cell ∈ family.states d) →
+        (∀ (line : family.Line n) (j : ℤ),
+            (family.coordinates n).lookup d line j = Option.none → ghost d line j ∈ family.states d) →
+          ∃ dt, 0 < dt ∧ dt ≤ family.horizon ∧ ((family.method n).withGhost ghost).Admitted d dt current
+  NumStability.PhysicalRefinementQuality.Family.HasHighResolution.order : ∀ (d : D),
+      ∃ p,
+        1 < p ∧
+          ∀ (q : (D → ℝ) → ℝ → Fin m → ℝ), family.SmoothReference d q → Nonempty (family.AccuracyCertificate d q p)
+  NumStability.PhysicalRefinementQuality.Family.HasHighResolution.oscillation : ∀ (d : D),
+      ∃ K,
+        0 ≤ K ∧
+          ∃ noise,
+            (∀ (n : ℕ), 0 ≤ noise n) ∧
+              Filter.Tendsto noise Filter.atTop (nhds 0) ∧
+                ∀ (n : ℕ) (ghost : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ) (dt : ℝ),
+                  0 < dt →
+                    dt ≤ family.horizon →
+                      ((family.method n).withGhost ghost).Admitted d dt current →
+                        ∀ (line : family.Line n),
+                          family.variation n d line ghost
+                              (NumStability.FiniteCoordinate.advance (family.data n)
+                                ((family.method n).withGhost ghost).rule d dt current) ≤
+                            (1 + K * dt) * family.variation n d line ghost current + dt * noise n
+constructor:
+  NumStability.PhysicalRefinementQuality.Family.HasHighResolution.mk.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+    [Fintype D] [MeasurableSpace FacePoint] {m : ℕ}
+    {family : NumStability.PhysicalRefinementQuality.Family D FacePoint m}
+    (input_available :
+      ∀ (n : ℕ) (d : D) (ghost : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ),
+        (∀ (cell : family.Cell n), current cell ∈ family.states d) →
+          (∀ (line : family.Line n) (j : ℤ),
+              (family.coordinates n).lookup d line j = Option.none → ghost d line j ∈ family.states d) →
+            ∃ dt, 0 < dt ∧ dt ≤ family.horizon ∧ ((family.method n).withGhost ghost).Admitted d dt current)
+    (order :
+      ∀ (d : D),
+        ∃ p,
+          1 < p ∧
+            ∀ (q : (D → ℝ) → ℝ → Fin m → ℝ), family.SmoothReference d q → Nonempty (family.AccuracyCertificate d q p))
+    (oscillation :
+      ∀ (d : D),
+        ∃ K,
+          0 ≤ K ∧
+            ∃ noise,
+              (∀ (n : ℕ), 0 ≤ noise n) ∧
+                Filter.Tendsto noise Filter.atTop (nhds 0) ∧
+                  ∀ (n : ℕ) (ghost : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ) (dt : ℝ),
+                    0 < dt →
+                      dt ≤ family.horizon →
+                        ((family.method n).withGhost ghost).Admitted d dt current →
+                          ∀ (line : family.Line n),
+                            family.variation n d line ghost
+                                (NumStability.FiniteCoordinate.advance (family.data n)
+                                  ((family.method n).withGhost ghost).rule d dt current) ≤
+                              (1 + K * dt) * family.variation n d line ghost current + dt * noise n) :
+    family.HasHighResolution
+'NumStability.PhysicalRefinementQuality.Family.HasHighResolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def NumStability.PhysicalHighResolutionSweep.coordinates.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (level : ℕ) →
+              (ℕ → D → family.Line level → ℤ → Fin m → ℝ) →
+                ℕ →
+                  NumStability.FiniteCoordinate.LineCoordinates D (family.Cell level) (family.Face level)
+                    (family.Line level) :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family level ghost k =>
+  (family.coordinates level).withGhost (ghost k)
+'NumStability.PhysicalHighResolutionSweep.coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.PhysicalHighResolutionSweep.method.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (level : ℕ) →
+              (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ) →
+                (k : ℕ) →
+                  NumStability.CapacityCoordinate.Method (family.data level)
+                    (NumStability.PhysicalHighResolutionSweep.coordinates family level ghost k) :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family level ghost k =>
+  (family.method level).withGhost (ghost k)
+'NumStability.PhysicalHighResolutionSweep.method' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.PhysicalHighResolutionSweep.execution.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (level : ℕ) →
+              (ℕ → D) →
+                (ℕ → ℝ) →
+                  (ℕ → D → family.Line level → ℤ → Fin m → ℝ) →
+                    (family.Cell level → Fin m → ℝ) → ℕ → family.Cell level → Fin m → ℝ :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family level direction duration ghost initial =>
+  NumStability.CapacityCoordinate.Sweep.run (NumStability.PhysicalHighResolutionSweep.method family level ghost)
+    direction duration initial
+'NumStability.PhysicalHighResolutionSweep.execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.PhysicalHighResolutionSweep.Specification.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) (level : ℕ) (direction : ℕ → D)
+  (duration : ℕ → ℝ) (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ) (initial : family.Cell level → Fin m → ℝ)
+  (steps : ℕ) : Prop
+number of parameters: 13
+fields:
+  NumStability.PhysicalHighResolutionSweep.Specification.quality : family.HasHighResolution
+  NumStability.PhysicalHighResolutionSweep.Specification.schedule : ∀ (d : D), ∃ k < steps, direction k = d
+  NumStability.PhysicalHighResolutionSweep.Specification.ordered : ∀ k ≤ steps,
+      NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k =
+        NumStability.orderedOperatorSweep
+          (List.map
+            (NumStability.CapacityCoordinate.Sweep.step
+              (NumStability.PhysicalHighResolutionSweep.method family level ghost) direction duration)
+            (List.range k))
+          initial
+  NumStability.PhysicalHighResolutionSweep.Specification.constituent : ∀ k < steps,
+      ∀ (cell : family.Cell level),
+        NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial (k + 1) cell =
+          NumStability.FiniteCoordinate.PhysicalLine.lineAdvance (family.data level) (family.coordinates level)
+            (family.method level).numericalFlux (direction k) ((family.coordinates level).cellLine (direction k) cell)
+            (duration k)
+            (((family.coordinates level).withGhost (ghost k)).extract (direction k)
+              ((family.coordinates level).cellLine (direction k) cell)
+              (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k))
+            ((family.coordinates level).cellIndex (direction k) cell)
+  NumStability.PhysicalHighResolutionSweep.Specification.conservative : ∀ k < steps,
+      ∑ cell,
+          (family.data level).cellVolume cell •
+            NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial (k + 1)
+              cell =
+        ∑ cell,
+            (family.data level).cellVolume cell •
+              NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k cell -
+          duration k •
+            ∑ cell,
+              ((NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                  (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k)
+                  ((family.data level).rightFace (direction k) cell) -
+                (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                  (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k)
+                  ((family.data level).leftFace (direction k) cell))
+  NumStability.PhysicalHighResolutionSweep.Specification.line_local : ∀ k < steps,
+      ∀ (cell : family.Cell level) (current other : family.Cell level → Fin m → ℝ),
+        (∀ (c : family.Cell level),
+            (family.coordinates level).cellLine (direction k) c =
+                (family.coordinates level).cellLine (direction k) cell →
+              current c = other c) →
+          NumStability.FiniteCoordinate.advance (family.data level)
+              (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+              current cell =
+            NumStability.FiniteCoordinate.advance (family.data level)
+              (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+              other cell
+  NumStability.PhysicalHighResolutionSweep.Specification.accuracy : ∀ (d : D) (q : (D → ℝ) → ℝ → Fin m → ℝ) (p : ℝ)
+      (certificate : family.AccuracyCertificate d q p) (n : ℕ),
+      certificate.threshold ≤ n →
+        ∀ (dt : ℝ),
+          0 < dt →
+            dt ≤ family.horizon →
+              ∀ (boundary : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ),
+                ((family.method n).withGhost boundary).Admitted d dt current →
+                  ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0) →
+                    ∀ (A E G : ℝ),
+                      (family.method n).StableAt d dt A →
+                        (∀ (cell : family.Cell n), ‖current cell - family.projected n q 0 cell‖ ≤ E) →
+                          (∀ (cell : family.Cell n) (j : ℤ),
+                              (family.coordinates n).lookup d ((family.coordinates n).cellLine d cell) j = Option.none →
+                                ‖boundary d ((family.coordinates n).cellLine d cell) j -
+                                      family.referenceGhost n q d ((family.coordinates n).cellLine d cell) j‖ ≤
+                                  G) →
+                            ∀ (cell : family.Cell n),
+                              ‖NumStability.FiniteCoordinate.advance (family.data n)
+                                      ((family.method n).withGhost boundary).rule d dt current cell -
+                                    family.projected n q dt cell‖ ≤
+                                A * Max.max E G + certificate.constant * dt * family.mesh n ^ p
+  NumStability.PhysicalHighResolutionSweep.Specification.physical_error : ∀ (physical : ℕ → (D → ℝ) → ℝ → Fin m → ℝ)
+      (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ) (netError : ℕ → family.Cell level → ℝ),
+      (∀ k < steps, 0 < duration k) →
+        (∀ k < steps, (family.data level).ReferenceOn (direction k) (physical k) 0 (duration k)) →
+          (∀ (cell : family.Cell level),
+              ‖initial cell - (family.data level).cellMean (physical 0) cell 0‖ ≤ initialError) →
+            (∀ k < steps,
+                (NumStability.PhysicalHighResolutionSweep.method family level ghost k).Admitted (direction k)
+                  (duration k)
+                  (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial
+                    k)) →
+              (∀ k < steps,
+                  (NumStability.PhysicalHighResolutionSweep.method family level ghost k).Admitted (direction k)
+                    (duration k) fun cell => (family.data level).cellMean (physical k) cell 0) →
+                (∀ k < steps,
+                    (NumStability.PhysicalHighResolutionSweep.method family level ghost k).StableAt (direction k)
+                      (duration k) (amplification k)) →
+                  (∀ k < steps,
+                      ∀ (cell : family.Cell level),
+                        ‖NumStability.FiniteCoordinate.netFluxDefect (family.data level)
+                              (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k)
+                              (fun c => (family.data level).cellMean (physical k) c 0) (physical k) 0 (duration k)
+                              cell‖ ≤
+                          netError k cell) →
+                    (∀ k < steps,
+                        ∀ (cell : family.Cell level),
+                          duration k / (family.data level).cellVolume cell * netError k cell ≤ localDefect k) →
+                      (∀ k < steps,
+                          ∀ (cell : family.Cell level),
+                            ‖(family.data level).cellMean (physical k) cell (duration k) -
+                                  (family.data level).cellMean (physical (k + 1)) cell 0‖ ≤
+                              splittingDefect k) →
+                        ∀ k ≤ steps,
+                          ∀ (cell : family.Cell level),
+                            ‖NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost
+                                    initial k cell -
+                                  (family.data level).cellMean (physical k) cell 0‖ ≤
+                              NumStability.SequentialError.errorBudget amplification localDefect splittingDefect
+                                initialError k
+  NumStability.PhysicalHighResolutionSweep.Specification.cartesian : ∀
+      (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : family.Cell level → D → ℤ)
+      (facePosition : D → family.Face level → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ),
+      NumStability.FiniteCartesian.CartesianIdentification (family.data level) axes cellPosition facePosition flux →
+        (∀ (cell : family.Cell level),
+            (family.data level).cellVolume cell = NumStability.CartesianGrid.cellVolume axes (cellPosition cell)) ∧
+          (∀ (q : (D → ℝ) → ℝ → Fin m → ℝ) (cell : family.Cell level) (t : ℝ),
+              (family.data level).cellMean q cell t =
+                NumStability.cellVolumeAverage MeasureTheory.MeasureSpace.volume
+                  (NumStability.CartesianGrid.cellBox axes (cellPosition cell)) fun x => q x t) ∧
+            (∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : family.Face level) (t : ℝ),
+                (family.data level).faceFlux d (fun x τ => q (x d) τ) face t =
+                  NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+                    flux d (q ((axes d).cellLeft (facePosition d face d)) t)) ∧
+              ∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D),
+                NumStability.IsRectangleConservationLawSolution q (flux d) →
+                  ∀ (cell : family.Cell level) (s t : ℝ),
+                    (family.data level).cellVolume cell •
+                        ((family.data level).cellMean (fun x τ => q (x d) τ) cell t -
+                          (family.data level).cellMean (fun x τ => q (x d) τ) cell s) =
+                      ∫ (τ : ℝ) in s..t,
+                        (family.data level).faceFlux d (fun x σ => q (x d) σ) ((family.data level).leftFace d cell) τ -
+                          (family.data level).faceFlux d (fun x σ => q (x d) σ) ((family.data level).rightFace d cell) τ
+constructor:
+  NumStability.PhysicalHighResolutionSweep.Specification.mk.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2} [Fintype D]
+    [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+    {family : NumStability.PhysicalRefinementQuality.Family D FacePoint m} {level : ℕ} {direction : ℕ → D}
+    {duration : ℕ → ℝ} {ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ} {initial : family.Cell level → Fin m → ℝ}
+    {steps : ℕ} (quality : family.HasHighResolution) (schedule : ∀ (d : D), ∃ k < steps, direction k = d)
+    (ordered :
+      ∀ k ≤ steps,
+        NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k =
+          NumStability.orderedOperatorSweep
+            (List.map
+              (NumStability.CapacityCoordinate.Sweep.step
+                (NumStability.PhysicalHighResolutionSweep.method family level ghost) direction duration)
+              (List.range k))
+            initial)
+    (constituent :
+      ∀ k < steps,
+        ∀ (cell : family.Cell level),
+          NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial (k + 1)
+              cell =
+            NumStability.FiniteCoordinate.PhysicalLine.lineAdvance (family.data level) (family.coordinates level)
+              (family.method level).numericalFlux (direction k) ((family.coordinates level).cellLine (direction k) cell)
+              (duration k)
+              (((family.coordinates level).withGhost (ghost k)).extract (direction k)
+                ((family.coordinates level).cellLine (direction k) cell)
+                (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k))
+              ((family.coordinates level).cellIndex (direction k) cell))
+    (conservative :
+      ∀ k < steps,
+        ∑ cell,
+            (family.data level).cellVolume cell •
+              NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial (k + 1)
+                cell =
+          ∑ cell,
+              (family.data level).cellVolume cell •
+                NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k
+                  cell -
+            duration k •
+              ∑ cell,
+                ((NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                    (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k)
+                    ((family.data level).rightFace (direction k) cell) -
+                  (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                    (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k)
+                    ((family.data level).leftFace (direction k) cell)))
+    (line_local :
+      ∀ k < steps,
+        ∀ (cell : family.Cell level) (current other : family.Cell level → Fin m → ℝ),
+          (∀ (c : family.Cell level),
+              (family.coordinates level).cellLine (direction k) c =
+                  (family.coordinates level).cellLine (direction k) cell →
+                current c = other c) →
+            NumStability.FiniteCoordinate.advance (family.data level)
+                (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                current cell =
+              NumStability.FiniteCoordinate.advance (family.data level)
+                (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule (direction k) (duration k)
+                other cell)
+    (accuracy :
+      ∀ (d : D) (q : (D → ℝ) → ℝ → Fin m → ℝ) (p : ℝ) (certificate : family.AccuracyCertificate d q p) (n : ℕ),
+        certificate.threshold ≤ n →
+          ∀ (dt : ℝ),
+            0 < dt →
+              dt ≤ family.horizon →
+                ∀ (boundary : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ),
+                  ((family.method n).withGhost boundary).Admitted d dt current →
+                    ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0) →
+                      ∀ (A E G : ℝ),
+                        (family.method n).StableAt d dt A →
+                          (∀ (cell : family.Cell n), ‖current cell - family.projected n q 0 cell‖ ≤ E) →
+                            (∀ (cell : family.Cell n) (j : ℤ),
+                                (family.coordinates n).lookup d ((family.coordinates n).cellLine d cell) j =
+                                    Option.none →
+                                  ‖boundary d ((family.coordinates n).cellLine d cell) j -
+                                        family.referenceGhost n q d ((family.coordinates n).cellLine d cell) j‖ ≤
+                                    G) →
+                              ∀ (cell : family.Cell n),
+                                ‖NumStability.FiniteCoordinate.advance (family.data n)
+                                        ((family.method n).withGhost boundary).rule d dt current cell -
+                                      family.projected n q dt cell‖ ≤
+                                  A * Max.max E G + certificate.constant * dt * family.mesh n ^ p)
+    (physical_error :
+      ∀ (physical : ℕ → (D → ℝ) → ℝ → Fin m → ℝ) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+        (netError : ℕ → family.Cell level → ℝ),
+        (∀ k < steps, 0 < duration k) →
+          (∀ k < steps, (family.data level).ReferenceOn (direction k) (physical k) 0 (duration k)) →
+            (∀ (cell : family.Cell level),
+                ‖initial cell - (family.data level).cellMean (physical 0) cell 0‖ ≤ initialError) →
+              (∀ k < steps,
+                  (NumStability.PhysicalHighResolutionSweep.method family level ghost k).Admitted (direction k)
+                    (duration k)
+                    (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial
+                      k)) →
+                (∀ k < steps,
+                    (NumStability.PhysicalHighResolutionSweep.method family level ghost k).Admitted (direction k)
+                      (duration k) fun cell => (family.data level).cellMean (physical k) cell 0) →
+                  (∀ k < steps,
+                      (NumStability.PhysicalHighResolutionSweep.method family level ghost k).StableAt (direction k)
+                        (duration k) (amplification k)) →
+                    (∀ k < steps,
+                        ∀ (cell : family.Cell level),
+                          ‖NumStability.FiniteCoordinate.netFluxDefect (family.data level)
+                                (NumStability.PhysicalHighResolutionSweep.method family level ghost k).rule
+                                (direction k) (fun c => (family.data level).cellMean (physical k) c 0) (physical k) 0
+                                (duration k) cell‖ ≤
+                            netError k cell) →
+                      (∀ k < steps,
+                          ∀ (cell : family.Cell level),
+                            duration k / (family.data level).cellVolume cell * netError k cell ≤ localDefect k) →
+                        (∀ k < steps,
+                            ∀ (cell : family.Cell level),
+                              ‖(family.data level).cellMean (physical k) cell (duration k) -
+                                    (family.data level).cellMean (physical (k + 1)) cell 0‖ ≤
+                                splittingDefect k) →
+                          ∀ k ≤ steps,
+                            ∀ (cell : family.Cell level),
+                              ‖NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost
+                                      initial k cell -
+                                    (family.data level).cellMean (physical k) cell 0‖ ≤
+                                NumStability.SequentialError.errorBudget amplification localDefect splittingDefect
+                                  initialError k)
+    (cartesian :
+      ∀ (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : family.Cell level → D → ℤ)
+        (facePosition : D → family.Face level → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ),
+        NumStability.FiniteCartesian.CartesianIdentification (family.data level) axes cellPosition facePosition flux →
+          (∀ (cell : family.Cell level),
+              (family.data level).cellVolume cell = NumStability.CartesianGrid.cellVolume axes (cellPosition cell)) ∧
+            (∀ (q : (D → ℝ) → ℝ → Fin m → ℝ) (cell : family.Cell level) (t : ℝ),
+                (family.data level).cellMean q cell t =
+                  NumStability.cellVolumeAverage MeasureTheory.MeasureSpace.volume
+                    (NumStability.CartesianGrid.cellBox axes (cellPosition cell)) fun x => q x t) ∧
+              (∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : family.Face level) (t : ℝ),
+                  (family.data level).faceFlux d (fun x τ => q (x d) τ) face t =
+                    NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+                      flux d (q ((axes d).cellLeft (facePosition d face d)) t)) ∧
+                ∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D),
+                  NumStability.IsRectangleConservationLawSolution q (flux d) →
+                    ∀ (cell : family.Cell level) (s t : ℝ),
+                      (family.data level).cellVolume cell •
+                          ((family.data level).cellMean (fun x τ => q (x d) τ) cell t -
+                            (family.data level).cellMean (fun x τ => q (x d) τ) cell s) =
+                        ∫ (τ : ℝ) in s..t,
+                          (family.data level).faceFlux d (fun x σ => q (x d) σ) ((family.data level).leftFace d cell)
+                              τ -
+                            (family.data level).faceFlux d (fun x σ => q (x d) σ) ((family.data level).rightFace d cell)
+                              τ) :
+    NumStability.PhysicalHighResolutionSweep.Specification family level direction duration ghost initial steps
+'NumStability.PhysicalHighResolutionSweep.Specification' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} : {D : Type u_1} →
+  {FacePoint : Type u_2} →
+    [inst : Fintype D] →
+      [inst_1 : MeasurableSpace FacePoint] →
+        {m : ℕ} →
+          (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) →
+            (level : ℕ) →
+              (ℕ → D) →
+                (ℕ → ℝ) → (ℕ → D → family.Line level → ℤ → Fin m → ℝ) → (family.Cell level → Fin m → ℝ) → ℕ → Prop :=
+fun {D} {FacePoint} [Fintype D] [MeasurableSpace FacePoint] {m} family level direction duration ghost initial steps =>
+  ∀ k < steps,
+    0 < duration k ∧
+      duration k ≤ family.horizon ∧
+        (NumStability.PhysicalHighResolutionSweep.method family level ghost k).Admitted (direction k) (duration k)
+          (NumStability.PhysicalHighResolutionSweep.execution family level direction duration ghost initial k)
+'NumStability.PhysicalHighResolutionSweep.ValidSubsteps' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.leveque01_coordinateHighResolutionMethods_sourceContract : ∀ {D : Type u_1} {FacePoint : Type u_2}
+  [inst : Fintype D] [inst_1 : DecidableEq D] [inst_2 : MeasurableSpace FacePoint] {m : ℕ},
+  0 < m →
+    0 < Fintype.card D →
+      ∀ (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m),
+        family.HasHighResolution →
+          ∀ (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ) (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ)
+            (initial : family.Cell level → Fin m → ℝ) (steps : ℕ),
+            (∀ (d : D), ∃ k < steps, direction k = d) →
+              NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost initial
+                  steps →
+                0 < m ∧
+                  0 < Fintype.card D ∧
+                    NumStability.PhysicalHighResolutionSweep.Specification family level direction duration ghost initial
+                        steps ∧
+                      NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost
+                        initial steps
+'NumStability.leveque01_coordinateHighResolutionMethods_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available : ∀ {D : Type u_1}
+  {FacePoint : Type u_2} [inst : Fintype D] [inst_1 : MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m),
+  family.HasHighResolution →
+    ∀ (n : ℕ) (d : D) (ghost : D → family.Line n → ℤ → Fin m → ℝ) (left right : Fin m → ℝ),
+      left ∈ family.states d →
+        right ∈ family.states d →
+          ∀ (side : family.Cell n → Prop) [inst_2 : DecidablePred side],
+            (∀ (line : family.Line n) (j : ℤ),
+                (family.coordinates n).lookup d line j = Option.none → ghost d line j ∈ family.states d) →
+              ∃ dt,
+                0 < dt ∧
+                  dt ≤ family.horizon ∧
+                    ((family.method n).withGhost ghost).Admitted d dt fun cell => if side cell then left else right
+'NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.available_at_threshold : ∀ {D : Type u_1}
+  {FacePoint : Type u_2} [inst : Fintype D] [inst_1 : MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) {d : D} {q : (D → ℝ) → ℝ → Fin m → ℝ} {p : ℝ}
+  (certificate : family.AccuracyCertificate d q p),
+  ∃ dt,
+    0 < dt ∧
+      dt ≤ family.horizon ∧
+        ((family.method certificate.threshold).withGhost (family.referenceGhost certificate.threshold q)).Admitted d dt
+          (family.projected certificate.threshold q 0)
+'NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.available_at_threshold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at : ∀ {D : Type u_1}
+  {FacePoint : Type u_2} [inst : Fintype D] [inst_1 : MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m) {d : D} {q : (D → ℝ) → ℝ → Fin m → ℝ} {p : ℝ}
+  (certificate : family.AccuracyCertificate d q p) (n : ℕ),
+  certificate.threshold ≤ n →
+    ∀ (dt : ℝ),
+      0 < dt →
+        dt ≤ family.horizon →
+          ∀ (ghost : D → family.Line n → ℤ → Fin m → ℝ) (current : family.Cell n → Fin m → ℝ),
+            ((family.method n).withGhost ghost).Admitted d dt current →
+              ((family.method n).withGhost (family.referenceGhost n q)).Admitted d dt (family.projected n q 0) →
+                ∀ (A E G : ℝ),
+                  (family.method n).StableAt d dt A →
+                    (∀ (cell : family.Cell n), ‖current cell - family.projected n q 0 cell‖ ≤ E) →
+                      (∀ (cell : family.Cell n) (j : ℤ),
+                          (family.coordinates n).lookup d ((family.coordinates n).cellLine d cell) j = Option.none →
+                            ‖ghost d ((family.coordinates n).cellLine d cell) j -
+                                  family.referenceGhost n q d ((family.coordinates n).cellLine d cell) j‖ ≤
+                              G) →
+                        ∀ (cell : family.Cell n),
+                          ‖NumStability.FiniteCoordinate.advance (family.data n)
+                                  ((family.method n).withGhost ghost).rule d dt current cell -
+                                family.projected n q dt cell‖ ≤
+                            A * Max.max E G + certificate.constant * dt * family.mesh n ^ p
+'NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.PhysicalHighResolutionSweep.specification : ∀ {D : Type u_1} {FacePoint : Type u_2} [inst : Fintype D]
+  [inst_1 : DecidableEq D] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m),
+  family.HasHighResolution →
+    ∀ (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ) (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ)
+      (initial : family.Cell level → Fin m → ℝ) (steps : ℕ),
+      (∀ (d : D), ∃ k < steps, direction k = d) →
+        NumStability.PhysicalHighResolutionSweep.Specification family level direction duration ghost initial steps
+'NumStability.PhysicalHighResolutionSweep.specification' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.PhysicalHighResolutionSweep.admitted_specification : ∀ {D : Type u_1} {FacePoint : Type u_2}
+  [inst : Fintype D] [inst_1 : DecidableEq D] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m),
+  family.HasHighResolution →
+    ∀ (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ) (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ)
+      (initial : family.Cell level → Fin m → ℝ) (steps : ℕ),
+      (∀ (d : D), ∃ k < steps, direction k = d) →
+        NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost initial steps →
+          NumStability.PhysicalHighResolutionSweep.Specification family level direction duration ghost initial steps ∧
+            NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost initial steps
+'NumStability.PhysicalHighResolutionSweep.admitted_specification' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

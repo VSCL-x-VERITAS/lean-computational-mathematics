@@ -1,0 +1,496 @@
+NumStability.LeftModeDomainsDraft.leftMode_solutionDomains {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) :
+  0 < √(bulkModulus / density) ∧
+    NumStability.IsLinearAdvectionSolution
+        (NumStability.linearAcousticsLeftInvariant system.pressure system.velocity density √(bulkModulus / density))
+        (-√(bulkModulus / density)) ∧
+      ∀ (profile : ℝ → ℝ),
+        (∀ (x t : ℝ),
+            NumStability.travelingWave profile (-√(bulkModulus / density)) x t =
+              profile (x + √(bulkModulus / density) * t)) ∧
+          (∀ (x t : ℝ),
+              NumStability.travelingWave profile (-√(bulkModulus / density)) (x - √(bulkModulus / density) * t) t =
+                profile x) ∧
+            (NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile (-√(bulkModulus / density)))
+                  (-√(bulkModulus / density)) ↔
+                Differentiable ℝ profile) ∧
+              ((NumStability.IsRectangleConservationLawSolution
+                  (NumStability.travelingWave profile (-√(bulkModulus / density))) fun state =>
+                  -√(bulkModulus / density) * state) ↔
+                ∀ (a b : ℝ), IntervalIntegrable profile volume a b)
+'NumStability.LeftModeDomainsDraft.leftMode_solutionDomains' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.LinearAcousticsSolution (bulkModulus density : ℝ) : Type
+number of parameters: 2
+fields:
+  NumStability.LinearAcousticsSolution.density_ne_zero : density ≠ 0
+  NumStability.LinearAcousticsSolution.pressure : ℝ → ℝ → ℝ
+  NumStability.LinearAcousticsSolution.velocity : ℝ → ℝ → ℝ
+  NumStability.LinearAcousticsSolution.satisfies : ∀ (x t : ℝ),
+      NumStability.IsLinearAcousticsSolutionAt self.pressure self.velocity bulkModulus density x t
+constructor:
+  NumStability.LinearAcousticsSolution.mk {bulkModulus density : ℝ} (density_ne_zero : density ≠ 0)
+    (pressure velocity : ℝ → ℝ → ℝ)
+    (satisfies : ∀ (x t : ℝ), NumStability.IsLinearAcousticsSolutionAt pressure velocity bulkModulus density x t) :
+    NumStability.LinearAcousticsSolution bulkModulus density
+def NumStability.IsLinearAcousticsSolutionAt : (ℝ → ℝ → ℝ) → (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ → ℝ → Prop :=
+fun pressure velocity bulkModulus density x t =>
+  ∃ pt px ut ux,
+    HasDerivAt (fun τ => pressure x τ) pt t ∧
+      HasDerivAt (fun ξ => pressure ξ t) px x ∧
+        HasDerivAt (fun τ => velocity x τ) ut t ∧
+          HasDerivAt (fun ξ => velocity ξ t) ux x ∧ pt + bulkModulus * ux = 0 ∧ ut + density⁻¹ * px = 0
+NumStability.LeftModeAlternativeEvidence.pressure (x t : ℝ) : ℝ
+'NumStability.LeftModeAlternativeEvidence.pressure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.velocity (x t : ℝ) : ℝ
+'NumStability.LeftModeAlternativeEvidence.velocity' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.acousticFixture : NumStability.LinearAcousticsSolution 1 1
+'NumStability.LeftModeAlternativeEvidence.acousticFixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.pressure_smooth :
+  ContDiff ℝ ⊤ fun z => NumStability.LeftModeAlternativeEvidence.pressure z.1 z.2
+'NumStability.LeftModeAlternativeEvidence.pressure_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.velocity_smooth :
+  ContDiff ℝ ⊤ fun z => NumStability.LeftModeAlternativeEvidence.velocity z.1 z.2
+'NumStability.LeftModeAlternativeEvidence.velocity_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.fixture_nonconstant :
+  NumStability.LeftModeAlternativeEvidence.acousticFixture.pressure 0 0 ≠
+      NumStability.LeftModeAlternativeEvidence.acousticFixture.pressure 1 0 ∧
+    NumStability.LeftModeAlternativeEvidence.acousticFixture.velocity 0 0 ≠
+      NumStability.LeftModeAlternativeEvidence.acousticFixture.velocity 1 0
+'NumStability.LeftModeAlternativeEvidence.fixture_nonconstant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.fixture_soundSpeed : √(1 / 1) = 1
+'NumStability.LeftModeAlternativeEvidence.fixture_soundSpeed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.fixture_leftInvariant :
+  NumStability.linearAcousticsLeftInvariant NumStability.LeftModeAlternativeEvidence.acousticFixture.pressure
+      NumStability.LeftModeAlternativeEvidence.acousticFixture.velocity 1 √(1 / 1) =
+    NumStability.travelingWave (fun x => 2 * x) (-1)
+'NumStability.LeftModeAlternativeEvidence.fixture_leftInvariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.fixture_leftEquation :
+  NumStability.IsLinearAdvectionSolution
+    (NumStability.linearAcousticsLeftInvariant NumStability.LeftModeAlternativeEvidence.acousticFixture.pressure
+      NumStability.LeftModeAlternativeEvidence.acousticFixture.velocity 1 1)
+    (-1)
+'NumStability.LeftModeAlternativeEvidence.fixture_leftEquation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.acoustic_nonvacuity :
+  ∃ system,
+    (∀ (x t : ℝ), system.pressure x t = x + t) ∧
+      (∀ (x t : ℝ), system.velocity x t = -(x + t)) ∧
+        (ContDiff ℝ ⊤ fun z => system.pressure z.1 z.2) ∧
+          (ContDiff ℝ ⊤ fun z => system.velocity z.1 z.2) ∧
+            system.pressure 0 0 ≠ system.pressure 1 0 ∧
+              system.velocity 0 0 ≠ system.velocity 1 0 ∧
+                NumStability.linearAcousticsLeftInvariant system.pressure system.velocity 1 √(1 / 1) =
+                  NumStability.travelingWave (fun x => 2 * x) (-1)
+'NumStability.LeftModeAlternativeEvidence.acoustic_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_locally_intervalIntegrable (a b : ℝ) : IntervalIntegrable abs volume a b
+'NumStability.LeftModeAlternativeEvidence.abs_locally_intervalIntegrable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_rectangle :
+  NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave abs (-1)) fun state => -1 * state
+'NumStability.LeftModeAlternativeEvidence.abs_rectangle' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_not_classical :
+  ¬NumStability.IsLinearAdvectionSolution (NumStability.travelingWave abs (-1)) (-1)
+'NumStability.LeftModeAlternativeEvidence.abs_not_classical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_not_classicalAt_origin :
+  ¬NumStability.IsLinearAdvectionSolutionAt (NumStability.travelingWave abs (-1)) (-1) 0 0
+'NumStability.LeftModeAlternativeEvidence.abs_not_classicalAt_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_left_geometry (x t : ℝ) :
+  NumStability.travelingWave abs (-1) x t = |x + t| ∧ NumStability.travelingWave abs (-1) (x - t) t = |x|
+'NumStability.LeftModeAlternativeEvidence.abs_left_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_characteristic_derivative (x t : ℝ) :
+  HasDerivAt (fun τ => NumStability.travelingWave abs (-1) (x - τ) τ) 0 t
+'NumStability.LeftModeAlternativeEvidence.abs_characteristic_derivative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.nonsmooth_profile_nonvacuity :
+  (NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave abs (-1)) fun state => -1 * state) ∧
+    ¬NumStability.IsLinearAdvectionSolution (NumStability.travelingWave abs (-1)) (-1)
+'NumStability.LeftModeAlternativeEvidence.nonsmooth_profile_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftModeAlternativeEvidence.abs_not_classical_acoustic_leftInvariant :
+  ¬∃ system,
+      NumStability.linearAcousticsLeftInvariant system.pressure system.velocity 1 1 =
+        NumStability.travelingWave abs (-1)
+'NumStability.LeftModeAlternativeEvidence.abs_not_classical_acoustic_leftInvariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.linearAcousticsLeftInvariant_isLinearAdvectionSolutionAt (pressure velocity : ℝ → ℝ → ℝ)
+  (bulkModulus density soundSpeed x t : ℝ) (hdensity : density ≠ 0) (hmaterial : bulkModulus = density * soundSpeed ^ 2)
+  (hsystem : NumStability.IsLinearAcousticsSolutionAt pressure velocity bulkModulus density x t) :
+  NumStability.IsLinearAdvectionSolutionAt
+    (NumStability.linearAcousticsLeftInvariant pressure velocity density soundSpeed) (-soundSpeed) x t
+'NumStability.linearAcousticsLeftInvariant_isLinearAdvectionSolutionAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.travelingWave_isLinearAdvectionSolution_iff.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (profile : ℝ → E) (speed : ℝ) :
+  NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile speed) speed ↔ Differentiable ℝ profile
+'NumStability.travelingWave_isLinearAdvectionSolution_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.travelingWave_isRectangleConservationLawSolution_iff.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] (profile : ℝ → E) (speed : ℝ) :
+  (NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile speed) fun state =>
+      speed • state) ↔
+    ∀ (a b : ℝ), IntervalIntegrable profile volume a b
+'NumStability.travelingWave_isRectangleConservationLawSolution_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.travelingWave_hasDerivAt_characteristic.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  (profile : ℝ → E) (speed x t : ℝ) :
+  HasDerivAt (fun τ => NumStability.travelingWave profile speed (x + speed * τ) τ) 0 t
+'NumStability.travelingWave_hasDerivAt_characteristic' depends on axioms: [propext, Classical.choice, Quot.sound]
+not_differentiableAt_abs_zero : ¬DifferentiableAt ℝ abs 0
+'not_differentiableAt_abs_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Continuous.intervalIntegrable.{u_5} {E : Type u_5} [NormedAddCommGroup E] {μ : Measure ℝ} [IsLocallyFiniteMeasure μ]
+  {u : ℝ → E} (hu : Continuous u) (a b : ℝ) : IntervalIntegrable u μ a b
+'Continuous.intervalIntegrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+contDiff_fst.{u_1, u_2, u_3} {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [NontriviallyNormedField 𝕜]
+  [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : WithTop ℕ∞} :
+  ContDiff 𝕜 n Prod.fst
+'contDiff_fst' depends on axioms: [propext, Classical.choice, Quot.sound]
+contDiff_snd.{u_1, u_2, u_3} {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [NontriviallyNormedField 𝕜]
+  [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : WithTop ℕ∞} :
+  ContDiff 𝕜 n Prod.snd
+'contDiff_snd' depends on axioms: [propext, Classical.choice, Quot.sound]
+ContDiff.add.{uE, uF, u_1} {𝕜 : Type u_1} [NontriviallyNormedField 𝕜] {E : Type uE} [NormedAddCommGroup E]
+  [NormedSpace 𝕜 E] {F : Type uF} [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : WithTop ℕ∞} {f g : E → F}
+  (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g) : ContDiff 𝕜 n fun x => f x + g x
+'ContDiff.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+ContDiff.neg.{uE, uF, u_1} {𝕜 : Type u_1} [NontriviallyNormedField 𝕜] {E : Type uE} [NormedAddCommGroup E]
+  [NormedSpace 𝕜 E] {F : Type uF} [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : WithTop ℕ∞} {f : E → F}
+  (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n fun x => -f x
+'ContDiff.neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsLeftSolutionDomains {bulkModulus density : ℝ}
+  (system : NumStability.LinearAcousticsSolution bulkModulus density) (hbulkModulus : 0 < bulkModulus)
+  (hdensity : 0 < density) :
+  0 < √(bulkModulus / density) ∧
+    NumStability.IsLinearAdvectionSolution
+        (NumStability.linearAcousticsLeftInvariant system.pressure system.velocity density √(bulkModulus / density))
+        (-√(bulkModulus / density)) ∧
+      ∀ (profile : ℝ → ℝ),
+        (∀ (x t : ℝ),
+            NumStability.travelingWave profile (-√(bulkModulus / density)) x t =
+              profile (x + √(bulkModulus / density) * t)) ∧
+          (∀ (x t : ℝ),
+              NumStability.travelingWave profile (-√(bulkModulus / density)) (x - √(bulkModulus / density) * t) t =
+                profile x) ∧
+            (NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile (-√(bulkModulus / density)))
+                  (-√(bulkModulus / density)) ↔
+                Differentiable ℝ profile) ∧
+              ((NumStability.IsRectangleConservationLawSolution
+                  (NumStability.travelingWave profile (-√(bulkModulus / density))) fun state =>
+                  -√(bulkModulus / density) * state) ↔
+                ∀ (a b : ℝ), IntervalIntegrable profile volume a b)
+'NumStability.leveque01_acousticsLeftSolutionDomains' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_riemannProblemDataClassification {m : ℕ}
+  (problem : NumStability.FirstOrderInitialValueProblem (Fin (m + 1))) :
+  (problem.IsRiemann ↔
+      (∃ leftState rightState,
+          problem.governing.IsHyperbolic ∧
+            leftState ∈ problem.governing.admissibleStates ∧
+              rightState ∈ problem.governing.admissibleStates ∧
+                (∀ x < 0, problem.initialState x = leftState) ∧
+                  ∀ (x : ℝ), 0 < x → problem.initialState x = rightState) ∧
+        ∀ (x t : ℝ) (state qt qx : Fin (m + 1) → ℝ),
+          problem.governing.residual x t state qt qx = 0 ↔
+            qt + (problem.governing.principal x t state).mulVec qx = problem.governing.forcing x t state) ∧
+    (problem.IsJumpRiemann ↔
+        ∃ leftState rightState, problem.IsRiemannWithStates leftState rightState ∧ leftState ≠ rightState) ∧
+      ∀ (leftState origin rightState : Fin (m + 1) → ℝ),
+        problem.governing.IsHyperbolic →
+          leftState ∈ problem.governing.admissibleStates →
+            rightState ∈ problem.governing.admissibleStates →
+              (NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                      rightState).IsRiemannWithStates
+                  leftState rightState ∧
+                (leftState = rightState →
+                    ¬(NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                          rightState).IsJumpRiemann) ∧
+                  (leftState ≠ rightState →
+                    (NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                        rightState).IsJumpRiemann)
+'NumStability.leveque01_riemannProblemDataClassification' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_eigenvalues_completeWavePropagation {m : ℕ} (A : Matrix (Fin m) (Fin m) ℝ)
+  (hA : NumStability.IsRealHyperbolicMatrix A) :
+  ∃ speeds b,
+    (∀ (i : Fin m), b i ≠ 0 ∧ A.mulVec (b i) = speeds i • b i) ∧
+      (∀ (q : ℝ → ℝ → Fin m → ℝ) (x t : ℝ),
+          NumStability.IsConstantCoefficientLinearSystemSolutionAt q A x t ↔
+            ∀ (i : Fin m), NumStability.IsLinearAdvectionSolutionAt (fun ξ τ => b.equivFun (q ξ τ) i) (speeds i) x t) ∧
+        ∀ (q : ℝ → ℝ → Fin m → ℝ),
+          Differentiable ℝ (Function.uncurry q) →
+            (∀ (x t : ℝ), NumStability.IsConstantCoefficientLinearSystemSolutionAt q A x t) →
+              (∀ (i : Fin m) (x t : ℝ), b.equivFun (q x t) i = b.equivFun (q (x - speeds i * t) 0) i) ∧
+                ∀ (x t : ℝ), q x t = ∑ i, b.equivFun (q (x - speeds i * t) 0) i • b i
+'NumStability.leveque01_eigenvalues_completeWavePropagation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ProspectiveSourceAlternatives.positive_dimensional_problem_capstone {m : ℕ}
+  (problem : NumStability.FirstOrderInitialValueProblem (Fin (m + 1))) :
+  problem.IsRiemann ↔
+    (∃ leftState rightState,
+        problem.governing.IsHyperbolic ∧
+          leftState ∈ problem.governing.admissibleStates ∧
+            rightState ∈ problem.governing.admissibleStates ∧
+              (∀ x < 0, problem.initialState x = leftState) ∧ ∀ (x : ℝ), 0 < x → problem.initialState x = rightState) ∧
+      ∀ (x t : ℝ) (state qt qx : Fin (m + 1) → ℝ),
+        problem.governing.residual x t state qt qx = 0 ↔
+          qt + (problem.governing.principal x t state).mulVec qx = problem.governing.forcing x t state
+'NumStability.ProspectiveSourceAlternatives.positive_dimensional_problem_capstone' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ProspectiveSourceAlternatives.equal_or_distinct_initial_states {m : ℕ}
+  (equation : NumStability.FirstOrderEquation (Fin (m + 1))) (hhyper : equation.IsHyperbolic)
+  (leftState origin rightState : Fin (m + 1) → ℝ) (hleft : leftState ∈ equation.admissibleStates)
+  (hright : rightState ∈ equation.admissibleStates) :
+  (NumStability.FirstOrderInitialValueProblem.fromStates equation leftState origin rightState).IsRiemannWithStates
+      leftState rightState ∧
+    (leftState = rightState →
+        ¬(NumStability.FirstOrderInitialValueProblem.fromStates equation leftState origin rightState).IsJumpRiemann) ∧
+      (leftState ≠ rightState →
+        (NumStability.FirstOrderInitialValueProblem.fromStates equation leftState origin rightState).IsJumpRiemann)
+'NumStability.ProspectiveSourceAlternatives.equal_or_distinct_initial_states' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ProspectiveSourceAlternatives.scalarEquation : NumStability.FirstOrderEquation (Fin 1)
+'NumStability.ProspectiveSourceAlternatives.scalarEquation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.ProspectiveSourceAlternatives.scalarEquation_hyperbolic :
+  NumStability.ProspectiveSourceAlternatives.scalarEquation.IsHyperbolic
+'NumStability.ProspectiveSourceAlternatives.scalarEquation_hyperbolic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.ProspectiveSourceAlternatives.scalar_problem_fixture (origin : Fin 1 → ℝ) :
+  (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+        (fun x => 0) origin fun x => 1).IsJumpRiemann ∧
+    (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+          (fun x => 0) origin fun x => 0).IsRiemann ∧
+      ¬(NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+              (fun x => 0) origin fun x => 0).IsJumpRiemann ∧
+        ∀ (x t : ℝ) (state qt qx : Fin 1 → ℝ),
+          NumStability.ProspectiveSourceAlternatives.scalarEquation.residual x t state qt qx = 0 ↔ qt + qx = 0
+'NumStability.ProspectiveSourceAlternatives.scalar_problem_fixture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.UnblockLinearChecks.expectedRiemannComposition {m : ℕ}
+  (problem : NumStability.FirstOrderInitialValueProblem (Fin (m + 1))) :
+  (problem.IsRiemann ↔
+      (∃ leftState rightState,
+          problem.governing.IsHyperbolic ∧
+            leftState ∈ problem.governing.admissibleStates ∧
+              rightState ∈ problem.governing.admissibleStates ∧
+                (∀ x < 0, problem.initialState x = leftState) ∧
+                  ∀ (x : ℝ), 0 < x → problem.initialState x = rightState) ∧
+        ∀ (x t : ℝ) (state qt qx : Fin (m + 1) → ℝ),
+          problem.governing.residual x t state qt qx = 0 ↔
+            qt + (problem.governing.principal x t state).mulVec qx = problem.governing.forcing x t state) ∧
+    (problem.IsJumpRiemann ↔
+        ∃ leftState rightState, problem.IsRiemannWithStates leftState rightState ∧ leftState ≠ rightState) ∧
+      ∀ (leftState origin rightState : Fin (m + 1) → ℝ),
+        problem.governing.IsHyperbolic →
+          leftState ∈ problem.governing.admissibleStates →
+            rightState ∈ problem.governing.admissibleStates →
+              (NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                      rightState).IsRiemannWithStates
+                  leftState rightState ∧
+                (leftState = rightState →
+                    ¬(NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                          rightState).IsJumpRiemann) ∧
+                  (leftState ≠ rightState →
+                    (NumStability.FirstOrderInitialValueProblem.fromStates problem.governing leftState origin
+                        rightState).IsJumpRiemann)
+'NumStability.UnblockLinearChecks.expectedRiemannComposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.UnblockLinearChecks.left_type_and_value :
+  @NumStability.leveque01_acousticsLeftSolutionDomains = @NumStability.LeftModeDomainsDraft.leftMode_solutionDomains
+'NumStability.UnblockLinearChecks.left_type_and_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.UnblockLinearChecks.riemann_type_and_value :
+  @NumStability.leveque01_riemannProblemDataClassification =
+    @NumStability.UnblockLinearChecks.expectedRiemannComposition
+'NumStability.UnblockLinearChecks.riemann_type_and_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.leveque01_acousticsLeftSolutionDomains NumStability.LeftModeAlternativeEvidence.acousticFixture
+  (Mathlib.Meta.NormNum.isNat_lt_true (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero)
+    (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_one) (Eq.refl false))
+  (Mathlib.Meta.NormNum.isNat_lt_true (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero)
+    (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_one)
+    (Eq.refl
+      false)) : 0 < √(1 / 1) ∧
+  NumStability.IsLinearAdvectionSolution
+      (NumStability.linearAcousticsLeftInvariant NumStability.LeftModeAlternativeEvidence.acousticFixture.pressure
+        NumStability.LeftModeAlternativeEvidence.acousticFixture.velocity 1 √(1 / 1))
+      (-√(1 / 1)) ∧
+    ∀ (profile : ℝ → ℝ),
+      (∀ (x t : ℝ), NumStability.travelingWave profile (-√(1 / 1)) x t = profile (x + √(1 / 1) * t)) ∧
+        (∀ (x t : ℝ), NumStability.travelingWave profile (-√(1 / 1)) (x - √(1 / 1) * t) t = profile x) ∧
+          (NumStability.IsLinearAdvectionSolution (NumStability.travelingWave profile (-√(1 / 1))) (-√(1 / 1)) ↔
+              Differentiable ℝ profile) ∧
+            ((NumStability.IsRectangleConservationLawSolution (NumStability.travelingWave profile (-√(1 / 1)))
+                fun state => -√(1 / 1) * state) ↔
+              ∀ (a b : ℝ), IntervalIntegrable profile volume a b)
+NumStability.leveque01_riemannProblemDataClassification
+  (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+    (fun x => 0) (fun x => 7) fun x =>
+    1) : ((NumStability.FirstOrderInitialValueProblem.fromStates
+        NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x => 1).IsRiemann ↔
+    (∃ leftState rightState,
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                (fun x => 0) (fun x => 7) fun x => 1).governing.IsHyperbolic ∧
+          leftState ∈
+              (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    1).governing.admissibleStates ∧
+            rightState ∈
+                (NumStability.FirstOrderInitialValueProblem.fromStates
+                      NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                      1).governing.admissibleStates ∧
+              (∀ x < 0,
+                  (NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          1).initialState
+                      x =
+                    leftState) ∧
+                ∀ (x : ℝ),
+                  0 < x →
+                    (NumStability.FirstOrderInitialValueProblem.fromStates
+                            NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                            1).initialState
+                        x =
+                      rightState) ∧
+      ∀ (x t : ℝ) (state qt qx : Fin (0 + 1) → ℝ),
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                    (fun x => 0) (fun x => 7) fun x => 1).governing.residual
+              x t state qt qx =
+            0 ↔
+          qt +
+              ((NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          1).governing.principal
+                    x t state).mulVec
+                qx =
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    1).governing.forcing
+              x t state) ∧
+  ((NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+          (fun x => 0) (fun x => 7) fun x => 1).IsJumpRiemann ↔
+      ∃ leftState rightState,
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                (fun x => 0) (fun x => 7) fun x => 1).IsRiemannWithStates
+            leftState rightState ∧
+          leftState ≠ rightState) ∧
+    ∀ (leftState origin rightState : Fin (0 + 1) → ℝ),
+      (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+              (fun x => 0) (fun x => 7) fun x => 1).governing.IsHyperbolic →
+        leftState ∈
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                  NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                  1).governing.admissibleStates →
+          rightState ∈
+              (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    1).governing.admissibleStates →
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                    (NumStability.FirstOrderInitialValueProblem.fromStates
+                        NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                        1).governing
+                    leftState origin rightState).IsRiemannWithStates
+                leftState rightState ∧
+              (leftState = rightState →
+                  ¬(NumStability.FirstOrderInitialValueProblem.fromStates
+                        (NumStability.FirstOrderInitialValueProblem.fromStates
+                            NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                            1).governing
+                        leftState origin rightState).IsJumpRiemann) ∧
+                (leftState ≠ rightState →
+                  (NumStability.FirstOrderInitialValueProblem.fromStates
+                      (NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          1).governing
+                      leftState origin rightState).IsJumpRiemann)
+NumStability.leveque01_riemannProblemDataClassification
+  (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+    (fun x => 0) (fun x => 7) fun x =>
+    0) : ((NumStability.FirstOrderInitialValueProblem.fromStates
+        NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x => 0).IsRiemann ↔
+    (∃ leftState rightState,
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                (fun x => 0) (fun x => 7) fun x => 0).governing.IsHyperbolic ∧
+          leftState ∈
+              (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    0).governing.admissibleStates ∧
+            rightState ∈
+                (NumStability.FirstOrderInitialValueProblem.fromStates
+                      NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                      0).governing.admissibleStates ∧
+              (∀ x < 0,
+                  (NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          0).initialState
+                      x =
+                    leftState) ∧
+                ∀ (x : ℝ),
+                  0 < x →
+                    (NumStability.FirstOrderInitialValueProblem.fromStates
+                            NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                            0).initialState
+                        x =
+                      rightState) ∧
+      ∀ (x t : ℝ) (state qt qx : Fin (0 + 1) → ℝ),
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                    (fun x => 0) (fun x => 7) fun x => 0).governing.residual
+              x t state qt qx =
+            0 ↔
+          qt +
+              ((NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          0).governing.principal
+                    x t state).mulVec
+                qx =
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    0).governing.forcing
+              x t state) ∧
+  ((NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+          (fun x => 0) (fun x => 7) fun x => 0).IsJumpRiemann ↔
+      ∃ leftState rightState,
+        (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+                (fun x => 0) (fun x => 7) fun x => 0).IsRiemannWithStates
+            leftState rightState ∧
+          leftState ≠ rightState) ∧
+    ∀ (leftState origin rightState : Fin (0 + 1) → ℝ),
+      (NumStability.FirstOrderInitialValueProblem.fromStates NumStability.ProspectiveSourceAlternatives.scalarEquation
+              (fun x => 0) (fun x => 7) fun x => 0).governing.IsHyperbolic →
+        leftState ∈
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                  NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                  0).governing.admissibleStates →
+          rightState ∈
+              (NumStability.FirstOrderInitialValueProblem.fromStates
+                    NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                    0).governing.admissibleStates →
+            (NumStability.FirstOrderInitialValueProblem.fromStates
+                    (NumStability.FirstOrderInitialValueProblem.fromStates
+                        NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                        0).governing
+                    leftState origin rightState).IsRiemannWithStates
+                leftState rightState ∧
+              (leftState = rightState →
+                  ¬(NumStability.FirstOrderInitialValueProblem.fromStates
+                        (NumStability.FirstOrderInitialValueProblem.fromStates
+                            NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                            0).governing
+                        leftState origin rightState).IsJumpRiemann) ∧
+                (leftState ≠ rightState →
+                  (NumStability.FirstOrderInitialValueProblem.fromStates
+                      (NumStability.FirstOrderInitialValueProblem.fromStates
+                          NumStability.ProspectiveSourceAlternatives.scalarEquation (fun x => 0) (fun x => 7) fun x =>
+                          0).governing
+                      leftState origin rightState).IsJumpRiemann)

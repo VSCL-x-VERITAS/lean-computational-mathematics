@@ -1,0 +1,142 @@
+
+namespace CapacitySmallBias
+open MeasureTheory NumStability NumStability.FiniteCoordinate
+open scoped BigOperators
+variable {D Cell Face Point FacePoint Line : Type*}
+variable [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A constant flux has its actual zero derivative and a complete real
+standard eigenbasis; no strict separation of wave speeds is needed. -/
+theorem constantFlux_hyperbolic (constant : State) (states : Set State) :
+    IsHyperbolicFluxOn (fun _ : State => constant) states := by
+  intro state _
+  refine ⟨0, hasFDerivAt_const constant state, fun _ => 0, Pi.basisFun ℝ (Fin m), ?_⟩
+  intro p
+  simp [Matrix.col]
+
+def method (data : PhysicalData D Cell Face Point FacePoint m)
+    (coord : LineCoordinates (m := m) D Cell Face Line)
+    (incidence : PhysicalCapacityBridge.Incidence data coord) (ε : State) :
+    CapacityCoordinate.Method data coord where
+  incidence := incidence
+  numericalFlux := fun _ _ _ _ j => (-(j : ℝ)) • ε
+  admitted := fun _ _ _ _ => True
+
+variable (data : PhysicalData D Cell Face Point FacePoint m)
+variable (coord : LineCoordinates (m := m) D Cell Face Line)
+variable (incidence : PhysicalCapacityBridge.Incidence data coord) (ε : Fin m → ℝ)
+
+theorem lineAdvance_eq (d : D) (line : Line) (dt : ℝ) (values : ℤ → State) (j : ℤ) :
+    PhysicalCapacityBridge.lineAdvance data coord (method data coord incidence ε).numericalFlux
+      d line dt values j = values j + (dt / PhysicalCapacityBridge.capacity data coord d line j) • ε := by
+  have hc : -((j + 1 : ℤ) : ℝ) - -(j : ℝ) = -1 := by push_cast; ring
+  change finiteVolumeCellAverageUpdate dt (PhysicalCapacityBridge.capacity data coord d line j)
+    (values j) ((-((j + 1 : ℤ) : ℝ)) • ε - (-(j : ℝ)) • ε) = _
+  rw [← sub_smul, hc]
+  simp [finiteVolumeCellAverageUpdate]
+
+theorem admitted_withGhost (ghost : D → Line → ℤ → State) (d : D) (dt : ℝ)
+    (current : Cell → State) : ((method data coord incidence ε).withGhost ghost).Admitted d dt current := by
+  intro cell
+  trivial
+
+theorem stable (d : D) (dt : ℝ) : (method data coord incidence ε).StableAt d dt 1 := by
+  intro cell values other _ _ E _ herr
+  simp only [lineAdvance_eq, add_sub_add_right_eq_sub, one_mul]
+  exact herr (coord.cellIndex d cell)
+
+/-- Uniform actual physical capacity makes the increment the same in every
+active cell. Supplied ghosts do not affect this input-independent flux. -/
+theorem advance_withGhost_uniform (V : ℝ) (hV : ∀ cell, data.cellVolume cell = V)
+    (ghost : D → Line → ℤ → State) (d : D) (dt : ℝ) (current : Cell → State) :
+    advance data ((method data coord incidence ε).withGhost ghost).rule d dt current =
+      fun cell => current cell + (dt / V) • ε := by
+  funext cell
+  rw [(method data coord incidence ε).advance_withGhost_eq, lineAdvance_eq,
+    PhysicalCapacityBridge.capacity_cell, hV]
+  simp only [LineCoordinates.extract, LineCoordinates.withGhost, coord.lookup_cell]
+
+theorem positive_available (ghost : D → Line → ℤ → State) (d : D) (current : Cell → State)
+    (horizon : ℝ) (hH : 0 < horizon) :
+    ∃ dt : ℝ, 0 < dt ∧ dt ≤ horizon ∧
+      ((method data coord incidence ε).withGhost ghost).Admitted d dt current :=
+  ⟨horizon, hH, le_rfl, admitted_withGhost data coord incidence ε ghost d horizon current⟩
+
+/-- For the zero physical-flux law, this is the actual nonzero local error,
+for every reference admitted by the physical all-subinterval balance. -/
+theorem reference_norm_error (V : ℝ) (hV : ∀ cell, data.cellVolume cell = V)
+    (ghost : D → Line → ℤ → State) (d : D) (q : Point → ℝ → State)
+    {horizon dt : ℝ} (href : data.ReferenceOn d q 0 horizon)
+    (hzero : ∀ face τ, data.faceFlux d q face τ = 0) (hdt : 0 < dt) (hT : dt ≤ horizon)
+    (cell : Cell) :
+    ‖advance data ((method data coord incidence ε).withGhost ghost).rule d dt
+      (fun c => data.cellMean q c 0) cell - data.cellMean q cell dt‖ = dt / V * ‖ε‖ := by
+  have hv : 0 < V := by rw [← hV cell]; exact data.cellVolume_pos cell
+  rw [advance_withGhost_uniform data coord incidence ε V hV]
+  rw [CapacityZeroFlux.cellMean_eq data d q href hzero Set.left_mem_uIcc
+    (Set.mem_uIcc_of_le hdt.le hT) cell]
+  simp [norm_smul, Real.norm_eq_abs, abs_of_pos (div_pos hdt hv)]
+
+theorem cartesian_scaling (h dt : ℝ) (hh : 0 < h) (hdt : 0 < dt) :
+    (dt / h ^ 2) • (h ^ 5 • (1 : Fin 1 → ℝ)) = (dt * h ^ 3) • (1 : Fin 1 → ℝ) ∧
+    ‖(dt / h ^ 2) • (h ^ 5 • (1 : Fin 1 → ℝ))‖ = dt * h ^ 3 ∧
+    0 < dt * h ^ 3 := by
+  have he : dt / h ^ 2 * h ^ 5 = dt * h ^ 3 := by field_simp
+  have hp : 0 < dt * h ^ 3 := mul_pos hdt (pow_pos hh 3)
+  refine ⟨?_, ?_, hp⟩
+  · rw [smul_smul, he]
+  · rw [smul_smul, he, norm_smul]
+    simp [Real.norm_eq_abs, abs_of_pos hdt, abs_of_pos hh]
+
+end CapacitySmallBias
+
+namespace CapacitySmallBias
+open NumStability NumStability.FiniteCoordinate
+open scoped BigOperators
+variable {D Cell Face Line : Type*} {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- Actual boundary-edge count on a selected line. Holes produce additional
+boundary edges; no universal two-edge assertion is built into this count. -/
+noncomputable def boundaryCount [Fintype Cell]
+    (coord : LineCoordinates (m := m) D Cell Face Line) (d : D) (line : Line) : ℕ := by
+  classical
+  exact ∑ cell, if coord.cellLine d cell = line then
+    (if coord.lookup d line (coord.cellIndex d cell - 1) = none then 1 else 0) +
+      (if coord.lookup d line (coord.cellIndex d cell + 1) = none then 1 else 0) else 0
+
+theorem variation_add_le [Fintype Cell] (coord : LineCoordinates (m := m) D Cell Face Line)
+    (d : D) (line : Line) (ghost : D → Line → ℤ → State) (current : Cell → State) (shift : State) :
+    CapacityZeroFlux.onceEdgeVariation coord d line ghost (fun cell => current cell + shift) ≤
+      CapacityZeroFlux.onceEdgeVariation coord d line ghost current +
+        (boundaryCount coord d line : ℝ) * ‖shift‖ := by
+  classical
+  unfold CapacityZeroFlux.onceEdgeVariation boundaryCount
+  simp only [Nat.cast_sum, Finset.sum_mul, ← Finset.sum_add_distrib]
+  apply Finset.sum_le_sum
+  intro cell _
+  by_cases hl : coord.cellLine d cell = line
+  · have hleft : ‖current cell + shift - ghost d line (coord.cellIndex d cell - 1)‖ ≤
+        ‖current cell - ghost d line (coord.cellIndex d cell - 1)‖ + ‖shift‖ := by
+      simpa [add_comm] using norm_sub_le_norm_sub_add_norm_sub
+        (current cell + shift) (current cell) (ghost d line (coord.cellIndex d cell - 1))
+    have hright : ‖ghost d line (coord.cellIndex d cell + 1) - (current cell + shift)‖ ≤
+        ‖ghost d line (coord.cellIndex d cell + 1) - current cell‖ + ‖shift‖ := by
+      simpa using norm_sub_le_norm_sub_add_norm_sub
+        (ghost d line (coord.cellIndex d cell + 1)) (current cell) (current cell + shift)
+    cases hp : coord.lookup d line (coord.cellIndex d cell - 1) <;>
+      cases hn : coord.lookup d line (coord.cellIndex d cell + 1) <;>
+        simp [LineCoordinates.withGhost, LineCoordinates.extract, hl, hp, hn] <;> linarith
+  · simp [LineCoordinates.withGhost, hl]
+
+theorem variation_add_le_two [Fintype Cell] (coord : LineCoordinates (m := m) D Cell Face Line)
+    (d : D) (line : Line) (ghost : D → Line → ℤ → State) (current : Cell → State) (shift : State)
+    (hcount : boundaryCount coord d line ≤ 2) :
+    CapacityZeroFlux.onceEdgeVariation coord d line ghost (fun cell => current cell + shift) ≤
+      CapacityZeroFlux.onceEdgeVariation coord d line ghost current + 2 * ‖shift‖ := by
+  apply (variation_add_le coord d line ghost current shift).trans
+  have hc : (boundaryCount coord d line : ℝ) ≤ 2 := by exact_mod_cast hcount
+  exact add_le_add_left (mul_le_mul_of_nonneg_right hc (norm_nonneg shift)) _
+
+end CapacitySmallBias

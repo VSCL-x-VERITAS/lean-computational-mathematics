@@ -1,0 +1,101 @@
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CertifiedRiemannRoutineUpdate
+
+/-!
+# Chapter 1: certified Riemann information and physical flux errors
+
+A supplied certified information routine produces fluxes and a normalized
+local update. Actual same-problem references link the two executions to
+Riemann data and finite-slab rectangle conservation. Direct and reference-based
+physical error propagation follow under explicit bounds. The recorded Q7
+convention and inherited rectangle interpretation remain separate from printed
+source assertions; no arbitrary-law routine availability is claimed here.
+-/
+
+open MeasureTheory
+
+namespace NumStability
+open LocalRiemannInformation
+
+theorem leveque01_certifiedRiemannRoutineInterface_sourceContract {m : ℕ}
+    (law : Law m)
+    {Result : Problem law → Type*} {Information : Type*}
+    (routine : Routine law Result Information)
+    (errorBound : Problem law → ℝ) (haccuracy : routine.HasRiemannAccuracy errorBound)
+    (left center right : Fin m → ℝ)
+    (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states)
+    (hrightState : right ∈ law.states)
+    {a b s t : ℝ} (hab : a < b) (hst : s < t)
+    (hleftDomain : routine.domain
+      ⟨left, center, hleftState, hcenterState, t - s, sub_pos.mpr hst⟩)
+    (hrightDomain : routine.domain
+      ⟨center, right, hcenterState, hrightState, t - s, sub_pos.mpr hst⟩)
+    (q : ℝ → ℝ → Fin m → ℝ)
+    (holdDensity : IntervalIntegrable (fun x => q x s) volume a b)
+    (hnewDensity : IntervalIntegrable (fun x => q x t) volume a b)
+    (hleftFlux : IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t)
+    (hrightFlux : IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t)
+    (hphysicalBalance : (∫ x in a..b, (fun x => q x t) x) - (∫ x in a..b, (fun x => q x s) x) =
+      ∫ τ in s..t, ((fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ)) :
+    let leftProblem : Problem law := ⟨left, center, hleftState, hcenterState, t - s, sub_pos.mpr hst⟩
+    let rightProblem : Problem law := ⟨center, right, hcenterState, hrightState, t - s, sub_pos.mpr hst⟩
+    let leftFlux := routine.flux leftProblem hleftDomain
+    let rightFlux := routine.flux rightProblem hrightDomain
+    let next := finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux)
+    0 < m ∧ IsHyperbolicFluxOn law.flux law.states ∧
+    leftProblem.left = left ∧ leftProblem.right = center ∧
+    rightProblem.left = center ∧ rightProblem.right = right ∧
+    leftProblem.duration = t - s ∧ rightProblem.duration = t - s ∧
+    leftFlux = routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+    rightFlux = routine.numericalFlux (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+    IsOneDimensionalCellAverage (fun x => q x s) a b (oneDimensionalCellAverage (fun x => q x s) a b) ∧
+    IsOneDimensionalCellAverage (fun x => q x t) a b (oneDimensionalCellAverage (fun x => q x t) a b) ∧
+    IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+      (oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) ∧
+    IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+      (oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t) ∧
+    oneDimensionalCellAverage (fun x => q x s) a b = cellVolumeAverage volume (Set.Ioc a b) (fun x => q x s) ∧
+    next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+    (b - a) • (next - oneDimensionalCellAverage (fun x => q x t) a b) =
+      (b - a) • (center - oneDimensionalCellAverage (fun x => q x s) a b) +
+        (t - s) • ((leftFlux - oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) -
+          (rightFlux - oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t)) ∧
+    (∀ oldBound leftBound rightBound : ℝ,
+      ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤ oldBound →
+      ‖leftFlux - oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t‖ ≤ leftBound →
+      ‖rightFlux - oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t‖ ≤ rightBound →
+      ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+        oldBound + (t - s) / (b - a) * (leftBound + rightBound)) ∧
+    ∃ (leftReference : Reference leftProblem) (rightReference : Reference rightProblem),
+      IsRiemannData (fun x => leftReference.field x 0) left center ∧
+      IsRiemannData (fun x => rightReference.field x 0) center right ∧
+      (∀ x y u v, 0 ≤ u → u ≤ v → v ≤ t - s →
+        (∫ z in x..y, leftReference.field z v) - (∫ z in x..y, leftReference.field z u) =
+          ∫ τ in u..v, (law.flux (leftReference.field x τ) - law.flux (leftReference.field y τ))) ∧
+      (∀ x y u v, 0 ≤ u → u ≤ v → v ≤ t - s →
+        (∫ z in x..y, rightReference.field z v) - (∫ z in x..y, rightReference.field z u) =
+          ∫ τ in u..v, (law.flux (rightReference.field x τ) - law.flux (rightReference.field y τ))) ∧
+      IsOneDimensionalCellAverage (fun τ => law.flux (leftReference.field 0 τ)) 0 (t - s)
+        leftReference.meanFlux ∧
+      IsOneDimensionalCellAverage (fun τ => law.flux (rightReference.field 0 τ)) 0 (t - s)
+        rightReference.meanFlux ∧
+      0 ≤ errorBound leftProblem ∧ 0 ≤ errorBound rightProblem ∧
+      ‖leftFlux - leftReference.meanFlux‖ ≤ errorBound leftProblem ∧
+      ‖rightFlux - rightReference.meanFlux‖ ≤ errorBound rightProblem ∧
+      ∀ oldBound leftComparison rightComparison : ℝ,
+        ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤ oldBound →
+        ‖leftReference.meanFlux - oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t‖ ≤ leftComparison →
+        ‖rightReference.meanFlux - oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t‖ ≤ rightComparison →
+        ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+          oldBound + (t - s) / (b - a) *
+            ((errorBound leftProblem + leftComparison) + (errorBound rightProblem + rightComparison)) := by
+  exact certifiedRoutine_local_interface_contract law routine errorBound haccuracy left center right
+    hleftState hcenterState hrightState hab hst hleftDomain hrightDomain
+    (fun x => q x s) (fun x => q x t)
+    (fun τ => law.flux (q a τ)) (fun τ => law.flux (q b τ))
+    holdDensity hnewDensity hleftFlux hrightFlux hphysicalBalance
+
+end NumStability

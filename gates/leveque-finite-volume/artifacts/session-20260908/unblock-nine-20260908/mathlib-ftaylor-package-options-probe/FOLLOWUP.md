@@ -1,0 +1,13 @@
+# Defs consuming the freshly compiled FTaylor artifact
+
+The unchanged `Defs.lean` (SHA-256 `793a1ca70881ed469c78feeb0724766b6a2d933e51a8fad5b9c87e67228c5711`) compiled with the same three package options and an explicit Lean `--setup` artifact map selecting the fresh FTaylor `.olean`, `.ir`, `.olean.server`, and `.olean.private`. The positive compile exited 0 in 53,218 ms, with empty stdout and stderr. The otherwise identical negative setup pointed FTaylor's main artifact at a nonexistent path; it exited 1 and named that exact missing file. Original source and captured compiled dependency pins remained unchanged.
+
+The positive receipt is `../defs-setup-06/receipt.json`, SHA-256 `73e5ba6352fb0f7798c94013fc5b2563649a6d321cc1f038a2a6d6fa9a3a34bc`. Its outer native `lake env` receipt is `9f75afaa99654db07764c4382cfa07d5dd97355c8f1806d2f249ef86d34fc0bd`. No package source was patched and the original source header controlled the imports (`imports: null` in setup).
+
+The fresh FTaylor binary SHA-256 is `f5dd56860697601f5a33342f5891a8787958d5f855bc4080b2d0bb64273fc366`; the existing cached binary is `d46029388be2edef659aae84e84fcbf4a1fadbc1d9e1798b4d499c82988ea28a`. They differ. This is not an assertion of either structural equivalence or semantic difference.
+
+Two limitations matter for the released audit workflow. Lean's package-prefix search selects the first root for all `Mathlib` modules. The first Defs attempt (`../defs-options-04`) therefore failed before elaboration because the partial overlay lacked `Mathlib.Analysis.Analytic.Within`. A later setup attempt (`../defs-setup-05`) failed before importing because my generated setup omitted the required `dynlibs` array. Both actual failures and raw outputs are preserved; attempt 06 supplies all JSON fields explicitly.
+
+Lean `--deps` returns before loading a setup file (`Lean/Shell.lean`, lines 504–526). Its successful output in attempt 06 describes the ordinary cached search, not the explicit compilation map. The negative/positive comparison establishes use of the map instead. `Lean/Environment.lean` uses supplied `importArts` when loading each module and IR (lines 2128–2144).
+
+The sealed `scripts/declaration_dossier.lean` initializes the search path and calls `withImportModules` afresh at lines 115–116. The pinned `withImportModules` at `Lean/Environment.lean` lines 2348–2350 calls `importModules` without shell setup artifacts. Thus this setup-only compilation approach does **not** establish correct fresh partial-Mathlib resolution for the final dynamic dossier. A complete isolated import layout or another separately reviewed supported runtime mechanism is still needed for that step. No released helper, source, gate, or configuration was changed here.

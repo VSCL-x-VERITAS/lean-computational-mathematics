@@ -1,0 +1,72 @@
+
+namespace PhysicalRefinementQuality.Family
+open MeasureTheory Filter NumStability NumStability.FiniteCoordinate
+open scoped BigOperators Topology
+variable {D FacePoint : Type*} [Fintype D] [MeasurableSpace FacePoint] {m : ℕ}
+local notation "Point" => D → ℝ
+local notation "State" => Fin m → ℝ
+
+/-- The zero-flux method is a complete core-quality instance on every actual
+refinement geometry. The physical reference class remains the entire genuine
+smooth class of the shared law; its measured means are constant by conservation. -/
+theorem zero_flux_quality (family : Family D FacePoint m)
+    (hnum : ∀ n d line dt values j, (family.method n).numericalFlux d line dt values j = 0)
+    (hadmit : ∀ n d line dt values, (family.method n).admitted d line dt values)
+    (hphysical : ∀ n d face point state, (family.data n).normalFlux d face point state = 0) :
+    family.HasHighResolution := by
+  have admitted : ∀ n d ghost dt current,
+      ((family.method n).withGhost ghost).Admitted d dt current := by
+    intro n d ghost dt current cell
+    exact hadmit n d _ dt _
+  have identity : ∀ n d ghost dt current,
+      advance (family.data n) ((family.method n).withGhost ghost).rule d dt current = current := by
+    intro n d ghost dt current
+    funext cell
+    simp [advance, CapacityCoordinate.Method.withGhost, CapacityCoordinate.Method.rule,
+      PhysicalCapacityBridge.faceRule, hnum, finiteVolumeCellAverageUpdate]
+  refine ⟨?_, ?_, ?_⟩
+  · intro n d ghost current _ _
+    exact ⟨family.horizon, family.horizon_pos, le_rfl,
+      admitted n d ghost family.horizon current⟩
+  · intro d
+    refine ⟨2, by norm_num, ?_⟩
+    intro q hq
+    refine ⟨{
+      constant := 0
+      constant_nonneg := le_rfl
+      threshold := 0
+      projection_available := ?_
+      bound := ?_ }⟩
+    · intro n _
+      exact ⟨family.horizon, family.horizon_pos, le_rfl,
+        admitted n d (family.referenceGhost n q) family.horizon (family.projected n q 0)⟩
+    · intro n _ dt hdt hT _ cell
+      rw [identity]
+      have hface : ∀ face τ, (family.data n).faceFlux d q face τ = 0 :=
+        fun face τ => CapacityZeroFlux.faceFlux_zero (family.data n) d (hphysical n d) q face τ
+      have hmean := CapacityZeroFlux.cellMean_eq (family.data n) d q (hq.2.1 n) hface
+        Set.left_mem_uIcc (Set.mem_uIcc_of_le hdt.le hT) cell
+      change ‖(family.data n).cellMean q cell 0 - (family.data n).cellMean q cell dt‖ ≤ _
+      rw [hmean]
+      simp
+  · intro d
+    refine ⟨0, le_rfl, fun _ => 0, fun _ => le_rfl, tendsto_const_nhds, ?_⟩
+    intro n ghost current dt _ _ _ line
+    rw [identity]
+    simp
+
+/-- The zero-flux family's perturbation stability is proved separately from
+core quality. No stability requirement has been inserted into that definition. -/
+theorem zero_flux_stable (family : Family D FacePoint m)
+    (hnum : ∀ n d line dt values j, (family.method n).numericalFlux d line dt values j = 0)
+    (n : ℕ) (d : D) (dt : ℝ) : (family.method n).StableAt d dt 1 := by
+  intro cell values other _ _ E _ herr
+  simpa [PhysicalCapacityBridge.lineAdvance, hnum, finiteVolumeCellAverageUpdate] using
+    herr ((family.coordinates n).cellIndex d cell)
+
+end PhysicalRefinementQuality.Family
+
+#check PhysicalRefinementQuality.Family.zero_flux_quality
+#print axioms PhysicalRefinementQuality.Family.zero_flux_quality
+#check PhysicalRefinementQuality.Family.zero_flux_stable
+#print axioms PhysicalRefinementQuality.Family.zero_flux_stable

@@ -1,0 +1,376 @@
+NumStability.leveque01_sourceTermsRectangleBalance {q production : ℝ → ℝ → Fin 1 → ℝ} (speed : ℝ)
+  (h : NumStability.IsRectangleBalanceLawSolution q (fun state => speed • state) production) :
+  NumStability.IsRectangleBalanceLawSolution q (fun state => speed • state) production ∧
+    (∀ (a b s t : ℝ),
+        ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ =
+          ((∫ (x : ℝ) in a..b, q x t) - ∫ (x : ℝ) in a..b, q x s) - ∫ (τ : ℝ) in s..t, speed • q a τ - speed • q b τ) ∧
+      ((NumStability.IsRectangleConservationLawSolution q fun state => speed • state) ↔
+          ∀ (a b s t : ℝ), ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ = 0) ∧
+        ((¬NumStability.IsRectangleConservationLawSolution q fun state => speed • state) ↔
+            ∃ a b s t, ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production x τ ≠ 0) ∧
+          ∀ (a b : ℝ),
+            ∀ᵐ (t : ℝ),
+              HasDerivAt (fun s => ∫ (x : ℝ) in a..b, q x s)
+                (speed • q a t - speed • q b t + ∫ (x : ℝ) in a..b, production x t) t
+NumStability.leveque01_materialInterfaceLocalRiemannData.{u_1, u_2} {Material : Type u_1} {State : Type u_2}
+  [TopologicalSpace Material] [TopologicalSpace State] [T2Space Material] [T2Space State] {medium : ℝ → Material}
+  {initialState : ℝ → State} {leftMaterial rightMaterial : Material} {leftState rightState : State}
+  (hmedium : NumStability.HasJumpAt medium 0 leftMaterial rightMaterial)
+  (hstate : NumStability.IsRiemannData initialState leftState rightState) (hdistinct : leftState ≠ rightState) :
+  (NumStability.HasJumpAt medium 0 leftMaterial rightMaterial ∧
+      NumStability.HasJumpAt initialState 0 leftState rightState) ∧
+    (Filter.Tendsto (fun x => (medium x, initialState x)) (nhdsWithin 0 (Set.Iio 0)) (nhds (leftMaterial, leftState)) ∧
+        Filter.Tendsto (fun x => (medium x, initialState x)) (nhdsWithin 0 (Set.Ioi 0))
+            (nhds (rightMaterial, rightState)) ∧
+          leftMaterial ≠ rightMaterial ∧ leftState ≠ rightState) ∧
+      NumStability.IsRiemannData initialState leftState rightState ∧
+        ¬ContinuousAt medium 0 ∧
+          ¬ContinuousAt initialState 0 ∧
+            ∃ originState, initialState = NumStability.riemannData leftState originState rightState
+NumStability.leveque01_materialCellVolumeAveraging.{u_1, u_2, u_3} {Cell : Type u_1} {Point : Type u_2}
+  {Parameter : Type u_3} [MeasurableSpace Point] [NormedAddCommGroup Parameter] [NormedSpace ℝ Parameter]
+  [CompleteSpace Parameter] (grid : NumStability.FiniteVolumeCellPartition Cell Point) (physicalVolume : Measure Point)
+  (materialParameter : Point → Parameter) (hpositive : ∀ (cell : Cell), physicalVolume (grid.cellRegion cell) ≠ 0)
+  (hfinite : ∀ (cell : Cell), physicalVolume (grid.cellRegion cell) ≠ ⊤)
+  (hintegrable : ∀ (cell : Cell), IntegrableOn materialParameter (grid.cellRegion cell) physicalVolume) :
+  ∃ assigned,
+    (∀ (cell : Cell),
+        NumStability.IsCellVolumeAverage physicalVolume (grid.cellRegion cell) materialParameter (assigned cell)) ∧
+      (∀ (other : Cell → Parameter),
+          (∀ (cell : Cell),
+              NumStability.IsCellVolumeAverage physicalVolume (grid.cellRegion cell) materialParameter (other cell)) →
+            other = assigned) ∧
+        (∀ (cell : Cell) (alternativeParameter : Point → Parameter),
+            Set.EqOn materialParameter alternativeParameter (grid.cellRegion cell) →
+              assigned cell =
+                NumStability.cellVolumeAverage physicalVolume (grid.cellRegion cell) alternativeParameter) ∧
+          ∀ (cell : Cell) (parameter : Parameter),
+            (NumStability.cellVolumeAverage physicalVolume (grid.cellRegion cell) fun x => parameter) = parameter
+'NumStability.leveque01_sourceTermsRectangleBalance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NumStability.leveque01_materialInterfaceLocalRiemannData' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NumStability.leveque01_materialCellVolumeAveraging' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.unitState : Fin 1 → ℝ
+'NumStability.MaterialUnblockingChecks.unitState' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.profile : ℝ → Fin 1 → ℝ
+'NumStability.MaterialUnblockingChecks.profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.state (rate x t : ℝ) : Fin 1 → ℝ
+'NumStability.MaterialUnblockingChecks.state' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.production (rate x _t : ℝ) : Fin 1 → ℝ
+'NumStability.MaterialUnblockingChecks.production' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.profile_eq_scalar_smul (x : ℝ) :
+  profile x = NumStability.riemannData 0 0 1 x • unitState
+'NumStability.MaterialUnblockingChecks.profile_eq_scalar_smul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.balance (rate : ℝ) :
+  NumStability.IsRectangleBalanceLawSolution (state rate) (fun x => 0) (production rate)
+'NumStability.MaterialUnblockingChecks.balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.source_integral (rate : ℝ) :
+  ∫ (_τ : ℝ) (x : ℝ) in 1..2, production rate x _τ = rate • unitState
+'NumStability.MaterialUnblockingChecks.source_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.source_capstone_instance (rate : ℝ) :
+  NumStability.IsRectangleBalanceLawSolution (state rate) (fun x => 0) (production rate) ∧
+    (∀ (a b s t : ℝ),
+        ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production rate x τ =
+          ((∫ (x : ℝ) in a..b, state rate x t) - ∫ (x : ℝ) in a..b, state rate x s) - ∫ (_τ : ℝ) in s..t, 0 - 0) ∧
+      ((NumStability.IsRectangleConservationLawSolution (state rate) fun x => 0) ↔
+          ∀ (a b s t : ℝ), ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production rate x τ = 0) ∧
+        ((¬NumStability.IsRectangleConservationLawSolution (state rate) fun x => 0) ↔
+            ∃ a b s t, ∫ (τ : ℝ) in s..t, ∫ (x : ℝ) in a..b, production rate x τ ≠ 0) ∧
+          ∀ (a b : ℝ),
+            ∀ᵐ (t : ℝ),
+              HasDerivAt (fun s => ∫ (x : ℝ) in a..b, state rate x s) (0 - 0 + ∫ (x : ℝ) in a..b, production rate x t) t
+'NumStability.MaterialUnblockingChecks.source_capstone_instance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.nonconservation (rate : ℝ) (hrate : rate ≠ 0) :
+  ¬NumStability.IsRectangleConservationLawSolution (state rate) fun x => 0
+'NumStability.MaterialUnblockingChecks.nonconservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.positive_and_negative_instances :
+  (¬NumStability.IsRectangleConservationLawSolution (state 1) fun x => 0) ∧
+    (¬NumStability.IsRectangleConservationLawSolution (state (-1)) fun x => 0) ∧
+      (∫ (τ : ℝ) (x : ℝ) in 1..2, production 1 x τ) 0 = 1 ∧ (∫ (τ : ℝ) (x : ℝ) in 1..2, production (-1) x τ) 0 = -1
+'NumStability.MaterialUnblockingChecks.positive_and_negative_instances' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.local_medium_applicability (originMaterial originState : ℝ) :
+  NumStability.HasJumpAt (NumStability.LocalMaterialInterface.varyingMedium originMaterial) 0 0 1 ∧
+    NumStability.HasJumpAt (NumStability.riemannData 2 originState 3) 0 2 3 ∧
+      (¬∃ ml mr, NumStability.IsRiemannData (NumStability.LocalMaterialInterface.varyingMedium originMaterial) ml mr) ∧
+        ¬ContinuousAt (NumStability.LocalMaterialInterface.varyingMedium originMaterial) 0 ∧
+          ¬ContinuousAt (NumStability.riemannData 2 originState 3) 0
+'NumStability.MaterialUnblockingChecks.local_medium_applicability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.equal_average_applicability :
+  ∃ assigned,
+    (∀ (cell : Bool),
+        NumStability.IsCellVolumeAverage volume (NumStability.CellVolumeAverageExamples.symmetricCells.cellRegion cell)
+          (fun x => x ^ 2) (assigned cell)) ∧
+      assigned false = assigned true ∧
+        ∀ (cell : Bool),
+          ∃ x ∈ NumStability.CellVolumeAverageExamples.symmetricCells.cellRegion cell,
+            ∃ y ∈ NumStability.CellVolumeAverageExamples.symmetricCells.cellRegion cell, x ^ 2 ≠ y ^ 2
+'NumStability.MaterialUnblockingChecks.equal_average_applicability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.different_average_applicability :
+  ∃ assigned,
+    (∀ (cell : Bool),
+        NumStability.IsCellVolumeAverage volume (NumStability.CellVolumeAverageExamples.symmetricCells.cellRegion cell)
+          (fun x => x) (assigned cell)) ∧
+      assigned false ≠ assigned true
+'NumStability.MaterialUnblockingChecks.different_average_applicability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.MaterialUnblockingChecks.selectedInstance : Real.measureSpace = measureSpaceOfInnerProductSpace
+'NumStability.MaterialUnblockingChecks.selectedInstance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.selectedVolume : volume = (stdOrthonormalBasis ℝ ℝ).toBasis.addHaar
+'NumStability.MaterialUnblockingChecks.selectedVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.stieltjesIdentity : volume = StieltjesFunction.id.measure
+'NumStability.MaterialUnblockingChecks.stieltjesIdentity' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.unitInterval : volume (Set.Ioc 0 1) = 1
+'NumStability.MaterialUnblockingChecks.unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.MaterialUnblockingChecks.selectedBorel : Real.measureSpace.toMeasurableSpace = borel ℝ
+'NumStability.MaterialUnblockingChecks.selectedBorel' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[implicit_reducible] def Real.measureSpace : MeasureTheory.MeasureSpace.{0} Real :=
+@inferInstance.{1} (MeasureTheory.MeasureSpace.{0} Real)
+  (@measureSpaceOfInnerProductSpace.{0} Real Real.normedAddCommGroup
+    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)
+    (@FiniteDimensional.rclike_to_real.{0} Real Real.instRCLike) Real.measurableSpace Real.borelSpace)
+@[implicit_reducible] def measureSpaceOfInnerProductSpace.{u_3} : {E : Type u_3} →
+  [inst : NormedAddCommGroup.{u_3} E] →
+    [inst_1 :
+        @InnerProductSpace.{0, u_3} Real E Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)] →
+      [@FiniteDimensional.{0, u_3} Real E Real.instDivisionRing (@NormedAddCommGroup.toAddCommGroup.{u_3} E inst)
+            (@NormedSpace.toModule.{0, u_3} Real E Real.normedField
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))] →
+        [inst_3 : MeasurableSpace.{u_3} E] →
+          [@BorelSpace.{u_3} E
+                (@UniformSpace.toTopologicalSpace.{u_3} E
+                  (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+                inst_3] →
+            MeasureTheory.MeasureSpace.{u_3} E :=
+fun {E : Type u_3} [inst : NormedAddCommGroup.{u_3} E]
+    [inst_1 :
+      @InnerProductSpace.{0, u_3} Real E Real.instRCLike (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)]
+    [inst_2 :
+      @FiniteDimensional.{0, u_3} Real E Real.instDivisionRing (@NormedAddCommGroup.toAddCommGroup.{u_3} E inst)
+        (@NormedSpace.toModule.{0, u_3} Real E Real.normedField
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+          (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))]
+    [inst_3 : MeasurableSpace.{u_3} E]
+    [inst_4 :
+      @BorelSpace.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+        inst_3] =>
+  @MeasureTheory.MeasureSpace.mk.{u_3} E inst_3
+    (@Module.Basis.addHaar.{0, u_3}
+      (Fin
+        (@Module.finrank.{0, u_3} Real E
+          (@DivisionSemiring.toSemiring.{0} Real
+            (@Semifield.toDivisionSemiring.{0} Real
+              (@Field.toSemifield.{0} Real
+                (@NormedField.toField.{0} Real
+                  (@DenselyNormedField.toNormedField.{0} Real
+                    (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))
+          (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E
+            (@UniformSpace.toTopologicalSpace.{u_3} E
+              (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+            (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E
+              (@UniformSpace.toTopologicalSpace.{u_3} E
+                (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+              (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))
+          (@NormedSpace.toModule.{0, u_3} Real E
+            (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+            (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))
+      E
+      (Fin.fintype
+        (@Module.finrank.{0, u_3} Real E
+          (@DivisionSemiring.toSemiring.{0} Real
+            (@Semifield.toDivisionSemiring.{0} Real
+              (@Field.toSemifield.{0} Real
+                (@NormedField.toField.{0} Real
+                  (@DenselyNormedField.toNormedField.{0} Real
+                    (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))
+          (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E
+            (@UniformSpace.toTopologicalSpace.{u_3} E
+              (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+            (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E
+              (@UniformSpace.toTopologicalSpace.{u_3} E
+                (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+              (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))
+          (@NormedSpace.toModule.{0, u_3} Real E
+            (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+            (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))
+      inst
+      (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1)
+      inst_3 inst_4
+      (@OrthonormalBasis.toBasis.{0, 0, u_3}
+        (Fin
+          (@Module.finrank.{0, u_3} Real E
+            (@DivisionSemiring.toSemiring.{0} Real
+              (@Semifield.toDivisionSemiring.{0} Real
+                (@Field.toSemifield.{0} Real
+                  (@NormedField.toField.{0} Real
+                    (@DenselyNormedField.toNormedField.{0} Real
+                      (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))
+            (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E
+              (@UniformSpace.toTopologicalSpace.{u_3} E
+                (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+              (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E
+                (@UniformSpace.toTopologicalSpace.{u_3} E
+                  (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))
+            (@NormedSpace.toModule.{0, u_3} Real E
+              (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))
+        Real Real.instRCLike E inst inst_1
+        (Fin.fintype
+          (@Module.finrank.{0, u_3} Real E
+            (@DivisionSemiring.toSemiring.{0} Real
+              (@Semifield.toDivisionSemiring.{0} Real
+                (@Field.toSemifield.{0} Real
+                  (@NormedField.toField.{0} Real
+                    (@DenselyNormedField.toNormedField.{0} Real
+                      (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))
+            (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E
+              (@UniformSpace.toTopologicalSpace.{u_3} E
+                (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+              (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E
+                (@UniformSpace.toTopologicalSpace.{u_3} E
+                  (@PseudoMetricSpace.toUniformSpace.{u_3} E
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))
+            (@NormedSpace.toModule.{0, u_3} Real E
+              (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)
+              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))
+        (@stdOrthonormalBasis.{0, u_3} Real Real.instRCLike E inst inst_1 inst_2)))
+def MeasureTheory.MeasureSpace.volume.{u_6} : {α : Type u_6} →
+  [self : MeasureTheory.MeasureSpace.{u_6} α] →
+    @MeasureTheory.Measure.{u_6} α (@MeasureTheory.MeasureSpace.toMeasurableSpace.{u_6} α self) :=
+fun (α : Type u_6) [self : MeasureTheory.MeasureSpace.{u_6} α] => self.2
+def NumStability.IsRectangleBalanceLawSolution.{u_1} : {E : Type u_1} →
+  [inst : NormedAddCommGroup.{u_1} E] →
+    [@NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)] →
+      (q : Real → Real → E) → (flux : E → E) → (production : Real → Real → E) → Prop :=
+fun {E : Type u_1} [inst : NormedAddCommGroup.{u_1} E]
+    [inst_1 : @NormedSpace.{0, u_1} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst)]
+    (q : Real → Real → E) (flux : E → E) (production : Real → Real → E) =>
+  And
+    (∀ (a b t : Real),
+      @IntervalIntegrable.{u_1} E
+        (@UniformSpace.toTopologicalSpace.{u_1} E
+          (@PseudoMetricSpace.toUniformSpace.{u_1} E
+            (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+        (@NormedAddGroup.toENormedAddMonoid.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst))
+        (fun (x : Real) => q x t) (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace) a b)
+    (And
+      (∀ (x s t : Real),
+        @IntervalIntegrable.{u_1} E
+          (@UniformSpace.toTopologicalSpace.{u_1} E
+            (@PseudoMetricSpace.toUniformSpace.{u_1} E
+              (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+          (@NormedAddGroup.toENormedAddMonoid.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst))
+          (fun (τ : Real) => flux (q x τ)) (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace) s t)
+      (And
+        (∀ (a b t : Real),
+          @IntervalIntegrable.{u_1} E
+            (@UniformSpace.toTopologicalSpace.{u_1} E
+              (@PseudoMetricSpace.toUniformSpace.{u_1} E
+                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+            (@NormedAddGroup.toENormedAddMonoid.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst))
+            (fun (x : Real) => production x t) (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace) a b)
+        (And
+          (∀ (a b s t : Real),
+            @IntervalIntegrable.{u_1} E
+              (@UniformSpace.toTopologicalSpace.{u_1} E
+                (@PseudoMetricSpace.toUniformSpace.{u_1} E
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+              (@NormedAddGroup.toENormedAddMonoid.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst))
+              (fun (τ : Real) =>
+                @intervalIntegral.{u_1} E inst inst_1 (fun (x : Real) => production x τ) a b
+                  (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace))
+              (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace) s t)
+          (∀ (a b s t : Real),
+            @Eq.{u_1 + 1} E
+              (@HSub.hSub.{u_1, u_1, u_1} E E E
+                (@instHSub.{u_1} E
+                  (@SubNegMonoid.toSub.{u_1} E
+                    (@AddGroup.toSubNegMonoid.{u_1} E
+                      (@NormedAddGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst)))))
+                (@intervalIntegral.{u_1} E inst inst_1 (fun (x : Real) => q x t) a b
+                  (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace))
+                (@intervalIntegral.{u_1} E inst inst_1 (fun (x : Real) => q x s) a b
+                  (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace)))
+              (@HAdd.hAdd.{u_1, u_1, u_1} E E E
+                (@instHAdd.{u_1} E
+                  (@AddCommMagma.toAdd.{u_1} E
+                    (@AddCommSemigroup.toAddCommMagma.{u_1} E
+                      (@AddCommMonoid.toAddCommSemigroup.{u_1} E
+                        (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_1} E
+                          (@UniformSpace.toTopologicalSpace.{u_1} E
+                            (@PseudoMetricSpace.toUniformSpace.{u_1} E
+                              (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+                                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+                          (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_1} E
+                            (@UniformSpace.toTopologicalSpace.{u_1} E
+                              (@PseudoMetricSpace.toUniformSpace.{u_1} E
+                                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_1} E
+                                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_1} E inst))))
+                            (@NormedAddCommGroup.toENormedAddCommMonoid.{u_1} E inst)))))))
+                (@intervalIntegral.{u_1} E inst inst_1
+                  (fun (τ : Real) =>
+                    @HSub.hSub.{u_1, u_1, u_1} E E E
+                      (@instHSub.{u_1} E
+                        (@SubNegMonoid.toSub.{u_1} E
+                          (@AddGroup.toSubNegMonoid.{u_1} E
+                            (@NormedAddGroup.toAddGroup.{u_1} E (@NormedAddCommGroup.toNormedAddGroup.{u_1} E inst)))))
+                      (flux (q a τ)) (flux (q b τ)))
+                  s t (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace))
+                (@intervalIntegral.{u_1} E inst inst_1
+                  (fun (τ : Real) =>
+                    @intervalIntegral.{u_1} E inst inst_1 (fun (x : Real) => production x τ) a b
+                      (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace))
+                  s t (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace)))))))
+Real.volume_eq_stieltjes_id : volume = StieltjesFunction.id.measure
+Real.volume_Ioc {a b : ℝ} : volume (Set.Ioc a b) = ENNReal.ofReal (b - a)
+Real.volume_real_Ioc_of_le {a b : ℝ} (hab : a ≤ b) : volume.real (Set.Ioc a b) = b - a
+'Real.volume_Ioc' depends on axioms: [propext, Classical.choice, Quot.sound]

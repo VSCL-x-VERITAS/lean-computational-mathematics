@@ -1,0 +1,530 @@
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Hyperbolicity
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CapacityCoordinateMethod
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CapacityCoordinateSweep
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethod
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethodEstimates
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineVariation
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.RefiningCartesianBoundary
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.RefiningCartesianGeometry
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.ZeroFluxCartesianRefinement
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FiniteLineCoordinates
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FinitePhysicalFluxError
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalCellMesh
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalHighResolutionSweep
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalLineCapacity
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalRefinementQuality
+import ComputationalMathematics.Source.LeVeque.Chapter01.CoordinateHighResolutionMethods
+
+/-! All 169 explicit declarations in the 16 exact current owners. Native execution is intentionally pending. -/
+
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.deepTerms true
+
+#check NumStability.FiniteCoordinate.LineCoordinates
+#print axioms NumStability.FiniteCoordinate.LineCoordinates
+
+#check NumStability.FiniteCoordinate.LineCoordinates.extract
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract
+
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_cell
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_cell
+
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_local
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_local
+
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_error_le
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_error_le
+
+#check NumStability.FiniteCoordinate.LineCoordinates.withGhost
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.withGhost
+
+#check NumStability.FiniteCoordinate.LineCoordinates.withGhost_maps
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.withGhost_maps
+
+#check NumStability.FiniteCoordinate.LineCoordinates.withGhost_self
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.withGhost_self
+
+#check NumStability.FiniteCoordinate.LineCoordinates.withGhost_withGhost
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.withGhost_withGhost
+
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_withGhost_error_le_max
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_withGhost_error_le_max
+
+#check NumStability.FiniteCoordinate.PhysicalLine.Incidence
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.Incidence
+
+#check NumStability.FiniteCoordinate.PhysicalLine.capacity
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.capacity
+
+#check NumStability.FiniteCoordinate.PhysicalLine.capacity_pos
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.capacity_pos
+
+#check NumStability.FiniteCoordinate.PhysicalLine.capacity_cell
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.capacity_cell
+
+#check NumStability.FiniteCoordinate.PhysicalLine.faceRule
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.faceRule
+
+#check NumStability.FiniteCoordinate.PhysicalLine.lineAdvance
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.lineAdvance
+
+#check NumStability.FiniteCoordinate.PhysicalLine.advance_eq
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.advance_eq
+
+#check NumStability.FiniteCoordinate.PhysicalLine.projection_cell
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.projection_cell
+
+#check NumStability.FiniteCoordinate.PhysicalLine.advance_line_local
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.advance_line_local
+
+#check NumStability.FiniteCoordinate.PhysicalLine.capacity_withGhost
+#print axioms NumStability.FiniteCoordinate.PhysicalLine.capacity_withGhost
+
+#check NumStability.FiniteCoordinate.netFluxDefect
+#print axioms NumStability.FiniteCoordinate.netFluxDefect
+
+#check NumStability.FiniteCoordinate.advance_error_balance
+#print axioms NumStability.FiniteCoordinate.advance_error_balance
+
+#check NumStability.FiniteCoordinate.advance_error_le_net
+#print axioms NumStability.FiniteCoordinate.advance_error_le_net
+
+#check NumStability.FiniteCoordinate.faceFlux_eq_zero
+#print axioms NumStability.FiniteCoordinate.faceFlux_eq_zero
+
+#check NumStability.FiniteCoordinate.cellMean_eq_of_faceFlux_zero
+#print axioms NumStability.FiniteCoordinate.cellMean_eq_of_faceFlux_zero
+
+#check NumStability.FiniteVolumeCellPartition.mesh
+#print axioms NumStability.FiniteVolumeCellPartition.mesh
+
+#check NumStability.FiniteVolumeCellPartition.diameter_le_mesh
+#print axioms NumStability.FiniteVolumeCellPartition.diameter_le_mesh
+
+#check NumStability.FiniteVolumeCellPartition.mesh_nonneg
+#print axioms NumStability.FiniteVolumeCellPartition.mesh_nonneg
+
+#check NumStability.FiniteVolumeCellPartition.mesh_le_iff
+#print axioms NumStability.FiniteVolumeCellPartition.mesh_le_iff
+
+#check NumStability.FiniteVolumeCellPartition.mesh_attained
+#print axioms NumStability.FiniteVolumeCellPartition.mesh_attained
+
+#check NumStability.FiniteVolumeCellPartition.dist_le_mesh
+#print axioms NumStability.FiniteVolumeCellPartition.dist_le_mesh
+
+#check NumStability.FiniteVolumeCellPartition.mesh_pos_of_separated
+#print axioms NumStability.FiniteVolumeCellPartition.mesh_pos_of_separated
+
+#check NumStability.CapacityCoordinate.Method
+#print axioms NumStability.CapacityCoordinate.Method
+
+#check NumStability.CapacityCoordinate.Method.rule
+#print axioms NumStability.CapacityCoordinate.Method.rule
+
+#check NumStability.CapacityCoordinate.Method.Admitted
+#print axioms NumStability.CapacityCoordinate.Method.Admitted
+
+#check NumStability.CapacityCoordinate.Method.StableAt
+#print axioms NumStability.CapacityCoordinate.Method.StableAt
+
+#check NumStability.CapacityCoordinate.Method.advance_eq
+#print axioms NumStability.CapacityCoordinate.Method.advance_eq
+
+#check NumStability.CapacityCoordinate.Method.coordinate_stability
+#print axioms NumStability.CapacityCoordinate.Method.coordinate_stability
+
+#check NumStability.CapacityCoordinate.Method.coordinate_local
+#print axioms NumStability.CapacityCoordinate.Method.coordinate_local
+
+#check NumStability.CapacityCoordinate.Method.withGhost
+#print axioms NumStability.CapacityCoordinate.Method.withGhost
+
+#check NumStability.CapacityCoordinate.Method.withGhost_flux_admission
+#print axioms NumStability.CapacityCoordinate.Method.withGhost_flux_admission
+
+#check NumStability.CapacityCoordinate.Method.advance_withGhost_eq
+#print axioms NumStability.CapacityCoordinate.Method.advance_withGhost_eq
+
+#check NumStability.CapacityCoordinate.Method.coordinate_stability_withGhost
+#print axioms NumStability.CapacityCoordinate.Method.coordinate_stability_withGhost
+
+#check NumStability.CapacityCoordinate.Sweep.step
+#print axioms NumStability.CapacityCoordinate.Sweep.step
+
+#check NumStability.CapacityCoordinate.Sweep.run
+#print axioms NumStability.CapacityCoordinate.Sweep.run
+
+#check NumStability.CapacityCoordinate.Sweep.run_succ
+#print axioms NumStability.CapacityCoordinate.Sweep.run_succ
+
+#check NumStability.CapacityCoordinate.Sweep.run_ordered
+#print axioms NumStability.CapacityCoordinate.Sweep.run_ordered
+
+#check NumStability.CapacityCoordinate.Sweep.run_physical_error
+#print axioms NumStability.CapacityCoordinate.Sweep.run_physical_error
+
+#check NumStability.CapacityCoordinate.Sweep.run_zero
+#print axioms NumStability.CapacityCoordinate.Sweep.run_zero
+
+#check NumStability.CapacityCoordinate.Sweep.run_line_step
+#print axioms NumStability.CapacityCoordinate.Sweep.run_line_step
+
+#check NumStability.CapacityCoordinate.Sweep.run_mass_balance
+#print axioms NumStability.CapacityCoordinate.Sweep.run_mass_balance
+
+#check NumStability.CapacityCoordinate.Sweep.step_coordinate_local
+#print axioms NumStability.CapacityCoordinate.Sweep.step_coordinate_local
+
+#check NumStability.CapacityCoordinate.Sweep.run_stage_local
+#print axioms NumStability.CapacityCoordinate.Sweep.run_stage_local
+
+#check NumStability.CapacityCoordinate.Sweep.run_withGhost_line_step
+#print axioms NumStability.CapacityCoordinate.Sweep.run_withGhost_line_step
+
+#check NumStability.FiniteCoordinate.LineCoordinates.onceEdgeVariation
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.onceEdgeVariation
+
+#check NumStability.FiniteCoordinate.LineCoordinates.boundaryCount
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.boundaryCount
+
+#check NumStability.FiniteCoordinate.LineCoordinates.variation_add_le
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.variation_add_le
+
+#check NumStability.FiniteCoordinate.LineCoordinates.variation_add_le_two
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.variation_add_le_two
+
+#check NumStability.PhysicalRefinementQuality.Family
+#print axioms NumStability.PhysicalRefinementQuality.Family
+
+#check NumStability.PhysicalRefinementQuality.Family.referenceGhost
+#print axioms NumStability.PhysicalRefinementQuality.Family.referenceGhost
+
+#check NumStability.PhysicalRefinementQuality.Family.projected
+#print axioms NumStability.PhysicalRefinementQuality.Family.projected
+
+#check NumStability.PhysicalRefinementQuality.Family.SmoothReference
+#print axioms NumStability.PhysicalRefinementQuality.Family.SmoothReference
+
+#check NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate
+#print axioms NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate
+
+#check NumStability.PhysicalRefinementQuality.Family.variation
+#print axioms NumStability.PhysicalRefinementQuality.Family.variation
+
+#check NumStability.PhysicalRefinementQuality.Family.HasHighResolution
+#print axioms NumStability.PhysicalRefinementQuality.Family.HasHighResolution
+
+#check NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available
+#print axioms NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available
+
+#check NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.available_at_threshold
+#print axioms NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.available_at_threshold
+
+#check NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at
+#print axioms NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at
+
+#check NumStability.PhysicalRefinementQuality.Family.zero_flux_quality
+#print axioms NumStability.PhysicalRefinementQuality.Family.zero_flux_quality
+
+#check NumStability.PhysicalRefinementQuality.Family.zero_flux_stable
+#print axioms NumStability.PhysicalRefinementQuality.Family.zero_flux_stable
+
+#check NumStability.PhysicalHighResolutionSweep.coordinates
+#print axioms NumStability.PhysicalHighResolutionSweep.coordinates
+
+#check NumStability.PhysicalHighResolutionSweep.method
+#print axioms NumStability.PhysicalHighResolutionSweep.method
+
+#check NumStability.PhysicalHighResolutionSweep.execution
+#print axioms NumStability.PhysicalHighResolutionSweep.execution
+
+#check NumStability.PhysicalHighResolutionSweep.Specification
+#print axioms NumStability.PhysicalHighResolutionSweep.Specification
+
+#check NumStability.PhysicalHighResolutionSweep.specification
+#print axioms NumStability.PhysicalHighResolutionSweep.specification
+
+#check NumStability.PhysicalHighResolutionSweep.ValidSubsteps
+#print axioms NumStability.PhysicalHighResolutionSweep.ValidSubsteps
+
+#check NumStability.PhysicalHighResolutionSweep.admitted_specification
+#print axioms NumStability.PhysicalHighResolutionSweep.admitted_specification
+
+#check NumStability.RefiningCartesianGrid.Direction
+#print axioms NumStability.RefiningCartesianGrid.Direction
+
+#check NumStability.RefiningCartesianGrid.State
+#print axioms NumStability.RefiningCartesianGrid.State
+
+#check NumStability.RefiningCartesianGrid.Position
+#print axioms NumStability.RefiningCartesianGrid.Position
+
+#check NumStability.RefiningCartesianGrid.Point
+#print axioms NumStability.RefiningCartesianGrid.Point
+
+#check NumStability.RefiningCartesianGrid.h
+#print axioms NumStability.RefiningCartesianGrid.h
+
+#check NumStability.RefiningCartesianGrid.h_pos
+#print axioms NumStability.RefiningCartesianGrid.h_pos
+
+#check NumStability.RefiningCartesianGrid.h_tendsto
+#print axioms NumStability.RefiningCartesianGrid.h_tendsto
+
+#check NumStability.RefiningCartesianGrid.active
+#print axioms NumStability.RefiningCartesianGrid.active
+
+#check NumStability.RefiningCartesianGrid.Cell
+#print axioms NumStability.RefiningCartesianGrid.Cell
+
+#check NumStability.RefiningCartesianGrid.mem_active
+#print axioms NumStability.RefiningCartesianGrid.mem_active
+
+#check NumStability.RefiningCartesianGrid.active_nonempty
+#print axioms NumStability.RefiningCartesianGrid.active_nonempty
+
+#check NumStability.RefiningCartesianGrid.cell_index_bounds
+#print axioms NumStability.RefiningCartesianGrid.cell_index_bounds
+
+#check NumStability.RefiningCartesianGrid.active_card
+#print axioms NumStability.RefiningCartesianGrid.active_card
+
+#check NumStability.RefiningCartesianGrid.axes
+#print axioms NumStability.RefiningCartesianGrid.axes
+
+#check NumStability.RefiningCartesianGrid.axis_left
+#print axioms NumStability.RefiningCartesianGrid.axis_left
+
+#check NumStability.RefiningCartesianGrid.axis_right
+#print axioms NumStability.RefiningCartesianGrid.axis_right
+
+#check NumStability.RefiningCartesianGrid.axis_volume
+#print axioms NumStability.RefiningCartesianGrid.axis_volume
+
+#check NumStability.RefiningCartesianGrid.identity_hyperbolic
+#print axioms NumStability.RefiningCartesianGrid.identity_hyperbolic
+
+#check NumStability.RefiningCartesianGrid.physical
+#print axioms NumStability.RefiningCartesianGrid.physical
+
+#check NumStability.RefiningCartesianGrid.physical_volume
+#print axioms NumStability.RefiningCartesianGrid.physical_volume
+
+#check NumStability.RefiningCartesianGrid.physical_area
+#print axioms NumStability.RefiningCartesianGrid.physical_area
+
+#check NumStability.RefiningCartesianGrid.target
+#print axioms NumStability.RefiningCartesianGrid.target
+
+#check NumStability.RefiningCartesianGrid.region
+#print axioms NumStability.RefiningCartesianGrid.region
+
+#check NumStability.RefiningCartesianGrid.target_nonempty
+#print axioms NumStability.RefiningCartesianGrid.target_nonempty
+
+#check NumStability.RefiningCartesianGrid.target_open
+#print axioms NumStability.RefiningCartesianGrid.target_open
+
+#check NumStability.RefiningCartesianGrid.target_inside
+#print axioms NumStability.RefiningCartesianGrid.target_inside
+
+#check NumStability.RefiningCartesianGrid.active_inside
+#print axioms NumStability.RefiningCartesianGrid.active_inside
+
+#check NumStability.RefiningCartesianGrid.axis_coverage
+#print axioms NumStability.RefiningCartesianGrid.axis_coverage
+
+#check NumStability.RefiningCartesianGrid.target_covered
+#print axioms NumStability.RefiningCartesianGrid.target_covered
+
+#check NumStability.RefiningCartesianGrid.box_bounded
+#print axioms NumStability.RefiningCartesianGrid.box_bounded
+
+#check NumStability.RefiningCartesianGrid.box_diameter_le
+#print axioms NumStability.RefiningCartesianGrid.box_diameter_le
+
+#check NumStability.RefiningCartesianGrid.actualMesh
+#print axioms NumStability.RefiningCartesianGrid.actualMesh
+
+#check NumStability.RefiningCartesianGrid.actualMesh_le
+#print axioms NumStability.RefiningCartesianGrid.actualMesh_le
+
+#check NumStability.RefiningCartesianGrid.actualMesh_nonneg
+#print axioms NumStability.RefiningCartesianGrid.actualMesh_nonneg
+
+#check NumStability.RefiningCartesianGrid.actualMesh_positive
+#print axioms NumStability.RefiningCartesianGrid.actualMesh_positive
+
+#check NumStability.RefiningCartesianGrid.actualMesh_tendsto
+#print axioms NumStability.RefiningCartesianGrid.actualMesh_tendsto
+
+#check NumStability.RefiningCartesianGrid.physicalWith
+#print axioms NumStability.RefiningCartesianGrid.physicalWith
+
+#check NumStability.RefiningCartesianGrid.physicalWith_cells
+#print axioms NumStability.RefiningCartesianGrid.physicalWith_cells
+
+#check NumStability.RefiningCartesianGrid.physicalWith_measure
+#print axioms NumStability.RefiningCartesianGrid.physicalWith_measure
+
+#check NumStability.RefiningCartesianGrid.tensorFlux
+#print axioms NumStability.RefiningCartesianGrid.tensorFlux
+
+#check NumStability.RefiningCartesianGrid.normal
+#print axioms NumStability.RefiningCartesianGrid.normal
+
+#check NumStability.RefiningCartesianGrid.physical_normal_flux
+#print axioms NumStability.RefiningCartesianGrid.physical_normal_flux
+
+#check NumStability.RefiningCartesianGrid.boundaryIndex
+#print axioms NumStability.RefiningCartesianGrid.boundaryIndex
+
+#check NumStability.RefiningCartesianGrid.boundaryPosition
+#print axioms NumStability.RefiningCartesianGrid.boundaryPosition
+
+#check NumStability.RefiningCartesianGrid.boundaryRegion
+#print axioms NumStability.RefiningCartesianGrid.boundaryRegion
+
+#check NumStability.RefiningCartesianGrid.boundaryIndex_bounds
+#print axioms NumStability.RefiningCartesianGrid.boundaryIndex_bounds
+
+#check NumStability.RefiningCartesianGrid.boundaryIndex_eq
+#print axioms NumStability.RefiningCartesianGrid.boundaryIndex_eq
+
+#check NumStability.RefiningCartesianGrid.boundaryPosition_eq
+#print axioms NumStability.RefiningCartesianGrid.boundaryPosition_eq
+
+#check NumStability.RefiningCartesianGrid.extended_box_inside
+#print axioms NumStability.RefiningCartesianGrid.extended_box_inside
+
+#check NumStability.RefiningCartesianGrid.boundary_inside
+#print axioms NumStability.RefiningCartesianGrid.boundary_inside
+
+#check NumStability.RefiningCartesianGrid.boundary_measurable
+#print axioms NumStability.RefiningCartesianGrid.boundary_measurable
+
+#check NumStability.RefiningCartesianGrid.boundary_volume
+#print axioms NumStability.RefiningCartesianGrid.boundary_volume
+
+#check NumStability.RefiningCartesianGrid.boundary_positive_finite
+#print axioms NumStability.RefiningCartesianGrid.boundary_positive_finite
+
+#check NumStability.RefiningCartesianGrid.boundary_on_neighbor
+#print axioms NumStability.RefiningCartesianGrid.boundary_on_neighbor
+
+#check NumStability.RefiningCartesianGrid.coord
+#print axioms NumStability.RefiningCartesianGrid.coord
+
+#check NumStability.ZeroFluxCartesianRefinement.zeroFlux
+#print axioms NumStability.ZeroFluxCartesianRefinement.zeroFlux
+
+#check NumStability.ZeroFluxCartesianRefinement.zero_hyperbolic
+#print axioms NumStability.ZeroFluxCartesianRefinement.zero_hyperbolic
+
+#check NumStability.ZeroFluxCartesianRefinement.data
+#print axioms NumStability.ZeroFluxCartesianRefinement.data
+
+#check NumStability.ZeroFluxCartesianRefinement.coordinates
+#print axioms NumStability.ZeroFluxCartesianRefinement.coordinates
+
+#check NumStability.ZeroFluxCartesianRefinement.method
+#print axioms NumStability.ZeroFluxCartesianRefinement.method
+
+#check NumStability.ZeroFluxCartesianRefinement.family
+#print axioms NumStability.ZeroFluxCartesianRefinement.family
+
+#check NumStability.ZeroFluxCartesianRefinement.family_quality
+#print axioms NumStability.ZeroFluxCartesianRefinement.family_quality
+
+#check NumStability.ZeroFluxCartesianRefinement.family_stable
+#print axioms NumStability.ZeroFluxCartesianRefinement.family_stable
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_smooth
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_smooth
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_nonconstant
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_nonconstant
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_box_integrable
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_box_integrable
+
+#check NumStability.ZeroFluxCartesianRefinement.faceFlux_zero
+#print axioms NumStability.ZeroFluxCartesianRefinement.faceFlux_zero
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_reference
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_reference
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_in_reference_class
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_in_reference_class
+
+#check NumStability.ZeroFluxCartesianRefinement.stationary_certificates
+#print axioms NumStability.ZeroFluxCartesianRefinement.stationary_certificates
+
+#check NumStability.ZeroFluxCartesianRefinement.nonconstant_full_quality
+#print axioms NumStability.ZeroFluxCartesianRefinement.nonconstant_full_quality
+
+#check NumStability.leveque01_coordinateHighResolutionMethods_sourceContract
+#print axioms NumStability.leveque01_coordinateHighResolutionMethods_sourceContract
+
+#check NumStability.FiniteCoordinate.LineRealization
+#print axioms NumStability.FiniteCoordinate.LineRealization
+
+#check NumStability.FiniteCoordinate.LineRealization.rule
+#print axioms NumStability.FiniteCoordinate.LineRealization.rule
+
+#check NumStability.FiniteCoordinate.LineRealization.Admitted
+#print axioms NumStability.FiniteCoordinate.LineRealization.Admitted
+
+#check NumStability.FiniteCoordinate.LineRealization.advance_eq
+#print axioms NumStability.FiniteCoordinate.LineRealization.advance_eq
+
+#check NumStability.FiniteCoordinate.LineRealization.coordinate_stability
+#print axioms NumStability.FiniteCoordinate.LineRealization.coordinate_stability
+
+#check NumStability.FiniteCoordinate.LineRealization.coordinate_local
+#print axioms NumStability.FiniteCoordinate.LineRealization.coordinate_local
+
+#check NumStability.FiniteCoordinate.LineRealization.smooth_accuracy
+#print axioms NumStability.FiniteCoordinate.LineRealization.smooth_accuracy
+
+#check NumStability.FiniteCoordinate.shared_face_cancels
+#print axioms NumStability.FiniteCoordinate.shared_face_cancels
+
+#check NumStability.FiniteCoordinate.coordinateStep
+#print axioms NumStability.FiniteCoordinate.coordinateStep
+
+#check NumStability.FiniteCoordinate.coordinateExecution
+#print axioms NumStability.FiniteCoordinate.coordinateExecution
+
+#check NumStability.FiniteCoordinate.coordinateExecution_succ
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_succ
+
+#check NumStability.FiniteCoordinate.coordinateExecution_ordered
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_ordered
+
+#check NumStability.FiniteCoordinate.coordinateExecution_physical_error
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_physical_error
+
+#check NumStability.IsHyperbolicFluxAt
+#print axioms NumStability.IsHyperbolicFluxAt
+
+#check NumStability.isHyperbolicFluxAt_iff_independent_real_eigenvectors
+#print axioms NumStability.isHyperbolicFluxAt_iff_independent_real_eigenvectors
+
+#check NumStability.IsHyperbolicFluxOn
+#print axioms NumStability.IsHyperbolicFluxOn
+
+#check NumStability.isHyperbolicFluxOn_iff_independent_real_eigenvectors
+#print axioms NumStability.isHyperbolicFluxOn_iff_independent_real_eigenvectors
+
+#check NumStability.hyperbolicConservationLaw_isHyperbolicFluxAt
+#print axioms NumStability.hyperbolicConservationLaw_isHyperbolicFluxAt
+
+#check NumStability.constantFlux_isHyperbolicOn
+#print axioms NumStability.constantFlux_isHyperbolicOn
+

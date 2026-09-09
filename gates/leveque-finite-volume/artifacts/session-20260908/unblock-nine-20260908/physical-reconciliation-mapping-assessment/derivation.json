@@ -1,0 +1,45 @@
+{
+  "original": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/final-reconciliation-mapping-inputs/capture_current_mapping.py",
+    "sha256": "db672f08c9bdbc2b74024c108d34cb7ba30e8aa6d78d31d329f779558a2c0213"
+  },
+  "successor": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-reconciliation-mapping-assessment/assess.py",
+    "sha256": "4f1ce0ee4d888565e1b1ce8b04c3c5f78e7147b087985f72d6bb298dbbd46350"
+  },
+  "changes": [
+    {
+      "old": "    topology=bound(config['topology']); records={}; owners={}; fps=[]; origins={}",
+      "new": "    topology=bound(config['topology']); policy=bound(config['preparation_policy'])\n    require([e['inventory'] for e in config['fingerprints']]==policy['current_work_fingerprint_refs'],'policy exact current refs')\n    records={}; owners={}; fps=[]; origins={}"
+    },
+    {
+      "old": "    require(len(records)==1426 and len(owners)==171 and len(fps)==7,'expected exact seven inventories / 1426 / 171')",
+      "new": "    require((len(records),len(owners),len(fps))==(config['expected_records'],config['expected_owners'],len(policy['current_work_fingerprint_refs'])),'explicit current census')"
+    },
+    {
+      "old": "    future=read(d/'final-certified-complete-declarations/manifest.json')",
+      "new": "    future=bound(config['complete_declaration_manifest'])"
+    },
+    {
+      "old": "    def git(*args):\n        return subprocess.check_output(['git','--no-optional-locks','-c','core.longpaths=true','-C',str(root),*args])\n    require(__import__('os').name!='nt','Git capture requires POSIX launcher')\n    head=git('rev-parse','HEAD').decode().strip(); require(head==config['expected_head'],'HEAD drift')\n    paths=git('diff','--name-only','-z',config['anchor'],'--','ComputationalMathematics','NumStability').decode().split('\\0')\n    paths=sorted(p for p in paths if p.endswith('.lean'))\n    untracked=git('ls-files','--others','--exclude-standard','-z','--','ComputationalMathematics','NumStability').decode().split('\\0')\n    paths=sorted(set(paths)|{p for p in untracked if p.endswith('.lean')})\n    staged=sorted(p for p in git('diff','--cached','--name-only','-z','--','ComputationalMathematics','NumStability').decode().split('\\0') if p.endswith('.lean'))\n",
+      "new": "    manual=bound(config['manual_review'])\n    head=manual['input_commit']; require(head==config['expected_head'],'manual recorded HEAD')\n    require(manual['anchor']==config['anchor'],'manual anchor')\n    paths=manual['reviewed_changed_source_paths']; require(len(paths)==config['expected_changed_paths'],'manual changed scope')\n    require(len(manual['source_files'])==config['expected_semantic_paths'],'manual semantic scope')\n    for item in manual['source_files']:\n        require(digest((root/item['path']).read_bytes())==item['sha256'],'manual source drift '+item['path'])\n    staged=None\n    protected={}\n    for item in bs['lanes'][1]['fingerprints']:\n        for r in bound(item)['records']:\n            require(r['name'] not in protected,'duplicate inspection record')\n            protected[r['name']]=r\n    require(set(protected)==set(old),'inspection catalogue/record names')\n    protected_differences=[{'name':n,'fields':[k for k in sorted(set(v)|set(records[n])) if v.get(k)!=records[n].get(k)]}\n                          for n,v in sorted(protected.items()) if n not in records or v!=records[n]]\n    require(not protected_differences,'protected inspection record changed')\n"
+    },
+    {
+      "old": "             'changed_lean_paths_from_anchor':len(paths),'current_staged_lean_paths':len(staged),",
+      "new": "             'changed_lean_paths_from_anchor':len(paths),'semantic_review_paths':len(manual['source_files']),\n             'scope_provenance':config['manual_review'],'scope_collection':'Frozen manual review; no new Git invocation',\n             'all_protected_records_byte_equal_as_json_values':not protected_differences,'current_staged_lean_paths':None,"
+    },
+    {
+      "old": "    require(git('rev-parse','HEAD').decode().strip()==head,'HEAD changed')",
+      "new": "    require(bound(config['manual_review'])==manual,'manual changed')"
+    },
+    {
+      "old": "             'new-policy-proposals.json':newpolicies,'source-row-assessment.json':rowdata,'nondeclaration-variants.json':variants,",
+      "new": "             'source-row-assessment.json':[{k:v for k,v in row.items() if k not in ('old_context','current_context')} for row in rowdata],\n             'nondeclaration-variants.json':variants,"
+    },
+    {
+      "old": "import argparse, collections, hashlib, importlib.util, json, re, subprocess",
+      "new": "import argparse, collections, hashlib, json, re"
+    }
+  ],
+  "scope": "Analysis only. Canonical producer/policy hashing and exact overrides retained in memory; payload output and all Git execution removed. Frozen scope and explicit count config replace historical hardcodes."
+}

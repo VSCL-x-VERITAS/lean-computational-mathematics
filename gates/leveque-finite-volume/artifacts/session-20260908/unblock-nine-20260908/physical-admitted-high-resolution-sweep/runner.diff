@@ -1,0 +1,45 @@
+--- C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\physical-high-resolution-sweep-draft\run_native.py
++++ C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\physical-admitted-high-resolution-sweep\run_native.py
+@@ -3,7 +3,7 @@
+ from pathlib import Path
+ R=Path(r'C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics')
+ D=R/'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908'
+-P=D/'physical-high-resolution-sweep-draft'
++P=D/'physical-admitted-high-resolution-sweep'
+ native=lambda p:str(p) if str(p).startswith('\\\\?\\') else '\\\\?\\'+os.path.abspath(p)
+ def raw(p):
+  with open(native(p),'rb') as stream:return stream.read()
+@@ -36,19 +36,22 @@
+  result=capture('lake',[r'C:\Users\qed_s\.elan\bin\lake.exe','env',sys.executable,'-X','utf8','-B',str(P/'run_native.py'),attempt,'--child'],R)
+  raise SystemExit(result['exit_code'])
+ 
+-bridge=D/'physical-refinement-quality-draft/native-02/Candidate.lean'
+-bridge_ref=ref(bridge);assert bridge_ref['sha256']=='c2b8d278def563d0e181536f745a18e5e461b7a595089bc639c87c736aee7415'
+-extra=D/'capacity-boundary-sweep-draft/Sweep.lean.fragment'
+-extra_ref=ref(extra);assert extra_ref['sha256']=='59950e9bc6bfd8ee3f354804bf530b0235e42e56a40a0e2ef85e5eb77216901a'
+-extra2=D/'capacity-boundary-sweep-draft/StageLaws.lean.fragment'
+-extra2_ref=ref(extra2);assert extra2_ref['sha256']=='f593e3bef75959892c0a76ce11472b775d1258b6f406e9a0f05ec447ac78b48e'
++bridge=D/'physical-high-resolution-sweep-draft/native-03/Candidate.lean'
++bridge_ref=ref(bridge);assert bridge_ref['sha256']=='73daca68c54303af3d73dd4916b2792b33b44c0b258e8c136ae95cc82525304e'
++old_target=D/'physical-high-resolution-sweep-draft/SourceTarget.lean.fragment'
++old_checks=D/'physical-high-resolution-sweep-draft/Checks.lean.fragment'
++suffix=raw(old_target)+b'\n'+raw(old_checks)
++basis=raw(bridge);assert basis.endswith(suffix)
++basis=basis[:-len(suffix)]
++assert b'theorem leveque01_coordinateHighResolutionMethods_sourceContract' not in basis
+ source_target=P/'SourceTarget.lean.fragment'
+-source_target_ref=ref(source_target)
+-fragment_ref=ref(P/'Sweep.lean.fragment')
+-put(A/'Sweep.lean.fragment',raw(P/'Sweep.lean.fragment'))
+-source= b'import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FiniteCartesianReference\nimport ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethodEstimates\nimport Mathlib.Topology.MetricSpace.Bounded\nimport Mathlib.Data.Finset.Lattice.Fold\n'+raw(bridge)+b'\n'+raw(extra)+b'\n'+raw(extra2)+b'\n'+raw(P/'Sweep.lean.fragment')+b'\n'+raw(source_target)+b'\n'+raw(P/'Checks.lean.fragment')
++fragment=P/'Admitted.lean.fragment'
++put(A/'Admitted.lean.fragment',raw(fragment))
++put(A/'SourceTarget.lean.fragment',raw(source_target))
++source=basis+b'\n'+raw(fragment)+b'\n'+raw(source_target)
+ candidate=A/'Candidate.lean';candidate_ref=put(candidate,source)
+-pins=[bridge_ref,extra_ref,extra2_ref,source_target_ref,fragment_ref,candidate_ref,ref(P/'Checks.lean.fragment'),ref(P/'run_native.py'),ref(R/'lean-toolchain'),ref(R/'lake-manifest.json')]
++pins=[bridge_ref,ref(old_target),ref(old_checks),ref(fragment),ref(source_target),candidate_ref,
++      ref(P/'run_native.py'),ref(R/'lean-toolchain'),ref(R/'lake-manifest.json')]
+ seen=set()
+ def project_imports(data):
+  return re.findall(r'(?m)^\s*(?:public\s+)?import\s+(ComputationalMathematics(?:\.[A-Za-z_0-9]+)+)',data.decode('utf-8'))

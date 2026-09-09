@@ -1,0 +1,151 @@
+CFL1RefinementWitness.grid (h : ℝ) (hh : 0 < h) : OneDimensionalFiniteVolumeGrid
+'CFL1RefinementWitness.grid' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.grid_volume (h : ℝ) (hh : 0 < h) (j : ℤ) : (CFL1RefinementWitness.grid h hh).cellVolume j = h
+'CFL1RefinementWitness.grid_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) : ℤ → ι → ℝ
+'CFL1RefinementWitness.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_eq_shift.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) (j : ℤ) :
+  CFL1RefinementWitness.advance h hh Q j = Q (j - 1)
+'CFL1RefinementWitness.advance_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.averaged.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ) (t : ℝ) (j : ℤ) :
+  ι → ℝ
+'CFL1RefinementWitness.averaged' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.averaged_eq_shift.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ) (t : ℝ)
+  (j : ℤ) : CFL1RefinementWitness.averaged h hh φ (t + h) j = CFL1RefinementWitness.averaged h hh φ t (j - 1)
+'CFL1RefinementWitness.averaged_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_averaged_exact.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+  (t : ℝ) (j : ℤ) :
+  CFL1RefinementWitness.advance h hh (CFL1RefinementWitness.averaged h hh φ t) j =
+    CFL1RefinementWitness.averaged h hh φ (t + h) j
+'CFL1RefinementWitness.advance_averaged_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.averaged_is_cell_average.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ volume a b) (t : ℝ) (j : ℤ) :
+  IsOneDimensionalCellAverage (fun x => φ (x - t)) ((CFL1RefinementWitness.grid h hh).cellLeft j)
+    ((CFL1RefinementWitness.grid h hh).cellRight j) (CFL1RefinementWitness.averaged h hh φ t j)
+'CFL1RefinementWitness.averaged_is_cell_average' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.translated_is_conserved.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ volume a b) : IsRectangleConservationLawSolution (fun x t => φ (x - t)) id
+'CFL1RefinementWitness.translated_is_conserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.physical_exactness.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ volume a b) (h : ℝ) (hh : 0 < h) (t : ℝ) (j : ℤ) (p : ℝ) (_hp : 1 < p) :
+  IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    IsOneDimensionalCellAverage (fun x => φ (x - t)) ((CFL1RefinementWitness.grid h hh).cellLeft j)
+        ((CFL1RefinementWitness.grid h hh).cellRight j) (CFL1RefinementWitness.averaged h hh φ t j) ∧
+      ‖CFL1RefinementWitness.advance h hh (CFL1RefinementWitness.averaged h hh φ t) j -
+            CFL1RefinementWitness.averaged h hh φ (t + h) j‖ ≤
+        0 * h ^ p
+'CFL1RefinementWitness.physical_exactness' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.window.{u_1} {E : Type u_1} (Q : ℤ → E) (start : ℤ) (N : ℕ) : Fin N → E
+'CFL1RefinementWitness.window' does not depend on any axioms
+CFL1RefinementWitness.advance_window.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) :
+  CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh Q) start N =
+    CFL1RefinementWitness.window Q (start - 1) N
+'CFL1RefinementWitness.advance_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.windowTV.{u_1} {ι : Type u_1} [Fintype ι] (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) : ℝ
+'CFL1RefinementWitness.windowTV' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_windowTV.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) (start : ℤ)
+  (N : ℕ) :
+  CFL1RefinementWitness.windowTV (CFL1RefinementWitness.advance h hh Q) start N =
+    CFL1RefinementWitness.windowTV Q (start - 1) N
+'CFL1RefinementWitness.advance_windowTV' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_no_overshoot (h : ℝ) (hh : 0 < h) (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ)
+  (lower upper : ℝ)
+  (hbound :
+    ∀ (i : Fin N),
+      lower ≤ CFL1RefinementWitness.window Q (start - 1) N i 0 ∧
+        CFL1RefinementWitness.window Q (start - 1) N i 0 ≤ upper)
+  (i : Fin N) :
+  lower ≤ CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh Q) start N i 0 ∧
+    CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh Q) start N i 0 ≤ upper
+'CFL1RefinementWitness.advance_no_overshoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_preserves_monotone (h : ℝ) (hh : 0 < h) (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ)
+  (hmono : Monotone fun i => CFL1RefinementWitness.window Q (start - 1) N i 0) :
+  Monotone fun i => CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh Q) start N i 0
+'CFL1RefinementWitness.advance_preserves_monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.meshSize (n : ℕ) : ℝ
+'CFL1RefinementWitness.meshSize' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.meshSize_pos (n : ℕ) : 0 < CFL1RefinementWitness.meshSize n
+'CFL1RefinementWitness.meshSize_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.meshSize_tendsto_zero : Tendsto CFL1RefinementWitness.meshSize atTop (𝓝 0)
+'CFL1RefinementWitness.meshSize_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.flux_locality.{u_1} {ι : Type u_1} (Q R : ℤ → ι → ℝ) (face : ℤ)
+  (h : Q (face - 1) = R (face - 1)) : (fun j => Q (j - 1)) face = (fun j => R (j - 1)) face
+'CFL1RefinementWitness.flux_locality' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.advance_extension_independent.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q R : ℤ → ι → ℝ)
+  (start : ℤ) (N : ℕ)
+  (heq : CFL1RefinementWitness.window Q (start - 1) N = CFL1RefinementWitness.window R (start - 1) N) :
+  CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh Q) start N =
+    CFL1RefinementWitness.window (CFL1RefinementWitness.advance h hh R) start N
+'CFL1RefinementWitness.advance_extension_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.refinement_accuracy.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ volume a b) (p : ℝ) (_hp : 1 < p) :
+  IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    ∃ C,
+      0 ≤ C ∧
+        ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+          ‖CFL1RefinementWitness.window
+                  (CFL1RefinementWitness.advance (CFL1RefinementWitness.meshSize n) ⋯
+                    (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯ φ t))
+                  start N i -
+                CFL1RefinementWitness.window
+                  (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯ φ
+                    (t + CFL1RefinementWitness.meshSize n))
+                  start N i‖ ≤
+            C * CFL1RefinementWitness.meshSize n * CFL1RefinementWitness.meshSize n ^ p
+'CFL1RefinementWitness.refinement_accuracy' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.refinement_oscillation.{u_1} {ι : Type u_1} [Fintype ι] (Q : ℤ → ι → ℝ) (n : ℕ) (start : ℤ)
+  (N : ℕ) :
+  CFL1RefinementWitness.windowTV (CFL1RefinementWitness.advance (CFL1RefinementWitness.meshSize n) ⋯ Q) start N ≤
+    (1 + 0 * CFL1RefinementWitness.meshSize n) * CFL1RefinementWitness.windowTV Q (start - 1) N + 0
+'CFL1RefinementWitness.refinement_oscillation' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.smoothProfile (x : ℝ) : Fin 1 → ℝ
+'CFL1RefinementWitness.smoothProfile' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.smoothProfile_smooth : ContDiff ℝ ⊤ CFL1RefinementWitness.smoothProfile
+'CFL1RefinementWitness.smoothProfile_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.smoothProfile_integrable (a b : ℝ) :
+  IntervalIntegrable CFL1RefinementWitness.smoothProfile volume a b
+'CFL1RefinementWitness.smoothProfile_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.smoothProfile_nonconstant :
+  CFL1RefinementWitness.smoothProfile 0 ≠ CFL1RefinementWitness.smoothProfile 1
+'CFL1RefinementWitness.smoothProfile_nonconstant' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.stepProfile : ℝ → Fin 1 → ℝ
+'CFL1RefinementWitness.stepProfile' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.stepProfile_integrable (a b : ℝ) : IntervalIntegrable CFL1RefinementWitness.stepProfile volume a b
+'CFL1RefinementWitness.stepProfile_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.stepProfile_discontinuous : ¬ContinuousAt CFL1RefinementWitness.stepProfile 0
+'CFL1RefinementWitness.stepProfile_discontinuous' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.smooth_refinement (p : ℝ) (hp : 1 < p) :
+  ContDiff ℝ ⊤ CFL1RefinementWitness.smoothProfile ∧
+    CFL1RefinementWitness.smoothProfile 0 ≠ CFL1RefinementWitness.smoothProfile 1 ∧
+      IsRectangleConservationLawSolution (fun x t => CFL1RefinementWitness.smoothProfile (x - t)) id ∧
+        ∃ C,
+          0 ≤ C ∧
+            ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+              ‖CFL1RefinementWitness.window
+                      (CFL1RefinementWitness.advance (CFL1RefinementWitness.meshSize n) ⋯
+                        (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯
+                          CFL1RefinementWitness.smoothProfile t))
+                      start N i -
+                    CFL1RefinementWitness.window
+                      (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯
+                        CFL1RefinementWitness.smoothProfile (t + CFL1RefinementWitness.meshSize n))
+                      start N i‖ ≤
+                C * CFL1RefinementWitness.meshSize n * CFL1RefinementWitness.meshSize n ^ p
+'CFL1RefinementWitness.smooth_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+CFL1RefinementWitness.step_refinement (p : ℝ) (hp : 1 < p) :
+  ¬ContinuousAt CFL1RefinementWitness.stepProfile 0 ∧
+    IsRectangleConservationLawSolution (fun x t => CFL1RefinementWitness.stepProfile (x - t)) id ∧
+      ∃ C,
+        0 ≤ C ∧
+          ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+            ‖CFL1RefinementWitness.window
+                    (CFL1RefinementWitness.advance (CFL1RefinementWitness.meshSize n) ⋯
+                      (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯
+                        CFL1RefinementWitness.stepProfile t))
+                    start N i -
+                  CFL1RefinementWitness.window
+                    (CFL1RefinementWitness.averaged (CFL1RefinementWitness.meshSize n) ⋯
+                      CFL1RefinementWitness.stepProfile (t + CFL1RefinementWitness.meshSize n))
+                    start N i‖ ≤
+              C * CFL1RefinementWitness.meshSize n * CFL1RefinementWitness.meshSize n ^ p
+'CFL1RefinementWitness.step_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]

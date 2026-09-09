@@ -1,0 +1,13 @@
+from pathlib import Path
+from datetime import datetime,timezone
+import hashlib,json,subprocess,sys,time
+F=Path(__file__).resolve().parent
+R=next(p for p in F.parents if (p/'lean-toolchain').exists())
+argv=[sys.executable,'-X','utf8','-B',str(R.parent/'workflow-v5.0.1-local/run_workflow_posix.py'),str(F/'freeze.py')]
+start=datetime.now(timezone.utc).isoformat();timer=time.monotonic()
+out=F/'freeze-output.txt';err=F/'freeze-stderr.txt'
+with out.open('xb') as stdout,err.open('xb') as stderr:p=subprocess.run(argv,cwd=R,stdout=stdout,stderr=stderr)
+receipt=dict(command=argv,started_at_utc=start,completed_at_utc=datetime.now(timezone.utc).isoformat(),elapsed_ms=round((time.monotonic()-timer)*1000),exit_code=p.returncode,stdout_sha256=hashlib.sha256(out.read_bytes()).hexdigest(),stderr_sha256=hashlib.sha256(err.read_bytes()).hexdigest())
+with (F/'freeze-exit.json').open('x',encoding='utf-8',newline='\n') as f:json.dump(receipt,f,indent=2);f.write('\n')
+print(json.dumps(receipt,indent=2));print(out.read_text(encoding='utf-8'));print(err.read_text(encoding='utf-8'))
+raise SystemExit(p.returncode)

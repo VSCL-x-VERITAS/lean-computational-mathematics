@@ -1,0 +1,82 @@
+IntervalQualityRepairDraft.Geometry (m : ℕ) : Type
+'IntervalQualityRepairDraft.Geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.Geometry.Projection {m : ℕ} (geometry : IntervalQualityRepairDraft.Geometry m) (n : ℕ)
+  (q : ℝ → ℝ → Fin m → ℝ) (values : ℤ → Fin m → ℝ) : Prop
+'IntervalQualityRepairDraft.Geometry.Projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.Method (m : ℕ) : Type
+'IntervalQualityRepairDraft.Method' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.Method.advance {m : ℕ} (method : IntervalQualityRepairDraft.Method m) (n : ℕ) (dt : ℝ)
+  (values : ℤ → Fin m → ℝ) : ℤ → Fin m → ℝ
+'IntervalQualityRepairDraft.Method.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.SmoothCertificate {m : ℕ} (method : IntervalQualityRepairDraft.Method m)
+  (q : ℝ → ℝ → Fin m → ℝ) (p : ℝ) : Type
+'IntervalQualityRepairDraft.SmoothCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CoreQuality {m : ℕ} (method : IntervalQualityRepairDraft.Method m) : Prop
+'IntervalQualityRepairDraft.CoreQuality' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.SameStepStability {m : ℕ} (method : IntervalQualityRepairDraft.Method m) (L : ℝ) : Prop
+'IntervalQualityRepairDraft.SameStepStability' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.SmoothCertificate.perturbed_at {m : ℕ} {method : IntervalQualityRepairDraft.Method m}
+  {q : ℝ → ℝ → Fin m → ℝ} {p L : ℝ} (certificate : IntervalQualityRepairDraft.SmoothCertificate method q p)
+  (stability : IntervalQualityRepairDraft.SameStepStability method L) (n : ℕ) (hn : certificate.threshold ≤ n) (dt : ℝ)
+  (hdt : 0 < dt) (horizon : dt ≤ method.geometry.horizon) (projected values : ℤ → Fin m → ℝ)
+  (hproj : method.geometry.Projection n q projected) (hp : method.admitted n dt projected)
+  (hv : method.admitted n dt values) {E : ℝ} (hE : 0 ≤ E)
+  (herr :
+    ∀ j ∈ Finset.Ico (method.geometry.inputStart n) (method.geometry.inputStart n + ↑(method.geometry.inputCount n)),
+      ‖values j - projected j‖ ≤ E)
+  (j : ℤ)
+  (hj :
+    j ∈ Finset.Ico (method.geometry.activeStart n) (method.geometry.activeStart n + ↑(method.geometry.activeCount n))) :
+  ‖method.advance n dt values j - NumStability.finiteVolumeCellAverageOn (method.geometry.grid n) (fun x => q x dt) j‖ ≤
+    (1 + L * dt) * E + certificate.constant * dt * method.geometry.mesh n ^ p
+'IntervalQualityRepairDraft.SmoothCertificate.perturbed_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.SmoothCertificate.projected_step_exists {m : ℕ}
+  {method : IntervalQualityRepairDraft.Method m} {q : ℝ → ℝ → Fin m → ℝ} {p : ℝ}
+  (certificate : IntervalQualityRepairDraft.SmoothCertificate method q p) (n : ℕ) (hn : certificate.threshold ≤ n) :
+  ∃ projected,
+    method.geometry.Projection n q projected ∧
+      ∃ dt, 0 < dt ∧ dt ≤ method.geometry.horizon ∧ method.admitted n dt projected
+'IntervalQualityRepairDraft.SmoothCertificate.projected_step_exists' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+IntervalQualityRepairDraft.Method.two_state_step {m : ℕ} (method : IntervalQualityRepairDraft.Method m) (n : ℕ)
+  (left right : Fin m → ℝ) (hl : left ∈ method.geometry.states) (hr : right ∈ method.geometry.states) (cut : ℤ) :
+  ∃ dt, 0 < dt ∧ method.admitted n dt fun j => NumStability.riemannData left right right (↑j - ↑cut)
+'IntervalQualityRepairDraft.Method.two_state_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.geometry : IntervalQualityRepairDraft.Geometry 1
+'IntervalQualityRepairDraft.CFL1.geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.method : IntervalQualityRepairDraft.Method 1
+'IntervalQualityRepairDraft.CFL1.method' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.advance_eq (n : ℕ) (values : ℤ → Fin 1 → ℝ) :
+  IntervalQualityRepairDraft.CFL1.method.advance n (NumStability.HighResolutionAdvectionLine.h n) values =
+    (NumStability.HighResolutionAdvectionLine.family 1).advance n values
+'IntervalQualityRepairDraft.CFL1.advance_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.core_quality :
+  IntervalQualityRepairDraft.CoreQuality IntervalQualityRepairDraft.CFL1.method
+'IntervalQualityRepairDraft.CFL1.core_quality' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.separate_stability :
+  ∃ L, IntervalQualityRepairDraft.SameStepStability IntervalQualityRepairDraft.CFL1.method L
+'IntervalQualityRepairDraft.CFL1.separate_stability' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.CFL1.smooth_nonconstant_certificate :
+  NumStability.CFLUnitShift.smoothProfile 0 ≠ NumStability.CFLUnitShift.smoothProfile 1 ∧
+    ∃ p,
+      1 < p ∧
+        Nonempty
+          (IntervalQualityRepairDraft.SmoothCertificate IntervalQualityRepairDraft.CFL1.method
+            (fun x t => NumStability.CFLUnitShift.smoothProfile (x - t)) p)
+'IntervalQualityRepairDraft.CFL1.smooth_nonconstant_certificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+IntervalQualityRepairDraft.CFL1.every_jump_available (n : ℕ) (left right : Fin 1 → ℝ) (cut : ℤ) :
+  0 < NumStability.HighResolutionAdvectionLine.h n ∧
+    IntervalQualityRepairDraft.CFL1.method.admitted n (NumStability.HighResolutionAdvectionLine.h n) fun j =>
+      NumStability.riemannData left right right (↑j - ↑cut)
+'IntervalQualityRepairDraft.CFL1.every_jump_available' depends on axioms: [propext, Classical.choice, Quot.sound]
+IntervalQualityRepairDraft.cinfty_definition {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : ℝ → (Fin m → ℝ) → Fin m → ℝ)
+  (states : Set (Fin m → ℝ)) (a b T : ℝ) :
+  NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q flux states a b T ↔
+    ContDiffOn ℝ (↑⊤) (Function.uncurry q) (Set.Icc a b ×ˢ Set.Icc 0 T) ∧
+      NumStability.LocalConservationLaw.SpatialRectangleReferenceOn q flux a b T ∧
+        ∀ x ∈ Set.Icc a b, ∀ t ∈ Set.Icc 0 T, q x t ∈ states
+'IntervalQualityRepairDraft.cinfty_definition' depends on axioms: [propext, Classical.choice, Quot.sound]
+CORE_QUALITY_STABILITY_SEPARATE

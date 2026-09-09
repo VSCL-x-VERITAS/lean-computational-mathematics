@@ -1,0 +1,15 @@
+# Frozen all-subinterval and Cartesian linkage basis
+
+This packet is useful mathematics, not a finished dimensional-splitting capstone or a source-faithfulness verdict. No production file was added or modified.
+
+Reference.lean quantifies the existing physical reference condition on every temporal subinterval, proves endpoint extraction and restriction, and exposes actual intermediate mass balances. Its nonconstant transported-step instance reuses PhysicalIntervalSweep and genuine rectangle conservation.
+
+Geometry.lean identifies the actual restricted cell measures, the pushforward of actual face measures under their actual facePoint maps, and the same directional physical flux. It proves equality of actual cell volume, actual cell mean, and actual face integral. Null-boundary Ioc/Ico conventions may be handled only through equality of restricted measures; equal scalar volumes alone do not satisfy this contract.
+
+Projection.lean derives the Cartesian cell integral and normalized average of a field depending on one coordinate from Mathlib's product-measure projection and integral_map, including all width/area factors. Lift.lean combines these with actual face integration to derive the same-data, same-law lifted directional reference. Its face identity holds even for an arbitrary profile because its normal coordinate is fixed on the actual Cartesian face. It does not require globally smooth profiles or assign unrelated flux functions to a matched volume.
+
+These are conditional transfer theorems. They do not yet construct a finite Cartesian physical-data object, establish its nonvacuity, or connect a high-resolution method family to the actual executed finite lines. The old infinite PhysicalData owners remain unchanged. Separate finite active-cell and quality-family drafts are active and explicitly excluded from this freeze.
+
+The completed DIM direct and round-trip findings required these repairs; the exact hconstant-free scratch remains a separate earlier algebraic generalization and is not presented as the full repair. Source context and the literal new high-resolution receipt are owned separately by root. The book's §6.3 is explanatory context, not a new Chapter6 inventory claim.
+
+All four successful native executions have exact output and source/dependency pins and actual zero exits. There are sixteen declaration/axiom reports in total, using only propext, Classical.choice and Quot.sound. Geometry01 and lift01 each retain the same unused-section-variable warning for Fintype D in cartesian_facePoint_measurable; it has no proof or applicability failure, and has not been silently reported as a warning-free run. The first draft-freeze guard rejected that warning and wrote no frozen receipt; this reviewed v2 guard recognizes only that exact warning. Projection01 is retained as a failed attempt (missing explicit measure-family and index arguments), then repaired without changing the intended theorem. No source acceptance, final gate status or candidate readiness is asserted.

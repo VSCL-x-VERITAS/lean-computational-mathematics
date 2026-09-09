@@ -1,0 +1,56 @@
+namespace DIMJointPrimaryWitness
+open NumStability MeasureTheory Set
+open NumStability.FiniteDirectionalRepair NumStability.DirectionalQualityRepair
+open NumStability.FiniteCartesianRepair NumStability.DirectionalPropagationRepair
+open scoped BigOperators
+
+theorem face_error_zero (d : Direction) (face : Direction → ℤ) :
+    ‖method.rule d (method.duration d) (fun cell => physical.cellMean reference cell 0) face -
+      oneDimensionalCellAverage (physical.faceFlux d reference face) 0 (method.duration d)‖ ≤ 0 := by
+  simp only [rule_zero, flux_zero, oneDimensionalCellAverage, intervalIntegral.integral_zero,
+    smul_zero, sub_self, norm_zero, le_refl]
+
+/-- This is an actual application of the entire corrected source contract,
+with every hypothesis discharged. Its inferred type preserves every clause
+of that contract, including the uniform all-refinement smooth accuracy clause.
+The reference is zero and the actual initial array is nonconstant. -/
+noncomputable def full_application :=
+  NumStability.DirectionalCompleteRepair.coordinate_highResolution_sourceContract
+    (data := physical) (coord := coord) (family := families)
+    (by norm_num : 0 < 1) (by simp : 0 < Fintype.card Direction)
+    (fun _ => method) (fun _ => (0 : Direction)) quality initial (fun _ => reference) 1
+    amplification (fun _ => 0) (fun _ => 0) 1 (fun _ _ => 0) (fun _ _ => 0)
+    (fun _ _ => reference_valid 0 0 _) initial_error
+    (fun _ _ => admitted _ _) (fun _ _ => admitted _ _)
+    (fun _ _ _ => le_rfl)
+    (fun _ _ cell => face_error_zero _ _) (fun _ _ cell => face_error_zero _ _)
+    (by intros; simp) (by intros; simp only [mean_zero, sub_self, norm_zero, le_refl])
+    (fun d => ⟨0, by omega, Subsingleton.elim _ _⟩)
+
+theorem actual_geometry :
+    CartesianIdentification physical axes Subtype.val (fun _ face => face) (fun _ => id) := cartesian
+
+theorem active_count : active.card = 4 := by
+  rw [active, Finset.card_image_of_injective _ position_injective]
+  norm_num
+
+theorem step_duration : method.duration 0 = (1 : ℝ) / 2 := by
+  change CFL1QualityFamilyWitness.h 0 = _
+  rw [CFL1QualityFamilyWitness.h_eq]
+  norm_num
+
+theorem actual_shift (current : Cell → State) (cell : Cell) :
+    coordinateExecution (fun _ => method) (fun _ => (0 : Direction)) current 1 cell =
+      coord.extract 0 () current (cell.val 0 - 1) := by
+  rw [coordinateExecution_succ]
+  rw [method.advance_eq]
+  exact CFL1QualityFamilyWitness.family_advance 1 0 _ _
+
+theorem initial_moves :
+    coordinateExecution (fun _ => method) (fun _ => (0 : Direction)) initial 1
+      (cellAt 0 (by omega)) = 0 ∧
+    coordinateExecution (fun _ => method) (fun _ => (0 : Direction)) initial 1
+      (cellAt 1 (by omega)) = 1 := by
+  simp [actual_shift, coord, LineCoordinates.extract, cellAt, position, initial]
+
+end DIMJointPrimaryWitness

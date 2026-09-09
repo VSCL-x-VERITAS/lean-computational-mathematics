@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flare.invalid/schemas/reconciliation-epoch.schema.json",
+  "title": "FLARE reconciliation epoch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workflow_schema_version",
+    "epoch_id",
+    "campaign_id",
+    "status",
+    "topology_sha256",
+    "anchor",
+    "lane_heads",
+    "candidate",
+    "assets",
+    "transports",
+    "collisions",
+    "affected_books",
+    "organization",
+    "branches",
+    "validations"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "workflow_schema_version": {"const": 3},
+    "epoch_id": {"$ref": "#/$defs/id"},
+    "campaign_id": {"$ref": "#/$defs/id"},
+    "status": {"enum": ["candidate", "accepted"]},
+    "topology_sha256": {"$ref": "#/$defs/hash"},
+    "anchor": {"$ref": "#/$defs/sha"},
+    "lane_heads": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["instance_id", "head"],
+        "properties": {
+          "instance_id": {"$ref": "#/$defs/id"},
+          "head": {"$ref": "#/$defs/sha"}
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instance_id", "commit", "tree"],
+      "properties": {
+        "instance_id": {"$ref": "#/$defs/id"},
+        "commit": {"$ref": "#/$defs/sha"},
+        "tree": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "transports": {"type": "array", "items": {"$ref": "#/$defs/transport"}},
+    "collisions": {"type": "array", "items": {"$ref": "#/$defs/collision"}},
+    "affected_books": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/book"}},
+    "organization": {"$ref": "#/$defs/organization"},
+    "branches": {"type": "array", "items": {"$ref": "#/$defs/branch"}},
+    "validations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_coverage", "import_graph", "signature_graph", "body_graph", "declaration_resolution", "focused_build", "full_build", "pristine_replay"],
+      "properties": {
+        "source_coverage": {"$ref": "#/$defs/validationEvidence"},
+        "import_graph": {"$ref": "#/$defs/validationEvidence"},
+        "signature_graph": {"$ref": "#/$defs/validationEvidence"},
+        "body_graph": {"$ref": "#/$defs/validationEvidence"},
+        "declaration_resolution": {"$ref": "#/$defs/validationEvidence"},
+        "focused_build": {"$ref": "#/$defs/validationEvidence"},
+        "full_build": {"$ref": "#/$defs/validationEvidence"},
+        "pristine_replay": {"$ref": "#/$defs/validationEvidence"}
+      }
+    },
+    "integration_acceptance": {"$ref": "#/$defs/integrationAcceptance"},
+    "stable_promotion": {"$ref": "#/$defs/stablePromotion"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "asset": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["asset_id", "concept_id", "lane_id", "kind", "unique", "disposition", "content_sha256"],
+      "properties": {
+        "asset_id": {"$ref": "#/$defs/id"},
+        "concept_id": {"$ref": "#/$defs/id"},
+        "lane_id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["source-row", "declaration", "module", "audit", "proof", "gate"]},
+        "unique": {"type": "boolean"},
+        "disposition": {"enum": ["selected", "superseded", "retained-unresolved", "rejected"]},
+        "content_sha256": {"$ref": "#/$defs/hash"},
+        "successor_asset_id": {"$ref": "#/$defs/id"},
+        "split_status": {"enum": ["none", "pending", "resolved"]},
+        "source_hash": {"$ref": "#/$defs/hash"},
+        "type_hash": {"$ref": "#/$defs/hash"},
+        "policy_hash": {"$ref": "#/$defs/hash"},
+        "proof_hash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "change_class", "old_module", "new_module", "old_declaration", "new_declaration", "old_hashes", "new_hashes", "faithfulness", "affected_books"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "change_class": {"enum": ["move", "body-only", "signature", "policy", "producer"]},
+        "old_module": {"type": "string", "minLength": 1},
+        "new_module": {"type": "string", "minLength": 1},
+        "old_declaration": {"type": "string", "minLength": 1},
+        "new_declaration": {"type": "string", "minLength": 1},
+        "old_hashes": {"$ref": "#/$defs/controlledHashes"},
+        "new_hashes": {"$ref": "#/$defs/controlledHashes"},
+        "faithfulness": {"enum": ["reuse", "replay", "full-reaudit", "reopen"]},
+        "affected_books": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}
+      }
+    },
+    "controlledHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "type", "policy", "producer", "proof"],
+      "properties": {
+        "source": {"$ref": "#/$defs/hash"},
+        "type": {"$ref": "#/$defs/hash"},
+        "policy": {"$ref": "#/$defs/hash"},
+        "producer": {"$ref": "#/$defs/hash"},
+        "proof": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "validationEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "tree", "command", "output_sha256", "elapsed_ms"],
+      "properties": {
+        "status": {"const": "PASS"},
+        "tree": {"$ref": "#/$defs/sha"},
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "output_sha256": {"$ref": "#/$defs/hash"},
+        "elapsed_ms": {"type": "integer", "minimum": 0}
+      }
+    },
+    "integrationAcceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "receipt_sha256"],
+      "properties": {
+        "decision": {"const": "advance-campaign-head"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "stablePromotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "receipt_sha256"],
+      "properties": {
+        "decision": {"const": "promote-stable"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "collision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "class", "status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "class": {"enum": ["semantic", "policy", "producer", "placement", "scope", "unresolved-transport"]},
+        "status": {"enum": ["resolved", "unresolved"]},
+        "resolution": {"type": "string", "minLength": 1}
+      }
+    },
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["book_id", "status", "rows", "tree", "stored_verdict", "current_verdict", "certificate_disposition"],
+      "properties": {
+        "book_id": {"$ref": "#/$defs/id"},
+        "status": {"enum": ["pass", "reopened"]},
+        "rows": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+        "tree": {"$ref": "#/$defs/sha"},
+        "stored_verdict": {"enum": ["PASS", "ACTIVE", "BLOCKED", "FAIL"]},
+        "current_verdict": {"enum": ["PASS", "ACTIVE", "BLOCKED", "FAIL"]},
+        "certificate_disposition": {"enum": ["current", "rejected-stale"]}
+      }
+    },
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_scope", "repository_ratchet"],
+      "properties": {
+        "unit_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unexpected_changes", "unclassified_modules", "mixed_pending_split", "duplicate_wrappers", "placeholder_findings", "canonical_placement_pending"],
+          "properties": {
+            "unexpected_changes": {"type": "array", "items": {"type": "string"}},
+            "unclassified_modules": {"type": "array", "items": {"type": "string"}},
+            "mixed_pending_split": {"type": "array", "items": {"type": "string"}},
+            "duplicate_wrappers": {"type": "array", "items": {"type": "string"}},
+            "placeholder_findings": {"type": "array", "items": {"type": "string"}},
+            "canonical_placement_pending": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "repository_ratchet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["category", "owner", "baseline_items", "current_items"],
+            "properties": {
+              "category": {"$ref": "#/$defs/id"},
+              "owner": {"type": "string", "minLength": 1},
+              "baseline_items": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "current_items": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "approved_exception": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instance_id", "ref", "unique_assets", "disposition"],
+      "properties": {
+        "instance_id": {"$ref": "#/$defs/id"},
+        "ref": {"type": "string", "minLength": 1},
+        "unique_assets": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+        "disposition": {"enum": ["retain", "supersede"]},
+        "superseded_by": {"$ref": "#/$defs/sha"}
+      }
+    }
+  }
+}

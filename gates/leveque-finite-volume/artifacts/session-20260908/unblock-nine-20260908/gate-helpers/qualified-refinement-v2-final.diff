@@ -1,0 +1,238 @@
+--- qualified_row_support.py
++++ qualified_row_support_v2.py
+@@ -232,6 +232,118 @@
+                 + evidence['target_application_review'] + ' Native input/output/exit and allowed axioms are hash-bound. ' + provenance}
+ 
+ 
++
++# These are coordinator addenda, never native Lean inputs or literal user replies.
++# Changing either exact addendum requires another explicit additive helper version.
++REFINEMENTS = {
++    'LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION': {
++        'choice_id': 'Q9',
++        'refinement_id': 'Q9-DECLARED-FIRST-ORDER-MODEL-20260908',
++        'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-definition-repair/interpretation-refinement.json',
++        'sha256': '8e24fcad8fc5b8462b243ead716a46b2613360966bbf4d03451056d8731d6f21',
++    },
++    'LEV-CH01-NONCONSERVATION-SOURCE-TERMS': {
++        'choice_id': 'Q6',
++        'refinement_id': 'Q6-FIXED-REPRESENTATIVE-ITERATED-BALANCE-20260908',
++        'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-definition-repair/q6-interpretation-refinement.json',
++        'sha256': '8658feb83ed55f4c7a4a5c64a95c45313814c44b62573372ea716b5c791e97f3',
++    },
++}
++
++
++def validate_refinement(packet, task, manifest, config):
++    """Validate an optional exact, separately configured coordinator addendum.
++
++    This is interpretation evidence, not proof evidence. Native checks remain
++    independently required by validate_request; JSON need not be in Lean snapshots.
++    No prior judgment is used to decide the current audit's accepted relation.
++    """
++    keys = ('interpretation_refinement_ref', 'interpretation_refinement')
++    present = [key in packet for key in keys]
++    configured = config['lean']['environment_files']
++    environment = manifest['lean_environment']
++    known_paths = {item['path'] for item in REFINEMENTS.values()}
++    if not any(present):
++        require(not any(path in known_paths for path in configured)
++                and not any(item['path'] in known_paths for item in environment),
++                'configured refinement cannot be silently omitted from the row packet')
++        return None
++    require(all(present), 'refinement requires both pointer and exact embedded content')
++    expected = REFINEMENTS.get(packet['scope_row'])
++    require(expected is not None, 'refinement is permitted only for the precise Q6/Q9 row pairing')
++    item, refinement = (packet[key] for key in keys)
++    expected_ref = {key: expected[key] for key in ('path', 'sha256')}
++    require(isinstance(item, dict) and set(item) == {'path', 'sha256'}
++            and item == expected_ref, 'refinement is not the exact pinned row addendum')
++    path = bound(item)
++    require(refinement == read(path), 'embedded refinement differs from its exact bound JSON')
++    require(configured.count(item['path']) == 1, 'addendum is absent or duplicated in exact configuration')
++    matches = [entry for entry in environment if entry['path'] == item['path']]
++    require(len(matches) == 1 and matches[0]['sha256'] == item['sha256'],
++            'addendum is not an exact unique manifest-bound environment input')
++    require(not any(other in configured or any(entry['path'] == other for entry in environment)
++                    for other in known_paths - {item['path']}),
++            'a differently scoped refinement cannot enter this row environment')
++    selection, mapping = choices()
++    require(refinement['format'] == 'coordinator-selected-interpretation-refinement-1'
++            and refinement['status'] == 'selected-for-fresh-independent-audit'
++            and refinement['refinement_id'] == expected['refinement_id'], 'wrong refinement schema or identity')
++    require(refinement['scope_row'] == packet['scope_row']
++            and refinement['prior_choice_id'] == expected['choice_id']
++            and refinement['prior_choice_exact'] == packet['choice'] == mapping[packet['scope_row']],
++            'refinement row/choice differs from the original pinned selection')
++    require(refinement['prior_selection_receipt'] == packet['selection_receipt'] == reference(SELECTION),
++            'refinement changes the original selection receipt')
++    for key in ('authority', 'exact_user_objective', 'goal_observation_sha256', 'preservation'):
++        require(refinement[key] == packet[key] == selection[key],
++                'refinement changes coordinator attribution or preservation: ' + key)
++    require(refinement['source'] == task['source']
++            and refinement['source']['sha256'] == selection['source_sha256']
++            and bound(refinement['source']) == repo_path(task['source']['path']),
++            'refinement source differs from the exact selected source and locator')
++    require(refinement['unchanged_target'] == {**task['target'], 'sha256': sha(repo_path(task['target']['path']))}
++            and bound(refinement['unchanged_target']) == repo_path(task['target']['path']),
++            'refinement target/declaration differs from the exact checked target')
++    model = refinement['selected_model']
++    require(isinstance(model, dict) and model
++            and all(isinstance(k, str) and k.strip() and isinstance(v, str) and v.strip()
++                    for k, v in model.items()), 'missing precise mathematical model clauses')
++    ambiguities = refinement['source_ambiguities_preserved']
++    require(isinstance(ambiguities, list) and ambiguities
++            and all(isinstance(value, str) and value.strip() for value in ambiguities),
++            'missing explicit preserved source ambiguities')
++    for key in ('coordinator_authorization', 'required_audit_qualification', 'independence'):
++        require(isinstance(refinement[key], str) and refinement[key].strip(), 'missing refinement qualification: ' + key)
++    require(refinement['no_production_or_native_supplement_change'] is True,
++            'this helper supports only the reviewed unchanged-target refinements')
++    # Historical references are provenance, never acceptance or proof substitutes.
++    for key in ('prior_task', 'prior_undetermined_decision'):
++        bound(refinement[key])
++    if 'defining_dependency' in refinement:
++        for key in ('owner', 'dossier'):
++            bound(refinement['defining_dependency'][key])
++    return {'reference': item, 'content': refinement}
++
++
++def validate_interpretation_qualification(decision, choice_id):
++    """Recognize explicit qualification without imposing a sealed finding category.
++
++    This is a conservative textual guard, not a new semantic judgment. Complete
++    sealed acceptance, exact choice inputs, and all other checks remain mandatory.
++    """
++    if any('interpretation-qualified' in finding.get('category', '') for finding in decision['findings']):
++        return 'explicit-finding-category'
++    rationale = decision.get('rationale', '')
++    prefix = 'under the recorded coordinator-selected interpretation'
++    require(isinstance(rationale, str) and 'interpretation-qualified' in rationale.lower()
++            and re.search(r'\b' + re.escape(choice_id) + r'\b', rationale) is not None
++            and all(isinstance(decision['implications'][direction].get('reasoning'), str)
++                    and decision['implications'][direction]['reasoning'].strip().lower().startswith(prefix)
++                    for direction in DIRECTIONS),
++            'complete decision lacks explicit interpretation qualification in category or rationale and both implications')
++    return 'explicit-rationale-and-both-implications'
++
++
+ def validate_request(request_path, complete=False):
+     request = read(request_path)
+     require(type(request.get('schema')) is int and request['schema'] == 1, 'wrong binding request schema')
+@@ -266,8 +378,8 @@
+         require(packet[key] == selection[key], 'choice attribution/preservation changed: ' + key)
+     require(packet['selection_receipt'] == reference(SELECTION)
+             and packet['source_sha256'] == selection['source_sha256'], 'choice receipt/source mismatch')
+-    require(any('interpretation-qualified' in f.get('category', '') for f in decision['findings']),
+-            'complete decision does not explicitly qualify acceptance by interpretation')
++    refinement = validate_refinement(packet, task, manifest, read(config))
++    validate_interpretation_qualification(decision, packet['choice']['choice_id'])
+     axioms = validate_native(request['native'], task)
+     fields = stronger_fields(request, task, decision) if classification == 'faithful-stronger' else {}
+     if classification == 'faithful-equivalent':
+@@ -277,6 +389,8 @@
+         'direct_judge.json', 'roundtrip_judge.json', 'agent_runs.json')]
+     if decision.get('adjudicated') is True:
+         checked_files.append(out/'agent_outputs/adjudicator.json')
++    if refinement is not None:
++        checked_files += [bound(refinement['reference']), paths['interpretation_packet'], SELECTION]
+     audit_hashes = {str(path): sha(path) for path in checked_files}
+     if complete:
+         require(os.name != 'nt', 'run released validators through the existing POSIX launcher')
+@@ -286,7 +400,8 @@
+         require(all(sha(path) == digest for path, digest in audit_hashes.items()), 'audit outputs changed during complete validation')
+     return {'request': request, 'task': task, 'manifest': manifest, 'decision': decision,
+             'config': config, 'classification': classification, 'pair': pair,
+-            'packet': packet, 'fields': fields, 'axioms': axioms, 'output': out, 'audit_hashes': audit_hashes}
++            'packet': packet, 'fields': fields, 'axioms': axioms, 'output': out, 'audit_hashes': audit_hashes,
++            'refinement': refinement}
+ 
+ 
+ def contract_for(validated):
+@@ -298,11 +413,23 @@
+               + packet['choice']['choice_id'] + ', selection SHA-256 ' + SELECTION_SHA
+               + ', row packet SHA-256 ' + request['interpretation_packet']['sha256']
+               + '. Original source-only contract SHA-256 ' + sha(source_path) + '. Original source account: ')
+-    return {'statement': prefix + source['contract_plain_english'],
++    contract = {'statement': prefix + source['contract_plain_english'],
+             'assumptions': source['statement']['hypotheses'] + source['statement']['implicit_context']
+                 + ['Coordinator-selected interpretation: ' + packet['choice']['selected_interpretation']]
+                 + ['Preserved limitation: ' + item for item in packet['preservation']],
+             'quantifiers': source['statement']['binders']}
++    refinement = validated.get('refinement')
++    if refinement is not None:
++        content, digest = refinement['content'], refinement['reference']['sha256']
++        contract['statement'] += (' Coordinator-selected refinement ' + content['refinement_id']
++            + ', SHA-256 ' + digest + ': its exact model clauses and preserved source ambiguities below '
++            'are part of this qualified contract, not additional printed-source assertions or literal user replies.')
++        contract['assumptions'] += ['Coordinator-selected refinement SHA-256: ' + digest]
++        contract['assumptions'] += ['Selected model [' + key + ']: ' + value
++                                    for key, value in content['selected_model'].items()]
++        contract['assumptions'] += ['Preserved source ambiguity: ' + value
++                                    for value in content['source_ambiguities_preserved']]
++    return contract
+ 
+ 
+ def validate_bound_row(row, complete=False):
+@@ -317,6 +444,12 @@
+             and tuple(row[d] for d in DIRECTIONS) == validated['pair'], 'row changes accepted relation strength')
+     require(row['coordinator_selected_interpretation'] == request['interpretation_packet'], 'row choice binding mismatch')
+     require(row['native_evidence'] == request['native'], 'row native binding mismatch')
++    refinement = validated['refinement']
++    if refinement is not None:
++        require(row.get('interpretation_refinement_ref') == refinement['reference'],
++                'row refinement reference differs from its exact audited packet')
++    else:
++        require('interpretation_refinement_ref' not in row, 'unrefined row retains a stale refinement reference')
+     for key, value in validated['fields'].items():
+         require(row.get(key) == value, 'stronger row evidence mismatch: ' + key)
+     if validated['classification'] == 'faithful-equivalent':
+--- bind-qualified-row.py
++++ bind-qualified-row-v2.py
+@@ -13,7 +13,7 @@
+ import sys
+ import tempfile
+ 
+-import qualified_row_support as q
++import qualified_row_support_v2 as q
+ 
+ 
+ def immutable(path, payload):
+@@ -72,7 +72,7 @@
+         q.require(row['contract_hash'] == checker.canonical_sha256(contract), 'rebind changes qualified contract')
+     for key in ('next_foundation', 'next_action', 'current_target', 'open_reason', 'strengthening_evidence',
+                 'applicability_audit', 'nonvacuity_witness', 'adjudication_status', 'adjudication_audit',
+-                'reuse_source', 'reuse_audit'):
++                'reuse_source', 'reuse_audit', 'interpretation_refinement_ref'):
+         row.pop(key, None)
+     row.update({'status': request['status'], 'lean_declarations': [task['target']['declaration']],
+                 'contract_hash': checker.canonical_sha256(contract),
+@@ -83,6 +83,8 @@
+                 'coordinator_selected_interpretation': request['interpretation_packet'],
+                 'native_evidence': request['native'], **v['fields'],
+                 'adjudication_required': decision.get('adjudicated') is True})
++    if v['refinement'] is not None:
++        row['interpretation_refinement_ref'] = v['refinement']['reference']
+     if request['status'] == 'REUSED':
+         row.update(reuse_source=f"Integrated baseline {baseline}; exact unchanged {task['target']['path']}::{task['target']['declaration']}",
+                    reuse_audit=f"Complete validated {task['task_id']}; decision SHA-256 {request['decision']['sha256']}")
+--- validate-closed-row-audits-v4.py
++++ validate-closed-row-audits-v5.py
+@@ -15,7 +15,7 @@
+ import subprocess
+ import sys
+ 
+-import qualified_row_support as qualified
++import qualified_row_support_v2 as qualified
+ 
+ 
+ def main():
+@@ -111,6 +111,8 @@
+             record['coordinator_selected_interpretation'] = row['coordinator_selected_interpretation']
+             record['native_evidence'] = row['native_evidence']
+             record['native_axioms'] = checked['axioms']
++            if checked['refinement'] is not None:
++                record['interpretation_refinement_ref'] = checked['refinement']['reference']
+             if classification == 'faithful-stronger':
+                 record['strengthening_evidence'] = row['strengthening_evidence']
+         elif classification == 'faithful-stronger' and row['id'] == 'LEV-CH01-VARIABLE-COEFFICIENT-NONCONSERVATION':

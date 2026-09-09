@@ -1,0 +1,4641 @@
+
+
+Exact role prompt SHA256 ccf143729c0f0bf0a915ed685976036d82a26c6d09f279be1ac4e1c6019d4574
+# Role: faithfulness adjudicator
+
+You are a fresh adjudicator. Resolve the supplied disagreements and unresolved
+items using primary source and Lean declaration evidence. Do not use majority
+vote.
+
+Read the exact trigger reasons, source locator and source, source contract,
+complete direct and blind dossiers, any dependency-reuse records, blind
+translation, and both judgments. Recheck every disputed dependency and semantic
+item. A reuse hash establishes provenance, not task-specific correctness.
+
+Confirm both implication directions, classification consistency, nonvacuity,
+and whether any purportedly stronger theorem is genuine strength rather than
+reduced applicability. Copy every trigger reason verbatim into `trigger` and
+return at least one resolved item per trigger.
+
+Return only JSON conforming to `schemas/adjudicator.schema.json`. Preserve
+remaining uncertainty instead of forcing a binary answer.
+
+
+Exact output schema SHA256 a858fc72ab5a49ab6e47b920f1dc878af8bc82bb04417527e61f1dba31099217
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Formalization faithfulness adjudication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "trigger", "resolved_items", "implications", "classification", "accepted", "remaining_uncertainties", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "adjudicator"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "trigger": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "resolved_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item", "resolution", "primary_evidence"],
+        "properties": {
+          "item": {"type": "string", "minLength": 1},
+          "resolution": {"type": "string", "minLength": 1},
+          "primary_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "remaining_uncertainties": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 889695d870b40c958e305bff7d63acf02f531e7ac179b8d72e0e3cefd06742ea
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "The extension of Riemann initial data to a discontinuity in the medium at x=0 as well as a discontinuity in initial data; the subsequent wave dynamics is a separate claim.",
+      "location": "raw PDF page 30; printed Chapter 1 page 8"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 5e1300ce32e44b97a25fd9ab3610406a3ff0d8ff2d892a5765272912144edd8c
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph",
+      "anchor": "The idea of a Riemann problem is easily extended to the case where there is a discontinuity in the medium at x = 0 as well as a discontinuity in the initial data.",
+      "observation": "The selected claim extends the Riemann problem to include a material discontinuity at the initial-data interface."
+    },
+    {
+      "location": "Raw PDF page 27, printed page 5, Section 1.2.1, opening paragraph and equation (1.11)",
+      "anchor": "the hyperbolic equation together with special initial data",
+      "observation": "A Riemann problem consists of the hyperbolic equation with piecewise constant initial data having a single jump: q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0."
+    },
+    {
+      "location": "Raw PDF page 29, printed page 7, Section 1.4, final paragraph",
+      "anchor": "sharp interfaces between different materials",
+      "observation": "The material context includes jump discontinuities in material parameters, illustrated by boundaries between soil and rock, different rocks, tissue and bone, water layers, and water and earth."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph",
+      "anchor": "each grid cell can be assigned different material properties via appropriate averaging",
+      "observation": "The surrounding numerical context assigns material properties to individual finite volume cells by averaging material parameters over each cell."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, sentence immediately following the selected claim",
+      "anchor": "Solving the Riemann problem at the interface between two cells then gives a decomposition of the data into waves",
+      "observation": "Wave decomposition, reflection, and transmission are subsequent claims about solving the problem, separate from the selected extension of its initial setup."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, second paragraph",
+      "anchor": "Hyperbolic equations with variable coefficients may not be in conservation form",
+      "observation": "The surrounding discussion does not restrict the extended problem to equations in conservation form."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "The spatial coordinate x and time coordinate t occur in the inherited initial-data expression q(x,0); the interface is placed at x = 0 [printed page 5, equation (1.11); printed page 8, selected sentence].",
+      "q_l and q_r denote the constant initial states on the left and right of the interface, respectively; the cited definition does not specify their state space [printed page 5, Section 1.2.1, equation (1.11)].",
+      "A medium with a discontinuity at x = 0 is introduced descriptively, without a named material-parameter function or formal quantifier scope [printed page 8, Section 1.4, selected sentence]."
+    ],
+    "hypotheses": [
+      "The inherited Riemann setup consists of a hyperbolic equation and piecewise constant initial data with a single jump at x = 0 [printed page 5, Section 1.2.1, opening paragraph and equation (1.11)].",
+      "In the extended setup, the medium also has a discontinuity at x = 0 [printed page 8, Section 1.4, selected sentence]."
+    ],
+    "conclusions": [
+      "The notion of a Riemann problem extends to a setup containing both a discontinuity in the medium and a discontinuity in the initial data at the interface x = 0 [printed page 8, Section 1.4, selected sentence; printed page 5, equation (1.11)]."
+    ],
+    "definitions_and_conventions": [
+      "The inherited initial data are q(x,0) = q_l when x < 0 and q(x,0) = q_r when x > 0 [printed page 5, equation (1.11)].",
+      "The initial-data definition leaves the value at x = 0 unspecified [printed page 5, equation (1.11), whose two branches use strict inequalities].",
+      "Placing the initial interface at zero is a coordinate convention: the definition says a jump occurs at some point, 'say x = 0' [printed page 5, Section 1.2.1, opening paragraph].",
+      "A discontinuity in the medium is contextualized through jumps in material parameters at interfaces between materials [printed page 7, Section 1.4, final paragraph]."
+    ],
+    "implicit_context": [
+      "The selected discussion concerns linear waves in heterogeneous media, within Section 1.4, 'Linear Waves and Discontinuous Media' [printed pages 7–8, section heading and surrounding paragraphs].",
+      "Finite volume cells can carry different averaged material properties, motivating Riemann problems at interfaces between cells [printed page 8, Section 1.4, first paragraph].",
+      "Conservation form is not a standing requirement of the surrounding variable-coefficient discussion [printed page 8, Section 1.4, second paragraph]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Coincident interface",
+        "details": [
+          "The medium discontinuity is explicitly located at x = 0, and the inherited initial-data jump uses the same coordinate location [printed page 8, selected sentence; printed page 5, equation (1.11)].",
+          "The selected extension includes both kinds of discontinuity, as expressed by 'as well as' [printed page 8, selected sentence]."
+        ]
+      },
+      {
+        "topic": "Initial-data structure",
+        "details": [
+          "The state is constant separately on the left and right sides at initial time [printed page 5, equation (1.11)].",
+          "The prose specifies a single jump discontinuity in these initial data [printed page 5, Section 1.2.1, opening paragraph]."
+        ]
+      },
+      {
+        "topic": "Scope of the claim",
+        "details": [
+          "The selected sentence extends the problem setup; it does not state an existence, uniqueness, or regularity theorem [printed page 8, Section 1.4, selected sentence].",
+          "The next sentence separately discusses waves moving into each cell and reflection and transmission; these are not conclusions of the selected setup claim [printed page 8, Section 1.4, first paragraph, sentence following the selected sentence]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the medium discontinuity and the initial-data discontinuity as distinct features at the shared interface x = 0 [printed page 8, selected sentence; printed page 5, equation (1.11)].",
+    "Preserve the inherited left and right constant initial states on x < 0 and x > 0 [printed page 5, equation (1.11)].",
+    "Do not attribute a specified value at x = 0 to the source's initial-data definition [printed page 5, equation (1.11)].",
+    "Do not attribute a particular topology, one-sided-limit predicate, or formula for material parameters to the selected sentence; it supplies none [printed page 8, selected sentence].",
+    "Keep the extension of the Riemann setup separate from subsequent claims about its wave dynamics [printed page 8, Section 1.4, consecutive sentences beginning 'The idea' and 'Solving'].",
+    "Do not impose conservation form as an explicit source requirement [printed page 8, Section 1.4, second paragraph]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "No mathematical definition of the medium discontinuity is supplied in the selected passage.",
+      "evidence": "Printed page 8 calls it 'a discontinuity in the medium'; printed page 7 contextualizes interfaces as jumps in material parameters without defining a parameter function or discontinuity predicate.",
+      "impact": "A particular topological characterization, parameter space, or one-sided-limit formulation would require an additional modeling choice."
+    },
+    {
+      "issue": "The material profile away from the interface is not explicitly specified.",
+      "evidence": "Printed page 8 identifies a medium discontinuity at x = 0 but supplies no two-branch material profile; the explicit piecewise constant formula on printed page 5 concerns q(x,0).",
+      "impact": "Global constancy of material parameters on each half-line, or absence of other material interfaces, cannot be extracted as an explicit requirement."
+    },
+    {
+      "issue": "Interface-point values are unspecified.",
+      "evidence": "Printed page 5, equation (1.11), covers only x < 0 and x > 0; the selected sentence on printed page 8 gives no material value at x = 0.",
+      "impact": "The source does not select a left value, right value, or other assigned value at the interface."
+    },
+    {
+      "issue": "The initial-state space and algebraic expression of a genuine jump are not stated.",
+      "evidence": "Printed page 5 describes a 'single jump discontinuity' and names q_l and q_r in equation (1.11), without specifying their space or displaying q_l ≠ q_r.",
+      "impact": "Unequal traces are the ordinary mathematical reading of the stated jump, but the cited passage does not provide a separate formal inequality or a state-space declaration."
+    },
+    {
+      "issue": "The extension is descriptive rather than a quantified theorem.",
+      "evidence": "Printed page 8 says the idea 'is easily extended' without listing coefficient assumptions, interface conditions, or a solution concept.",
+      "impact": "The passage supports the extended problem setup, but not a universally quantified solvability or uniqueness claim."
+    }
+  ],
+  "contract_plain_english": "The Riemann problem introduced on printed page 5 consists of a hyperbolic equation with constant left and right initial states separated by a single jump at x = 0, with no initial value specified at the interface itself (equation (1.11)). The selected sentence on printed page 8 extends this setup to include a discontinuity in the medium at that same interface. Material-parameter jumps provide the surrounding physical context (printed page 7, Section 1.4). The selected passage does not define a topology or a precise material profile, and its subsequent discussion of wave decomposition, reflection, and transmission is a separate claim (printed page 8, first paragraph)."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Separate coordinator-selected source interpretation under the user goal; not a printed-source assertion SHA256 94ae012912d15fbe8fc11bcd172becb61c1c630babf1b949de4d45f10ee9d683
+{
+  "format": "coordinator-selected-source-interpretation-1",
+  "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+  "exact_user_objective": "I want you to unblock all nine of them.",
+  "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+  "selection_receipt": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+    "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+  },
+  "scope_row": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA",
+  "choice": {
+    "choice_id": "Q5",
+    "rows": [
+      "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA"
+    ],
+    "selected_interpretation": "Use distinct one-sided local material traces at the same interface as distinct initial-state traces. Retain two constant strict-half-line initial states without requiring the material itself to be globally constant on each half-line."
+  },
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "preservation": [
+    "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+    "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+    "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+    "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+    "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+  ],
+  "comparison_rule": "Assess the exact selected claim under this explicit coordinator-selected interpretation. This is authorized task work, not a literal detailed user answer or a printed-source assertion. Independently decide both implications; any acceptance must be interpretation-qualified and preserve source ambiguity. No requested verdict is supplied."
+}
+
+The user requested that all nine rows be unblocked. The coordinator selected the documented convention for this row within that task. This is not a literal detailed user answer. Assess the exact source claim under this explicitly selected convention. The convention is separate from source evidence and supplies no requested verdict. Independently compare every exact target claim, hypothesis, and domain with the source under that convention. Preserve the original source-only ambiguity as such; do not attribute the convention to the book. Any acceptance and implication reasoning must explicitly be qualified as under the recorded coordinator-selected interpretation. The convention does not apply to other source rows.
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 4b8650b78d5ba0b6ad36272dd65a9dd6934bc9ac3aff12be65595a3454e358ed
+# Declaration dossier for LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_materialInterfaceLocalRiemannData {Material State : Type*}
+    [TopologicalSpace Material] [TopologicalSpace State]
+    [T2Space Material] [T2Space State]
+    {medium : ℝ → Material} {initialState : ℝ → State}
+    {leftMaterial rightMaterial : Material} {leftState rightState : State}
+    (hmedium : HasJumpAt medium 0 leftMaterial rightMaterial)
+    (hstate : IsRiemannData initialState leftState rightState)
+    (hdistinct : leftState ≠ rightState) :
+    (HasJumpAt medium 0 leftMaterial rightMaterial ∧
+      HasJumpAt initialState 0 leftState rightState) ∧
+    (Tendsto (fun x => (medium x, initialState x)) (𝓝[<] 0)
+        (𝓝 (leftMaterial, leftState)) ∧
+      Tendsto (fun x => (medium x, initialState x)) (𝓝[>] 0)
+        (𝓝 (rightMaterial, rightState)) ∧
+      leftMaterial ≠ rightMaterial ∧ leftState ≠ rightState) ∧
+    IsRiemannData initialState leftState rightState ∧
+    ¬ ContinuousAt medium 0 ∧ ¬ ContinuousAt initialState 0 ∧
+    (∃ originState, initialState = riemannData leftState originState rightState)
+```
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace Material] [inst_1 : TopologicalSpace State]
+  [T2Space Material] [T2Space State] {medium : Real → Material} {initialState : Real → State}
+  {leftMaterial rightMaterial : Material} {leftState rightState : State},
+  NumStability.HasJumpAt medium 0 leftMaterial rightMaterial →
+    NumStability.IsRiemannData initialState leftState rightState →
+      Ne leftState rightState →
+        And
+          (And (NumStability.HasJumpAt medium 0 leftMaterial rightMaterial)
+            (NumStability.HasJumpAt initialState 0 leftState rightState))
+          (And
+            (And
+              (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Iio 0))
+                (nhds { fst := leftMaterial, snd := leftState }))
+              (And
+                (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Ioi 0))
+                  (nhds { fst := rightMaterial, snd := rightState }))
+                (And (Ne leftMaterial rightMaterial) (Ne leftState rightState))))
+            (And (NumStability.IsRiemannData initialState leftState rightState)
+              (And (Not (ContinuousAt medium 0))
+                (And (Not (ContinuousAt initialState 0))
+                  (Exists fun originState =>
+                    Eq initialState (NumStability.riemannData leftState originState rightState))))))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace.{u_1} Material]
+  [inst_1 : TopologicalSpace.{u_2} State] [@T2Space.{u_1} Material inst] [@T2Space.{u_2} State inst_1]
+  {medium : Real → Material} {initialState : Real → State} {leftMaterial rightMaterial : Material}
+  {leftState rightState : State}
+  (hmedium :
+    @NumStability.HasJumpAt.{u_1} Material inst medium
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+  (hstate : @NumStability.IsRiemannData.{u_2} State initialState leftState rightState)
+  (hdistinct : @Ne.{u_2 + 1} State leftState rightState),
+  And
+    (And
+      (@NumStability.HasJumpAt.{u_1} Material inst medium
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+      (@NumStability.HasJumpAt.{u_2} State inst_1 initialState
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftState rightState))
+    (And
+      (And
+        (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+          (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+          (@nhdsWithin.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+            (@Set.Iio.{0} Real Real.instPreorder
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+            (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+            (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)))
+        (And
+          (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+            (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+            (@nhdsWithin.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+              (@Set.Ioi.{0} Real Real.instPreorder
+                (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+              (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+              (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState)))
+          (And (@Ne.{u_1 + 1} Material leftMaterial rightMaterial) (@Ne.{u_2 + 1} State leftState rightState))))
+      (And (@NumStability.IsRiemannData.{u_2} State initialState leftState rightState)
+        (And
+          (Not
+            (@ContinuousAt.{0, u_1} Real Material
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              inst medium (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (And
+            (Not
+              (@ContinuousAt.{0, u_2} Real State
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                inst_1 initialState (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@Exists.{u_2 + 1} State fun (originState : State) =>
+              @Eq.{u_2 + 1} (Real → State) initialState
+                (@NumStability.riemannData.{u_2} State leftState originState rightState))))))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataJump`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`, `Mathlib.Analysis.Calculus.Deriv.Basic`
+- `ComputationalMathematics.Topology.Order.Jump` imports: `Mathlib.Topology.Constructions.SumProd`, `Mathlib.Topology.Instances.Real.Lemmas`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataJump` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity`, `ComputationalMathematics.Topology.Order.Jump`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.HasJumpAt`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Topology.Order.Jump`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `aa534a048dc393a30a846ded197c7f76580bdf2258f12ca6f816679676f2c033`
+
+Type:
+
+```lean
+{E : Type u_1} → [TopologicalSpace E] → (Real → E) → Real → E → E → Prop
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_1} → [TopologicalSpace.{u_1} E] → (data : Real → E) → (a : Real) → (left right : E) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [TopologicalSpace E] data a left right =>
+  And (Filter.Tendsto data (nhdsWithin a (Set.Iio a)) (nhds left))
+    (And (Filter.Tendsto data (nhdsWithin a (Set.Ioi a)) (nhds right)) (Ne left right))
+```
+
+### D002: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D003: `NumStability.riemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `26e08100ec1e5620a6544ddb3d82ba18df6987384db43d3096e56de6c1c46638`
+
+Type:
+
+```lean
+{State : Type u_1} → State → State → State → Real → State
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (leftState valueAtOrigin rightState : State) → Real → State
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} leftState valueAtOrigin rightState x =>
+  ite (Real.instLT.lt x 0) leftState (ite (Real.instLT.lt 0 x) rightState valueAtOrigin)
+```
+
+### D004: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D005: `ContinuousAt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3c8b2955cfd1b5ec4313254503ce66a5505b003200b3b378f96770b19f854cf6`
+
+Type:
+
+```lean
+{X : Type u_1} → {Y : Type u_2} → [TopologicalSpace X] → [TopologicalSpace Y] → (X → Y) → X → Prop
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_1} → {Y : Type u_2} → [TopologicalSpace.{u_1} X] → [TopologicalSpace.{u_2} Y] → (f : X → Y) → (x : X) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [TopologicalSpace X] [TopologicalSpace Y] f x => Filter.Tendsto f (nhds x) (nhds (f x))
+```
+
+### D006: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D007: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D008: `Filter.Tendsto`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Filter.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7e5f54349644c32198960083c0e0eb6c033c80a8656d02a78b3eae9a4f5131f2`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → (α → β) → Filter α → Filter β → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → (f : α → β) → (l₁ : Filter.{u_1} α) → (l₂ : Filter.{u_2} β) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} f l₁ l₂ => Filter.instPartialOrder.le (Filter.map f l₁) l₂
+```
+
+### D009: `Ne`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6`
+
+Type:
+
+```lean
+{α : Sort u} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (a b : α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} a b => Not (Eq a b)
+```
+
+### D010: `Not`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0bfdacbe07f6cbb8995b354e36299fd742f29398c188d7cc23dedcdc47f57a9a`
+
+Type:
+
+```lean
+Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a : Prop) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a => a → False
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D012: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → (β : Type v) → Type (max u v)
+```
+
+### D013: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → (fst : α) → (snd : β) → Prod.{u, v} α β
+```
+
+### D014: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D015: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D016: `Real.instPreorder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `896bb94fc15867c0df82ea0f639eb6116e90a24819a66a54db9442e47cba7274`
+
+Type:
+
+```lean
+Preorder Real
+```
+
+Fully explicit type:
+
+```lean
+Preorder.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D017: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D018: `Real.pseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
+
+Type:
+
+```lean
+PseudoMetricSpace Real
+```
+
+Fully explicit type:
+
+```lean
+PseudoMetricSpace.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
+  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
+  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
+```
+
+### D019: `Set.Iio`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7d2fb1f1a25e32137e405a3246c71735490bca2e04477240797df205bd739c7e`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Preorder.{u_1} α] → (b : α) → Set.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt x b
+```
+
+### D020: `Set.Ioi`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ad556a749b4ff2a341c66bd35e0369f79888567fa7730aab8ee2fdd700fbfd52`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Preorder.{u_1} α] → (b : α) → Set.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt b x
+```
+
+### D021: `T2Space`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Separation.Hausdorff`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `08a54e5e65d34b76977bbc7266ee793dc9893b14c6b6492ae56b97fde6aba974`
+
+Type:
+
+```lean
+(X : Type u) → [TopologicalSpace X] → Prop
+```
+
+Fully explicit type:
+
+```lean
+(X : Type u) → [TopologicalSpace.{u} X] → Prop
+```
+
+### D022: `TopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `c85328c9b77ed49bcba2dd67e9f87b53aaf251834d29c69856ef079a9ec4b57b`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+Fully explicit type:
+
+```lean
+(X : Type u) → Type u
+```
+
+### D023: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D024: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D025: `instTopologicalSpaceProd`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Constructions.SumProd`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `52bf679916f23cac59489c5a99280e24c015508e91377d9dfa711ba64a31319c`
+
+Type:
+
+```lean
+{X : Type u} → {Y : Type v} → [t₁ : TopologicalSpace X] → [t₂ : TopologicalSpace Y] → TopologicalSpace (Prod X Y)
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u} →
+  {Y : Type v} →
+    [t₁ : TopologicalSpace.{u} X] → [t₂ : TopologicalSpace.{v} Y] → TopologicalSpace.{max v u} (Prod.{u, v} X Y)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [t₁ : TopologicalSpace X] [t₂ : TopologicalSpace Y] =>
+  SemilatticeInf.toMin.min (TopologicalSpace.induced Prod.fst t₁) (TopologicalSpace.induced Prod.snd t₂)
+```
+
+### D026: `nhds`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8eb445823f4b15a765f7e0cd634f73196d36b4f09054d2aef43a69d3138c6ce8`
+
+Type:
+
+```lean
+{X : Type u_3} → [TopologicalSpace X] → X → Filter X
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_3} → [TopologicalSpace.{u_3} X] → (x : X) → Filter.{u_3} X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+wrapped✝.1
+```
+
+### D027: `nhdsWithin`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ae7b5c1971244e63e32407fed747da989ad9fef3a4d9c3a64643427eaf071f05`
+
+Type:
+
+```lean
+{X : Type u_1} → [TopologicalSpace X] → X → Set X → Filter X
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_1} → [TopologicalSpace.{u_1} X] → (x : X) → (s : Set.{u_1} X) → Filter.{u_1} X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} [TopologicalSpace X] x s => Filter.instInf.min (nhds x) (Filter.principal s)
+```
+
+### D028: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D029: `Real.decidableLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `def93575a13821d7d42b557cb9b973eede26ae12bbb8b60b1f0a302bf95a5a42`
+
+Type:
+
+```lean
+(a b : Real) → Decidable (Real.instLT.lt a b)
+```
+
+Fully explicit type:
+
+```lean
+(a b : Real) → Decidable (@LT.lt.{0} Real Real.instLT a b)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a b => inferInstance
+```
+
+### D030: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D031: `ite`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3029bae29d2d16b5aeb879ad3c12a1b3c4e78998083bf1ab4614942fafdece0e`
+
+Type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → α → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → (t e : α) → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} c [h : Decidable c] t e => Decidable.casesOn h (fun x => e) fun x => t
+```
+
+
+Complete dependency inventory SHA256 6f4829bf1f56509c6a1ade4b6db037b5a77aad27a0f5aaf8218da95a238f2e78
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "fun {E} [TopologicalSpace E] data a left right =>\n  And (Filter.Tendsto data (nhdsWithin a (Set.Iio a)) (nhds left))\n    (And (Filter.Tendsto data (nhdsWithin a (Set.Ioi a)) (nhds right)) (Ne left right))",
+      "distance": 1,
+      "id": "D001",
+      "kind": "def",
+      "name": "NumStability.HasJumpAt",
+      "owner_module": "ComputationalMathematics.Topology.Order.Jump",
+      "role": "local",
+      "semantic_sha256": "aa534a048dc393a30a846ded197c7f76580bdf2258f12ca6f816679676f2c033",
+      "type_explicit": "{E : Type u_1} \u2192 [TopologicalSpace.{u_1} E] \u2192 (data : Real \u2192 E) \u2192 (a : Real) \u2192 (left right : E) \u2192 Prop",
+      "type_readable": "{E : Type u_1} \u2192 [TopologicalSpace E] \u2192 (Real \u2192 E) \u2192 Real \u2192 E \u2192 E \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef002",
+      "body_readable": "fun {State} data leftState rightState =>\n  And (\u2200 (x : Real), Real.instLT.lt x 0 \u2192 Eq (data x) leftState)\n    (\u2200 (x : Real), Real.instLT.lt 0 x \u2192 Eq (data x) rightState)",
+      "distance": 1,
+      "id": "D002",
+      "kind": "def",
+      "name": "NumStability.IsRiemannData",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData",
+      "role": "local",
+      "semantic_sha256": "9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712",
+      "type_explicit": "{State : Type u_1} \u2192 (data : Real \u2192 State) \u2192 (leftState rightState : State) \u2192 Prop",
+      "type_readable": "{State : Type u_1} \u2192 (Real \u2192 State) \u2192 State \u2192 State \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef003",
+      "body_readable": "fun {State} leftState valueAtOrigin rightState x =>\n  ite (Real.instLT.lt x 0) leftState (ite (Real.instLT.lt 0 x) rightState valueAtOrigin)",
+      "distance": 1,
+      "id": "D003",
+      "kind": "def",
+      "name": "NumStability.riemannData",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData",
+      "role": "local",
+      "semantic_sha256": "26e08100ec1e5620a6544ddb3d82ba18df6987384db43d3096e56de6c1c46638",
+      "type_explicit": "{State : Type u_1} \u2192 (leftState valueAtOrigin rightState : State) \u2192 Real \u2192 State",
+      "type_readable": "{State : Type u_1} \u2192 State \u2192 State \u2192 State \u2192 Real \u2192 State"
+    },
+    {
+      "blind_name": "And",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D004",
+      "kind": "inductive",
+      "name": "And",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "ContinuousAt",
+      "body_readable": "fun {X} {Y} [TopologicalSpace X] [TopologicalSpace Y] f x => Filter.Tendsto f (nhds x) (nhds (f x))",
+      "distance": 1,
+      "id": "D005",
+      "kind": "def",
+      "name": "ContinuousAt",
+      "owner_module": "Mathlib.Topology.Defs.Filter",
+      "role": "external-frontier",
+      "semantic_sha256": "3c8b2955cfd1b5ec4313254503ce66a5505b003200b3b378f96770b19f854cf6",
+      "type_explicit": "{X : Type u_1} \u2192 {Y : Type u_2} \u2192 [TopologicalSpace.{u_1} X] \u2192 [TopologicalSpace.{u_2} Y] \u2192 (f : X \u2192 Y) \u2192 (x : X) \u2192 Prop",
+      "type_readable": "{X : Type u_1} \u2192 {Y : Type u_2} \u2192 [TopologicalSpace X] \u2192 [TopologicalSpace Y] \u2192 (X \u2192 Y) \u2192 X \u2192 Prop"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D006",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Exists",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D007",
+      "kind": "inductive",
+      "name": "Exists",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (p : \u03b1 \u2192 Prop) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (\u03b1 \u2192 Prop) \u2192 Prop"
+    },
+    {
+      "blind_name": "Filter.Tendsto",
+      "body_readable": "fun {\u03b1} {\u03b2} f l\u2081 l\u2082 => Filter.instPartialOrder.le (Filter.map f l\u2081) l\u2082",
+      "distance": 1,
+      "id": "D008",
+      "kind": "def",
+      "name": "Filter.Tendsto",
+      "owner_module": "Mathlib.Order.Filter.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7e5f54349644c32198960083c0e0eb6c033c80a8656d02a78b3eae9a4f5131f2",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 (f : \u03b1 \u2192 \u03b2) \u2192 (l\u2081 : Filter.{u_1} \u03b1) \u2192 (l\u2082 : Filter.{u_2} \u03b2) \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 (\u03b1 \u2192 \u03b2) \u2192 Filter \u03b1 \u2192 Filter \u03b2 \u2192 Prop"
+    },
+    {
+      "blind_name": "Ne",
+      "body_readable": "fun {\u03b1} a b => Not (Eq a b)",
+      "distance": 1,
+      "id": "D009",
+      "kind": "def",
+      "name": "Ne",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (a b : \u03b1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Not",
+      "body_readable": "fun a => a \u2192 False",
+      "distance": 1,
+      "id": "D010",
+      "kind": "def",
+      "name": "Not",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "0bfdacbe07f6cbb8995b354e36299fd742f29398c188d7cc23dedcdc47f57a9a",
+      "type_explicit": "(a : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D011",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "Prod",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D012",
+      "kind": "inductive",
+      "name": "Prod",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347",
+      "type_explicit": "(\u03b1 : Type u) \u2192 (\u03b2 : Type v) \u2192 Type (max u v)",
+      "type_readable": "Type u \u2192 Type v \u2192 Type (max u v)"
+    },
+    {
+      "blind_name": "Prod.mk",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D013",
+      "kind": "constructor",
+      "name": "Prod.mk",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 (fst : \u03b1) \u2192 (snd : \u03b2) \u2192 Prod.{u, v} \u03b1 \u03b2",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 \u03b1 \u2192 \u03b2 \u2192 Prod \u03b1 \u03b2"
+    },
+    {
+      "blind_name": "PseudoMetricSpace.toUniformSpace",
+      "body_readable": "fun \u03b1 [self : PseudoMetricSpace \u03b1] => self.7",
+      "distance": 1,
+      "id": "D014",
+      "kind": "abbrev",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "owner_module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace.{u} \u03b1] \u2192 UniformSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace \u03b1] \u2192 UniformSpace \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D015",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Real.instPreorder",
+      "body_readable": "inferInstance",
+      "distance": 1,
+      "id": "D016",
+      "kind": "def",
+      "name": "Real.instPreorder",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "896bb94fc15867c0df82ea0f639eb6116e90a24819a66a54db9442e47cba7274",
+      "type_explicit": "Preorder.{0} Real",
+      "type_readable": "Preorder Real"
+    },
+    {
+      "blind_name": "Real.instZero",
+      "body_readable": "{ zero := Real.zero\u271d }",
+      "distance": 1,
+      "id": "D017",
+      "kind": "def",
+      "name": "Real.instZero",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882",
+      "type_explicit": "Zero.{0} Real",
+      "type_readable": "Zero Real"
+    },
+    {
+      "blind_name": "Real.pseudoMetricSpace",
+      "body_readable": "{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := \u22ef,\n  dist_triangle := \u22ef, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,\n  cobounded_sets := Real.pseudoMetricSpace._proof_4 }",
+      "distance": 1,
+      "id": "D018",
+      "kind": "def",
+      "name": "Real.pseudoMetricSpace",
+      "owner_module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e",
+      "type_explicit": "PseudoMetricSpace.{0} Real",
+      "type_readable": "PseudoMetricSpace Real"
+    },
+    {
+      "blind_name": "Set.Iio",
+      "body_readable": "fun {\u03b1} [inst : Preorder \u03b1] b => setOf fun x => inst.lt x b",
+      "distance": 1,
+      "id": "D019",
+      "kind": "def",
+      "name": "Set.Iio",
+      "owner_module": "Mathlib.Order.Interval.Set.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7d2fb1f1a25e32137e405a3246c71735490bca2e04477240797df205bd739c7e",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Preorder.{u_1} \u03b1] \u2192 (b : \u03b1) \u2192 Set.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Preorder \u03b1] \u2192 \u03b1 \u2192 Set \u03b1"
+    },
+    {
+      "blind_name": "Set.Ioi",
+      "body_readable": "fun {\u03b1} [inst : Preorder \u03b1] b => setOf fun x => inst.lt b x",
+      "distance": 1,
+      "id": "D020",
+      "kind": "def",
+      "name": "Set.Ioi",
+      "owner_module": "Mathlib.Order.Interval.Set.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "ad556a749b4ff2a341c66bd35e0369f79888567fa7730aab8ee2fdd700fbfd52",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Preorder.{u_1} \u03b1] \u2192 (b : \u03b1) \u2192 Set.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Preorder \u03b1] \u2192 \u03b1 \u2192 Set \u03b1"
+    },
+    {
+      "blind_name": "T2Space",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D021",
+      "kind": "inductive",
+      "name": "T2Space",
+      "owner_module": "Mathlib.Topology.Separation.Hausdorff",
+      "role": "external-frontier",
+      "semantic_sha256": "08a54e5e65d34b76977bbc7266ee793dc9893b14c6b6492ae56b97fde6aba974",
+      "type_explicit": "(X : Type u) \u2192 [TopologicalSpace.{u} X] \u2192 Prop",
+      "type_readable": "(X : Type u) \u2192 [TopologicalSpace X] \u2192 Prop"
+    },
+    {
+      "blind_name": "TopologicalSpace",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D022",
+      "kind": "inductive",
+      "name": "TopologicalSpace",
+      "owner_module": "Mathlib.Topology.Defs.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "c85328c9b77ed49bcba2dd67e9f87b53aaf251834d29c69856ef079a9ec4b57b",
+      "type_explicit": "(X : Type u) \u2192 Type u",
+      "type_readable": "Type u \u2192 Type u"
+    },
+    {
+      "blind_name": "UniformSpace.toTopologicalSpace",
+      "body_readable": "fun \u03b1 [self : UniformSpace \u03b1] => self.1",
+      "distance": 1,
+      "id": "D023",
+      "kind": "abbrev",
+      "name": "UniformSpace.toTopologicalSpace",
+      "owner_module": "Mathlib.Topology.UniformSpace.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : UniformSpace.{u} \u03b1] \u2192 TopologicalSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : UniformSpace \u03b1] \u2192 TopologicalSpace \u03b1"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 1,
+      "id": "D024",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    },
+    {
+      "blind_name": "instTopologicalSpaceProd",
+      "body_readable": "fun {X} {Y} [t\u2081 : TopologicalSpace X] [t\u2082 : TopologicalSpace Y] =>\n  SemilatticeInf.toMin.min (TopologicalSpace.induced Prod.fst t\u2081) (TopologicalSpace.induced Prod.snd t\u2082)",
+      "distance": 1,
+      "id": "D025",
+      "kind": "def",
+      "name": "instTopologicalSpaceProd",
+      "owner_module": "Mathlib.Topology.Constructions.SumProd",
+      "role": "external-frontier",
+      "semantic_sha256": "52bf679916f23cac59489c5a99280e24c015508e91377d9dfa711ba64a31319c",
+      "type_explicit": "{X : Type u} \u2192\n  {Y : Type v} \u2192\n    [t\u2081 : TopologicalSpace.{u} X] \u2192 [t\u2082 : TopologicalSpace.{v} Y] \u2192 TopologicalSpace.{max v u} (Prod.{u, v} X Y)",
+      "type_readable": "{X : Type u} \u2192 {Y : Type v} \u2192 [t\u2081 : TopologicalSpace X] \u2192 [t\u2082 : TopologicalSpace Y] \u2192 TopologicalSpace (Prod X Y)"
+    },
+    {
+      "blind_name": "nhds",
+      "body_readable": "wrapped\u271d.1",
+      "distance": 1,
+      "id": "D026",
+      "kind": "def",
+      "name": "nhds",
+      "owner_module": "Mathlib.Topology.Defs.Filter",
+      "role": "external-frontier",
+      "semantic_sha256": "8eb445823f4b15a765f7e0cd634f73196d36b4f09054d2aef43a69d3138c6ce8",
+      "type_explicit": "{X : Type u_3} \u2192 [TopologicalSpace.{u_3} X] \u2192 (x : X) \u2192 Filter.{u_3} X",
+      "type_readable": "{X : Type u_3} \u2192 [TopologicalSpace X] \u2192 X \u2192 Filter X"
+    },
+    {
+      "blind_name": "nhdsWithin",
+      "body_readable": "fun {X} [TopologicalSpace X] x s => Filter.instInf.min (nhds x) (Filter.principal s)",
+      "distance": 1,
+      "id": "D027",
+      "kind": "def",
+      "name": "nhdsWithin",
+      "owner_module": "Mathlib.Topology.Defs.Filter",
+      "role": "external-frontier",
+      "semantic_sha256": "ae7b5c1971244e63e32407fed747da989ad9fef3a4d9c3a64643427eaf071f05",
+      "type_explicit": "{X : Type u_1} \u2192 [TopologicalSpace.{u_1} X] \u2192 (x : X) \u2192 (s : Set.{u_1} X) \u2192 Filter.{u_1} X",
+      "type_readable": "{X : Type u_1} \u2192 [TopologicalSpace X] \u2192 X \u2192 Set X \u2192 Filter X"
+    },
+    {
+      "blind_name": "LT.lt",
+      "body_readable": "fun \u03b1 [self : LT \u03b1] => self.1",
+      "distance": 2,
+      "id": "D028",
+      "kind": "abbrev",
+      "name": "LT.lt",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : LT.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : LT \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Real.decidableLT",
+      "body_readable": "fun a b => inferInstance",
+      "distance": 2,
+      "id": "D029",
+      "kind": "def",
+      "name": "Real.decidableLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "def93575a13821d7d42b557cb9b973eede26ae12bbb8b60b1f0a302bf95a5a42",
+      "type_explicit": "(a b : Real) \u2192 Decidable (@LT.lt.{0} Real Real.instLT a b)",
+      "type_readable": "(a b : Real) \u2192 Decidable (Real.instLT.lt a b)"
+    },
+    {
+      "blind_name": "Real.instLT",
+      "body_readable": "{ lt := Real.lt\u271d }",
+      "distance": 2,
+      "id": "D030",
+      "kind": "def",
+      "name": "Real.instLT",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a",
+      "type_explicit": "LT.{0} Real",
+      "type_readable": "LT Real"
+    },
+    {
+      "blind_name": "ite",
+      "body_readable": "fun {\u03b1} c [h : Decidable c] t e => Decidable.casesOn h (fun x => e) fun x => t",
+      "distance": 2,
+      "id": "D031",
+      "kind": "def",
+      "name": "ite",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "3029bae29d2d16b5aeb879ad3c12a1b3c4e78998083bf1ab4614942fafdece0e",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (c : Prop) \u2192 [h : Decidable c] \u2192 (t e : \u03b1) \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (c : Prop) \u2192 [h : Decidable c] \u2192 \u03b1 \u2192 \u03b1 \u2192 \u03b1"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact proof-free native Lean environment supplement; independently inspect its declarations and provenance SHA256 1ad56f3dcdd8949ef0286bf8ab1bf79631995cf8b9e189ef494b68e7080c431b
+{
+  "format": "proof-free-lean-environment-evidence-1",
+  "scope": "Exact native declarations characterizing neighborhood filters and limits; contains no source correspondence claim or prior judgment.",
+  "runtime": {
+    "command_receipt": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-topology-final-exit.json",
+      "sha256": "98cbd6e9578daccb713008f3c37086526362195b8d68d9c57362ebb4dec7a2a5"
+    },
+    "probe": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/TopologyDeclarations.lean",
+      "sha256": "92fbd057bc5ba7860e648048cf0856341a47b2263b89c4338fd87976d120d3f0"
+    },
+    "environment_files": [
+      {
+        "path": "lean-toolchain",
+        "sha256": "fdf7ccfe204caff50fab1913b9f13a763be5384e87d14555c9fdcb2be2b9f7f8"
+      },
+      {
+        "path": "lake-manifest.json",
+        "sha256": "ccfe8a72d6d227aebfe4e58575ddf2a2aef03b795052f97b770c36f684cc5774"
+      },
+      {
+        "path": ".lake/packages/mathlib/Mathlib/Topology/Defs/Filter.lean",
+        "sha256": "8c0f9587c5b742eac2e7fd4d7116a52aa6fe3029039184940eeb9302f0774c7f"
+      },
+      {
+        "path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Topology/Defs/Filter.olean",
+        "sha256": "122843f22c626a0b1590095ff51ae1a9371d319a6c360aa109c3a790cec4fa93"
+      },
+      {
+        "path": ".lake/packages/mathlib/Mathlib/Topology/Defs/Basic.lean",
+        "sha256": "d4f8ef2bd2f73ea99f92c1bb9d1cc0e482465dab7ab7b0127f6ed498aed4e9a9"
+      },
+      {
+        "path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Topology/Defs/Basic.olean",
+        "sha256": "e1e09f189e834c95b732e6222c05e55dbb1f2c84b40ec0e200699877ac4fd2f2"
+      },
+      {
+        "path": ".lake/packages/mathlib/Mathlib/Topology/Neighborhoods.lean",
+        "sha256": "87807e2894f050c14af949d9a9859d5dc2d9a208670d1b18856b669e28a58e1d"
+      },
+      {
+        "path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Topology/Neighborhoods.olean",
+        "sha256": "0c3a0a54a01ee23036f9350291945f360aec80ab0c23cba2df593c5a76d6f1a9"
+      }
+    ],
+    "native_lake": "C:\\Users\\qed_s\\.elan\\bin\\lake.EXE"
+  },
+  "native_output_spans": [
+    {
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-topology-final-output.txt",
+      "source_sha256": "ed9ca5178683e5c5899bfa04f9c9d074c4799a9aa190f6aab44a148013ac8775",
+      "start_byte": 0,
+      "end_byte_exclusive": 2469,
+      "span_sha256": "ed9ca5178683e5c5899bfa04f9c9d074c4799a9aa190f6aab44a148013ac8775",
+      "exact_text": "@nhds_def : ∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X),\n  nhds x = ⨅ s ∈ {s | x ∈ s ∧ IsOpen s}, Filter.principal s\n@mem_nhds_iff : ∀ {X : Type u_1} [inst : TopologicalSpace X] {x : X} {s : Set X}, s ∈ nhds x ↔ ∃ t ⊆ s, IsOpen t ∧ x ∈ t\nclass TopologicalSpace.{u} (X : Type u) : Type u\nnumber of parameters: 1\nfields:\n  TopologicalSpace.IsOpen : Set X → Prop\n  TopologicalSpace.isOpen_univ : TopologicalSpace.IsOpen Set.univ\n  TopologicalSpace.isOpen_inter : ∀ (s t : Set X),\n      TopologicalSpace.IsOpen s → TopologicalSpace.IsOpen t → TopologicalSpace.IsOpen (s ∩ t)\n  TopologicalSpace.isOpen_sUnion : ∀ (s : Set (Set X)),\n      (∀ t ∈ s, TopologicalSpace.IsOpen t) → TopologicalSpace.IsOpen (⋃₀ s)\nconstructor:\n  TopologicalSpace.mk.{u} {X : Type u} (IsOpen : Set X → Prop) (isOpen_univ : IsOpen Set.univ)\n    (isOpen_inter : ∀ (s t : Set X), IsOpen s → IsOpen t → IsOpen (s ∩ t))\n    (isOpen_sUnion : ∀ (s : Set (Set X)), (∀ t ∈ s, IsOpen t) → IsOpen (⋃₀ s)) : TopologicalSpace X\ndef Filter.Tendsto.{u_1, u_2} : {α : Type u_1} → {β : Type u_2} → (α → β) → Filter α → Filter β → Prop :=\nfun {α} {β} f l₁ l₂ => Filter.map f l₁ ≤ l₂\ndef nhdsWithin.{u_1} : {X : Type u_1} → [TopologicalSpace X] → X → Set X → Filter X :=\nfun {X} [TopologicalSpace X] x s => nhds x ⊓ Filter.principal s\n@nhds_def.{u_1} : ∀ {X : Type u_1} [inst : TopologicalSpace.{u_1} X] (x : X),\n  @Eq.{u_1 + 1} (Filter.{u_1} X) (@nhds.{u_1} X inst x)\n    (⨅ s,\n      ⨅ (_ :\n        @Membership.mem.{u_1, u_1} (Set.{u_1} X) (Set.{u_1} (Set.{u_1} X)) (@Set.instMembership.{u_1} (Set.{u_1} X))\n          (@setOf.{u_1} (Set.{u_1} X) fun s =>\n            And (@Membership.mem.{u_1, u_1} X (Set.{u_1} X) (@Set.instMembership.{u_1} X) s x) (@IsOpen.{u_1} X inst s))\n          s),\n        @Filter.principal.{u_1} X s)\n@mem_nhds_iff.{u_1} : ∀ {X : Type u_1} [inst : TopologicalSpace.{u_1} X] {x : X} {s : Set.{u_1} X},\n  Iff\n    (@Membership.mem.{u_1, u_1} (Set.{u_1} X) (Filter.{u_1} X) (@Filter.instMembership.{u_1} X) (@nhds.{u_1} X inst x)\n      s)\n    (∃ t,\n      And (@HasSubset.Subset.{u_1} (Set.{u_1} X) (@Set.instHasSubset.{u_1} X) t s)\n        (And (@IsOpen.{u_1} X inst t) (@Membership.mem.{u_1, u_1} X (Set.{u_1} X) (@Set.instMembership.{u_1} X) t x)))\n'nhds_def' depends on axioms: [propext, Quot.sound.{u}]\n'mem_nhds_iff' depends on axioms: [propext, Quot.sound.{u}]\n",
+      "first_line": 1,
+      "last_line": 38
+    }
+  ],
+  "probe_commands": [
+    "#check @nhds_def",
+    "#check @mem_nhds_iff",
+    "#print TopologicalSpace",
+    "#print Filter.Tendsto",
+    "#print nhdsWithin",
+    "#print axioms nhds_def",
+    "#print axioms mem_nhds_iff"
+  ],
+  "omissions": [
+    "No target proof, source interpretation, prior audit output or requested classification is included."
+  ]
+}
+
+This supplement contains exact native output spans and runtime/source hash provenance. It supplies no prior audit judgment. Treat declaration output as evidence to inspect independently, not a requested interpretation or classification. It is bound by the prepared manifest as Lean-environment evidence. Preserve any unresolved source or dependency meaning.
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 b571684dd68b7adaaa72161cd7b68f8f3c6c93451c3ab6d24ecc7899ac2766de
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "3a0c0fa956dea10d97e4178e3297b467f1fad8460a50c9f4da192b878d08a80a",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "For a function data from the reals to a topological space, its limit at a from strictly below is left, its limit at a from strictly above is right, and left and right are unequal.",
+      "effect_on_target": "The medium hypothesis includes both one-sided limits and unequal limiting material values. The conclusion repeats this and asserts the corresponding three properties for initialState.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "For every real x < 0, data(x) = leftState, and for every real x > 0, data(x) = rightState.",
+      "effect_on_target": "Requires initialState to be constant on each entire open half-line. Appears as both hypothesis and conclusion; imposes no condition at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "The function taking leftState when x < 0, rightState when x > 0, and valueAtOrigin when x = 0.",
+      "effect_on_target": "The existential conclusion represents initialState exactly as this three-case function, with an existentially chosen value at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "And",
+      "meaning": "Logical conjunction: both component propositions hold.",
+      "effect_on_target": "All grouped conclusions hold simultaneously, as do the component conditions inside the local predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "ContinuousAt",
+      "meaning": "A function f is continuous at x if f tends to f(x) along the neighborhood filter of x.",
+      "effect_on_target": "The conclusion denies continuity at zero separately for medium and initialState.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "Expresses the prescribed state values on half-lines and equality of the entire initialState function with its piecewise representation.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Exists",
+      "meaning": "There is an object of the specified type satisfying the predicate.",
+      "effect_on_target": "There exists originState in State giving the stated function equality; this witness is chosen within the scope of all preceding parameters and hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "Filter.Tendsto",
+      "meaning": "The image of the source filter under the function is less than or equal to the target filter; equivalently, every target-filter set has preimage belonging to the source filter.",
+      "effect_on_target": "Expresses the scalar-domain one-sided limits of each component and of the paired function.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "Ne",
+      "meaning": "Negation of equality.",
+      "effect_on_target": "Requires and repeats distinct left and right state values, and encodes distinct material values within the medium hypothesis and explicitly in the conclusion.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Not",
+      "meaning": "Logical negation, defined as implication to falsehood.",
+      "effect_on_target": "Expresses inequalities through Ne and the failure of continuity of both functions at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "OfNat.ofNat",
+      "meaning": "Extracts the interpretation of a natural-number literal from its OfNat instance.",
+      "effect_on_target": "Interprets every displayed numeral 0 as real zero through the supplied real zero instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "Prod",
+      "meaning": "The Cartesian product type of two types.",
+      "effect_on_target": "The paired function takes values in Material × State.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Prod.mk",
+      "meaning": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Pairs medium(x) with initialState(x), leftMaterial with leftState, and rightMaterial with rightState, preserving this order.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the uniform-space structure carried by a pseudometric-space structure.",
+      "effect_on_target": "Provides the intermediate structure through which the real pseudometric supplies the topology used in limits and continuity.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "Both functions have the full real line as domain; the distinguished point is real zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "Real.instPreorder",
+      "meaning": "The inferred preorder instance on the real numbers, conventionally their usual order; its implementation is not expanded beyond inferInstance.",
+      "effect_on_target": "Supplies the order used to form the strict lower and upper half-lines in the source filters.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Real.instZero",
+      "meaning": "The real zero instance, whose zero field is Real.zero.",
+      "effect_on_target": "Fixes the common interface point, half-line boundary, and point of discontinuity at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "The real pseudometric-space structure with distance d(x,y) = |x-y|.",
+      "effect_on_target": "Makes real-domain neighborhoods and limiting approaches use the usual metric topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Set.Iio",
+      "meaning": "The set of points strictly less than its endpoint.",
+      "effect_on_target": "At endpoint zero, restricts limiting approaches to x < 0 and excludes zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Set.Ioi",
+      "meaning": "The set of points strictly greater than its endpoint.",
+      "effect_on_target": "At endpoint zero, restricts limiting approaches to x > 0 and excludes zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "T2Space",
+      "meaning": "The Hausdorff separation property: distinct points have disjoint neighborhoods.",
+      "effect_on_target": "Both codomain topologies are required to be Hausdorff, so distinct one-sided limits are incompatible with continuity at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "TopologicalSpace",
+      "meaning": "A topology on a type, specifying open sets satisfying the topology axioms.",
+      "effect_on_target": "Material and State have arbitrary specified topologies subject to the Hausdorff assumptions; no metric or algebraic codomain structure is required.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology carried by a uniform-space structure.",
+      "effect_on_target": "Supplies the real-domain topology from its metric-derived uniform structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral zero using the zero field of a Zero instance.",
+      "effect_on_target": "Connects real numeral notation to Real.instZero without introducing another constant or assumption.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "instTopologicalSpaceProd",
+      "meaning": "The product topology, constructed from the topologies induced by the two coordinate projections.",
+      "effect_on_target": "The paired limits are limits in the product topology on Material × State and therefore express simultaneous convergence of the coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "nhds",
+      "meaning": "Conventionally the neighborhood filter at a point, consisting of sets containing an open neighborhood of that point. The supplied body wrapped✝.1 does not expose this construction.",
+      "effect_on_target": "Determines the target filters for all limits and the unrestricted source filters for continuity. The mathematical translation uses its conventional neighborhood-filter interpretation.",
+      "status": "unclear"
+    },
+    {
+      "id": "D027",
+      "name": "nhdsWithin",
+      "meaning": "The infimum of the neighborhood filter at x and the principal filter of s, representing neighborhoods restricted to s.",
+      "effect_on_target": "Produces the source filters for approaches to zero within the strictly negative and strictly positive real half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "LT.lt",
+      "meaning": "Extracts the strict comparison relation from an LT instance.",
+      "effect_on_target": "Supplies the comparisons that select half-lines and branches of the piecewise state function.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Real.decidableLT",
+      "meaning": "A decision instance for strict comparison of two real numbers.",
+      "effect_on_target": "Permits the conditional definition of the piecewise function; adds no mathematical hypothesis on the inputs.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "Real.instLT",
+      "meaning": "The strict-order instance on reals with comparison field Real.lt.",
+      "effect_on_target": "Determines x < 0 and 0 < x in the state predicate and piecewise function.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "ite",
+      "meaning": "Returns the first branch when its proposition is true and the second branch when it is false.",
+      "effect_on_target": "The nested conditional selects the left value for negative inputs, the right value for positive inputs, and the origin value when neither strict inequality holds.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every type Material in universe u_1 and every type State in universe u_2, each equipped with a topology and assumed Hausdorff.",
+      "For every function medium : ℝ → Material and every function initialState : ℝ → State.",
+      "For every leftMaterial, rightMaterial ∈ Material and leftState, rightState ∈ State.",
+      "Under the three stated hypotheses, there exists originState ∈ State in the final conjunct. It may depend on the preceding data; the asserted function equality forces originState = initialState(0)."
+    ],
+    "hypotheses": [
+      "As x tends to 0 through x < 0, medium(x) tends to leftMaterial; as x tends to 0 through x > 0, medium(x) tends to rightMaterial; and leftMaterial ≠ rightMaterial.",
+      "For every real x < 0, initialState(x) = leftState, and for every real x > 0, initialState(x) = rightState.",
+      "leftState ≠ rightState."
+    ],
+    "conclusions": [
+      "The first conjunction asserts both: medium has the prescribed unequal one-sided limits at zero; and initialState tends to leftState from below and rightState from above at zero, with leftState ≠ rightState.",
+      "The next grouped conjunction asserts that x ↦ (medium(x), initialState(x)) tends to (leftMaterial, leftState) as x → 0 from below, tends to (rightMaterial, rightState) as x → 0 from above, and satisfies both leftMaterial ≠ rightMaterial and leftState ≠ rightState.",
+      "The remaining grouped conjunction asserts that initialState equals leftState at every negative real input and rightState at every positive real input; medium is not continuous at zero; initialState is not continuous at zero; and there exists originState ∈ State such that initialState equals, as a function on all of ℝ, the function with value leftState for x < 0, originState for x = 0, and rightState for x > 0."
+    ],
+    "mathematical_definitions": [
+      "The real domain carries the topology from d(x,y) = |x-y|.",
+      "A left limit at zero uses the filter of neighborhoods of zero restricted to (-∞,0); a right limit uses neighborhoods restricted to (0,∞). Neither includes evaluation at zero.",
+      "Convergence to a codomain point means eventual membership in every neighborhood of that point along the specified source filter.",
+      "Material × State carries the product topology, and ordered pairs list the material coordinate first.",
+      "Continuity at zero means convergence to the actual value of the function at zero along unrestricted neighborhoods of zero.",
+      "LocalDef001 combines the two specified one-sided limits with inequality of their values. LocalDef002 prescribes constant values on the entire two open half-lines. LocalDef003 supplies the corresponding piecewise function with a separately specified value at zero."
+    ],
+    "proposition_plain_english": "Let Material and State be Hausdorff topological spaces, and let medium and initialState be functions on the real line taking values in these spaces respectively. Suppose medium has distinct left and right limits leftMaterial and rightMaterial at zero. Suppose initialState is identically leftState on the negative half-line and identically rightState on the positive half-line, where leftState and rightState are distinct. Then medium retains those prescribed distinct one-sided limits, and initialState has the prescribed distinct one-sided limits leftState and rightState at zero. The paired function (medium, initialState) has left limit (leftMaterial, leftState) and right limit (rightMaterial, rightState) in the product topology, with both coordinate pairs unequal. The prescribed half-line values of initialState still hold. Both medium and initialState are discontinuous at zero. Finally, there is a state originState such that initialState is exactly the function equal to leftState for negative inputs, originState at zero, and rightState for positive inputs."
+  },
+  "restrictions_and_vacuity_risks": [
+    "Both codomains must be Hausdorff. The declaration does not cover arbitrary non-Hausdorff topological spaces.",
+    "The hypotheses require two distinct elements in each codomain. For empty or singleton codomains there are no parameter choices satisfying all hypotheses, so the universally quantified implication has no applicable instance there.",
+    "The strict real half-lines approach zero and give nontrivial source filters under the usual real topology; the one-sided limit assertions are not vacuous through an empty approach region.",
+    "The state hypothesis is global on each open half-line, whereas the medium hypothesis only constrains behavior approaching zero and imposes no half-line constancy.",
+    "Neither function's value at zero is prescribed by the hypotheses. The existential witness is necessarily initialState(0), but need not equal either limiting state.",
+    "The conclusion contains repeated hypotheses and repeated inequalities; these are simultaneous assertions, not additional independently chosen data.",
+    "Function equality in the existential conclusion holds on all real inputs, not merely near zero or almost everywhere. The declaration asserts existence, not explicitly unique existence, although the witness is forced by evaluation at zero.",
+    "No algebraic structure, quantitative jump size, differentiability, evolution law, physical interpretation, or relation between the two coordinate functions beyond the displayed limits is encoded.",
+    "The interface point is fixed at zero. No indexed family, time variable, additional interface, or continuity assertion away from zero is present."
+  ],
+  "ambiguities": [
+    "Some foundational external declarations are supplied only by type or opaque references. In particular, nhds has body wrapped✝.1 with no definition of wrapped✝, so its neighborhood-filter semantics cannot be independently recovered from that body alone. The translation uses the conventional meanings of the foundational real, topology, order, and logical primitives; all three local predicates are explicitly defined and introduce no further ambiguity."
+  ]
+}
+
+Complete direct declaration dossier SHA256 b607f30417e7d723ff9280a61966f81c4d4840354915759cf84b79d09c80b9c8
+# Declaration dossier for LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_materialInterfaceLocalRiemannData {Material State : Type*}
+    [TopologicalSpace Material] [TopologicalSpace State]
+    [T2Space Material] [T2Space State]
+    {medium : ℝ → Material} {initialState : ℝ → State}
+    {leftMaterial rightMaterial : Material} {leftState rightState : State}
+    (hmedium : HasJumpAt medium 0 leftMaterial rightMaterial)
+    (hstate : IsRiemannData initialState leftState rightState)
+    (hdistinct : leftState ≠ rightState) :
+    (HasJumpAt medium 0 leftMaterial rightMaterial ∧
+      HasJumpAt initialState 0 leftState rightState) ∧
+    (Tendsto (fun x => (medium x, initialState x)) (𝓝[<] 0)
+        (𝓝 (leftMaterial, leftState)) ∧
+      Tendsto (fun x => (medium x, initialState x)) (𝓝[>] 0)
+        (𝓝 (rightMaterial, rightState)) ∧
+      leftMaterial ≠ rightMaterial ∧ leftState ≠ rightState) ∧
+    IsRiemannData initialState leftState rightState ∧
+    ¬ ContinuousAt medium 0 ∧ ¬ ContinuousAt initialState 0 ∧
+    (∃ originState, initialState = riemannData leftState originState rightState)
+```
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace Material] [inst_1 : TopologicalSpace State]
+  [T2Space Material] [T2Space State] {medium : Real → Material} {initialState : Real → State}
+  {leftMaterial rightMaterial : Material} {leftState rightState : State},
+  NumStability.HasJumpAt medium 0 leftMaterial rightMaterial →
+    NumStability.IsRiemannData initialState leftState rightState →
+      Ne leftState rightState →
+        And
+          (And (NumStability.HasJumpAt medium 0 leftMaterial rightMaterial)
+            (NumStability.HasJumpAt initialState 0 leftState rightState))
+          (And
+            (And
+              (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Iio 0))
+                (nhds { fst := leftMaterial, snd := leftState }))
+              (And
+                (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Ioi 0))
+                  (nhds { fst := rightMaterial, snd := rightState }))
+                (And (Ne leftMaterial rightMaterial) (Ne leftState rightState))))
+            (And (NumStability.IsRiemannData initialState leftState rightState)
+              (And (Not (ContinuousAt medium 0))
+                (And (Not (ContinuousAt initialState 0))
+                  (Exists fun originState =>
+                    Eq initialState (NumStability.riemannData leftState originState rightState))))))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace.{u_1} Material]
+  [inst_1 : TopologicalSpace.{u_2} State] [@T2Space.{u_1} Material inst] [@T2Space.{u_2} State inst_1]
+  {medium : Real → Material} {initialState : Real → State} {leftMaterial rightMaterial : Material}
+  {leftState rightState : State}
+  (hmedium :
+    @NumStability.HasJumpAt.{u_1} Material inst medium
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+  (hstate : @NumStability.IsRiemannData.{u_2} State initialState leftState rightState)
+  (hdistinct : @Ne.{u_2 + 1} State leftState rightState),
+  And
+    (And
+      (@NumStability.HasJumpAt.{u_1} Material inst medium
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+      (@NumStability.HasJumpAt.{u_2} State inst_1 initialState
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftState rightState))
+    (And
+      (And
+        (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+          (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+          (@nhdsWithin.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+            (@Set.Iio.{0} Real Real.instPreorder
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+            (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+            (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)))
+        (And
+          (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+            (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+            (@nhdsWithin.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+              (@Set.Ioi.{0} Real Real.instPreorder
+                (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+              (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+              (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState)))
+          (And (@Ne.{u_1 + 1} Material leftMaterial rightMaterial) (@Ne.{u_2 + 1} State leftState rightState))))
+      (And (@NumStability.IsRiemannData.{u_2} State initialState leftState rightState)
+        (And
+          (Not
+            (@ContinuousAt.{0, u_1} Real Material
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              inst medium (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (And
+            (Not
+              (@ContinuousAt.{0, u_2} Real State
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                inst_1 initialState (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@Exists.{u_2 + 1} State fun (originState : State) =>
+              @Eq.{u_2 + 1} (Real → State) initialState
+                (@NumStability.riemannData.{u_2} State leftState originState rightState))))))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataJump`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData` imports: `Mathlib.Data.Real.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`, `Mathlib.Analysis.Calculus.Deriv.Basic`
+- `ComputationalMathematics.Topology.Order.Jump` imports: `Mathlib.Topology.Constructions.SumProd`, `Mathlib.Topology.Instances.Real.Lemmas`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataJump` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity`, `ComputationalMathematics.Topology.Order.Jump`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.HasJumpAt`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Topology.Order.Jump`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `aa534a048dc393a30a846ded197c7f76580bdf2258f12ca6f816679676f2c033`
+
+Type:
+
+```lean
+{E : Type u_1} → [TopologicalSpace E] → (Real → E) → Real → E → E → Prop
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_1} → [TopologicalSpace.{u_1} E] → (data : Real → E) → (a : Real) → (left right : E) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [TopologicalSpace E] data a left right =>
+  And (Filter.Tendsto data (nhdsWithin a (Set.Iio a)) (nhds left))
+    (And (Filter.Tendsto data (nhdsWithin a (Set.Ioi a)) (nhds right)) (Ne left right))
+```
+
+### D002: `NumStability.IsRiemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (data : Real → State) → (leftState rightState : State) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D003: `NumStability.riemannData`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `26e08100ec1e5620a6544ddb3d82ba18df6987384db43d3096e56de6c1c46638`
+
+Type:
+
+```lean
+{State : Type u_1} → State → State → State → Real → State
+```
+
+Fully explicit type:
+
+```lean
+{State : Type u_1} → (leftState valueAtOrigin rightState : State) → Real → State
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} leftState valueAtOrigin rightState x =>
+  ite (Real.instLT.lt x 0) leftState (ite (Real.instLT.lt 0 x) rightState valueAtOrigin)
+```
+
+### D004: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D005: `ContinuousAt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3c8b2955cfd1b5ec4313254503ce66a5505b003200b3b378f96770b19f854cf6`
+
+Type:
+
+```lean
+{X : Type u_1} → {Y : Type u_2} → [TopologicalSpace X] → [TopologicalSpace Y] → (X → Y) → X → Prop
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_1} → {Y : Type u_2} → [TopologicalSpace.{u_1} X] → [TopologicalSpace.{u_2} Y] → (f : X → Y) → (x : X) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [TopologicalSpace X] [TopologicalSpace Y] f x => Filter.Tendsto f (nhds x) (nhds (f x))
+```
+
+### D006: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D007: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D008: `Filter.Tendsto`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Filter.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7e5f54349644c32198960083c0e0eb6c033c80a8656d02a78b3eae9a4f5131f2`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → (α → β) → Filter α → Filter β → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → (f : α → β) → (l₁ : Filter.{u_1} α) → (l₂ : Filter.{u_2} β) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} f l₁ l₂ => Filter.instPartialOrder.le (Filter.map f l₁) l₂
+```
+
+### D009: `Ne`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6`
+
+Type:
+
+```lean
+{α : Sort u} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (a b : α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} a b => Not (Eq a b)
+```
+
+### D010: `Not`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0bfdacbe07f6cbb8995b354e36299fd742f29398c188d7cc23dedcdc47f57a9a`
+
+Type:
+
+```lean
+Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a : Prop) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a => a → False
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D012: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → (β : Type v) → Type (max u v)
+```
+
+### D013: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → (fst : α) → (snd : β) → Prod.{u, v} α β
+```
+
+### D014: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D015: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D016: `Real.instPreorder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `896bb94fc15867c0df82ea0f639eb6116e90a24819a66a54db9442e47cba7274`
+
+Type:
+
+```lean
+Preorder Real
+```
+
+Fully explicit type:
+
+```lean
+Preorder.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D017: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D018: `Real.pseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
+
+Type:
+
+```lean
+PseudoMetricSpace Real
+```
+
+Fully explicit type:
+
+```lean
+PseudoMetricSpace.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
+  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
+  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
+```
+
+### D019: `Set.Iio`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7d2fb1f1a25e32137e405a3246c71735490bca2e04477240797df205bd739c7e`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Preorder.{u_1} α] → (b : α) → Set.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt x b
+```
+
+### D020: `Set.Ioi`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ad556a749b4ff2a341c66bd35e0369f79888567fa7730aab8ee2fdd700fbfd52`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Preorder.{u_1} α] → (b : α) → Set.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt b x
+```
+
+### D021: `T2Space`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Separation.Hausdorff`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `08a54e5e65d34b76977bbc7266ee793dc9893b14c6b6492ae56b97fde6aba974`
+
+Type:
+
+```lean
+(X : Type u) → [TopologicalSpace X] → Prop
+```
+
+Fully explicit type:
+
+```lean
+(X : Type u) → [TopologicalSpace.{u} X] → Prop
+```
+
+### D022: `TopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `c85328c9b77ed49bcba2dd67e9f87b53aaf251834d29c69856ef079a9ec4b57b`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+Fully explicit type:
+
+```lean
+(X : Type u) → Type u
+```
+
+### D023: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D024: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D025: `instTopologicalSpaceProd`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Constructions.SumProd`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `52bf679916f23cac59489c5a99280e24c015508e91377d9dfa711ba64a31319c`
+
+Type:
+
+```lean
+{X : Type u} → {Y : Type v} → [t₁ : TopologicalSpace X] → [t₂ : TopologicalSpace Y] → TopologicalSpace (Prod X Y)
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u} →
+  {Y : Type v} →
+    [t₁ : TopologicalSpace.{u} X] → [t₂ : TopologicalSpace.{v} Y] → TopologicalSpace.{max v u} (Prod.{u, v} X Y)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [t₁ : TopologicalSpace X] [t₂ : TopologicalSpace Y] =>
+  SemilatticeInf.toMin.min (TopologicalSpace.induced Prod.fst t₁) (TopologicalSpace.induced Prod.snd t₂)
+```
+
+### D026: `nhds`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8eb445823f4b15a765f7e0cd634f73196d36b4f09054d2aef43a69d3138c6ce8`
+
+Type:
+
+```lean
+{X : Type u_3} → [TopologicalSpace X] → X → Filter X
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_3} → [TopologicalSpace.{u_3} X] → (x : X) → Filter.{u_3} X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+wrapped✝.1
+```
+
+### D027: `nhdsWithin`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ae7b5c1971244e63e32407fed747da989ad9fef3a4d9c3a64643427eaf071f05`
+
+Type:
+
+```lean
+{X : Type u_1} → [TopologicalSpace X] → X → Set X → Filter X
+```
+
+Fully explicit type:
+
+```lean
+{X : Type u_1} → [TopologicalSpace.{u_1} X] → (x : X) → (s : Set.{u_1} X) → Filter.{u_1} X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} [TopologicalSpace X] x s => Filter.instInf.min (nhds x) (Filter.principal s)
+```
+
+### D028: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LT.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D029: `Real.decidableLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `def93575a13821d7d42b557cb9b973eede26ae12bbb8b60b1f0a302bf95a5a42`
+
+Type:
+
+```lean
+(a b : Real) → Decidable (Real.instLT.lt a b)
+```
+
+Fully explicit type:
+
+```lean
+(a b : Real) → Decidable (@LT.lt.{0} Real Real.instLT a b)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a b => inferInstance
+```
+
+### D030: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Fully explicit type:
+
+```lean
+LT.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D031: `ite`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3029bae29d2d16b5aeb879ad3c12a1b3c4e78998083bf1ab4614942fafdece0e`
+
+Type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → α → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → (t e : α) → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} c [h : Decidable c] t e => Decidable.casesOn h (fun x => e) fun x => t
+```
+
+## Complete local imported sources
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannData.lean`
+SHA-256: `35ab3a9c610ddbc90dec920888d39ff4bd36c54e7fe093e1bc4ace131950c3da`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Data.Real.Basic
+
+/-!
+# One-dimensional Riemann data
+
+Source-independent definitions for piecewise constant initial data with one
+jump at the origin.  The predicate intentionally imposes no condition at the
+origin, and `riemannData` exposes that free value as an explicit parameter.
+-/
+
+namespace NumStability
+
+/-- A field has left state `leftState` on `x < 0` and right state `rightState`
+on `x > 0`.  Its value at `x = 0` is deliberately unspecified. -/
+def IsRiemannData
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) : Prop :=
+  (∀ x : ℝ, x < 0 → data x = leftState) ∧
+    (∀ x : ℝ, 0 < x → data x = rightState)
+
+/-- Riemann data with an explicit, freely chosen value at the jump point. -/
+noncomputable def riemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    ℝ → State :=
+  fun x =>
+    if x < 0 then leftState
+    else if 0 < x then rightState
+    else valueAtOrigin
+
+/-- The parameterized construction satisfies the Riemann-data predicate. -/
+theorem riemannData_isRiemannData
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    IsRiemannData
+      (riemannData leftState valueAtOrigin rightState)
+      leftState rightState := by
+  constructor
+  · intro x hx
+    simp [riemannData, hx]
+  · intro x hx
+    have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+    simp [riemannData, hx, hnotLeft]
+
+/-- The value of `riemannData` at the jump is exactly its free parameter. -/
+@[simp]
+theorem riemannData_zero
+    {State : Type*} (leftState valueAtOrigin rightState : State) :
+    riemannData leftState valueAtOrigin rightState 0 = valueAtOrigin := by
+  simp [riemannData]
+
+/-- The Riemann-data predicate characterizes exactly the functions obtained by
+choosing an arbitrary value at the origin. -/
+theorem isRiemannData_iff_exists_valueAtOrigin
+    {State : Type*} (data : ℝ → State)
+    (leftState rightState : State) :
+    IsRiemannData data leftState rightState ↔
+      ∃ valueAtOrigin,
+        data = riemannData leftState valueAtOrigin rightState := by
+  constructor
+  · rintro ⟨hleft, hright⟩
+    refine ⟨data 0, funext ?_⟩
+    intro x
+    rcases lt_trichotomy x 0 with hx | hx | hx
+    · simpa [riemannData, hx] using hleft x hx
+    · subst x
+      simp
+    · have hnotLeft : ¬ x < 0 := not_lt_of_ge (le_of_lt hx)
+      simpa [riemannData, hx, hnotLeft] using hright x hx
+  · rintro ⟨valueAtOrigin, rfl⟩
+    exact riemannData_isRiemannData leftState valueAtOrigin rightState
+
+end NumStability
+```
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannDataRegularity.lean`
+SHA-256: `daad4eb4bdf9db2e9d8a2f424a91ac82a3a7a0485b6138ff43403df6d901b108`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
+import Mathlib.Analysis.Calculus.Deriv.Basic
+
+/-!
+# One-sided limits and discontinuity of Riemann data
+
+The left and right traces are independent of the selected value at the origin.
+Distinct states preclude continuity there.
+-/
+
+open Filter Set
+open scoped Topology
+
+namespace NumStability
+
+theorem IsRiemannData.tendsto_left {State : Type*} [TopologicalSpace State]
+    {data : ℝ → State} {leftState rightState : State}
+    (hdata : IsRiemannData data leftState rightState) :
+    Tendsto data (𝓝[<] (0 : ℝ)) (𝓝 leftState) := by
+  apply (tendsto_const_nhds :
+    Tendsto (fun _ : ℝ => leftState) (𝓝[<] (0 : ℝ)) (𝓝 leftState)).congr'
+  filter_upwards [self_mem_nhdsWithin] with x hx
+  exact (hdata.1 x hx).symm
+
+theorem IsRiemannData.tendsto_right {State : Type*} [TopologicalSpace State]
+    {data : ℝ → State} {leftState rightState : State}
+    (hdata : IsRiemannData data leftState rightState) :
+    Tendsto data (𝓝[>] (0 : ℝ)) (𝓝 rightState) := by
+  apply (tendsto_const_nhds :
+    Tendsto (fun _ : ℝ => rightState) (𝓝[>] (0 : ℝ)) (𝓝 rightState)).congr'
+  filter_upwards [self_mem_nhdsWithin] with x hx
+  exact (hdata.2 x hx).symm
+
+theorem IsRiemannData.not_continuousAt_zero {State : Type*}
+    [TopologicalSpace State] [T2Space State]
+    {data : ℝ → State} {leftState rightState : State}
+    (hdata : IsRiemannData data leftState rightState) (hne : leftState ≠ rightState) :
+    ¬ ContinuousAt data 0 := by
+  intro hc
+  have hl := tendsto_nhds_unique hdata.tendsto_left hc.continuousWithinAt.tendsto
+  have hr := tendsto_nhds_unique hdata.tendsto_right hc.continuousWithinAt.tendsto
+  exact hne (hl.trans hr.symm)
+
+end NumStability
+```
+
+### `ComputationalMathematics.Topology.Order.Jump`
+
+Path: `ComputationalMathematics/Topology/Order/Jump.lean`
+SHA-256: `52e081821a28be9e594ca06414b30b77f220403872db050ac10be985ad21d56e`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import Mathlib.Topology.Constructions.SumProd
+import Mathlib.Topology.Instances.Real.Lemmas
+
+/-!
+# Distinct one-sided traces on the real line
+
+A jump records distinct left and right limits, independently of the value at the point.
+Both component inequalities are retained when pairing two jumps.
+-/
+
+open Filter Set
+open scoped Topology
+
+namespace NumStability
+
+/-- A jump has existing, distinct left and right traces. The point value is free. -/
+def HasJumpAt {E : Type*} [TopologicalSpace E]
+    (data : ℝ → E) (a : ℝ) (left right : E) : Prop :=
+  Tendsto data (𝓝[<] a) (𝓝 left) ∧
+    Tendsto data (𝓝[>] a) (𝓝 right) ∧ left ≠ right
+
+theorem HasJumpAt.not_continuousAt {E : Type*} [TopologicalSpace E] [T2Space E]
+    {data : ℝ → E} {a : ℝ} {left right : E}
+    (h : HasJumpAt data a left right) : ¬ ContinuousAt data a := by
+  intro hc
+  have hl := tendsto_nhds_unique h.1 hc.continuousWithinAt.tendsto
+  have hr := tendsto_nhds_unique h.2.1 hc.continuousWithinAt.tendsto
+  exact h.2.2 (hl.trans hr.symm)
+
+/-- Only the two punctured one-sided germs matter. -/
+theorem HasJumpAt.congr {E : Type*} [TopologicalSpace E]
+    {data other : ℝ → E} {a : ℝ} {left right : E}
+    (h : HasJumpAt data a left right)
+    (hl : data =ᶠ[𝓝[<] a] other) (hr : data =ᶠ[𝓝[>] a] other) :
+    HasJumpAt other a left right :=
+  ⟨h.1.congr' hl, h.2.1.congr' hr, h.2.2⟩
+/-- Pairing one-sided traces preserves both component jumps, not only pair inequality. -/
+theorem hasJumpAt_and_iff_product_traces {Material State : Type*}
+    [TopologicalSpace Material] [TopologicalSpace State]
+    (medium : ℝ → Material) (initialState : ℝ → State) (a : ℝ)
+    (leftMaterial rightMaterial : Material) (leftState rightState : State) :
+    (HasJumpAt medium a leftMaterial rightMaterial ∧
+      HasJumpAt initialState a leftState rightState) ↔
+      Tendsto (fun x => (medium x, initialState x)) (𝓝[<] a)
+        (𝓝 (leftMaterial, leftState)) ∧
+      Tendsto (fun x => (medium x, initialState x)) (𝓝[>] a)
+        (𝓝 (rightMaterial, rightState)) ∧
+      leftMaterial ≠ rightMaterial ∧ leftState ≠ rightState := by
+  constructor
+  · rintro ⟨hm, hq⟩
+    exact ⟨hm.1.prodMk_nhds hq.1, hm.2.1.prodMk_nhds hq.2.1, hm.2.2, hq.2.2⟩
+  · rintro ⟨hl, hr, hm, hq⟩
+    exact ⟨⟨hl.fst_nhds, hr.fst_nhds, hm⟩, ⟨hl.snd_nhds, hr.snd_nhds, hq⟩⟩
+
+end NumStability
+```
+
+### `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataJump`
+
+Path: `ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/RiemannDataJump.lean`
+SHA-256: `d846767bf51f6259175777302d91325849a098c715d8ba53fb388c451c7534cc`
+
+```lean
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity
+import ComputationalMathematics.Topology.Order.Jump
+
+/-!
+# Jumps of Riemann data
+
+Distinct constant-side data has a jump at zero. The origin value remains free.
+-/
+
+namespace NumStability
+
+/-- The existing one-sided Riemann limits give a jump when the states differ. -/
+theorem IsRiemannData.hasJumpAt {E : Type*} [TopologicalSpace E]
+    {data : ℝ → E} {left right : E}
+    (h : IsRiemannData data left right) (hne : left ≠ right) :
+    HasJumpAt data 0 left right :=
+  ⟨h.tendsto_left, h.tendsto_right, hne⟩
+
+end NumStability
+```
+
+
+Complete blind declaration dossier SHA256 3a0c0fa956dea10d97e4178e3297b467f1fad8460a50c9f4da192b878d08a80a
+# Blind Lean declaration dossier
+
+Translate only the mathematical proposition below. Source identity, task metadata,
+theorem name, source declaration, proof, and repository commentary are excluded.
+Do not use tools or inspect filesystem content.
+
+## Elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace Material] [inst_1 : TopologicalSpace State]
+  [T2Space Material] [T2Space State] {medium : Real → Material} {initialState : Real → State}
+  {leftMaterial rightMaterial : Material} {leftState rightState : State},
+  LocalDef001 medium 0 leftMaterial rightMaterial →
+    LocalDef002 initialState leftState rightState →
+      Ne leftState rightState →
+        And
+          (And (LocalDef001 medium 0 leftMaterial rightMaterial)
+            (LocalDef001 initialState 0 leftState rightState))
+          (And
+            (And
+              (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Iio 0))
+                (nhds { fst := leftMaterial, snd := leftState }))
+              (And
+                (Filter.Tendsto (fun x => { fst := medium x, snd := initialState x }) (nhdsWithin 0 (Set.Ioi 0))
+                  (nhds { fst := rightMaterial, snd := rightState }))
+                (And (Ne leftMaterial rightMaterial) (Ne leftState rightState))))
+            (And (LocalDef002 initialState leftState rightState)
+              (And (Not (ContinuousAt medium 0))
+                (And (Not (ContinuousAt initialState 0))
+                  (Exists fun originState =>
+                    Eq initialState (LocalDef003 leftState originState rightState))))))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Material : Type u_1} {State : Type u_2} [inst : TopologicalSpace.{u_1} Material]
+  [inst_1 : TopologicalSpace.{u_2} State] [@T2Space.{u_1} Material inst] [@T2Space.{u_2} State inst_1]
+  {medium : Real → Material} {initialState : Real → State} {leftMaterial rightMaterial : Material}
+  {leftState rightState : State}
+  (hmedium :
+    @LocalDef001.{u_1} Material inst medium
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+  (hstate : @LocalDef002.{u_2} State initialState leftState rightState)
+  (hdistinct : @Ne.{u_2 + 1} State leftState rightState),
+  And
+    (And
+      (@LocalDef001.{u_1} Material inst medium
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftMaterial rightMaterial)
+      (@LocalDef001.{u_2} State inst_1 initialState
+        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) leftState rightState))
+    (And
+      (And
+        (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+          (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+          (@nhdsWithin.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+            (@Set.Iio.{0} Real Real.instPreorder
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+            (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+            (@Prod.mk.{u_1, u_2} Material State leftMaterial leftState)))
+        (And
+          (@Filter.Tendsto.{0, max u_2 u_1} Real (Prod.{u_1, u_2} Material State)
+            (fun (x : Real) => @Prod.mk.{u_1, u_2} Material State (medium x) (initialState x))
+            (@nhdsWithin.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+              (@Set.Ioi.{0} Real Real.instPreorder
+                (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@nhds.{max u_1 u_2} (Prod.{u_1, u_2} Material State)
+              (@instTopologicalSpaceProd.{u_1, u_2} Material State inst inst_1)
+              (@Prod.mk.{u_1, u_2} Material State rightMaterial rightState)))
+          (And (@Ne.{u_1 + 1} Material leftMaterial rightMaterial) (@Ne.{u_2 + 1} State leftState rightState))))
+      (And (@LocalDef002.{u_2} State initialState leftState rightState)
+        (And
+          (Not
+            (@ContinuousAt.{0, u_1} Real Material
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              inst medium (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+          (And
+            (Not
+              (@ContinuousAt.{0, u_2} Real State
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                inst_1 initialState (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+            (@Exists.{u_2 + 1} State fun (originState : State) =>
+              @Eq.{u_2 + 1} (Real → State) initialState
+                (@LocalDef003.{u_2} State leftState originState rightState))))))
+```
+
+## Complete semantic dependency inventory
+
+Return exactly one coverage record for every dependency ID, in order.
+
+### D001: `LocalDef001`
+
+- Role: `local`
+- Owner module: `LocalImport002`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `aa534a048dc393a30a846ded197c7f76580bdf2258f12ca6f816679676f2c033`
+
+Type:
+
+```lean
+{E : Type u_1} → [TopologicalSpace E] → (Real → E) → Real → E → E → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [TopologicalSpace E] data a left right =>
+  And (Filter.Tendsto data (nhdsWithin a (Set.Iio a)) (nhds left))
+    (And (Filter.Tendsto data (nhdsWithin a (Set.Ioi a)) (nhds right)) (Ne left right))
+```
+
+### D002: `LocalDef002`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9986cca09fad513510d98d589879bd7b67d633458b39e176f9124be154775712`
+
+Type:
+
+```lean
+{State : Type u_1} → (Real → State) → State → State → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} data leftState rightState =>
+  And (∀ (x : Real), Real.instLT.lt x 0 → Eq (data x) leftState)
+    (∀ (x : Real), Real.instLT.lt 0 x → Eq (data x) rightState)
+```
+
+### D003: `LocalDef003`
+
+- Role: `local`
+- Owner module: `LocalImport001`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `26e08100ec1e5620a6544ddb3d82ba18df6987384db43d3096e56de6c1c46638`
+
+Type:
+
+```lean
+{State : Type u_1} → State → State → State → Real → State
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {State} leftState valueAtOrigin rightState x =>
+  ite (Real.instLT.lt x 0) leftState (ite (Real.instLT.lt 0 x) rightState valueAtOrigin)
+```
+
+### D004: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+### D005: `ContinuousAt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3c8b2955cfd1b5ec4313254503ce66a5505b003200b3b378f96770b19f854cf6`
+
+Type:
+
+```lean
+{X : Type u_1} → {Y : Type u_2} → [TopologicalSpace X] → [TopologicalSpace Y] → (X → Y) → X → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [TopologicalSpace X] [TopologicalSpace Y] f x => Filter.Tendsto f (nhds x) (nhds (f x))
+```
+
+### D006: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D007: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+### D008: `Filter.Tendsto`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Filter.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7e5f54349644c32198960083c0e0eb6c033c80a8656d02a78b3eae9a4f5131f2`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → (α → β) → Filter α → Filter β → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} f l₁ l₂ => Filter.instPartialOrder.le (Filter.map f l₁) l₂
+```
+
+### D009: `Ne`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6`
+
+Type:
+
+```lean
+{α : Sort u} → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} a b => Not (Eq a b)
+```
+
+### D010: `Not`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `0bfdacbe07f6cbb8995b354e36299fd742f29398c188d7cc23dedcdc47f57a9a`
+
+Type:
+
+```lean
+Prop → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a => a → False
+```
+
+### D011: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D012: `Prod`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `3df3b0cff45fb04022db70edff8e5747def6cae602cd8c33e673abac1bb4e347`
+
+Type:
+
+```lean
+Type u → Type v → Type (max u v)
+```
+
+### D013: `Prod.mk`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `constructor`
+- Distance from target type: `1`
+- Semantic SHA-256: `e42ba07a23655c2aae0502df1e03897313eaf034a0e84cfef98e91f6b4920097`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → α → β → Prod α β
+```
+
+### D014: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D015: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+### D016: `Real.instPreorder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `896bb94fc15867c0df82ea0f639eb6116e90a24819a66a54db9442e47cba7274`
+
+Type:
+
+```lean
+Preorder Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D017: `Real.instZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `860eaaa75b06ac6fccbf4f27e9e162807e8851d04bb42d2411332c6368b14882`
+
+Type:
+
+```lean
+Zero Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ zero := Real.zero✝ }
+```
+
+### D018: `Real.pseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `9c0d1d56a04dd3ae3fce36b5fb3c2f4fe632c2bdaed84b5667c1a60a03491a3e`
+
+Type:
+
+```lean
+PseudoMetricSpace Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ dist := fun x y => abs (instHSub.hSub x y), dist_self := Real.pseudoMetricSpace._proof_1, dist_comm := ⋯,
+  dist_triangle := ⋯, edist_dist := Real.pseudoMetricSpace._proof_2, uniformity_dist := Real.pseudoMetricSpace._proof_3,
+  cobounded_sets := Real.pseudoMetricSpace._proof_4 }
+```
+
+### D019: `Set.Iio`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7d2fb1f1a25e32137e405a3246c71735490bca2e04477240797df205bd739c7e`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt x b
+```
+
+### D020: `Set.Ioi`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Interval.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ad556a749b4ff2a341c66bd35e0369f79888567fa7730aab8ee2fdd700fbfd52`
+
+Type:
+
+```lean
+{α : Type u_1} → [Preorder α] → α → Set α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Preorder α] b => setOf fun x => inst.lt b x
+```
+
+### D021: `T2Space`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Separation.Hausdorff`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `08a54e5e65d34b76977bbc7266ee793dc9893b14c6b6492ae56b97fde6aba974`
+
+Type:
+
+```lean
+(X : Type u) → [TopologicalSpace X] → Prop
+```
+
+### D022: `TopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `c85328c9b77ed49bcba2dd67e9f87b53aaf251834d29c69856ef079a9ec4b57b`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+### D023: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D024: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D025: `instTopologicalSpaceProd`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Constructions.SumProd`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `52bf679916f23cac59489c5a99280e24c015508e91377d9dfa711ba64a31319c`
+
+Type:
+
+```lean
+{X : Type u} → {Y : Type v} → [t₁ : TopologicalSpace X] → [t₂ : TopologicalSpace Y] → TopologicalSpace (Prod X Y)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} {Y} [t₁ : TopologicalSpace X] [t₂ : TopologicalSpace Y] =>
+  SemilatticeInf.toMin.min (TopologicalSpace.induced Prod.fst t₁) (TopologicalSpace.induced Prod.snd t₂)
+```
+
+### D026: `nhds`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8eb445823f4b15a765f7e0cd634f73196d36b4f09054d2aef43a69d3138c6ce8`
+
+Type:
+
+```lean
+{X : Type u_3} → [TopologicalSpace X] → X → Filter X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+wrapped✝.1
+```
+
+### D027: `nhdsWithin`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.Defs.Filter`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `ae7b5c1971244e63e32407fed747da989ad9fef3a4d9c3a64643427eaf071f05`
+
+Type:
+
+```lean
+{X : Type u_1} → [TopologicalSpace X] → X → Set X → Filter X
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {X} [TopologicalSpace X] x s => Filter.instInf.min (nhds x) (Filter.principal s)
+```
+
+### D028: `LT.lt`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `fd5699899f1a49c91982cb363d3a71557ab1b53ee772cd777c9ee7717abc2009`
+
+Type:
+
+```lean
+{α : Type u} → [self : LT α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LT α] => self.1
+```
+
+### D029: `Real.decidableLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `def93575a13821d7d42b557cb9b973eede26ae12bbb8b60b1f0a302bf95a5a42`
+
+Type:
+
+```lean
+(a b : Real) → Decidable (Real.instLT.lt a b)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a b => inferInstance
+```
+
+### D030: `Real.instLT`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `573bcfac2b62a55b90ee93bf35473d500cc64581698a699b2152c52f40d0e14a`
+
+Type:
+
+```lean
+LT Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ lt := Real.lt✝ }
+```
+
+### D031: `ite`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `3029bae29d2d16b5aeb879ad3c12a1b3c4e78998083bf1ab4614942fafdece0e`
+
+Type:
+
+```lean
+{α : Sort u} → (c : Prop) → [h : Decidable c] → α → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} c [h : Decidable c] t e => Decidable.casesOn h (fun x => e) fun x => t
+```
+
+
+Mechanical adjudication triggers SHA256 db09d89cae68597d1a4bcbf302000bb4de0022b9604d1e686e86b9643d42f66f
+{
+  "required": true,
+  "reasons": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D026 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C10 unclear",
+    "round-trip judge left semantic_checklist item N02 unclear",
+    "round-trip judge left semantic_checklist item N05 unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ]
+}
+
+
+Direct judgment SHA256 016c4e58a3c56cc4ccf0cb5f7f29cd836c6f78ef38b16963765642246cb2cac5
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "dossier_sha256": "4b8650b78d5ba0b6ad36272dd65a9dd6934bc9ac3aff12be65595a3454e358ed",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.HasJumpAt",
+      "interpretation": "The function has the specified left and right limits at the given real interface, using strictly one-sided neighborhood filters, and these limits are unequal.",
+      "effect_on_target": "Assumes a local material jump at zero and concludes an initial-state jump at the same point. It imposes no material constancy away from zero.",
+      "source_match": "Matches the recorded coordinator-selected interpretation of the medium discontinuity. The printed sentence itself does not define this limit predicate.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "NumStability.IsRiemannData",
+      "interpretation": "The function equals the left state at every negative real argument and the right state at every positive real argument; its value at zero is unrestricted.",
+      "effect_on_target": "Preserves the two constant strict-half-line initial states. A separate inequality ensures a genuine jump.",
+      "source_match": "Matches equation (1.11) on printed page 5, including its strict inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "NumStability.riemannData",
+      "interpretation": "A three-parameter function taking the left state for negative arguments, the right state for positive arguments, and the supplied origin value at zero.",
+      "effect_on_target": "The existential conclusion represents the given initial function with its own origin value, without prescribing that value.",
+      "source_match": "A harmless total-function representation of equation (1.11), whose origin value is unspecified.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "And",
+      "interpretation": "Logical conjunction.",
+      "effect_on_target": "Requires every displayed jump, limit, inequality, data condition, discontinuity, and representation simultaneously.",
+      "source_match": "Preserves the coexistence of medium and initial-data discontinuities; the extra conjuncts explicate the selected interpretation.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "ContinuousAt",
+      "interpretation": "Convergence of the function along the full neighborhood filter at the input to the neighborhood filter at its actual value there.",
+      "effect_on_target": "Its negation states ordinary discontinuity at zero for both functions, independently of their assigned values at zero.",
+      "source_match": "Unequal one-sided traces imply these discontinuities in the Hausdorff setting used to represent the source's physical quantities.",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "Eq",
+      "interpretation": "Equality of objects of the same type, including equality of functions.",
+      "effect_on_target": "Expresses exact constant-state values and exact equality with the three-branch representation.",
+      "source_match": "Matches the exact initial-data formula; no approximation or equality only almost everywhere is substituted.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "Exists",
+      "interpretation": "Existential quantification over a witness satisfying the predicate.",
+      "effect_on_target": "Allows an originState depending on the already fixed initialState; initialState 0 is a witness.",
+      "source_match": "Preserves the source's unspecified interface value and makes no solution-existence claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "Filter.Tendsto",
+      "interpretation": "The mapped source filter is below the target filter, expressing eventual membership in every target-filter set.",
+      "effect_on_target": "Expresses separate and paired one-sided convergence.",
+      "source_match": "Implements the local-trace convention. The native supplement independently exposes the same map-and-order definition.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "Ne",
+      "interpretation": "Negation of equality.",
+      "effect_on_target": "Requires genuinely different material traces and genuinely different initial states.",
+      "source_match": "Matches the selected convention's distinct traces and the source's description of jump discontinuities.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "Not",
+      "interpretation": "A proposition implies False.",
+      "effect_on_target": "Negates equality and continuity without changing their underlying notions.",
+      "source_match": "Correctly expresses distinctness and discontinuity.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "OfNat.ofNat",
+      "interpretation": "Extracts the numeral value from the specified OfNat instance.",
+      "effect_on_target": "All interface numerals elaborate to zero in Real.",
+      "source_match": "Matches the shared interface x = 0.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "Prod",
+      "interpretation": "The Cartesian product of two types.",
+      "effect_on_target": "Packages material and initial state while retaining their separate types and roles.",
+      "source_match": "Represents the two coincident features without identifying them or adding a physical coupling law.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "Prod.mk",
+      "interpretation": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Forms (medium x, initialState x) and the corresponding left-left and right-right trace pairs.",
+      "source_match": "Preserves which material and state traces belong to each side.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "interpretation": "Projects the uniform-space structure carried by a pseudometric-space instance.",
+      "effect_on_target": "Participates in obtaining the standard topology of the real input coordinate.",
+      "source_match": "Introduces no alternative spatial geometry.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "Real",
+      "interpretation": "The library real-number type at the external semantic frontier.",
+      "effect_on_target": "Both profiles have a one-dimensional real spatial coordinate.",
+      "source_match": "Matches the real line and strict half-lines of equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Real.instPreorder",
+      "interpretation": "The inferred preorder structure on the real numbers.",
+      "effect_on_target": "Supplies the ordering used by the open left and right rays.",
+      "source_match": "Agrees with the negative and positive coordinate regions in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "Real.instZero",
+      "interpretation": "The zero structure whose value is the real-number zero.",
+      "effect_on_target": "Fixes the common interface coordinate.",
+      "source_match": "Matches the source's chosen origin.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "Real.pseudoMetricSpace",
+      "interpretation": "The real pseudometric structure with distance |x - y|.",
+      "effect_on_target": "Determines ordinary real neighborhoods and genuine approach from either side of zero.",
+      "source_match": "Matches the standard spatial interpretation of the source coordinate.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "Set.Iio",
+      "interpretation": "The set of elements strictly less than the specified endpoint.",
+      "effect_on_target": "Restricts left limits to x < 0, excluding zero.",
+      "source_match": "Matches the left branch of equation (1.11) and leaves the interface value free.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "Set.Ioi",
+      "interpretation": "The set of elements strictly greater than the specified endpoint.",
+      "effect_on_target": "Restricts right limits to x > 0, excluding zero.",
+      "source_match": "Matches the right branch of equation (1.11) and leaves the interface value free.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "T2Space",
+      "interpretation": "The standard Hausdorff separation property for the supplied topology.",
+      "effect_on_target": "Ensures uniqueness of limits along nontrivial filters, allowing unequal traces to rule out continuity at zero.",
+      "source_match": "An explicit ambient modeling assumption, not a printed hypothesis. It covers the ordinary real and finite-dimensional material/state spaces in the physical context. No conclusion is claimed for arbitrary non-Hausdorff representations.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "TopologicalSpace",
+      "interpretation": "A collection of open sets closed under arbitrary unions and finite intersections and containing the whole space, as exposed by the native supplement.",
+      "effect_on_target": "Provides the material and state notions of neighborhoods, traces, and continuity.",
+      "source_match": "Supplies structure needed by the selected local-trace interpretation; no particular topology is attributed to the printed passage.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "UniformSpace.toTopologicalSpace",
+      "interpretation": "Projects the topology carried by a uniform-space structure.",
+      "effect_on_target": "Completes the explicit instance chain giving Real its standard topology.",
+      "source_match": "Preserves the ordinary topology of the spatial line.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "Zero.toOfNat0",
+      "interpretation": "Builds the numeral-zero instance from the type's zero value.",
+      "effect_on_target": "Connects written zero to Real.instZero.",
+      "source_match": "No displacement or alternative interface constant is introduced.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "instTopologicalSpaceProd",
+      "interpretation": "The product topology obtained from the topologies induced by the two coordinate projections.",
+      "effect_on_target": "Makes convergence of the paired profile equivalent to convergence of its two coordinates along the same filter.",
+      "source_match": "The paired-limit conclusions simply package the selected coincident traces and add no material-state relation.",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "nhds",
+      "interpretation": "The neighborhood filter: the native supplement's mem_nhds_iff identifies its members as sets containing an open set containing the point.",
+      "effect_on_target": "Gives the actual neighborhood semantics concealed by the dossier's wrapped projection body.",
+      "source_match": "Supports ordinary one-sided limits under the selected interpretation. The supplied native declarations resolve the otherwise opaque one-level body.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "nhdsWithin",
+      "interpretation": "The infimum of the neighborhood filter and the principal filter of the restricting set.",
+      "effect_on_target": "Restricts approach to each strict half-line while retaining locality at zero.",
+      "source_match": "Matches local traces and does not require globally constant material profiles.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "LT.lt",
+      "interpretation": "Projects the strict comparison relation from an LT instance.",
+      "effect_on_target": "Used with Real.instLT to test the two branches of the initial-data profile.",
+      "source_match": "Preserves the source's strict inequalities.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "Real.decidableLT",
+      "interpretation": "A decision instance for strict comparison of two real numbers.",
+      "effect_on_target": "Enables the conditional definition of riemannData; it asserts no numerical comparison algorithm or approximation.",
+      "source_match": "A logical implementation detail with no change to the exact branch conditions.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "Real.instLT",
+      "interpretation": "The strict order instance using the real-number less-than relation.",
+      "effect_on_target": "Selects negative and positive arguments consistently with the interval sets.",
+      "source_match": "Matches x < 0 and x > 0 in equation (1.11).",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "ite",
+      "interpretation": "Selects the first value when the decidable proposition is true and the second otherwise.",
+      "effect_on_target": "Produces the left, right, and origin branches of riemannData.",
+      "source_match": "Preserves both specified half-line values; the residual branch at zero is existentially unrestricted.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached raw page 30, printed page 8, extends the Riemann setup to a medium discontinuity at zero. Raw page 27 supplies equation (1.11); raw page 29 supplies the material-parameter context.",
+      "lean_evidence": "The proof-free header and both elaborated types concern coincident material and initial-state jumps at zero.",
+      "reasoning": "The selected claim is the initial setup, not the following wave-decomposition claim. I inspected the attached renderings and inline evidence; source-byte and rendering hashes are supplied provenance, not independently recomputed hashes."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses a one-dimensional spatial coordinate and left/right states. Section 1.4 distinguishes material parameters from the wave state without specifying their formal spaces.",
+      "lean_evidence": "Material and State are separate types with separate Hausdorff topologies; medium and initialState map Real into the respective types.",
+      "reasoning": "The types preserve object roles and include the ordinary scalar/vector physical settings. Abstract Hausdorff spaces are an ambient representation for the interpreted claim, not an assertion that the book specifies these structures."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The source describes a setup with prescribed left and right states and leaves the origin value unspecified.",
+      "lean_evidence": "Profiles and traces are universally bound before the hypotheses. The existential originState occurs only in the conclusion and may depend on initialState.",
+      "reasoning": "The witness can be initialState 0. There is no uniform origin value, swapped quantifier order, or claim that a medium or PDE solution must exist for arbitrary parameters."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "Printed page 8 adds a material discontinuity to the inherited initial-data jump. The recorded convention specifies distinct local material traces and constant strict-half-line initial states.",
+      "lean_evidence": "hmedium supplies unequal material traces, hstate supplies the two constant state branches, and hdistinct excludes equal initial states. T2Space is required for both codomains.",
+      "reasoning": "The data hypotheses match the interpreted setup. Hausdorffness makes ordinary discontinuity follow from unequal limits and holds in the intended physical spaces; it is not counted as stronger-theorem evidence. No conservation-form, material half-line constancy, or interface-value hypothesis appears."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected sentence requires both discontinuities at the same interface; equation (1.11) supplies the initial-state structure. Wave dynamics is discussed in the next sentence.",
+      "lean_evidence": "The conclusion includes both jumps, the original initial-data condition, paired traces, distinctness, both failures of continuity, and an unrestricted origin-value representation.",
+      "reasoning": "Every selected data feature is present. Paired limits and the representation are consequences of those features. The theorem does not encode the background hyperbolic equation, but the selected comparison concerns extending its initial setup, not establishing or solving that equation."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source supplies strict-half-line initial values and descriptive material discontinuities; the recorded interpretation supplies local-trace semantics.",
+      "lean_evidence": "D001-D031 expose the local definitions and external frontier. The native supplement characterizes nhds through open neighborhoods and prints TopologicalSpace, Tendsto, and nhdsWithin.",
+      "reasoning": "All dependencies have been interpreted. In particular, HasJumpAt is unequal one-sided convergence, not merely inequality or a globally piecewise constant medium."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source specifies exact initial values and simultaneous jump discontinuities.",
+      "lean_evidence": "IsRiemannData uses equality and strict inequalities; HasJumpAt conjoins both limits and Ne; the target conjoins all asserted properties.",
+      "reasoning": "No approximate equality, one-sided alternative, or non-strict replacement occurs. Added conjuncts are entailed by the interpreted data in the stated ambient spaces, so they do not establish independent stronger content."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The medium discontinuity and initial-data discontinuity are distinct features located at the same zero interface.",
+      "lean_evidence": "medium and initialState remain separate functions; paired left limits use (leftMaterial, leftState), and paired right limits use (rightMaterial, rightState).",
+      "reasoning": "Neither objects nor sides are conflated. The paired function introduces no identification of material parameters with wave states."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) and the selected extension both place the interface at x = 0.",
+      "lean_evidence": "Every jump, restricted neighborhood, continuity predicate, and branch boundary uses real zero.",
+      "reasoning": "The interface and side orientation match throughout. No additional numerical constants or indices enter."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The surrounding examples involve ordinary physical material parameters and initial states; no general topological domain is specified.",
+      "lean_evidence": "The statement permits any Hausdorff material and state spaces, imposes no finite-dimensionality condition, and requires only local material traces.",
+      "reasoning": "This abstraction includes the intended real/vector settings without narrowing them. Hausdorffness is an explicit representation choice, not a printed hypothesis or a reason to classify the theorem as stronger. Acceptance is restricted to the recorded interpretation of this source row, not all conceivable meanings of discontinuity."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) excludes zero from both branches. The selected interpretation requires distinct traces and does not require global material constancy.",
+      "lean_evidence": "Iio and Ioi exclude zero; riemannData has a free origin branch; both pairs of traces are unequal; HasJumpAt only constrains behavior near zero.",
+      "reasoning": "Arbitrary origin values are allowed. Equal states are correctly excluded from the genuine-jump case. Material variation and other interfaces away from zero remain admissible."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source motivates genuine material and initial-state jumps, rather than an empty or zero-jump setup.",
+      "lean_evidence": "Take Material = State = Real, medium x = 1 + x for x < 0 and 2 + x otherwise, and initialState equal to 0 for x < 0 and 1 for x > 0, with any value at zero.",
+      "reasoning": "The material traces are 1 and 2 and the state traces are 0 and 1, so all hypotheses are satisfiable with a nonconstant medium. Both strict one-sided neighborhood filters at real zero are nontrivial. Repeated assumptions in the conclusion do not make the independently derived state jump and discontinuity claims vacuous."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence extends the problem's data setup. Cell updates and wave decomposition belong to surrounding or subsequent discussion.",
+      "lean_evidence": "The target contains profiles and their trace properties, with no numerical recurrence or execution.",
+      "reasoning": "No algorithm or discretization result is selected for this comparison."
+    },
+    {
+      "id": "N02",
+      "status": "pass",
+      "source_evidence": "The interpreted claim uses local traces on the ordinary spatial line and keeps material and state quantities distinct.",
+      "lean_evidence": "Real.pseudoMetricSpace uses |x - y|, and the paired limits use the product topology of the separately supplied codomain topologies.",
+      "reasoning": "Spatial approach is ordinary real approach, and product convergence has componentwise meaning. No norm magnitude or operator-norm assertion is introduced."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected setup claim makes no error or stability assertion.",
+      "lean_evidence": "There are no error bounds, residuals, conditioning quantities, or stability predicates.",
+      "reasoning": "No numerical error or stability notion requires comparison."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) specifies exact initial data. Nearby cell averages motivate Riemann problems but are not the selected sentence's mathematical conclusion.",
+      "lean_evidence": "The initialState branches and origin representation use exact equality; the medium is an exact function with limits.",
+      "reasoning": "The target does not substitute computed, rounded, or averaged quantities for the selected data profiles."
+    },
+    {
+      "id": "N05",
+      "status": "pass",
+      "source_evidence": "The printed passage leaves the precise discontinuity predicate unspecified; the recorded convention selects distinct one-sided local traces.",
+      "lean_evidence": "HasJumpAt and the paired Tendsto conclusions are exact one-sided limit assertions at zero.",
+      "reasoning": "Under that convention, the limits have the intended exact status. No asymptotic approximation, truncation, or claim of globally constant material is substituted."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The selected sentence extends a setup and does not state solution existence, uniqueness, or well-posedness. Solving the problem is discussed separately afterward.",
+      "lean_evidence": "The only existential quantifier supplies an origin value for an already given initial function. The conclusion asserts discontinuity but no PDE solution or evolution.",
+      "reasoning": "The target preserves the selected scope and introduces no unsupported solvability theorem. Hausdorffness supports the topological discontinuity consequences, not PDE well-posedness."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Under the recorded coordinator-selected interpretation, and within the inherited hyperbolic-equation context, the target supplies exactly the data extension: a medium with unequal local traces at zero together with unequal constant left and right initial states at the same interface. Expanding HasJumpAt and IsRiemannData establishes each selected feature. The origin representation permits every interface value, and no global material constancy is imposed. This direction concerns the selected initial setup; it does not infer an equation, solution, or wave dynamics from the topological theorem alone."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "Under the recorded coordinator-selected interpretation, the source setup supplies hmedium, the two strict-half-line state equalities, and distinct states in the ordinary Hausdorff spaces representing physical parameters and states. The constant branches give the two state limits. Product topology then gives the paired limits; distinct traces in Hausdorff codomains exclude continuity at zero; choosing originState = initialState 0 gives the exact three-branch representation. Thus every additional conjunct follows mathematically from the interpreted setup. This is not a claim that the printed passage itself specifies Hausdorff topologies, a filter definition, or a theorem about arbitrary non-Hausdorff state spaces."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "note",
+      "category": "interpretation-qualified-acceptance",
+      "source_evidence": "Printed page 8 states the medium discontinuity descriptively; printed page 7 contextualizes it through material-parameter jumps. Neither passage defines topology or one-sided limits.",
+      "lean_evidence": "HasJumpAt explicitly means unequal one-sided limits, and both codomains carry Hausdorff topologies.",
+      "impact": "Acceptance applies to the exact selected claim under the recorded coordinator-selected local-trace interpretation in the ordinary Hausdorff mathematical setting. The original source-only ambiguity remains and is not converted into a printed hypothesis."
+    },
+    {
+      "severity": "note",
+      "category": "scope-and-derived-conclusions",
+      "source_evidence": "The selected sentence extends the Riemann setup; the following sentence separately discusses waves, reflection, and transmission.",
+      "lean_evidence": "The target concerns data and topological consequences only. Paired limits, failures of continuity, and the existential origin representation follow from its data conditions.",
+      "impact": "These consequences are harmless elaborations of the interpreted setup. Acceptance does not certify a formalization of the hyperbolic equation, interface coupling conditions, or wave dynamics."
+    }
+  ],
+  "rationale": "The attached primary-source renderings confirm the selected material-interface sentence and the inherited strict-half-line initial-data formula. Reading the header, readable type, explicit type, all 31 dependencies, and the native neighborhood supplement shows that the target preserves distinct local material and state traces at the same origin, constant initial states on both strict half-lines, and unrestricted interface values. The material need not be globally piecewise constant. The topological conclusions are consequences in the stated Hausdorff setting, and the hypotheses have concrete nonvacuous real-valued examples. Both implications hold for the selected setup under the recorded coordinator-selected interpretation; equivalence and acceptance are qualified accordingly. No source bytes, runtime receipts, or hashes were independently recomputed, and no target proof or prior judgment was consulted."
+}
+
+Roundtrip judgment SHA256 b4f3e525636e6e097eb0a20715cb8b00841e01d1851be21ad1891d0afae6e934
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "blind_translation_sha256": "b571684dd68b7adaaa72161cd7b68f8f3c6c93451c3ab6d24ecc7899ac2766de",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The attached printed page 8 extends the Riemann setup to a medium discontinuity at x = 0 alongside the initial-data discontinuity. Printed page 5 supplies equation (1.11); printed page 7 supplies material-interface context.",
+      "translation_evidence": "The translation concerns coincident material and initial-state traces at zero and constant initial states on strict half-lines.",
+      "reasoning": "The selected sentence and necessary inherited context are identifiable in the supplied primary-source images. Source hashes are supplied provenance, not independently recomputed."
+    },
+    {
+      "id": "C02",
+      "status": "unclear",
+      "source_evidence": "The book does not specify abstract state or material spaces. The recorded coordinator-selected interpretation specifies distinct one-sided local traces but no separation axiom.",
+      "translation_evidence": "Both Material and State are arbitrary Hausdorff topological spaces; both functions have domain ℝ.",
+      "reasoning": "The real spatial domain matches. Hausdorff codomains are natural for ordinary numerical state spaces, but the supplied evidence does not settle whether this additional structural requirement belongs to the selected interpretation."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The selected passage describes extending a setup, without asserting quantified solvability. Equation (1.11) leaves the value at zero unspecified.",
+      "translation_evidence": "The statement applies to given profiles and traces satisfying the setup hypotheses. Its final existential witness may depend on these profiles and equals initialState(0).",
+      "reasoning": "Within the recorded coordinator-selected interpretation, the quantifiers express a conditional characterization of supplied data. The existential witness does not assert existence of an evolution or choose a common origin value independently of the profile."
+    },
+    {
+      "id": "C04",
+      "status": "unclear",
+      "source_evidence": "Equation (1.11) prescribes constant strict-half-line initial states. The selected convention requires distinct initial and local material traces without global material constancy.",
+      "translation_evidence": "The hypotheses prescribe precisely those profile conditions, together with Hausdorff topology assumptions.",
+      "reasoning": "The profile hypotheses match the recorded interpretation, and no conservation-form restriction is added. The additional separation assumptions need an explicit domain justification."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The selected claim includes both discontinuities at the same interface; the subsequent sentence separately discusses solving the problem and wave decomposition.",
+      "translation_evidence": "The conclusions retain both trace jumps, provide paired limits, assert both discontinuities, and preserve the strict-half-line state values.",
+      "reasoning": "Under the recorded interpretation and the translation's stated conventional limit semantics, the setup features are represented. Product limits and the origin-value representation are consequences of that setup. Wave dynamics are appropriately outside this selected claim."
+    },
+    {
+      "id": "C06",
+      "status": "unclear",
+      "source_evidence": "The book supplies no topological definition; one-sided trace semantics enter through the separately recorded interpretation.",
+      "translation_evidence": "D001–D003 explicitly explain the local predicates. D026 marks nhds unclear because its supplied body is wrapped✝.1 and uses conventional neighborhood-filter semantics instead.",
+      "reasoning": "The ledger accounts for D001–D031, but expressly leaves a foundational dependency unresolved. Because neighborhoods determine limits and continuity, this gap cannot be cleared from the permitted evidence."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The selected sentence requires a medium discontinuity as well as an initial-data discontinuity. The recorded convention makes both pairs of traces distinct.",
+      "translation_evidence": "Both inequalities are asserted conjunctively; both one-sided limits use strict approach regions.",
+      "reasoning": "Under the recorded interpretation and conventional limit semantics, the conjunctions and inequalities preserve the two genuine jumps. Repeated hypotheses do not add substantive strength."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes material properties from the initial state while locating their discontinuities at the same interface.",
+      "translation_evidence": "medium and initialState have separate codomains and separate trace pairs. Product limits pair corresponding material and state traces.",
+      "reasoning": "The objects remain distinct; pairing expresses their common spatial approach without identifying them or imposing a constitutive relation."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) uses x < 0 and x > 0, and the selected extension places the medium discontinuity at x = 0.",
+      "translation_evidence": "All interface points are real zero; left and right limits use Iio 0 and Ioi 0 respectively.",
+      "reasoning": "The interface constant, strict inequalities, and left/right assignments agree. No coefficients or indexed families occur in the selected setup."
+    },
+    {
+      "id": "C10",
+      "status": "unclear",
+      "source_evidence": "The source discusses hyperbolic initial data and physical material parameters without specifying an abstract topology. The selected convention supplies local traces.",
+      "translation_evidence": "The translation generalizes the data characterization to arbitrary Hausdorff spaces and encodes no hyperbolic equation.",
+      "reasoning": "Omitting evolution is consistent with the explicitly selected setup scope. Whether the abstract Hausdorff formulation is a harmless generalization over the intended source domains remains unresolved; the recorded convention does not specify those domains."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) leaves x = 0 unspecified, and the selected sentence supplies no material value at the interface.",
+      "translation_evidence": "Neither origin value is constrained. The existential originState represents the existing initialState(0), without requiring it to equal either trace.",
+      "reasoning": "The representation preserves freedom at zero. Distinct traces exclude the no-jump case as required by the recorded interpretation."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The selected setting has genuine jumps in two kinds of data at zero.",
+      "translation_evidence": "Each trace pair is unequal, and approach filters use nonempty real half-lines accumulating at zero.",
+      "reasoning": "Under the stated conventional semantics, real-valued step functions with traces 0 and 1 satisfy the hypotheses. The intended setting therefore has nonvacuous instances, despite empty or singleton codomains providing none."
+    },
+    {
+      "id": "N01",
+      "status": "not-applicable",
+      "source_evidence": "The selected sentence extends the initial setup; numerical wave decomposition belongs to the following sentence.",
+      "translation_evidence": "No recurrence, numerical flux, time step, or execution process is asserted.",
+      "reasoning": "The selected claim contains no algorithm whose execution semantics must be preserved."
+    },
+    {
+      "id": "N02",
+      "status": "unclear",
+      "source_evidence": "The book specifies no codomain metric or topology. The recorded interpretation requires local one-sided traces.",
+      "translation_evidence": "The real domain has its usual metric topology, codomains are Hausdorff, and paired limits use the product topology; D026 remains unclear.",
+      "reasoning": "The product construction expresses simultaneous component limits under conventional semantics. The unresolved neighborhood dependency and unspecified codomain structure prevent an unconditional semantic match."
+    },
+    {
+      "id": "N03",
+      "status": "not-applicable",
+      "source_evidence": "The selected setup claim contains no error estimate, conditioning measure, or stability assertion.",
+      "translation_evidence": "The translated proposition contains no error or stability quantities.",
+      "reasoning": "No numerical error or stability notion is at issue."
+    },
+    {
+      "id": "N04",
+      "status": "pass",
+      "source_evidence": "Equation (1.11) specifies exact initial states. Nearby finite-volume averaging motivates interface problems but is not part of the selected setup assertion.",
+      "translation_evidence": "The functions, state equalities, and trace limits are exact mathematical data; no computed approximation is substituted.",
+      "reasoning": "The translated quantities retain the roles of prescribed initial and material data."
+    },
+    {
+      "id": "N05",
+      "status": "unclear",
+      "source_evidence": "One-sided local traces are supplied by the recorded coordinator-selected interpretation, not explicitly defined in the book.",
+      "translation_evidence": "The translation uses exact one-sided filter limits, with no rates or remainder terms, but flags the neighborhood-filter dependency as unclear.",
+      "reasoning": "The claimed limit regime matches the selected interpretation under conventional semantics. Its dependency-level meaning remains unresolved through D026."
+    },
+    {
+      "id": "N06",
+      "status": "pass",
+      "source_evidence": "The selected sentence does not assert existence, uniqueness, or well-posedness of a solution.",
+      "translation_evidence": "The only existential conclusion represents the already supplied initial profile using its value at zero. No evolution solution is asserted.",
+      "reasoning": "The representation witness does not introduce a solvability claim. The continuity conclusions characterize the selected trace jumps under the stated Hausdorff assumptions."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "unclear",
+      "reasoning": "Under the recorded coordinator-selected interpretation and conventional neighborhood semantics, each admissible translated instance exhibits exactly the two distinct trace jumps at zero and the required constant strict-half-line initial data. However, D026 leaves the foundational limit semantics unresolved, and the supplied interpretation does not settle whether the Hausdorff domain restriction covers the selected source scope. The implication cannot be certified unconditionally from the permitted evidence."
+    },
+    "source_implies_translation": {
+      "verdict": "unclear",
+      "reasoning": "Under the recorded coordinator-selected interpretation, if the intended codomains are Hausdorff and nhds has its conventional semantics, constant half-line initial states supply the stated state limits, coordinate limits give product limits, distinct traces preclude continuity, and initialState(0) supplies the representation witness. Neither the printed source nor the recorded convention expressly settles the Hausdorff structure, and D026 remains unresolved. These conditional deductions therefore do not establish the full implication."
+    }
+  },
+  "classification": "undetermined",
+  "accepted": false,
+  "requires_adjudication": true,
+  "findings": [
+    {
+      "severity": "major",
+      "category": "unresolved-semantic-dependency",
+      "source_evidence": "The recorded interpretation requires distinct one-sided local traces at the common interface.",
+      "translation_evidence": "D026 explicitly reports that the neighborhood-filter construction cannot be recovered from its supplied body and substitutes conventional semantics.",
+      "impact": "Limits and continuity depend on this primitive. The role cannot resolve the ledger's explicit uncertainty from the allowed evidence; adjudication is required."
+    },
+    {
+      "severity": "major",
+      "category": "unresolved-domain-restriction",
+      "source_evidence": "The printed passage does not specify a topology, and the recorded coordinator-selected interpretation specifies distinct local traces without a Hausdorff requirement.",
+      "translation_evidence": "Both codomains must be Hausdorff, and the conclusion asserts failure of continuity from distinct one-sided limits.",
+      "impact": "The requirement is natural for usual physical state spaces but is an additional structural condition whose coverage needs justification. In general non-Hausdorff spaces, distinct limit values need not imply discontinuity. This cannot be classified as genuine stronger coverage without resolving the intended domain."
+    }
+  ],
+  "rationale": "Inspection of the supplied primary-source images supports the selected setup and its inherited strict-half-line initial data. Under the recorded coordinator-selected interpretation, the translated profile conditions, shared interface, distinct objects, unrestricted origin values, and absence of wave-dynamics claims align. The extra product-limit and representation conclusions are elementary consequences under conventional Hausdorff topology semantics. Acceptance nevertheless remains undetermined because the translation explicitly leaves D026 unclear and the supplied convention does not settle the codomain separation assumptions. Any eventual acceptance must remain qualified by the recorded interpretation; the book itself does not specify that topological model."
+}
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

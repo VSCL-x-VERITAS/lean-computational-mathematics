@@ -1,0 +1,63 @@
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/coordinate-high-resolution-audit-preparation/GeometrySemantics.lean:10:7: error(lean.unknownIdentifier): Unknown constant `OneDimensionalFiniteVolumeGrid`
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/coordinate-high-resolution-audit-preparation/GeometrySemantics.lean:11:7: error(lean.unknownIdentifier): Unknown constant `OneDimensionalFiniteVolumeGrid.cellVolume`
+def NumStability.CartesianGrid.cellBox.{u_1} : {D : Type u_1} →
+  (D → NumStability.OneDimensionalFiniteVolumeGrid) → (D → ℤ) → Set (D → ℝ) :=
+fun {D} axes cell => Set.univ.pi fun d => Set.Ico ((axes d).cellLeft (cell d)) ((axes d).cellRight (cell d))
+def NumStability.CartesianGrid.cellVolume.{u_1} : {D : Type u_1} →
+  [Fintype D] → (D → NumStability.OneDimensionalFiniteVolumeGrid) → (D → ℤ) → ℝ :=
+fun {D} [Fintype D] axes cell => ∏ d, (axes d).cellVolume (cell d)
+def NumStability.CartesianGrid.faceArea.{u_1} : {D : Type u_1} →
+  [Fintype D] → [DecidableEq D] → (D → NumStability.OneDimensionalFiniteVolumeGrid) → D → (D → ℤ) → ℝ :=
+fun {D} [Fintype D] [DecidableEq D] axes d cell => ∏ e ∈ Finset.univ.erase d, (axes e).cellVolume (cell e)
+def NumStability.CartesianGrid.tangentialFaceBox.{u_1} : {D : Type u_1} →
+  (D → NumStability.OneDimensionalFiniteVolumeGrid) → (d : D) → (D → ℤ) → Set ({ e // e ≠ d } → ℝ) :=
+fun {D} axes d cell => Set.univ.pi fun e => Set.Ico ((axes ↑e).cellLeft (cell ↑e)) ((axes ↑e).cellRight (cell ↑e))
+def NumStability.CartesianGrid.facePoint.{u_1} : {D : Type u_1} →
+  [DecidableEq D] →
+    (D → NumStability.OneDimensionalFiniteVolumeGrid) → (d : D) → (D → ℤ) → ({ e // e ≠ d } → ℝ) → D → ℝ :=
+fun {D} [DecidableEq D] axes d cell point e => if h : e = d then (axes d).cellLeft (cell d) else point ⟨e, h⟩
+def NumStability.cellVolumeAverage.{u_1, u_2} : {Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] → [NormedSpace ℝ E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E :=
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace ℝ E] μ region field =>
+  (μ region).toReal⁻¹ • ∫ (point : Point) in region, field point ∂μ
+def NumStability.oneDimensionalCellAverage.{u_1} : {E : Type u_1} →
+  [inst : NormedAddCommGroup E] → [NormedSpace ℝ E] → (ℝ → E) → ℝ → ℝ → E :=
+fun {E} [NormedAddCommGroup E] [NormedSpace ℝ E] field left right =>
+  (right - left)⁻¹ • ∫ (x : ℝ) in left..right, field x
+@MeasureTheory.volume_pi : ∀ {ι : Type u_1} {α : ι → Type u_2} [inst : Fintype ι]
+  [inst_1 : (i : ι) → MeasureTheory.MeasureSpace (α i)],
+  MeasureTheory.volume = MeasureTheory.Measure.pi fun x => MeasureTheory.volume
+@MeasureTheory.Measure.pi_pi : ∀ {ι : Type u_1} {α : ι → Type u_2} [inst : Fintype ι]
+  [inst_1 : (i : ι) → MeasurableSpace (α i)] (μ : (i : ι) → MeasureTheory.Measure (α i))
+  [∀ (i : ι), MeasureTheory.SigmaFinite (μ i)] (s : (i : ι) → Set (α i)),
+  (MeasureTheory.Measure.pi μ) (Set.univ.pi s) = ∏ i, (μ i) (s i)
+@Real.volume_Ico : ∀ {a b : ℝ}, MeasureTheory.volume (Set.Ico a b) = ENNReal.ofReal (b - a)
+@Real.volume_pi_Ico_toReal : ∀ {ι : Type u_1} [inst : Fintype ι] {a b : ι → ℝ},
+  a ≤ b → (MeasureTheory.volume (Set.univ.pi fun i => Set.Ico (a i) (b i))).toReal = ∏ i, (b i - a i)
+@NumStability.CartesianGrid.cellBox_volume : ∀ {D : Type u_1} [inst : Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ),
+  (MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =
+    NumStability.CartesianGrid.cellVolume axes cell
+@NumStability.CartesianGrid.tangentialFaceBox_volume : ∀ {D : Type u_1} [inst : Fintype D] [inst_1 : DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ),
+  (MeasureTheory.volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+    NumStability.CartesianGrid.faceArea axes d cell
+@MeasureTheory.Measure.map_apply_of_aemeasurable : ∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α}
+  {mβ : MeasurableSpace β} {μ : MeasureTheory.Measure α} {f : α → β},
+  AEMeasurable f μ → ∀ {s : Set β}, MeasurableSet s → (MeasureTheory.Measure.map f μ) s = μ (f ⁻¹' s)
+@MeasureTheory.integral_map : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G] [inst_1 : NormedSpace ℝ G]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_3} [inst_2 : MeasurableSpace β] {φ : α → β},
+  AEMeasurable φ μ →
+    ∀ {f : β → G},
+      MeasureTheory.AEStronglyMeasurable f (MeasureTheory.Measure.map φ μ) →
+        ∫ (y : β), f y ∂MeasureTheory.Measure.map φ μ = ∫ (x : α), f (φ x) ∂μ
+'MeasureTheory.volume_pi' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.Measure.pi_pi' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Real.volume_Ico' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Real.volume_pi_Ico_toReal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NumStability.CartesianGrid.cellBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NumStability.CartesianGrid.tangentialFaceBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.Measure.map_apply_of_aemeasurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_map' depends on axioms: [propext, Classical.choice, Quot.sound]

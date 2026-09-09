@@ -1,0 +1,890 @@
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.StationaryRiemannField
+import Mathlib.Algebra.Order.Floor.Ring
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannInterface
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.LinearRiemannSolution
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannDataRegularity
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Transport.ClassicalCharacteristics
+import Mathlib.Analysis.Calculus.ParametricIntervalIntegral
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Hyperbolicity
+import Mathlib.Analysis.Calculus.ContDiff.Defs
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+
+
+
+/-!
+Explicit CFL-one transport witness. The integer array is an explicit extension
+outside the finite active window, including the entering left boundary value.
+Window variation is compared with the shifted input window. Exactness here is
+specific to unit-speed transport and time step equal to cell width; it is not
+a general high-order claim about upwind methods or nonlinear shock formation.
+-/
+
+open MeasureTheory Filter
+open scoped BigOperators Topology
+open NumStability
+
+namespace CFL1RefinementWitness
+
+def grid (h : ℝ) (hh : 0 < h) : OneDimensionalFiniteVolumeGrid where
+  cellLeft j := ((j : ℝ) - 1) * h
+  cellRight j := (j : ℝ) * h
+  cell_nonempty j := by nlinarith
+  adjacent j := by simp
+
+theorem grid_volume (h : ℝ) (hh : 0 < h) (j : ℤ) :
+    (grid h hh).cellVolume j = h := by
+  simp only [OneDimensionalFiniteVolumeGrid.cellVolume, grid]
+  ring
+
+noncomputable def advance {ι : Type*} (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → ι → ℝ) : ℤ → ι → ℝ :=
+  riemannFiniteVolumeUpdate (grid h hh) h Q (fun j => Q (j - 1))
+
+theorem advance_eq_shift {ι : Type*} (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → ι → ℝ) (j : ℤ) : advance h hh Q j = Q (j - 1) := by
+  simp only [advance, riemannFiniteVolumeUpdate, grid_volume, div_self (ne_of_gt hh),
+    add_sub_cancel_right, one_smul]
+  abel
+
+noncomputable def averaged {ι : Type*} [Fintype ι] (h : ℝ) (hh : 0 < h)
+    (φ : ℝ → ι → ℝ) (t : ℝ) (j : ℤ) : ι → ℝ :=
+  finiteVolumeCellAverageOn (grid h hh) (fun x => φ (x - t)) j
+
+theorem averaged_eq_shift {ι : Type*} [Fintype ι] (h : ℝ) (hh : 0 < h)
+    (φ : ℝ → ι → ℝ) (t : ℝ) (j : ℤ) :
+    averaged h hh φ (t + h) j = averaged h hh φ t (j - 1) := by
+  simp only [averaged, finiteVolumeCellAverageOn, oneDimensionalCellAverage,
+    grid, Int.cast_sub, Int.cast_one, intervalIntegral.integral_comp_sub_right]
+  congr 2 <;> ring
+
+theorem advance_averaged_exact {ι : Type*} [Fintype ι] (h : ℝ) (hh : 0 < h)
+    (φ : ℝ → ι → ℝ) (t : ℝ) (j : ℤ) :
+    advance h hh (averaged h hh φ t) j = averaged h hh φ (t + h) j := by
+  rw [advance_eq_shift, averaged_eq_shift]
+
+theorem averaged_is_cell_average {ι : Type*} [Fintype ι]
+    (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+    (hφ : ∀ a b, IntervalIntegrable φ volume a b) (t : ℝ) (j : ℤ) :
+    IsOneDimensionalCellAverage (fun x => φ (x - t))
+      ((grid h hh).cellLeft j) ((grid h hh).cellRight j)
+      (averaged h hh φ t j) := by
+  apply finiteVolumeCellAverageOn_spec
+  intro i
+  simpa only [travelingWave, one_mul] using
+    travelingWave_intervalIntegrable_space φ hφ 1
+      ((grid h hh).cellLeft i) ((grid h hh).cellRight i) t
+
+theorem translated_is_conserved {ι : Type*} [Fintype ι]
+    (φ : ℝ → ι → ℝ) (hφ : ∀ a b, IntervalIntegrable φ volume a b) :
+    IsRectangleConservationLawSolution (fun x t => φ (x - t)) id := by
+  simpa only [IsRectangleConservationLawSolution, travelingWave, one_mul, one_smul, id_eq] using
+    travelingWave_isRectangleConservationLawSolution φ hφ 1
+
+/-- Every locally integrable physical translated profile has zero defect;
+the constant zero is uniform in mesh, time, cell and profile. -/
+theorem physical_exactness {ι : Type*} [Fintype ι]
+    (φ : ℝ → ι → ℝ) (hφ : ∀ a b, IntervalIntegrable φ volume a b)
+    (h : ℝ) (hh : 0 < h) (t : ℝ) (j : ℤ) (p : ℝ) (_hp : 1 < p) :
+    IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    IsOneDimensionalCellAverage (fun x => φ (x - t))
+      ((grid h hh).cellLeft j) ((grid h hh).cellRight j) (averaged h hh φ t j) ∧
+    ‖advance h hh (averaged h hh φ t) j - averaged h hh φ (t + h) j‖ ≤
+      (0 : ℝ) * h ^ p := by
+  refine ⟨translated_is_conserved φ hφ, averaged_is_cell_average h hh φ hφ t j, ?_⟩
+  simp only [advance_averaged_exact, sub_self, norm_zero, zero_mul, le_refl]
+
+def window {E : Type*} (Q : ℤ → E) (start : ℤ) (N : ℕ) : Fin N → E :=
+  fun i => Q (start + (i.val : ℤ))
+
+theorem advance_window {ι : Type*} (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) :
+    window (advance h hh Q) start N = window Q (start - 1) N := by
+  funext i
+  simp only [window, advance_eq_shift]
+  congr 1; ring
+
+/-- Sum of internal adjacent jumps in a finite window, with arbitrary start. -/
+noncomputable def windowTV {ι : Type*} [Fintype ι]
+    (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) : ℝ :=
+  ∑ i ∈ Finset.range (N - 1),
+    ‖Q (start + (i : ℤ) + 1) - Q (start + (i : ℤ))‖
+
+theorem advance_windowTV {ι : Type*} [Fintype ι] (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) :
+    windowTV (advance h hh Q) start N = windowTV Q (start - 1) N := by
+  unfold windowTV
+  apply Finset.sum_congr rfl
+  intro i _hi
+  simp only [advance_eq_shift]
+  have hleft : start + (i : ℤ) + 1 - 1 = start - 1 + (i : ℤ) + 1 := by ring
+  have hright : start + (i : ℤ) - 1 = start - 1 + (i : ℤ) := by ring
+  rw [hleft, hright]
+
+theorem advance_no_overshoot (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ) (lower upper : ℝ)
+    (hbound : ∀ i : Fin N, lower ≤ window Q (start - 1) N i 0 ∧
+      window Q (start - 1) N i 0 ≤ upper) :
+    ∀ i : Fin N, lower ≤ window (advance h hh Q) start N i 0 ∧
+      window (advance h hh Q) start N i 0 ≤ upper := by
+  rw [advance_window]
+  exact hbound
+
+theorem advance_preserves_monotone (h : ℝ) (hh : 0 < h)
+    (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ)
+    (hmono : Monotone (fun i : Fin N => window Q (start - 1) N i 0)) :
+    Monotone (fun i : Fin N => window (advance h hh Q) start N i 0) := by
+  rw [advance_window]
+  exact hmono
+
+noncomputable def meshSize (n : ℕ) : ℝ := 1 / ((n : ℝ) + 1)
+
+theorem meshSize_pos (n : ℕ) : 0 < meshSize n := by unfold meshSize; positivity
+
+theorem meshSize_tendsto_zero : Tendsto meshSize atTop (𝓝 0) :=
+  tendsto_one_div_add_atTop_nhds_zero_nat
+
+/-- The numerical flux uses exactly the left adjacent value. -/
+theorem flux_locality {ι : Type*} (Q R : ℤ → ι → ℝ) (face : ℤ)
+    (h : Q (face - 1) = R (face - 1)) :
+    (fun j => Q (j - 1)) face = (fun j => R (j - 1)) face := h
+
+/-- Only the shifted finite input window is needed for the active output.
+Thus a ghost extension agreeing there gives exactly the same finite output. -/
+theorem advance_extension_independent {ι : Type*} (h : ℝ) (hh : 0 < h)
+    (Q R : ℤ → ι → ℝ) (start : ℤ) (N : ℕ)
+    (heq : window Q (start - 1) N = window R (start - 1) N) :
+    window (advance h hh Q) start N = window (advance h hh R) start N := by
+  rw [advance_window, advance_window, heq]
+
+/-- A single constant works at every refinement, time, cell and finite window.
+The physical profile is arbitrary subject to local interval integrability;
+the conclusion therefore applies in particular to every smooth such profile. -/
+theorem refinement_accuracy {ι : Type*} [Fintype ι]
+    (φ : ℝ → ι → ℝ) (hφ : ∀ a b, IntervalIntegrable φ volume a b)
+    (p : ℝ) (_hp : 1 < p) :
+    IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+      ‖window (advance (meshSize n) (meshSize_pos n)
+          (averaged (meshSize n) (meshSize_pos n) φ t)) start N i -
+        window (averaged (meshSize n) (meshSize_pos n) φ (t + meshSize n)) start N i‖
+        ≤ C * meshSize n * (meshSize n) ^ p := by
+  refine ⟨translated_is_conserved φ hφ, 0, le_rfl, ?_⟩
+  intro n t start N i
+  simp only [window, advance_averaged_exact, sub_self, norm_zero, zero_mul, le_refl]
+
+/-- Zero growth and zero defect in a uniform quantitative variation bound.
+The shifted input window includes entering boundary variation explicitly. -/
+theorem refinement_oscillation {ι : Type*} [Fintype ι]
+    (Q : ℤ → ι → ℝ) (n : ℕ) (start : ℤ) (N : ℕ) :
+    windowTV (advance (meshSize n) (meshSize_pos n) Q) start N ≤
+      (1 + (0 : ℝ) * meshSize n) * windowTV Q (start - 1) N + 0 := by
+  simp only [advance_windowTV, zero_mul, add_zero, one_mul, le_refl]
+
+def smoothProfile (x : ℝ) : Fin 1 → ℝ := fun _ => x
+
+theorem smoothProfile_smooth : ContDiff ℝ ⊤ smoothProfile := by
+  exact contDiff_pi.mpr (fun _ => contDiff_id)
+
+theorem smoothProfile_integrable (a b : ℝ) :
+    IntervalIntegrable smoothProfile volume a b :=
+  smoothProfile_smooth.continuous.intervalIntegrable a b
+
+theorem smoothProfile_nonconstant : smoothProfile 0 ≠ smoothProfile 1 := by
+  intro h
+  have h0 := congrFun h 0
+  norm_num [smoothProfile] at h0
+
+noncomputable def stepProfile : ℝ → Fin 1 → ℝ := riemannData 1 0 0
+
+theorem stepProfile_integrable (a b : ℝ) :
+    IntervalIntegrable stepProfile volume a b := riemannData_intervalIntegrable _ _ _ a b
+
+theorem stepProfile_discontinuous : ¬ ContinuousAt stepProfile 0 := by
+  apply (riemannData_isRiemannData (1 : Fin 1 → ℝ) 0 0).not_continuousAt_zero
+  intro h
+  have h0 := congrFun h 0
+  norm_num at h0
+
+/-- The smooth nonconstant profile actually meets the family contract. -/
+theorem smooth_refinement (p : ℝ) (hp : 1 < p) :
+    ContDiff ℝ ⊤ smoothProfile ∧ smoothProfile 0 ≠ smoothProfile 1 ∧
+    IsRectangleConservationLawSolution (fun x t => smoothProfile (x - t)) id ∧
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+      ‖window (advance (meshSize n) (meshSize_pos n)
+          (averaged (meshSize n) (meshSize_pos n) smoothProfile t)) start N i -
+        window (averaged (meshSize n) (meshSize_pos n) smoothProfile (t + meshSize n))
+          start N i‖ ≤ C * meshSize n * (meshSize n) ^ p :=
+  ⟨smoothProfile_smooth, smoothProfile_nonconstant,
+    refinement_accuracy smoothProfile smoothProfile_integrable p hp⟩
+
+/-- A discontinuous transport profile also meets the same physical exactness
+and refinement bound; this is a transported jump, not a nonlinear shock. -/
+theorem step_refinement (p : ℝ) (hp : 1 < p) :
+    (¬ ContinuousAt stepProfile 0) ∧
+    IsRectangleConservationLawSolution (fun x t => stepProfile (x - t)) id ∧
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+      ‖window (advance (meshSize n) (meshSize_pos n)
+          (averaged (meshSize n) (meshSize_pos n) stepProfile t)) start N i -
+        window (averaged (meshSize n) (meshSize_pos n) stepProfile (t + meshSize n))
+          start N i‖ ≤ C * meshSize n * (meshSize n) ^ p :=
+  ⟨stepProfile_discontinuous, refinement_accuracy stepProfile stepProfile_integrable p hp⟩
+
+end CFL1RefinementWitness
+
+open MeasureTheory Filter Set
+open scoped Topology Interval
+open NumStability
+namespace DimLocalCharacteristicWitness
+variable {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A genuine local conservation reference, on all space/time subrectangles
+of the supplied physical line problem. Values outside this box are unused. -/
+def RectangleReferenceOn (q : ℝ → ℝ → State) (flux : State → State)
+    (left right horizon : ℝ) : Prop :=
+  (∀ t ∈ Set.Icc 0 horizon, IntervalIntegrable (fun x => q x t) volume left right) ∧
+  (∀ x ∈ Set.Icc left right, IntervalIntegrable (fun t => flux (q x t)) volume 0 horizon) ∧
+  ∀ a ∈ Set.Icc left right, ∀ b ∈ Set.Icc left right,
+    ∀ s ∈ Set.Icc 0 horizon, ∀ t ∈ Set.Icc 0 horizon,
+      (∫ x in a..b, q x t) - (∫ x in a..b, q x s) =
+        ∫ τ in s..t, flux (q a τ) - flux (q b τ)
+
+/-- Smoothness is a fixed mathematical condition, never a caller-chosen
+eligibility predicate. The same local conservation law and state domain apply. -/
+def SmoothReferenceOn (q : ℝ → ℝ → State) (flux : State → State)
+    (states : Set State) (left right horizon : ℝ) : Prop :=
+  ContDiffOn ℝ ⊤ (Function.uncurry q) (Set.Icc left right ×ˢ Set.Icc 0 horizon) ∧
+  RectangleReferenceOn q flux left right horizon ∧
+  ∀ x ∈ Set.Icc left right, ∀ t ∈ Set.Icc 0 horizon, q x t ∈ states
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+
+theorem local_integral_hasDerivAt
+    (F F' : ℝ → ℝ → E) {a b c d t : ℝ} (hab : a ≤ b) (ht : t ∈ Ioo c d)
+    (hc : ContinuousOn (Function.uncurry F) (Icc c d ×ˢ Icc a b))
+    (hc' : ContinuousOn (Function.uncurry F') (Icc c d ×ˢ Icc a b))
+    (hd : ∀ r ∈ Ioo c d, ∀ x ∈ Icc a b, HasDerivAt (fun s => F s x) (F' r x) r) :
+    HasDerivAt (fun s => ∫ x in a..b, F s x) (∫ x in a..b, F' t x) t := by
+  have hslice (r : ℝ) (hr : r ∈ Icc c d) : ContinuousOn (F r) (Icc a b) :=
+    hc.comp (continuous_const.prodMk continuous_id).continuousOn (fun _ hx => ⟨hr, hx⟩)
+  have hslice' (r : ℝ) (hr : r ∈ Icc c d) : ContinuousOn (F' r) (Icc a b) :=
+    hc'.comp (continuous_const.prodMk continuous_id).continuousOn (fun _ hx => ⟨hr, hx⟩)
+  obtain ⟨C, hC⟩ := (isCompact_Icc.prod isCompact_Icc).exists_bound_of_continuousOn hc'
+  have hu : Ι a b ⊆ Icc a b := by rw [uIoc_of_le hab]; exact Ioc_subset_Icc_self
+  apply (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (s := Ioo c d) (bound := fun _ => C) (Ioo_mem_nhds ht.1 ht.2) ?_
+    ((hslice t (Ioo_subset_Icc_self ht)).intervalIntegrable_of_Icc hab)
+    (((hslice' t (Ioo_subset_Icc_self ht)).mono hu).aestronglyMeasurable measurableSet_uIoc)
+    ?_ intervalIntegrable_const ?_).2
+  · filter_upwards [Ioo_mem_nhds ht.1 ht.2] with r hr
+    exact ((hslice r (Ioo_subset_Icc_self hr)).mono hu).aestronglyMeasurable measurableSet_uIoc
+  · exact ae_of_all _ (fun x hx r hr => hC (r, x) ⟨Ioo_subset_Icc_self hr, hu hx⟩)
+  · exact ae_of_all _ (fun x hx r hr => hd r hr x (hu hx))
+
+theorem eq_zero_of_local_integrals [CompleteSpace E] (g : ℝ → E) {L R x : ℝ}
+    (hc : ContinuousOn g (Ioo L R)) (hx : x ∈ Ioo L R)
+    (hi : ∀ a ∈ Ioo L R, ∀ b ∈ Ioo L R, ∫ y in a..b, g y = 0) : g x = 0 := by
+  have hd := intervalIntegral.integral_hasDerivAt_right
+    (IntervalIntegrable.refl (f := g) (a := x))
+    (ContinuousOn.stronglyMeasurableAtFilter isOpen_Ioo hc x hx)
+    (hc.continuousAt (Ioo_mem_nhds hx.1 hx.2))
+  have hz : HasDerivAt (fun _ : ℝ => (0 : E)) (g x) x :=
+    hd.congr_of_eventuallyEq (by
+      filter_upwards [Ioo_mem_nhds hx.1 hx.2] with b hb
+      exact (hi x hx b hb).symm)
+  exact hz.unique (hasDerivAt_const x 0)
+
+noncomputable def qt (q : ℝ → ℝ → E) (x t : ℝ) : E :=
+  fderiv ℝ (Function.uncurry q) (x, t) (0, 1)
+
+noncomputable def qx (q : ℝ → ℝ → E) (x t : ℝ) : E :=
+  fderiv ℝ (Function.uncurry q) (x, t) (1, 0)
+
+theorem partial_time {q : ℝ → ℝ → E} {x t : ℝ}
+    (hd : DifferentiableAt ℝ (Function.uncurry q) (x, t)) :
+    HasDerivAt (q x) (qt q x t) t := by
+  simpa only [Function.comp_def, Function.uncurry_apply_pair, qt] using
+    hd.hasFDerivAt.comp_hasDerivAt t
+      ((hasDerivAt_const t x).prodMk (hasDerivAt_id t))
+
+theorem partial_space {q : ℝ → ℝ → E} {x t : ℝ}
+    (hd : DifferentiableAt ℝ (Function.uncurry q) (x, t)) :
+    HasDerivAt (fun y => q y t) (qx q x t) x := by
+  simpa only [Function.comp_def, Function.uncurry_apply_pair, qx] using
+    hd.hasFDerivAt.comp_hasDerivAt x
+      ((hasDerivAt_id x).prodMk (hasDerivAt_const x t))
+
+theorem smooth_reference_interior {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H) :
+    ContDiffOn ℝ ⊤ (Function.uncurry q) (Ioo L R ×ˢ Ioo 0 H) :=
+  hq.1.mono (prod_mono Ioo_subset_Icc_self Ioo_subset_Icc_self)
+
+theorem interior_partials_continuous {q : ℝ → ℝ → E} {L R H : ℝ}
+    (hq : ContDiffOn ℝ ⊤ (Function.uncurry q) (Ioo L R ×ˢ Ioo 0 H)) :
+    ContinuousOn (Function.uncurry (qt q)) (Ioo L R ×ˢ Ioo 0 H) ∧
+    ContinuousOn (Function.uncurry (qx q)) (Ioo L R ×ˢ Ioo 0 H) := by
+  have hc := hq.continuousOn_fderiv_of_isOpen (isOpen_Ioo.prod isOpen_Ioo) (by simp)
+  exact ⟨hc.clm_apply continuousOn_const, hc.clm_apply continuousOn_const⟩
+
+theorem interior_differentiableAt {q : ℝ → ℝ → E} {L R H x t : ℝ}
+    (hq : ContDiffOn ℝ ⊤ (Function.uncurry q) (Ioo L R ×ˢ Ioo 0 H))
+    (hx : x ∈ Ioo L R) (ht : t ∈ Ioo 0 H) :
+    DifferentiableAt ℝ (Function.uncurry q) (x, t) :=
+  (hq.differentiableOn (by simp) (x,t) ⟨hx, ht⟩).differentiableAt
+    (prod_mem_nhds (Ioo_mem_nhds hx.1 hx.2) (Ioo_mem_nhds ht.1 ht.2))
+
+theorem interior_mass_derivative {q : ℝ → ℝ → E} {L R H a b t : ℝ}
+    (hq : ContDiffOn ℝ ⊤ (Function.uncurry q) (Ioo L R ×ˢ Ioo 0 H))
+    (ha : a ∈ Ioo L R) (hb : b ∈ Ioo L R) (hab : a ≤ b) (ht : t ∈ Ioo 0 H) :
+    HasDerivAt (fun r => ∫ x in a..b, q x r) (∫ x in a..b, qt q x t) t := by
+  have htime : Icc (t / 2) ((t + H) / 2) ⊆ Ioo 0 H := by
+    intro r hr; constructor <;> linarith [hr.1, hr.2, ht.1, ht.2]
+  have hspace : Icc a b ⊆ Ioo L R := Icc_subset_Ioo ha.1 hb.2
+  apply local_integral_hasDerivAt (fun r x => q x r) (fun r x => qt q x r) hab
+    (show t ∈ Ioo (t / 2) ((t + H) / 2) by constructor <;> linarith [ht.1, ht.2])
+  · exact hq.continuousOn.comp continuous_swap.continuousOn
+      (fun _ hp => ⟨hspace hp.2, htime hp.1⟩)
+  · exact (interior_partials_continuous hq).1.comp continuous_swap.continuousOn
+      (fun _ hp => ⟨hspace hp.2, htime hp.1⟩)
+  · intro r hr x hx
+    exact partial_time (interior_differentiableAt hq (hspace hx)
+      (htime (Ioo_subset_Icc_self hr)))
+
+theorem rectangle_mass_derivative {q : ℝ → ℝ → State} {states : Set State}
+    {L R H a b t : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (ha : a ∈ Ioo L R) (hb : b ∈ Ioo L R) (ht : t ∈ Ioo 0 H) :
+    HasDerivAt (fun r => ∫ x in a..b, q x r) (q a t - q b t) t := by
+  have hc := (smooth_reference_interior hq).continuousOn
+  have hboundary : ContinuousOn (fun r => q a r - q b r) (Ioo 0 H) :=
+    (hc.comp (continuous_const.prodMk continuous_id).continuousOn (fun _ hr => ⟨ha, hr⟩)).sub
+      (hc.comp (continuous_const.prodMk continuous_id).continuousOn (fun _ hr => ⟨hb, hr⟩))
+  have hd := intervalIntegral.integral_hasDerivAt_right
+    (IntervalIntegrable.refl (f := fun r => q a r - q b r) (a := t))
+    (ContinuousOn.stronglyMeasurableAtFilter isOpen_Ioo hboundary t ht)
+    (hboundary.continuousAt (Ioo_mem_nhds ht.1 ht.2))
+  apply (hd.add_const (∫ x in a..b, q x t)).congr_of_eventuallyEq
+  filter_upwards [Ioo_mem_nhds ht.1 ht.2] with r hr
+  exact (sub_eq_iff_eq_add.mp (hq.2.1.2.2 a (Ioo_subset_Icc_self ha)
+    b (Ioo_subset_Icc_self hb) t (Ioo_subset_Icc_self ht) r (Ioo_subset_Icc_self hr)))
+
+theorem interior_classical {q : ℝ → ℝ → State} {states : Set State}
+    {L R H x t : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (hx : x ∈ Ioo L R) (ht : t ∈ Ioo 0 H) :
+    IsLinearAdvectionSolutionAt q 1 x t := by
+  have hs := smooth_reference_interior hq
+  have hp := interior_partials_continuous hs
+  have hqt : ContinuousOn (fun y => qt q y t) (Ioo L R) :=
+    hp.1.comp (continuous_id.prodMk continuous_const).continuousOn (fun _ hy => ⟨hy, ht⟩)
+  have hqx : ContinuousOn (fun y => qx q y t) (Ioo L R) :=
+    hp.2.comp (continuous_id.prodMk continuous_const).continuousOn (fun _ hy => ⟨hy, ht⟩)
+  have hi_ordered (a b : ℝ) (ha : a ∈ Ioo L R) (hb : b ∈ Ioo L R) (hab : a ≤ b) :
+      ∫ y in a..b, (qt q y t + qx q y t) = 0 := by
+    have hsub : Icc a b ⊆ Ioo L R := Icc_subset_Ioo ha.1 hb.2
+    have hit := (hqt.mono hsub).intervalIntegrable_of_Icc (μ := volume) hab
+    have hix := (hqx.mono hsub).intervalIntegrable_of_Icc (μ := volume) hab
+    have htint := (interior_mass_derivative hs ha hb hab ht).unique
+      (rectangle_mass_derivative hq ha hb ht)
+    have hxint : (∫ y in a..b, qx q y t) = q b t - q a t :=
+      intervalIntegral.integral_eq_sub_of_hasDerivAt
+        (fun y hy => partial_space (interior_differentiableAt hs
+          (hsub (uIcc_of_le hab ▸ hy)) ht)) hix
+    rw [intervalIntegral.integral_add hit hix, htint, hxint]
+    abel
+  have hz : qt q x t + qx q x t = 0 :=
+    eq_zero_of_local_integrals _ (hqt.add hqx) hx (by
+      intro a ha b hb
+      rcases le_total a b with hab | hba
+      · exact hi_ordered a b ha hb hab
+      · change (∫ y in a..b, qt q y t + qx q y t) = 0
+        rw [intervalIntegral.integral_symm, hi_ordered b a hb ha hba, neg_zero])
+  refine ⟨qt q x t, qx q x t, partial_time (interior_differentiableAt hs hx ht),
+    partial_space (interior_differentiableAt hs hx ht), ?_⟩
+  simpa only [one_smul] using hz
+
+/-- The entire backward characteristic remains in the physical box. Interior
+PDE information propagates to both time endpoints by continuity on the closed box. -/
+theorem characteristic_propagation {q : ℝ → ℝ → State} {states : Set State}
+    {L R H x t : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (ht : t ∈ Icc 0 H) (hleft : L ≤ x - t) (hright : x ≤ R) :
+    q x t = q (x - t) 0 := by
+  rcases eq_or_lt_of_le ht.1 with hzero | hpos
+  · simp [← hzero]
+  let f : ℝ → State := fun r => q (x - t + r) r
+  have hclosed : ContinuousOn f (Icc 0 t) :=
+    hq.1.continuousOn.comp
+      ((continuous_const.add continuous_id).prodMk continuous_id).continuousOn (by
+        intro r hr
+        constructor <;> constructor <;> dsimp <;> linarith [hr.1, hr.2, ht.2])
+  have hd (r : ℝ) (hr : r ∈ Ioo 0 t) : HasDerivAt f 0 r := by
+    have hx : x - t + r ∈ Ioo L R := by
+      constructor <;> linarith [hr.1, hr.2]
+    have hrt : r ∈ Ioo 0 H := ⟨hr.1, lt_of_lt_of_le hr.2 ht.2⟩
+    have hpde := interior_classical hq hx hrt
+    have hdiff := interior_differentiableAt (smooth_reference_interior hq) hx hrt
+    simpa only [f, one_mul] using
+      (linearAdvection_hasDerivAt_characteristic (speed := 1) (x := x - t)
+        (t := r) (by simpa only [one_mul] using hdiff)
+        (by simpa only [one_mul] using hpde))
+  obtain ⟨c, hc⟩ := isOpen_Ioo.exists_is_const_of_deriv_eq_zero isPreconnected_Ioo
+    (fun r hr => (hd r hr).differentiableAt.differentiableWithinAt)
+    (fun r hr => (hd r hr).deriv)
+  have heq : EqOn f (fun _ => c) (Icc 0 t) :=
+    (show EqOn f (fun _ => c) (Ioo 0 t) from hc).of_subset_closure
+      hclosed continuousOn_const Ioo_subset_Icc_self (by rw [closure_Ioo (ne_of_lt hpos)])
+  have h := (heq (right_mem_Icc.mpr ht.1)).trans (heq (left_mem_Icc.mpr ht.1)).symm
+  simpa [f] using h
+
+theorem local_cell_average_shift {q : ℝ → ℝ → State} {states : Set State}
+    {L R H a b t : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (hab : a ≤ b) (ht : t ∈ Icc 0 H) (hleft : L ≤ a - t) (hright : b ≤ R) :
+    oneDimensionalCellAverage (fun x => q x t) a b =
+      oneDimensionalCellAverage (fun x => q x 0) (a - t) (b - t) := by
+  have heq : (∫ x in a..b, q x t) = ∫ x in a..b, q (x - t) 0 := by
+    apply intervalIntegral.integral_congr
+    intro x hx
+    rw [uIcc_of_le hab] at hx
+    exact characteristic_propagation hq ht (by linarith [hx.1]) (by linarith [hx.2])
+  unfold oneDimensionalCellAverage
+  rw [heq, intervalIntegral.integral_comp_sub_right (f := fun x => q x 0)]
+  congr 2; ring
+
+end DimLocalCharacteristicWitness
+
+namespace DimLocalCharacteristicWitness
+open CFL1RefinementWitness
+open NumStability
+open MeasureTheory Set
+variable {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A smooth local physical reference advances exactly at CFL one, provided
+the active cell and its backward-shifted predecessor stay in the box. -/
+theorem local_cfl1_exact {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (h : ℝ) (hh : 0 < h) (hhH : h ≤ H) (j : ℤ)
+    (hleft : L ≤ (grid h hh).cellLeft j - h)
+    (hright : (grid h hh).cellRight j ≤ R) :
+    advance h hh (fun k => finiteVolumeCellAverageOn (grid h hh) (fun x => q x 0) k) j =
+      finiteVolumeCellAverageOn (grid h hh) (fun x => q x h) j := by
+  rw [advance_eq_shift]
+  have havg := local_cell_average_shift hq
+    ((grid h hh).cell_nonempty j).le ⟨hh.le, hhH⟩ hleft hright
+  have hl : (grid h hh).cellLeft j - h = (grid h hh).cellLeft (j - 1) := by
+    simp only [grid, Int.cast_sub, Int.cast_one]
+    ring
+  have hr : (grid h hh).cellRight j - h = (grid h hh).cellRight (j - 1) := by
+    simp only [grid, Int.cast_sub, Int.cast_one]
+    ring
+  rw [hl, hr] at havg
+  exact havg.symm
+
+/-- Only the actually entering predecessor average is needed at CFL one.
+There is no condition on values at unused exterior cells. -/
+theorem local_cfl1_exact_of_projection {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (h : ℝ) (hh : 0 < h) (hhH : h ≤ H) (j : ℤ)
+    (hleft : L ≤ (grid h hh).cellLeft j - h)
+    (hright : (grid h hh).cellRight j ≤ R)
+    (values : ℤ → State)
+    (hprojection : values (j - 1) =
+      finiteVolumeCellAverageOn (grid h hh) (fun x => q x 0) (j - 1)) :
+    advance h hh values j = finiteVolumeCellAverageOn (grid h hh) (fun x => q x h) j := by
+  rw [advance_eq_shift, hprojection]
+  simpa only [advance_eq_shift] using local_cfl1_exact hq h hh hhH j hleft hright
+
+/-- The zero constant is uniform for every smooth local rectangle reference,
+every admitted mesh, and every cell obeying the stated physical containment.
+This is the local-reference accuracy component; family geometry/admission and
+finite-window oscillation remain separate obligations. -/
+theorem local_refinement_zero_defect {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (p : ℝ) (_hp : 1 < p) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (j : ℤ), meshSize n ≤ H →
+      L ≤ (grid (meshSize n) (meshSize_pos n)).cellLeft j - meshSize n →
+      (grid (meshSize n) (meshSize_pos n)).cellRight j ≤ R →
+      ∀ values : ℤ → State,
+        values (j - 1) = finiteVolumeCellAverageOn (grid (meshSize n) (meshSize_pos n))
+          (fun x => q x 0) (j - 1) →
+        ‖advance (meshSize n) (meshSize_pos n) values j -
+          finiteVolumeCellAverageOn (grid (meshSize n) (meshSize_pos n))
+            (fun x => q x (meshSize n)) j‖ ≤ C * meshSize n * (meshSize n) ^ p := by
+  refine ⟨0, le_rfl, ?_⟩
+  intro n j hH hl hr values hproj
+  rw [local_cfl1_exact_of_projection hq (meshSize n) (meshSize_pos n) hH j hl hr values hproj]
+  simp only [sub_self, norm_zero, zero_mul, le_refl]
+
+end DimLocalCharacteristicWitness
+
+open MeasureTheory Filter
+open scoped BigOperators Topology
+namespace NumStability.DirectionalQualityRepair
+
+variable {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A genuine local conservation reference, on all space/time subrectangles
+of the supplied physical line problem. Values outside this box are unused. -/
+def RectangleReferenceOn (q : ℝ → ℝ → State) (flux : State → State)
+    (left right horizon : ℝ) : Prop :=
+  (∀ t ∈ Set.Icc 0 horizon, IntervalIntegrable (fun x => q x t) volume left right) ∧
+  (∀ x ∈ Set.Icc left right, IntervalIntegrable (fun t => flux (q x t)) volume 0 horizon) ∧
+  ∀ a ∈ Set.Icc left right, ∀ b ∈ Set.Icc left right,
+    ∀ s ∈ Set.Icc 0 horizon, ∀ t ∈ Set.Icc 0 horizon,
+      (∫ x in a..b, q x t) - (∫ x in a..b, q x s) =
+        ∫ τ in s..t, flux (q a τ) - flux (q b τ)
+
+/-- Smoothness is a fixed mathematical condition, never a caller-chosen
+eligibility predicate. The same local conservation law and state domain apply. -/
+def SmoothReferenceOn (q : ℝ → ℝ → State) (flux : State → State)
+    (states : Set State) (left right horizon : ℝ) : Prop :=
+  ContDiffOn ℝ ⊤ (Function.uncurry q) (Set.Icc left right ×ˢ Set.Icc 0 horizon) ∧
+  RectangleReferenceOn q flux left right horizon ∧
+  ∀ x ∈ Set.Icc left right, ∀ t ∈ Set.Icc 0 horizon, q x t ∈ states
+
+noncomputable def windowVariation (start : ℤ) (count : ℕ) (values : ℤ → State) : ℝ :=
+  ∑ k ∈ Finset.range count, ‖values (start + k + 1) - values (start + k)‖
+
+/-- Logical line geometry may produce a spatially varying directional law.
+Conservation still uses the same physical endpoint flux in every rectangle. -/
+def SpatialRectangleReferenceOn (q : ℝ → ℝ → State) (flux : ℝ → State → State)
+    (left right horizon : ℝ) : Prop :=
+  (∀ t ∈ Set.Icc 0 horizon, IntervalIntegrable (fun x => q x t) volume left right) ∧
+  (∀ x ∈ Set.Icc left right, IntervalIntegrable (fun t => flux x (q x t)) volume 0 horizon) ∧
+  ∀ a ∈ Set.Icc left right, ∀ b ∈ Set.Icc left right,
+    ∀ s ∈ Set.Icc 0 horizon, ∀ t ∈ Set.Icc 0 horizon,
+      (∫ x in a..b, q x t) - (∫ x in a..b, q x s) =
+        ∫ τ in s..t, flux a (q a τ) - flux b (q b τ)
+
+def SpatialSmoothReferenceOn (q : ℝ → ℝ → State) (flux : ℝ → State → State)
+    (states : Set State) (left right horizon : ℝ) : Prop :=
+  ContDiffOn ℝ ⊤ (Function.uncurry q) (Set.Icc left right ×ˢ Set.Icc 0 horizon) ∧
+  SpatialRectangleReferenceOn q flux left right horizon ∧
+  ∀ x ∈ Set.Icc left right, ∀ t ∈ Set.Icc 0 horizon, q x t ∈ states
+
+theorem spatial_rectangle_const_iff (q : ℝ → ℝ → State) (flux : State → State)
+    (left right horizon : ℝ) :
+    SpatialRectangleReferenceOn q (fun _ => flux) left right horizon ↔
+      RectangleReferenceOn q flux left right horizon := Iff.rfl
+
+theorem spatial_smooth_const_iff (q : ℝ → ℝ → State) (flux : State → State)
+    (states : Set State) (left right horizon : ℝ) :
+    SpatialSmoothReferenceOn q (fun _ => flux) states left right horizon ↔
+      SmoothReferenceOn q flux states left right horizon := Iff.rfl
+
+/-- Data of a refining one-dimensional numerical family. The full supplied
+line is an input, while the explicit finite input window controls locality.
+Its extra entries may be supplied boundary/ghost data. No boundary condition
+or automatic admissibility outside the used window is inferred. -/
+structure LineFamily (m : ℕ) where
+  flux : ℝ → (Fin m → ℝ) → Fin m → ℝ
+  states : Set (Fin m → ℝ)
+  left : ℝ
+  right : ℝ
+  interval_nonempty : left < right
+  hyperbolic : ∀ x ∈ Set.Icc left right, IsHyperbolicFluxOn (flux x) states
+  horizon : ℝ
+  horizon_pos : 0 < horizon
+  grid : ℕ → OneDimensionalFiniteVolumeGrid
+  mesh : ℕ → ℝ
+  mesh_pos : ∀ n, 0 < mesh n
+  mesh_tendsto : Tendsto mesh atTop (𝓝 0)
+  meshRatio : ℝ
+  meshRatio_pos : 0 < meshRatio
+  dt : ℕ → ℝ
+  dt_pos : ∀ n, 0 < dt n
+  dt_le_horizon : ∀ n, dt n ≤ horizon
+  cfl : ℝ
+  cfl_pos : 0 < cfl
+  activeStart : ℕ → ℤ
+  activeCount : ℕ → ℕ
+  activeCount_two_le : ∀ n, 2 ≤ activeCount n
+  targetLeft : ℝ
+  targetRight : ℝ
+  target_nonempty : targetLeft < targetRight
+  target_inside : left < targetLeft ∧ targetRight < right
+  active_coverage : ∀ n x, x ∈ Set.Icc targetLeft targetRight →
+    ∃ j ∈ Finset.Ico (activeStart n) (activeStart n + activeCount n),
+      x ∈ Set.Icc ((grid n).cellLeft j) ((grid n).cellRight j)
+  inputStart : ℕ → ℤ
+  inputCount : ℕ → ℕ
+  input_covers : ∀ n,
+    Finset.Ico (activeStart n) (activeStart n + activeCount n) ⊆
+      Finset.Ico (inputStart n) (inputStart n + inputCount n)
+  input_geometry : ∀ n j, j ∈ Finset.Ico (inputStart n) (inputStart n + inputCount n) →
+    left ≤ (grid n).cellLeft j ∧ (grid n).cellRight j ≤ right ∧
+    (grid n).cellVolume j ≤ mesh n ∧ dt n ≤ cfl * (grid n).cellVolume j
+  mesh_comparable : ∀ n j, j ∈ Finset.Ico (inputStart n) (inputStart n + inputCount n) →
+    mesh n ≤ meshRatio * (grid n).cellVolume j
+  numericalFlux : ℕ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ
+  admitted : ℕ → (ℤ → Fin m → ℝ) → Prop
+  line_local : ∀ n (q other : ℤ → Fin m → ℝ),
+    (∀ j ∈ Finset.Ico (inputStart n) (inputStart n + inputCount n), q j = other j) →
+    ∀ j ∈ Finset.Icc (activeStart n) (activeStart n + activeCount n),
+      numericalFlux n q j = numericalFlux n other j
+
+noncomputable def LineFamily.advance (family : LineFamily m) (n : ℕ) (values : ℤ → State)
+    (j : ℤ) : State := riemannFiniteVolumeUpdate (family.grid n) (family.dt n) values
+      (family.numericalFlux n values) j
+
+def LineFamily.InitialProjection (family : LineFamily m) (n : ℕ)
+    (q : ℝ → ℝ → State) (values : ℤ → State) : Prop :=
+  ∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + family.inputCount n),
+    values j = finiteVolumeCellAverageOn (family.grid n) (fun x => q x 0) j
+
+/-- The adopted quality convention has uniform refinement content.
+Accuracy concerns every actual smooth local reference and its exact projected
+inputs. Constants cannot be chosen after each mesh or as an output error norm.
+Oscillation control uses the incoming finite window, including boundary data,
+with uniform amplification and a vanishing additive rate. Exact TVD is a
+stronger sufficient instance, not a restriction on every supplied family. -/
+structure LineFamily.HasControlledHighResolution (family : LineFamily m) : Prop where
+  order : ∃ p : ℝ, 1 < p ∧
+    ∀ q : ℝ → ℝ → State, SpatialSmoothReferenceOn q family.flux family.states
+      family.left family.right family.horizon →
+      ∃ C : ℝ, 0 ≤ C ∧ ∃ N : ℕ, ∀ n, N ≤ n → ∀ values,
+        family.InitialProjection n q values → family.admitted n values ∧
+        ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + family.activeCount n),
+          ‖family.advance n values j -
+            finiteVolumeCellAverageOn (family.grid n) (fun x => q x (family.dt n)) j‖ ≤
+              C * family.dt n * (family.mesh n) ^ p
+  stability : ∃ L : ℝ, 0 ≤ L ∧ ∀ n values other, family.admitted n values →
+    family.admitted n other → ∀ E : ℝ, 0 ≤ E →
+    (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + family.inputCount n),
+      ‖values j - other j‖ ≤ E) →
+    ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + family.activeCount n),
+      ‖family.advance n values j - family.advance n other j‖ ≤ (1 + L * family.dt n) * E
+  oscillation : ∃ K : ℝ, 0 ≤ K ∧ ∃ noise : ℕ → ℝ,
+    (∀ n, 0 ≤ noise n) ∧ Tendsto noise atTop (𝓝 0) ∧
+    ∀ n values, family.admitted n values →
+      windowVariation (family.activeStart n) (family.activeCount n - 1) (family.advance n values) ≤
+        (1 + K * family.dt n) *
+          windowVariation (family.inputStart n) (family.inputCount n - 1) values + family.dt n * noise n
+
+/-- Stability transfers the smooth-reference consistency estimate to actual
+perturbed inputs. The supplied exterior entries participate in the incoming
+error bound; no boundary accuracy is silently inferred. -/
+theorem LineFamily.HasControlledHighResolution.perturbed_accuracy
+    (family : LineFamily m) (quality : family.HasControlledHighResolution) :
+    ∃ p L : ℝ, 1 < p ∧ 0 ≤ L ∧ ∀ q : ℝ → ℝ → State,
+      SpatialSmoothReferenceOn q family.flux family.states family.left family.right family.horizon →
+      ∃ C : ℝ, 0 ≤ C ∧ ∃ N : ℕ, ∀ n, N ≤ n → ∀ projected values,
+        family.InitialProjection n q projected → family.admitted n values →
+        ∀ E : ℝ, 0 ≤ E →
+        (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + family.inputCount n),
+          ‖values j - projected j‖ ≤ E) →
+        ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + family.activeCount n),
+          ‖family.advance n values j -
+            finiteVolumeCellAverageOn (family.grid n) (fun x => q x (family.dt n)) j‖ ≤
+            (1 + L * family.dt n) * E + C * family.dt n * (family.mesh n) ^ p := by
+  obtain ⟨p, hp, accuracy⟩ := quality.order
+  obtain ⟨L, hL, stability⟩ := quality.stability
+  refine ⟨p, L, hp, hL, ?_⟩
+  intro q hq
+  obtain ⟨C, hC, N, hacc⟩ := accuracy q hq
+  refine ⟨C, hC, N, ?_⟩
+  intro n hn projected values hproj hvalues E hE herr j hj
+  have ha := hacc n hn projected hproj
+  exact (norm_sub_le_norm_sub_add_norm_sub (family.advance n values j) (family.advance n projected j)
+    (finiteVolumeCellAverageOn (family.grid n) (fun x => q x (family.dt n)) j)).trans
+      (add_le_add (stability n values projected hvalues ha.1 E hE herr j hj) (ha.2 j hj))
+
+noncomputable def LineFamily.stabilityRate (family : LineFamily m)
+    (quality : family.HasControlledHighResolution) : ℝ := Classical.choose quality.stability
+
+theorem LineFamily.stabilityRate_spec (family : LineFamily m)
+    (quality : family.HasControlledHighResolution) :
+    0 ≤ family.stabilityRate quality ∧ ∀ n values other, family.admitted n values →
+      family.admitted n other → ∀ E : ℝ, 0 ≤ E →
+      (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + family.inputCount n),
+        ‖values j - other j‖ ≤ E) →
+      ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + family.activeCount n),
+        ‖family.advance n values j - family.advance n other j‖ ≤
+          (1 + family.stabilityRate quality * family.dt n) * E :=
+  Classical.choose_spec quality.stability
+
+end NumStability.DirectionalQualityRepair
+
+
+namespace CFL1QualityFamilyWitness
+open NumStability NumStability.DirectionalQualityRepair
+open CFL1RefinementWitness
+open MeasureTheory Set Filter
+open scoped BigOperators Topology
+
+noncomputable def h (n : ℕ) : ℝ := meshSize (n + 1)
+
+theorem h_pos (n : ℕ) : 0 < h n := meshSize_pos (n + 1)
+
+theorem h_eq (n : ℕ) : h n = 1 / ((n : ℝ) + 2) := by
+  simp only [h, meshSize, Nat.cast_add, Nat.cast_one]
+  congr 1; ring
+
+theorem h_mul (n : ℕ) : h n * ((n : ℝ) + 2) = 1 := by
+  rw [h_eq]
+  have : (n : ℝ) + 2 ≠ 0 := by positivity
+  field_simp
+
+theorem h_le_half (n : ℕ) : h n ≤ 1 / 2 := by
+  rw [h_eq, div_le_div_iff₀ (by positivity) (by norm_num)]
+  norm_num
+
+theorem h_tendsto_zero : Tendsto h atTop (𝓝 0) :=
+  meshSize_tendsto_zero.comp (tendsto_add_atTop_nat 1)
+
+theorem input_geometry (n : ℕ) (j : ℤ)
+    (hj : j ∈ Finset.Ico (-1) ((-1 : ℤ) + ((n + 5 : ℕ) : ℤ))) :
+    (-2 : ℝ) ≤ (grid (h n) (h_pos n)).cellLeft j ∧
+    (grid (h n) (h_pos n)).cellRight j ≤ 2 := by
+  simp only [Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat] at hj
+  have hjl : (-1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast hj.1
+  have hjr : (j : ℝ) ≤ (n : ℝ) + 3 := by
+    have : j ≤ (n : ℤ) + 3 := by omega
+    exact_mod_cast this
+  simp only [grid]
+  have hl := mul_le_mul_of_nonneg_right hjl (h_pos n).le
+  have hr := mul_le_mul_of_nonneg_right hjr (h_pos n).le
+  have hp := h_pos n
+  have hb := h_le_half n
+  have he := h_mul n
+  constructor <;> nlinarith
+
+theorem active_coverage (n : ℕ) (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
+    ∃ j ∈ Finset.Ico (0 : ℤ) (0 + (n + 4 : ℕ)),
+      x ∈ Icc ((grid (h n) (h_pos n)).cellLeft j)
+        ((grid (h n) (h_pos n)).cellRight j) := by
+  let k : ℤ := ⌊x * ((n : ℝ) + 2)⌋
+  have hk0 : 0 ≤ k := Int.floor_nonneg.mpr (mul_nonneg hx.1 (by positivity))
+  have hkle := Int.floor_le (x * ((n : ℝ) + 2))
+  have hklt := Int.lt_floor_add_one (x * ((n : ℝ) + 2))
+  have hkmax : k ≤ (n : ℤ) + 2 := by
+    have hkr : (k : ℝ) ≤ (n : ℝ) + 2 := by
+      dsimp [k]
+      nlinarith [mul_le_mul_of_nonneg_right hx.2 (show 0 ≤ (n : ℝ) + 2 by positivity)]
+    exact_mod_cast hkr
+  refine ⟨k + 1, ?_, ?_⟩
+  · simp only [Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat]
+    omega
+  · simp only [grid, Int.cast_add, Int.cast_one, add_sub_cancel_right]
+    have hl := mul_le_mul_of_nonneg_right hkle (h_pos n).le
+    have hr := mul_lt_mul_of_pos_right hklt (h_pos n)
+    have he := h_mul n
+    have heq : (x * ((n : ℝ) + 2)) * h n = x := by
+      calc
+        _ = x * (h n * ((n : ℝ) + 2)) := by ring
+        _ = x := by rw [he, mul_one]
+    change (k : ℝ) * h n ≤ x ∧ x ≤ ((k : ℝ) + 1) * h n
+    dsimp [k] at *
+    constructor <;> nlinarith
+
+noncomputable def family (m : ℕ) : LineFamily m where
+  flux := fun _ => id
+  states := Set.univ
+  left := -2
+  right := 2
+  interval_nonempty := by norm_num
+  hyperbolic := by
+    intro x hx state hstate
+    have heq : (StationaryRiemannField.transportLaw (m := m)).physicalFlux = id :=
+      funext StationaryRiemannField.physicalFlux
+    rw [← heq]
+    exact hyperbolicConservationLaw_isHyperbolicFluxAt _ state
+  horizon := 1
+  horizon_pos := by norm_num
+  grid := fun n => grid (h n) (h_pos n)
+  mesh := h
+  mesh_pos := h_pos
+  mesh_tendsto := h_tendsto_zero
+  meshRatio := 1
+  meshRatio_pos := by norm_num
+  dt := h
+  dt_pos := h_pos
+  dt_le_horizon := fun n => (h_le_half n).trans (by norm_num)
+  cfl := 1
+  cfl_pos := by norm_num
+  activeStart := fun _ => 0
+  activeCount := fun n => n + 4
+  activeCount_two_le := by intro n; omega
+  targetLeft := 0
+  targetRight := 1
+  target_nonempty := by norm_num
+  target_inside := by norm_num
+  active_coverage := active_coverage
+  inputStart := fun _ => -1
+  inputCount := fun n => n + 5
+  input_covers := by
+    intro n j hj
+    simp only [Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat] at hj ⊢
+    omega
+  input_geometry := by
+    intro n j hj
+    obtain ⟨hl, hr⟩ := input_geometry n j hj
+    exact ⟨hl, hr, (grid_volume _ _ _).le, by rw [grid_volume, one_mul]⟩
+  mesh_comparable := by intro n j hj; rw [grid_volume, one_mul]
+  numericalFlux := fun _ values j => values (j - 1)
+  admitted := fun _ _ => True
+  line_local := by
+    intro n values other heq j hj
+    apply heq
+    simp only [Finset.mem_Ico, Finset.mem_Icc, Nat.cast_add, Nat.cast_ofNat] at hj ⊢
+    omega
+
+theorem family_advance (m n : ℕ) (values : ℤ → Fin m → ℝ) (j : ℤ) :
+    (family m).advance n values j = values (j - 1) :=
+  advance_eq_shift (h n) (h_pos n) values j
+
+theorem family_quality (m : ℕ) : (family m).HasControlledHighResolution := by
+  constructor
+  · refine ⟨2, by norm_num, ?_⟩
+    intro q hq
+    refine ⟨0, le_rfl, 0, ?_⟩
+    intro n hn values hproj
+    refine ⟨True.intro, ?_⟩
+    intro j hj
+    have hj' : 0 ≤ j ∧ j < (n : ℤ) + 4 := by
+      simpa only [family, Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat, zero_add] using hj
+    have hpred : j - 1 ∈ Finset.Ico (-1) ((-1 : ℤ) + ((n + 5 : ℕ) : ℤ)) := by
+      simp only [Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat]
+      omega
+    have hgeom := input_geometry n (j - 1) hpred
+    have hgeomj := input_geometry n j (by
+      simp only [Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat]; omega)
+    have hl : (-2 : ℝ) ≤ (grid (h n) (h_pos n)).cellLeft j - h n := by
+      have he : (grid (h n) (h_pos n)).cellLeft j - h n =
+          (grid (h n) (h_pos n)).cellLeft (j - 1) := by
+        simp only [grid, Int.cast_sub, Int.cast_one]; ring
+      rw [he]
+      exact hgeom.1
+    have href : DimLocalCharacteristicWitness.SmoothReferenceOn q id Set.univ (-2) 2 1 := hq
+    have hexact := DimLocalCharacteristicWitness.local_cfl1_exact_of_projection href
+      (h n) (h_pos n) ((h_le_half n).trans (by norm_num)) j hl hgeomj.2 values
+      (hproj (j - 1) hpred)
+    change ‖advance (h n) (h_pos n) values j -
+      finiteVolumeCellAverageOn (grid (h n) (h_pos n)) (fun x => q x (h n)) j‖ ≤
+        (0 : ℝ) * h n * h n ^ (2 : ℝ)
+    rw [hexact]
+    simp
+  · refine ⟨0, le_rfl, ?_⟩
+    intro n values other hv ho E hE herr j hj
+    rw [family_advance, family_advance]
+    simp only [zero_mul, add_zero, one_mul]
+    apply herr
+    simp only [family, Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat] at hj ⊢
+    omega
+  · refine ⟨0, le_rfl, fun _ => 0, fun _ => le_rfl, tendsto_const_nhds, ?_⟩
+    intro n values hv
+    simp only [zero_mul, add_zero, one_mul, mul_zero]
+    change windowVariation 0 (n + 4 - 1) ((family m).advance n values) ≤
+      windowVariation (-1) (n + 5 - 1) values
+    unfold windowVariation
+    simp only [family_advance]
+    have he (k : ℕ) :
+        ‖values ((0 : ℤ) + k + 1 - 1) - values (0 + k - 1)‖ =
+        ‖values ((-1 : ℤ) + k + 1) - values (-1 + k)‖ := by
+      congr 2 <;> congr 1 <;> ring
+    simp_rw [he]
+    exact Finset.sum_le_sum_of_subset_of_nonneg
+      (Finset.range_mono (by omega)) (fun _ _ _ => norm_nonneg _)
+
+end CFL1QualityFamilyWitness

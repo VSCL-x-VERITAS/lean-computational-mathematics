@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "purpose": "Refresh accepted row context without dropping separately bound source context.",
+  "validator": {
+    "source": {
+      "path": "validate-closed-row-audits-v6.py",
+      "sha256": "95fbb838b7c620228406574f7f9470ba4ca70474396405159ebdf73c7f4ddbe1"
+    },
+    "output": {
+      "path": "validate-closed-row-audits-rebind-v2.py",
+      "sha256": "43ec7d65651ad45a1b62853228538c1fe09f49841a7fc10db97906a845d4de87"
+    },
+    "exact_replacements": [
+      {
+        "before": "    args = parser.parse_args()\n",
+        "after": "    parser.add_argument('--gate-input', type=Path)\n    parser.add_argument('--gate-input-sha256')\n    args = parser.parse_args()\n"
+      },
+      {
+        "before": "    gate = read(gate_path)\n",
+        "after": "    require((args.gate_input is None) == (args.gate_input_sha256 is None),\n            'proposal path and exact hash must be supplied together')\n    proposal = None\n    if args.gate_input is not None:\n        require(args.validate, 'proposal validation requires --validate')\n        selected_gate = args.gate_input.resolve()\n        require(selected_gate.is_relative_to(root.resolve()) and selected_gate != gate_path.resolve(),\n                'proposal must be separate repository evidence')\n        require(sha(selected_gate) == args.gate_input_sha256, 'proposal hash mismatch')\n        proposal = {'path': selected_gate.relative_to(root).as_posix(), 'sha256': sha(selected_gate)}\n    else:\n        selected_gate = gate_path\n    gate = read(selected_gate)\n"
+      },
+      {
+        "before": "    print(json.dumps({'mode': 'released-complete-validation' if args.validate else 'inventory-only-not-validation',\n                      'closed_rows': len(rows), 'records': inventory}, indent=2))\n",
+        "after": "    if proposal is not None:\n        require(sha(selected_gate) == proposal['sha256'], 'proposal changed during validation')\n    result = {'mode': 'released-complete-validation' if args.validate else 'inventory-only-not-validation',\n              'closed_rows': len(rows), 'records': inventory}\n    if proposal is not None:\n        result['validated_gate_input'] = proposal\n        result['current_bindings'] = context['bindings']\n    print(json.dumps(result, indent=2))\n"
+      }
+    ]
+  },
+  "batch": {
+    "source": {
+      "path": "rebind-accepted-row-batch.py",
+      "sha256": "16f782717887402bfe03b5f0319bf25e62adcb5c5ddf672d1ebc9b92ce1eb520"
+    },
+    "output": {
+      "path": "rebind-accepted-row-batch-v2.py",
+      "sha256": "6776b4990d9b9bd189d366559623f1b2451aff8c0f1d54fdddc0d4ad5ecb8c41"
+    },
+    "exact_replacements": [
+      {
+        "before": "'qualified_row_support_v2.py': 'c72831c1518610fe7c67bba22322b7418ced275a731bf3b474d9ed6ae8fe64da'",
+        "after": "'qualified_row_support_v3.py': '75bca786c37ea46940642b7db271d9501d3569c769e2081756da2e4a74905128'"
+      },
+      {
+        "before": "'validate-closed-row-audits-rebind.py': '0c13b89e3b2597d8262ca2da54257b66b4840478ad15e541cd79e2235231c74b'",
+        "after": "'validate-closed-row-audits-rebind-v2.py': '43ec7d65651ad45a1b62853228538c1fe09f49841a7fc10db97906a845d4de87'"
+      },
+      {
+        "before": "'qualified-refinement-v2-validator-dependencies.json': 'bbf246b042b947bd77b43190a4d0a95810b24c319c431cfdbc5f5b7e3597683f'",
+        "after": "'source-context-v3-validator-dependencies.json': 'd6e5b63836455eec9edd42fc210ede4b84972b85ad96fc8d54d17672582ce33f'"
+      },
+      {
+        "before": "q = load('batch_qualified_support', 'qualified_row_support_v2.py')",
+        "after": "q = load('batch_qualified_support_v3', 'qualified_row_support_v3.py')"
+      },
+      {
+        "before": "deps = parse(reader.read(H / 'qualified-refinement-v2-validator-dependencies.json'))",
+        "after": "deps = parse(reader.read(H / 'source-context-v3-validator-dependencies.json'))"
+      },
+      {
+        "before": "str(H/'validate-closed-row-audits-rebind.py'), '--validate'",
+        "after": "str(H/'validate-closed-row-audits-rebind-v2.py'), '--validate'"
+      },
+      {
+        "before": "                require(record[key] == row[key], 'Qualified validation binding mismatch: ' + key)\n",
+        "after": "                require(record[key] == row[key], 'Qualified validation binding mismatch: ' + key)\n            for key in q.SOURCE_CONTEXT_KEYS:\n                require((key in record) == (key in row), 'Source-context validation presence mismatch: ' + key)\n                if key in row:\n                    require(record[key] == row[key], 'Source-context validation binding mismatch: ' + key)\n"
+      }
+    ]
+  },
+  "prior_validator_derivation": {
+    "path": "rebind-validator-derivation.json",
+    "sha256": "0d3393291fb6ebbb8c71cd0915431ca31660c6bd68c52c44e99ee15ea888f51c"
+  },
+  "runtime_invoked": false,
+  "gate_mutated": false,
+  "new_source_semantics": false
+}

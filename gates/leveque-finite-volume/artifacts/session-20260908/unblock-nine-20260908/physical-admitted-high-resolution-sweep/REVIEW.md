@@ -1,0 +1,11 @@
+# Admitted physical coordinate source successor
+
+The source-facing theorem now explicitly requires and concludes `ValidSubsteps`: every selected stage has positive duration within the family horizon, and the actual intermediate array is admitted by that stage's supplied method and boundary values. The total algebraic sweep and the core high-resolution quality predicate remain unchanged. Stability is still a separate premise of the conditional error analyses.
+
+The exact frozen mathematical prefix is taken from `physical-high-resolution-sweep-draft/native-03/Candidate.lean`. Only that predecessor's final source wrapper and trailing checks are removed, by a checked exact suffix operation. The new ValidSubsteps definition, admitted specification and source wrapper are appended. Existing frozen inputs are not changed. The public source theorem name remains the same for the eventual canonical replacement.
+
+The recorded Q10 interpretation describes supplied physical cell volumes, shared normal face fluxes and successive conservative coordinate-line updates. Accordingly the generic directional reference problem here is the supplied measured balance system at all refinement levels. A fixed tensor flux contracted with supplied normals does not itself prove equivalence to an independently defined continuum PDE. No such equivalence is claimed, and no chart/Jacobian or arbitrary reference eligibility predicate is added. Actual CartesianIdentification, rectangle_balance_lift and the separately checked nonconstant Cartesian references provide the required concrete realization evidence.
+
+The scope reviewer identified the missing admission condition and distinguished the geometric limitation from a defect under Q10. This design review is not a source-faithfulness verdict. Native compilation, the complete zero-flux quality inhabitant and the joint primary application are separate evidence stages; gate closure still requires a fresh independent source audit.
+
+The freezer requires actual child and parent exit zero, unchanged input pins, exact fragment snapshots, three new axiom reports and 61 total reports, with no errors, warnings or sorryAx. A source acceptance is never inferred from those checks.

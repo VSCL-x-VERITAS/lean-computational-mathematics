@@ -1,0 +1,3 @@
+Root adopts this exact task-bound copy after reviewing REVIEW.md and the actual 23-check receipt. The new guard is byte-for-byte the previously reviewed guard with only the exact task ID literal changed. The staged collector is byte-identical to the previously reviewed helper. The 1,048,576-byte cap, source/blind separation, actual CLI input comparison, genuine collection and adjudication handling, and complete-validation requirements remain intact.
+
+Measure the newly prepared actual role inputs before launching any role. An oversized input requires a separately reviewed lossless transport; neither truncation nor a fabricated role receipt is allowed. Successful process completion supplies no semantic acceptance by itself.

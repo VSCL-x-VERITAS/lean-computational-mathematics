@@ -1,0 +1,106 @@
+--- prepare-successor-audit.py (unchanged)
++++ prepare-successor-audit-with-companions.py
+@@ -10,7 +10,65 @@
+  p.parent.mkdir(parents=True,exist_ok=True)
+  with p.open('xb') as f:f.write(data)
+ def writej(p,data):create(p,(json.dumps(data,indent=2,ensure_ascii=False)+'\n').encode())
++def load_additional_supplement(root, extension):
++ """Read exact native spans and an explicit pinned file allowlist; no judgments."""
++ assert isinstance(extension,dict) and set(extension)=={'packet','environment_config'}
++ def unique(pairs):
++  result={}
++  for key,value in pairs:
++   assert key not in result,('duplicate JSON key',key)
++   result[key]=value
++  return result
++ def load_ref(reference):
++  assert isinstance(reference,dict) and set(reference)=={'path','sha256'}
++  rel=reference['path'];digest=reference['sha256']
++  assert isinstance(rel,str) and rel and '\\' not in rel and ':' not in rel
++  assert all(part not in ('','.','..') for part in rel.split('/'))
++  assert not Path(rel).is_absolute()
++  assert isinstance(digest,str) and len(digest)==64 and all(c in '0123456789abcdef' for c in digest)
++  path=root/rel
++  assert path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(root.resolve())
++  data=path.read_bytes();assert hashlib.sha256(data).hexdigest()==digest,(rel,'hash changed')
++  return data
++ config=json.loads(load_ref(extension['environment_config']),object_pairs_hook=unique)
++ assert set(config)=={'format','environment_files'} and config['format']=='pinned-audit-environment-extension-1'
++ assert isinstance(config['environment_files'],list) and config['environment_files']
++ pins={}
++ for reference in config['environment_files']:
++  load_ref(reference)
++  assert reference['path'] not in pins,('duplicate environment path',reference['path'])
++  pins[reference['path']]=reference['sha256']
++ raw=load_ref(extension['packet']);packet=json.loads(raw,object_pairs_hook=unique)
++ assert set(packet)=={'format','scope','runtime','native_output_spans','probe_commands','omissions'}
++ assert packet['format']=='proof-free-lean-environment-evidence-1'
++ assert isinstance(packet['scope'],str) and isinstance(packet['runtime'],dict)
++ assert isinstance(packet['probe_commands'],list) and isinstance(packet['omissions'],list)
++ assert isinstance(packet['native_output_spans'],list) and packet['native_output_spans']
++ for span in packet['native_output_spans']:
++  needed={'source_path','source_sha256','start_byte','end_byte_exclusive','span_sha256','exact_text'}
++  assert isinstance(span,dict) and needed <= set(span)
++  assert pins.get(span['source_path'])==span['source_sha256'],('span source absent from pinned environment',span['source_path'])
++  data=load_ref({'path':span['source_path'],'sha256':span['source_sha256']})
++  start=span['start_byte'];end=span['end_byte_exclusive']
++  assert type(start) is int and type(end) is int and 0<=start<end<=len(data)
++  exact=data[start:end]
++  assert isinstance(span['exact_text'],str) and exact==span['exact_text'].encode('utf-8')
++  assert hashlib.sha256(exact).hexdigest()==span['span_sha256']
++  if 'first_line' in span:assert span['first_line']==data[:start].count(b'\n')+1
++  if 'last_line' in span:assert span['last_line']==data[:end].count(b'\n')
++ return packet,raw,[extension['packet'],extension['environment_config'],*config['environment_files']]
++
++def merge_additional_supplement(base_bytes, base_spans, extra_packet, extra_bytes, extension):
++ if base_bytes is None:return extra_bytes
++ base=json.loads(base_bytes);merged=json.loads(base_bytes)
++ merged['native_output_spans']=[*base_spans,*extra_packet['native_output_spans']]
++ merged['additional_environment_packets']=[*base.get('additional_environment_packets',[]),
++  {'packet':extension['packet'],'environment_config':extension['environment_config'],
++   'metadata':{key:value for key,value in extra_packet.items() if key!='native_output_spans'}}]
++ return (json.dumps(merged,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
++
+ spec=json.loads(Path(sys.argv[1]).read_bytes())
++additional_data=load_additional_supplement(R,spec['additional_supplement']) if spec.get('additional_supplement') else None
+ taskid=spec['task_id'];prior=S/'audits'/spec['prior_task'];T=S/'audits'/taskid
+ assert not T.exists(),T
+ oldtask=json.loads((prior/'audit-task.json').read_bytes());task=json.loads(json.dumps(oldtask))
+@@ -37,6 +95,8 @@
+ envfiles=list(cfg['lean']['environment_files'])
+ supp=prior/'dependency-environment-packet.json'
+ if spec.get('supplement_task'):supp=S/'audits'/spec['supplement_task']/'dependency-environment-packet.json'
++supplement_bytes=None
++spans=[]
+ if supp.is_file():
+  packet=json.loads(supp.read_bytes())
+  spans=packet.get('native_output_spans',packet.get('declaration_output_spans',packet.get('exact_native_output_spans')))
+@@ -48,7 +108,7 @@
+   exact=raw[span['start_byte']:span['end_byte_exclusive']]
+   assert exact==span['exact_text'].encode('utf-8') and hashlib.sha256(exact).hexdigest()==span['span_sha256']
+  # Existing complete packet is copied without semantic rewriting or inherited judgments.
+- create(T/'dependency-environment-packet.json',supp.read_bytes())
++ supplement_bytes=supp.read_bytes()
+  envfiles.append((T/'dependency-environment-packet.json').relative_to(R).as_posix())
+  cfg_extra=spec.get('supplement_config')
+  if cfg_extra:
+@@ -57,12 +117,18 @@
+    if not any(x in rel for x in ('real-measure-dependency/','real-measure-root-verification.json','.lake/packages/mathlib/')):continue
+    assert (R/rel).is_file(),rel
+    envfiles.append(rel)
++if additional_data is not None:
++ extra_packet,extra_bytes,extra_pins=additional_data
++ supplement_bytes=merge_additional_supplement(supplement_bytes,spans,extra_packet,extra_bytes,spec['additional_supplement'])
++ envfiles.extend(reference['path'] for reference in extra_pins)
++ envfiles.append((T/'dependency-environment-packet.json').relative_to(R).as_posix())
++if supplement_bytes is not None:create(T/'dependency-environment-packet.json',supplement_bytes)
+ cfg['task_metadata_glob']=(T/'audit-task.json').relative_to(R).as_posix()
+ envfiles += [task['target']['path'],'.lake/build/lib/lean/'+task['target']['path'].removesuffix('.lean')+'.olean',receipt.relative_to(R).as_posix(),(T/'user-interpretation-packet.json').relative_to(R).as_posix()]
+ cfg['lean']['environment_files']=list(dict.fromkeys(envfiles))
+ for rel in cfg['lean']['environment_files']:assert (R/rel).is_file(),rel
+ config=D/(taskid+'.config.json');writej(config,cfg)
+-writej(T/'preparation-lineage.json',{'prior_task':spec['prior_task'],'prior_manifest_sha256':sha(prior/'faithfulness/manifest.json'),'prior_config_sha256':sha(cfgpath),'environment_byte_checks':verified,'target_sha256':sha(R/task['target']['path']),'selected_interpretation_sha256':sha(T/'user-interpretation-packet.json'),'prior_decisions_reused':False,'spec_sha256':sha(Path(sys.argv[1]))})
++writej(T/'preparation-lineage.json',{'prior_task':spec['prior_task'],'prior_manifest_sha256':sha(prior/'faithfulness/manifest.json'),'prior_config_sha256':sha(cfgpath),'environment_byte_checks':verified,'target_sha256':sha(R/task['target']['path']),'selected_interpretation_sha256':sha(T/'user-interpretation-packet.json'),'prior_decisions_reused':False,'additional_supplement':spec.get('additional_supplement'),'spec_sha256':sha(Path(sys.argv[1]))})
+ wrapper=str(W/'workflow-v5.0.1-local/run_workflow_posix.py')
+ env=os.environ.copy();env['FAITHFULNESS_AUDIT_CONFIG']='/c/'+config.as_posix()[3:]
+ def released(label,script,args,cwd):

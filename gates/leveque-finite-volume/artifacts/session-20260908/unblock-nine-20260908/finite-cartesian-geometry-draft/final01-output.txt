@@ -1,0 +1,273 @@
+NumStability.FiniteDirectionalRepair.PhysicalData.{u_1, u_2, u_3, u_4, u_5} (D : Type u_1) (Cell : Type u_2)
+  (Face : Type u_3) (Point : Type u_4) (FacePoint : Type u_5) [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] (m : ℕ) : Type (max (max (max (max u_1 u_2) u_3) u_4) u_5)
+'NumStability.FiniteDirectionalRepair.PhysicalData' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.PhysicalData.ReferenceOn.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m) (d : D)
+  (q : Point → ℝ → Fin m → ℝ) (s t : ℝ) : Prop
+'NumStability.FiniteDirectionalRepair.PhysicalData.ReferenceOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) (cell : Cell) :
+  data.cellVolume cell • NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    data.cellVolume cell • current cell -
+      dt • (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteDirectionalRepair.advance_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.finite_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} [Fintype Cell]
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) :
+  ∑ cell, data.cellVolume cell • NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    ∑ cell, data.cellVolume cell • current cell -
+      dt • ∑ cell, (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteDirectionalRepair.finite_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.sweep_cons.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (stages : List (D × ℝ))
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteDirectionalRepair.sweep data rule ((d, dt) :: stages) current =
+    NumStability.FiniteDirectionalRepair.sweep data rule stages
+      (NumStability.FiniteDirectionalRepair.advance data rule d dt current)
+'NumStability.FiniteDirectionalRepair.sweep_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.sweep_split.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (before after : List (D × ℝ)) (d : D) (dt : ℝ)
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteDirectionalRepair.sweep data rule (before ++ (d, dt) :: after) current =
+    NumStability.FiniteDirectionalRepair.sweep data rule after
+      (NumStability.FiniteDirectionalRepair.advance data rule d dt
+        (NumStability.FiniteDirectionalRepair.sweep data rule before current))
+'NumStability.FiniteDirectionalRepair.sweep_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.LineLocal.{u_1, u_2, u_3} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {m : ℕ} [DecidableEq Cell] (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) :
+  Prop
+'NumStability.FiniteDirectionalRepair.LineLocal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_local.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} [DecidableEq Cell]
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ)
+  (hlocal : NumStability.FiniteDirectionalRepair.LineLocal stencil rule) (d : D) (dt : ℝ)
+  (current other : Cell → Fin m → ℝ) (cell : Cell)
+  (hagree :
+    ∀ j ∈ insert cell (stencil d (data.leftFace d cell) ∪ stencil d (data.rightFace d cell)), current j = other j) :
+  NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    NumStability.FiniteDirectionalRepair.advance data rule d dt other cell
+'NumStability.FiniteDirectionalRepair.advance_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_error_le.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell)
+  (oldBound leftBound rightBound : ℝ) (hold : ‖current cell - data.cellMean q cell s‖ ≤ oldBound)
+  (hleft :
+    ‖rule d (t - s) current (data.leftFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.leftFace d cell)) s t‖ ≤
+      leftBound)
+  (hright :
+    ‖rule d (t - s) current (data.rightFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.rightFace d cell)) s t‖ ≤
+      rightBound) :
+  ‖NumStability.FiniteDirectionalRepair.advance data rule d (t - s) current cell - data.cellMean q cell t‖ ≤
+    oldBound + (t - s) / data.cellVolume cell * (leftBound + rightBound)
+'NumStability.FiniteDirectionalRepair.advance_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.axis_right_eq_next_left (axis : NumStability.OneDimensionalFiniteVolumeGrid) (j : ℤ) :
+  axis.cellRight j = axis.cellLeft (j + 1)
+'NumStability.FiniteCartesianDraft.axis_right_eq_next_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.axis_left_strictMono (axis : NumStability.OneDimensionalFiniteVolumeGrid) :
+  StrictMono axis.cellLeft
+'NumStability.FiniteCartesianDraft.axis_left_strictMono' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.axis_index_unique (axis : NumStability.OneDimensionalFiniteVolumeGrid) {a b : ℤ}
+  {x : ℝ} (ha : x ∈ Set.Ico (axis.cellLeft a) (axis.cellRight a))
+  (hb : x ∈ Set.Ico (axis.cellLeft b) (axis.cellRight b)) : a = b
+'NumStability.FiniteCartesianDraft.axis_index_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.cellBox_disjoint.{u_1} {D : Type u_1}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) {a b : D → ℤ} (hab : a ≠ b) :
+  Disjoint (NumStability.CartesianGrid.cellBox axes a) (NumStability.CartesianGrid.cellBox axes b)
+'NumStability.FiniteCartesianDraft.cellBox_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.cellBox_measurable.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ) :
+  MeasurableSet (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesianDraft.cellBox_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.tangentialFaceBox_measurable.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  MeasurableSet (NumStability.CartesianGrid.tangentialFaceBox axes d face)
+'NumStability.FiniteCartesianDraft.tangentialFaceBox_measurable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianDraft.cells.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty) :
+  NumStability.FiniteVolumeCellPartition (↥active) (D → ℝ)
+'NumStability.FiniteCartesianDraft.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.facePoint_measurable.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  Measurable (NumStability.CartesianGrid.facePoint axes d face)
+'NumStability.FiniteCartesianDraft.facePoint_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.faceMeasure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) : Measure (D → ℝ)
+'NumStability.FiniteCartesianDraft.faceMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.left_face_in_closure.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ)
+  (hp : point ∈ NumStability.CartesianGrid.tangentialFaceBox axes d cell) :
+  NumStability.CartesianGrid.facePoint axes d cell point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesianDraft.left_face_in_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.right_face_in_closure.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ)
+  (hp : point ∈ NumStability.CartesianGrid.tangentialFaceBox axes d (Function.update cell d (cell d + 1))) :
+  NumStability.CartesianGrid.facePoint axes d (Function.update cell d (cell d + 1)) point ∈
+    closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesianDraft.right_face_in_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.left_face_ae_incidence.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂NumStability.FiniteCartesianDraft.faceMeasure axes d cell,
+    point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesianDraft.left_face_ae_incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.right_face_ae_incidence.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂NumStability.FiniteCartesianDraft.faceMeasure axes d (Function.update cell d (cell d + 1)),
+    point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesianDraft.right_face_ae_incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) :
+  NumStability.FiniteDirectionalRepair.PhysicalData D (↥active) (D → ℤ) (D → ℝ) (D → ℝ) m
+'NumStability.FiniteCartesianDraft.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_cell_measure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (cell : ↥active) :
+  (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).measure.restrict
+      ((NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).cells.cellRegion cell) =
+    volume.restrict (NumStability.CartesianGrid.cellBox axes ↑cell)
+'NumStability.FiniteCartesianDraft.data_cell_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_cellVolume.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (cell : ↥active) :
+  (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).cellVolume cell =
+    NumStability.CartesianGrid.cellVolume axes ↑cell
+'NumStability.FiniteCartesianDraft.data_cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_face_measure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  Measure.map ((NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).facePoint d face)
+      ((NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).faceMeasure d face) =
+    Measure.map (NumStability.CartesianGrid.facePoint axes d face)
+      (volume.restrict (NumStability.CartesianGrid.tangentialFaceBox axes d face))
+'NumStability.FiniteCartesianDraft.data_face_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_shared_face.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (left right : ↥active)
+  (hadjacent : ↑right = Function.update (↑left) d (↑left d + 1)) :
+  (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).rightFace d left =
+    (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).leftFace d right
+'NumStability.FiniteCartesianDraft.data_shared_face' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_left_position.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (cell : ↥active) :
+  (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).leftFace d cell = ↑cell
+'NumStability.FiniteCartesianDraft.data_left_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_right_position.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (cell : ↥active) :
+  (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).rightFace d cell =
+    Function.update (↑cell) d (↑cell d + 1)
+'NumStability.FiniteCartesianDraft.data_right_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_face_measurable.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  AEMeasurable ((NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).facePoint d face)
+    ((NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).faceMeasure d face)
+'NumStability.FiniteCartesianDraft.data_face_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.data_normal_flux.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂(NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).faceMeasure d face,
+    ∀ (value : Fin m → ℝ),
+      (NumStability.FiniteCartesianDraft.data axes active hne states flux hflux).normalFlux d face point value =
+        flux d value
+'NumStability.FiniteCartesianDraft.data_normal_flux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.faceMeasure_area.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  ((NumStability.FiniteCartesianDraft.faceMeasure axes d face) Set.univ).toReal =
+    NumStability.CartesianGrid.faceArea axes d face
+'NumStability.FiniteCartesianDraft.faceMeasure_area' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.axes : Fin 2 → NumStability.OneDimensionalFiniteVolumeGrid
+'NumStability.FiniteCartesianDraft.Example.axes' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.lower : Fin 2 → ℤ
+'NumStability.FiniteCartesianDraft.Example.lower' does not depend on any axioms
+NumStability.FiniteCartesianDraft.Example.upper : Fin 2 → ℤ
+'NumStability.FiniteCartesianDraft.Example.upper' depends on axioms: [propext]
+NumStability.FiniteCartesianDraft.Example.active : Finset (Fin 2 → ℤ)
+'NumStability.FiniteCartesianDraft.Example.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.lower_ne_upper :
+  NumStability.FiniteCartesianDraft.Example.lower ≠ NumStability.FiniteCartesianDraft.Example.upper
+'NumStability.FiniteCartesianDraft.Example.lower_ne_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.active_card : NumStability.FiniteCartesianDraft.Example.active.card = 2
+'NumStability.FiniteCartesianDraft.Example.active_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.active_nonempty : NumStability.FiniteCartesianDraft.Example.active.Nonempty
+'NumStability.FiniteCartesianDraft.Example.active_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.lowerCell : ↥NumStability.FiniteCartesianDraft.Example.active
+'NumStability.FiniteCartesianDraft.Example.lowerCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.upperCell : ↥NumStability.FiniteCartesianDraft.Example.active
+'NumStability.FiniteCartesianDraft.Example.upperCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.identity_hyperbolic :
+  ∀ (x : Fin 2), NumStability.IsHyperbolicFluxOn (fun state => state) Set.univ
+'NumStability.FiniteCartesianDraft.Example.identity_hyperbolic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianDraft.Example.physical :
+  NumStability.FiniteDirectionalRepair.PhysicalData (Fin 2) (↥NumStability.FiniteCartesianDraft.Example.active)
+    (Fin 2 → ℤ) (Fin 2 → ℝ) (Fin 2 → ℝ) 1
+'NumStability.FiniteCartesianDraft.Example.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.distinct_active_cells :
+  NumStability.FiniteCartesianDraft.Example.lowerCell ≠ NumStability.FiniteCartesianDraft.Example.upperCell
+'NumStability.FiniteCartesianDraft.Example.distinct_active_cells' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianDraft.Example.shared_internal_face :
+  NumStability.FiniteCartesianDraft.Example.physical.rightFace 0 NumStability.FiniteCartesianDraft.Example.lowerCell =
+    NumStability.FiniteCartesianDraft.Example.physical.leftFace 0 NumStability.FiniteCartesianDraft.Example.upperCell
+'NumStability.FiniteCartesianDraft.Example.shared_internal_face' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianDraft.Example.physical_cellVolume
+  (cell : ↥NumStability.FiniteCartesianDraft.Example.active) :
+  NumStability.FiniteCartesianDraft.Example.physical.cellVolume cell = 1
+'NumStability.FiniteCartesianDraft.Example.physical_cellVolume' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianDraft.Example.physical_faceArea (d : Fin 2) (face : Fin 2 → ℤ) :
+  ((NumStability.FiniteCartesianDraft.Example.physical.faceMeasure d face) Set.univ).toReal = 1
+'NumStability.FiniteCartesianDraft.Example.physical_faceArea' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianDraft.Example.concrete_geometry :
+  NumStability.FiniteCartesianDraft.Example.active.card = 2 ∧
+    NumStability.FiniteCartesianDraft.Example.lowerCell ≠ NumStability.FiniteCartesianDraft.Example.upperCell ∧
+      NumStability.FiniteCartesianDraft.Example.physical.rightFace 0
+            NumStability.FiniteCartesianDraft.Example.lowerCell =
+          NumStability.FiniteCartesianDraft.Example.physical.leftFace 0
+            NumStability.FiniteCartesianDraft.Example.upperCell ∧
+        (∀ (cell : ↥NumStability.FiniteCartesianDraft.Example.active),
+            NumStability.FiniteCartesianDraft.Example.physical.cellVolume cell = 1) ∧
+          ∀ (d : Fin 2) (face : Fin 2 → ℤ),
+            ((NumStability.FiniteCartesianDraft.Example.physical.faceMeasure d face) Set.univ).toReal = 1
+'NumStability.FiniteCartesianDraft.Example.concrete_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]

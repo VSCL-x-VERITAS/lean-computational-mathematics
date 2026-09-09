@@ -1,0 +1,32 @@
+Exact direct document
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Native α → β. "quoted" \ slash
+Unique last line.

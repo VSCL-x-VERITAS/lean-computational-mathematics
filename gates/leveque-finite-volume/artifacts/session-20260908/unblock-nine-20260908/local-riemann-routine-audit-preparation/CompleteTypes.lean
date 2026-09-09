@@ -1,0 +1,14 @@
+import ComputationalMathematics.Source.LeVeque.Chapter01.RiemannLocalRoutineInterface
+
+set_option pp.maxSteps 1000000
+set_option pp.universes false
+set_option pp.proofs false
+
+#print NumStability.LocalRiemannInformation.Routine
+#print NumStability.LocalRiemannInformation.Routine.flux
+#print NumStability.LocalRiemannInformation.Routine.Consistent
+#print NumStability.LocalRiemannInformation.biasedRoutine
+#check @NumStability.LocalRiemannInformation.routine_local_interface_contract
+#check @NumStability.leveque01_localRiemannRoutineInterface_sourceContract
+#print axioms NumStability.LocalRiemannInformation.routine_local_interface_contract
+#print axioms NumStability.leveque01_localRiemannRoutineInterface_sourceContract

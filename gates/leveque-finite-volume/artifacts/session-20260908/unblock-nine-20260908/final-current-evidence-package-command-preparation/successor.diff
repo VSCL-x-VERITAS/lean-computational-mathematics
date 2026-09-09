@@ -1,0 +1,110 @@
+--- prepare-final-current-evidence-inputs-dim-roots-v2.py
++++ prepare-final-current-evidence-inputs-package-command-v1.py
+@@ -1,4 +1,4 @@
+-"""Assemble actual all-41 evidence with the adopted DIM module-root v2 suite.
++"""Assemble actual all-41 evidence with the installed package-command v1 suite.
+ 
+ Additive successor; no gate writes or checker/audit execution. The output retains
+ the exact batch/global consumer schema. A separate assembly receipt records the
+@@ -20,23 +20,8 @@
+ R = S.parents[3]
+ H = D / 'gate-helpers'
+ PREFIX = D.relative_to(R).as_posix() + '/'
+-PINS = {
+-    'prepare-final-current-evidence-inputs.py': '584f7ff9a7ad2ece92d0ce0ee4bf5cb12223d198c9dbd5e75fc8bc1303b1004c',
+-    'dim-module-root-preparation/manifest.json': '679dfb1a8444e179e29a9e3f59376cf22c73682685045fd4dbcb90bdbc08e905',
+-    'dim-module-root-preparation/ROOT-ADOPTION.md': '9f6fb7745c2aee1ad071659df53e42a8429075e5d9877255f43674508ef81381',
+-    'gate-helpers/final-global-evidence-input-template.json': '39e18c696bd04be35d870381327fc92c387ca33046a570066b54b183f35824ee',
+-    'physical-syntax-fingerprints/current-expression-fingerprints.json': '26817e845567840e94977e03a12fd89bb7b8ea3ba0ddc88d20c401e05036ac01',
+-    'physical-syntax-fingerprints/final-receipt.json': '2b0b08ccf1fe57558f21263a28550ee5627c61c515ef96d805e7a74c59abaf3d',
+-}
+-HELPERS = {
+-    'prepare': 'prepare-successor-audit-with-dim-module-roots-v2.py',
+-    'support': 'gate-helpers/qualified_row_support_dim_roots_v2.py',
+-    'qualified': 'gate-helpers/bind-qualified-row-dim-roots-v2.py',
+-    'closed': 'gate-helpers/validate-closed-row-audits-dim-roots-v2.py',
+-    'rebind_validator': 'gate-helpers/validate-closed-row-audits-rebind-dim-roots-v2.py',
+-    'batch': 'gate-helpers/rebind-accepted-row-batch-dim-roots-v2.py',
+-    'global': 'gate-helpers/bind-final-global-evidence-dim-roots-v2.py',
+-}
++PINS = {'prepare-final-current-evidence-inputs.py': '584f7ff9a7ad2ece92d0ce0ee4bf5cb12223d198c9dbd5e75fc8bc1303b1004c', 'dim-module-root-preparation/manifest.json': '679dfb1a8444e179e29a9e3f59376cf22c73682685045fd4dbcb90bdbc08e905', 'dim-module-root-preparation/ROOT-ADOPTION.md': '9f6fb7745c2aee1ad071659df53e42a8429075e5d9877255f43674508ef81381', 'gate-helpers/final-global-evidence-input-template.json': '39e18c696bd04be35d870381327fc92c387ca33046a570066b54b183f35824ee', 'physical-syntax-fingerprints/current-expression-fingerprints.json': '26817e845567840e94977e03a12fd89bb7b8ea3ba0ddc88d20c401e05036ac01', 'physical-syntax-fingerprints/final-receipt.json': '2b0b08ccf1fe57558f21263a28550ee5627c61c515ef96d805e7a74c59abaf3d', 'prepare-final-current-evidence-inputs-dim-roots-v2.py': 'd88f07397354f2d5d8f20ac2578d4124821a8be66ef7e76df8d9b5aa86cc312d', 'physical-dim-package-runtime-preparation/suite/actual-render-01/manifest.json': '8906052ebcd027fc8f473825f780e98f7647e22b4c68681b439e8014b913e5cb', 'physical-dim-package-runtime-preparation/ROOT-ADOPTION.md': '0791441ee7dee4b6ed29e745e38ed06f17d4300f1f7c0a0a08ca45ace5155ac7', 'physical-dim-package-runtime-preparation/root-adoption-receipt.json': 'd2e2132524dec5bf69088b23ff94566863123d549b02b9fab008f8594f22627b', 'physical-dim-package-runtime-preparation/installation-01/receipt.json': '1869c7fcdb97b75c31244ffaca9b8d3aa1ede30b380bfa4aab2d49dc341e85be'}
++HELPERS = {'prepare': 'prepare-successor-audit-with-package-command-v1.py', 'support': 'gate-helpers/qualified_row_support_package_command_v1.py', 'qualified': 'gate-helpers/bind-qualified-row-package-command-v1.py', 'closed': 'gate-helpers/validate-closed-row-audits-package-command-v1.py', 'rebind_validator': 'gate-helpers/validate-closed-row-audits-rebind-package-command-v1.py', 'batch': 'gate-helpers/rebind-accepted-row-batch-package-command-v1.py', 'global': 'gate-helpers/bind-final-global-evidence-package-command-v1.py'}
+ GLOBAL_EVIDENCE = {'source-inventory', 'layout', 'tiers', 'compatibility', 'hygiene',
+                    'audits', 'declarations', 'focused-build', 'full-build'}
+ 
+@@ -112,37 +97,55 @@
+     pins = {name: {'path': PREFIX + name, 'sha256': digest} for name, digest in PINS.items()}
+     for item in pins.values():
+         reader.bound(item)
+-    manifest = read(reader.bound(pins['dim-module-root-preparation/manifest.json']))
+-    require(manifest['recommended_revision'] == 'v2', 'Wrong adopted helper revision')
+-    by_path = {item['path']: item for item in manifest['helpers']}
+-    require(len(by_path) == len(manifest['helpers']) == len(HELPERS)
+-            and set(by_path) == {PREFIX + name for name in HELPERS.values()}, 'Mixed helper suite')
++    base = 'physical-dim-package-runtime-preparation/'
++    manifest_ref = pins[base + 'suite/actual-render-01/manifest.json']
++    manifest = read(reader.bound(manifest_ref))
++    adoption = read(reader.bound(pins[base + 'root-adoption-receipt.json']))
++    installation = read(reader.bound(pins[base + 'installation-01/receipt.json']))
++    require(adoption['kind'] == 'root-exact-package-runtime-suite-adoption'
++            and adoption['review'] == pins[base + 'ROOT-ADOPTION.md']
++            and adoption['rendered_manifest'] == manifest_ref
++            and adoption['reconstructed_python_helpers'] == 7
++            and adoption['old_dependencies_retained'] is True, 'Wrong actual suite adoption')
++    require(manifest['format'] == 'prospective-package-command-helper-suite-1'
++            and installation['status'] == 'REVIEWED_NEW_HELPERS_INSTALLED_BYTE_EXACT_NO_OPERATIONAL_RUN'
++            and installation['manifest'] == manifest_ref, 'Wrong actual helper installation')
++    entries = manifest['entry_points']
++    by_path = {item['path']: item for item in entries.values()}
++    require(len(by_path) == len(entries) == 8
++            and {PREFIX + name for name in HELPERS.values()} < set(by_path), 'Mixed helper suite')
++    require(len(installation['installed']) == 8
++            and {item['path']: item for item in installation['installed']} == by_path,
++            'Installed helpers differ from reviewed render')
+     helpers = {key: by_path[PREFIX + name] for key, name in HELPERS.items()}
+-    for item in helpers.values():
++    for item in by_path.values():
+         reader.bound(item)
+-    dependencies = read(reader.bound(manifest['dependencies']))
++    dependency_ref = entries['dependencies']
++    require(dependency_ref['path'] == PREFIX + 'gate-helpers/source-context-package-command-v1-validator-dependencies.json',
++            'Mixed dependency manifest')
++    dependencies = read(reader.bound(dependency_ref))
+     require(dependencies['audit_validator'] == helpers['closed'], 'Dependency validator differs')
+-    for item in dependencies['validator_dependencies']:
++    for item in [*dependencies['validator_dependencies'], *dependencies['source_context_protocol_inputs']]:
+         reader.bound(item)
+     batch_pins = literal(reader.bound(helpers['batch']), 'PINNED')
+     for filename, digest in batch_pins.items():
+         reader.bound({'path': PREFIX + 'gate-helpers/' + filename, 'sha256': digest})
+     require(batch_pins[Path(HELPERS['support']).name] == helpers['support']['sha256']
+             and batch_pins[Path(HELPERS['rebind_validator']).name] == helpers['rebind_validator']['sha256']
+-            and batch_pins[Path(manifest['dependencies']['path']).name] == manifest['dependencies']['sha256'],
++            and batch_pins[Path(dependency_ref['path']).name] == dependency_ref['sha256'],
+             'Batch selected helper pins differ')
+     projection = reader.bound(helpers['global'])
+     validator = literal(projection, 'FINAL_VALIDATOR_PIN')
+     validator_dependencies = literal(projection, 'FINAL_VALIDATOR_DEPENDENCIES')
+     require(validator == helpers['closed'], 'Global selected validator differs')
+     actual = {(item['path'], item['sha256']) for item in validator_dependencies}
+-    require(len(actual) == len(validator_dependencies)
++    require(len(actual) == len(validator_dependencies) == 11
+             and {(item['path'], item['sha256']) for item in dependencies['validator_dependencies']} <= actual
+             and (helpers['support']['path'], helpers['support']['sha256']) in actual,
+             'Mixed global validator dependencies')
+     for item in validator_dependencies:
+         reader.bound(item)
+-    return {'helpers': helpers, 'pins': pins, 'dependencies': manifest['dependencies'],
++    return {'helpers': helpers, 'pins': pins, 'dependencies': dependency_ref,
+             'validator': validator, 'validator_dependencies': validator_dependencies,
+             'runtime_pins': {'path': PREFIX + 'gate-helpers/batch-rebind-runtime-pins.json',
+                              'sha256': batch_pins['batch-rebind-runtime-pins.json']}}
+@@ -212,7 +215,7 @@
+ 
+ 
+ def load_support(path):
+-    specification = importlib.util.spec_from_file_location('final_current_dim_roots_v2', path)
++    specification = importlib.util.spec_from_file_location('final_current_package_command_v1', path)
+     result = importlib.util.module_from_spec(specification)
+     specification.loader.exec_module(result)
+     return result

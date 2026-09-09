@@ -1,0 +1,64 @@
+--- validate-closed-row-audits-v3.py
++++ validate-closed-row-audits-v4.py
+@@ -3,6 +3,7 @@
+ Inventory mode is read-only preparation, not audit validation. Validation mode
+ runs the unchanged complete validator. Stronger support additionally requires
+ the exact pinned smooth-bridge or production applicability and native nonvacuity evidence.
++The additive nine-row branch checks explicit coordinator attribution, native evidence and exact interpretation bindings.
+ Neither mode writes a gate, judgment, or audit artifact.
+ """
+ from pathlib import Path
+@@ -14,13 +15,15 @@
+ import subprocess
+ import sys
+ 
++import qualified_row_support as qualified
++
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--validate', action='store_true')
+     parser.add_argument('--require-all-closed', action='store_true')
+     args = parser.parse_args()
+-    session = Path(__file__).resolve().parent
++    session = Path(__file__).resolve().parents[2]
+     root = session.parents[3]
+     spec = importlib.util.spec_from_file_location(
+         'stronger_evidence_checks', session / 'bind-audited-stronger-reused-row.py')
+@@ -43,7 +46,12 @@
+     consensus = importlib.util.module_from_spec(cspec)
+     require(cspec.loader is not None, 'Missing consensus evidence loader')
+     cspec.loader.exec_module(consensus)
+-    gate = read(root / 'gates/leveque-finite-volume/chapter-01.json')
++    gate_path = root / 'gates/leveque-finite-volume/chapter-01.json'
++    gate = read(gate_path)
++    qualified.validate_preserved_rows(gate)
++    _, selected_rows = qualified.choices()
++    checker = qualified.gate_checker() if args.validate else None
++    context = checker.current_context(gate_path, 1) if checker else None
+     closed_statuses = {'PROVED', 'REUSED', 'DISCREPANCY'}
+     rows = sorted([row for row in gate['rows'] if row['status'] in closed_statuses],
+                   key=lambda row: row['id'])
+@@ -91,7 +99,21 @@
+             'manifest_sha256': sha(output / 'manifest.json'),
+             'decision_sha256': sha(output / 'decision.json'),
+         }
+-        if classification == 'faithful-stronger' and row['id'] == 'LEV-CH01-VARIABLE-COEFFICIENT-NONCONSERVATION':
++        if row['id'] in selected_rows:
++            checked = qualified.validate_bound_row(row)
++            require(checked['config'] == config, 'qualified exact configuration mismatch')
++            if args.validate:
++                require(checked['request']['current_bindings'] == context['bindings'],
++                        'qualified request requires a current-fingerprint rebind')
++                require(not checker.row_artifact_defects(row, 1, context, gate_path.parent, set(), location=row['id']),
++                        'qualified row artifacts do not bind current context')
++            record['qualified_binding_request'] = row['qualified_binding_request']
++            record['coordinator_selected_interpretation'] = row['coordinator_selected_interpretation']
++            record['native_evidence'] = row['native_evidence']
++            record['native_axioms'] = checked['axioms']
++            if classification == 'faithful-stronger':
++                record['strengthening_evidence'] = row['strengthening_evidence']
++        elif classification == 'faithful-stronger' and row['id'] == 'LEV-CH01-VARIABLE-COEFFICIENT-NONCONSERVATION':
+             require(decision.get('adjudicated') is False
+                     and row.get('adjudication_required') is False
+                     and not row.get('adjudication_status') and not row.get('adjudication_audit'),

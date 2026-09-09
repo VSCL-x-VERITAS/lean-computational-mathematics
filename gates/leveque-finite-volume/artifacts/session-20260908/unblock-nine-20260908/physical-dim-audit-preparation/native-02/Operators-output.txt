@@ -1,0 +1,445 @@
+structure NumStability.FiniteCoordinate.LineCoordinates.{u_5, u_6, u_7, u_8} {m : ℕ} (D : Type u_5) (Cell : Type u_6)
+  (Face : Type u_7) (Line : Type u_8) : Type (max (max (max u_5 u_6) u_7) u_8)
+number of parameters: 5
+fields:
+  NumStability.FiniteCoordinate.LineCoordinates.cellLine : D → Cell → Line
+  NumStability.FiniteCoordinate.LineCoordinates.cellIndex : D → Cell → ℤ
+  NumStability.FiniteCoordinate.LineCoordinates.faceLine : D → Face → Line
+  NumStability.FiniteCoordinate.LineCoordinates.faceIndex : D → Face → ℤ
+  NumStability.FiniteCoordinate.LineCoordinates.lookup : D → Line → ℤ → Option Cell
+  NumStability.FiniteCoordinate.LineCoordinates.lookup_cell : ∀ (d : D) (cell : Cell),
+      self.lookup d (self.cellLine d cell) (self.cellIndex d cell) = Option.some cell
+  NumStability.FiniteCoordinate.LineCoordinates.lookup_sound : ∀ (d : D) (line : Line) (j : ℤ) (cell : Cell),
+      self.lookup d line j = Option.some cell → self.cellLine d cell = line ∧ self.cellIndex d cell = j
+  NumStability.FiniteCoordinate.LineCoordinates.ghost : D → Line → ℤ → Fin m → ℝ
+constructor:
+  NumStability.FiniteCoordinate.LineCoordinates.mk.{u_5, u_6, u_7, u_8} {m : ℕ} {D : Type u_5} {Cell : Type u_6}
+    {Face : Type u_7} {Line : Type u_8} (cellLine : D → Cell → Line) (cellIndex : D → Cell → ℤ)
+    (faceLine : D → Face → Line) (faceIndex : D → Face → ℤ) (lookup : D → Line → ℤ → Option Cell)
+    (lookup_cell : ∀ (d : D) (cell : Cell), lookup d (cellLine d cell) (cellIndex d cell) = Option.some cell)
+    (lookup_sound :
+      ∀ (d : D) (line : Line) (j : ℤ) (cell : Cell),
+        lookup d line j = Option.some cell → cellLine d cell = line ∧ cellIndex d cell = j)
+    (ghost : D → Line → ℤ → Fin m → ℝ) : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line
+'NumStability.FiniteCoordinate.LineCoordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.LineCoordinates.extract.{u_1, u_2, u_3, u_4} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Line : Type u_4} →
+        {m : ℕ} →
+          NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line →
+            D → Line → (Cell → Fin m → ℝ) → ℤ → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Line} {m} coord d line current j =>
+  match (motive := Option Cell → Fin m → ℝ) coord.lookup d line j with
+  | Option.some cell => current cell
+  | Option.none => coord.ghost d line j
+'NumStability.FiniteCoordinate.LineCoordinates.extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.LineCoordinates.withGhost.{u_1, u_2, u_3, u_4} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Line : Type u_4} →
+        {m : ℕ} →
+          NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line →
+            (D → Line → ℤ → Fin m → ℝ) → NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line :=
+fun {D} {Cell} {Face} {Line} {m} coord newGhost =>
+  { cellLine := coord.cellLine, cellIndex := coord.cellIndex, faceLine := coord.faceLine, faceIndex := coord.faceIndex,
+    lookup := coord.lookup, lookup_cell := ⋯, lookup_sound := ⋯, ghost := newGhost }
+'NumStability.FiniteCoordinate.LineCoordinates.withGhost' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.FiniteCoordinate.PhysicalLine.Incidence.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line) : Prop
+number of parameters: 12
+fields:
+  NumStability.FiniteCoordinate.PhysicalLine.Incidence.left_line : ∀ (d : D) (cell : Cell),
+      coord.faceLine d (data.leftFace d cell) = coord.cellLine d cell
+  NumStability.FiniteCoordinate.PhysicalLine.Incidence.right_line : ∀ (d : D) (cell : Cell),
+      coord.faceLine d (data.rightFace d cell) = coord.cellLine d cell
+  NumStability.FiniteCoordinate.PhysicalLine.Incidence.left_index : ∀ (d : D) (cell : Cell),
+      coord.faceIndex d (data.leftFace d cell) = coord.cellIndex d cell
+  NumStability.FiniteCoordinate.PhysicalLine.Incidence.right_index : ∀ (d : D) (cell : Cell),
+      coord.faceIndex d (data.rightFace d cell) = coord.cellIndex d cell + 1
+constructor:
+  NumStability.FiniteCoordinate.PhysicalLine.Incidence.mk.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+    {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+    [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+    {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+    (left_line : ∀ (d : D) (cell : Cell), coord.faceLine d (data.leftFace d cell) = coord.cellLine d cell)
+    (right_line : ∀ (d : D) (cell : Cell), coord.faceLine d (data.rightFace d cell) = coord.cellLine d cell)
+    (left_index : ∀ (d : D) (cell : Cell), coord.faceIndex d (data.leftFace d cell) = coord.cellIndex d cell)
+    (right_index : ∀ (d : D) (cell : Cell), coord.faceIndex d (data.rightFace d cell) = coord.cellIndex d cell + 1) :
+    NumStability.FiniteCoordinate.PhysicalLine.Incidence data coord
+'NumStability.FiniteCoordinate.PhysicalLine.Incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalLine.capacity.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                      NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line → D → Line → ℤ → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} data coord d line j =>
+  match coord.lookup d line j with
+  | Option.some cell => data.cellVolume cell
+  | Option.none => 1
+'NumStability.FiniteCoordinate.PhysicalLine.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalLine.faceRule.{u_1, u_2, u_3, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Line : Type u_6} →
+        {m : ℕ} →
+          NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line →
+            (D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) → D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Line} {m} coord numericalFlux d dt current face =>
+  numericalFlux d (coord.faceLine d face) dt (coord.extract d (coord.faceLine d face) current) (coord.faceIndex d face)
+'NumStability.FiniteCoordinate.PhysicalLine.faceRule' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalLine.lineAdvance.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                      NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line →
+                        (D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) →
+                          D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} data coord numericalFlux d line dt values j =>
+  NumStability.finiteVolumeCellAverageUpdate dt
+    (NumStability.FiniteCoordinate.PhysicalLine.capacity data coord d line j) (values j)
+    (numericalFlux d line dt values (j + 1) - numericalFlux d line dt values j)
+'NumStability.FiniteCoordinate.PhysicalLine.lineAdvance' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.CapacityCoordinate.Method.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line) : Type (max u_1 u_6)
+number of parameters: 12
+fields:
+  NumStability.CapacityCoordinate.Method.incidence : NumStability.FiniteCoordinate.PhysicalLine.Incidence data coord
+  NumStability.CapacityCoordinate.Method.numericalFlux : D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ
+  NumStability.CapacityCoordinate.Method.admitted : D → Line → ℝ → (ℤ → Fin m → ℝ) → Prop
+constructor:
+  NumStability.CapacityCoordinate.Method.mk.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+    {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+    [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+    {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+    (incidence : NumStability.FiniteCoordinate.PhysicalLine.Incidence data coord)
+    (numericalFlux : D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ)
+    (admitted : D → Line → ℝ → (ℤ → Fin m → ℝ) → Prop) : NumStability.CapacityCoordinate.Method data coord
+'NumStability.CapacityCoordinate.Method' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Method.rule.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        NumStability.CapacityCoordinate.Method data coord →
+                          D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method =>
+  NumStability.FiniteCoordinate.PhysicalLine.faceRule coord method.numericalFlux
+'NumStability.CapacityCoordinate.Method.rule' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Method.Admitted.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        NumStability.CapacityCoordinate.Method data coord → D → ℝ → (Cell → Fin m → ℝ) → Prop :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method d dt current =>
+  ∀ (cell : Cell), method.admitted d (coord.cellLine d cell) dt (coord.extract d (coord.cellLine d cell) current)
+'NumStability.CapacityCoordinate.Method.Admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Method.StableAt.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        NumStability.CapacityCoordinate.Method data coord → D → ℝ → ℝ → Prop :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method d dt A =>
+  ∀ (cell : Cell) (values other : ℤ → Fin m → ℝ),
+    method.admitted d (coord.cellLine d cell) dt values →
+      method.admitted d (coord.cellLine d cell) dt other →
+        ∀ (E : ℝ),
+          0 ≤ E →
+            (∀ (j : ℤ), ‖values j - other j‖ ≤ E) →
+              ‖NumStability.FiniteCoordinate.PhysicalLine.lineAdvance data coord method.numericalFlux d
+                      (coord.cellLine d cell) dt values (coord.cellIndex d cell) -
+                    NumStability.FiniteCoordinate.PhysicalLine.lineAdvance data coord method.numericalFlux d
+                      (coord.cellLine d cell) dt other (coord.cellIndex d cell)‖ ≤
+                A * E
+'NumStability.CapacityCoordinate.Method.StableAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Method.withGhost.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        NumStability.CapacityCoordinate.Method data coord →
+                          (newGhost : D → Line → ℤ → Fin m → ℝ) →
+                            NumStability.CapacityCoordinate.Method data (coord.withGhost newGhost) :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method newGhost =>
+  { incidence := ⋯, numericalFlux := method.numericalFlux, admitted := method.admitted }
+'NumStability.CapacityCoordinate.Method.withGhost' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Sweep.step.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : ℕ → NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        ((k : ℕ) → NumStability.CapacityCoordinate.Method data (coord k)) →
+                          (ℕ → D) → (ℕ → ℝ) → ℕ → (Cell → Fin m → ℝ) → Cell → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method direction duration n =>
+  NumStability.FiniteCoordinate.advance data (method n).rule (direction n) (duration n)
+'NumStability.CapacityCoordinate.Sweep.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CapacityCoordinate.Sweep.run.{u_1, u_2, u_3, u_4, u_5, u_6} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          {Line : Type u_6} →
+            [inst : MeasurableSpace Point] →
+              [inst_1 : TopologicalSpace Point] →
+                [inst_2 : MeasurableSpace FacePoint] →
+                  {m : ℕ} →
+                    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m} →
+                      {coord : ℕ → NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line} →
+                        ((k : ℕ) → NumStability.CapacityCoordinate.Method data (coord k)) →
+                          (ℕ → D) → (ℕ → ℝ) → (Cell → Fin m → ℝ) → ℕ → Cell → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} {Line} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m} {data} {coord} method direction duration initial =>
+  NumStability.SequentialError.execution (NumStability.CapacityCoordinate.Sweep.step method direction duration) initial
+'NumStability.CapacityCoordinate.Sweep.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.advance.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} →
+                  NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                    (D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) → D → ℝ → (Cell → Fin m → ℝ) → Cell → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data rule d dt current cell =>
+  NumStability.finiteVolumeCellAverageUpdate dt (data.cellVolume cell) (current cell)
+    (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteCoordinate.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.finiteVolumeCellAverageUpdate.{u_1} : {E : Type u_1} →
+  [inst : AddCommGroup E] → [Module ℝ E] → ℝ → ℝ → E → E → E :=
+fun {E} [AddCommGroup E] [Module ℝ E] timeStep cellVolume oldAverage netOutwardFlux =>
+  oldAverage - (timeStep / cellVolume) • netOutwardFlux
+'NumStability.finiteVolumeCellAverageUpdate' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.orderedOperatorSweep.{u_1} : {State : Type u_1} → List (State → State) → State → State :=
+fun {State} operators state => List.foldl (fun current step => step current) state operators
+'NumStability.orderedOperatorSweep' does not depend on any axioms
+def NumStability.FiniteCoordinate.netFluxDefect.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} →
+                  NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                    (D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) →
+                      D → (Cell → Fin m → ℝ) → (Point → ℝ → Fin m → ℝ) → ℝ → ℝ → Cell → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data rule d current q s t cell =>
+  rule d (t - s) current (data.leftFace d cell) -
+      NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.leftFace d cell)) s t -
+    (rule d (t - s) current (data.rightFace d cell) -
+      NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.rightFace d cell)) s t)
+'NumStability.FiniteCoordinate.netFluxDefect' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.LineCoordinates.onceEdgeVariation.{u_1, u_2, u_3, u_4} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Line : Type u_4} →
+        {m : ℕ} →
+          [Fintype Cell] →
+            NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line →
+              D → Line → (D → Line → ℤ → Fin m → ℝ) → (Cell → Fin m → ℝ) → ℝ :=
+fun {D} {Cell} {Face} {Line} {m} [Fintype Cell] coord d line ghost current =>
+  have actual := coord.withGhost ghost;
+  ∑ cell,
+    if actual.cellLine d cell = line then
+      ‖current cell - actual.extract d line current (actual.cellIndex d cell - 1)‖ +
+        if actual.lookup d line (actual.cellIndex d cell + 1) = Option.none then
+          ‖actual.extract d line current (actual.cellIndex d cell + 1) - current cell‖
+        else 0
+    else 0
+'NumStability.FiniteCoordinate.LineCoordinates.onceEdgeVariation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def NumStability.SequentialError.execution.{u_1, u_2} : {Cell : Type u_1} →
+  {E : Type u_2} → (ℕ → (Cell → E) → Cell → E) → (Cell → E) → ℕ → Cell → E :=
+fun {Cell} {E} step initial x =>
+  Nat.brecOn (motive := fun x => Cell → E) x fun x f =>
+    (match (motive := (x : ℕ) → Nat.below (motive := fun x => Cell → E) x → Cell → E) x with
+      | 0 => fun x => initial
+      | n.succ => fun x => step n x.1)
+      f
+'NumStability.SequentialError.execution' does not depend on any axioms
+def NumStability.SequentialError.errorBudget : (ℕ → ℝ) → (ℕ → ℝ) → (ℕ → ℝ) → ℝ → ℕ → ℝ :=
+fun amplification localDefect splittingDefect initialError x =>
+  Nat.brecOn x fun x f =>
+    (match (motive := (x : ℕ) → Nat.below x → ℝ) x with
+      | 0 => fun x => initialError
+      | n.succ => fun x => amplification n * x.1 + localDefect n + splittingDefect n)
+      f
+'NumStability.SequentialError.errorBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteVolumeCellPartition.mesh.{u_1, u_2} : {Cell : Type u_1} →
+  {Point : Type u_2} →
+    [Fintype Cell] →
+      [inst : MeasurableSpace Point] →
+        [PseudoMetricSpace Point] → NumStability.FiniteVolumeCellPartition Cell Point → ℝ :=
+fun {Cell} {Point} [Fintype Cell] [MeasurableSpace Point] [PseudoMetricSpace Point] cells =>
+  Finset.univ.sup' ⋯ fun cell => Metric.diam (cells.cellRegion cell)
+'NumStability.FiniteVolumeCellPartition.mesh' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.FiniteCoordinate.PhysicalLine.capacity_cell : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [inst : MeasurableSpace Point]
+  [inst_1 : TopologicalSpace Point] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line) (d : D) (cell : Cell),
+  NumStability.FiniteCoordinate.PhysicalLine.capacity data coord d (coord.cellLine d cell) (coord.cellIndex d cell) =
+    data.cellVolume cell
+'NumStability.FiniteCoordinate.PhysicalLine.capacity_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.FiniteCoordinate.PhysicalLine.projection_cell : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [inst : MeasurableSpace Point]
+  [inst_1 : TopologicalSpace Point] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line) (q : Point → ℝ → Fin m → ℝ) (d : D) (t : ℝ)
+  (cell : Cell),
+  coord.extract d (coord.cellLine d cell) (fun c => data.cellMean q c t) (coord.cellIndex d cell) =
+    NumStability.cellVolumeAverage data.measure (data.cells.cellRegion cell) fun x => q x t
+'NumStability.FiniteCoordinate.PhysicalLine.projection_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.CapacityCoordinate.Method.advance_withGhost_eq : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [inst : MeasurableSpace Point]
+  [inst_1 : TopologicalSpace Point] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  (method : NumStability.CapacityCoordinate.Method data coord) (newGhost : D → Line → ℤ → Fin m → ℝ) (d : D) (dt : ℝ)
+  (current : Cell → Fin m → ℝ) (cell : Cell),
+  NumStability.FiniteCoordinate.advance data (method.withGhost newGhost).rule d dt current cell =
+    NumStability.FiniteCoordinate.PhysicalLine.lineAdvance data coord method.numericalFlux d (coord.cellLine d cell) dt
+      ((coord.withGhost newGhost).extract d (coord.cellLine d cell) current) (coord.cellIndex d cell)
+'NumStability.CapacityCoordinate.Method.advance_withGhost_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.CapacityCoordinate.Method.coordinate_stability_withGhost : ∀ {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [inst : MeasurableSpace Point]
+  [inst_1 : TopologicalSpace Point] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  (method : NumStability.CapacityCoordinate.Method data coord) (first second : D → Line → ℤ → Fin m → ℝ) (d : D)
+  (dt A : ℝ),
+  method.StableAt d dt A →
+    ∀ (current other : Cell → Fin m → ℝ),
+      (method.withGhost first).Admitted d dt current →
+        (method.withGhost second).Admitted d dt other →
+          ∀ (E G : ℝ),
+            (∀ (cell : Cell), ‖current cell - other cell‖ ≤ E) →
+              (∀ (cell : Cell) (j : ℤ),
+                  coord.lookup d (coord.cellLine d cell) j = Option.none →
+                    ‖first d (coord.cellLine d cell) j - second d (coord.cellLine d cell) j‖ ≤ G) →
+                ∀ (cell : Cell),
+                  ‖NumStability.FiniteCoordinate.advance data (method.withGhost first).rule d dt current cell -
+                        NumStability.FiniteCoordinate.advance data (method.withGhost second).rule d dt other cell‖ ≤
+                    A * Max.max E G
+'NumStability.CapacityCoordinate.Method.coordinate_stability_withGhost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.CapacityCoordinate.Sweep.run_physical_error : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [inst : MeasurableSpace Point]
+  [inst_1 : TopologicalSpace Point] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : ℕ → NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  (method : (k : ℕ) → NumStability.CapacityCoordinate.Method data (coord k)) (direction : ℕ → D) (duration : ℕ → ℝ)
+  (initial : Cell → Fin m → ℝ) (physical : ℕ → Point → ℝ → Fin m → ℝ) (steps : ℕ)
+  (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ) (netError : ℕ → Cell → ℝ),
+  (∀ n < steps, 0 < duration n) →
+    (∀ n < steps, data.ReferenceOn (direction n) (physical n) 0 (duration n)) →
+      (∀ (cell : Cell), ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError) →
+        (∀ n < steps,
+            (method n).Admitted (direction n) (duration n)
+              (NumStability.CapacityCoordinate.Sweep.run method direction duration initial n)) →
+          (∀ n < steps, (method n).Admitted (direction n) (duration n) fun cell => data.cellMean (physical n) cell 0) →
+            (∀ n < steps, (method n).StableAt (direction n) (duration n) (amplification n)) →
+              (∀ n < steps,
+                  ∀ (cell : Cell),
+                    ‖NumStability.FiniteCoordinate.netFluxDefect data (method n).rule (direction n)
+                          (fun c => data.cellMean (physical n) c 0) (physical n) 0 (duration n) cell‖ ≤
+                      netError n cell) →
+                (∀ n < steps, ∀ (cell : Cell), duration n / data.cellVolume cell * netError n cell ≤ localDefect n) →
+                  (∀ n < steps,
+                      ∀ (cell : Cell),
+                        ‖data.cellMean (physical n) cell (duration n) - data.cellMean (physical (n + 1)) cell 0‖ ≤
+                          splittingDefect n) →
+                    ∀ n ≤ steps,
+                      ∀ (cell : Cell),
+                        ‖NumStability.CapacityCoordinate.Sweep.run method direction duration initial n cell -
+                              data.cellMean (physical n) cell 0‖ ≤
+                          NumStability.SequentialError.errorBudget amplification localDefect splittingDefect
+                            initialError n
+'NumStability.CapacityCoordinate.Sweep.run_physical_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.FiniteCoordinate.advance_error_le_net : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [inst : MeasurableSpace Point] [inst_1 : TopologicalSpace Point]
+  [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ},
+  data.ReferenceOn d q s t →
+    s < t →
+      ∀ (cell : Cell) (oldBound netDefectBound : ℝ),
+        ‖current cell - data.cellMean q cell s‖ ≤ oldBound →
+          ‖NumStability.FiniteCoordinate.netFluxDefect data rule d current q s t cell‖ ≤ netDefectBound →
+            ‖NumStability.FiniteCoordinate.advance data rule d (t - s) current cell - data.cellMean q cell t‖ ≤
+              oldBound + (t - s) / data.cellVolume cell * netDefectBound
+'NumStability.FiniteCoordinate.advance_error_le_net' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,506 @@
+NumStability.FiniteDirectionalRepair.PhysicalData.{u_1, u_2, u_3, u_4, u_5} (D : Type u_1) (Cell : Type u_2)
+  (Face : Type u_3) (Point : Type u_4) (FacePoint : Type u_5) [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] (m : ℕ) : Type (max (max (max (max u_1 u_2) u_3) u_4) u_5)
+'NumStability.FiniteDirectionalRepair.PhysicalData' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.PhysicalData.ReferenceOn.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m) (d : D)
+  (q : Point → ℝ → Fin m → ℝ) (s t : ℝ) : Prop
+'NumStability.FiniteDirectionalRepair.PhysicalData.ReferenceOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) (cell : Cell) :
+  data.cellVolume cell • NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    data.cellVolume cell • current cell -
+      dt • (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteDirectionalRepair.advance_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.finite_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} [Fintype Cell]
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) :
+  ∑ cell, data.cellVolume cell • NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    ∑ cell, data.cellVolume cell • current cell -
+      dt • ∑ cell, (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteDirectionalRepair.finite_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.sweep_cons.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (stages : List (D × ℝ))
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteDirectionalRepair.sweep data rule ((d, dt) :: stages) current =
+    NumStability.FiniteDirectionalRepair.sweep data rule stages
+      (NumStability.FiniteDirectionalRepair.advance data rule d dt current)
+'NumStability.FiniteDirectionalRepair.sweep_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.sweep_split.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (before after : List (D × ℝ)) (d : D) (dt : ℝ)
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteDirectionalRepair.sweep data rule (before ++ (d, dt) :: after) current =
+    NumStability.FiniteDirectionalRepair.sweep data rule after
+      (NumStability.FiniteDirectionalRepair.advance data rule d dt
+        (NumStability.FiniteDirectionalRepair.sweep data rule before current))
+'NumStability.FiniteDirectionalRepair.sweep_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.LineLocal.{u_1, u_2, u_3} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {m : ℕ} [DecidableEq Cell] (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) :
+  Prop
+'NumStability.FiniteDirectionalRepair.LineLocal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_local.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} [DecidableEq Cell]
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ)
+  (hlocal : NumStability.FiniteDirectionalRepair.LineLocal stencil rule) (d : D) (dt : ℝ)
+  (current other : Cell → Fin m → ℝ) (cell : Cell)
+  (hagree :
+    ∀ j ∈ insert cell (stencil d (data.leftFace d cell) ∪ stencil d (data.rightFace d cell)), current j = other j) :
+  NumStability.FiniteDirectionalRepair.advance data rule d dt current cell =
+    NumStability.FiniteDirectionalRepair.advance data rule d dt other cell
+'NumStability.FiniteDirectionalRepair.advance_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.advance_error_le.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell)
+  (oldBound leftBound rightBound : ℝ) (hold : ‖current cell - data.cellMean q cell s‖ ≤ oldBound)
+  (hleft :
+    ‖rule d (t - s) current (data.leftFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.leftFace d cell)) s t‖ ≤
+      leftBound)
+  (hright :
+    ‖rule d (t - s) current (data.rightFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.rightFace d cell)) s t‖ ≤
+      rightBound) :
+  ‖NumStability.FiniteDirectionalRepair.advance data rule d (t - s) current cell - data.cellMean q cell t‖ ≤
+    oldBound + (t - s) / data.cellVolume cell * (leftBound + rightBound)
+'NumStability.FiniteDirectionalRepair.advance_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalQualityRepair.RectangleReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) (left right horizon : ℝ) : Prop
+'NumStability.DirectionalQualityRepair.RectangleReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalQualityRepair.SmoothReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (states : Set (Fin m → ℝ)) (left right horizon : ℝ) : Prop
+'NumStability.DirectionalQualityRepair.SmoothReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalQualityRepair.LineFamily (m : ℕ) : Type
+'NumStability.DirectionalQualityRepair.LineFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalQualityRepair.LineFamily.HasControlledHighResolution {m : ℕ}
+  (family : NumStability.DirectionalQualityRepair.LineFamily m) : Prop
+'NumStability.DirectionalQualityRepair.LineFamily.HasControlledHighResolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalQualityRepair.LineFamily.HasControlledHighResolution.perturbed_accuracy {m : ℕ}
+  (family : NumStability.DirectionalQualityRepair.LineFamily m) (quality : family.HasControlledHighResolution) :
+  ∃ p L,
+    1 < p ∧
+      0 ≤ L ∧
+        ∀ (q : ℝ → ℝ → Fin m → ℝ),
+          NumStability.DirectionalQualityRepair.SpatialSmoothReferenceOn q family.flux family.states family.left
+              family.right family.horizon →
+            ∃ C,
+              0 ≤ C ∧
+                ∃ N,
+                  ∀ (n : ℕ),
+                    N ≤ n →
+                      ∀ (projected values : ℤ → Fin m → ℝ),
+                        family.InitialProjection n q projected →
+                          family.admitted n values →
+                            ∀ (E : ℝ),
+                              0 ≤ E →
+                                (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + ↑(family.inputCount n)),
+                                    ‖values j - projected j‖ ≤ E) →
+                                  ∀
+                                    j ∈
+                                      Finset.Ico (family.activeStart n)
+                                        (family.activeStart n + ↑(family.activeCount n)),
+                                    ‖family.advance n values j -
+                                          NumStability.finiteVolumeCellAverageOn (family.grid n)
+                                            (fun x => q x (family.dt n)) j‖ ≤
+                                      (1 + L * family.dt n) * E + C * family.dt n * family.mesh n ^ p
+'NumStability.DirectionalQualityRepair.LineFamily.HasControlledHighResolution.perturbed_accuracy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.LineCoordinates.{u_7, u_8, u_9, u_10} {m : ℕ} (D : Type u_7) (Cell : Type u_8)
+  (Face : Type u_9) (Line : Type u_10) : Type (max (max (max u_10 u_7) u_8) u_9)
+'NumStability.FiniteDirectionalRepair.LineCoordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.LineCoordinates.extract_local.{u_1, u_2, u_3, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Line : Type u_6} {m : ℕ}
+  (coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line) (d : D) (line : Line)
+  (current other : Cell → Fin m → ℝ) (h : ∀ (cell : Cell), coord.cellLine d cell = line → current cell = other cell) :
+  coord.extract d line current = coord.extract d line other
+'NumStability.FiniteDirectionalRepair.LineCoordinates.extract_local' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.LineRealization.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line)
+  (family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m) : Type (max u_1 u_6)
+'NumStability.FiniteDirectionalRepair.LineRealization' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteDirectionalRepair.LineRealization.advance_eq.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (realization : NumStability.FiniteDirectionalRepair.LineRealization data coord family) (d : D)
+  (current : Cell → Fin m → ℝ) (cell : Cell) :
+  NumStability.FiniteDirectionalRepair.advance data realization.rule d (realization.duration d) current cell =
+    (family d (coord.cellLine d cell)).advance (realization.level d (coord.cellLine d cell))
+      (coord.extract d (coord.cellLine d cell) current) (coord.cellIndex d cell)
+'NumStability.FiniteDirectionalRepair.LineRealization.advance_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.LineRealization.coordinate_stability.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (realization : NumStability.FiniteDirectionalRepair.LineRealization data coord family)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (d : D)
+  (current other : Cell → Fin m → ℝ) (hc : realization.Admitted d current) (ho : realization.Admitted d other) {E A : ℝ}
+  (hE : 0 ≤ E) (herr : ∀ (cell : Cell), ‖current cell - other cell‖ ≤ E)
+  (hA : ∀ (cell : Cell), 1 + (family d (coord.cellLine d cell)).stabilityRate ⋯ * realization.duration d ≤ A)
+  (cell : Cell) :
+  ‖NumStability.FiniteDirectionalRepair.advance data realization.rule d (realization.duration d) current cell -
+        NumStability.FiniteDirectionalRepair.advance data realization.rule d (realization.duration d) other cell‖ ≤
+    A * E
+'NumStability.FiniteDirectionalRepair.LineRealization.coordinate_stability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.LineRealization.coordinate_local.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (realization : NumStability.FiniteDirectionalRepair.LineRealization data coord family) (d : D)
+  (current other : Cell → Fin m → ℝ) (cell : Cell)
+  (h : ∀ (c : Cell), coord.cellLine d c = coord.cellLine d cell → current c = other c) :
+  NumStability.FiniteDirectionalRepair.advance data realization.rule d (realization.duration d) current cell =
+    NumStability.FiniteDirectionalRepair.advance data realization.rule d (realization.duration d) other cell
+'NumStability.FiniteDirectionalRepair.LineRealization.coordinate_local' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.LineRealization.smooth_accuracy.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (realization : NumStability.FiniteDirectionalRepair.LineRealization data coord family)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (d : D) (cell : Cell) :
+  ∃ p L,
+    1 < p ∧
+      0 ≤ L ∧
+        ∀ (q : ℝ → ℝ → Fin m → ℝ),
+          NumStability.DirectionalQualityRepair.SpatialSmoothReferenceOn q (family d (coord.cellLine d cell)).flux
+              (family d (coord.cellLine d cell)).states (family d (coord.cellLine d cell)).left
+              (family d (coord.cellLine d cell)).right (family d (coord.cellLine d cell)).horizon →
+            ∃ C,
+              0 ≤ C ∧
+                ∃ N,
+                  N ≤ realization.level d (coord.cellLine d cell) →
+                    ∀ (projected current : Cell → Fin m → ℝ),
+                      (family d (coord.cellLine d cell)).InitialProjection (realization.level d (coord.cellLine d cell))
+                          q (coord.extract d (coord.cellLine d cell) projected) →
+                        realization.Admitted d current →
+                          ∀ (E : ℝ),
+                            0 ≤ E →
+                              (∀ (c : Cell), ‖current c - projected c‖ ≤ E) →
+                                ‖NumStability.FiniteDirectionalRepair.advance data realization.rule d
+                                        (realization.duration d) current cell -
+                                      NumStability.finiteVolumeCellAverageOn
+                                        ((family d (coord.cellLine d cell)).grid
+                                          (realization.level d (coord.cellLine d cell)))
+                                        (fun x => q x (realization.duration d)) (coord.cellIndex d cell)‖ ≤
+                                  (1 + L * realization.duration d) * E +
+                                    C * realization.duration d *
+                                      (family d (coord.cellLine d cell)).mesh
+                                          (realization.level d (coord.cellLine d cell)) ^
+                                        p
+'NumStability.FiniteDirectionalRepair.LineRealization.smooth_accuracy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.shared_face_cancels.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ)
+  (left right : Cell) (shared : data.rightFace d left = data.leftFace d right) :
+  -(dt • rule d dt current (data.rightFace d left)) + dt • rule d dt current (data.leftFace d right) = 0
+'NumStability.FiniteDirectionalRepair.shared_face_cancels' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalPropagationRepair.execution_error_le.{u_1, u_2} {Cell : Type u_1} {E : Type u_2}
+  [NormedAddCommGroup E] (step : ℕ → (Cell → E) → Cell → E) (admitted : ℕ → (Cell → E) → Prop) (initial : Cell → E)
+  (reference directionalReference : ℕ → Cell → E) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+  (hinitial : ∀ (cell : Cell), ‖initial cell - reference 0 cell‖ ≤ initialError)
+  (hactual : ∀ (n : ℕ), admitted n (NumStability.DirectionalPropagationRepair.execution step initial n))
+  (hrefadmit : ∀ (n : ℕ), admitted n (reference n))
+  (hstable :
+    ∀ (n : ℕ) (q other : Cell → E),
+      admitted n q →
+        admitted n other →
+          ∀ (error : ℝ),
+            (∀ (cell : Cell), ‖q cell - other cell‖ ≤ error) →
+              ∀ (cell : Cell), ‖step n q cell - step n other cell‖ ≤ amplification n * error)
+  (hlocal : ∀ (n : ℕ) (cell : Cell), ‖step n (reference n) cell - directionalReference n cell‖ ≤ localDefect n)
+  (hsplit : ∀ (n : ℕ) (cell : Cell), ‖directionalReference n cell - reference (n + 1) cell‖ ≤ splittingDefect n) (n : ℕ)
+  (cell : Cell) :
+  ‖NumStability.DirectionalPropagationRepair.execution step initial n cell - reference n cell‖ ≤
+    NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.DirectionalPropagationRepair.execution_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalPropagationRepair.errorBudget_uniform_le (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError A delta : ℝ) (hA : 1 ≤ A) (hE : 0 ≤ initialError) (hd : 0 ≤ delta)
+  (ha : ∀ (n : ℕ), 0 ≤ amplification n ∧ amplification n ≤ A) (hl : ∀ (n : ℕ), 0 ≤ localDefect n)
+  (hs : ∀ (n : ℕ), 0 ≤ splittingDefect n) (hdefect : ∀ (n : ℕ), localDefect n + splittingDefect n ≤ delta) (n : ℕ) :
+  NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n ≤
+    A ^ n * (initialError + ↑n * delta)
+'NumStability.DirectionalPropagationRepair.errorBudget_uniform_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalPropagationRepair.execution_error_le_upto.{u_1, u_2} {Cell : Type u_1} {E : Type u_2}
+  [NormedAddCommGroup E] (step : ℕ → (Cell → E) → Cell → E) (admitted : ℕ → (Cell → E) → Prop) (initial : Cell → E)
+  (reference directionalReference : ℕ → Cell → E) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+  (steps : ℕ) (hinitial : ∀ (cell : Cell), ‖initial cell - reference 0 cell‖ ≤ initialError)
+  (hactual : ∀ n < steps, admitted n (NumStability.DirectionalPropagationRepair.execution step initial n))
+  (hrefadmit : ∀ n < steps, admitted n (reference n))
+  (hstable :
+    ∀ n < steps,
+      ∀ (q other : Cell → E),
+        admitted n q →
+          admitted n other →
+            ∀ (error : ℝ),
+              (∀ (cell : Cell), ‖q cell - other cell‖ ≤ error) →
+                ∀ (cell : Cell), ‖step n q cell - step n other cell‖ ≤ amplification n * error)
+  (hlocal : ∀ n < steps, ∀ (cell : Cell), ‖step n (reference n) cell - directionalReference n cell‖ ≤ localDefect n)
+  (hsplit : ∀ n < steps, ∀ (cell : Cell), ‖directionalReference n cell - reference (n + 1) cell‖ ≤ splittingDefect n)
+  (n : ℕ) :
+  n ≤ steps →
+    ∀ (cell : Cell),
+      ‖NumStability.DirectionalPropagationRepair.execution step initial n cell - reference n cell‖ ≤
+        NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.DirectionalPropagationRepair.execution_error_le_upto' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.coordinateExecution_ordered.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (method : ℕ → NumStability.FiniteDirectionalRepair.LineRealization data coord family) (direction : ℕ → D)
+  (initial : Cell → Fin m → ℝ) (n : ℕ) :
+  NumStability.FiniteDirectionalRepair.coordinateExecution method direction initial n =
+    NumStability.orderedOperatorSweep
+      (List.map (NumStability.FiniteDirectionalRepair.coordinateStep method direction) (List.range n)) initial
+'NumStability.FiniteDirectionalRepair.coordinateExecution_ordered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteDirectionalRepair.coordinateExecution_physical_error.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteDirectionalRepair.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalQualityRepair.LineFamily m}
+  (method : ℕ → NumStability.FiniteDirectionalRepair.LineRealization data coord family) (direction : ℕ → D)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (initial : Cell → Fin m → ℝ)
+  (physical : ℕ → Point → ℝ → Fin m → ℝ) (steps : ℕ) (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError : ℝ) (leftError rightError : ℕ → Cell → ℝ)
+  (href : ∀ n < steps, data.ReferenceOn (direction n) (physical n) 0 ((method n).duration (direction n)))
+  (hinitial : ∀ (cell : Cell), ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError)
+  (hactual :
+    ∀ n < steps,
+      (method n).Admitted (direction n)
+        (NumStability.FiniteDirectionalRepair.coordinateExecution method direction initial n))
+  (hrefadmit : ∀ n < steps, (method n).Admitted (direction n) fun cell => data.cellMean (physical n) cell 0)
+  (hamplification :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        1 +
+            (family (direction n) (coord.cellLine (direction n) cell)).stabilityRate ⋯ *
+              (method n).duration (direction n) ≤
+          amplification n)
+  (hleft :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.leftFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.leftFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          leftError n cell)
+  (hright :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.rightFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.rightFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          rightError n cell)
+  (hlocal :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        (method n).duration (direction n) / data.cellVolume cell * (leftError n cell + rightError n cell) ≤
+          localDefect n)
+  (hsplit :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖data.cellMean (physical n) cell ((method n).duration (direction n)) -
+              data.cellMean (physical (n + 1)) cell 0‖ ≤
+          splittingDefect n)
+  (n : ℕ) :
+  n ≤ steps →
+    ∀ (cell : Cell),
+      ‖NumStability.FiniteDirectionalRepair.coordinateExecution method direction initial n cell -
+            data.cellMean (physical n) cell 0‖ ≤
+        NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.FiniteDirectionalRepair.coordinateExecution_physical_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:885:0: warning: automatically included section variable(s) unused in theorem `NumStability.DirectionalGeometryRepair.cartesian_facePoint_measurable`:
+  [Fintype D]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype D] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+NumStability.DirectionalGeometryRepair.CartesianIdentification.cellMean_lift.{u_1, u_2} {D : Type u_1} [Fintype D]
+  [DecidableEq D] {m : ℕ} {FacePoint : Type u_2} [MeasurableSpace FacePoint]
+  {data : NumStability.DirectionalFiniteVolume.PhysicalData D (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.DirectionalGeometryRepair.CartesianIdentification data axes flux) (q : ℝ → ℝ → Fin m → ℝ) (d : D)
+  (cell : D → ℤ) (t : ℝ)
+  (hq : IntervalIntegrable (fun x => q x t) volume ((axes d).cellLeft (cell d)) ((axes d).cellRight (cell d))) :
+  data.cellMean (fun x τ => q (x d) τ) cell t =
+    NumStability.finiteVolumeCellAverageOn (axes d) (fun x => q x t) (cell d)
+'NumStability.DirectionalGeometryRepair.CartesianIdentification.cellMean_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalGeometryRepair.CartesianIdentification.faceFlux_lift.{u_1, u_2} {D : Type u_1} [Fintype D]
+  [DecidableEq D] {m : ℕ} {FacePoint : Type u_2} [MeasurableSpace FacePoint]
+  {data : NumStability.DirectionalFiniteVolume.PhysicalData D (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.DirectionalGeometryRepair.CartesianIdentification data axes flux) (q : ℝ → ℝ → Fin m → ℝ) (d : D)
+  (cell : D → ℤ) (t : ℝ) :
+  data.faceFlux d (fun x τ => q (x d) τ) cell t =
+    NumStability.CartesianGrid.faceArea axes d cell • flux d (q ((axes d).cellLeft (cell d)) t)
+'NumStability.DirectionalGeometryRepair.CartesianIdentification.faceFlux_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalGeometryRepair.CartesianIdentification.directional_reference_lift.{u_1, u_2} {D : Type u_1}
+  [Fintype D] [DecidableEq D] {m : ℕ} {FacePoint : Type u_2} [MeasurableSpace FacePoint]
+  {data : NumStability.DirectionalFiniteVolume.PhysicalData D (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.DirectionalGeometryRepair.CartesianIdentification data axes flux) (q : ℝ → ℝ → Fin m → ℝ) (d : D)
+  (hq : NumStability.IsRectangleConservationLawSolution q (flux d)) (s t : ℝ) :
+  NumStability.DirectionalFiniteVolume.IsDirectionalReference data.cellVolume (data.cellMean fun x τ => q (x d) τ)
+    (data.faceFlux d fun x τ => q (x d) τ) d s t
+'NumStability.DirectionalGeometryRepair.CartesianIdentification.directional_reference_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianRepair.CartesianIdentification.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face (D → ℝ) FacePoint m)
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : Cell → D → ℤ)
+  (facePosition : D → Face → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ) : Prop
+'NumStability.FiniteCartesianRepair.CartesianIdentification' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesianRepair.CartesianIdentification.cellVolume_eq.{u_1, u_2, u_3, u_4} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint]
+  {m : ℕ} {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesianRepair.CartesianIdentification data axes cellPosition facePosition flux)
+  (cell : Cell) : data.cellVolume cell = NumStability.CartesianGrid.cellVolume axes (cellPosition cell)
+'NumStability.FiniteCartesianRepair.CartesianIdentification.cellVolume_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianRepair.CartesianIdentification.faceFlux_lift.{u_1, u_2, u_3, u_4} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint]
+  {m : ℕ} {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesianRepair.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : Face) (t : ℝ) :
+  data.faceFlux d (fun x τ => q (x d) τ) face t =
+    NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+      flux d (q ((axes d).cellLeft (facePosition d face d)) t)
+'NumStability.FiniteCartesianRepair.CartesianIdentification.faceFlux_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesianRepair.CartesianIdentification.rectangle_balance_lift.{u_1, u_2, u_3, u_4} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint]
+  {m : ℕ} {data : NumStability.FiniteDirectionalRepair.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesianRepair.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : ℝ → ℝ → Fin m → ℝ) (d : D) (hq : NumStability.IsRectangleConservationLawSolution q (flux d)) (cell : Cell)
+  (s t : ℝ) :
+  data.cellVolume cell • (data.cellMean (fun x τ => q (x d) τ) cell t - data.cellMean (fun x τ => q (x d) τ) cell s) =
+    ∫ (τ : ℝ) in s..t,
+      data.faceFlux d (fun x τ => q (x d) τ) (data.leftFace d cell) τ -
+        data.faceFlux d (fun x τ => q (x d) τ) (data.rightFace d cell) τ
+'NumStability.FiniteCartesianRepair.CartesianIdentification.rectangle_balance_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1263:156: error: Application type mismatch: The argument
+  q
+has type
+  ℝ → ℝ → State
+but is expected to have type
+  ℝ → ℝ → Fin m → ℝ
+in the application
+  (family (direction n) (coord.cellLine (direction n) cell)).InitialProjection
+    ((method n).level (direction n) (coord.cellLine (direction n) cell)) q
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1264:77: error: Application type mismatch: The argument
+  projected
+has type
+  Cell → State
+but is expected to have type
+  Cell → Fin m → ℝ
+in the application
+  coord.extract (direction n) (coord.cellLine (direction n) cell) projected
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1265:44: error: Application type mismatch: The argument
+  current
+has type
+  Cell → State
+but is expected to have type
+  Cell → Fin m → ℝ
+in the application
+  (method n).Admitted (direction n) current
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1266:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HSub State State ?m.1001
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1267:90: error: Application type mismatch: The argument
+  current
+has type
+  Cell → State
+but is expected to have type
+  Cell → Fin m → ℝ
+in the application
+  advance data (method n).rule (direction n) ((method n).duration (direction n)) current
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1268:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  NormedAddCommGroup State
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1257:31: error: Application type mismatch: The argument
+  q
+has type
+  ℝ → ℝ → State
+but is expected to have type
+  ℝ → ℝ → Fin m → ℝ
+in the application
+  SpatialSmoothReferenceOn q
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1320:7: error(lean.unknownIdentifier): Unknown identifier `NumStability.DirectionalCompleteRepair.coordinate_highResolution_sourceContract`
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\directional-reference-repair\primary02-Primary.lean:1321:14: error(lean.unknownIdentifier): Unknown constant `NumStability.DirectionalCompleteRepair.coordinate_highResolution_sourceContract`

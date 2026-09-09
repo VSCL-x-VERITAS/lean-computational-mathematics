@@ -1,0 +1,78 @@
+'PhysicalCapacityBridge.capacity_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PhysicalCapacityBridge.capacity_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PhysicalCapacityBridge.advance_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PhysicalCapacityBridge.projection_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PhysicalCapacityBridge.advance_line_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PhysicalCapacityBridge.weighted_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+\\?\C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\capacity-net-reference-error-draft\native-01\Candidate.lean:212:81: error: unsolved goals
+case refine_2
+bias : ℝ
+hnet : bias - (bias + 2) = -2
+⊢ 1 = 1
+CapacityNetReferenceError.netFluxDefect.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} (data : PhysicalData D Cell Face Point FacePoint m) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ)
+  (d : D) (current : Cell → Fin m → ℝ) (q : Point → ℝ → Fin m → ℝ) (s t : ℝ) (cell : Cell) : Fin m → ℝ
+'CapacityNetReferenceError.netFluxDefect' depends on axioms: [propext, Classical.choice, Quot.sound]
+CapacityNetReferenceError.advance_error_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell) :
+  data.cellVolume cell • (advance data rule d (t - s) current cell - data.cellMean q cell t) =
+    data.cellVolume cell • (current cell - data.cellMean q cell s) +
+      (t - s) • netFluxDefect data rule d current q s t cell
+'CapacityNetReferenceError.advance_error_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+CapacityNetReferenceError.advance_error_le_net.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell)
+  (oldBound netDefectBound : ℝ) (hold : ‖current cell - data.cellMean q cell s‖ ≤ oldBound)
+  (hnet : ‖netFluxDefect data rule d current q s t cell‖ ≤ netDefectBound) :
+  ‖advance data rule d (t - s) current cell - data.cellMean q cell t‖ ≤
+    oldBound + (t - s) / data.cellVolume cell * netDefectBound
+'CapacityNetReferenceError.advance_error_le_net' depends on axioms: [propext, Classical.choice, Quot.sound]
+CapacityNetReferenceError.capacity_line_error_balance.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ} (data : PhysicalData D Cell Face Point FacePoint m)
+  (coord : LineCoordinates D Cell Face Line) (incidence : PhysicalCapacityBridge.Incidence data coord)
+  (numericalFlux : D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell) :
+  PhysicalCapacityBridge.capacity data coord d (coord.cellLine d cell) (coord.cellIndex d cell) •
+      (PhysicalCapacityBridge.lineAdvance data coord numericalFlux d (coord.cellLine d cell) (t - s)
+          (coord.extract d (coord.cellLine d cell) current) (coord.cellIndex d cell) -
+        coord.extract d (coord.cellLine d cell) (fun c => data.cellMean q c t) (coord.cellIndex d cell)) =
+    data.cellVolume cell •
+        (coord.extract d (coord.cellLine d cell) current (coord.cellIndex d cell) -
+          cellVolumeAverage data.measure (data.cells.cellRegion cell) fun x => q x s) +
+      (t - s) • netFluxDefect data (PhysicalCapacityBridge.faceRule coord numericalFlux) d current q s t cell
+'CapacityNetReferenceError.capacity_line_error_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+CapacityNetReferenceError.capacity_line_error_le_net.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ} (data : PhysicalData D Cell Face Point FacePoint m)
+  (coord : LineCoordinates D Cell Face Line) (incidence : PhysicalCapacityBridge.Incidence data coord)
+  (numericalFlux : D → Line → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell)
+  (oldBound netDefectBound : ℝ) (hold : ‖current cell - data.cellMean q cell s‖ ≤ oldBound)
+  (hnet :
+    ‖netFluxDefect data (PhysicalCapacityBridge.faceRule coord numericalFlux) d current q s t cell‖ ≤ netDefectBound) :
+  ‖PhysicalCapacityBridge.lineAdvance data coord numericalFlux d (coord.cellLine d cell) (t - s)
+          (coord.extract d (coord.cellLine d cell) current) (coord.cellIndex d cell) -
+        cellVolumeAverage data.measure (data.cells.cellRegion cell) fun x => q x t‖ ≤
+    oldBound +
+      (t - s) / PhysicalCapacityBridge.capacity data coord d (coord.cellLine d cell) (coord.cellIndex d cell) *
+        netDefectBound
+'CapacityNetReferenceError.capacity_line_error_le_net' depends on axioms: [propext, Classical.choice, Quot.sound]
+CapacityNetReferenceError.scalar_nonzero_net_example (bias : ℝ) :
+  IntervalIntegrable (fun x => 0) volume 0 2 ∧
+    IntervalIntegrable (fun x => 0) volume 0 1 ∧
+      (∀ (a b s t : ℝ), (∫ (x : ℝ) in a..b, 0) - ∫ (x : ℝ) in a..b, 0 = ∫ (τ : ℝ) in s..t, 0 - 0) ∧
+        bias + 2 - 0 - (bias - 0) = 2 ∧
+          finiteVolumeCellAverageUpdate 1 2 0 (bias - (bias + 2)) = 1 ∧
+            ‖finiteVolumeCellAverageUpdate 1 2 0 (bias - (bias + 2)) - 0‖ = 0 + 1 / 2 * 2 ∧
+              0 < ‖finiteVolumeCellAverageUpdate 1 2 0 (bias - (bias + 2)) - 0‖
+'CapacityNetReferenceError.scalar_nonzero_net_example' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,26 @@
+
+namespace NumStability
+variable {D FacePoint : Type*} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+
+/-- Chapter 1 coordinate splitting under the recorded physical logical-grid
+interpretation and the separately adopted high-resolution convention: order
+greater than one on smooth references and quantitative oscillation control.
+The supplied family is executed on its actual selected measured mesh with
+explicit boundary inputs. Stability and physical reference-error hypotheses
+belong only to the conditional analysis inside the specification. -/
+theorem leveque01_coordinateHighResolutionMethods_sourceContract
+    (hm : 0 < m) (hD : 0 < Fintype.card D)
+    (family : PhysicalRefinementQuality.Family D FacePoint m)
+    (quality : family.HasHighResolution) (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ)
+    (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ)
+    (initial : family.Cell level → Fin m → ℝ) (steps : ℕ)
+    (hschedule : ∀ d : D, ∃ k < steps, direction k = d) :
+    0 < m ∧ 0 < Fintype.card D ∧
+      PhysicalHighResolutionSweep.Specification family level direction duration ghost initial steps :=
+  ⟨hm, hD, PhysicalHighResolutionSweep.specification family quality level direction duration ghost
+    initial steps hschedule⟩
+
+end NumStability
+
+#check NumStability.leveque01_coordinateHighResolutionMethods_sourceContract
+#print axioms NumStability.leveque01_coordinateHighResolutionMethods_sourceContract

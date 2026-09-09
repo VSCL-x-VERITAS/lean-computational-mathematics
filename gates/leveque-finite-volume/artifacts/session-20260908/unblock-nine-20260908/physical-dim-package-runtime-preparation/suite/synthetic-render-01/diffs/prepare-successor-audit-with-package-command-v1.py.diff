@@ -1,0 +1,161 @@
+--- prepare-successor-audit-with-dim-module-roots-v2.py
++++ prepare-successor-audit-with-package-command-v1.py
+@@ -308,10 +308,116 @@
+    assert len(found)==1 and found[0]['sha256']==reference['sha256']
+ 
+ 
++PACKAGE_COMPILER_EXTENSION = {'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-extension.json', 'sha256': '2581e91a5fed319c8656c5df84e1f6b5ae973656d84746ee05f8d28dc045b677'}
++PACKAGE_COMPILER_PLAN = {'format': 'exact-package-command-extension-1', 'task_id': 'LEV-CH01-PHYSICAL-HIGH-RESOLUTION-PACKAGE-COMMAND-PRODUCTION-20260908', 'row_id': 'LEV-CH01-DIMENSIONAL-SPLITTING', 'target_file': 'ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean', 'target_declaration': 'NumStability.leveque01_coordinateHighResolutionMethods_sourceContract', 'adapter': {'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-adapter.py', 'sha256': 'a665e1171d94c107986b146398ca9964faba9bed47b8271b998d54dc9095a62b'}, 'descriptor': {'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-descriptor.json', 'sha256': '7690718b992b72e097defb1fbed3f50cd08afbbe7c434ac3b470b59c710122b5'}, 'environment_files': [{'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-environment.txt', 'sha256': '1c55a3d5b01a9522851015b992573ba28cf331a57838a156c8d7da19357cc238'}], 'command': ['python3', '-B', 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-adapter.py', '--descriptor', 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/physical-dim-package-runtime-preparation/suite/synthetic-fixture-01/fake-descriptor.json', '--descriptor-sha256', '7690718b992b72e097defb1fbed3f50cd08afbbe7c434ac3b470b59c710122b5']}
++
++PACKAGE_TASK_ID = 'LEV-CH01-PHYSICAL-HIGH-RESOLUTION-PACKAGE-COMMAND-PRODUCTION-20260908'
++PACKAGE_ROW_ID = 'LEV-CH01-DIMENSIONAL-SPLITTING'
++PACKAGE_TARGET = {'path': 'ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean',
++                  'declaration': 'NumStability.leveque01_coordinateHighResolutionMethods_sourceContract'}
++
++
++def package_require(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def package_json(raw):
++    def unique(pairs):
++        result = {}
++        for key, value in pairs:
++            package_require(key not in result, 'duplicate compiler-extension JSON key: ' + key)
++            result[key] = value
++        return result
++    return json.loads(raw, object_pairs_hook=unique)
++
++
++def package_bound_bytes(root, reference):
++    package_require(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'invalid compiler FileRef')
++    relative, digest = reference['path'], reference['sha256']
++    package_require(isinstance(relative, str) and relative and '\\' not in relative and ':' not in relative
++                    and all(part not in ('', '.', '..') for part in relative.split('/'))
++                    and not Path(relative).is_absolute(), 'invalid compiler relative path')
++    package_require(isinstance(digest, str) and len(digest) == 64
++                    and all(char in '0123456789abcdef' for char in digest), 'invalid compiler digest')
++    path = root / relative
++    package_require(path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(root.resolve()),
++                    'compiler reference escapes or is not a regular file')
++    raw = path.read_bytes()
++    package_require(hashlib.sha256(raw).hexdigest() == digest, 'compiler input changed: ' + relative)
++    return raw
++
++
++def package_compiler_inputs(reference, plan):
++    result = {}
++    for item in [reference, plan['adapter'], plan['descriptor'], *plan['environment_files']]:
++        path = item['path']
++        package_require(path not in result or result[path] == item, 'conflicting compiler input pin')
++        result[path] = item
++    return list(result.values())
++
++
++def load_package_compiler_command(root, spec):
++    package_require(spec.get('task_id') == PACKAGE_TASK_ID and spec.get('row_id') == PACKAGE_ROW_ID,
++                    'compiler extension is limited to the exact package task and row')
++    package_require(spec.get('target') == PACKAGE_TARGET, 'compiler extension target changed')
++    package_require(spec.get('compiler_command_extension') == PACKAGE_COMPILER_EXTENSION,
++                    'compiler extension pointer changed')
++    plan = package_json(package_bound_bytes(root, PACKAGE_COMPILER_EXTENSION))
++    package_require(isinstance(plan, dict) and set(plan) == {
++        'format', 'task_id', 'row_id', 'target_file', 'target_declaration', 'command',
++        'adapter', 'descriptor', 'environment_files'}, 'wrong compiler extension schema')
++    package_require(plan == PACKAGE_COMPILER_PLAN, 'compiler extension differs from reviewed exact plan')
++    package_require(plan['format'] == 'exact-package-command-extension-1'
++                    and plan['task_id'] == PACKAGE_TASK_ID and plan['row_id'] == PACKAGE_ROW_ID
++                    and plan['target_file'] == PACKAGE_TARGET['path']
++                    and plan['target_declaration'] == PACKAGE_TARGET['declaration'], 'compiler extension identity changed')
++    package_bound_bytes(root, plan['adapter'])
++    package_bound_bytes(root, plan['descriptor'])
++    package_require(plan['command'] == ['python3', '-B', plan['adapter']['path'], '--descriptor',
++                                      plan['descriptor']['path'], '--descriptor-sha256', plan['descriptor']['sha256']],
++                    'unreviewed compiler command shape')
++    refs = plan['environment_files']
++    package_require(isinstance(refs, list) and refs, 'compiler environment must be a nonempty FileRef list')
++    for item in refs:
++        package_bound_bytes(root, item)
++    package_require(len({item['path'] for item in refs}) == len(refs), 'duplicate compiler environment path')
++    for item in package_compiler_inputs(PACKAGE_COMPILER_EXTENSION, plan):
++        package_bound_bytes(root, item)
++    return plan
++
++
++def apply_package_compiler_command(config, plan):
++    package_require(config['lean']['command'] == ['lake', 'env', 'lean'], 'prior compiler command must remain exact')
++    result = json.loads(json.dumps(config))
++    result['lean']['command'] = list(plan['command'])
++    return result
++
++
++def verify_package_compiler_command(root, spec, config, manifested=None, lineage=None):
++    plan = load_package_compiler_command(root, spec)
++    package_require(config['lean']['command'] == plan['command'], 'configured compiler command differs')
++    pins = package_compiler_inputs(PACKAGE_COMPILER_EXTENSION, plan)
++    for reference in pins:
++        package_require(config['lean']['environment_files'].count(reference['path']) == 1,
++                        'compiler input absent or repeated in exact configuration')
++        if manifested is not None:
++            found = [item for item in manifested['lean_environment'] if item['path'] == reference['path']]
++            package_require(len(found) == 1 and found[0]['sha256'] == reference['sha256'],
++                            'compiler input not uniquely manifest-bound')
++    if lineage is not None:
++        package_require(lineage.get('compiler_command_extension') == PACKAGE_COMPILER_EXTENSION
++                        and lineage.get('compiler_command') == plan['command']
++                        and lineage.get('prior_compiler_command') == ['lake', 'env', 'lean']
++                        and lineage.get('compiler_environment_inputs') == pins,
++                        'compiler preparation lineage differs')
++    return pins
++
+ assert len(sys.argv) in (2,6)
+ if len(sys.argv)==6:assert sys.argv[2]=='--recover-partial' and sys.argv[4]=='--recovery-sha256'
+ spec=json.loads(Path(sys.argv[1]).read_bytes())
+ module_root_plan=load_dim_module_roots(R,spec)
++compiler_plan=load_package_compiler_command(R,spec)
+ additional_data=load_additional_supplement(R,spec['additional_supplement']) if spec.get('additional_supplement') else None
+ taskid=spec['task_id'];prior=S/'audits'/spec['prior_task'];T=S/'audits'/taskid
+ if len(sys.argv)==6:
+@@ -337,6 +443,7 @@
+ if context_data is not None:writej(T/'inherited-source-interpretation-packet.json',context_data['packet'])
+ cfgpath=S/spec['prior_config'];cfg=json.loads(cfgpath.read_bytes())
+ cfg=apply_dim_module_roots(cfg,module_root_plan)
++cfg=apply_package_compiler_command(cfg,compiler_plan)
+ prior_manifest=json.loads((prior/'faithfulness/manifest.json').read_bytes())
+ recorded={x['path']:x['sha256'] for x in prior_manifest['lean_environment']}
+ verified=[]
+@@ -381,14 +488,17 @@
+  envfiles.extend(reference['path'] for reference in context_data['pins'])
+  envfiles.append((T/'inherited-source-interpretation-packet.json').relative_to(R).as_posix())
+ envfiles.extend(x['path'] for x in [DIM_MODULE_EXTENSION,*module_root_plan['environment_files']])
++envfiles.extend(x['path'] for x in package_compiler_inputs(PACKAGE_COMPILER_EXTENSION,compiler_plan))
+ cfg['lean']['environment_files']=list(dict.fromkeys(envfiles))
+ verify_dim_module_roots(R,spec,cfg)
++verify_package_compiler_command(R,spec,cfg)
+ for rel in cfg['lean']['environment_files']:assert (R/rel).is_file(),rel
+ config=D/(taskid+'.config.json');writej(config,cfg)
+-writej(T/'preparation-lineage.json',{'prior_task':spec['prior_task'],'prior_manifest_sha256':sha(prior/'faithfulness/manifest.json'),'prior_config_sha256':sha(cfgpath),'environment_byte_checks':verified,'target_sha256':sha(R/task['target']['path']),'selected_interpretation_sha256':sha(T/'user-interpretation-packet.json'),'prior_decisions_reused':False,'additional_supplement':spec.get('additional_supplement'),'spec_sha256':sha(Path(sys.argv[1])),'source_context_extension':spec.get('source_context_extension'),'inherited_interpretation_sha256':sha(T/'inherited-source-interpretation-packet.json') if context_data is not None else None,'preparer_sha256':sha(Path(__file__)),'module_source_root_extension':spec['module_source_root_extension'],'module_source_roots':module_root_plan['roots'],'partial_recovery_manifest':{'path':Path(sys.argv[3]).resolve().relative_to(R).as_posix(),'sha256':sys.argv[5]} if recovery_pins else None})
++writej(T/'preparation-lineage.json',{'prior_task':spec['prior_task'],'prior_manifest_sha256':sha(prior/'faithfulness/manifest.json'),'prior_config_sha256':sha(cfgpath),'environment_byte_checks':verified,'target_sha256':sha(R/task['target']['path']),'selected_interpretation_sha256':sha(T/'user-interpretation-packet.json'),'prior_decisions_reused':False,'additional_supplement':spec.get('additional_supplement'),'spec_sha256':sha(Path(sys.argv[1])),'source_context_extension':spec.get('source_context_extension'),'inherited_interpretation_sha256':sha(T/'inherited-source-interpretation-packet.json') if context_data is not None else None,'preparer_sha256':sha(Path(__file__)),'compiler_command_extension':spec['compiler_command_extension'],'compiler_command':compiler_plan['command'],'prior_compiler_command':['lake','env','lean'],'compiler_environment_inputs':package_compiler_inputs(PACKAGE_COMPILER_EXTENSION,compiler_plan),'module_source_root_extension':spec['module_source_root_extension'],'module_source_roots':module_root_plan['roots'],'partial_recovery_manifest':{'path':Path(sys.argv[3]).resolve().relative_to(R).as_posix(),'sha256':sys.argv[5]} if recovery_pins else None})
+ wrapper=str(W/'workflow-v5.0.1-local/run_workflow_posix.py')
+ env=os.environ.copy();env['FAITHFULNESS_AUDIT_CONFIG']='/c/'+config.as_posix()[3:]
+ def released(label,script,args,cwd):
++ verify_package_compiler_command(R,spec,cfg,lineage=json.loads((T/'preparation-lineage.json').read_bytes()))
+  verify_dim_module_roots(R,spec,cfg)
+  if recovery_pins:verify_partial_recovery(T,recovery_pins)
+  if context_data is not None:
+@@ -409,6 +519,7 @@
+   assert sha(R/reference['path'])==reference['sha256']
+   assert prepared_pins[reference['path']]==reference['sha256']
+ verify_dim_module_roots(R,spec,cfg,json.loads((T/'faithfulness/manifest.json').read_bytes()))
++verify_package_compiler_command(R,spec,cfg,json.loads((T/'faithfulness/manifest.json').read_bytes()),json.loads((T/'preparation-lineage.json').read_bytes()))
+ parent_id='LEV-CH01-EQ-1.10-INTERPRETED-RECTANGLE-PRODUCTION-20260908'
+ parent=S/'audits'/parent_id/'faithfulness/orchestration';out=T/'faithfulness';tr=out/'orchestration';tr.mkdir()
+ lineage=[]
+@@ -447,5 +558,6 @@
+ assert taskid.encode() not in message and b'LeVeque' not in message and b'user-interpretation' not in message
+ writej(T/'role-transport-preflight.json',{'helpers':lineage,'blind_packet_sha256':sha(out/'inputs/blind_review_packet.md'),'blind_stdin_sha256':hashlib.sha256(message).hexdigest(),'blind_isolation_verified':True,'source_context_extension':spec.get('source_context_extension'),'roles_invoked':False,'images':[{'page':p,'sha256':sha(tr/('page-'+p.zfill(3)+'.png'))} for p in spec['pages'].split(',')],'config_path':config.relative_to(R).as_posix()})
+ verify_dim_module_roots(R,spec,cfg,json.loads((T/'faithfulness/manifest.json').read_bytes()))
++verify_package_compiler_command(R,spec,cfg,json.loads((T/'faithfulness/manifest.json').read_bytes()),json.loads((T/'preparation-lineage.json').read_bytes()))
+ if recovery_pins:verify_partial_recovery(T,recovery_pins)
+ print(json.dumps({'prepared':taskid,'config':str(config),'runner':str(tr/'q.py'),'pages':spec['pages'],'blind_bytes':len(packet)}),flush=True)

@@ -1,0 +1,81 @@
+namespace CapacityBoundarySweep
+open MeasureTheory NumStability NumStability.FiniteCoordinate NumStability.SequentialError CapacityCoordinate
+open scoped BigOperators
+variable {D Cell Face Point FacePoint Line : Type*}
+variable [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+local notation "State" => Fin m → ℝ
+variable {data : PhysicalData D Cell Face Point FacePoint m}
+variable {coord : ℕ → LineCoordinates (m := m) D Cell Face Line}
+
+noncomputable def step (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
+    (duration : ℕ → ℝ) (n : ℕ) : (Cell → State) → Cell → State :=
+  advance data (method n).rule (direction n) (duration n)
+
+noncomputable def run (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
+    (duration : ℕ → ℝ) (initial : Cell → State) : ℕ → Cell → State :=
+  execution (step method direction duration) initial
+
+theorem run_succ (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
+    (duration : ℕ → ℝ) (initial : Cell → State) (n : ℕ) :
+    run method direction duration initial (n + 1) =
+      advance data (method n).rule (direction n) (duration n)
+        (run method direction duration initial n) := rfl
+
+theorem run_ordered (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
+    (duration : ℕ → ℝ) (initial : Cell → State) (n : ℕ) :
+    run method direction duration initial n =
+      orderedOperatorSweep ((List.range n).map (step method direction duration)) initial := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [run_succ, List.range_succ, List.map_append, orderedOperatorSweep]
+    simp only [List.map_cons, List.map_nil, List.foldl_append, List.foldl_cons, List.foldl_nil]
+    change step method direction duration n (run method direction duration initial n) =
+      step method direction duration n
+        (orderedOperatorSweep ((List.range n).map (step method direction duration)) initial)
+    rw [ih]
+
+/-- Actual ordered capacity execution, compared with physical measured cell
+means. Stability, net physical-flux defect, and stage-reference mismatch remain
+independent hypotheses. This theorem does not define a high-resolution class. -/
+theorem run_physical_error (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
+    (duration : ℕ → ℝ) (initial : Cell → State) (physical : ℕ → Point → ℝ → State)
+    (steps : ℕ) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+    (netError : ℕ → Cell → ℝ)
+    (hdt : ∀ n < steps, 0 < duration n)
+    (href : ∀ n < steps, data.ReferenceOn (direction n) (physical n) 0 (duration n))
+    (hinitial : ∀ cell, ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError)
+    (hactual : ∀ n < steps, (method n).Admitted (direction n) (duration n)
+      (run method direction duration initial n))
+    (hrefadmit : ∀ n < steps, (method n).Admitted (direction n) (duration n)
+      (fun cell => data.cellMean (physical n) cell 0))
+    (hstable : ∀ n < steps, (method n).StableAt (direction n) (duration n) (amplification n))
+    (hnet : ∀ n < steps, ∀ cell,
+      ‖CapacityNetReferenceError.netFluxDefect data (method n).rule (direction n)
+        (fun c => data.cellMean (physical n) c 0) (physical n) 0 (duration n) cell‖ ≤ netError n cell)
+    (hlocal : ∀ n < steps, ∀ cell,
+      duration n / data.cellVolume cell * netError n cell ≤ localDefect n)
+    (hsplit : ∀ n < steps, ∀ cell,
+      ‖data.cellMean (physical n) cell (duration n) -
+        data.cellMean (physical (n + 1)) cell 0‖ ≤ splittingDefect n) :
+    ∀ n ≤ steps, ∀ cell,
+      ‖run method direction duration initial n cell - data.cellMean (physical n) cell 0‖ ≤
+        errorBudget amplification localDefect splittingDefect initialError n := by
+  apply execution_error_le_upto (step method direction duration)
+    (fun n => (method n).Admitted (direction n) (duration n)) initial
+    (fun n cell => data.cellMean (physical n) cell 0)
+    (fun n cell => data.cellMean (physical n) cell (duration n))
+    amplification localDefect splittingDefect initialError steps hinitial hactual hrefadmit
+  · intro n hn current other hc ho E herr
+    have hE : 0 ≤ E := (norm_nonneg _).trans (herr (Classical.choice data.cells.cells_nonempty))
+    exact (method n).coordinate_stability (direction n) (duration n) (amplification n)
+      (hstable n hn) current other hc ho hE herr
+  · intro n hn cell
+    have he := CapacityNetReferenceError.advance_error_le_net data (method n).rule (direction n)
+      (fun c => data.cellMean (physical n) c 0) (physical n) (href n hn) (hdt n hn) cell
+      0 (netError n cell) (by simp) (hnet n hn cell)
+    apply le_trans ?_ (hlocal n hn cell)
+    simpa [step] using he
+  · exact hsplit
+
+end CapacityBoundarySweep

@@ -1,0 +1,149 @@
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/measure-operator-evidence/Operators.lean:6:0: error: Unknown option `pp.width`
+def MeasureTheory.Measure.restrict.{u_2} : {α : Type u_2} →
+  {_m0 : MeasurableSpace α} → MeasureTheory.Measure α → Set α → MeasureTheory.Measure α :=
+fun {α} {_m0} μ s => (MeasureTheory.Measure.restrictₗ s) μ
+@MeasureTheory.Measure.restrict_apply : ∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}
+  {s t : Set α}, MeasurableSet t → (μ.restrict s) t = μ (t ∩ s)
+@MeasureTheory.Measure.restrict_apply' : ∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}
+  {s t : Set α}, MeasurableSet s → (μ.restrict s) t = μ (t ∩ s)
+@MeasureTheory.Measure.restrict_apply_univ : ∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}
+  (s : Set α), (μ.restrict s) Set.univ = μ s
+def MeasureTheory.IntegrableOn.{u_1, u_3} : {α : Type u_1} →
+  {ε : Type u_3} →
+    {mα : MeasurableSpace α} →
+      [inst : TopologicalSpace ε] →
+        [ContinuousENorm ε] →
+          (α → ε) → Set α → autoParam (MeasureTheory.Measure α) MeasureTheory.IntegrableOn._auto_1 → Prop :=
+fun {α} {ε} {mα} [TopologicalSpace ε] [ContinuousENorm ε] f s μ => MeasureTheory.Integrable f (μ.restrict s)
+def MeasureTheory.Integrable.{u_5, u_8} : {ε : Type u_5} →
+  [inst : TopologicalSpace ε] →
+    [ContinuousENorm ε] →
+      {α : Type u_8} →
+        {x : MeasurableSpace α} →
+          (α → ε) → autoParam (MeasureTheory.Measure α) MeasureTheory.Integrable._auto_1 → Prop :=
+fun {ε} [TopologicalSpace ε] [ContinuousENorm ε] {α} {x} f μ =>
+  MeasureTheory.AEStronglyMeasurable f μ ∧ MeasureTheory.HasFiniteIntegral f μ
+def MeasureTheory.HasFiniteIntegral.{u_1, u_4} : {α : Type u_1} →
+  {ε : Type u_4} →
+    [ENorm ε] →
+      {x : MeasurableSpace α} →
+        (α → ε) → autoParam (MeasureTheory.Measure α) MeasureTheory.HasFiniteIntegral._auto_1 → Prop :=
+fun {α} {ε} [ENorm ε] {x} f μ => ∫⁻ (a : α), ‖f a‖ₑ ∂μ < ⊤
+@MeasureTheory.hasFiniteIntegral_iff_norm : ∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace α}
+  {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β] (f : α → β),
+  MeasureTheory.HasFiniteIntegral f μ ↔ ∫⁻ (a : α), ENNReal.ofReal ‖f a‖ ∂μ < ⊤
+def MeasureTheory.AEStronglyMeasurable.{u_1, u_2} : {α : Type u_1} →
+  {β : Type u_2} →
+    [TopologicalSpace β] →
+      [m : MeasurableSpace α] →
+        {m₀ : MeasurableSpace α} →
+          (α → β) → autoParam (MeasureTheory.Measure α) MeasureTheory.AEStronglyMeasurable._auto_1 → Prop :=
+fun {α} {β} [TopologicalSpace β] [MeasurableSpace α] {m₀} f μ => ∃ g, MeasureTheory.StronglyMeasurable g ∧ f =ᵐ[μ] g
+def MeasureTheory.StronglyMeasurable.{u_1, u_2} : {α : Type u_1} →
+  {β : Type u_2} → [TopologicalSpace β] → [MeasurableSpace α] → (α → β) → Prop :=
+fun {α} {β} [TopologicalSpace β] [MeasurableSpace α] f =>
+  ∃ fs, ∀ (x : α), Filter.Tendsto (fun n => (fs n) x) Filter.atTop (nhds (f x))
+structure MeasureTheory.SimpleFunc.{u, v} (α : Type u) [MeasurableSpace α] (β : Type v) : Type (max u v)
+number of parameters: 3
+fields:
+  MeasureTheory.SimpleFunc.toFun : α → β
+  MeasureTheory.SimpleFunc.measurableSet_fiber' : ∀ (x : β), MeasurableSet (self.toFun ⁻¹' {x})
+  MeasureTheory.SimpleFunc.finite_range' : (Set.range self.toFun).Finite
+constructor:
+  MeasureTheory.SimpleFunc.mk.{u, v} {α : Type u} [MeasurableSpace α] {β : Type v} (toFun : α → β)
+    (measurableSet_fiber' : ∀ (x : β), MeasurableSet (toFun ⁻¹' {x})) (finite_range' : (Set.range toFun).Finite) :
+    MeasureTheory.SimpleFunc α β
+@MeasureTheory.lintegral_def : ∀ {α : Type u_1} {m : MeasurableSpace α} (μ : MeasureTheory.Measure α) (f : α → ENNReal),
+  MeasureTheory.lintegral μ f = ⨆ g, ⨆ (_ : ⇑g ≤ f), g.lintegral μ
+def MeasureTheory.SimpleFunc.lintegral.{u_1} : {α : Type u_1} →
+  {_m : MeasurableSpace α} → MeasureTheory.SimpleFunc α ENNReal → MeasureTheory.Measure α → ENNReal :=
+fun {α} {_m} f μ => ∑ x ∈ f.range, x * μ (⇑f ⁻¹' {x})
+@MeasureTheory.integral_def : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G] [inst_1 : NormedSpace ℝ G]
+  {x : MeasurableSpace α} (μ : MeasureTheory.Measure α) (f : α → G),
+  MeasureTheory.integral μ f =
+    if x_1 : CompleteSpace G then
+      if hf : MeasureTheory.Integrable f μ then MeasureTheory.L1.integral (MeasureTheory.Integrable.toL1 f hf) else 0
+    else 0
+@MeasureTheory.integral_eq : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [hE : CompleteSpace E] (f : α → E)
+  (hf : MeasureTheory.Integrable f μ),
+  ∫ (a : α), f a ∂μ = MeasureTheory.L1.integral (MeasureTheory.Integrable.toL1 f hf)
+@MeasureTheory.Integrable.coeFn_toL1 : ∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace α}
+  {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β] {f : α → β} (hf : MeasureTheory.Integrable f μ),
+  ↑↑(MeasureTheory.Integrable.toL1 f hf) =ᵐ[μ] f
+@MeasureTheory.L1.integral_def : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E] {m : MeasurableSpace α}
+  {μ : MeasureTheory.Measure α} [inst_1 : NormedSpace ℝ E] [inst_2 : CompleteSpace E],
+  MeasureTheory.L1.integral = ⇑MeasureTheory.L1.integralCLM
+@MeasureTheory.L1.integral_eq : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E] {m : MeasurableSpace α}
+  {μ : MeasureTheory.Measure α} [inst_1 : NormedSpace ℝ E] [inst_2 : CompleteSpace E] (f : ↥(MeasureTheory.Lp E 1 μ)),
+  MeasureTheory.L1.integral f = MeasureTheory.L1.integralCLM f
+def MeasureTheory.L1.integralCLM.{u_1, u_2} : {α : Type u_1} →
+  {E : Type u_2} →
+    [inst : NormedAddCommGroup E] →
+      {m : MeasurableSpace α} →
+        {μ : MeasureTheory.Measure α} →
+          [inst_1 : NormedSpace ℝ E] → [CompleteSpace E] → ↥(MeasureTheory.Lp E 1 μ) →L[ℝ] E :=
+fun {α} {E} [NormedAddCommGroup E] {m} {μ} [NormedSpace ℝ E] [CompleteSpace E] => MeasureTheory.L1.integralCLM' ℝ
+def MeasureTheory.L1.integralCLM'.{u_1, u_2, u_4} : {α : Type u_1} →
+  {E : Type u_2} →
+    (𝕜 : Type u_4) →
+      [inst : NormedAddCommGroup E] →
+        {m : MeasurableSpace α} →
+          {μ : MeasureTheory.Measure α} →
+            [inst_1 : NormedSpace ℝ E] →
+              [inst_2 : NormedRing 𝕜] →
+                [inst_3 : Module 𝕜 E] →
+                  [inst_4 : IsBoundedSMul 𝕜 E] →
+                    [SMulCommClass ℝ 𝕜 E] → [CompleteSpace E] → ↥(MeasureTheory.Lp E 1 μ) →L[𝕜] E :=
+fun {α} {E} 𝕜 [NormedAddCommGroup E] {m} {μ} [NormedSpace ℝ E] [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E]
+    [SMulCommClass ℝ 𝕜 E] [CompleteSpace E] =>
+  (MeasureTheory.L1.SimpleFunc.integralCLM' α E 𝕜 μ).extend (MeasureTheory.Lp.simpleFunc.coeToLp α E 𝕜)
+@MeasureTheory.L1.SimpleFunc.integral_eq_integral : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst_1 : NormedSpace ℝ E]
+  (f : ↥(MeasureTheory.Lp.simpleFunc E 1 μ)),
+  MeasureTheory.L1.SimpleFunc.integral f =
+    MeasureTheory.SimpleFunc.integral μ (MeasureTheory.Lp.simpleFunc.toSimpleFunc f)
+@MeasureTheory.L1.SimpleFunc.integral_L1_eq_integral : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst_1 : NormedSpace ℝ E] [inst_2 : CompleteSpace E]
+  (f : ↥(MeasureTheory.Lp.simpleFunc E 1 μ)), MeasureTheory.L1.integral ↑f = MeasureTheory.L1.SimpleFunc.integral f
+@MeasureTheory.SimpleFunc.integral_eq : ∀ {α : Type u_1} {F : Type u_2} [inst : NormedAddCommGroup F]
+  [inst_1 : NormedSpace ℝ F] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α) (f : MeasureTheory.SimpleFunc α F),
+  MeasureTheory.SimpleFunc.integral μ f = ∑ x ∈ f.range, μ.real (⇑f ⁻¹' {x}) • x
+@MeasureTheory.SimpleFunc.integral_eq_sum : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E]
+  [inst_1 : NormedSpace ℝ E] {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [hE : CompleteSpace E]
+  (f : MeasureTheory.SimpleFunc α E),
+  MeasureTheory.Integrable (⇑f) μ → ∫ (x : α), f x ∂μ = ∑ x ∈ f.range, μ.real (⇑f ⁻¹' {x}) • x
+@MeasureTheory.tendsto_integral_of_L1 : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G]
+  [inst_1 : NormedSpace ℝ G] {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {ι : Type u_3} (f : α → G),
+  MeasureTheory.Integrable f μ →
+    ∀ {F : ι → α → G} {l : Filter ι},
+      (∀ᶠ (i : ι) in l, MeasureTheory.Integrable (F i) μ) →
+        Filter.Tendsto (fun i => ∫⁻ (x : α), ‖F i x - f x‖ₑ ∂μ) l (nhds 0) →
+          Filter.Tendsto (fun i => ∫ (x : α), F i x ∂μ) l (nhds (∫ (x : α), f x ∂μ))
+@MeasureTheory.integral_undef : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G] [inst_1 : NormedSpace ℝ G]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {f : α → G},
+  ¬MeasureTheory.Integrable f μ → ∫ (a : α), f a ∂μ = 0
+@MeasureTheory.integral_const : ∀ {α : Type u_1} {E : Type u_2} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [hE : CompleteSpace E] (c : E),
+  ∫ (x : α), c ∂μ = μ.real Set.univ • c
+@MeasureTheory.integral_congr_ae : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G]
+  [inst_1 : NormedSpace ℝ G] {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {f g : α → G},
+  f =ᵐ[μ] g → ∫ (a : α), f a ∂μ = ∫ (a : α), g a ∂μ
+'MeasureTheory.Measure.restrict_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.Measure.restrict_apply'' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.Measure.restrict_apply_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.hasFiniteIntegral_iff_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.lintegral_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.Integrable.coeFn_toL1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.L1.integral_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.L1.integral_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.L1.SimpleFunc.integral_eq_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.L1.SimpleFunc.integral_L1_eq_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.SimpleFunc.integral_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.SimpleFunc.integral_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.tendsto_integral_of_L1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_undef' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MeasureTheory.integral_congr_ae' depends on axioms: [propext, Classical.choice, Quot.sound]

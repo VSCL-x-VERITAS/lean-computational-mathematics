@@ -1,0 +1,181 @@
+--- ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean
++++ proposal/ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean
+@@ -2,147 +2,43 @@
+ SPDX-License-Identifier: MIT
+ -/
+ 
+-import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.HighResolutionCoordinateSweep
++import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.PhysicalHighResolutionSweep
+ 
+ /-!
+-Chapter 1 coordinate splitting under the recorded logical-grid interpretation
+-and the separately adopted high-resolution convention. The latter requires
+-uniform order greater than one for smooth local references, perturbation
+-stability, and quantitative oscillation control. This is an explicit selected
+-interpretation, not a claim that the book states these analytic quantifiers.
++# Chapter 1 coordinate splitting on a physical logical grid
+ 
+-The theorem uses the supplied methods on their actual extracted lines, keeps
+-boundary data and splitting defects explicit, and identifies actual Cartesian
+-measures and fluxes when the same physical data has that realization. It does
+-not assert higher temporal order for a Lie-split composite or existence of
+-high-resolution solvers for arbitrary laws.
++This correspondence uses the recorded physical logical-grid and separately adopted
++high-resolution interpretations. It executes supplied capacity methods through positive,
++admitted coordinate substeps on the selected measured mesh. Core quality retains
++uniform smooth order and quantitative oscillation control; stability is required only
++inside the conditional error analysis. The underlying assumptions are supplied measured
++directional balances, with no continuum-equivalence inference from tensor/normal data.
++The earlier common-area source contract is preserved in its frozen historical audit;
++this replacement requires its own source-faithfulness decision.
+ -/
+ 
+ namespace NumStability
+-open MeasureTheory NumStability.LocalConservationLaw DirectionalLine FiniteCoordinate SequentialError
+-open scoped BigOperators
+-variable {D Cell Face FacePoint Line : Type*} [Fintype D] [DecidableEq D] [Fintype Cell]
+-variable [MeasurableSpace FacePoint] {m : ℕ}
+-variable {data : PhysicalData D Cell Face (D → ℝ) FacePoint m}
+-variable {coord : LineCoordinates (m := m) D Cell Face Line} {family : D → Line → LineFamily m}
+-local notation "V" => Fin m → ℝ
++variable {D FacePoint : Type*} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+ 
+-/-- One complete conditional construction: supplied high-resolution line
+-families are the actual constituent operators, physical references conserve
+-on every time subinterval, finite successive execution retains boundary
+-transfer and explicit splitting errors, and Cartesian observations concern
+-the same physical data. Solver existence for arbitrary laws and composite
+-high temporal order are not asserted. -/
+-theorem leveque01_coordinateHighResolutionMethods_sourceContract (hm : 0 < m) (hD : 0 < Fintype.card D)
+-
+-    (method : ℕ → LineRealization data coord family) (direction : ℕ → D)
+-    (quality : ∀ d line, (family d line).HasControlledHighResolution)
+-    (initial : Cell → V) (physical : ℕ → (D → ℝ) → ℝ → V) (steps : ℕ)
+-    (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+-    (leftError rightError : ℕ → Cell → ℝ)
+-    (href : ∀ n < steps, data.ReferenceOn (direction n) (physical n) 0
+-      ((method n).duration (direction n)))
+-    (hinitial : ∀ cell, ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError)
+-    (hactual : ∀ n < steps, (method n).Admitted (direction n)
+-      (coordinateExecution method direction initial n))
+-    (hrefadmit : ∀ n < steps, (method n).Admitted (direction n)
+-      (fun cell => data.cellMean (physical n) cell 0))
+-    (hamplification : ∀ n < steps, ∀ cell,
+-      1 + (family (direction n) (coord.cellLine (direction n) cell)).stabilityRate
+-        (quality (direction n) (coord.cellLine (direction n) cell)) *
+-        (method n).duration (direction n) ≤ amplification n)
+-    (hleft : ∀ n < steps, ∀ cell,
+-      ‖(method n).rule (direction n) ((method n).duration (direction n))
+-          (fun c => data.cellMean (physical n) c 0) (data.leftFace (direction n) cell) -
+-        oneDimensionalCellAverage (data.faceFlux (direction n) (physical n)
+-          (data.leftFace (direction n) cell)) 0 ((method n).duration (direction n))‖ ≤ leftError n cell)
+-    (hright : ∀ n < steps, ∀ cell,
+-      ‖(method n).rule (direction n) ((method n).duration (direction n))
+-          (fun c => data.cellMean (physical n) c 0) (data.rightFace (direction n) cell) -
+-        oneDimensionalCellAverage (data.faceFlux (direction n) (physical n)
+-          (data.rightFace (direction n) cell)) 0 ((method n).duration (direction n))‖ ≤ rightError n cell)
+-    (hlocal : ∀ n < steps, ∀ cell, (method n).duration (direction n) / data.cellVolume cell *
+-      (leftError n cell + rightError n cell) ≤ localDefect n)
+-    (hsplit : ∀ n < steps, ∀ cell,
+-      ‖data.cellMean (physical n) cell ((method n).duration (direction n)) -
+-        data.cellMean (physical (n + 1)) cell 0‖ ≤ splittingDefect n)
+-    (hschedule : ∀ d : D, ∃ n < steps, direction n = d) :
+-    0 < m ∧ 0 < Fintype.card D ∧ (∀ d : D, ∃ n < steps, direction n = d) ∧
+-    (∀ d line, (family d line).HasControlledHighResolution) ∧
+-    (∀ d line, ∃ p L : ℝ, 1 < p ∧ 0 ≤ L ∧ ∀ q : ℝ → ℝ → V,
+-      SpatialSmoothReferenceOn q (family d line).flux (family d line).states (family d line).left (family d line).right (family d line).horizon →
+-      ∃ C : ℝ, 0 ≤ C ∧ ∃ N : ℕ, ∀ n, N ≤ n → ∀ projected values,
+-        (family d line).InitialProjection n q projected → (family d line).admitted n values →
+-        ∀ E : ℝ, 0 ≤ E →
+-        (∀ j ∈ Finset.Ico ((family d line).inputStart n) ((family d line).inputStart n + (family d line).inputCount n),
+-          ‖values j - projected j‖ ≤ E) →
+-        ∀ j ∈ Finset.Ico ((family d line).activeStart n) ((family d line).activeStart n + (family d line).activeCount n),
+-          ‖(family d line).advance n values j -
+-            finiteVolumeCellAverageOn ((family d line).grid n) (fun x => q x ((family d line).dt n)) j‖ ≤
+-            (1 + L * (family d line).dt n) * E + C * (family d line).dt n * ((family d line).mesh n) ^ p) ∧
+-    (∀ n ≤ steps, coordinateExecution method direction initial n =
+-      orderedOperatorSweep ((List.range n).map (coordinateStep method direction)) initial) ∧
+-    (∀ n < steps, ∀ cell,
+-      coordinateExecution method direction initial (n + 1) cell =
+-        (family (direction n) (coord.cellLine (direction n) cell)).advance
+-          ((method n).level (direction n) (coord.cellLine (direction n) cell))
+-          (coord.extract (direction n) (coord.cellLine (direction n) cell)
+-            (coordinateExecution method direction initial n)) (coord.cellIndex (direction n) cell)) ∧
+-    (∀ n < steps,
+-      (∑ cell, data.cellVolume cell • coordinateExecution method direction initial (n + 1) cell) =
+-      (∑ cell, data.cellVolume cell • coordinateExecution method direction initial n cell) -
+-        (method n).duration (direction n) • ∑ cell,
+-          ((method n).rule (direction n) ((method n).duration (direction n))
+-            (coordinateExecution method direction initial n) (data.rightFace (direction n) cell) -
+-           (method n).rule (direction n) ((method n).duration (direction n))
+-            (coordinateExecution method direction initial n) (data.leftFace (direction n) cell))) ∧
+-    (∀ n < steps, ∀ cell current other,
+-      (∀ c, coord.cellLine (direction n) c = coord.cellLine (direction n) cell → current c = other c) →
+-      advance data (method n).rule (direction n) ((method n).duration (direction n)) current cell =
+-        advance data (method n).rule (direction n) ((method n).duration (direction n)) other cell) ∧
+-    (∀ n < steps, ∀ cell, ∃ p L : ℝ, 1 < p ∧ 0 ≤ L ∧ ∀ q : ℝ → ℝ → V,
+-      SpatialSmoothReferenceOn q (family (direction n) (coord.cellLine (direction n) cell)).flux
+-        (family (direction n) (coord.cellLine (direction n) cell)).states (family (direction n) (coord.cellLine (direction n) cell)).left
+-        (family (direction n) (coord.cellLine (direction n) cell)).right (family (direction n) (coord.cellLine (direction n) cell)).horizon →
+-      ∃ C : ℝ, 0 ≤ C ∧ ∃ N : ℕ,
+-        N ≤ (method n).level (direction n) (coord.cellLine (direction n) cell) →
+-        ∀ projected current : Cell → V,
+-          (family (direction n) (coord.cellLine (direction n) cell)).InitialProjection ((method n).level (direction n) (coord.cellLine (direction n) cell)) q
+-            (coord.extract (direction n) (coord.cellLine (direction n) cell) projected) →
+-          (method n).Admitted (direction n) current → ∀ E : ℝ, 0 ≤ E →
+-          (∀ c, ‖current c - projected c‖ ≤ E) →
+-          ‖advance data (method n).rule (direction n) ((method n).duration (direction n)) current cell -
+-            finiteVolumeCellAverageOn
+-              ((family (direction n) (coord.cellLine (direction n) cell)).grid ((method n).level (direction n) (coord.cellLine (direction n) cell)))
+-              (fun x => q x ((method n).duration (direction n))) (coord.cellIndex (direction n) cell)‖ ≤
+-            (1 + L * (method n).duration (direction n)) * E + C * (method n).duration (direction n) *
+-              (family (direction n) (coord.cellLine (direction n) cell)).mesh ((method n).level (direction n) (coord.cellLine (direction n) cell)) ^ p) ∧
+-    (∀ n < steps, ∀ u ∈ Set.uIcc 0 ((method n).duration (direction n)),
+-      ∀ v ∈ Set.uIcc 0 ((method n).duration (direction n)), ∀ cell,
+-      data.cellVolume cell • (data.cellMean (physical n) cell v - data.cellMean (physical n) cell u) =
+-        ∫ τ in u..v, data.faceFlux (direction n) (physical n) (data.leftFace (direction n) cell) τ -
+-          data.faceFlux (direction n) (physical n) (data.rightFace (direction n) cell) τ) ∧
+-    (∀ n ≤ steps, ∀ cell,
+-      ‖coordinateExecution method direction initial n cell - data.cellMean (physical n) cell 0‖ ≤
+-        errorBudget amplification localDefect splittingDefect initialError n) ∧
+-    (∀ (axes : D → OneDimensionalFiniteVolumeGrid) (cellPosition : Cell → D → ℤ)
+-      (facePosition : D → Face → D → ℤ) (flux : D → V → V),
+-      FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux →
+-      (∀ cell, data.cellVolume cell = CartesianGrid.cellVolume axes (cellPosition cell)) ∧
+-      (∀ (q : (D → ℝ) → ℝ → V) cell t, data.cellMean q cell t =
+-        cellVolumeAverage volume (CartesianGrid.cellBox axes (cellPosition cell)) (fun x => q x t)) ∧
+-      (∀ (q : ℝ → ℝ → V) d face t,
+-        data.faceFlux d (fun x τ => q (x d) τ) face t =
+-          CartesianGrid.faceArea axes d (facePosition d face) •
+-            flux d (q ((axes d).cellLeft (facePosition d face d)) t)) ∧
+-      (∀ (q : ℝ → ℝ → V) d, IsRectangleConservationLawSolution q (flux d) → ∀ cell s t,
+-        data.cellVolume cell • (data.cellMean (fun x τ => q (x d) τ) cell t -
+-          data.cellMean (fun x τ => q (x d) τ) cell s) =
+-          ∫ τ in s..t, data.faceFlux d (fun x τ => q (x d) τ) (data.leftFace d cell) τ -
+-            data.faceFlux d (fun x τ => q (x d) τ) (data.rightFace d cell) τ)) := by
+-  exact HighResolutionCoordinateSweep.coordinate_highResolution_specification hm hD
+-    method direction quality initial physical steps amplification localDefect splittingDefect
+-    initialError leftError rightError href hinitial hactual hrefadmit hamplification hleft hright
+-    hlocal hsplit hschedule
++/-- Chapter 1 coordinate splitting under the recorded physical logical-grid
++interpretation and the separately adopted high-resolution convention: order
++greater than one on smooth references and quantitative oscillation control.
++The supplied methods execute positive, admitted coordinate substeps on the
++selected measured mesh, with explicit stage-dependent boundary inputs.
++Stability and physical reference-error hypotheses belong to the conditional
++analysis, rather than to the coordinate construction or core quality. -/
++theorem leveque01_coordinateHighResolutionMethods_sourceContract
++    (hm : 0 < m) (hD : 0 < Fintype.card D)
++    (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m)
++    (quality : family.HasHighResolution) (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ)
++    (ghost : ℕ → D → family.Line level → ℤ → Fin m → ℝ)
++    (initial : family.Cell level → Fin m → ℝ) (steps : ℕ)
++    (hschedule : ∀ d : D, ∃ k < steps, direction k = d)
++    (hvalid : NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost initial steps) :
++    0 < m ∧ 0 < Fintype.card D ∧
++      NumStability.PhysicalHighResolutionSweep.Specification family level direction duration ghost initial steps ∧
++      NumStability.PhysicalHighResolutionSweep.ValidSubsteps family level direction duration ghost initial steps :=
++  ⟨hm, hD, NumStability.PhysicalHighResolutionSweep.admitted_specification family quality level direction duration ghost
++    initial steps hschedule hvalid⟩
+ 
+ end NumStability

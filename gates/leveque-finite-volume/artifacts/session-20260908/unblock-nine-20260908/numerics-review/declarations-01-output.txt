@@ -1,0 +1,662 @@
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/CheckDeclarations.lean:676:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cellVolumeAverage volume (Set.Ioc (unitGrid.cellLeft ?i) (unitGrid.cellRight ?i)) ?field
+in the target expression
+  ‖riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old ⋯) 0 -
+        cellVolumeAverage volume (Set.Ioc 0 1) fun x => StationaryRiemannField.reference 0 1 x dt‖ ≤
+    0
+
+dt : ℝ
+hdt : 0 < dt
+hdt1 : dt < 1
+law : OneDimensionalHyperbolicConservationLaw (Fin 1) := StationaryRiemannField.transportLaw
+method : RiemannInformationFluxMethod law LeftStateInformationFlux.OrderedResult ((Fin 1 → ℝ) × (Fin 1 → ℝ)) :=
+  LeftStateInformationFlux.method law
+old : ℤ → Fin 1 → ℝ := finiteVolumeCellAverageOn unitGrid initialState
+localTrace : (j : ℤ) → LeftStateInformationFlux.OrderedResult (adjacentCellRiemannProblem law old j) → ℝ → Fin 1 → ℝ :=
+  fun x => LeftStateInformationFlux.localTrace
+hq :
+  IsRectangleConservationLawSolution (StationaryRiemannField.reference 0 1)
+    StationaryRiemannField.transportLaw.physicalFlux
+hinit : (fun x => StationaryRiemannField.reference 0 1 x 0) = initialState
+hold :
+  ‖old 0 -
+        cellVolumeAverage volume (Set.Ioc (unitGrid.cellLeft 0) (unitGrid.cellRight 0)) fun x =>
+          StationaryRiemannField.reference 0 1 x 0‖ ≤
+    0
+hn : ∀ (j : ℤ) (τ : ℝ), ‖method.interfaceFlux old ⋯ j - localTrace j (method.selectedResult old ⋯ j) τ‖ ≤ 0
+hel :
+  ∀ τ ∈ Set.uIoc 0 dt,
+    ‖localTrace 0 (method.selectedResult old ⋯ 0) τ -
+          law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft 0) τ)‖ ≤
+      0
+her :
+  ∀ τ ∈ Set.uIoc 0 dt,
+    ‖localTrace (0 + 1) (method.selectedResult old ⋯ (0 + 1)) τ -
+          law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft (0 + 1)) τ)‖ ≤
+      0
+hleft :
+  ‖method.interfaceFlux old ⋯ 0 -
+        timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux 0 dt 0‖ ≤
+    0 + 0
+hright :
+  ‖method.interfaceFlux old ⋯ (0 + 1) -
+        timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux 0 dt (0 + 1)‖ ≤
+    0 + 0
+hold' : ‖old 0 - finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x 0) 0‖ ≤ 0
+hb :
+  IsOneDimensionalCellAverage (fun x => StationaryRiemannField.reference 0 1 x 0) (unitGrid.cellLeft 0)
+      (unitGrid.cellRight 0)
+      (finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x 0) 0) ∧
+    IsOneDimensionalCellAverage (fun x => StationaryRiemannField.reference 0 1 x dt) (unitGrid.cellLeft 0)
+        (unitGrid.cellRight 0)
+        (finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x dt) 0) ∧
+      (finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x 0) 0 =
+          cellVolumeAverage volume (Set.Ioc (unitGrid.cellLeft 0) (unitGrid.cellRight 0)) fun x =>
+            StationaryRiemannField.reference 0 1 x 0) ∧
+        IsOneDimensionalCellAverage
+            (fun τ => law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft 0) τ)) 0 dt
+            (timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux 0 dt 0) ∧
+          (timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux 0 dt 0 =
+              cellVolumeAverage volume (Set.Ioc 0 dt) fun τ =>
+                law.physicalFlux (StationaryRiemannField.reference 0 1 (unitGrid.cellLeft 0) τ)) ∧
+            riemannFiniteVolumeUpdate unitGrid (dt - 0) old (method.interfaceFlux old ⋯) 0 =
+                old 0 -
+                  ((dt - 0) / unitGrid.cellVolume 0) •
+                    (method.interfaceFlux old ⋯ (0 + 1) - method.interfaceFlux old ⋯ 0) ∧
+              unitGrid.cellVolume 0 •
+                    (riemannFiniteVolumeUpdate unitGrid (dt - 0) old (method.interfaceFlux old ⋯) 0 -
+                      finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x dt) 0) =
+                  unitGrid.cellVolume 0 •
+                      (old 0 -
+                        finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x 0) 0) +
+                    (dt - 0) •
+                      (method.interfaceFlux old ⋯ 0 -
+                          timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux
+                            0 dt 0 -
+                        (method.interfaceFlux old ⋯ (0 + 1) -
+                          timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1) law.physicalFlux
+                            0 dt (0 + 1))) ∧
+                ∀ (oldBound leftBound rightBound : ℝ),
+                  ‖old 0 - finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x 0) 0‖ ≤
+                      oldBound →
+                    ‖method.interfaceFlux old ⋯ 0 -
+                            timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1)
+                              law.physicalFlux 0 dt 0‖ ≤
+                        leftBound →
+                      ‖method.interfaceFlux old ⋯ (0 + 1) -
+                              timeAveragedPhysicalFaceFlux unitGrid (StationaryRiemannField.reference 0 1)
+                                law.physicalFlux 0 dt (0 + 1)‖ ≤
+                          rightBound →
+                        ‖riemannFiniteVolumeUpdate unitGrid (dt - 0) old (method.interfaceFlux old ⋯) 0 -
+                              finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x dt)
+                                0‖ ≤
+                          oldBound + (dt - 0) / unitGrid.cellVolume 0 * (leftBound + rightBound)
+estimate :
+  ‖riemannFiniteVolumeUpdate unitGrid (dt - 0) old (method.interfaceFlux old ⋯) 0 -
+        finiteVolumeCellAverageOn unitGrid (fun x => StationaryRiemannField.reference 0 1 x dt) 0‖ ≤
+    0 + (dt - 0) / unitGrid.cellVolume 0 * (0 + 0)
+⊢ ‖riemannFiniteVolumeUpdate unitGrid dt old (method.interfaceFlux old ⋯) 0 -
+        cellVolumeAverage volume (Set.Ioc 0 1) fun x => StationaryRiemannField.reference 0 1 x dt‖ ≤
+    0
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/CheckDeclarations.lean:681:0: error: Unknown option `pp.width`
+@NumStability.leveque01_finiteVolumeUpdateError_sourceContract : ∀ {m : ℕ},
+  0 < m →
+    ∀ (grid : NumStability.OneDimensionalFiniteVolumeGrid) {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ},
+      NumStability.IsRectangleConservationLawSolution q flux →
+        ∀ (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ},
+          s < t →
+            ∀ (old : ℤ → Fin m → ℝ),
+              0 < m ∧
+                ∀ (i : ℤ),
+                  NumStability.IsOneDimensionalCellAverage (fun x => q x s) (grid.cellLeft i) (grid.cellRight i)
+                      (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) ∧
+                    NumStability.IsOneDimensionalCellAverage (fun x => q x t) (grid.cellLeft i) (grid.cellRight i)
+                        (NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) ∧
+                      (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i =
+                          NumStability.cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i)) fun x =>
+                            q x s) ∧
+                        NumStability.IsOneDimensionalCellAverage (fun τ => flux (q (grid.cellLeft i) τ)) s t
+                            (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i) ∧
+                          (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i =
+                              NumStability.cellVolumeAverage volume (Set.Ioc s t) fun τ =>
+                                flux (q (grid.cellLeft i) τ)) ∧
+                            NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i =
+                                old i - ((t - s) / grid.cellVolume i) • (rule s t old (i + 1) - rule s t old i) ∧
+                              grid.cellVolume i •
+                                    (NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+                                      NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) =
+                                  grid.cellVolume i •
+                                      (old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) +
+                                    (t - s) •
+                                      (rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i -
+                                        (rule s t old (i + 1) -
+                                          NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1))) ∧
+                                ∀ (oldBound leftBound rightBound : ℝ),
+                                  ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤ oldBound →
+                                    ‖rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i‖ ≤
+                                        leftBound →
+                                      ‖rule s t old (i + 1) -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1)‖ ≤
+                                          rightBound →
+                                        ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+                                              NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+                                          oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.leveque01_finiteVolumeUpdateError_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.leveque01_riemannInformationInterfaceFlux_sourceContract : ∀ {m : ℕ},
+  0 < m →
+    ∀ (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+      {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+      {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+      (method : NumStability.RiemannInformationFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+      (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {q : ℝ → ℝ → Fin m → ℝ},
+      NumStability.IsRectangleConservationLawSolution q law.physicalFlux →
+        ∀ {s t : ℝ},
+          s < t →
+            0 < m ∧
+              (∀ (a b : ℝ),
+                  ∀ᵐ (τ : ℝ),
+                    HasDerivAt (fun r => ∫ (x : ℝ) in a..b, q x r) (law.physicalFlux (q a τ) - law.physicalFlux (q b τ))
+                      τ) ∧
+                (∀ (state : Fin m → ℝ) (j : ℤ), method.interfaceFlux (fun x => state) ⋯ j = law.physicalFlux state) ∧
+                  (∀ (j : ℤ),
+                      let problem := NumStability.adjacentCellRiemannProblem law old j;
+                      have result := method.solve problem ⋯;
+                      grid.cellRight (j - 1) = grid.cellLeft j ∧
+                        problem.leftState = old (j - 1) ∧
+                          problem.rightState = old j ∧
+                            method.selectedResult old hdomain j = result ∧
+                              method.interfaceFlux old hdomain j = method.numericalFlux (method.extract result)) ∧
+                    ∀ (i : ℤ),
+                      NumStability.IsOneDimensionalCellAverage (fun x => q x s) (grid.cellLeft i) (grid.cellRight i)
+                          (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) ∧
+                        NumStability.IsOneDimensionalCellAverage (fun x => q x t) (grid.cellLeft i) (grid.cellRight i)
+                            (NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) ∧
+                          (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i =
+                              NumStability.cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i))
+                                fun x => q x s) ∧
+                            NumStability.IsOneDimensionalCellAverage (fun τ => law.physicalFlux (q (grid.cellLeft i) τ))
+                                s t (NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i) ∧
+                              (NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i =
+                                  NumStability.cellVolumeAverage volume (Set.Ioc s t) fun τ =>
+                                    law.physicalFlux (q (grid.cellLeft i) τ)) ∧
+                                NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                      (method.interfaceFlux old hdomain) i =
+                                    old i -
+                                      ((t - s) / grid.cellVolume i) •
+                                        (method.interfaceFlux old hdomain (i + 1) -
+                                          method.interfaceFlux old hdomain i) ∧
+                                  grid.cellVolume i •
+                                        (NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                            (method.interfaceFlux old hdomain) i -
+                                          NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) =
+                                      grid.cellVolume i •
+                                          (old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) +
+                                        (t - s) •
+                                          (method.interfaceFlux old hdomain i -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i -
+                                            (method.interfaceFlux old hdomain (i + 1) -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                (i + 1))) ∧
+                                    ∀ (oldBound leftBound rightBound : ℝ),
+                                      ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤
+                                          oldBound →
+                                        ‖method.interfaceFlux old hdomain i -
+                                                NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                  i‖ ≤
+                                            leftBound →
+                                          ‖method.interfaceFlux old hdomain (i + 1) -
+                                                  NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                    (i + 1)‖ ≤
+                                              rightBound →
+                                            ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                                    (method.interfaceFlux old hdomain) i -
+                                                  NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+                                              oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.leveque01_riemannInformationInterfaceFlux_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.leveque01_coordinateSplittingBalance_sourceContract : ∀ {D : Type u_1} {E : Type u_2}
+  [inst : DecidableEq D] [inst_1 : AddCommGroup E] [inst_2 : Module ℝ E] (cellVolume : (D → ℤ) → ℝ),
+  (∀ (cell : D → ℤ), 0 < cellVolume cell) →
+    ∀ (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (stages : List (D × ℝ)),
+      stages ≠ [] →
+        (∀ (d : D), ∃ dt, (d, dt) ∈ stages) →
+          (∀ stage ∈ stages, 0 < stage.2) →
+            ∀ (state : (D → ℤ) → E),
+              stages ≠ [] ∧
+                (∀ (d : D), ∃ dt, (d, dt) ∈ stages) ∧
+                  (∀ stage ∈ stages, 0 < stage.2) ∧
+                    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+                      stages = before ++ (d, dt) :: after →
+                        have current := NumStability.CoordinateLineBalance.sweep cellVolume rule before state;
+                        NumStability.CoordinateLineBalance.sweep cellVolume rule stages state =
+                            NumStability.CoordinateLineBalance.sweep cellVolume rule after
+                              (NumStability.CoordinateLineBalance.advance cellVolume rule d dt current) ∧
+                          (∀ (cell : D → ℤ),
+                              cellVolume cell •
+                                  NumStability.CoordinateLineBalance.advance cellVolume rule d dt current cell =
+                                cellVolume cell • current cell -
+                                  dt • NumStability.CoordinateLineBalance.netOutwardFlux rule d dt current cell) ∧
+                            (∀ (base : D → ℤ) (start : ℤ) (count : ℕ),
+                                ∑ k ∈ Finset.range count,
+                                    cellVolume (Function.update base d (start + ↑k)) •
+                                      NumStability.CoordinateLineBalance.advance cellVolume rule d dt current
+                                        (Function.update base d (start + ↑k)) =
+                                  ∑ k ∈ Finset.range count,
+                                      cellVolume (Function.update base d (start + ↑k)) •
+                                        current (Function.update base d (start + ↑k)) -
+                                    dt •
+                                      (NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                          (Function.update base d (start + ↑count)) -
+                                        NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                          (Function.update base d start))) ∧
+                              ∀ (other : (D → ℤ) → E) (base : D → ℤ),
+                                (∀ (j : ℤ), current (Function.update base d j) = other (Function.update base d j)) →
+                                  ∀ (j : ℤ),
+                                    NumStability.CoordinateLineBalance.advance cellVolume rule d dt current
+                                        (Function.update base d j) =
+                                      NumStability.CoordinateLineBalance.advance cellVolume rule d dt other
+                                        (Function.update base d j)
+'NumStability.leveque01_coordinateSplittingBalance_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.leveque01_coordinateSplittingBalance_information : ∀ {D : Type u_1} [inst : DecidableEq D] {m : ℕ}
+  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (cellVolume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ),
+  NumStability.RiemannInformationCoordinate.SweepAdmitted methods cellVolume area fallback stages state →
+    (∀ (other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ),
+        NumStability.CoordinateLineBalance.sweep cellVolume
+            (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) stages state =
+          NumStability.CoordinateLineBalance.sweep cellVolume
+            (NumStability.RiemannInformationCoordinate.guardedRule methods area other) stages state) ∧
+      ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+        stages = before ++ (d, dt) :: after →
+          ∀ (cell : D → ℤ),
+            have current :=
+              NumStability.CoordinateLineBalance.sweep cellVolume
+                (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) before state;
+            ∃ (admitted : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt current cell),
+              let problem :=
+                NumStability.adjacentCellRiemannProblem (laws d) (fun j => current (Function.update cell d j)) (cell d);
+              have result := (methods d dt).solve problem admitted;
+              problem.leftState = current (Function.update cell d (cell d - 1)) ∧
+                problem.rightState = current cell ∧
+                  NumStability.CoordinateLineBalance.normalFaceFlux
+                      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt current cell =
+                    area d cell • (methods d dt).numericalFlux ((methods d dt).extract result)
+'NumStability.leveque01_coordinateSplittingBalance_information' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.leveque01_coordinateSplittingBalance_cartesian : ∀ {D : Type u_1} [inst : Fintype D]
+  [inst_1 : DecidableEq D] {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),
+  (∀ (cell : D → ℤ), 0 < NumStability.CartesianGrid.cellVolume axes cell) ∧
+    (∀ (cell : D → ℤ),
+        (volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =
+          NumStability.CartesianGrid.cellVolume axes cell) ∧
+      (∀ (cell : D → ℤ),
+          (volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+            NumStability.CartesianGrid.faceArea axes d cell) ∧
+        (∀ (cell : D → ℤ), (axes d).cellRight (cell d) = (axes d).cellLeft (Function.update cell d (cell d + 1) d)) ∧
+          (fun j =>
+              NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+                (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt state
+                (Function.update base d j)) =
+            NumStability.riemannFiniteVolumeUpdate (axes d) dt (fun j => state (Function.update base d j)) fun j =>
+              rule d (Function.update base d j) dt fun k => state (Function.update base d k)
+'NumStability.leveque01_coordinateSplittingBalance_cartesian' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.NumericsSourceChecks.wholeType_leveque01_finiteVolumeUpdateError_sourceContract : ∀ {m : ℕ},
+  0 < m →
+    ∀ (grid : NumStability.OneDimensionalFiniteVolumeGrid) {q : ℝ → ℝ → Fin m → ℝ} {flux : (Fin m → ℝ) → Fin m → ℝ},
+      NumStability.IsRectangleConservationLawSolution q flux →
+        ∀ (rule : ℝ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ) {s t : ℝ},
+          s < t →
+            ∀ (old : ℤ → Fin m → ℝ),
+              0 < m ∧
+                ∀ (i : ℤ),
+                  NumStability.IsOneDimensionalCellAverage (fun x => q x s) (grid.cellLeft i) (grid.cellRight i)
+                      (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) ∧
+                    NumStability.IsOneDimensionalCellAverage (fun x => q x t) (grid.cellLeft i) (grid.cellRight i)
+                        (NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) ∧
+                      (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i =
+                          NumStability.cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i)) fun x =>
+                            q x s) ∧
+                        NumStability.IsOneDimensionalCellAverage (fun τ => flux (q (grid.cellLeft i) τ)) s t
+                            (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i) ∧
+                          (NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i =
+                              NumStability.cellVolumeAverage volume (Set.Ioc s t) fun τ =>
+                                flux (q (grid.cellLeft i) τ)) ∧
+                            NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i =
+                                old i - ((t - s) / grid.cellVolume i) • (rule s t old (i + 1) - rule s t old i) ∧
+                              grid.cellVolume i •
+                                    (NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+                                      NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) =
+                                  grid.cellVolume i •
+                                      (old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) +
+                                    (t - s) •
+                                      (rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i -
+                                        (rule s t old (i + 1) -
+                                          NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1))) ∧
+                                ∀ (oldBound leftBound rightBound : ℝ),
+                                  ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤ oldBound →
+                                    ‖rule s t old i - NumStability.timeAveragedPhysicalFaceFlux grid q flux s t i‖ ≤
+                                        leftBound →
+                                      ‖rule s t old (i + 1) -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q flux s t (i + 1)‖ ≤
+                                          rightBound →
+                                        ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old (rule s t old) i -
+                                              NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+                                          oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.NumericsSourceChecks.wholeType_leveque01_finiteVolumeUpdateError_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.wholeType_leveque01_riemannInformationInterfaceFlux_sourceContract : ∀ {m : ℕ},
+  0 < m →
+    ∀ (grid : NumStability.OneDimensionalFiniteVolumeGrid)
+      {law : NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+      {Result : NumStability.HyperbolicRiemannProblem law → Type u_1} {Information : Type u_2}
+      (method : NumStability.RiemannInformationFluxMethod law Result Information) (old : ℤ → Fin m → ℝ)
+      (hdomain : ∀ (j : ℤ), method.domain (NumStability.adjacentCellRiemannProblem law old j)) {q : ℝ → ℝ → Fin m → ℝ},
+      NumStability.IsRectangleConservationLawSolution q law.physicalFlux →
+        ∀ {s t : ℝ},
+          s < t →
+            0 < m ∧
+              (∀ (a b : ℝ),
+                  ∀ᵐ (τ : ℝ),
+                    HasDerivAt (fun r => ∫ (x : ℝ) in a..b, q x r) (law.physicalFlux (q a τ) - law.physicalFlux (q b τ))
+                      τ) ∧
+                (∀ (state : Fin m → ℝ) (j : ℤ), method.interfaceFlux (fun x => state) ⋯ j = law.physicalFlux state) ∧
+                  (∀ (j : ℤ),
+                      let problem := NumStability.adjacentCellRiemannProblem law old j;
+                      have result := method.solve problem ⋯;
+                      grid.cellRight (j - 1) = grid.cellLeft j ∧
+                        problem.leftState = old (j - 1) ∧
+                          problem.rightState = old j ∧
+                            method.selectedResult old hdomain j = result ∧
+                              method.interfaceFlux old hdomain j = method.numericalFlux (method.extract result)) ∧
+                    ∀ (i : ℤ),
+                      NumStability.IsOneDimensionalCellAverage (fun x => q x s) (grid.cellLeft i) (grid.cellRight i)
+                          (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) ∧
+                        NumStability.IsOneDimensionalCellAverage (fun x => q x t) (grid.cellLeft i) (grid.cellRight i)
+                            (NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) ∧
+                          (NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i =
+                              NumStability.cellVolumeAverage volume (Set.Ioc (grid.cellLeft i) (grid.cellRight i))
+                                fun x => q x s) ∧
+                            NumStability.IsOneDimensionalCellAverage (fun τ => law.physicalFlux (q (grid.cellLeft i) τ))
+                                s t (NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i) ∧
+                              (NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i =
+                                  NumStability.cellVolumeAverage volume (Set.Ioc s t) fun τ =>
+                                    law.physicalFlux (q (grid.cellLeft i) τ)) ∧
+                                NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                      (method.interfaceFlux old hdomain) i =
+                                    old i -
+                                      ((t - s) / grid.cellVolume i) •
+                                        (method.interfaceFlux old hdomain (i + 1) -
+                                          method.interfaceFlux old hdomain i) ∧
+                                  grid.cellVolume i •
+                                        (NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                            (method.interfaceFlux old hdomain) i -
+                                          NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i) =
+                                      grid.cellVolume i •
+                                          (old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i) +
+                                        (t - s) •
+                                          (method.interfaceFlux old hdomain i -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t i -
+                                            (method.interfaceFlux old hdomain (i + 1) -
+                                              NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                (i + 1))) ∧
+                                    ∀ (oldBound leftBound rightBound : ℝ),
+                                      ‖old i - NumStability.finiteVolumeCellAverageOn grid (fun x => q x s) i‖ ≤
+                                          oldBound →
+                                        ‖method.interfaceFlux old hdomain i -
+                                                NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                  i‖ ≤
+                                            leftBound →
+                                          ‖method.interfaceFlux old hdomain (i + 1) -
+                                                  NumStability.timeAveragedPhysicalFaceFlux grid q law.physicalFlux s t
+                                                    (i + 1)‖ ≤
+                                              rightBound →
+                                            ‖NumStability.riemannFiniteVolumeUpdate grid (t - s) old
+                                                    (method.interfaceFlux old hdomain) i -
+                                                  NumStability.finiteVolumeCellAverageOn grid (fun x => q x t) i‖ ≤
+                                              oldBound + (t - s) / grid.cellVolume i * (leftBound + rightBound)
+'NumStability.NumericsSourceChecks.wholeType_leveque01_riemannInformationInterfaceFlux_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_sourceContract : ∀ {D : Type u_1}
+  {E : Type u_2} [inst : DecidableEq D] [inst_1 : AddCommGroup E] [inst_2 : Module ℝ E] (cellVolume : (D → ℤ) → ℝ),
+  (∀ (cell : D → ℤ), 0 < cellVolume cell) →
+    ∀ (rule : D → (D → ℤ) → ℝ → (ℤ → E) → E) (stages : List (D × ℝ)),
+      stages ≠ [] →
+        (∀ (d : D), ∃ dt, (d, dt) ∈ stages) →
+          (∀ stage ∈ stages, 0 < stage.2) →
+            ∀ (state : (D → ℤ) → E),
+              stages ≠ [] ∧
+                (∀ (d : D), ∃ dt, (d, dt) ∈ stages) ∧
+                  (∀ stage ∈ stages, 0 < stage.2) ∧
+                    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+                      stages = before ++ (d, dt) :: after →
+                        have current := NumStability.CoordinateLineBalance.sweep cellVolume rule before state;
+                        NumStability.CoordinateLineBalance.sweep cellVolume rule stages state =
+                            NumStability.CoordinateLineBalance.sweep cellVolume rule after
+                              (NumStability.CoordinateLineBalance.advance cellVolume rule d dt current) ∧
+                          (∀ (cell : D → ℤ),
+                              cellVolume cell •
+                                  NumStability.CoordinateLineBalance.advance cellVolume rule d dt current cell =
+                                cellVolume cell • current cell -
+                                  dt • NumStability.CoordinateLineBalance.netOutwardFlux rule d dt current cell) ∧
+                            (∀ (base : D → ℤ) (start : ℤ) (count : ℕ),
+                                ∑ k ∈ Finset.range count,
+                                    cellVolume (Function.update base d (start + ↑k)) •
+                                      NumStability.CoordinateLineBalance.advance cellVolume rule d dt current
+                                        (Function.update base d (start + ↑k)) =
+                                  ∑ k ∈ Finset.range count,
+                                      cellVolume (Function.update base d (start + ↑k)) •
+                                        current (Function.update base d (start + ↑k)) -
+                                    dt •
+                                      (NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                          (Function.update base d (start + ↑count)) -
+                                        NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                          (Function.update base d start))) ∧
+                              ∀ (other : (D → ℤ) → E) (base : D → ℤ),
+                                (∀ (j : ℤ), current (Function.update base d j) = other (Function.update base d j)) →
+                                  ∀ (j : ℤ),
+                                    NumStability.CoordinateLineBalance.advance cellVolume rule d dt current
+                                        (Function.update base d j) =
+                                      NumStability.CoordinateLineBalance.advance cellVolume rule d dt other
+                                        (Function.update base d j)
+'NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_information : ∀ {D : Type u_1}
+  [inst : DecidableEq D] {m : ℕ} {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}
+  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}
+  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))
+  (cellVolume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ),
+  NumStability.RiemannInformationCoordinate.SweepAdmitted methods cellVolume area fallback stages state →
+    (∀ (other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ),
+        NumStability.CoordinateLineBalance.sweep cellVolume
+            (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) stages state =
+          NumStability.CoordinateLineBalance.sweep cellVolume
+            (NumStability.RiemannInformationCoordinate.guardedRule methods area other) stages state) ∧
+      ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+        stages = before ++ (d, dt) :: after →
+          ∀ (cell : D → ℤ),
+            have current :=
+              NumStability.CoordinateLineBalance.sweep cellVolume
+                (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) before state;
+            ∃ (admitted : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt current cell),
+              let problem :=
+                NumStability.adjacentCellRiemannProblem (laws d) (fun j => current (Function.update cell d j)) (cell d);
+              have result := (methods d dt).solve problem admitted;
+              problem.leftState = current (Function.update cell d (cell d - 1)) ∧
+                problem.rightState = current cell ∧
+                  NumStability.CoordinateLineBalance.normalFaceFlux
+                      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt current cell =
+                    area d cell • (methods d dt).numericalFlux ((methods d dt).extract result)
+'NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_information' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_cartesian : ∀ {D : Type u_1}
+  [inst : Fintype D] [inst_1 : DecidableEq D] {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),
+  (∀ (cell : D → ℤ), 0 < NumStability.CartesianGrid.cellVolume axes cell) ∧
+    (∀ (cell : D → ℤ),
+        (volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =
+          NumStability.CartesianGrid.cellVolume axes cell) ∧
+      (∀ (cell : D → ℤ),
+          (volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+            NumStability.CartesianGrid.faceArea axes d cell) ∧
+        (∀ (cell : D → ℤ), (axes d).cellRight (cell d) = (axes d).cellLeft (Function.update cell d (cell d + 1) d)) ∧
+          (fun j =>
+              NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+                (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt state
+                (Function.update base d j)) =
+            NumStability.riemannFiniteVolumeUpdate (axes d) dt (fun j => state (Function.update base d j)) fun j =>
+              rule d (Function.update base d j) dt fun k => state (Function.update base d k)
+'NumStability.NumericsSourceChecks.wholeType_leveque01_coordinateSplittingBalance_cartesian' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.cartesian_primary_instantiation : ∀ {D : Type u_1} [inst : Fintype D]
+  [inst_1 : DecidableEq D] {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (stages : List (D × ℝ)),
+  stages ≠ [] →
+    (∀ (d : D), ∃ dt, (d, dt) ∈ stages) →
+      (∀ stage ∈ stages, 0 < stage.2) →
+        ∀ (state : (D → ℤ) → Fin m → ℝ),
+          stages ≠ [] ∧
+            (∀ (d : D), ∃ dt, (d, dt) ∈ stages) ∧
+              (∀ stage ∈ stages, 0 < stage.2) ∧
+                ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+                  stages = before ++ (d, dt) :: after →
+                    have current :=
+                      NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)
+                        (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) before state;
+                    NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)
+                          (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) stages state =
+                        NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)
+                          (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) after
+                          (NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+                            (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current) ∧
+                      (∀ (cell : D → ℤ),
+                          NumStability.CartesianGrid.cellVolume axes cell •
+                              NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+                                (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current cell =
+                            NumStability.CartesianGrid.cellVolume axes cell • current cell -
+                              dt •
+                                NumStability.CoordinateLineBalance.netOutwardFlux
+                                  (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current
+                                  cell) ∧
+                        (∀ (base : D → ℤ) (start : ℤ) (count : ℕ),
+                            ∑ k ∈ Finset.range count,
+                                NumStability.CartesianGrid.cellVolume axes (Function.update base d (start + ↑k)) •
+                                  NumStability.CoordinateLineBalance.advance
+                                    (NumStability.CartesianGrid.cellVolume axes)
+                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current
+                                    (Function.update base d (start + ↑k)) =
+                              ∑ k ∈ Finset.range count,
+                                  NumStability.CartesianGrid.cellVolume axes (Function.update base d (start + ↑k)) •
+                                    current (Function.update base d (start + ↑k)) -
+                                dt •
+                                  (NumStability.CoordinateLineBalance.normalFaceFlux
+                                      (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current
+                                      (Function.update base d (start + ↑count)) -
+                                    NumStability.CoordinateLineBalance.normalFaceFlux
+                                      (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current
+                                      (Function.update base d start))) ∧
+                          ∀ (other : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),
+                            (∀ (j : ℤ), current (Function.update base d j) = other (Function.update base d j)) →
+                              ∀ (j : ℤ),
+                                NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)
+                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current
+                                    (Function.update base d j) =
+                                  NumStability.CoordinateLineBalance.advance
+                                    (NumStability.CartesianGrid.cellVolume axes)
+                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt other
+                                    (Function.update base d j)
+'NumStability.NumericsSourceChecks.cartesian_primary_instantiation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.NumericsSourceChecks.independent_reference_weighted_error : NumStability.FVUpdateCapstoneDraft.Witness.old
+      0 ≠
+    NumStability.finiteVolumeCellAverageOn NumStability.FVUpdateCapstoneDraft.Witness.grid
+      (fun x => NumStability.FVUpdateCapstoneDraft.Witness.q x 0) 0 ∧
+  NumStability.timeAveragedPhysicalFaceFlux NumStability.FVUpdateCapstoneDraft.Witness.grid
+        NumStability.FVUpdateCapstoneDraft.Witness.q id 0 1 0 ≠
+      id (NumStability.FVUpdateCapstoneDraft.Witness.q (NumStability.FVUpdateCapstoneDraft.Witness.grid.cellLeft 0) 0) ∧
+    NumStability.FVUpdateCapstoneDraft.Witness.rule 0 1 NumStability.FVUpdateCapstoneDraft.Witness.old 0 ≠ 0 ∧
+      NumStability.FVUpdateCapstoneDraft.Witness.grid.cellVolume 0 •
+          (NumStability.riemannFiniteVolumeUpdate NumStability.FVUpdateCapstoneDraft.Witness.grid (1 - 0)
+              NumStability.FVUpdateCapstoneDraft.Witness.old
+              (NumStability.FVUpdateCapstoneDraft.Witness.rule 0 1 NumStability.FVUpdateCapstoneDraft.Witness.old) 0 -
+            NumStability.finiteVolumeCellAverageOn NumStability.FVUpdateCapstoneDraft.Witness.grid
+              (fun x => NumStability.FVUpdateCapstoneDraft.Witness.q x 1) 0) =
+        NumStability.FVUpdateCapstoneDraft.Witness.grid.cellVolume 0 •
+            (NumStability.FVUpdateCapstoneDraft.Witness.old 0 -
+              NumStability.finiteVolumeCellAverageOn NumStability.FVUpdateCapstoneDraft.Witness.grid
+                (fun x => NumStability.FVUpdateCapstoneDraft.Witness.q x 0) 0) +
+          (1 - 0) •
+            (NumStability.FVUpdateCapstoneDraft.Witness.rule 0 1 NumStability.FVUpdateCapstoneDraft.Witness.old 0 -
+                NumStability.timeAveragedPhysicalFaceFlux NumStability.FVUpdateCapstoneDraft.Witness.grid
+                  NumStability.FVUpdateCapstoneDraft.Witness.q id 0 1 0 -
+              (NumStability.FVUpdateCapstoneDraft.Witness.rule 0 1 NumStability.FVUpdateCapstoneDraft.Witness.old 1 -
+                NumStability.timeAveragedPhysicalFaceFlux NumStability.FVUpdateCapstoneDraft.Witness.grid
+                  NumStability.FVUpdateCapstoneDraft.Witness.q id 0 1 1))
+'NumStability.NumericsSourceChecks.independent_reference_weighted_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.NumericsSourceChecks.information_capstone_finite_step_comparison : ∀ {dt : ℝ},
+  0 < dt →
+    dt < 1 →
+      let method := NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw;
+      have old :=
+        NumStability.finiteVolumeCellAverageOn NumStability.InformationInterfaceDraft.Witness.unitGrid
+          NumStability.InformationInterfaceDraft.Witness.initialState;
+      NumStability.riemannFiniteVolumeUpdate NumStability.InformationInterfaceDraft.Witness.unitGrid dt old
+          (method.interfaceFlux old ⋯) 0 =
+        NumStability.cellVolumeAverage volume (Set.Ioc 0 1) fun x =>
+          NumStability.StationaryRiemannField.reference 0 1 x dt
+'NumStability.NumericsSourceChecks.information_capstone_finite_step_comparison' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftStateInformationFlux.concrete_information_only : have law :=
+  NumStability.StationaryRiemannField.transportLaw;
+have problem := { leftState := 0, rightState := 1 };
+have result := (NumStability.LeftStateInformationFlux.method law).solve problem trivial;
+(NumStability.LeftStateInformationFlux.method law).domain problem ∧
+  (NumStability.LeftStateInformationFlux.method law).extract result = (0, 1) ∧
+    (NumStability.LeftStateInformationFlux.method law).numericalFlux
+        ((NumStability.LeftStateInformationFlux.method law).extract result) =
+      0
+'NumStability.LeftStateInformationFlux.concrete_information_only' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity : ∀
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ),
+  (NumStability.RiemannInformationCoordinate.SweepAdmitted
+      (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+      (fun x => 1) (fun x x_1 => 1) fallback [(0, 1), (1, 1)] fun cell => if cell 1 = 0 then 0 else 1) ∧
+    NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 1] =
+        0 ∧
+      NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 2] =
+        1
+'NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

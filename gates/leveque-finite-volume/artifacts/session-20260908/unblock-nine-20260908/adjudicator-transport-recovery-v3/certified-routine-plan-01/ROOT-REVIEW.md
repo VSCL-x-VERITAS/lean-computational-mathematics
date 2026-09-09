@@ -1,0 +1,9 @@
+# Root transport review
+
+Root reviewed the complete unchanged `recovery-v3.py` implementation and the actual plan `00af47438c720cb138783cb578073b106a8abe28c9c56c59ac6d3a9fedd4a3e1` before execution. This is the ordinary four-collected-role case for `LEV-CH01-CERTIFIED-RIEMANN-ROUTINE-INTERFACE-PRODUCTION-20260908`; it requires no retry-lineage exception.
+
+The original adjudicator input has 1,532,185 characters. Its native events contain only `thread.started`, and the native error reports the 1,048,576-character limit. There is no original adjudicator final output. The failed original wrapper remains exit 1. The direct role accepted interpretation-qualified equivalence; the round-trip role is undetermined and requested adjudication. Neither judgment is replaced.
+
+The new input has 980,780 characters, SHA256 `b3a1bc33ab0ed6325b8a9b630f30afe8f997919e0af273eb48128e1d269899bd`. It retains the complete declaration dossier verbatim, references exact repeated packet/line spans in that same supplied dossier, and removes JSON formatting whitespace outside strings. The independent reconstruction restores the complete original prompt, SHA256 `25b4b865c7f43fdaf0f1b2e8862dcd25010c05d73aa27c8f59cd7bbb6fc93681`. Token bytes, string escapes, numbers, source images and all distinct evidence remain unchanged. No semantic summary, extra interpretation, finding suppression or desired verdict is added.
+
+Root authorizes the fresh stateless `a2` adjudicator and the unchanged collector, released finalizer and released complete validator. The runner pins original outputs, role lineage, source inputs, native executable and released kit files; it verifies the permitted manifest transition and preserves actual failures. This review approves only the evidence transport. It does not certify source faithfulness, close a gate row, relabel the original wrapper, or claim the new native run has completed.

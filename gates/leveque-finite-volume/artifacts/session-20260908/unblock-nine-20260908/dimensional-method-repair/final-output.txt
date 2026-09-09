@@ -1,0 +1,242 @@
+NumStability.DirectionalMethodRepair.IsDirectionalReference.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (cellVolume : (D → ℤ) → ℝ) (mean physical : (D → ℤ) → ℝ → Fin m → ℝ) (d : D) (s t : ℝ) : Prop
+'NumStability.DirectionalMethodRepair.IsDirectionalReference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.faceAverage.{u_1} {D : Type u_1} {m : ℕ} (physical : (D → ℤ) → ℝ → Fin m → ℝ)
+  (s t : ℝ) (cell : D → ℤ) : Fin m → ℝ
+'NumStability.DirectionalMethodRepair.faceAverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.reference_weighted_balance.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (cellVolume : (D → ℤ) → ℝ) (mean physical : (D → ℤ) → ℝ → Fin m → ℝ) (d : D) {s t : ℝ}
+  (h : NumStability.DirectionalMethodRepair.IsDirectionalReference cellVolume mean physical d s t) (hst : s < t)
+  (cell : D → ℤ) :
+  cellVolume cell • mean cell t =
+    cellVolume cell • mean cell s +
+      (t - s) •
+        (NumStability.DirectionalMethodRepair.faceAverage physical s t cell -
+          NumStability.DirectionalMethodRepair.faceAverage physical s t (Function.update cell d (cell d + 1)))
+'NumStability.DirectionalMethodRepair.reference_weighted_balance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.advance_error_le.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  (cellVolume : (D → ℤ) → ℝ) (hvolume : ∀ (cell : D → ℤ), 0 < cellVolume cell)
+  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (old : (D → ℤ) → Fin m → ℝ)
+  (mean physical : (D → ℤ) → ℝ → Fin m → ℝ) {s t : ℝ}
+  (href : NumStability.DirectionalMethodRepair.IsDirectionalReference cellVolume mean physical d s t) (hst : s < t)
+  (cell : D → ℤ) {oldBound leftBound rightBound : ℝ} (hold : ‖old cell - mean cell s‖ ≤ oldBound)
+  (hleft :
+    ‖NumStability.CoordinateLineBalance.normalFaceFlux rule d (t - s) old cell -
+          NumStability.DirectionalMethodRepair.faceAverage physical s t cell‖ ≤
+      leftBound)
+  (hright :
+    ‖NumStability.CoordinateLineBalance.normalFaceFlux rule d (t - s) old (Function.update cell d (cell d + 1)) -
+          NumStability.DirectionalMethodRepair.faceAverage physical s t (Function.update cell d (cell d + 1))‖ ≤
+      rightBound) :
+  ‖NumStability.CoordinateLineBalance.advance cellVolume rule d (t - s) old cell - mean cell t‖ ≤
+    oldBound + (t - s) / cellVolume cell * (leftBound + rightBound)
+'NumStability.DirectionalMethodRepair.advance_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.cartesian_reference.{u_1} {D : Type u_1} [DecidableEq D] {m : ℕ} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (q : ℝ → ℝ → Fin m → ℝ) (hq : NumStability.IsRectangleConservationLawSolution q flux) (s t : ℝ) :
+  NumStability.DirectionalMethodRepair.IsDirectionalReference (NumStability.CartesianGrid.cellVolume axes)
+    (fun cell t => NumStability.finiteVolumeCellAverageOn (axes d) (fun x => q x t) (cell d))
+    (fun cell t => NumStability.CartesianGrid.faceArea axes d cell • flux (q ((axes d).cellLeft (cell d)) t)) d s t
+'NumStability.DirectionalMethodRepair.cartesian_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.{u_2, u_3, u_4} (D : Type u_2) (Point : Type u_3)
+  (FacePoint : Type u_4) [DecidableEq D] [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (m : ℕ) : Type (max (max u_2 u_3) u_4)
+'NumStability.DirectionalMethodRepair.PhysicalData' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.cellVolume.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m) (cell : D → ℤ) : ℝ
+'NumStability.DirectionalMethodRepair.PhysicalData.cellVolume' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.cellVolume_pos.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m) (cell : D → ℤ) :
+  0 < data.cellVolume cell
+'NumStability.DirectionalMethodRepair.PhysicalData.cellVolume_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.cellMean.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m) (q : Point → ℝ → Fin m → ℝ)
+  (cell : D → ℤ) (t : ℝ) : Fin m → ℝ
+'NumStability.DirectionalMethodRepair.PhysicalData.cellMean' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.faceFlux.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m) (d : D) (q : Point → ℝ → Fin m → ℝ)
+  (cell : D → ℤ) (t : ℝ) : Fin m → ℝ
+'NumStability.DirectionalMethodRepair.PhysicalData.faceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalMethodRepair.PhysicalData.ReferenceOn.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D] {m : ℕ}
+  {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m) (d : D) (q : Point → ℝ → Fin m → ℝ)
+  (s t : ℝ) : Prop
+'NumStability.DirectionalMethodRepair.PhysicalData.ReferenceOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.directional_splitting_contract.{u_1, u_2, u_3} {D : Type u_1} [DecidableEq D]
+  {m : ℕ} {Point : Type u_2} {FacePoint : Type u_3} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] [Fintype D] (data : NumStability.DirectionalMethodRepair.PhysicalData D Point FacePoint m)
+  (hdimension : 0 < m) (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
+  (admitted : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Prop)
+  (hconstant :
+    ∀ (d : D) (cell : D → ℤ) (dt : ℝ) (value : Fin m → ℝ),
+      0 < dt →
+        value ∈ data.admissibleStates d →
+          (admitted d cell dt fun x => value) →
+            Integrable (fun point => data.normalFlux d cell point value) (data.faceMeasure d cell) ∧
+              (rule d cell dt fun x => value) =
+                ∫ (point : FacePoint), data.normalFlux d cell point value ∂data.faceMeasure d cell)
+  (stages : List (D × ℝ)) (hnonempty : stages ≠ []) (hcover : ∀ (d : D), ∃ dt, (d, dt) ∈ stages)
+  (hpositive : ∀ stage ∈ stages, 0 < stage.2) (initial : (D → ℤ) → Fin m → ℝ)
+  (reference : List (D × ℝ) → D → ℝ → Point → ℝ → Fin m → ℝ) (oldError faceError : List (D × ℝ) → D → ℝ → (D → ℤ) → ℝ)
+  (hreferences :
+    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+      stages = before ++ (d, dt) :: after → data.ReferenceOn d (reference before d dt) 0 dt)
+  (hadmitted :
+    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+      stages = before ++ (d, dt) :: after →
+        ∀ (cell : D → ℤ),
+          admitted d cell dt fun j =>
+            NumStability.CoordinateLineBalance.sweep data.cellVolume rule before initial (Function.update cell d j))
+  (hstates :
+    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+      stages = before ++ (d, dt) :: after →
+        ∀ (cell : D → ℤ),
+          NumStability.CoordinateLineBalance.sweep data.cellVolume rule before initial cell ∈ data.admissibleStates d)
+  (hold :
+    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+      stages = before ++ (d, dt) :: after →
+        ∀ (cell : D → ℤ),
+          ‖NumStability.CoordinateLineBalance.sweep data.cellVolume rule before initial cell -
+                data.cellMean (reference before d dt) cell 0‖ ≤
+            oldError before d dt cell)
+  (hface :
+    ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+      stages = before ++ (d, dt) :: after →
+        ∀ (cell : D → ℤ),
+          ‖NumStability.CoordinateLineBalance.normalFaceFlux rule d dt
+                  (NumStability.CoordinateLineBalance.sweep data.cellVolume rule before initial) cell -
+                NumStability.DirectionalMethodRepair.faceAverage (data.faceFlux d (reference before d dt)) 0 dt cell‖ ≤
+            faceError before d dt cell) :
+  0 < m ∧
+    (∀ (d : D) (cell : D → ℤ) (point : FacePoint),
+        NumStability.IsHyperbolicFluxOn (data.normalFlux d cell point) (data.admissibleStates d)) ∧
+      (∀ (d : D) (cell : D → ℤ) (dt : ℝ) (value : Fin m → ℝ),
+          0 < dt →
+            value ∈ data.admissibleStates d →
+              (admitted d cell dt fun x => value) →
+                Integrable (fun point => data.normalFlux d cell point value) (data.faceMeasure d cell) ∧
+                  (rule d cell dt fun x => value) =
+                    ∫ (point : FacePoint), data.normalFlux d cell point value ∂data.faceMeasure d cell) ∧
+        stages ≠ [] ∧
+          (∀ (d : D), ∃ dt, (d, dt) ∈ stages) ∧
+            (∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),
+                stages = before ++ (d, dt) :: after →
+                  have current := NumStability.CoordinateLineBalance.sweep data.cellVolume rule before initial;
+                  0 < dt ∧
+                    data.ReferenceOn d (reference before d dt) 0 dt ∧
+                      (∀ (cell : D → ℤ), admitted d cell dt fun j => current (Function.update cell d j)) ∧
+                        (∀ (cell : D → ℤ), current cell ∈ data.admissibleStates d) ∧
+                          NumStability.CoordinateLineBalance.sweep data.cellVolume rule stages initial =
+                              NumStability.CoordinateLineBalance.sweep data.cellVolume rule after
+                                (NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt current) ∧
+                            (∀ (cell : D → ℤ),
+                                data.cellVolume cell •
+                                    NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt current cell =
+                                  data.cellVolume cell • current cell -
+                                    dt • NumStability.CoordinateLineBalance.netOutwardFlux rule d dt current cell) ∧
+                              (∀ (base : D → ℤ) (start : ℤ) (count : ℕ),
+                                  ∑ k ∈ Finset.range count,
+                                      data.cellVolume (Function.update base d (start + ↑k)) •
+                                        NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt current
+                                          (Function.update base d (start + ↑k)) =
+                                    ∑ k ∈ Finset.range count,
+                                        data.cellVolume (Function.update base d (start + ↑k)) •
+                                          current (Function.update base d (start + ↑k)) -
+                                      dt •
+                                        (NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                            (Function.update base d (start + ↑count)) -
+                                          NumStability.CoordinateLineBalance.normalFaceFlux rule d dt current
+                                            (Function.update base d start))) ∧
+                                (∀ (other : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),
+                                    (∀ (j : ℤ), current (Function.update base d j) = other (Function.update base d j)) →
+                                      ∀ (j : ℤ),
+                                        NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt current
+                                            (Function.update base d j) =
+                                          NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt other
+                                            (Function.update base d j)) ∧
+                                  ∀ (cell : D → ℤ),
+                                    ‖NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt current cell -
+                                          data.cellMean (reference before d dt) cell dt‖ ≤
+                                      oldError before d dt cell +
+                                        dt / data.cellVolume cell *
+                                          (faceError before d dt cell +
+                                            faceError before d dt (Function.update cell d (cell d + 1)))) ∧
+              ∀ (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)
+                (lineRule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ),
+                data.cellVolume = NumStability.CartesianGrid.cellVolume axes →
+                  rule = NumStability.CartesianCoordinateUpdate.areaWeightedRule axes lineRule →
+                    (∀ (cell : D → ℤ),
+                        (volume (NumStability.CartesianGrid.cellBox axes cell)).toReal = data.cellVolume cell) ∧
+                      (∀ (d : D) (cell : D → ℤ),
+                          (volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+                            NumStability.CartesianGrid.faceArea axes d cell) ∧
+                        (∀ (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),
+                            (fun j =>
+                                NumStability.CoordinateLineBalance.advance data.cellVolume rule d dt state
+                                  (Function.update base d j)) =
+                              NumStability.riemannFiniteVolumeUpdate (axes d) dt
+                                (fun j => state (Function.update base d j)) fun j =>
+                                lineRule d (Function.update base d j) dt fun k => state (Function.update base d k)) ∧
+                          ∀ (d : D) (flux : (Fin m → ℝ) → Fin m → ℝ) (q : ℝ → ℝ → Fin m → ℝ),
+                            NumStability.IsRectangleConservationLawSolution q flux →
+                              ∀ (s t : ℝ),
+                                NumStability.DirectionalMethodRepair.IsDirectionalReference data.cellVolume
+                                  (fun cell τ =>
+                                    NumStability.finiteVolumeCellAverageOn (axes d) (fun x => q x τ) (cell d))
+                                  (fun cell τ =>
+                                    NumStability.CartesianGrid.faceArea axes d cell •
+                                      flux (q ((axes d).cellLeft (cell d)) τ))
+                                  d s t
+'NumStability.DirectionalMethodRepair.directional_splitting_contract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.index_rule_not_constant_consistent (physical : (Fin 1 → ℝ) → Fin 1 → ℝ)
+  (value : Fin 1 → ℝ) : ¬∀ (cell : Fin 2 → ℤ), (fun x => ↑(cell 0)) = physical value
+'NumStability.DirectionalMethodRepair.index_rule_not_constant_consistent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalMethodRepair.nonconstant_cartesian_reference
+  (axes : Fin 2 → NumStability.OneDimensionalFiniteVolumeGrid) (d : Fin 2) (s t : ℝ) :
+  ∃ q,
+    q (-1) 0 = 0 ∧
+      q 1 0 = 1 ∧
+        NumStability.DirectionalMethodRepair.IsDirectionalReference (NumStability.CartesianGrid.cellVolume axes)
+          (fun cell τ => NumStability.finiteVolumeCellAverageOn (axes d) (fun x => q x τ) (cell d))
+          (fun cell τ => NumStability.CartesianGrid.faceArea axes d cell • q ((axes d).cellLeft (cell d)) τ) d s t
+'NumStability.DirectionalMethodRepair.nonconstant_cartesian_reference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity
+  (fallback : Fin 2 → (Fin 2 → ℤ) → ℝ → (ℤ → Fin 1 → ℝ) → Fin 1 → ℝ) :
+  (NumStability.RiemannInformationCoordinate.SweepAdmitted
+      (fun _d _dt => NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+      (fun x => 1) (fun x x_1 => 1) fallback [(0, 1), (1, 1)] fun cell => if cell 1 = 0 then 0 else 1) ∧
+    NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 1] =
+        0 ∧
+      NumStability.CoordinateLineBalance.sweep (fun x => 1)
+          (NumStability.RiemannInformationCoordinate.guardedRule
+            (fun _d _dt =>
+              NumStability.LeftStateInformationFlux.method NumStability.StationaryRiemannField.transportLaw)
+            (fun x x_1 => 1) fallback)
+          [(0, 1), (1, 1)] (fun cell => if cell 1 = 0 then 0 else 1) ![0, 2] =
+        1
+'NumStability.LeftStateCoordinateSweep.left_two_stage_nonvacuity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

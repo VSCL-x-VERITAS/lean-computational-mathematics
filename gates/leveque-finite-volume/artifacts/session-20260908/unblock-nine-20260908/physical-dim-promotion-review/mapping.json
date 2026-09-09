@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "status": "proposal-only; root review required",
+  "source_acceptance": false,
+  "prefix": "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/",
+  "new_owners": [
+    {
+      "leaf": "FiniteLineCoordinates.lean",
+      "role": "reusable",
+      "namespace": "NumStability.FiniteCoordinate",
+      "sources": [
+        {
+          "path": "CoordinateLineMethod.lean",
+          "declarations": [
+            "LineCoordinates",
+            "LineCoordinates.extract",
+            "LineCoordinates.extract_cell",
+            "LineCoordinates.extract_local"
+          ]
+        },
+        {
+          "path": "CoordinateLineMethodEstimates.lean",
+          "declarations": [
+            "LineCoordinates.extract_error_le"
+          ]
+        },
+        {
+          "path": "D/capacity-ghost-boundary-draft/Ghost.lean.fragment",
+          "declarations": [
+            "LineCoordinates.withGhost",
+            "LineCoordinates.withGhost_maps",
+            "LineCoordinates.withGhost_self",
+            "LineCoordinates.withGhost_withGhost",
+            "LineCoordinates.extract_withGhost_error_le_max"
+          ]
+        }
+      ],
+      "imports": [
+        "Mathlib finite-real-vector/norm support only"
+      ],
+      "reason": "Preserve all five existing fully qualified names; remove dependency on old interval quality/common-area realization."
+    },
+    {
+      "leaf": "PhysicalLineCapacity.lean",
+      "role": "reusable",
+      "namespace": "NumStability.FiniteCoordinate.PhysicalLine",
+      "sources": [
+        {
+          "path": "D/physical-capacity-line-bridge/PhysicalCapacityBridge.lean",
+          "declarations": [
+            "Incidence",
+            "capacity",
+            "capacity_pos",
+            "capacity_cell",
+            "faceRule",
+            "lineAdvance",
+            "advance_eq",
+            "projection_cell",
+            "advance_line_local"
+          ]
+        },
+        {
+          "path": "D/capacity-ghost-boundary-draft/Ghost.lean.fragment",
+          "declarations": [
+            "CapacityGhost.capacity_withGhost"
+          ]
+        }
+      ],
+      "imports": [
+        "FiniteLineCoordinates",
+        "FinitePhysicalUpdate"
+      ],
+      "reason": "Actual volume lookup, integrated face rule, exact operator/physical projection. Keep totalized missing-index capacity documented, never a mesh."
+    },
+    {
+      "leaf": "FinitePhysicalFluxError.lean",
+      "role": "reusable",
+      "namespace": "NumStability.FiniteCoordinate",
+      "sources": [
+        {
+          "path": "D/capacity-net-reference-error-draft/NetError.lean.fragment",
+          "declarations": [
+            "netFluxDefect",
+            "advance_error_balance",
+            "advance_error_le_net"
+          ]
+        },
+        {
+          "path": "D/capacity-zero-flux-witness/Zero.lean.fragment",
+          "declarations": [
+            "faceFlux_zero",
+            "cellMean_eq"
+          ]
+        }
+      ],
+      "imports": [
+        "FinitePhysicalReferenceError"
+      ],
+      "reason": "Net defect before triangle bounds and zero-flux reference consequences; reuse current ReferenceOn and weighted update. Proposed names for the latter two should explicitly mention zero flux."
+    },
+    {
+      "leaf": "PhysicalCellMesh.lean",
+      "role": "reusable",
+      "namespace": "NumStability.FiniteVolumeCellPartition",
+      "sources": [
+        {
+          "path": "D/capacity-coordinate-realization-draft/Realization.lean.fragment",
+          "declarations": [
+            "CapacityPhysicalMesh.mesh",
+            "CapacityPhysicalMesh.diameter_le_mesh",
+            "CapacityPhysicalMesh.mesh_nonneg",
+            "CapacityPhysicalMesh.mesh_le_iff",
+            "CapacityPhysicalMesh.mesh_attained",
+            "CapacityPhysicalMesh.dist_le_mesh",
+            "CapacityPhysicalMesh.mesh_pos_of_separated"
+          ]
+        }
+      ],
+      "imports": [
+        "CellVolumeAverage",
+        "Mathlib.Topology.MetricSpace.Bounded",
+        "Mathlib.Data.Finset.Lattice.Fold"
+      ],
+      "reason": "Independent finite maximum of actual cell diameters, requiring bounded cells for distance use."
+    },
+    {
+      "leaf": "CapacityCoordinateMethod.lean",
+      "role": "reusable",
+      "namespace": "NumStability.CapacityCoordinate",
+      "sources": [
+        {
+          "path": "D/capacity-coordinate-realization-draft/Realization.lean.fragment",
+          "declarations": [
+            "Method",
+            "Method.rule",
+            "Method.Admitted",
+            "Method.StableAt",
+            "Method.advance_eq",
+            "Method.coordinate_stability",
+            "Method.coordinate_local"
+          ]
+        },
+        {
+          "path": "D/capacity-ghost-boundary-draft/Ghost.lean.fragment",
+          "declarations": [
+            "Method.withGhost",
+            "Method.withGhost_flux_admission",
+            "Method.advance_withGhost_eq",
+            "Method.coordinate_stability_withGhost"
+          ]
+        }
+      ],
+      "imports": [
+        "PhysicalLineCapacity"
+      ],
+      "reason": "Supplied dt-dependent method/domain; stability separate. Preserve actual/reference ghost error max and nominal withGhost adapter."
+    },
+    {
+      "leaf": "CapacityCoordinateSweep.lean",
+      "role": "reusable",
+      "namespace": "NumStability.CapacityCoordinate.Sweep",
+      "sources": [
+        {
+          "path": "D/capacity-boundary-sweep-draft/Sweep.lean.fragment",
+          "declarations": [
+            "step",
+            "run",
+            "run_succ",
+            "run_ordered",
+            "run_physical_error"
+          ]
+        },
+        {
+          "path": "D/capacity-boundary-sweep-draft/StageLaws.lean.fragment",
+          "declarations": [
+            "run_zero",
+            "run_line_step",
+            "run_mass_balance",
+            "step_coordinate_local",
+            "run_stage_local",
+            "run_withGhost_line_step"
+          ]
+        }
+      ],
+      "imports": [
+        "CapacityCoordinateMethod",
+        "FinitePhysicalFluxError",
+        "ComputationalMathematics.Analysis.Normed.Group.SequentialError"
+      ],
+      "reason": "One canonical stage-dependent coordinate recursion. Fixed-coordinate run remains its verified specialization in evidence."
+    },
+    {
+      "leaf": "CoordinateLineVariation.lean",
+      "role": "reusable",
+      "namespace": "NumStability.FiniteCoordinate.LineCoordinates",
+      "sources": [
+        {
+          "path": "D/capacity-zero-flux-witness/Zero.lean.fragment",
+          "declarations": [
+            "onceEdgeVariation"
+          ]
+        },
+        {
+          "path": "D/capacity-small-bias-witness/Bias.lean.fragment",
+          "declarations": [
+            "boundaryCount",
+            "variation_add_le",
+            "variation_add_le_two"
+          ]
+        }
+      ],
+      "imports": [
+        "FiniteLineCoordinates"
+      ],
+      "reason": "One shared once-per-edge variation producer and actual boundary count. No physical measure or quality dependency."
+    },
+    {
+      "leaf": "PhysicalRefinementQuality.lean",
+      "role": "reusable",
+      "namespace": "NumStability.PhysicalRefinementQuality",
+      "sources": [
+        {
+          "path": "D/physical-refinement-quality-draft/PhysicalRefinement.lean.fragment",
+          "declarations": [
+            "Family",
+            "Family.referenceGhost",
+            "Family.projected",
+            "Family.SmoothReference",
+            "Family.AccuracyCertificate",
+            "Family.variation",
+            "Family.HasHighResolution",
+            "Family.HasHighResolution.two_state_available",
+            "Family.AccuracyCertificate.available_at_threshold",
+            "Family.AccuracyCertificate.perturbed_at"
+          ]
+        },
+        {
+          "path": "D/physical-zero-quality-draft/ZeroQuality.lean.fragment",
+          "declarations": [
+            "Family.zero_flux_quality",
+            "Family.zero_flux_stable"
+          ]
+        }
+      ],
+      "imports": [
+        "CapacityCoordinateMethod",
+        "PhysicalCellMesh",
+        "FinitePhysicalFluxError",
+        "CoordinateLineVariation",
+        "Mathlib.Analysis.Calculus.ContDiff.FTaylorSeries"
+      ],
+      "reason": "Fixed-law measured family, genuine C∞ references, uniform C/N and all admitted dt; separate stability. Family.variation delegates by rfl to shared variation. Approximately 270 source lines, one cohesive quality contract."
+    },
+    {
+      "leaf": "PhysicalHighResolutionSweep.lean",
+      "role": "reusable",
+      "namespace": "NumStability.PhysicalHighResolutionSweep",
+      "sources": [
+        {
+          "path": "D/physical-high-resolution-sweep-draft/Sweep.lean.fragment",
+          "declarations": [
+            "coordinates",
+            "method",
+            "execution",
+            "Specification",
+            "specification"
+          ]
+        }
+      ],
+      "pending_final_additions": [
+        "ValidSubsteps",
+        "admitted_specification"
+      ],
+      "imports": [
+        "PhysicalRefinementQuality",
+        "CapacityCoordinateSweep",
+        "FiniteCartesianReference"
+      ],
+      "reason": "Actual selected-level constituent execution, conservation and locality; optional perturbation/net-defect/splitting analysis; Cartesian observations refer to same data. Must bind final native-success source."
+    },
+    {
+      "leaf": "Examples/RefiningCartesianGeometry.lean",
+      "role": "reusable",
+      "namespace": "NumStability.RefiningCartesianGrid",
+      "sources": [
+        {
+          "path": "D/physical-refinement-cartesian-witness/Geometry.lean.fragment",
+          "declarations": "all 36 declarations in frozen inventory"
+        },
+        {
+          "path": "D/physical-refinement-cartesian-witness/Boundary.lean.fragment",
+          "declarations": [
+            "physicalWith",
+            "physicalWith_cells",
+            "physicalWith_measure",
+            "tensorFlux",
+            "normal",
+            "physical_normal_flux"
+          ]
+        }
+      ],
+      "imports": [
+        "FiniteCartesianGeometry",
+        "PhysicalCellMesh",
+        "Examples/HighResolutionAdvectionLine"
+      ],
+      "reason": "Concrete h=1/(n+2), growing finite boxes, nonshrinking target, actual diameter convergence and supplied fixed directional flux. About 225 lines; geometry is an example, not arbitrary-grid construction."
+    },
+    {
+      "leaf": "Examples/RefiningCartesianBoundary.lean",
+      "role": "reusable",
+      "namespace": "NumStability.RefiningCartesianGrid",
+      "sources": [
+        {
+          "path": "D/physical-refinement-cartesian-witness/Boundary.lean.fragment",
+          "declarations": [
+            "boundaryIndex",
+            "boundaryPosition",
+            "boundaryRegion",
+            "boundaryIndex_bounds",
+            "boundaryIndex_eq",
+            "boundaryPosition_eq",
+            "extended_box_inside",
+            "boundary_inside",
+            "boundary_measurable",
+            "boundary_volume",
+            "boundary_positive_finite",
+            "boundary_on_neighbor"
+          ]
+        },
+        {
+          "path": "D/physical-refinement-cartesian-witness/Execution.lean.fragment",
+          "declarations": [
+            "coord"
+          ]
+        }
+      ],
+      "imports": [
+        "Examples/RefiningCartesianGeometry",
+        "FiniteLineCoordinates"
+      ],
+      "reason": "Concrete lookup and genuine finite measured boundary boxes. Clamp used only for unread totalized slots. No transport routine dependency."
+    },
+    {
+      "leaf": "Examples/ZeroFluxCartesianRefinement.lean",
+      "role": "reusable",
+      "namespace": "NumStability.ZeroFluxCartesianRefinement",
+      "sources": [
+        {
+          "path": "D/physical-zero-refinement-witness/Family.lean.fragment",
+          "declarations": "all 17 declarations in frozen view"
+        }
+      ],
+      "imports": [
+        "Examples/RefiningCartesianBoundary",
+        "PhysicalRefinementQuality",
+        "ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Hyperbolicity"
+      ],
+      "reason": "Complete generic-family inhabitant plus fixed spatially nonconstant genuine smooth reference. Full source application stays artifact-only."
+    }
+  ],
+  "changed_owners": [
+    {
+      "path": "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/CoordinateLineMethod.lean",
+      "change": "Move only four LineCoordinates declarations with unchanged names/types/bodies to FiniteLineCoordinates; import it. Retain LineRealization and all old public methods."
+    },
+    {
+      "path": "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/CoordinateLineMethodEstimates.lean",
+      "change": "Move only LineCoordinates.extract_error_le unchanged to FiniteLineCoordinates; existing CoordinateLineMethod import preserves transitive availability. Retain all old realization estimates."
+    },
+    {
+      "path": "ComputationalMathematics/Analysis/PartialDifferentialEquations/ConservationLaws/Hyperbolicity.lean",
+      "change": "Add the checked constant-flux hyperbolicity theorem from CapacitySmallBias, with an explicit NumStability name (suggest constantFlux_isHyperbolicOn). This uses existing actual derivative/basis definitions; no new 20-line utility owner needed."
+    },
+    {
+      "path": "ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean",
+      "change": "Replace current source theorem contract/proof with final admitted physical-family successor, retaining the intended source declaration name. This is a material type/domain change, not a compatibility-preserving theorem equivalence. Preserve old owner bytes in existing frozen audit and source snapshots; require new audit."
+    }
+  ],
+  "exposure_metadata": [
+    "ComputationalMathematics/Analysis.lean: sorted casefold public imports for selected new reusable leaves; no new generic-to-Source edge.",
+    "ComputationalMathematics/Source/LeVeque/Chapter01.lean: current same source path remains; change imports only if actual source owner naming changes.",
+    "docs/architecture/tiers.json: explicit reusable coverage for all 12 selected new leaves, source prefix for source wrapper; no unmeasured zero-debt claim."
+  ],
+  "separate_existing_regularization_group": [
+    "ComputationalMathematics/Analysis/PartialDifferentialEquations/ConservationLaws/LocalLinearAdvection.lean",
+    "ComputationalMathematics/Analysis/PartialDifferentialEquations/ConservationLaws/LocalRectangleReference.lean",
+    "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/Examples/CFLUnitShift.lean",
+    "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/Examples/HighResolutionAdvectionLine.lean",
+    "ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/RefiningLineMethod.lean"
+  ],
+  "omit_from_minimal_production": [
+    {
+      "declarations": [
+        "PhysicalCapacityBridge.weighted_mass_balance"
+      ],
+      "reuse": "FiniteCoordinate.finite_mass_balance with selected faceRule."
+    },
+    {
+      "declarations": [
+        "CapacityCoordinate.Method.projection_cell",
+        "CapacityCoordinate.Method.projection_withGhost"
+      ],
+      "reuse": "PhysicalLine.projection_cell / unchanged extraction and withGhost maps."
+    },
+    {
+      "declarations": [
+        "CapacityNetReferenceError.capacity_line_error_balance",
+        "CapacityNetReferenceError.capacity_line_error_le_net"
+      ],
+      "reuse": "Generic net-error theorem plus Method.advance_eq; keep checked applications in evidence."
+    },
+    {
+      "declarations": [
+        "CapacityCoordinate.step",
+        "CapacityCoordinate.run",
+        "CapacityCoordinate.run_succ",
+        "CapacityCoordinate.run_ordered",
+        "CapacityCoordinate.run_physical_error",
+        "CapacityBoundarySweep.run_constant_coord"
+      ],
+      "reuse": "Canonical stage-dependent sweep; retain frozen rfl constant-family comparator in placement evidence only."
+    },
+    {
+      "declarations": [
+        "Remaining generic CapacityZeroFlux.method/identity/admission/example declarations",
+        "Remaining CapacitySmallBias method/error/scaling declarations"
+      ],
+      "reuse": "Not needed by complete zero-family fixture, which uses generic zero-flux quality theorem. Preserve successful artifacts; later independent concrete algorithm owner if requested."
+    },
+    {
+      "declarations": [
+        "Cartesian identity-flux capacity method, nonconstant motion and transported reference companions"
+      ],
+      "reuse": "Retain frozen nonzero-consumer evidence; not required to inhabit zero-flux full quality. Promote later in measured cohesive example leaves if root wants that API."
+    }
+  ],
+  "required_validation": [
+    "Freeze final admitted sweep and source application before canonical placement; no live fragment is an authoritative final input.",
+    "Exact unchanged declaration comparisons for moved five existing declarations; isolate old import and new import smoke checks.",
+    "All new nominal structures need explicit field maps/round trips and commuting numerical rule/admission/advance/projection checks; do not assert nominal DefEq.",
+    "Compare generalized stage-dependent run and constant-coordinate specialization through the frozen rfl evidence; omit duplicate recursion.",
+    "Verify shared variation specialization by rfl under actual family.finiteCell; preserve missing-neighbor edges.",
+    "Run focused topological builds, all target/declaration/axiom checks, full source/application checks, exact fingerprints, current graph and organization gates after actual final placement.",
+    "Fresh source audit must bind replacement target, C∞ semantics, complete uniformity/admission/quality/optional-analysis definitions and separate literal interpretation receipts."
+  ]
+}

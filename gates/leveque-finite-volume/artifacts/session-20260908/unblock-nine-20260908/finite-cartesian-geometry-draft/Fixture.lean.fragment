@@ -1,0 +1,70 @@
+namespace NumStability.FiniteCartesianDraft.Example
+
+open MeasureTheory
+
+def axes : Fin 2 → OneDimensionalFiniteVolumeGrid := fun _ => PhysicalIntervalSweep.axis
+def lower : Fin 2 → ℤ := fun _ => 0
+def upper : Fin 2 → ℤ := Function.update lower 0 1
+def active : Finset (Fin 2 → ℤ) := {lower, upper}
+
+theorem lower_ne_upper : lower ≠ upper := by
+  intro h
+  have he := congrFun h 0
+  norm_num [lower, upper] at he
+
+theorem active_card : active.card = 2 := by simp [active, lower_ne_upper]
+theorem active_nonempty : active.Nonempty := by exact ⟨lower, by simp [active]⟩
+
+def lowerCell : ↥active := ⟨lower, by simp [active]⟩
+def upperCell : ↥active := ⟨upper, by simp [active]⟩
+
+theorem identity_hyperbolic :
+    ∀ _ : Fin 2, IsHyperbolicFluxOn (fun state : Fin 1 → ℝ => state) Set.univ := by
+  intro _
+  exact PhysicalIntervalSweep.data.hyperbolic 0 (fun _ => 0) ()
+
+noncomputable def physical :
+    FiniteDirectionalRepair.PhysicalData (Fin 2) ↥active (Fin 2 → ℤ) (Fin 2 → ℝ) (Fin 2 → ℝ) 1 :=
+  data axes active active_nonempty (fun _ => Set.univ) (fun _ state => state) identity_hyperbolic
+
+theorem distinct_active_cells : lowerCell ≠ upperCell := by
+  intro h
+  exact lower_ne_upper (congrArg Subtype.val h)
+
+theorem shared_internal_face : physical.rightFace 0 lowerCell = physical.leftFace 0 upperCell := rfl
+
+theorem physical_cellVolume (cell : ↥active) : physical.cellVolume cell = 1 := by
+  rw [physical, data_cellVolume]
+  simp [CartesianGrid.cellVolume, axes, PhysicalIntervalSweep.axis,
+    OneDimensionalFiniteVolumeGrid.cellVolume]
+
+theorem physical_faceArea (d : Fin 2) (face : Fin 2 → ℤ) :
+    (physical.faceMeasure d face Set.univ).toReal = 1 := by
+  change (faceMeasure axes d face Set.univ).toReal = 1
+  rw [faceMeasure_area]
+  simp [CartesianGrid.faceArea, axes, PhysicalIntervalSweep.axis,
+    OneDimensionalFiniteVolumeGrid.cellVolume]
+
+theorem concrete_geometry :
+    active.card = 2 ∧ lowerCell ≠ upperCell ∧
+    physical.rightFace 0 lowerCell = physical.leftFace 0 upperCell ∧
+    (∀ cell, physical.cellVolume cell = 1) ∧
+    (∀ d face, (physical.faceMeasure d face Set.univ).toReal = 1) :=
+  ⟨active_card, distinct_active_cells, shared_internal_face, physical_cellVolume, physical_faceArea⟩
+
+end NumStability.FiniteCartesianDraft.Example
+
+#check NumStability.FiniteCartesianDraft.data_left_position
+#print axioms NumStability.FiniteCartesianDraft.data_left_position
+#check NumStability.FiniteCartesianDraft.data_right_position
+#print axioms NumStability.FiniteCartesianDraft.data_right_position
+#check NumStability.FiniteCartesianDraft.data_face_measurable
+#print axioms NumStability.FiniteCartesianDraft.data_face_measurable
+#check NumStability.FiniteCartesianDraft.data_normal_flux
+#print axioms NumStability.FiniteCartesianDraft.data_normal_flux
+#check NumStability.FiniteCartesianDraft.faceMeasure_area
+#print axioms NumStability.FiniteCartesianDraft.faceMeasure_area
+#check NumStability.FiniteCartesianDraft.Example.physical
+#print axioms NumStability.FiniteCartesianDraft.Example.physical
+#check NumStability.FiniteCartesianDraft.Example.concrete_geometry
+#print axioms NumStability.FiniteCartesianDraft.Example.concrete_geometry

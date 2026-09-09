@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "qualified_row_support_v3.py",
+      "initial_snapshot": "source-context-initial-helper-snapshots/qualified_row_support_v3.py.snapshot",
+      "before_sha256": "59ad410e2d83f8318aa29588a22f0f9be57a608d39d7e0351cef3a6f8c68b8c3",
+      "after_sha256": "75bca786c37ea46940642b7db271d9501d3569c769e2081756da2e4a74905128",
+      "already_changed_before_recovery": true
+    },
+    {
+      "path": "source-context-validation.fragment.py",
+      "initial_snapshot": "source-context-initial-helper-snapshots/source-context-validation.fragment.py.snapshot",
+      "before_sha256": "ace962f4229d33f4c3d37a28b47574dd425b428b256dcfc25e47e2b093a6b96f",
+      "after_sha256": "e3caa31c0bf43103186a6ad140764887edea7011e895c042e24908f2c1d3c37c",
+      "already_changed_before_recovery": false
+    }
+  ],
+  "exact_replacements": [
+    {
+      "before": "SOURCE_CONTEXT_PREPARER_SHA = 'f0f27bc5757411a7363fcc70a18c78b2d5bf8011920f9e7c9ee2ebc2013f4ce2'",
+      "after": "SOURCE_CONTEXT_PREPARERS = {\n    'f0f27bc5757411a7363fcc70a18c78b2d5bf8011920f9e7c9ee2ebc2013f4ce2': 'prepare-successor-audit-with-source-context.py',\n    'fc1afd7578e69927edca25788423334f3947b8d58e348b176ae0a1cd3d64318e': 'prepare-successor-audit-with-source-context-long-paths.py',\n}\nSOURCE_CONTEXT_RECOVERY = {\n    'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/fv-local-domain-review/fv-partial-preparation-recovery.json',\n    'sha256': 'c09ae07dfec56808608e51f249e68196bebf78bdd0ce0ffb5009079c6a5c47a7',\n}"
+    },
+    {
+      "before": "    preparer = SESSION/'unblock-nine-20260908/prepare-successor-audit-with-source-context.py'\n    require(lineage['preparer_sha256'] == SOURCE_CONTEXT_PREPARER_SHA == sha(preparer), 'source-context preparer changed')\n",
+      "after": "    preparer_name = SOURCE_CONTEXT_PREPARERS.get(lineage['preparer_sha256'])\n    require(preparer_name is not None, 'unreviewed source-context preparer')\n    preparer = SESSION/'unblock-nine-20260908'/preparer_name\n    require(lineage['preparer_sha256'] == sha(preparer), 'source-context preparer changed')\n"
+    },
+    {
+      "before": "    return {'refs': refs, 'extension': extension, 'packet': packet, 'lineage': lineage, 'provenance': provenance}\n",
+      "after": "    recovery_ref = lineage.get('partial_recovery_manifest')\n    if recovery_ref is not None:\n        require(recovery_ref == SOURCE_CONTEXT_RECOVERY, 'unreviewed partial-preparation recovery')\n        recovery = source_context_json(source_context_ref(recovery_ref))\n        require(recovery['format'] == 'two-file-unsealed-audit-preparation-recovery-1'\n                and recovery['task_path'] == task_dir.relative_to(ROOT).as_posix()\n                and recovery['failure_stage'] == 'before-released-route'\n                and recovery['spec']['sha256'] == lineage['spec_sha256'], 'recovery provenance differs from this preparation')\n        require({item['path'] for item in recovery['existing_files']} ==\n                {request['task']['path'], request['interpretation_packet']['path']}, 'recovery changed the exact two-file scope')\n        provenance += [recovery_ref, recovery['spec'], recovery['preparer_parent'], *recovery['existing_files']]\n        for item in provenance:\n            bound(item)\n    return {'refs': refs, 'extension': extension, 'packet': packet, 'lineage': lineage, 'provenance': provenance}\n"
+    }
+  ],
+  "operational_invocations": 0,
+  "initial_attempt_observed_exit": 1,
+  "initial_failure": "Native MAX_PATH while creating the second historical snapshot; first helper had already been derived.",
+  "recovery": "Verify both original snapshots and exact deterministic outputs; finish only those owned helper writes."
+}

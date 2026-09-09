@@ -1,0 +1,97 @@
+RETRY_TASK='LEV-CH01-LOCAL-RIEMANN-ROUTINE-INTERFACE-PRODUCTION-20260908'
+RETRY_PLAN_SHA='ac548be03bbd75ea7d4666d05f24b0f1204f109216a7581e1ee0defb7fb90a4d'
+RETRY_PREPARATION_SHA='f9455150ed1454b9412f6988f38e0d0ffb122477b9b55b32ce241d78e3b3b539'
+RETRY_HELPER_SHA='8873eeca945581e221d473174aecc0149554698cb44e0068dd5e8f1dfe61759e'
+
+def retry_history(before,after,failed_uid,new_uid):
+    assert len(before['runs'])==4 and len({x['agent_id'] for x in before['runs']})==4
+    assert [x['role'] for x in before['runs']]==['source-contract','blind-translation','direct-judge','roundtrip-judge']
+    assert before['runs'][-1]['agent_id']==failed_uid
+    assert {k:v for k,v in before.items() if k!='runs'}=={k:v for k,v in after.items() if k!='runs'}
+    assert after['runs'][:-1]==before['runs'] and len(after['runs'])==5
+    added=after['runs'][-1]
+    assert added['role']=='roundtrip-judge' and added['agent_id']==new_uid
+    assert new_uid not in {x['agent_id'] for x in before['runs']}
+
+def continuation_contract(execution,continuation,original):
+    assert execution['format']=='malformed-roundtrip-recovery-execution-1'
+    assert execution['task_id']==RETRY_TASK
+    assert execution['original_wrapper_exit_code']==original['exit_code']==1
+    assert execution['canonical_collection_performed'] is True
+    assert type(execution['exit_code']) is int and execution['exit_code']!=0
+    assert [x['name'] for x in execution['steps']]==['collect-r2','continuation']
+    assert execution['steps'][0]['exit_code']==0
+    assert execution['steps'][1]==continuation
+    assert execution['exit_code']==continuation['exit_code']!=0
+    assert isinstance(execution['guard_error'],str) and execution['guard_error']
+    assert original['stdout_sha256']=='50a2105fdfba5e3e1219e08d79325bdaf2526f0b3c1068b5351396b726d9089e'
+    assert original['stderr_sha256']=='f296ccb7e8a28efa15248ff685134d75f89043f78670fc4541668154a3943c1a'
+
+def retry_lineage(tid,runs):
+    """Require the exact completed malformed-output handoff and its NEW failure.
+
+    This never relabels the original schema failure as an input-limit failure.
+    The separate ordinary unstarted_failure guard checks the actual a_* evidence.
+    """
+    assert tid==RETRY_TASK
+    F=S/'unblock-nine-20260908/riemann-routine-roundtrip-retry'
+    E=F/'handoff-plan';T=S/'audits'/tid;O=T/'faithfulness';P=O/'orchestration'
+    assert sha(F/'receipt.json')==RETRY_PREPARATION_SHA
+    assert sha(E/'plan.json')==RETRY_PLAN_SHA
+    assert sha(F/'recover.py')==RETRY_HELPER_SHA
+    plan=read(E/'plan.json');execution=read(E/'execution-receipt.json')
+    continuation=read(E/'continuation-exit.json');original=read(T/'role-run-receipt.json')
+    continuation_contract(execution,continuation,original)
+    assert execution['plan']==ref(E/'plan.json')
+    assert execution['original_role_run_receipt']==ref(T/'role-run-receipt.json')
+    assert execution['new_runtime']==ref(P/'r2_runtime.json')
+    assert execution['new_canonical']==ref(O/'agent_outputs/roundtrip_judge.json')
+    assert execution['agent_runs_after_retry']==ref(E/'agent-runs-after-r2.json')
+    assert execution['invalid_canonical_archive']==ref(E/'invalid-canonical-archived.json')
+    assert (E/'invalid-canonical-archived.json').read_bytes()==verify(plan['invalid_canonical_before']).read_bytes()==(P/'r_final.json').read_bytes()
+    assert sha(P/'r_final.json')=='9a7140d20fa162a9a00d71127fb5c9c64822c8e7dee432e3cf90f75dbf0cf7e4'
+    assert (O/'agent_outputs/roundtrip_judge.json').read_bytes()==verify(plan['new_output']).read_bytes()
+    assert (O/'manifest.json').read_bytes()==verify(plan['manifest_before']).read_bytes()
+    before=read(verify(plan['agent_runs_before']));after=read(E/'agent-runs-after-r2.json')
+    assert (O/'agent_outputs/agent_runs.json').read_bytes()==(E/'agent-runs-after-r2.json').read_bytes()
+    assert runs==after
+    retry_history(before,after,plan['prior_invalid_agent_id'],plan['new_agent_id'])
+    assert read(P/'r2_runtime.json')['agent_id']==plan['new_agent_id']
+    for pin in plan['static_inputs']:verify(pin)
+    for key in ('manifest_before','agent_runs_before','invalid_canonical_before','new_output'):verify(plan[key])
+    for step in execution['steps']:
+        verify(step['stdout']);verify(step['stderr'])
+    command=continuation['command']
+    assert len(command)==8 and command[1:4]==['-X','utf8','-B']
+    assert Path(command[4]).resolve()==(P/'q.py').resolve()
+    assert command[5:]==[tid,'26,27,28','2']
+    assert read(E/'collect-r2-exit.json')==execution['steps'][0]
+    # The unchanged q must have validated all current canonical roles and reached
+    # its real adjudication boundary before the failed a_* attempt.
+    boundaries=[]
+    for line in verify(continuation['stdout']).read_bytes().splitlines():
+        try:value=decode(line)
+        except (ValueError,UnicodeError):continue
+        if isinstance(value,dict) and 'boundary' in value:boundaries.append(value)
+    assert [x['role'] for x in boundaries if x['boundary']=='role_validated']==['source-contract','blind-translation','direct-judge','roundtrip-judge']
+    checks=[x for x in boundaries if x['boundary']=='adjudication_check']
+    assert len(checks)==1 and checks[0]['task']==tid
+    assert checks[0]['triggers']==read(P/'adjudication_triggers.json')
+    assert checks[0]['triggers']['required'] is True
+    pins=list(plan['static_inputs'])
+    paths=[F/'receipt.json',F/'recover.py',E/'plan.json',E/'execution-receipt.json',
+        E/'execution-started.json',E/'continuation-exit.json',E/'collect-r2-exit.json',
+        E/'agent-runs-after-r2.json',E/'invalid-canonical-archived.json',P/'r2_runtime.json',
+        O/'agent_outputs/roundtrip_judge.json',P/'adjudication_triggers.json']
+    paths += [verify(plan[key]) for key in ('manifest_before','agent_runs_before','invalid_canonical_before','new_output')]
+    paths += [verify(step[key]) for step in execution['steps'] for key in ('stdout','stderr')]
+    pins += [ref(path) for path in paths]
+    return {'format':'exact-info-roundtrip-retry-lineage-1',
+        'original_schema_failure_receipt':ref(T/'role-run-receipt.json'),
+        'actual_continuation_failure_receipt':ref(E/'continuation-exit.json'),
+        'handoff_execution_receipt':ref(E/'execution-receipt.json'),
+        'prior_invalid_roundtrip_agent_id':plan['prior_invalid_agent_id'],
+        'valid_roundtrip_retry_agent_id':plan['new_agent_id'],
+        'original_schema_failure_preserved':True,
+        'pins':list({x['path']:x for x in pins}.values())}
+

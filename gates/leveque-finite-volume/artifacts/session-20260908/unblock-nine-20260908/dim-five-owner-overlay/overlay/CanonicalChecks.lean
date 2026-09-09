@@ -1,0 +1,314 @@
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FinitePhysicalGeometry
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FinitePhysicalUpdate
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FinitePhysicalReferenceError
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.LocalRectangleReference
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RefiningLineMethod
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethod
+import ComputationalMathematics.Analysis.Normed.Group.SequentialError
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethodEstimates
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CartesianCellProjection
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FiniteCartesianGeometry
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FiniteCartesianReference
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.LocalLinearAdvection
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.CFLUnitShift
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.HighResolutionAdvectionLine
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.HighResolutionCoordinateSweep
+
+#check NumStability.FiniteCoordinate.PhysicalData
+#print axioms NumStability.FiniteCoordinate.PhysicalData
+#check NumStability.FiniteCoordinate.PhysicalData.cellVolume
+#print axioms NumStability.FiniteCoordinate.PhysicalData.cellVolume
+#check NumStability.FiniteCoordinate.PhysicalData.cellVolume_pos
+#print axioms NumStability.FiniteCoordinate.PhysicalData.cellVolume_pos
+#check NumStability.FiniteCoordinate.PhysicalData.cellMean
+#print axioms NumStability.FiniteCoordinate.PhysicalData.cellMean
+#check NumStability.FiniteCoordinate.PhysicalData.faceFlux
+#print axioms NumStability.FiniteCoordinate.PhysicalData.faceFlux
+#check NumStability.FiniteCoordinate.advance
+#print axioms NumStability.FiniteCoordinate.advance
+#check NumStability.FiniteCoordinate.sweep
+#print axioms NumStability.FiniteCoordinate.sweep
+#check NumStability.FiniteCoordinate.advance_mass_balance
+#print axioms NumStability.FiniteCoordinate.advance_mass_balance
+#check NumStability.FiniteCoordinate.finite_mass_balance
+#print axioms NumStability.FiniteCoordinate.finite_mass_balance
+#check NumStability.FiniteCoordinate.sweep_cons
+#print axioms NumStability.FiniteCoordinate.sweep_cons
+#check NumStability.FiniteCoordinate.sweep_split
+#print axioms NumStability.FiniteCoordinate.sweep_split
+#check NumStability.FiniteCoordinate.LineLocal
+#print axioms NumStability.FiniteCoordinate.LineLocal
+#check NumStability.FiniteCoordinate.advance_local
+#print axioms NumStability.FiniteCoordinate.advance_local
+#check NumStability.FiniteCoordinate.PhysicalData.ReferenceOn
+#print axioms NumStability.FiniteCoordinate.PhysicalData.ReferenceOn
+#check NumStability.FiniteCoordinate.advance_error_le
+#print axioms NumStability.FiniteCoordinate.advance_error_le
+#check NumStability.LocalConservationLaw.RectangleReferenceOn
+#print axioms NumStability.LocalConservationLaw.RectangleReferenceOn
+#check NumStability.LocalConservationLaw.SmoothReferenceOn
+#print axioms NumStability.LocalConservationLaw.SmoothReferenceOn
+#check NumStability.LocalConservationLaw.SpatialRectangleReferenceOn
+#print axioms NumStability.LocalConservationLaw.SpatialRectangleReferenceOn
+#check NumStability.LocalConservationLaw.SpatialSmoothReferenceOn
+#print axioms NumStability.LocalConservationLaw.SpatialSmoothReferenceOn
+#check NumStability.LocalConservationLaw.spatial_rectangle_const_iff
+#print axioms NumStability.LocalConservationLaw.spatial_rectangle_const_iff
+#check NumStability.LocalConservationLaw.spatial_smooth_const_iff
+#print axioms NumStability.LocalConservationLaw.spatial_smooth_const_iff
+#check NumStability.DirectionalLine.windowVariation
+#print axioms NumStability.DirectionalLine.windowVariation
+#check NumStability.DirectionalLine.LineFamily
+#print axioms NumStability.DirectionalLine.LineFamily
+#check NumStability.DirectionalLine.LineFamily.advance
+#print axioms NumStability.DirectionalLine.LineFamily.advance
+#check NumStability.DirectionalLine.LineFamily.InitialProjection
+#print axioms NumStability.DirectionalLine.LineFamily.InitialProjection
+#check NumStability.DirectionalLine.LineFamily.HasControlledHighResolution
+#print axioms NumStability.DirectionalLine.LineFamily.HasControlledHighResolution
+#check NumStability.DirectionalLine.LineFamily.HasControlledHighResolution.perturbed_accuracy
+#print axioms NumStability.DirectionalLine.LineFamily.HasControlledHighResolution.perturbed_accuracy
+#check NumStability.DirectionalLine.LineFamily.stabilityRate
+#print axioms NumStability.DirectionalLine.LineFamily.stabilityRate
+#check NumStability.DirectionalLine.LineFamily.stabilityRate_spec
+#print axioms NumStability.DirectionalLine.LineFamily.stabilityRate_spec
+#check NumStability.FiniteCoordinate.LineCoordinates
+#print axioms NumStability.FiniteCoordinate.LineCoordinates
+#check NumStability.FiniteCoordinate.LineCoordinates.extract
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_cell
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_cell
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_local
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_local
+#check NumStability.FiniteCoordinate.LineRealization
+#print axioms NumStability.FiniteCoordinate.LineRealization
+#check NumStability.FiniteCoordinate.LineRealization.rule
+#print axioms NumStability.FiniteCoordinate.LineRealization.rule
+#check NumStability.FiniteCoordinate.LineRealization.Admitted
+#print axioms NumStability.FiniteCoordinate.LineRealization.Admitted
+#check NumStability.FiniteCoordinate.LineRealization.advance_eq
+#print axioms NumStability.FiniteCoordinate.LineRealization.advance_eq
+#check NumStability.SequentialError.execution
+#print axioms NumStability.SequentialError.execution
+#check NumStability.SequentialError.errorBudget
+#print axioms NumStability.SequentialError.errorBudget
+#check NumStability.SequentialError.execution_error_le
+#print axioms NumStability.SequentialError.execution_error_le
+#check NumStability.SequentialError.execution_error_le_upto
+#print axioms NumStability.SequentialError.execution_error_le_upto
+#check NumStability.SequentialError.errorBudget_uniform_le
+#print axioms NumStability.SequentialError.errorBudget_uniform_le
+#check NumStability.FiniteCoordinate.LineCoordinates.extract_error_le
+#print axioms NumStability.FiniteCoordinate.LineCoordinates.extract_error_le
+#check NumStability.FiniteCoordinate.LineRealization.coordinate_stability
+#print axioms NumStability.FiniteCoordinate.LineRealization.coordinate_stability
+#check NumStability.FiniteCoordinate.LineRealization.coordinate_local
+#print axioms NumStability.FiniteCoordinate.LineRealization.coordinate_local
+#check NumStability.FiniteCoordinate.LineRealization.smooth_accuracy
+#print axioms NumStability.FiniteCoordinate.LineRealization.smooth_accuracy
+#check NumStability.FiniteCoordinate.shared_face_cancels
+#print axioms NumStability.FiniteCoordinate.shared_face_cancels
+#check NumStability.FiniteCoordinate.coordinateStep
+#print axioms NumStability.FiniteCoordinate.coordinateStep
+#check NumStability.FiniteCoordinate.coordinateExecution
+#print axioms NumStability.FiniteCoordinate.coordinateExecution
+#check NumStability.FiniteCoordinate.coordinateExecution_succ
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_succ
+#check NumStability.FiniteCoordinate.coordinateExecution_ordered
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_ordered
+#check NumStability.FiniteCoordinate.coordinateExecution_physical_error
+#print axioms NumStability.FiniteCoordinate.coordinateExecution_physical_error
+#check NumStability.CartesianGrid.integral_cellBox_projection
+#print axioms NumStability.CartesianGrid.integral_cellBox_projection
+#check NumStability.CartesianGrid.cellVolumeAverage_projection
+#print axioms NumStability.CartesianGrid.cellVolumeAverage_projection
+#check NumStability.FiniteCartesian.axis_right_eq_next_left
+#print axioms NumStability.FiniteCartesian.axis_right_eq_next_left
+#check NumStability.FiniteCartesian.axis_left_strictMono
+#print axioms NumStability.FiniteCartesian.axis_left_strictMono
+#check NumStability.FiniteCartesian.axis_index_unique
+#print axioms NumStability.FiniteCartesian.axis_index_unique
+#check NumStability.FiniteCartesian.cellBox_disjoint
+#print axioms NumStability.FiniteCartesian.cellBox_disjoint
+#check NumStability.FiniteCartesian.cellBox_measurable
+#print axioms NumStability.FiniteCartesian.cellBox_measurable
+#check NumStability.FiniteCartesian.tangentialFaceBox_measurable
+#print axioms NumStability.FiniteCartesian.tangentialFaceBox_measurable
+#check NumStability.FiniteCartesian.cells
+#print axioms NumStability.FiniteCartesian.cells
+#check NumStability.FiniteCartesian.facePoint_measurable
+#print axioms NumStability.FiniteCartesian.facePoint_measurable
+#check NumStability.FiniteCartesian.faceMeasure
+#print axioms NumStability.FiniteCartesian.faceMeasure
+#check NumStability.FiniteCartesian.left_face_in_closure
+#print axioms NumStability.FiniteCartesian.left_face_in_closure
+#check NumStability.FiniteCartesian.right_face_in_closure
+#print axioms NumStability.FiniteCartesian.right_face_in_closure
+#check NumStability.FiniteCartesian.left_face_ae_incidence
+#print axioms NumStability.FiniteCartesian.left_face_ae_incidence
+#check NumStability.FiniteCartesian.right_face_ae_incidence
+#print axioms NumStability.FiniteCartesian.right_face_ae_incidence
+#check NumStability.FiniteCartesian.data
+#print axioms NumStability.FiniteCartesian.data
+#check NumStability.FiniteCartesian.data_cell_measure
+#print axioms NumStability.FiniteCartesian.data_cell_measure
+#check NumStability.FiniteCartesian.data_cellVolume
+#print axioms NumStability.FiniteCartesian.data_cellVolume
+#check NumStability.FiniteCartesian.data_face_measure
+#print axioms NumStability.FiniteCartesian.data_face_measure
+#check NumStability.FiniteCartesian.data_shared_face
+#print axioms NumStability.FiniteCartesian.data_shared_face
+#check NumStability.FiniteCartesian.data_left_position
+#print axioms NumStability.FiniteCartesian.data_left_position
+#check NumStability.FiniteCartesian.data_right_position
+#print axioms NumStability.FiniteCartesian.data_right_position
+#check NumStability.FiniteCartesian.data_face_measurable
+#print axioms NumStability.FiniteCartesian.data_face_measurable
+#check NumStability.FiniteCartesian.data_normal_flux
+#print axioms NumStability.FiniteCartesian.data_normal_flux
+#check NumStability.FiniteCartesian.faceMeasure_area
+#print axioms NumStability.FiniteCartesian.faceMeasure_area
+#check NumStability.FiniteCartesian.CartesianIdentification
+#print axioms NumStability.FiniteCartesian.CartesianIdentification
+#check NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq
+#check NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq
+#check NumStability.FiniteCartesian.CartesianIdentification.faceFlux_eq
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.faceFlux_eq
+#check NumStability.FiniteCartesian.CartesianIdentification.cellMean_lift
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.cellMean_lift
+#check NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift
+#check NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift
+#print axioms NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift
+#check NumStability.LocalLinearAdvection.local_integral_hasDerivAt
+#print axioms NumStability.LocalLinearAdvection.local_integral_hasDerivAt
+#check NumStability.LocalLinearAdvection.eq_zero_of_local_integrals
+#print axioms NumStability.LocalLinearAdvection.eq_zero_of_local_integrals
+#check NumStability.LocalLinearAdvection.qt
+#print axioms NumStability.LocalLinearAdvection.qt
+#check NumStability.LocalLinearAdvection.qx
+#print axioms NumStability.LocalLinearAdvection.qx
+#check NumStability.LocalLinearAdvection.partial_time
+#print axioms NumStability.LocalLinearAdvection.partial_time
+#check NumStability.LocalLinearAdvection.partial_space
+#print axioms NumStability.LocalLinearAdvection.partial_space
+#check NumStability.LocalLinearAdvection.smooth_reference_interior
+#print axioms NumStability.LocalLinearAdvection.smooth_reference_interior
+#check NumStability.LocalLinearAdvection.interior_partials_continuous
+#print axioms NumStability.LocalLinearAdvection.interior_partials_continuous
+#check NumStability.LocalLinearAdvection.interior_differentiableAt
+#print axioms NumStability.LocalLinearAdvection.interior_differentiableAt
+#check NumStability.LocalLinearAdvection.interior_mass_derivative
+#print axioms NumStability.LocalLinearAdvection.interior_mass_derivative
+#check NumStability.LocalLinearAdvection.rectangle_mass_derivative
+#print axioms NumStability.LocalLinearAdvection.rectangle_mass_derivative
+#check NumStability.LocalLinearAdvection.interior_classical
+#print axioms NumStability.LocalLinearAdvection.interior_classical
+#check NumStability.LocalLinearAdvection.characteristic_propagation
+#print axioms NumStability.LocalLinearAdvection.characteristic_propagation
+#check NumStability.LocalLinearAdvection.local_cell_average_shift
+#print axioms NumStability.LocalLinearAdvection.local_cell_average_shift
+#check NumStability.CFLUnitShift.grid
+#print axioms NumStability.CFLUnitShift.grid
+#check NumStability.CFLUnitShift.grid_volume
+#print axioms NumStability.CFLUnitShift.grid_volume
+#check NumStability.CFLUnitShift.advance
+#print axioms NumStability.CFLUnitShift.advance
+#check NumStability.CFLUnitShift.advance_eq_shift
+#print axioms NumStability.CFLUnitShift.advance_eq_shift
+#check NumStability.CFLUnitShift.averaged
+#print axioms NumStability.CFLUnitShift.averaged
+#check NumStability.CFLUnitShift.averaged_eq_shift
+#print axioms NumStability.CFLUnitShift.averaged_eq_shift
+#check NumStability.CFLUnitShift.advance_averaged_exact
+#print axioms NumStability.CFLUnitShift.advance_averaged_exact
+#check NumStability.CFLUnitShift.averaged_is_cell_average
+#print axioms NumStability.CFLUnitShift.averaged_is_cell_average
+#check NumStability.CFLUnitShift.translated_is_conserved
+#print axioms NumStability.CFLUnitShift.translated_is_conserved
+#check NumStability.CFLUnitShift.physical_exactness
+#print axioms NumStability.CFLUnitShift.physical_exactness
+#check NumStability.CFLUnitShift.window
+#print axioms NumStability.CFLUnitShift.window
+#check NumStability.CFLUnitShift.advance_window
+#print axioms NumStability.CFLUnitShift.advance_window
+#check NumStability.CFLUnitShift.windowTV
+#print axioms NumStability.CFLUnitShift.windowTV
+#check NumStability.CFLUnitShift.advance_windowTV
+#print axioms NumStability.CFLUnitShift.advance_windowTV
+#check NumStability.CFLUnitShift.advance_no_overshoot
+#print axioms NumStability.CFLUnitShift.advance_no_overshoot
+#check NumStability.CFLUnitShift.advance_preserves_monotone
+#print axioms NumStability.CFLUnitShift.advance_preserves_monotone
+#check NumStability.CFLUnitShift.meshSize
+#print axioms NumStability.CFLUnitShift.meshSize
+#check NumStability.CFLUnitShift.meshSize_pos
+#print axioms NumStability.CFLUnitShift.meshSize_pos
+#check NumStability.CFLUnitShift.meshSize_tendsto_zero
+#print axioms NumStability.CFLUnitShift.meshSize_tendsto_zero
+#check NumStability.CFLUnitShift.flux_locality
+#print axioms NumStability.CFLUnitShift.flux_locality
+#check NumStability.CFLUnitShift.advance_extension_independent
+#print axioms NumStability.CFLUnitShift.advance_extension_independent
+#check NumStability.CFLUnitShift.refinement_accuracy
+#print axioms NumStability.CFLUnitShift.refinement_accuracy
+#check NumStability.CFLUnitShift.refinement_oscillation
+#print axioms NumStability.CFLUnitShift.refinement_oscillation
+#check NumStability.CFLUnitShift.smoothProfile
+#print axioms NumStability.CFLUnitShift.smoothProfile
+#check NumStability.CFLUnitShift.smoothProfile_smooth
+#print axioms NumStability.CFLUnitShift.smoothProfile_smooth
+#check NumStability.CFLUnitShift.smoothProfile_integrable
+#print axioms NumStability.CFLUnitShift.smoothProfile_integrable
+#check NumStability.CFLUnitShift.smoothProfile_nonconstant
+#print axioms NumStability.CFLUnitShift.smoothProfile_nonconstant
+#check NumStability.CFLUnitShift.stepProfile
+#print axioms NumStability.CFLUnitShift.stepProfile
+#check NumStability.CFLUnitShift.stepProfile_integrable
+#print axioms NumStability.CFLUnitShift.stepProfile_integrable
+#check NumStability.CFLUnitShift.stepProfile_discontinuous
+#print axioms NumStability.CFLUnitShift.stepProfile_discontinuous
+#check NumStability.CFLUnitShift.smooth_refinement
+#print axioms NumStability.CFLUnitShift.smooth_refinement
+#check NumStability.CFLUnitShift.step_refinement
+#print axioms NumStability.CFLUnitShift.step_refinement
+#check NumStability.LocalLinearAdvection.local_cfl1_exact
+#print axioms NumStability.LocalLinearAdvection.local_cfl1_exact
+#check NumStability.LocalLinearAdvection.local_cfl1_exact_of_projection
+#print axioms NumStability.LocalLinearAdvection.local_cfl1_exact_of_projection
+#check NumStability.LocalLinearAdvection.local_refinement_zero_defect
+#print axioms NumStability.LocalLinearAdvection.local_refinement_zero_defect
+#check NumStability.HighResolutionAdvectionLine.h
+#print axioms NumStability.HighResolutionAdvectionLine.h
+#check NumStability.HighResolutionAdvectionLine.h_pos
+#print axioms NumStability.HighResolutionAdvectionLine.h_pos
+#check NumStability.HighResolutionAdvectionLine.h_eq
+#print axioms NumStability.HighResolutionAdvectionLine.h_eq
+#check NumStability.HighResolutionAdvectionLine.h_mul
+#print axioms NumStability.HighResolutionAdvectionLine.h_mul
+#check NumStability.HighResolutionAdvectionLine.h_le_half
+#print axioms NumStability.HighResolutionAdvectionLine.h_le_half
+#check NumStability.HighResolutionAdvectionLine.h_tendsto_zero
+#print axioms NumStability.HighResolutionAdvectionLine.h_tendsto_zero
+#check NumStability.HighResolutionAdvectionLine.input_geometry
+#print axioms NumStability.HighResolutionAdvectionLine.input_geometry
+#check NumStability.HighResolutionAdvectionLine.active_coverage
+#print axioms NumStability.HighResolutionAdvectionLine.active_coverage
+#check NumStability.HighResolutionAdvectionLine.family
+#print axioms NumStability.HighResolutionAdvectionLine.family
+#check NumStability.HighResolutionAdvectionLine.family_advance
+#print axioms NumStability.HighResolutionAdvectionLine.family_advance
+#check NumStability.HighResolutionAdvectionLine.family_quality
+#print axioms NumStability.HighResolutionAdvectionLine.family_quality
+#check NumStability.HighResolutionAdvectionLine.smooth_local_reference
+#print axioms NumStability.HighResolutionAdvectionLine.smooth_local_reference
+#check NumStability.HighResolutionAdvectionLine.smooth_initial_projection
+#print axioms NumStability.HighResolutionAdvectionLine.smooth_initial_projection
+#check NumStability.HighResolutionAdvectionLine.step_local_reference
+#print axioms NumStability.HighResolutionAdvectionLine.step_local_reference
+#check NumStability.HighResolutionAdvectionLine.scalar_family_exists
+#print axioms NumStability.HighResolutionAdvectionLine.scalar_family_exists
+#check NumStability.HighResolutionCoordinateSweep.coordinate_highResolution_specification
+#print axioms NumStability.HighResolutionCoordinateSweep.coordinate_highResolution_specification

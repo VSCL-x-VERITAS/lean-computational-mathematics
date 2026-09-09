@@ -1,0 +1,81 @@
+NumStability.leveque01_localRiemannInformationInterface_sourceContract.{u_1, u_2, u_3, u_4} {m : ℕ}
+  (law : NumStability.LocalRiemannInformation.Law m)
+  {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} {Information : Type u_2}
+  (method : NumStability.LocalRiemannInformation.Method law Result Information) {Cell : Type u_3} {Face : Type u_4}
+  (leftCell rightCell : Face → Cell) (old : Cell → Fin m → ℝ) (hstates : ∀ (cell : Cell), old cell ∈ law.states)
+  (cell : Cell) (leftFace rightFace : Face) (hleftCell : rightCell leftFace = cell)
+  (hrightCell : leftCell rightFace = cell) {a b s t : ℝ} (hab : a < b) (hst : s < t)
+  (hdomain :
+    ∀ (face : Face),
+      method.domain
+        (NumStability.LocalRiemannInformation.adjacentProblem law leftCell rightCell old hstates (t - s) ⋯ face))
+  (q : ℝ → ℝ → Fin m → ℝ) (faceLocation : Face → ℝ) (hleftLocation : faceLocation leftFace = a)
+  (hrightLocation : faceLocation rightFace = b) (holdDensity : IntervalIntegrable (fun x => q x s) volume a b)
+  (hnewDensity : IntervalIntegrable (fun x => q x t) volume a b)
+  (hleftFlux : IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t)
+  (hrightFlux : IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t)
+  (hphysicalBalance :
+    (∫ (x : ℝ) in a..b, q x t) - ∫ (x : ℝ) in a..b, q x s = ∫ (τ : ℝ) in s..t, law.flux (q a τ) - law.flux (q b τ)) :
+  let problem := NumStability.LocalRiemannInformation.adjacentProblem law leftCell rightCell old hstates (t - s) ⋯;
+  have numericalFlux := fun face => method.flux (problem face) ⋯;
+  have next :=
+    NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) (old cell)
+      (numericalFlux rightFace - numericalFlux leftFace);
+  0 < m ∧
+    NumStability.IsHyperbolicFluxOn law.flux law.states ∧
+      (∀ (face : Face),
+          (problem face).left = old (leftCell face) ∧
+            (problem face).right = old (rightCell face) ∧
+              (problem face).duration = t - s ∧
+                numericalFlux face = method.numericalFlux (method.extract (method.solve (problem face) ⋯))) ∧
+        (problem leftFace).right = old cell ∧
+          (problem rightFace).left = old cell ∧
+            (∀ (face : Face),
+                old (leftCell face) = old (rightCell face) → numericalFlux face = law.flux (old (leftCell face))) ∧
+              ∃ leftReference rightReference,
+                NumStability.IsRiemannData (fun x => leftReference.field x 0) (old (leftCell leftFace)) (old cell) ∧
+                  NumStability.IsRiemannData (fun x => rightReference.field x 0) (old cell)
+                      (old (rightCell rightFace)) ∧
+                    NumStability.IsOneDimensionalCellAverage (fun τ => law.flux (leftReference.field 0 τ)) 0 (t - s)
+                        leftReference.meanFlux ∧
+                      NumStability.IsOneDimensionalCellAverage (fun τ => law.flux (rightReference.field 0 τ)) 0 (t - s)
+                          rightReference.meanFlux ∧
+                        ‖numericalFlux leftFace - leftReference.meanFlux‖ ≤ method.errorBound (problem leftFace) ∧
+                          ‖numericalFlux rightFace - rightReference.meanFlux‖ ≤ method.errorBound (problem rightFace) ∧
+                            NumStability.IsOneDimensionalCellAverage (fun x => q x s) a b
+                                (NumStability.oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                              NumStability.IsOneDimensionalCellAverage (fun x => q x t) a b
+                                  (NumStability.oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                (NumStability.oneDimensionalCellAverage (fun x => q x s) a b =
+                                    NumStability.cellVolumeAverage volume (Set.Ioc a b) fun x => q x s) ∧
+                                  next =
+                                      old cell -
+                                        ((t - s) / (b - a)) • (numericalFlux rightFace - numericalFlux leftFace) ∧
+                                    (b - a) • (next - NumStability.oneDimensionalCellAverage (fun x => q x t) a b) =
+                                        (b - a) •
+                                            (old cell - NumStability.oneDimensionalCellAverage (fun x => q x s) a b) +
+                                          (t - s) •
+                                            (numericalFlux leftFace -
+                                                NumStability.oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t -
+                                              (numericalFlux rightFace -
+                                                NumStability.oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                  t)) ∧
+                                      ∀ (oldBound leftComparison rightComparison : ℝ),
+                                        ‖old cell - NumStability.oneDimensionalCellAverage (fun x => q x s) a b‖ ≤
+                                            oldBound →
+                                          ‖leftReference.meanFlux -
+                                                  NumStability.oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                    t‖ ≤
+                                              leftComparison →
+                                            ‖rightReference.meanFlux -
+                                                    NumStability.oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                      t‖ ≤
+                                                rightComparison →
+                                              ‖next - NumStability.oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+                                                oldBound +
+                                                  (t - s) / (b - a) *
+                                                    (method.errorBound (problem leftFace) + leftComparison +
+                                                      (method.errorBound (problem rightFace) + rightComparison))
+'NumStability.leveque01_localRiemannInformationInterface_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

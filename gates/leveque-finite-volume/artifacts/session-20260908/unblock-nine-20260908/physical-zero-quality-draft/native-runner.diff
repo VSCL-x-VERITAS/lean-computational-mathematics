@@ -1,0 +1,33 @@
+--- C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\physical-refinement-quality-draft\run_native.py
++++ run_native.py
+@@ -3,7 +3,7 @@
+ from pathlib import Path
+ R=Path(r'C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics')
+ D=R/'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908'
+-P=D/'physical-refinement-quality-draft'
++P=D/'physical-zero-quality-draft'
+ native=lambda p:str(p) if str(p).startswith('\\\\?\\') else '\\\\?\\'+os.path.abspath(p)
+ def raw(p):
+  with open(native(p),'rb') as stream:return stream.read()
+@@ -36,13 +36,15 @@
+  result=capture('lake',[r'C:\Users\qed_s\.elan\bin\lake.exe','env',sys.executable,'-X','utf8','-B',str(P/'run_native.py'),attempt,'--child'],R)
+  raise SystemExit(result['exit_code'])
+ 
+-bridge=D/'capacity-ghost-boundary-draft/native-01/Candidate.lean'
+-bridge_ref=ref(bridge);assert bridge_ref['sha256']=='f0e3bf9abd1a997f46df663b657a142749213572bbb2ecd16bb71b94e55af2c2'
+-fragment_ref=ref(P/'PhysicalRefinement.lean.fragment')
+-put(A/'PhysicalRefinement.lean.fragment',raw(P/'PhysicalRefinement.lean.fragment'))
+-source= b'import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethodEstimates\nimport Mathlib.Topology.MetricSpace.Bounded\nimport Mathlib.Data.Finset.Lattice.Fold\n'+raw(bridge)+b'\n'+raw(P/'PhysicalRefinement.lean.fragment')+b'\n'+raw(P/'Checks.lean.fragment')
++bridge=D/'physical-refinement-quality-draft/native-02/Candidate.lean'
++bridge_ref=ref(bridge);assert bridge_ref['sha256']=='c2b8d278def563d0e181536f745a18e5e461b7a595089bc639c87c736aee7415'
++extra=D/'capacity-zero-flux-witness/native-01/Zero.lean.fragment'
++extra_ref=ref(extra);assert extra_ref['sha256']=='cd7714c46194d050edbd0b7ae0d3a25acc86139bcf653af2bf78c79fc09efb19'
++fragment_ref=ref(P/'ZeroQuality.lean.fragment')
++put(A/'ZeroQuality.lean.fragment',raw(P/'ZeroQuality.lean.fragment'))
++source= b'import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CoordinateLineMethodEstimates\nimport Mathlib.Topology.MetricSpace.Bounded\nimport Mathlib.Data.Finset.Lattice.Fold\n'+raw(bridge)+b'\n'+raw(extra)+b'\n'+raw(P/'ZeroQuality.lean.fragment')+b'\n'+raw(P/'Checks.lean.fragment')
+ candidate=A/'Candidate.lean';candidate_ref=put(candidate,source)
+-pins=[bridge_ref,fragment_ref,candidate_ref,ref(P/'Checks.lean.fragment'),ref(P/'run_native.py'),ref(R/'lean-toolchain'),ref(R/'lake-manifest.json')]
++pins=[bridge_ref,extra_ref,fragment_ref,candidate_ref,ref(P/'Checks.lean.fragment'),ref(P/'run_native.py'),ref(R/'lean-toolchain'),ref(R/'lake-manifest.json')]
+ seen=set()
+ def project_imports(data):
+  return re.findall(r'(?m)^\s*(?:public\s+)?import\s+(ComputationalMathematics(?:\.[A-Za-z_0-9]+)+)',data.decode('utf-8'))

@@ -1,0 +1,35 @@
+"""Actual pure-test capture, with immutable outputs and real return code."""
+from pathlib import Path
+import subprocess
+import sys
+import time
+import json
+import prepare_mapping_catalogue as p
+
+HERE = Path(__file__).resolve().parent
+R = HERE.parent.parents[4]
+
+
+def main():
+    label = sys.argv[1] if len(sys.argv) > 1 else 'mapping-tests-01'
+    assert label.startswith('mapping-tests-') and label.replace('-', '').isalnum()
+    directory = HERE/label; directory.mkdir()
+    files = ['prepare_mapping_catalogue.py', 'emit_reviewed_mapping.py', 'test_mapping_preparation.py', 'run-mapping-tests.py']
+    before = {name: p.sha((HERE/name).read_bytes()) for name in files}
+    for name in files: (directory/(name + '.snapshot')).write_bytes((HERE/name).read_bytes())
+    command = [sys.executable, '-B', str(HERE/'test_mapping_preparation.py')]
+    start = time.perf_counter()
+    run = subprocess.run(command, cwd=R, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (directory/'stdout.txt').write_bytes(run.stdout); (directory/'stderr.txt').write_bytes(run.stderr)
+    receipt = {'schema': 1, 'command': command, 'cwd': str(R), 'exit_code': run.returncode,
+               'elapsed_seconds': time.perf_counter() - start, 'input_hashes_before': before,
+               'input_hashes_after': {name: p.sha((HERE/name).read_bytes()) for name in files},
+               'stdout': p.reference(R, directory/'stdout.txt'), 'stderr': p.reference(R, directory/'stderr.txt'),
+               'candidate_epoch_or_acceptance': False}
+    p.create(directory/'receipt.json', receipt)
+    print(json.dumps(receipt, indent=2))
+    if run.returncode: sys.stderr.buffer.write(run.stderr)
+    return run.returncode
+
+
+if __name__ == '__main__': raise SystemExit(main())

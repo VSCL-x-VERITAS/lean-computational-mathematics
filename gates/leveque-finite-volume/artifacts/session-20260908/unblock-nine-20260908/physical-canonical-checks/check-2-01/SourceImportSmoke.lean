@@ -1,0 +1,50 @@
+import ComputationalMathematics.Source.LeVeque.Chapter01.CoordinateHighResolutionMethods
+
+/-! Only the Chapter 1 source owner is imported; core physical contract names must be exposed. Native execution is intentionally pending. -/
+
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.deepTerms true
+
+#check NumStability.leveque01_coordinateHighResolutionMethods_sourceContract
+#print axioms NumStability.leveque01_coordinateHighResolutionMethods_sourceContract
+
+#check NumStability.PhysicalRefinementQuality.Family
+#print axioms NumStability.PhysicalRefinementQuality.Family
+
+#check NumStability.PhysicalRefinementQuality.Family.SmoothReference
+#print axioms NumStability.PhysicalRefinementQuality.Family.SmoothReference
+
+#check NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate
+#print axioms NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate
+
+#check NumStability.PhysicalRefinementQuality.Family.HasHighResolution
+#print axioms NumStability.PhysicalRefinementQuality.Family.HasHighResolution
+
+#check NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at
+#print axioms NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at
+
+#check NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available
+#print axioms NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available
+
+#check NumStability.PhysicalHighResolutionSweep.coordinates
+#print axioms NumStability.PhysicalHighResolutionSweep.coordinates
+
+#check NumStability.PhysicalHighResolutionSweep.method
+#print axioms NumStability.PhysicalHighResolutionSweep.method
+
+#check NumStability.PhysicalHighResolutionSweep.execution
+#print axioms NumStability.PhysicalHighResolutionSweep.execution
+
+#check NumStability.PhysicalHighResolutionSweep.Specification
+#print axioms NumStability.PhysicalHighResolutionSweep.Specification
+
+#check NumStability.PhysicalHighResolutionSweep.specification
+#print axioms NumStability.PhysicalHighResolutionSweep.specification
+
+#check NumStability.PhysicalHighResolutionSweep.ValidSubsteps
+#print axioms NumStability.PhysicalHighResolutionSweep.ValidSubsteps
+
+#check NumStability.PhysicalHighResolutionSweep.admitted_specification
+#print axioms NumStability.PhysicalHighResolutionSweep.admitted_specification
+

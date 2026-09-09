@@ -1,0 +1,113 @@
+PhysicalDIMCanonicalJoint.direction (k : ℕ) : NumStability.RefiningCartesianGrid.Direction
+'PhysicalDIMCanonicalJoint.direction' depends on axioms: [propext]
+PhysicalDIMCanonicalJoint.duration (_k : ℕ) : ℝ
+'PhysicalDIMCanonicalJoint.duration' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.ghost (level _k : ℕ) :
+  NumStability.RefiningCartesianGrid.Direction →
+    NumStability.ZeroFluxCartesianRefinement.family.Line level → ℤ → Fin 1 → ℝ
+'PhysicalDIMCanonicalJoint.ghost' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.initial (level : ℕ) : NumStability.ZeroFluxCartesianRefinement.family.Cell level → Fin 1 → ℝ
+'PhysicalDIMCanonicalJoint.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.schedule (d : NumStability.RefiningCartesianGrid.Direction) :
+  ∃ k < 2, PhysicalDIMCanonicalJoint.direction k = d
+'PhysicalDIMCanonicalJoint.schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.actual_substeps (level k : ℕ) :
+  k < 2 →
+    0 < PhysicalDIMCanonicalJoint.duration k ∧
+      PhysicalDIMCanonicalJoint.duration k ≤ NumStability.ZeroFluxCartesianRefinement.family.horizon ∧
+        (NumStability.PhysicalHighResolutionSweep.method NumStability.ZeroFluxCartesianRefinement.family level
+              (PhysicalDIMCanonicalJoint.ghost level) k).Admitted
+          (PhysicalDIMCanonicalJoint.direction k) (PhysicalDIMCanonicalJoint.duration k)
+          (NumStability.PhysicalHighResolutionSweep.execution NumStability.ZeroFluxCartesianRefinement.family level
+            PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration
+            (PhysicalDIMCanonicalJoint.ghost level) (PhysicalDIMCanonicalJoint.initial level) k)
+'PhysicalDIMCanonicalJoint.actual_substeps' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.full_application (level : ℕ) :
+  0 < 1 ∧
+    0 < Fintype.card NumStability.RefiningCartesianGrid.Direction ∧
+      NumStability.PhysicalHighResolutionSweep.Specification NumStability.ZeroFluxCartesianRefinement.family level
+          PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration (PhysicalDIMCanonicalJoint.ghost level)
+          (PhysicalDIMCanonicalJoint.initial level) 2 ∧
+        NumStability.PhysicalHighResolutionSweep.ValidSubsteps NumStability.ZeroFluxCartesianRefinement.family level
+          PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration (PhysicalDIMCanonicalJoint.ghost level)
+          (PhysicalDIMCanonicalJoint.initial level) 2
+'PhysicalDIMCanonicalJoint.full_application' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.actual_references (level k : ℕ) :
+  k < 2 →
+    (NumStability.ZeroFluxCartesianRefinement.family.data level).ReferenceOn (PhysicalDIMCanonicalJoint.direction k)
+      NumStability.ZeroFluxCartesianRefinement.stationary 0 (PhysicalDIMCanonicalJoint.duration k)
+'PhysicalDIMCanonicalJoint.actual_references' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.cartesian (level : ℕ) :
+  NumStability.FiniteCartesian.CartesianIdentification (NumStability.ZeroFluxCartesianRefinement.family.data level)
+    (NumStability.RefiningCartesianGrid.axes level) Subtype.val (fun x face => face)
+    NumStability.ZeroFluxCartesianRefinement.zeroFlux
+'PhysicalDIMCanonicalJoint.cartesian' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.reference_boundary_exact (level k : ℕ) :
+  PhysicalDIMCanonicalJoint.ghost level k =
+    NumStability.ZeroFluxCartesianRefinement.family.referenceGhost level
+      NumStability.ZeroFluxCartesianRefinement.stationary
+'PhysicalDIMCanonicalJoint.reference_boundary_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.numerical_step_identity (level k : ℕ)
+  (current : NumStability.ZeroFluxCartesianRefinement.family.Cell level → NumStability.RefiningCartesianGrid.State) :
+  NumStability.FiniteCoordinate.advance (NumStability.ZeroFluxCartesianRefinement.family.data level)
+      (NumStability.PhysicalHighResolutionSweep.method NumStability.ZeroFluxCartesianRefinement.family level
+          (PhysicalDIMCanonicalJoint.ghost level) k).rule
+      (PhysicalDIMCanonicalJoint.direction k) (PhysicalDIMCanonicalJoint.duration k) current =
+    current
+'PhysicalDIMCanonicalJoint.numerical_step_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.execution_identity (level k : ℕ) :
+  NumStability.PhysicalHighResolutionSweep.execution NumStability.ZeroFluxCartesianRefinement.family level
+      PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration (PhysicalDIMCanonicalJoint.ghost level)
+      (PhysicalDIMCanonicalJoint.initial level) k =
+    PhysicalDIMCanonicalJoint.initial level
+'PhysicalDIMCanonicalJoint.execution_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.physical_error_zero (level k : ℕ) (t : ℝ)
+  (cell : NumStability.ZeroFluxCartesianRefinement.family.Cell level) :
+  ‖NumStability.PhysicalHighResolutionSweep.execution NumStability.ZeroFluxCartesianRefinement.family level
+          PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration (PhysicalDIMCanonicalJoint.ghost level)
+          (PhysicalDIMCanonicalJoint.initial level) k cell -
+        (NumStability.ZeroFluxCartesianRefinement.family.data level).cellMean
+          NumStability.ZeroFluxCartesianRefinement.stationary cell t‖ =
+    0
+'PhysicalDIMCanonicalJoint.physical_error_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+PhysicalDIMCanonicalJoint.joint_applicability (level : ℕ) :
+  (0 < 1 ∧
+      0 < Fintype.card NumStability.RefiningCartesianGrid.Direction ∧
+        NumStability.PhysicalHighResolutionSweep.Specification NumStability.ZeroFluxCartesianRefinement.family level
+            PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration
+            (PhysicalDIMCanonicalJoint.ghost level) (PhysicalDIMCanonicalJoint.initial level) 2 ∧
+          NumStability.PhysicalHighResolutionSweep.ValidSubsteps NumStability.ZeroFluxCartesianRefinement.family level
+            PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration
+            (PhysicalDIMCanonicalJoint.ghost level) (PhysicalDIMCanonicalJoint.initial level) 2) ∧
+    (∀ k < 2,
+        0 < PhysicalDIMCanonicalJoint.duration k ∧
+          PhysicalDIMCanonicalJoint.duration k ≤ NumStability.ZeroFluxCartesianRefinement.family.horizon ∧
+            (NumStability.PhysicalHighResolutionSweep.method NumStability.ZeroFluxCartesianRefinement.family level
+                  (PhysicalDIMCanonicalJoint.ghost level) k).Admitted
+              (PhysicalDIMCanonicalJoint.direction k) (PhysicalDIMCanonicalJoint.duration k)
+              (NumStability.PhysicalHighResolutionSweep.execution NumStability.ZeroFluxCartesianRefinement.family level
+                PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration
+                (PhysicalDIMCanonicalJoint.ghost level) (PhysicalDIMCanonicalJoint.initial level) k)) ∧
+      (∀ k < 2,
+          (NumStability.ZeroFluxCartesianRefinement.family.data level).ReferenceOn
+            (PhysicalDIMCanonicalJoint.direction k) NumStability.ZeroFluxCartesianRefinement.stationary 0
+            (PhysicalDIMCanonicalJoint.duration k)) ∧
+        NumStability.FiniteCartesian.CartesianIdentification
+            (NumStability.ZeroFluxCartesianRefinement.family.data level) (NumStability.RefiningCartesianGrid.axes level)
+            Subtype.val (fun x face => face) NumStability.ZeroFluxCartesianRefinement.zeroFlux ∧
+          (∃ x ∈ NumStability.ZeroFluxCartesianRefinement.family.target,
+              ∃ y ∈ NumStability.ZeroFluxCartesianRefinement.family.target,
+                NumStability.ZeroFluxCartesianRefinement.stationary x 0 ≠
+                  NumStability.ZeroFluxCartesianRefinement.stationary y 0) ∧
+            (∀ (k : ℕ),
+                PhysicalDIMCanonicalJoint.ghost level k =
+                  NumStability.ZeroFluxCartesianRefinement.family.referenceGhost level
+                    NumStability.ZeroFluxCartesianRefinement.stationary) ∧
+              ∀ (k : ℕ) (t : ℝ) (cell : NumStability.ZeroFluxCartesianRefinement.family.Cell level),
+                ‖NumStability.PhysicalHighResolutionSweep.execution NumStability.ZeroFluxCartesianRefinement.family
+                        level PhysicalDIMCanonicalJoint.direction PhysicalDIMCanonicalJoint.duration
+                        (PhysicalDIMCanonicalJoint.ghost level) (PhysicalDIMCanonicalJoint.initial level) k cell -
+                      (NumStability.ZeroFluxCartesianRefinement.family.data level).cellMean
+                        NumStability.ZeroFluxCartesianRefinement.stationary cell t‖ =
+                  0
+'PhysicalDIMCanonicalJoint.joint_applicability' depends on axioms: [propext, Classical.choice, Quot.sound]

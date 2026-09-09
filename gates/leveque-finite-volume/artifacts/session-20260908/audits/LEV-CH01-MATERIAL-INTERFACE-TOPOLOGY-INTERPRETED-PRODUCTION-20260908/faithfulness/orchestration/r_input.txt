@@ -1,0 +1,844 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 889695d870b40c958e305bff7d63acf02f531e7ac179b8d72e0e3cefd06742ea
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "The extension of Riemann initial data to a discontinuity in the medium at x=0 as well as a discontinuity in initial data; the subsequent wave dynamics is a separate claim.",
+      "location": "raw PDF page 30; printed Chapter 1 page 8"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 5e1300ce32e44b97a25fd9ab3610406a3ff0d8ff2d892a5765272912144edd8c
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-MATERIAL-INTERFACE-TOPOLOGY-INTERPRETED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph",
+      "anchor": "The idea of a Riemann problem is easily extended to the case where there is a discontinuity in the medium at x = 0 as well as a discontinuity in the initial data.",
+      "observation": "The selected claim extends the Riemann problem to include a material discontinuity at the initial-data interface."
+    },
+    {
+      "location": "Raw PDF page 27, printed page 5, Section 1.2.1, opening paragraph and equation (1.11)",
+      "anchor": "the hyperbolic equation together with special initial data",
+      "observation": "A Riemann problem consists of the hyperbolic equation with piecewise constant initial data having a single jump: q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0."
+    },
+    {
+      "location": "Raw PDF page 29, printed page 7, Section 1.4, final paragraph",
+      "anchor": "sharp interfaces between different materials",
+      "observation": "The material context includes jump discontinuities in material parameters, illustrated by boundaries between soil and rock, different rocks, tissue and bone, water layers, and water and earth."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, first paragraph",
+      "anchor": "each grid cell can be assigned different material properties via appropriate averaging",
+      "observation": "The surrounding numerical context assigns material properties to individual finite volume cells by averaging material parameters over each cell."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, sentence immediately following the selected claim",
+      "anchor": "Solving the Riemann problem at the interface between two cells then gives a decomposition of the data into waves",
+      "observation": "Wave decomposition, reflection, and transmission are subsequent claims about solving the problem, separate from the selected extension of its initial setup."
+    },
+    {
+      "location": "Raw PDF page 30, printed page 8, Section 1.4, second paragraph",
+      "anchor": "Hyperbolic equations with variable coefficients may not be in conservation form",
+      "observation": "The surrounding discussion does not restrict the extended problem to equations in conservation form."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "The spatial coordinate x and time coordinate t occur in the inherited initial-data expression q(x,0); the interface is placed at x = 0 [printed page 5, equation (1.11); printed page 8, selected sentence].",
+      "q_l and q_r denote the constant initial states on the left and right of the interface, respectively; the cited definition does not specify their state space [printed page 5, Section 1.2.1, equation (1.11)].",
+      "A medium with a discontinuity at x = 0 is introduced descriptively, without a named material-parameter function or formal quantifier scope [printed page 8, Section 1.4, selected sentence]."
+    ],
+    "hypotheses": [
+      "The inherited Riemann setup consists of a hyperbolic equation and piecewise constant initial data with a single jump at x = 0 [printed page 5, Section 1.2.1, opening paragraph and equation (1.11)].",
+      "In the extended setup, the medium also has a discontinuity at x = 0 [printed page 8, Section 1.4, selected sentence]."
+    ],
+    "conclusions": [
+      "The notion of a Riemann problem extends to a setup containing both a discontinuity in the medium and a discontinuity in the initial data at the interface x = 0 [printed page 8, Section 1.4, selected sentence; printed page 5, equation (1.11)]."
+    ],
+    "definitions_and_conventions": [
+      "The inherited initial data are q(x,0) = q_l when x < 0 and q(x,0) = q_r when x > 0 [printed page 5, equation (1.11)].",
+      "The initial-data definition leaves the value at x = 0 unspecified [printed page 5, equation (1.11), whose two branches use strict inequalities].",
+      "Placing the initial interface at zero is a coordinate convention: the definition says a jump occurs at some point, 'say x = 0' [printed page 5, Section 1.2.1, opening paragraph].",
+      "A discontinuity in the medium is contextualized through jumps in material parameters at interfaces between materials [printed page 7, Section 1.4, final paragraph]."
+    ],
+    "implicit_context": [
+      "The selected discussion concerns linear waves in heterogeneous media, within Section 1.4, 'Linear Waves and Discontinuous Media' [printed pages 7–8, section heading and surrounding paragraphs].",
+      "Finite volume cells can carry different averaged material properties, motivating Riemann problems at interfaces between cells [printed page 8, Section 1.4, first paragraph].",
+      "Conservation form is not a standing requirement of the surrounding variable-coefficient discussion [printed page 8, Section 1.4, second paragraph]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Coincident interface",
+        "details": [
+          "The medium discontinuity is explicitly located at x = 0, and the inherited initial-data jump uses the same coordinate location [printed page 8, selected sentence; printed page 5, equation (1.11)].",
+          "The selected extension includes both kinds of discontinuity, as expressed by 'as well as' [printed page 8, selected sentence]."
+        ]
+      },
+      {
+        "topic": "Initial-data structure",
+        "details": [
+          "The state is constant separately on the left and right sides at initial time [printed page 5, equation (1.11)].",
+          "The prose specifies a single jump discontinuity in these initial data [printed page 5, Section 1.2.1, opening paragraph]."
+        ]
+      },
+      {
+        "topic": "Scope of the claim",
+        "details": [
+          "The selected sentence extends the problem setup; it does not state an existence, uniqueness, or regularity theorem [printed page 8, Section 1.4, selected sentence].",
+          "The next sentence separately discusses waves moving into each cell and reflection and transmission; these are not conclusions of the selected setup claim [printed page 8, Section 1.4, first paragraph, sentence following the selected sentence]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the medium discontinuity and the initial-data discontinuity as distinct features at the shared interface x = 0 [printed page 8, selected sentence; printed page 5, equation (1.11)].",
+    "Preserve the inherited left and right constant initial states on x < 0 and x > 0 [printed page 5, equation (1.11)].",
+    "Do not attribute a specified value at x = 0 to the source's initial-data definition [printed page 5, equation (1.11)].",
+    "Do not attribute a particular topology, one-sided-limit predicate, or formula for material parameters to the selected sentence; it supplies none [printed page 8, selected sentence].",
+    "Keep the extension of the Riemann setup separate from subsequent claims about its wave dynamics [printed page 8, Section 1.4, consecutive sentences beginning 'The idea' and 'Solving'].",
+    "Do not impose conservation form as an explicit source requirement [printed page 8, Section 1.4, second paragraph]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "No mathematical definition of the medium discontinuity is supplied in the selected passage.",
+      "evidence": "Printed page 8 calls it 'a discontinuity in the medium'; printed page 7 contextualizes interfaces as jumps in material parameters without defining a parameter function or discontinuity predicate.",
+      "impact": "A particular topological characterization, parameter space, or one-sided-limit formulation would require an additional modeling choice."
+    },
+    {
+      "issue": "The material profile away from the interface is not explicitly specified.",
+      "evidence": "Printed page 8 identifies a medium discontinuity at x = 0 but supplies no two-branch material profile; the explicit piecewise constant formula on printed page 5 concerns q(x,0).",
+      "impact": "Global constancy of material parameters on each half-line, or absence of other material interfaces, cannot be extracted as an explicit requirement."
+    },
+    {
+      "issue": "Interface-point values are unspecified.",
+      "evidence": "Printed page 5, equation (1.11), covers only x < 0 and x > 0; the selected sentence on printed page 8 gives no material value at x = 0.",
+      "impact": "The source does not select a left value, right value, or other assigned value at the interface."
+    },
+    {
+      "issue": "The initial-state space and algebraic expression of a genuine jump are not stated.",
+      "evidence": "Printed page 5 describes a 'single jump discontinuity' and names q_l and q_r in equation (1.11), without specifying their space or displaying q_l ≠ q_r.",
+      "impact": "Unequal traces are the ordinary mathematical reading of the stated jump, but the cited passage does not provide a separate formal inequality or a state-space declaration."
+    },
+    {
+      "issue": "The extension is descriptive rather than a quantified theorem.",
+      "evidence": "Printed page 8 says the idea 'is easily extended' without listing coefficient assumptions, interface conditions, or a solution concept.",
+      "impact": "The passage supports the extended problem setup, but not a universally quantified solvability or uniqueness claim."
+    }
+  ],
+  "contract_plain_english": "The Riemann problem introduced on printed page 5 consists of a hyperbolic equation with constant left and right initial states separated by a single jump at x = 0, with no initial value specified at the interface itself (equation (1.11)). The selected sentence on printed page 8 extends this setup to include a discontinuity in the medium at that same interface. Material-parameter jumps provide the surrounding physical context (printed page 7, Section 1.4). The selected passage does not define a topology or a precise material profile, and its subsequent discussion of wave decomposition, reflection, and transmission is a separate claim (printed page 8, first paragraph)."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Separate coordinator-selected source interpretation under the user goal; not a printed-source assertion SHA256 94ae012912d15fbe8fc11bcd172becb61c1c630babf1b949de4d45f10ee9d683
+{
+  "format": "coordinator-selected-source-interpretation-1",
+  "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+  "exact_user_objective": "I want you to unblock all nine of them.",
+  "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+  "selection_receipt": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+    "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+  },
+  "scope_row": "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA",
+  "choice": {
+    "choice_id": "Q5",
+    "rows": [
+      "LEV-CH01-MATERIAL-INTERFACE-RIEMANN-DATA"
+    ],
+    "selected_interpretation": "Use distinct one-sided local material traces at the same interface as distinct initial-state traces. Retain two constant strict-half-line initial states without requiring the material itself to be globally constant on each half-line."
+  },
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "preservation": [
+    "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+    "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+    "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+    "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+    "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+  ],
+  "comparison_rule": "Assess the exact selected claim under this explicit coordinator-selected interpretation. This is authorized task work, not a literal detailed user answer or a printed-source assertion. Independently decide both implications; any acceptance must be interpretation-qualified and preserve source ambiguity. No requested verdict is supplied."
+}
+
+The user requested that all nine rows be unblocked. The coordinator selected the documented convention for this row within that task. This is not a literal detailed user answer. Assess the exact source claim under this explicitly selected convention. The convention is separate from source evidence and supplies no requested verdict. Independently compare every exact target claim, hypothesis, and domain with the source under that convention. Preserve the original source-only ambiguity as such; do not attribute the convention to the book. Any acceptance and implication reasoning must explicitly be qualified as under the recorded coordinator-selected interpretation. The convention does not apply to other source rows.
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 b571684dd68b7adaaa72161cd7b68f8f3c6c93451c3ab6d24ecc7899ac2766de
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "3a0c0fa956dea10d97e4178e3297b467f1fad8460a50c9f4da192b878d08a80a",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "For a function data from the reals to a topological space, its limit at a from strictly below is left, its limit at a from strictly above is right, and left and right are unequal.",
+      "effect_on_target": "The medium hypothesis includes both one-sided limits and unequal limiting material values. The conclusion repeats this and asserts the corresponding three properties for initialState.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "For every real x < 0, data(x) = leftState, and for every real x > 0, data(x) = rightState.",
+      "effect_on_target": "Requires initialState to be constant on each entire open half-line. Appears as both hypothesis and conclusion; imposes no condition at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "The function taking leftState when x < 0, rightState when x > 0, and valueAtOrigin when x = 0.",
+      "effect_on_target": "The existential conclusion represents initialState exactly as this three-case function, with an existentially chosen value at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "And",
+      "meaning": "Logical conjunction: both component propositions hold.",
+      "effect_on_target": "All grouped conclusions hold simultaneously, as do the component conditions inside the local predicates.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "ContinuousAt",
+      "meaning": "A function f is continuous at x if f tends to f(x) along the neighborhood filter of x.",
+      "effect_on_target": "The conclusion denies continuity at zero separately for medium and initialState.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "Expresses the prescribed state values on half-lines and equality of the entire initialState function with its piecewise representation.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Exists",
+      "meaning": "There is an object of the specified type satisfying the predicate.",
+      "effect_on_target": "There exists originState in State giving the stated function equality; this witness is chosen within the scope of all preceding parameters and hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "Filter.Tendsto",
+      "meaning": "The image of the source filter under the function is less than or equal to the target filter; equivalently, every target-filter set has preimage belonging to the source filter.",
+      "effect_on_target": "Expresses the scalar-domain one-sided limits of each component and of the paired function.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "Ne",
+      "meaning": "Negation of equality.",
+      "effect_on_target": "Requires and repeats distinct left and right state values, and encodes distinct material values within the medium hypothesis and explicitly in the conclusion.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "Not",
+      "meaning": "Logical negation, defined as implication to falsehood.",
+      "effect_on_target": "Expresses inequalities through Ne and the failure of continuity of both functions at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "OfNat.ofNat",
+      "meaning": "Extracts the interpretation of a natural-number literal from its OfNat instance.",
+      "effect_on_target": "Interprets every displayed numeral 0 as real zero through the supplied real zero instance.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "Prod",
+      "meaning": "The Cartesian product type of two types.",
+      "effect_on_target": "The paired function takes values in Material × State.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "Prod.mk",
+      "meaning": "Constructs an ordered pair from its first and second components.",
+      "effect_on_target": "Pairs medium(x) with initialState(x), leftMaterial with leftState, and rightMaterial with rightState, preserving this order.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "meaning": "Extracts the uniform-space structure carried by a pseudometric-space structure.",
+      "effect_on_target": "Provides the intermediate structure through which the real pseudometric supplies the topology used in limits and continuity.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "Real",
+      "meaning": "The type of real numbers.",
+      "effect_on_target": "Both functions have the full real line as domain; the distinguished point is real zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "Real.instPreorder",
+      "meaning": "The inferred preorder instance on the real numbers, conventionally their usual order; its implementation is not expanded beyond inferInstance.",
+      "effect_on_target": "Supplies the order used to form the strict lower and upper half-lines in the source filters.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Real.instZero",
+      "meaning": "The real zero instance, whose zero field is Real.zero.",
+      "effect_on_target": "Fixes the common interface point, half-line boundary, and point of discontinuity at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "Real.pseudoMetricSpace",
+      "meaning": "The real pseudometric-space structure with distance d(x,y) = |x-y|.",
+      "effect_on_target": "Makes real-domain neighborhoods and limiting approaches use the usual metric topology.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "Set.Iio",
+      "meaning": "The set of points strictly less than its endpoint.",
+      "effect_on_target": "At endpoint zero, restricts limiting approaches to x < 0 and excludes zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Set.Ioi",
+      "meaning": "The set of points strictly greater than its endpoint.",
+      "effect_on_target": "At endpoint zero, restricts limiting approaches to x > 0 and excludes zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "T2Space",
+      "meaning": "The Hausdorff separation property: distinct points have disjoint neighborhoods.",
+      "effect_on_target": "Both codomain topologies are required to be Hausdorff, so distinct one-sided limits are incompatible with continuity at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "TopologicalSpace",
+      "meaning": "A topology on a type, specifying open sets satisfying the topology axioms.",
+      "effect_on_target": "Material and State have arbitrary specified topologies subject to the Hausdorff assumptions; no metric or algebraic codomain structure is required.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "UniformSpace.toTopologicalSpace",
+      "meaning": "Extracts the topology carried by a uniform-space structure.",
+      "effect_on_target": "Supplies the real-domain topology from its metric-derived uniform structure.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral zero using the zero field of a Zero instance.",
+      "effect_on_target": "Connects real numeral notation to Real.instZero without introducing another constant or assumption.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "instTopologicalSpaceProd",
+      "meaning": "The product topology, constructed from the topologies induced by the two coordinate projections.",
+      "effect_on_target": "The paired limits are limits in the product topology on Material × State and therefore express simultaneous convergence of the coordinates.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "nhds",
+      "meaning": "Conventionally the neighborhood filter at a point, consisting of sets containing an open neighborhood of that point. The supplied body wrapped✝.1 does not expose this construction.",
+      "effect_on_target": "Determines the target filters for all limits and the unrestricted source filters for continuity. The mathematical translation uses its conventional neighborhood-filter interpretation.",
+      "status": "unclear"
+    },
+    {
+      "id": "D027",
+      "name": "nhdsWithin",
+      "meaning": "The infimum of the neighborhood filter at x and the principal filter of s, representing neighborhoods restricted to s.",
+      "effect_on_target": "Produces the source filters for approaches to zero within the strictly negative and strictly positive real half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "LT.lt",
+      "meaning": "Extracts the strict comparison relation from an LT instance.",
+      "effect_on_target": "Supplies the comparisons that select half-lines and branches of the piecewise state function.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Real.decidableLT",
+      "meaning": "A decision instance for strict comparison of two real numbers.",
+      "effect_on_target": "Permits the conditional definition of the piecewise function; adds no mathematical hypothesis on the inputs.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "Real.instLT",
+      "meaning": "The strict-order instance on reals with comparison field Real.lt.",
+      "effect_on_target": "Determines x < 0 and 0 < x in the state predicate and piecewise function.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "ite",
+      "meaning": "Returns the first branch when its proposition is true and the second branch when it is false.",
+      "effect_on_target": "The nested conditional selects the left value for negative inputs, the right value for positive inputs, and the origin value when neither strict inequality holds.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every type Material in universe u_1 and every type State in universe u_2, each equipped with a topology and assumed Hausdorff.",
+      "For every function medium : ℝ → Material and every function initialState : ℝ → State.",
+      "For every leftMaterial, rightMaterial ∈ Material and leftState, rightState ∈ State.",
+      "Under the three stated hypotheses, there exists originState ∈ State in the final conjunct. It may depend on the preceding data; the asserted function equality forces originState = initialState(0)."
+    ],
+    "hypotheses": [
+      "As x tends to 0 through x < 0, medium(x) tends to leftMaterial; as x tends to 0 through x > 0, medium(x) tends to rightMaterial; and leftMaterial ≠ rightMaterial.",
+      "For every real x < 0, initialState(x) = leftState, and for every real x > 0, initialState(x) = rightState.",
+      "leftState ≠ rightState."
+    ],
+    "conclusions": [
+      "The first conjunction asserts both: medium has the prescribed unequal one-sided limits at zero; and initialState tends to leftState from below and rightState from above at zero, with leftState ≠ rightState.",
+      "The next grouped conjunction asserts that x ↦ (medium(x), initialState(x)) tends to (leftMaterial, leftState) as x → 0 from below, tends to (rightMaterial, rightState) as x → 0 from above, and satisfies both leftMaterial ≠ rightMaterial and leftState ≠ rightState.",
+      "The remaining grouped conjunction asserts that initialState equals leftState at every negative real input and rightState at every positive real input; medium is not continuous at zero; initialState is not continuous at zero; and there exists originState ∈ State such that initialState equals, as a function on all of ℝ, the function with value leftState for x < 0, originState for x = 0, and rightState for x > 0."
+    ],
+    "mathematical_definitions": [
+      "The real domain carries the topology from d(x,y) = |x-y|.",
+      "A left limit at zero uses the filter of neighborhoods of zero restricted to (-∞,0); a right limit uses neighborhoods restricted to (0,∞). Neither includes evaluation at zero.",
+      "Convergence to a codomain point means eventual membership in every neighborhood of that point along the specified source filter.",
+      "Material × State carries the product topology, and ordered pairs list the material coordinate first.",
+      "Continuity at zero means convergence to the actual value of the function at zero along unrestricted neighborhoods of zero.",
+      "LocalDef001 combines the two specified one-sided limits with inequality of their values. LocalDef002 prescribes constant values on the entire two open half-lines. LocalDef003 supplies the corresponding piecewise function with a separately specified value at zero."
+    ],
+    "proposition_plain_english": "Let Material and State be Hausdorff topological spaces, and let medium and initialState be functions on the real line taking values in these spaces respectively. Suppose medium has distinct left and right limits leftMaterial and rightMaterial at zero. Suppose initialState is identically leftState on the negative half-line and identically rightState on the positive half-line, where leftState and rightState are distinct. Then medium retains those prescribed distinct one-sided limits, and initialState has the prescribed distinct one-sided limits leftState and rightState at zero. The paired function (medium, initialState) has left limit (leftMaterial, leftState) and right limit (rightMaterial, rightState) in the product topology, with both coordinate pairs unequal. The prescribed half-line values of initialState still hold. Both medium and initialState are discontinuous at zero. Finally, there is a state originState such that initialState is exactly the function equal to leftState for negative inputs, originState at zero, and rightState for positive inputs."
+  },
+  "restrictions_and_vacuity_risks": [
+    "Both codomains must be Hausdorff. The declaration does not cover arbitrary non-Hausdorff topological spaces.",
+    "The hypotheses require two distinct elements in each codomain. For empty or singleton codomains there are no parameter choices satisfying all hypotheses, so the universally quantified implication has no applicable instance there.",
+    "The strict real half-lines approach zero and give nontrivial source filters under the usual real topology; the one-sided limit assertions are not vacuous through an empty approach region.",
+    "The state hypothesis is global on each open half-line, whereas the medium hypothesis only constrains behavior approaching zero and imposes no half-line constancy.",
+    "Neither function's value at zero is prescribed by the hypotheses. The existential witness is necessarily initialState(0), but need not equal either limiting state.",
+    "The conclusion contains repeated hypotheses and repeated inequalities; these are simultaneous assertions, not additional independently chosen data.",
+    "Function equality in the existential conclusion holds on all real inputs, not merely near zero or almost everywhere. The declaration asserts existence, not explicitly unique existence, although the witness is forced by evaluation at zero.",
+    "No algebraic structure, quantitative jump size, differentiability, evolution law, physical interpretation, or relation between the two coordinate functions beyond the displayed limits is encoded.",
+    "The interface point is fixed at zero. No indexed family, time variable, additional interface, or continuity assertion away from zero is present."
+  ],
+  "ambiguities": [
+    "Some foundational external declarations are supplied only by type or opaque references. In particular, nhds has body wrapped✝.1 with no definition of wrapped✝, so its neighborhood-filter semantics cannot be independently recovered from that body alone. The translation uses the conventional meanings of the foundational real, topology, order, and logical primitives; all three local predicates are explicitly defined and introduce no further ambiguity."
+  ]
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract, blind translation, and separately labeled user interpretation.
+
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

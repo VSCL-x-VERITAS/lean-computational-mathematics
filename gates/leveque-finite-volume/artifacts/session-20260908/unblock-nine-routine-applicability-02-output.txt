@@ -1,0 +1,483 @@
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:19:4: error: could not synthesize default value for parameter 'hc' using tactics
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:19:4: error: tactic 'aesop' failed, failed to prove the goal after exhaustive search.
+Initial goal:
+  contract : ∀ (routine : Routine law (fun x => (Fin 1 → ℝ) × (Fin 1 → ℝ)) ((Fin 1 → ℝ) × (Fin 1 → ℝ)))
+    (left center right : Fin 1 → ℝ) (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states)
+    (hrightState : right ∈ law.states) {a b s t : ℝ},
+    a < b →
+      ∀ (hst : s < t)
+        (hleftDomain :
+          routine.domain
+            { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+              duration_pos := ⋯ })
+        (hrightDomain :
+          routine.domain
+            { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+              duration_pos := ⋯ })
+        (q : ℝ → ℝ → Fin 1 → ℝ),
+        IntervalIntegrable (fun x => q x s) volume a b →
+          IntervalIntegrable (fun x => q x t) volume a b →
+            IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t →
+              IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t →
+                (∫ (x : ℝ) in a..b, (fun x => q x t) x) - ∫ (x : ℝ) in a..b, (fun x => q x s) x =
+                    ∫ (τ : ℝ) in s..t, (fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ →
+                  let leftProblem :=
+                    { left := left, right := center, left_mem := hleftState, right_mem := hcenterState,
+                      duration := t - s, duration_pos := ⋯ };
+                  let rightProblem :=
+                    { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                      duration := t - s, duration_pos := ⋯ };
+                  have leftFlux := routine.flux leftProblem hleftDomain;
+                  have rightFlux := routine.flux rightProblem hrightDomain;
+                  have next := finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                  0 < 1 ∧
+                    IsHyperbolicFluxOn law.flux law.states ∧
+                      leftProblem.left = left ∧
+                        leftProblem.right = center ∧
+                          rightProblem.left = center ∧
+                            rightProblem.right = right ∧
+                              leftProblem.duration = t - s ∧
+                                rightProblem.duration = t - s ∧
+                                  leftFlux =
+                                      routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                    rightFlux =
+                                        routine.numericalFlux
+                                          (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                      IsOneDimensionalCellAverage (fun x => q x s) a b
+                                          (oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                                        IsOneDimensionalCellAverage (fun x => q x t) a b
+                                            (oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                          IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+                                              (oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) ∧
+                                            IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+                                                (oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t) ∧
+                                              (oneDimensionalCellAverage (fun x => q x s) a b =
+                                                  cellVolumeAverage volume (Set.Ioc a b) fun x => q x s) ∧
+                                                next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                  (b - a) • (next - oneDimensionalCellAverage (fun x => q x t) a b) =
+                                                      (b - a) •
+                                                          (center - oneDimensionalCellAverage (fun x => q x s) a b) +
+                                                        (t - s) •
+                                                          (leftFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                                t -
+                                                            (rightFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                                t)) ∧
+                                                    (∀ (oldBound leftBound rightBound : ℝ),
+                                                        ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤
+                                                            oldBound →
+                                                          ‖leftFlux -
+                                                                  oneDimensionalCellAverage (fun τ => law.flux (q a τ))
+                                                                    s t‖ ≤
+                                                              leftBound →
+                                                            ‖rightFlux -
+                                                                    oneDimensionalCellAverage
+                                                                      (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                rightBound →
+                                                              ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+                                                                oldBound +
+                                                                  (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                      ∀ (leftReference : Reference leftProblem)
+                                                        (rightReference : Reference rightProblem)
+                                                        (leftSolverBound rightSolverBound : ℝ),
+                                                        ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                          ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                            IsRiemannData (fun x => leftReference.field x 0) left
+                                                                center ∧
+                                                              IsRiemannData (fun x => rightReference.field x 0) center
+                                                                  right ∧
+                                                                IsOneDimensionalCellAverage
+                                                                    (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                    (t - s) leftReference.meanFlux ∧
+                                                                  IsOneDimensionalCellAverage
+                                                                      (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                      (t - s) rightReference.meanFlux ∧
+                                                                    ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                      ⋯ ≤ oldBound → ⋯ → ⋯ :=
+    (leveque01_localRiemannRoutineInterface_sourceContract law ((1 / 2) • 1)).right
+  ⊢ ‖0‖ₑ ≠ ⊤
+Remaining goals after safe rules:
+  ⊢ Sort ?u.4
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:19:29: error: could not synthesize default value for parameter 'hc' using tactics
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:19:29: error: tactic 'aesop' failed, failed to prove the goal after exhaustive search.
+Initial goal:
+  contract : ∀ (routine : Routine law (fun x => (Fin 1 → ℝ) × (Fin 1 → ℝ)) ((Fin 1 → ℝ) × (Fin 1 → ℝ)))
+    (left center right : Fin 1 → ℝ) (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states)
+    (hrightState : right ∈ law.states) {a b s t : ℝ},
+    a < b →
+      ∀ (hst : s < t)
+        (hleftDomain :
+          routine.domain
+            { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+              duration_pos := ⋯ })
+        (hrightDomain :
+          routine.domain
+            { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+              duration_pos := ⋯ })
+        (q : ℝ → ℝ → Fin 1 → ℝ),
+        IntervalIntegrable (fun x => q x s) volume a b →
+          IntervalIntegrable (fun x => q x t) volume a b →
+            IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t →
+              IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t →
+                (∫ (x : ℝ) in a..b, (fun x => q x t) x) - ∫ (x : ℝ) in a..b, (fun x => q x s) x =
+                    ∫ (τ : ℝ) in s..t, (fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ →
+                  let leftProblem :=
+                    { left := left, right := center, left_mem := hleftState, right_mem := hcenterState,
+                      duration := t - s, duration_pos := ⋯ };
+                  let rightProblem :=
+                    { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                      duration := t - s, duration_pos := ⋯ };
+                  have leftFlux := routine.flux leftProblem hleftDomain;
+                  have rightFlux := routine.flux rightProblem hrightDomain;
+                  have next := finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                  0 < 1 ∧
+                    IsHyperbolicFluxOn law.flux law.states ∧
+                      leftProblem.left = left ∧
+                        leftProblem.right = center ∧
+                          rightProblem.left = center ∧
+                            rightProblem.right = right ∧
+                              leftProblem.duration = t - s ∧
+                                rightProblem.duration = t - s ∧
+                                  leftFlux =
+                                      routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                    rightFlux =
+                                        routine.numericalFlux
+                                          (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                      IsOneDimensionalCellAverage (fun x => q x s) a b
+                                          (oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                                        IsOneDimensionalCellAverage (fun x => q x t) a b
+                                            (oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                          IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+                                              (oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) ∧
+                                            IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+                                                (oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t) ∧
+                                              (oneDimensionalCellAverage (fun x => q x s) a b =
+                                                  cellVolumeAverage volume (Set.Ioc a b) fun x => q x s) ∧
+                                                next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                  (b - a) • (next - oneDimensionalCellAverage (fun x => q x t) a b) =
+                                                      (b - a) •
+                                                          (center - oneDimensionalCellAverage (fun x => q x s) a b) +
+                                                        (t - s) •
+                                                          (leftFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                                t -
+                                                            (rightFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                                t)) ∧
+                                                    (∀ (oldBound leftBound rightBound : ℝ),
+                                                        ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤
+                                                            oldBound →
+                                                          ‖leftFlux -
+                                                                  oneDimensionalCellAverage (fun τ => law.flux (q a τ))
+                                                                    s t‖ ≤
+                                                              leftBound →
+                                                            ‖rightFlux -
+                                                                    oneDimensionalCellAverage
+                                                                      (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                rightBound →
+                                                              ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+                                                                oldBound +
+                                                                  (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                      ∀ (leftReference : Reference leftProblem)
+                                                        (rightReference : Reference rightProblem)
+                                                        (leftSolverBound rightSolverBound : ℝ),
+                                                        ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                          ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                            IsRiemannData (fun x => leftReference.field x 0) left
+                                                                center ∧
+                                                              IsRiemannData (fun x => rightReference.field x 0) center
+                                                                  right ∧
+                                                                IsOneDimensionalCellAverage
+                                                                    (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                    (t - s) leftReference.meanFlux ∧
+                                                                  IsOneDimensionalCellAverage
+                                                                      (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                      (t - s) rightReference.meanFlux ∧
+                                                                    ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                      ⋯ ≤ oldBound → ⋯ → ⋯ :=
+    (leveque01_localRiemannRoutineInterface_sourceContract law ((1 / 2) • 1)).right
+  ⊢ ‖0‖ₑ ≠ ⊤
+Remaining goals after safe rules:
+  ⊢ Sort ?u.4
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:21:7: error: could not synthesize default value for parameter 'hc' using tactics
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:21:7: error: tactic 'aesop' failed, failed to prove the goal after exhaustive search.
+Initial goal:
+  contract : ∀ (routine : Routine law (fun x => (Fin 1 → ℝ) × (Fin 1 → ℝ)) ((Fin 1 → ℝ) × (Fin 1 → ℝ)))
+    (left center right : Fin 1 → ℝ) (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states)
+    (hrightState : right ∈ law.states) {a b s t : ℝ},
+    a < b →
+      ∀ (hst : s < t)
+        (hleftDomain :
+          routine.domain
+            { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+              duration_pos := ⋯ })
+        (hrightDomain :
+          routine.domain
+            { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+              duration_pos := ⋯ })
+        (q : ℝ → ℝ → Fin 1 → ℝ),
+        IntervalIntegrable (fun x => q x s) volume a b →
+          IntervalIntegrable (fun x => q x t) volume a b →
+            IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t →
+              IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t →
+                (∫ (x : ℝ) in a..b, (fun x => q x t) x) - ∫ (x : ℝ) in a..b, (fun x => q x s) x =
+                    ∫ (τ : ℝ) in s..t, (fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ →
+                  let leftProblem :=
+                    { left := left, right := center, left_mem := hleftState, right_mem := hcenterState,
+                      duration := t - s, duration_pos := ⋯ };
+                  let rightProblem :=
+                    { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                      duration := t - s, duration_pos := ⋯ };
+                  have leftFlux := routine.flux leftProblem hleftDomain;
+                  have rightFlux := routine.flux rightProblem hrightDomain;
+                  have next := finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                  0 < 1 ∧
+                    IsHyperbolicFluxOn law.flux law.states ∧
+                      leftProblem.left = left ∧
+                        leftProblem.right = center ∧
+                          rightProblem.left = center ∧
+                            rightProblem.right = right ∧
+                              leftProblem.duration = t - s ∧
+                                rightProblem.duration = t - s ∧
+                                  leftFlux =
+                                      routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                    rightFlux =
+                                        routine.numericalFlux
+                                          (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                      IsOneDimensionalCellAverage (fun x => q x s) a b
+                                          (oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                                        IsOneDimensionalCellAverage (fun x => q x t) a b
+                                            (oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                          IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+                                              (oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) ∧
+                                            IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+                                                (oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t) ∧
+                                              (oneDimensionalCellAverage (fun x => q x s) a b =
+                                                  cellVolumeAverage volume (Set.Ioc a b) fun x => q x s) ∧
+                                                next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                  (b - a) • (next - oneDimensionalCellAverage (fun x => q x t) a b) =
+                                                      (b - a) •
+                                                          (center - oneDimensionalCellAverage (fun x => q x s) a b) +
+                                                        (t - s) •
+                                                          (leftFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                                t -
+                                                            (rightFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                                t)) ∧
+                                                    (∀ (oldBound leftBound rightBound : ℝ),
+                                                        ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤
+                                                            oldBound →
+                                                          ‖leftFlux -
+                                                                  oneDimensionalCellAverage (fun τ => law.flux (q a τ))
+                                                                    s t‖ ≤
+                                                              leftBound →
+                                                            ‖rightFlux -
+                                                                    oneDimensionalCellAverage
+                                                                      (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                rightBound →
+                                                              ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+                                                                oldBound +
+                                                                  (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                      ∀ (leftReference : Reference leftProblem)
+                                                        (rightReference : Reference rightProblem)
+                                                        (leftSolverBound rightSolverBound : ℝ),
+                                                        ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                          ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                            IsRiemannData (fun x => leftReference.field x 0) left
+                                                                center ∧
+                                                              IsRiemannData (fun x => rightReference.field x 0) center
+                                                                  right ∧
+                                                                IsOneDimensionalCellAverage
+                                                                    (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                    (t - s) leftReference.meanFlux ∧
+                                                                  IsOneDimensionalCellAverage
+                                                                      (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                      (t - s) rightReference.meanFlux ∧
+                                                                    ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                      ⋯ ≤ oldBound → ⋯ → ⋯ :=
+    (leveque01_localRiemannRoutineInterface_sourceContract law ((1 / 2) • 1)).right
+  ⊢ ‖0‖ₑ ≠ ⊤
+Remaining goals after safe rules:
+  ⊢ Sort ?u.4
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:23:7: error: could not synthesize default value for parameter 'hc' using tactics
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-routine-production/Applicability.lean:23:7: error: tactic 'aesop' failed, failed to prove the goal after exhaustive search.
+Initial goal:
+  contract : ∀ (routine : Routine law (fun x => (Fin 1 → ℝ) × (Fin 1 → ℝ)) ((Fin 1 → ℝ) × (Fin 1 → ℝ)))
+    (left center right : Fin 1 → ℝ) (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states)
+    (hrightState : right ∈ law.states) {a b s t : ℝ},
+    a < b →
+      ∀ (hst : s < t)
+        (hleftDomain :
+          routine.domain
+            { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+              duration_pos := ⋯ })
+        (hrightDomain :
+          routine.domain
+            { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+              duration_pos := ⋯ })
+        (q : ℝ → ℝ → Fin 1 → ℝ),
+        IntervalIntegrable (fun x => q x s) volume a b →
+          IntervalIntegrable (fun x => q x t) volume a b →
+            IntervalIntegrable (fun τ => law.flux (q a τ)) volume s t →
+              IntervalIntegrable (fun τ => law.flux (q b τ)) volume s t →
+                (∫ (x : ℝ) in a..b, (fun x => q x t) x) - ∫ (x : ℝ) in a..b, (fun x => q x s) x =
+                    ∫ (τ : ℝ) in s..t, (fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ →
+                  let leftProblem :=
+                    { left := left, right := center, left_mem := hleftState, right_mem := hcenterState,
+                      duration := t - s, duration_pos := ⋯ };
+                  let rightProblem :=
+                    { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                      duration := t - s, duration_pos := ⋯ };
+                  have leftFlux := routine.flux leftProblem hleftDomain;
+                  have rightFlux := routine.flux rightProblem hrightDomain;
+                  have next := finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                  0 < 1 ∧
+                    IsHyperbolicFluxOn law.flux law.states ∧
+                      leftProblem.left = left ∧
+                        leftProblem.right = center ∧
+                          rightProblem.left = center ∧
+                            rightProblem.right = right ∧
+                              leftProblem.duration = t - s ∧
+                                rightProblem.duration = t - s ∧
+                                  leftFlux =
+                                      routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                    rightFlux =
+                                        routine.numericalFlux
+                                          (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                      IsOneDimensionalCellAverage (fun x => q x s) a b
+                                          (oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                                        IsOneDimensionalCellAverage (fun x => q x t) a b
+                                            (oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                          IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+                                              (oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t) ∧
+                                            IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+                                                (oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t) ∧
+                                              (oneDimensionalCellAverage (fun x => q x s) a b =
+                                                  cellVolumeAverage volume (Set.Ioc a b) fun x => q x s) ∧
+                                                next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                  (b - a) • (next - oneDimensionalCellAverage (fun x => q x t) a b) =
+                                                      (b - a) •
+                                                          (center - oneDimensionalCellAverage (fun x => q x s) a b) +
+                                                        (t - s) •
+                                                          (leftFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                                t -
+                                                            (rightFlux -
+                                                              oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                                t)) ∧
+                                                    (∀ (oldBound leftBound rightBound : ℝ),
+                                                        ‖center - oneDimensionalCellAverage (fun x => q x s) a b‖ ≤
+                                                            oldBound →
+                                                          ‖leftFlux -
+                                                                  oneDimensionalCellAverage (fun τ => law.flux (q a τ))
+                                                                    s t‖ ≤
+                                                              leftBound →
+                                                            ‖rightFlux -
+                                                                    oneDimensionalCellAverage
+                                                                      (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                rightBound →
+                                                              ‖next - oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+                                                                oldBound +
+                                                                  (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                      ∀ (leftReference : Reference leftProblem)
+                                                        (rightReference : Reference rightProblem)
+                                                        (leftSolverBound rightSolverBound : ℝ),
+                                                        ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                          ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                            IsRiemannData (fun x => leftReference.field x 0) left
+                                                                center ∧
+                                                              IsRiemannData (fun x => rightReference.field x 0) center
+                                                                  right ∧
+                                                                IsOneDimensionalCellAverage
+                                                                    (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                    (t - s) leftReference.meanFlux ∧
+                                                                  IsOneDimensionalCellAverage
+                                                                      (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                      (t - s) rightReference.meanFlux ∧
+                                                                    ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                      ⋯ ≤ oldBound → ⋯ → ⋯ :=
+    (leveque01_localRiemannRoutineInterface_sourceContract law ((1 / 2) • 1)).right
+  ⊢ ‖0‖ₑ ≠ ⊤
+Remaining goals after safe rules:
+  ⊢ Sort ?u.4
+LocalRoutineApplicability.actual_two_face_source_application :
+  have leftProblem := { left := 0, right := 0, left_mem := ⋯, right_mem := ⋯, duration := 1 - 0, duration_pos := ⋯ };
+  have rightProblem := { left := 0, right := 0, left_mem := ⋯, right_mem := ⋯, duration := 1 - 0, duration_pos := ⋯ };
+  have leftFlux := (biasedRoutine law ((1 / 2) • 1)).flux leftProblem trivial;
+  have rightFlux := (biasedRoutine law ((1 / 2) • 1)).flux rightProblem trivial;
+  have next := finiteVolumeCellAverageUpdate (1 - 0) (1 - 0) 0 (rightFlux - leftFlux);
+  0 < 1 ∧
+    IsHyperbolicFluxOn law.flux law.states ∧
+      leftProblem.left = 0 ∧
+        leftProblem.right = 0 ∧
+          rightProblem.left = 0 ∧
+            rightProblem.right = 0 ∧
+              leftProblem.duration = 1 - 0 ∧
+                rightProblem.duration = 1 - 0 ∧
+                  leftFlux =
+                      (biasedRoutine law ((1 / 2) • 1)).numericalFlux
+                        ((biasedRoutine law ((1 / 2) • 1)).extract
+                          ((biasedRoutine law ((1 / 2) • 1)).solve leftProblem trivial)) ∧
+                    rightFlux =
+                        (biasedRoutine law ((1 / 2) • 1)).numericalFlux
+                          ((biasedRoutine law ((1 / 2) • 1)).extract
+                            ((biasedRoutine law ((1 / 2) • 1)).solve rightProblem trivial)) ∧
+                      IsOneDimensionalCellAverage (fun x => 0) 0 1 (oneDimensionalCellAverage (fun x => 0) 0 1) ∧
+                        IsOneDimensionalCellAverage (fun x => 0) 0 1 (oneDimensionalCellAverage (fun x => 0) 0 1) ∧
+                          IsOneDimensionalCellAverage (fun τ => law.flux 0) 0 1
+                              (oneDimensionalCellAverage (fun τ => law.flux 0) 0 1) ∧
+                            IsOneDimensionalCellAverage (fun τ => law.flux 0) 0 1
+                                (oneDimensionalCellAverage (fun τ => law.flux 0) 0 1) ∧
+                              (oneDimensionalCellAverage (fun x => 0) 0 1 =
+                                  cellVolumeAverage volume (Set.Ioc 0 1) fun x => 0) ∧
+                                next = 0 - ((1 - 0) / (1 - 0)) • (rightFlux - leftFlux) ∧
+                                  (1 - 0) • (next - oneDimensionalCellAverage (fun x => 0) 0 1) =
+                                      (1 - 0) • (0 - oneDimensionalCellAverage (fun x => 0) 0 1) +
+                                        (1 - 0) •
+                                          (leftFlux - oneDimensionalCellAverage (fun τ => law.flux 0) 0 1 -
+                                            (rightFlux - oneDimensionalCellAverage (fun τ => law.flux 0) 0 1)) ∧
+                                    (∀ (oldBound leftBound rightBound : ℝ),
+                                        ‖0 - oneDimensionalCellAverage (fun x => 0) 0 1‖ ≤ oldBound →
+                                          ‖leftFlux - oneDimensionalCellAverage (fun τ => law.flux 0) 0 1‖ ≤ leftBound →
+                                            ‖rightFlux - oneDimensionalCellAverage (fun τ => law.flux 0) 0 1‖ ≤
+                                                rightBound →
+                                              ‖next - oneDimensionalCellAverage (fun x => 0) 0 1‖ ≤
+                                                oldBound + (1 - 0) / (1 - 0) * (leftBound + rightBound)) ∧
+                                      ∀ (leftReference : Reference leftProblem)
+                                        (rightReference : Reference rightProblem)
+                                        (leftSolverBound rightSolverBound : ℝ),
+                                        ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                          ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                            IsRiemannData (fun x => leftReference.field x 0) 0 0 ∧
+                                              IsRiemannData (fun x => rightReference.field x 0) 0 0 ∧
+                                                IsOneDimensionalCellAverage
+                                                    (fun τ => law.flux (leftReference.field 0 τ)) 0 (1 - 0)
+                                                    leftReference.meanFlux ∧
+                                                  IsOneDimensionalCellAverage
+                                                      (fun τ => law.flux (rightReference.field 0 τ)) 0 (1 - 0)
+                                                      rightReference.meanFlux ∧
+                                                    ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                      ‖0 - oneDimensionalCellAverage (fun x => 0) 0 1‖ ≤ oldBound →
+                                                        ‖leftReference.meanFlux -
+                                                                oneDimensionalCellAverage (fun τ => law.flux 0) 0 1‖ ≤
+                                                            leftComparison →
+                                                          ‖rightReference.meanFlux -
+                                                                  oneDimensionalCellAverage (fun τ => law.flux 0) 0 1‖ ≤
+                                                              rightComparison →
+                                                            ‖next - oneDimensionalCellAverage (fun x => 0) 0 1‖ ≤
+                                                              oldBound +
+                                                                (1 - 0) / (1 - 0) *
+                                                                  (leftSolverBound + leftComparison +
+                                                                    (rightSolverBound + rightComparison))
+'LocalRoutineApplicability.actual_two_face_source_application' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+LocalRoutineApplicability.actual_reference_and_nonconsistency :
+  (∃ physicalReference,
+      ‖(biasedRoutine law ((1 / 2) • 1)).flux equalProblem trivial - physicalReference.meanFlux‖ = 1 / 2) ∧
+    ¬(biasedRoutine law ((1 / 2) • 1)).Consistent
+'LocalRoutineApplicability.actual_reference_and_nonconsistency' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

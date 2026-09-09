@@ -1,0 +1,30 @@
+NumStability.DirectionalPropagationRepair.execution_error_le.{u_1, u_2} {Cell : Type u_1} {E : Type u_2}
+  [NormedAddCommGroup E] (step : ℕ → (Cell → E) → Cell → E) (admitted : ℕ → (Cell → E) → Prop) (initial : Cell → E)
+  (reference directionalReference : ℕ → Cell → E) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+  (hinitial : ∀ (cell : Cell), ‖initial cell - reference 0 cell‖ ≤ initialError)
+  (hactual : ∀ (n : ℕ), admitted n (NumStability.DirectionalPropagationRepair.execution step initial n))
+  (hrefadmit : ∀ (n : ℕ), admitted n (reference n))
+  (hstable :
+    ∀ (n : ℕ) (q other : Cell → E),
+      admitted n q →
+        admitted n other →
+          ∀ (error : ℝ),
+            (∀ (cell : Cell), ‖q cell - other cell‖ ≤ error) →
+              ∀ (cell : Cell), ‖step n q cell - step n other cell‖ ≤ amplification n * error)
+  (hlocal : ∀ (n : ℕ) (cell : Cell), ‖step n (reference n) cell - directionalReference n cell‖ ≤ localDefect n)
+  (hsplit : ∀ (n : ℕ) (cell : Cell), ‖directionalReference n cell - reference (n + 1) cell‖ ≤ splittingDefect n) (n : ℕ)
+  (cell : Cell) :
+  ‖NumStability.DirectionalPropagationRepair.execution step initial n cell - reference n cell‖ ≤
+    NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.DirectionalPropagationRepair.execution_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalPropagationRepair.errorBudget_uniform_le (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError A delta : ℝ) (hA : 1 ≤ A) (hE : 0 ≤ initialError) (hd : 0 ≤ delta)
+  (ha : ∀ (n : ℕ), 0 ≤ amplification n ∧ amplification n ≤ A) (hl : ∀ (n : ℕ), 0 ≤ localDefect n)
+  (hs : ∀ (n : ℕ), 0 ≤ splittingDefect n) (hdefect : ∀ (n : ℕ), localDefect n + splittingDefect n ≤ delta) (n : ℕ) :
+  NumStability.DirectionalPropagationRepair.errorBudget amplification localDefect splittingDefect initialError n ≤
+    A ^ n * (initialError + ↑n * delta)
+'NumStability.DirectionalPropagationRepair.errorBudget_uniform_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

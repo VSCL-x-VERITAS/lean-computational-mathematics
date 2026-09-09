@@ -1,0 +1,1245 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 835dbc135291303b5004fc20f724aade504b874e1b7a94a895b58fc533ef9eb6
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.2.1 defines a Riemann problem as a hyperbolic equation with special piecewise constant initial data, followed by (1.11).",
+      "location": "raw PDF page 27; printed Chapter 1 page 5"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-RIEMANN-MODEL-REFINED-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 441147b5513847445032f3621b98488d6dcf335847f291d4e9e23083333fe266
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-RIEMANN-MODEL-REFINED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, opening paragraph",
+      "anchor": "“the hyperbolic equation together with special initial data”",
+      "observation": "A Riemann problem comprises a hyperbolic equation and initial data, rather than initial data alone."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, equation (1.11)",
+      "anchor": "“piecewise constant with a single jump discontinuity at some point, say x = 0”",
+      "observation": "The displayed initial condition is q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0. The display has no branch at x = 0."
+    },
+    {
+      "location": "Raw PDF page 23; printed page 1; equation (1.1) and its following paragraph",
+      "anchor": "q_t(x,t) + A q_x(x,t) = 0; q : ℝ × ℝ → ℝ^m",
+      "observation": "The introductory one-dimensional constant-coefficient linear system uses a vector of m unknown functions and a constant real m × m matrix A. Subscripts denote partial derivatives."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; opening paragraph",
+      "anchor": "“real eigenvalues and a corresponding set of m linearly independent eigenvectors”",
+      "observation": "These are the stated conditions for hyperbolicity of the constant-coefficient system (1.1). Eigenvalues give the corresponding wave speeds."
+    },
+    {
+      "location": "Raw PDF page 25; printed page 3; Section 1.1, equations (1.8)–(1.9)",
+      "anchor": "q_t(x,t) + f(q(x,t))_x = 0",
+      "observation": "Conservation laws provide another governing-equation context. Here f is the flux function, and the quasilinear expression uses the flux Jacobian f′(q)."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; opening paragraphs preceding Section 1.2",
+      "anchor": "“At a discontinuity in q, the partial differential equation (1.8) does not hold in the classical sense”",
+      "observation": "The source distinguishes classical differential satisfaction from the integral conservation law, which continues to hold at discontinuities."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, paragraph after (1.11)",
+      "anchor": "“q_l = Q_{i−1} and q_r = Q_i”",
+      "observation": "Neighboring cell averages can supply the two states; solving the resulting Riemann problem gives information for computing a numerical flux and updating cell averages over a time step."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2.1, paragraph after (1.11)",
+      "anchor": "“typically a similarity solution, a function of x/t alone”",
+      "observation": "The source describes typical hyperbolic Riemann solutions as depending on x/t and consisting of a finite set of waves propagating from the origin with constant wave speeds."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first two paragraphs",
+      "anchor": "“a discontinuity in the medium at x = 0 as well as a discontinuity in the initial data”",
+      "observation": "The source explicitly extends the Riemann-problem idea to discontinuous media and notes that variable-coefficient hyperbolic equations need not be in conservation form."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "x is the one-dimensional spatial coordinate and t is time; the initial slice is t = 0 [printed page 1, introduction to (1.1); printed page 5, (1.11)].",
+      "q is the unknown state depending on x and t; the introductory system permits vector states in ℝ^m, with the scalar case m = 1 also discussed [printed page 1, paragraph following (1.1) and scalar-case paragraph].",
+      "q_l and q_r are the constant left and right initial states [printed page 5, Section 1.2.1, opening paragraph and (1.11)].",
+      "The initial jump is at a spatial point represented as x = 0; “say x = 0” presents the location as a choice [printed page 5, sentence introducing (1.11)]."
+    ],
+    "hypotheses": [
+      "The governing equation is hyperbolic [printed page 5, Section 1.2.1, “the hyperbolic equation together with special initial data”].",
+      "The initial data are piecewise constant with a single jump discontinuity, represented at x = 0 [printed page 5, Section 1.2.1, sentence preceding (1.11)]."
+    ],
+    "conclusions": [
+      "A hyperbolic equation together with the specified two-state initial data is the problem called a Riemann problem [printed page 5, Section 1.2.1, opening paragraph].",
+      "The initial condition requires q(x,0) = q_l for every x < 0 and q(x,0) = q_r for every x > 0; (1.11) imposes no displayed value at x = 0 [printed page 5, (1.11), two strict-inequality branches]."
+    ],
+    "definitions_and_conventions": [
+      "The equation is part of the problem being defined; the two-state initial profile alone does not exhaust the definition [printed page 5, Section 1.2.1, “equation together with special initial data”].",
+      "For the constant-coefficient linear system (1.1), hyperbolicity means real eigenvalues and a corresponding set of m linearly independent eigenvectors of A [printed page 3, opening paragraph].",
+      "The symbols q_l and q_r designate left and right states by the conditions x < 0 and x > 0, respectively [printed page 5, (1.11)]."
+    ],
+    "implicit_context": [
+      "The chapter introduces time-dependent problems and one-space-dimensional systems; (1.11) uses that spatial and temporal notation [printed page 1, paragraph introducing (1.1); printed page 5, (1.11)].",
+      "Discontinuous conservation-law solutions need not satisfy the differential equation classically at the discontinuity; the source instead identifies the integral conservation law as fundamental there [printed page 5, paragraph beginning “At a discontinuity in q”].",
+      "Conservation laws are an important class in the chapter, but the Riemann-problem definition says “hyperbolic equation”; the later discussion explicitly includes equations outside conservation form [printed page 3, Section 1.1; printed page 5, Section 1.2.1; printed page 8, second paragraph]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Quantifier scope and the interface",
+        "details": [
+          "Each branch in (1.11) applies throughout its indicated open spatial half-line at initial time; the display does not constrain q at positive times [printed page 5, (1.11)].",
+          "Neither equality with q_l nor equality with q_r is specified at x = 0 [printed page 5, (1.11), strict inequalities]."
+        ]
+      },
+      {
+        "topic": "Definition versus qualitative solution description",
+        "details": [
+          "The definition specifies an equation and initial data; it does not explicitly assert existence or uniqueness of a solution [printed page 5, Section 1.2.1, opening paragraph and (1.11)].",
+          "The subsequent similarity and finite-wave description is qualified by “typically”; it is not stated as an unconditional requirement in the definition [printed page 5, paragraph after (1.11)]."
+        ]
+      },
+      {
+        "topic": "Numerical application",
+        "details": [
+          "For neighboring grid-cell averages Q_{i−1} and Q_i, the source chooses q_l = Q_{i−1} and q_r = Q_i to obtain information for flux computation and a cell-average update [printed page 5, paragraph after (1.11)].",
+          "This neighboring-cell construction is an application following the definition, rather than a prerequisite that every Riemann problem originate from a grid [printed page 5, opening definition followed by the conditional sentence beginning “If Q_{i−1} and Q_i”]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the governing hyperbolic equation as a constituent of the Riemann problem [printed page 5, Section 1.2.1, opening sentence].",
+    "Preserve the initial time t = 0, constant left and right states, and the strict spatial inequalities in (1.11) [printed page 5, (1.11)].",
+    "Do not attribute a prescribed interface value to the source: neither displayed branch includes x = 0 [printed page 5, (1.11)].",
+    "Do not turn the typical similarity and finite-wave description into an unconditional theorem or defining hypothesis [printed page 5, paragraph after (1.11), “typically”].",
+    "Do not require classical differential satisfaction at a discontinuity on the authority of this passage [printed page 5, paragraph beginning “At a discontinuity in q”]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "Whether equal left and right states are included as a degenerate Riemann problem.",
+      "evidence": "Printed page 5, Section 1.2.1, calls the data a “single jump discontinuity,” but (1.11) does not explicitly state q_l ≠ q_r.",
+      "impact": "The prose describes a genuine jump, while the displayed equations alone allow equal states. The source does not explicitly settle inclusion of the degenerate case."
+    },
+    {
+      "issue": "The initial value at the interface.",
+      "evidence": "Printed page 5, (1.11), specifies only x < 0 and x > 0.",
+      "impact": "Choosing a value at x = 0 requires an additional convention. The passage does not explicitly explain whether or in what solution sense that choice is immaterial."
+    },
+    {
+      "issue": "The precise solution concept and general admissibility conditions.",
+      "evidence": "Printed page 5, Section 1.2.1, defines the problem without specifying a solution space or admissibility criterion; the preceding discussion says classical differential satisfaction fails at discontinuities.",
+      "impact": "A particular weak-solution definition, entropy condition, regularity requirement, or existence-and-uniqueness assertion cannot be recovered from the selected definition alone."
+    }
+  ],
+  "contract_plain_english": "Section 1.2.1 defines a Riemann problem as a hyperbolic equation supplied with initial data consisting of two constant states separated at a point, written as x = 0: q(x,0) = q_l for x < 0 and q(x,0) = q_r for x > 0 [printed page 5, opening paragraph and (1.11)]. The interface value is unspecified, and the prose's genuine-jump wording leaves the equal-state case unresolved by the display. The subsequent similarity and finite-wave description is expressly typical, rather than an unconditional assertion [printed page 5, paragraph after (1.11)]."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Separate coordinator-selected source interpretation under the user goal; not a printed-source assertion SHA256 4ee82294419ec61ef4d763271c84750ef61bf8cd640faad5c4c6ce60da131afa
+{
+  "format": "coordinator-selected-source-interpretation-1",
+  "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+  "exact_user_objective": "I want you to unblock all nine of them.",
+  "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+  "selection_receipt": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+    "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+  },
+  "scope_row": "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION",
+  "choice": {
+    "choice_id": "Q9",
+    "rows": [
+      "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION"
+    ],
+    "selected_interpretation": "Use positive-dimensional first-order hyperbolic governing-equation/problem-data classification, explicitly linking the equation and principal matrix. Include the equal-state degenerate case and preserve unspecified interface value. Do not assert existence of a solution."
+  },
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "preservation": [
+    "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+    "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+    "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+    "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+    "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+  ],
+  "comparison_rule": "Assess the exact selected claim under this explicit coordinator-selected interpretation. This is authorized task work, not a literal detailed user answer or a printed-source assertion. Independently decide both implications; any acceptance must be interpretation-qualified and preserve source ambiguity. No requested verdict is supplied. The separate recorded refinement is part of this exact comparison convention. Independently assess the claim under both recorded inputs; preserve their source-only limitations and do not infer a requested verdict.",
+  "interpretation_refinement_ref": {
+    "sha256": "8e24fcad8fc5b8462b243ead716a46b2613360966bbf4d03451056d8731d6f21",
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/riemann-definition-repair/interpretation-refinement.json"
+  },
+  "interpretation_refinement": {
+    "format": "coordinator-selected-interpretation-refinement-1",
+    "status": "selected-for-fresh-independent-audit",
+    "refinement_id": "Q9-DECLARED-FIRST-ORDER-MODEL-20260908",
+    "recorded_at_utc": "2026-09-08T17:02:28.943594+00:00",
+    "scope_row": "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION",
+    "prior_choice_id": "Q9",
+    "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+    "exact_user_objective": "I want you to unblock all nine of them.",
+    "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+    "coordinator_authorization": "The root coordinator explicitly selected this additive refinement under the existing user goal. It is not a literal detailed user answer, printed-source assertion, independent audit verdict, or change to the original interpretation receipt.",
+    "prior_selection_receipt": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+      "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+    },
+    "prior_choice_exact": {
+      "choice_id": "Q9",
+      "rows": [
+        "LEV-CH01-RIEMANN-INITIAL-VALUE-DEFINITION"
+      ],
+      "selected_interpretation": "Use positive-dimensional first-order hyperbolic governing-equation/problem-data classification, explicitly linking the equation and principal matrix. Include the equal-state degenerate case and preserve unspecified interface value. Do not assert existence of a solution."
+    },
+    "prior_task": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/audits/LEV-CH01-RIEMANN-DEFINITION-INTERPRETED-PRODUCTION-20260908/audit-task.json",
+      "sha256": "1523710d5e095ea524e57bd825b1d1555f7153fe9f1c04e69c1e8b7b6c9ed3db"
+    },
+    "prior_undetermined_decision": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/audits/LEV-CH01-RIEMANN-DEFINITION-INTERPRETED-PRODUCTION-20260908/faithfulness/decision.json",
+      "sha256": "c8d7f8191a30ba12edc3bc15b74e73a62df4cb6e3880ee9690d229fb75078930"
+    },
+    "source": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+      "sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+      "version": "First published in printed format 2002 (PDF copyright 2004)",
+      "locations": [
+        {
+          "location": "raw PDF page 27; printed Chapter 1 page 5",
+          "anchor": "Section 1.2.1 defines a Riemann problem as a hyperbolic equation with special piecewise constant initial data, followed by (1.11)."
+        }
+      ]
+    },
+    "unchanged_target": {
+      "path": "ComputationalMathematics/Source/LeVeque/Chapter01/RiemannProblemDataClassification.lean",
+      "declaration": "NumStability.leveque01_riemannProblemDataClassification",
+      "sha256": "1c9647b69667c8b60e21165121352a5096e680d2cf6bb8a1b4fcdcb6b77a577c"
+    },
+    "selected_model": {
+      "positive_dimension": "Use n = m + 1 for m a natural number, with real vector states in R^n and square real n-by-n principal matrices.",
+      "governing_law_identity": "The governing-law data are the triple (Omega, A, b). Omega is a fixed declared set of admissible states and is part of the law, rather than an independent filter added to a law identified only by A and b. Different declared sets can therefore represent different governing-law data even when their total coefficient functions coincide.",
+      "state_domain": "Omega may be any fixed subset of R^n. This is a classification of candidate problem data: the empty set may be stored, but it admits no Riemann problem because the two side states must belong to Omega. No openness, convexity, global integrability, or regularity of Omega is imposed.",
+      "coordinate_domain": "Use one real spatial coordinate and one real time coordinate. The coefficient data are supplied on all R x R, and spectral hyperbolicity means at every real x and t, for every state in Omega. This chooses a global coefficient-data model; it is not a claim of solution existence for all real times or a representation theorem for arbitrary coordinate domains.",
+      "principal_and_forcing": "A is an arbitrary supplied function R x R x R^n -> Matrix(n,n,R). b is an arbitrary supplied function R x R x R^n -> R^n. The explicit first-order equation is q_t + A(x,t,q) q_x = b(x,t,q). Nonzero forcing is permitted, with no sign, continuity, differentiability, integrability, or physical rate-law constraint. Homogeneous equations are the special case b = 0. No conservative-flux representation is required.",
+      "spectral_condition": "For each admissible state at each real x,t, the actual matrix A(x,t,state) has a complete real eigenbasis with real eigenvalues. Eigenvalues need not be distinct; no uniform diagonalization bound, symmetrizer, or coefficient regularity is asserted.",
+      "total_function_representation": "Lean stores total coefficient functions on the ambient state space. The governing-law domain is Omega. The residual equivalence in the target is an algebraic identity of that stored expression for arbitrary arguments; it does not impose equation solutionhood outside Omega or add a law that a solution must satisfy at every ambient state.",
+      "problem_data": "A candidate initial-value problem consists of this governing law and an independently supplied initial state function q0 : R -> R^n. It is in the selected Riemann family exactly when the governing law satisfies the stated spectral condition and there exist left and right states in Omega with q0(x)=left for every x<0 and q0(x)=right for every x>0.",
+      "interface_and_degeneracy": "The interface is represented at coordinate zero. The value q0(0) is wholly unspecified, including no requirement that it lie in Omega; the problem-data predicate deliberately tests only the two strict half-lines. Equal side states are admitted as a degenerate member of the two-state family. The genuine-jump subfamily additionally requires unequal side states. No quotient or equivalence of solutions under single-point changes is asserted.",
+      "no_solution_theorem": "This is governing-law/problem-data classification only. It neither selects a classical, weak, entropy, or rectangle solution notion nor asserts existence, uniqueness, regularity, self-similarity, wave structure, or a numerical approximation guarantee."
+    },
+    "source_ambiguities_preserved": [
+      "The printed definition does not explicitly identify its full equation class with every triple (Omega,A,b) in this selected model.",
+      "The printed passage does not specify an arbitrary stored state-domain predicate or its role in governing-law identity.",
+      "The printed passage does not settle the global coefficient-coordinate domain or arbitrary-forcing generality at the precision used here.",
+      "The prose calls the separation a jump, while the formula does not expressly exclude equal states; admission of the degenerate case remains interpretation-qualified."
+    ],
+    "required_audit_qualification": "Compare the original source definition under the original Q9 selection plus this exact additional model convention. Any accepted contract must explicitly retain this selected equation/domain/forcing scope and both interpretation hashes. Do not describe it as an unqualified representation theorem for every conceivable hyperbolic equation.",
+    "independence": "Source extraction receives only source evidence. Blind translation receives only its new exact masked target packet. Direct, round-trip and triggered adjudication receive this separately labeled interpretation input according to the sealed role protocol. No prior judgment is reused or requested verdict supplied.",
+    "preservation": [
+      "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+      "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+      "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+      "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+      "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+    ],
+    "no_production_or_native_supplement_change": true
+  }
+}
+
+The user requested that all nine rows be unblocked. The coordinator selected the documented convention for this row within that task. This is not a literal detailed user answer. Assess the exact source claim under this explicitly selected convention. The convention is separate from source evidence and supplies no requested verdict. Independently compare every exact target claim, hypothesis, and domain with the source under that convention. Preserve the original source-only ambiguity as such; do not attribute the convention to the book. Any acceptance and implication reasoning must explicitly be qualified as under the recorded coordinator-selected interpretation. The convention does not apply to other source rows.
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 cb7395c79c30fb728d707080cfda805958349f4f9b7aa108a1edf6b567f1f673
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "0d47b77afa3c4929f237bc11dedb29e5f06d2a68272e464c402cdb2ba7217e8f",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "An equation is hyperbolic when, for every real x and t and every admissible state u, its principal matrix at (x,t,u) has a basis of real eigenvectors with real eigenvalues.",
+      "effect_on_target": "Hyperbolicity concerns all space and time points but only admissible states. The eigenvalues and eigenbasis may depend on x, t, and u.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "Projects the admissible-state set from an equation.",
+      "effect_on_target": "Both constant side states must belong to this set.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "LocalDef003",
+      "meaning": "Projects the vector-valued forcing function of space, time, and state from an equation.",
+      "effect_on_target": "Supplies the right-hand side of the algebraic equation and the subtracted term in the residual.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "LocalDef004",
+      "meaning": "Projects the square real principal-matrix function of space, time, and state from an equation.",
+      "effect_on_target": "This matrix acts on qx and is required to have a real eigenbasis at admissible states.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "LocalDef005",
+      "meaning": "The residual is qt + A(x,t,u) qx - f(x,t,u), with vector operations performed componentwise.",
+      "effect_on_target": "Its vanishing is equivalent to qt + A(x,t,u) qx = f(x,t,u), independently of hyperbolicity or admissibility.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "LocalDef006",
+      "meaning": "The problem structure contains a governing equation and a function assigning a state to each real spatial point, as exposed by its constructor and projections.",
+      "effect_on_target": "The outer universal quantifier ranges over these equation-and-initial-data objects.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "LocalDef007",
+      "meaning": "A problem is jump Riemann precisely when there exist distinct left and right states for which it is Riemann with those states.",
+      "effect_on_target": "The second equivalence unfolds this definition; the final implications classify the constructed problem by equality or inequality of its side states.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "LocalDef008",
+      "meaning": "A problem is Riemann precisely when there exist left and right states for which it is Riemann with those states.",
+      "effect_on_target": "The first equivalence expands this existential property and conjoins an always-valid residual identity on its right-hand side.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "LocalDef009",
+      "meaning": "Being Riemann with specified states means the governing equation is hyperbolic, both states are admissible, and the initial data equal the left state for x < 0 and the right state for x > 0.",
+      "effect_on_target": "Defines the complete conditions on the side-state witnesses without requiring their inequality or restricting the value at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "LocalDef010",
+      "meaning": "Constructs a problem using the given equation and initial data equal to leftState for x < 0, origin for x = 0, and rightState for x > 0.",
+      "effect_on_target": "The final clause constructs a new problem sharing the original governing equation, with an arbitrary state vector as its value at zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "LocalDef011",
+      "meaning": "Projects the governing equation from a problem.",
+      "effect_on_target": "Determines admissibility, hyperbolicity, the principal matrix, forcing, and the equation retained by the constructed problem.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "LocalDef012",
+      "meaning": "Projects the initial-state function from a problem.",
+      "effect_on_target": "The first characterization constrains this function on the two open half-lines.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "LocalDef013",
+      "meaning": "The equation structure contains an admissible-state set, a principal-matrix function, and a forcing function, as exposed by its constructor and projections.",
+      "effect_on_target": "Packages the governing data without a built-in hyperbolicity, regularity, or nonemptiness requirement.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "LocalDef014",
+      "meaning": "Constructs a problem from an equation and a real-indexed state function.",
+      "effect_on_target": "Allows the specified piecewise initial data to be combined with the governing equation without additional hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "LocalDef015",
+      "meaning": "For a square real matrix A, there exist real numbers lambda_p and a basis (b_p) of the full real state space, indexed by the state-coordinate index type, such that A b_p = lambda_p b_p for every p.",
+      "effect_on_target": "Hyperbolicity means diagonalizability over the reals, not distinctness of eigenvalues, orthogonality, or merely reality of the spectrum.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "LocalDef016",
+      "meaning": "A state-valued function equals a specified left state at every negative real input and a specified right state at every positive real input.",
+      "effect_on_target": "Encodes exact pointwise constancy on open half-lines and leaves the value at zero unrestricted.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "LocalDef017",
+      "meaning": "The function selects the left state when x < 0, the right state when x > 0, and the specified origin value otherwise, which over the reals means x = 0.",
+      "effect_on_target": "Provides the initial data for the constructed problem and makes its value at zero independent of both side states.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "LocalDef018",
+      "meaning": "Constructs an equation from any admissible-state set, principal-matrix function, and forcing function of the stated types.",
+      "effect_on_target": "No smoothness, openness, nonemptiness, or differential-equation solvability conditions are imposed by construction.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "And",
+      "meaning": "Logical conjunction: both propositions hold.",
+      "effect_on_target": "The target asserts all three main clauses and all conditions within each indicated conjunction.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "Eq",
+      "meaning": "Equality of two objects of the same type.",
+      "effect_on_target": "Vector and function equalities are exact and amount to agreement in every coordinate; these are not approximate or almost-everywhere equalities.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "Exists",
+      "meaning": "Existential quantification over an object satisfying a predicate.",
+      "effect_on_target": "Side states are existential witnesses for each problem; eigenvalues and eigenbases are local witnesses for each principal matrix in the hyperbolicity condition.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "Fin",
+      "meaning": "Fin n is the finite index type consisting of natural numbers from 0 through n - 1.",
+      "effect_on_target": "The state coordinates and matrix rows and columns are indexed by 0 through m.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "Fin.fintype",
+      "meaning": "Supplies the exhaustive finite enumeration of Fin n.",
+      "effect_on_target": "Makes all m + 1 indices available for finite matrix-vector sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "HAdd.hAdd",
+      "meaning": "Selects the addition operation supplied by the relevant instance.",
+      "effect_on_target": "Denotes natural-number addition in m + 1 and componentwise vector addition in the residual equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "Iff",
+      "meaning": "Logical equivalence, comprising implication in both directions.",
+      "effect_on_target": "Both characterizations and the residual equation equivalence are necessary-and-sufficient statements.",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "LT.lt",
+      "meaning": "Selects the strict order relation supplied by the relevant instance.",
+      "effect_on_target": "Used with the real strict order to distinguish negative and positive spatial points.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "Matrix.mulVec",
+      "meaning": "Matrix-vector multiplication: (Av)_i is the finite sum over j of A_ij v_j.",
+      "effect_on_target": "Specifies the action of the principal matrix on qx and on each eigenbasis vector.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "Membership.mem",
+      "meaning": "Selects the membership predicate, taking the container before the element in its explicit application.",
+      "effect_on_target": "The displayed applications mean that a state belongs to the admissible-state set.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Nat",
+      "meaning": "The natural numbers, including zero.",
+      "effect_on_target": "m may be zero, so the target includes one-dimensional systems and all higher positive finite dimensions.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "Ne",
+      "meaning": "Inequality is negation of equality.",
+      "effect_on_target": "Distinct side states differ as vectors, hence in at least one coordinate; coordinatewise inequality is not required.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "NonUnitalCommRing.toNonUnitalNonAssocCommRing",
+      "meaning": "Retains the underlying operations and weaker commutative ring structure while forgetting the associativity requirement.",
+      "effect_on_target": "Forms part of the instance path supplying ordinary real arithmetic to matrix-vector multiplication; it adds no hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing",
+      "meaning": "Projects the underlying nonunital, nonassociative ring structure, forgetting multiplication commutativity.",
+      "effect_on_target": "Preserves the real operations used by matrix-vector multiplication without imposing a separate condition.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring",
+      "meaning": "Retains addition, multiplication, zero, and distributive laws while forgetting additive inverses as part of the structure.",
+      "effect_on_target": "Supplies the algebraic structure required for the finite sums and products in matrix-vector multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "NonUnitalNormedCommRing.toNonUnitalCommRing",
+      "meaning": "Forgets the normed structure and retains the underlying nonunital commutative ring.",
+      "effect_on_target": "Only its real arithmetic is used; no norm inequality appears in the target.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "NormedCommRing.toNonUnitalNormedCommRing",
+      "meaning": "Retains the norm, metric, and ring operations while forgetting the unit requirement.",
+      "effect_on_target": "An intermediate instance conversion for real matrix arithmetic, not a regularity or boundedness assumption.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "Not",
+      "meaning": "Logical negation: a proposition implies falsehood.",
+      "effect_on_target": "Expresses inequality and the absence of any distinct Riemann side-state witnesses in the equal-state case.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "OfNat.ofNat",
+      "meaning": "Interprets a natural-number numeral in a type using its numeral instance.",
+      "effect_on_target": "Provides the natural number 1, real zero, and zero vector in their respective occurrences.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "Pi.instAdd",
+      "meaning": "Addition of functions is defined pointwise.",
+      "effect_on_target": "The sum qt + A qx is a vector whose coordinates are the corresponding real sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "Pi.instZero",
+      "meaning": "The zero function has zero at every input.",
+      "effect_on_target": "Residual equality to zero means every residual coordinate is zero.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "Real",
+      "meaning": "The real-number type.",
+      "effect_on_target": "Space, time, state coordinates, matrix entries, forcing coordinates, and eigenvalues are real.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "Real.instAdd",
+      "meaning": "Supplies ordinary addition of real numbers.",
+      "effect_on_target": "Determines the componentwise addition used in the residual equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "Real.instLT",
+      "meaning": "Supplies the strict order on real numbers.",
+      "effect_on_target": "The initial-data conditions concern the open half-lines x < 0 and x > 0.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "Real.instZero",
+      "meaning": "Supplies the real number zero.",
+      "effect_on_target": "Fixes the spatial dividing point and the entries of the residual zero vector.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "Real.normedCommRing",
+      "meaning": "The standard normed commutative ring structure on the reals, using their usual arithmetic.",
+      "effect_on_target": "Provides arithmetic instances for matrix multiplication; its norm and metric impose no additional target conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "Set",
+      "meaning": "A set of elements of a type is represented by a predicate on that type.",
+      "effect_on_target": "The admissible states can form any subset of the real state space.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "Set.instMembership",
+      "meaning": "Set membership is satisfaction of the predicate defining the set.",
+      "effect_on_target": "Interprets admissibility as the corresponding predicate holding at the state.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "Zero.toOfNat0",
+      "meaning": "Interprets the numeral 0 as the zero supplied by a type's zero instance.",
+      "effect_on_target": "Ensures scalar zero and vector zero use the specified real and pointwise zero structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "instAddNat",
+      "meaning": "Supplies natural-number addition.",
+      "effect_on_target": "The coordinate count is the natural-number sum m + 1.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "instHAdd",
+      "meaning": "Uses a type's ordinary addition as its heterogeneous-addition operation with the same input and output types.",
+      "effect_on_target": "Connects the elaborated addition notation to natural addition and pointwise real-vector addition.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "instOfNatNat",
+      "meaning": "Interprets a natural-number numeral as that same natural number.",
+      "effect_on_target": "The numeral 1 in the state-space dimension is exactly one.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "Fintype",
+      "meaning": "A finite type equipped with an exhaustive finite enumeration.",
+      "effect_on_target": "Supports finite coordinate sums; the target uses the canonical such structure on Fin (m + 1).",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "HSub.hSub",
+      "meaning": "Selects the subtraction operation supplied by the relevant instance.",
+      "effect_on_target": "Subtracts the forcing vector in the residual definition.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "Matrix",
+      "meaning": "A matrix is a function of a row index and a column index with values in the entry type.",
+      "effect_on_target": "The principal matrix has m + 1 rows and m + 1 columns of real entries.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "Pi.instSub",
+      "meaning": "Subtraction of functions is defined pointwise.",
+      "effect_on_target": "The residual subtracts forcing coordinate by coordinate.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "Real.instSub",
+      "meaning": "Real subtraction is addition of the additive inverse.",
+      "effect_on_target": "Gives the residual its usual algebraic subtraction semantics.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "instHSub",
+      "meaning": "Uses a type's ordinary subtraction as its heterogeneous subtraction with identical input and output types.",
+      "effect_on_target": "Connects residual subtraction notation to pointwise real-vector subtraction.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "Algebra.id",
+      "meaning": "A commutative semiring is an algebra over itself with identity structure map and scalar action given by multiplication.",
+      "effect_on_target": "Real scalars act on real coordinates by ordinary multiplication in the eigenvector equation.",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "Algebra.toSMul",
+      "meaning": "Projects the scalar multiplication from an algebra structure.",
+      "effect_on_target": "Supplies the real scalar action underlying eigenvalue multiplication.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "CommRing.toNonUnitalCommRing",
+      "meaning": "Forgets the unit from a commutative ring while preserving its underlying operations.",
+      "effect_on_target": "Supports inherited real algebraic structures without changing arithmetic or adding hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "CommSemiring.toSemiring",
+      "meaning": "Projects the semiring structure from a commutative semiring.",
+      "effect_on_target": "Supplies standard real semiring operations used in module and basis structures.",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "DFunLike.coe",
+      "meaning": "Coerces a function-like object to its underlying function.",
+      "effect_on_target": "Allows evaluation of a basis at an index to obtain the corresponding state vector.",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "Function.hasSMul",
+      "meaning": "Lifts scalar multiplication to functions pointwise.",
+      "effect_on_target": "Multiplying an eigenbasis vector by a real eigenvalue multiplies each coordinate by that eigenvalue.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "HSMul.hSMul",
+      "meaning": "Selects the supplied scalar multiplication operation.",
+      "effect_on_target": "The eigenvector equation uses real scalar multiplication of state vectors.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "Module.Basis",
+      "meaning": "An indexed basis of a module; over the reals, a linearly independent spanning family with unique finite coordinate representations.",
+      "effect_on_target": "The eigenvectors must form a basis of the entire state space, excluding defective matrices even if their eigenvalues are real.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "Module.Basis.instFunLike",
+      "meaning": "Evaluating a basis at index p gives the inverse coordinate representation of the unit coordinate vector at p.",
+      "effect_on_target": "Each vector in the eigenvalue equation is an actual basis vector and therefore nonzero.",
+      "status": "understood"
+    },
+    {
+      "id": "D066",
+      "name": "Pi.Function.module",
+      "meaning": "The function space inherits its module structure pointwise from the codomain.",
+      "effect_on_target": "The state functions Fin (m + 1) → Real form the usual real vector space of dimension m + 1.",
+      "status": "understood"
+    },
+    {
+      "id": "D067",
+      "name": "Pi.addCommMonoid",
+      "meaning": "Functions into additive commutative monoids form an additive commutative monoid under pointwise operations.",
+      "effect_on_target": "Provides the additive structure of the state space used by its real bases.",
+      "status": "understood"
+    },
+    {
+      "id": "D068",
+      "name": "Real.commRing",
+      "meaning": "The ordinary commutative ring structure of real numbers.",
+      "effect_on_target": "Supports standard real linear algebra and the cancellation underlying the residual equivalence.",
+      "status": "understood"
+    },
+    {
+      "id": "D069",
+      "name": "Real.decidableLT",
+      "meaning": "Supplies a decision for each strict comparison of real numbers.",
+      "effect_on_target": "Allows the piecewise initial-state function to branch on x < 0 and 0 < x; no additional mathematical hypothesis is introduced.",
+      "status": "understood"
+    },
+    {
+      "id": "D070",
+      "name": "Real.instAddCommMonoid",
+      "meaning": "The standard additive commutative monoid structure on the reals.",
+      "effect_on_target": "Supplies pointwise vector addition and the additive structure required by the state-space module.",
+      "status": "understood"
+    },
+    {
+      "id": "D071",
+      "name": "Real.instCommSemiring",
+      "meaning": "The standard commutative semiring structure on the reals.",
+      "effect_on_target": "Supports the real self-algebra and scalar multiplication used in the eigenbasis condition.",
+      "status": "understood"
+    },
+    {
+      "id": "D072",
+      "name": "Real.semiring",
+      "meaning": "The standard semiring structure on the reals.",
+      "effect_on_target": "Provides the scalar semiring for real modules and bases.",
+      "status": "understood"
+    },
+    {
+      "id": "D073",
+      "name": "Semiring.toModule",
+      "meaning": "A semiring is a module over itself with scalar multiplication given by multiplication.",
+      "effect_on_target": "Together with the function-space module instance, makes the state space a real vector space with usual coordinatewise scaling.",
+      "status": "understood"
+    },
+    {
+      "id": "D074",
+      "name": "instHSMul",
+      "meaning": "Uses an existing scalar multiplication operation as the corresponding heterogeneous scalar multiplication.",
+      "effect_on_target": "Connects the elaborated eigenvalue multiplication to the ordinary real action on vectors.",
+      "status": "understood"
+    },
+    {
+      "id": "D075",
+      "name": "ite",
+      "meaning": "If the condition is true, returns the first branch; otherwise returns the second branch.",
+      "effect_on_target": "Implements the three initial-data values selected by the sign of x.",
+      "status": "understood"
+    }
+  ],
+  "translation": {
+    "binders": [
+      "For every natural number m, set n = m + 1 and V = {0,...,m} → R, identified with R^n.",
+      "For every problem P consisting of a governing equation E = (S,A,f) and initial-state function g: R → V, where S ⊆ V, A: R × R × V → R^(n×n), and f: R × R × V → V.",
+      "In the first equivalence, left and right states L,R ∈ V are existential witnesses for the fixed problem; these witnesses are fixed across all spatial points.",
+      "In the residual equivalence, x,t range independently over all real numbers, and u,qt,qx range independently over all of V. This universal clause lies outside the side-state existential quantifiers.",
+      "In the jump equivalence, L,R ∈ V are a separate pair of existential witnesses for the fixed problem.",
+      "In the construction clause, L,O,R range universally and independently over V. O is a state value at the spatial origin, not a spatial coordinate.",
+      "Within hyperbolicity, for each x,t ∈ R and u ∈ S there exist an eigenvalue family lambda: {0,...,m} → R and an indexed real basis (b_p) of V, with A(x,t,u)b_p = lambda_p b_p for every p. These witnesses may depend on x,t,u."
+    ],
+    "hypotheses": [
+      "There are no outer hypotheses on P beyond its type.",
+      "The final construction clause assumes E is hyperbolic, L ∈ S, and R ∈ S.",
+      "Within that clause, L = R is the premise for the non-jump conclusion, and L ≠ R is the premise for the jump conclusion.",
+      "There is no admissibility assumption on O and no assumption that the original initial data g have any particular form."
+    ],
+    "conclusions": [
+      "P.IsRiemann if and only if both of the following hold: (a) there exist L,R ∈ V such that E is hyperbolic, L ∈ S, R ∈ S, g(x) = L for every x < 0, and g(x) = R for every x > 0; (b) for every x,t ∈ R and u,qt,qx ∈ V, residual_E(x,t,u,qt,qx) = 0 if and only if qt + A(x,t,u)qx = f(x,t,u).",
+      "P.IsJumpRiemann if and only if there exist L,R ∈ V such that P.IsRiemannWithStates(L,R) and L ≠ R.",
+      "For every L,O,R ∈ V, if E is hyperbolic and L,R ∈ S, let Q be the problem with governing equation E and initial data h(x) = L for x < 0, h(0) = O, and h(x) = R for x > 0. Then Q.IsRiemannWithStates(L,R), and both implications hold: if L = R then Q is not jump Riemann; if L ≠ R then Q is jump Riemann."
+    ],
+    "mathematical_definitions": [
+      "The matrix action is (Av)_i = sum from j = 0 to m of A_ij v_j. Vector addition, subtraction, scalar multiplication, and zero are componentwise.",
+      "residual_E(x,t,u,qt,qx) = qt + A(x,t,u)qx - f(x,t,u).",
+      "E is hyperbolic precisely when A(x,t,u) is diagonalizable over R for every x,t ∈ R and every u ∈ S, meaning it admits a basis of V consisting of eigenvectors with real eigenvalues.",
+      "P.IsRiemannWithStates(L,R) means that E is hyperbolic, L,R ∈ S, g(x) = L for all x < 0, and g(x) = R for all x > 0.",
+      "P.IsRiemann means there exist L,R with P.IsRiemannWithStates(L,R). Equality of L and R is permitted.",
+      "P.IsJumpRiemann means there exist L,R with P.IsRiemannWithStates(L,R) and L ≠ R."
+    ],
+    "proposition_plain_english": "For every positive finite real state-space dimension and every governing-equation-and-initial-data problem, three assertions hold together. First, the problem is Riemann exactly when it has admissible constant states on the negative and positive half-lines and a governing equation whose principal matrix has a real eigenbasis at every space-time point and admissible state, together with the universal algebraic equivalence between vanishing residual and qt + A qx = f. Second, it is jump Riemann exactly when its Riemann side states can be chosen distinct. Third, for any hyperbolic governing equation from the given problem and any two admissible side states, assigning those states on the respective open half-lines and any state at zero constructs a problem Riemann with those side states. The constructed problem is not jump Riemann when the side states agree and is jump Riemann when they differ."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The dimension is m + 1 with m natural, so it is at least one; zero-dimensional systems are excluded.",
+    "Hyperbolicity is required only on S, although A and f are defined on every state. If S is empty, hyperbolicity is vacuous, but no problem can satisfy either Riemann predicate, and the construction clause has no admissible side-state instances.",
+    "The initial-state requirements leave g(0) entirely unrestricted. In the constructed problem, O need not belong to S or equal either side state.",
+    "When L = R but O differs, the constructed initial data have an isolated discrepancy at zero and still count as Riemann but not jump Riemann. The jump predicate concerns unequal half-line values, not every form of discontinuity.",
+    "The half-line equalities hold at every point, not merely almost everywhere. Both real half-lines are nonempty, so they determine their respective constant values uniquely.",
+    "The residual equivalence holds for all real x and t, including negative times, and all u,qt,qx ∈ V, including inadmissible u.",
+    "qt and qx are arbitrary vectors. No function of space and time is quantified whose derivatives they must be, and no derivative relation is imposed.",
+    "The residual equivalence is an algebraic consequence of the residual definition and places no extra restriction on the problem.",
+    "Hyperbolicity does not require distinct eigenvalues, a common eigenbasis for different points or states, smooth dependence of eigenvalues or eigenvectors, or uniform bounds on a diagonalization.",
+    "No regularity is imposed on A, f, or the admissible-state set. There is no requirement that forcing vanish, that coefficients be constant, or that A arise as the derivative of a flux.",
+    "The proposition does not assert existence, uniqueness, regularity, entropy admissibility, weak solvability, or self-similarity of a solution to a differential equation.",
+    "The constructed problem retains only the governing equation from P; its initial data replace those of P. The final implication remains conditional if that equation is not hyperbolic or the selected side states are not admissible."
+  ],
+  "ambiguities": []
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract, blind translation, and separately labeled user interpretation.
+
+Attached primary source rendering: raw PDF page 23.
+
+Attached primary source rendering: raw PDF page 25.
+
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

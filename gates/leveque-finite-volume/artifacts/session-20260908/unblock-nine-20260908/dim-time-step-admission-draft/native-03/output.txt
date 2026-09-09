@@ -1,0 +1,155 @@
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\dim-time-step-admission-draft\Candidate.lean:131:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'family', which is 'noncomputable'
+C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\unblock-nine-20260908\dim-time-step-admission-draft\Candidate.lean:185:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (if _a then left else right) = if j < cut + 1 then left else right
+Error: Application type mismatch: The argument
+  (j - 1).decLt cut
+has type
+  Decidable (j - 1 < cut)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite (Fin 1 → ℝ) _a ((j - 1).decLt cut)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+n : ℕ
+left right : Fin 1 → ℝ
+cut j : ℤ
+he : j - 1 < cut ↔ j < cut + 1
+⊢ (if j - 1 < cut then left else right) = if j < cut + 1 then left else right
+TimeStepAdmissionDraft.Domain.{u_1} (State : Type u_1) : Type u_1
+'TimeStepAdmissionDraft.Domain' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.Domain.InputStates.{u_1} {State : Type u_1} (domain : TimeStepAdmissionDraft.Domain.{u_1} State)
+  (n : Nat) (values : Int → State) : Prop
+'TimeStepAdmissionDraft.Domain.InputStates' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.jump.{u_1} {State : Type u_1} (left right : State) (cut j : Int) : State
+'TimeStepAdmissionDraft.jump' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.jump_eq.{u_1} {State : Type u_1} (left right : State) (cut j : Int) :
+  Eq.{u_1 + 1} (TimeStepAdmissionDraft.jump.{u_1} left right cut j) (ite.{u_1 + 1} (LT.lt.{0} j cut) left right)
+'TimeStepAdmissionDraft.jump_eq' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.jump_mem.{u_1} {State : Type u_1} {states : Set.{u_1} State} {left right : State}
+  (hl : Membership.mem.{u_1, u_1} states left) (hr : Membership.mem.{u_1, u_1} states right) (cut j : Int) :
+  Membership.mem.{u_1, u_1} states (TimeStepAdmissionDraft.jump.{u_1} left right cut j)
+'TimeStepAdmissionDraft.jump_mem' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.Domain.jump_input.{u_1} {State : Type u_1} (domain : TimeStepAdmissionDraft.Domain.{u_1} State)
+  (n : Nat) {left right : State}
+  (hl : Membership.mem.{u_1, u_1} (TimeStepAdmissionDraft.Domain.states.{u_1} domain) left)
+  (hr : Membership.mem.{u_1, u_1} (TimeStepAdmissionDraft.Domain.states.{u_1} domain) right) (cut : Int) :
+  TimeStepAdmissionDraft.Domain.InputStates.{u_1} domain n (TimeStepAdmissionDraft.jump.{u_1} left right cut)
+'TimeStepAdmissionDraft.Domain.jump_input' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.Domain.jump_available.{u_1} {State : Type u_1}
+  (domain : TimeStepAdmissionDraft.Domain.{u_1} State) (n : Nat) {left right : State}
+  (hl : Membership.mem.{u_1, u_1} (TimeStepAdmissionDraft.Domain.states.{u_1} domain) left)
+  (hr : Membership.mem.{u_1, u_1} (TimeStepAdmissionDraft.Domain.states.{u_1} domain) right) (cut : Int) :
+  ∃ dt,
+    And (LT.lt.{0} 0 dt)
+      (And (LE.le.{0} dt (TimeStepAdmissionDraft.Domain.mesh.{u_1} domain n))
+        (TimeStepAdmissionDraft.Domain.admitted.{u_1} domain n dt (TimeStepAdmissionDraft.jump.{u_1} left right cut)))
+'TimeStepAdmissionDraft.Domain.jump_available' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.SameStepStability {m : Nat} (domain : TimeStepAdmissionDraft.Domain.{0} (Fin m → Real))
+  (advance : Nat → Real → (Int → Fin m → Real) → Int → Fin m → Real) (activeStart : Nat → Int) (activeCount : Nat → Nat)
+  (L : Real) : Prop
+'TimeStepAdmissionDraft.SameStepStability' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.OscillationControl {m : Nat} (domain : TimeStepAdmissionDraft.Domain.{0} (Fin m → Real))
+  (advance : Nat → Real → (Int → Fin m → Real) → Int → Fin m → Real) (activeStart : Nat → Int) (activeCount : Nat → Nat)
+  (K : Real) (noise : Nat → Real) : Prop
+'TimeStepAdmissionDraft.OscillationControl' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.jump_available_with_oscillation {m : Nat}
+  (domain : TimeStepAdmissionDraft.Domain.{0} (Fin m → Real))
+  (advance : Nat → Real → (Int → Fin m → Real) → Int → Fin m → Real) (activeStart : Nat → Int) (activeCount : Nat → Nat)
+  (K : Real) (noise : Nat → Real)
+  (control : TimeStepAdmissionDraft.OscillationControl domain advance activeStart activeCount K noise) (n : Nat)
+  {left right : Fin m → Real} (hl : Membership.mem.{0, 0} (TimeStepAdmissionDraft.Domain.states.{0} domain) left)
+  (hr : Membership.mem.{0, 0} (TimeStepAdmissionDraft.Domain.states.{0} domain) right) (cut : Int) :
+  ∃ dt,
+    And (LT.lt.{0} 0 dt)
+      (And (LE.le.{0} dt (TimeStepAdmissionDraft.Domain.mesh.{0} domain n))
+        (And (TimeStepAdmissionDraft.Domain.admitted.{0} domain n dt (TimeStepAdmissionDraft.jump.{0} left right cut))
+          (LE.le.{0}
+            (NumStability.DirectionalLine.windowVariation (activeStart n) (HSub.hSub.{0, 0, 0} (activeCount n) 1)
+              (advance n dt (TimeStepAdmissionDraft.jump.{0} left right cut)))
+            (HAdd.hAdd.{0, 0, 0}
+              (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (HMul.hMul.{0, 0, 0} K dt))
+                (NumStability.DirectionalLine.windowVariation (TimeStepAdmissionDraft.Domain.inputStart.{0} domain n)
+                  (HSub.hSub.{0, 0, 0} (TimeStepAdmissionDraft.Domain.inputCount.{0} domain n) 1)
+                  (TimeStepAdmissionDraft.jump.{0} left right cut)))
+              (HMul.hMul.{0, 0, 0} dt (noise n))))))
+'TimeStepAdmissionDraft.jump_available_with_oscillation' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.domain : TimeStepAdmissionDraft.Domain.{0} (Fin 1 → Real)
+'TimeStepAdmissionDraft.CFL1.domain' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.numericalFlux (n : Nat) (_dt : Real) (values : Int → Fin 1 → Real) : Int → Fin 1 → Real
+'TimeStepAdmissionDraft.CFL1.numericalFlux' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.flux_locality (n : Nat) (dt : Real) (values other : Int → Fin 1 → Real)
+  (heq :
+    ∀ (j : Int),
+      Membership.mem.{0, 0}
+          (Finset.Ico.{0} (TimeStepAdmissionDraft.Domain.inputStart.{0} TimeStepAdmissionDraft.CFL1.domain n)
+            (HAdd.hAdd.{0, 0, 0} (TimeStepAdmissionDraft.Domain.inputStart.{0} TimeStepAdmissionDraft.CFL1.domain n)
+              ↑(TimeStepAdmissionDraft.Domain.inputCount.{0} TimeStepAdmissionDraft.CFL1.domain n)))
+          j →
+        Eq.{1} (values j) (other j))
+  (j : Int) :
+  Membership.mem.{0, 0}
+      (Finset.Icc.{0}
+        (NumStability.DirectionalLine.LineFamily.activeStart (NumStability.HighResolutionAdvectionLine.family 1) n)
+        (HAdd.hAdd.{0, 0, 0}
+          (NumStability.DirectionalLine.LineFamily.activeStart (NumStability.HighResolutionAdvectionLine.family 1) n)
+          ↑(NumStability.DirectionalLine.LineFamily.activeCount (NumStability.HighResolutionAdvectionLine.family 1) n)))
+      j →
+    Eq.{1} (TimeStepAdmissionDraft.CFL1.numericalFlux n dt values j)
+      (TimeStepAdmissionDraft.CFL1.numericalFlux n dt other j)
+'TimeStepAdmissionDraft.CFL1.flux_locality' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.advance (n : Nat) (dt : Real) (values : Int → Fin 1 → Real) : Int → Fin 1 → Real
+'TimeStepAdmissionDraft.CFL1.advance' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.advance_at_h (n : Nat) (values : Int → Fin 1 → Real) :
+  Eq.{1} (TimeStepAdmissionDraft.CFL1.advance n (NumStability.HighResolutionAdvectionLine.h n) values)
+    (NumStability.DirectionalLine.LineFamily.advance (NumStability.HighResolutionAdvectionLine.family 1) n values)
+'TimeStepAdmissionDraft.CFL1.advance_at_h' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.advance_admitted (n : Nat) (dt : Real) (values : Int → Fin 1 → Real)
+  (hadmit : TimeStepAdmissionDraft.Domain.admitted.{0} TimeStepAdmissionDraft.CFL1.domain n dt values) (j : Int) :
+  Eq.{1} (TimeStepAdmissionDraft.CFL1.advance n dt values j) (values (HSub.hSub.{0, 0, 0} j 1))
+'TimeStepAdmissionDraft.CFL1.advance_admitted' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.same_step_stability :
+  TimeStepAdmissionDraft.SameStepStability TimeStepAdmissionDraft.CFL1.domain TimeStepAdmissionDraft.CFL1.advance
+    (NumStability.DirectionalLine.LineFamily.activeStart (NumStability.HighResolutionAdvectionLine.family 1))
+    (NumStability.DirectionalLine.LineFamily.activeCount (NumStability.HighResolutionAdvectionLine.family 1)) 0
+'TimeStepAdmissionDraft.CFL1.same_step_stability' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.oscillation_control :
+  ∃ K noise,
+    TimeStepAdmissionDraft.OscillationControl TimeStepAdmissionDraft.CFL1.domain TimeStepAdmissionDraft.CFL1.advance
+      (NumStability.DirectionalLine.LineFamily.activeStart (NumStability.HighResolutionAdvectionLine.family 1))
+      (NumStability.DirectionalLine.LineFamily.activeCount (NumStability.HighResolutionAdvectionLine.family 1)) K noise
+'TimeStepAdmissionDraft.CFL1.oscillation_control' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.every_jump_available (n : Nat) (left right : Fin 1 → Real) (cut : Int) :
+  And
+    (TimeStepAdmissionDraft.Domain.admitted.{0} TimeStepAdmissionDraft.CFL1.domain n
+      (NumStability.HighResolutionAdvectionLine.h n) (TimeStepAdmissionDraft.jump.{0} left right cut))
+    (And (LT.lt.{0} 0 (NumStability.HighResolutionAdvectionLine.h n))
+      (LE.le.{0} (NumStability.HighResolutionAdvectionLine.h n)
+        (TimeStepAdmissionDraft.Domain.mesh.{0} TimeStepAdmissionDraft.CFL1.domain n)))
+'TimeStepAdmissionDraft.CFL1.every_jump_available' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.jump_moves (n : Nat) (left right : Fin 1 → Real) (cut j : Int) :
+  Eq.{1}
+    (TimeStepAdmissionDraft.CFL1.advance n (NumStability.HighResolutionAdvectionLine.h n)
+      (TimeStepAdmissionDraft.jump.{0} left right cut) j)
+    (TimeStepAdmissionDraft.jump.{0} left right (HAdd.hAdd.{0, 0, 0} cut 1) j)
+'TimeStepAdmissionDraft.CFL1.jump_moves' depends on axioms: [propext, sorryAx.{u}, Classical.choice.{u}, Quot.sound.{u}]
+TimeStepAdmissionDraft.CFL1.nonconstant_jump (n : Nat) :
+  And (Ne.{1} (TimeStepAdmissionDraft.jump.{0} 0 1 0 (-1)) (TimeStepAdmissionDraft.jump.{0} 0 1 0 0))
+    (And
+      (Eq.{1}
+        (TimeStepAdmissionDraft.CFL1.advance n (NumStability.HighResolutionAdvectionLine.h n)
+          (TimeStepAdmissionDraft.jump.{0} 0 1 0) 0)
+        0)
+      (Eq.{1}
+        (TimeStepAdmissionDraft.CFL1.advance n (NumStability.HighResolutionAdvectionLine.h n)
+          (TimeStepAdmissionDraft.jump.{0} 0 1 0) 1)
+        1))
+'TimeStepAdmissionDraft.CFL1.nonconstant_jump' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]

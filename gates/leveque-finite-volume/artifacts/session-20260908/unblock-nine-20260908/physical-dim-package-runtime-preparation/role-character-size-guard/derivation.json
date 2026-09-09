@@ -1,0 +1,51 @@
+{
+  "original_guard": {
+    "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\gates\\leveque-finite-volume\\artifacts\\session-20260908\\unblock-nine-20260908\\physical-dim-package-runtime-preparation\\role-size-guard\\guard.py",
+    "sha256": "9ad00aa0324ed47d167d4f7ef44452a14a01d9a11390499e544d14f0d5bb1a41"
+  },
+  "original_staged": {
+    "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\gates\\leveque-finite-volume\\artifacts\\session-20260908\\unblock-nine-20260908\\physical-dim-package-runtime-preparation\\role-size-guard\\staged.py",
+    "sha256": "0e64d2d9051d2b5dbeb52ce1aa32f5eb914557c3cea113c856322695cce57e83"
+  },
+  "exact_changes": [
+    {
+      "old": "one byte-identical existing audit role below a UTF-8 cap.",
+      "new": "one byte-identical existing audit role below a Unicode code-point cap."
+    },
+    {
+      "old": " message.decode('utf-8')\n assert len(message)<=LIMIT,('UTF-8 stdin exceeds reviewed byte cap',len(message),LIMIT)",
+      "new": " characters=len(message.decode('utf-8'))\n assert characters<=LIMIT,('stdin exceeds native Unicode code-point cap',characters,LIMIT)"
+    },
+    {
+      "old": " launchable=len(message)<=LIMIT",
+      "new": " characters=len(message.decode('utf-8'))\n launchable=characters<=LIMIT"
+    },
+    {
+      "old": "exact-role-stdin-size-guard-1",
+      "new": "exact-role-stdin-codepoint-guard-1",
+      "occurrences": 2
+    },
+    {
+      "old": "'stdin_characters':len(message.decode()),'stdin_sha256':digest(message),'byte_limit':LIMIT,",
+      "new": "'stdin_characters':characters,'stdin_sha256':digest(message),\n  'character_limit':LIMIT,'limit_unit':'Unicode code points',"
+    },
+    {
+      "old": "'stdin_characters':len(message.decode()),'within_limit':launchable",
+      "new": "'stdin_characters':characters,'within_limit':launchable"
+    },
+    {
+      "old": " assert plan['byte_limit']==LIMIT and not os.path.exists(disk(plan_path.parent/'execution-receipt.json'))",
+      "new": " assert plan['character_limit']==LIMIT and plan['limit_unit']=='Unicode code points'\n assert not os.path.exists(disk(plan_path.parent/'execution-receipt.json'))"
+    },
+    {
+      "old": " frozen=raw(verify(plan['input']));assert size_guard(frozen)==plan['stdin_sha256']",
+      "new": " frozen=raw(verify(plan['input']));assert size_guard(frozen)==plan['stdin_sha256']\n assert plan['stdin_bytes']==len(frozen) and plan['stdin_characters']==len(frozen.decode('utf-8'))"
+    },
+    {
+      "old": "command_calls.append({'command':command,'stdin_sha256':digest(actual),'stdin_bytes':len(actual)})",
+      "new": "command_calls.append({'command':command,'stdin_sha256':digest(actual),'stdin_bytes':len(actual),\n   'stdin_characters':len(actual.decode('utf-8')),'limit_unit':'Unicode code points'})"
+    }
+  ],
+  "staged_byte_identical": true,
+  "operational_plans_created": false
+}

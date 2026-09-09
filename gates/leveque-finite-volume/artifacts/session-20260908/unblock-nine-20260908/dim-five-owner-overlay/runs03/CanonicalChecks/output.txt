@@ -1,0 +1,1262 @@
+NumStability.FiniteCoordinate.PhysicalData.{u_1, u_2, u_3, u_4, u_5} (D : Type u_1) (Cell : Type u_2) (Face : Type u_3)
+  (Point : Type u_4) (FacePoint : Type u_5) [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  (m : ℕ) : Type (max (max (max (max u_1 u_2) u_3) u_4) u_5)
+'NumStability.FiniteCoordinate.PhysicalData' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.PhysicalData.cellVolume.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (cell : Cell) : ℝ
+'NumStability.FiniteCoordinate.PhysicalData.cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.PhysicalData.cellVolume_pos.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (cell : Cell) : 0 < data.cellVolume cell
+'NumStability.FiniteCoordinate.PhysicalData.cellVolume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.PhysicalData.cellMean.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (q : Point → ℝ → Fin m → ℝ) (cell : Cell) (t : ℝ) : Fin m → ℝ
+'NumStability.FiniteCoordinate.PhysicalData.cellMean' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.PhysicalData.faceFlux.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (d : D) (q : Point → ℝ → Fin m → ℝ) (face : Face) (t : ℝ) : Fin m → ℝ
+'NumStability.FiniteCoordinate.PhysicalData.faceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.advance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) (cell : Cell) :
+  Fin m → ℝ
+'NumStability.FiniteCoordinate.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.sweep.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (stages : List (D × ℝ)) (current : Cell → Fin m → ℝ) :
+  Cell → Fin m → ℝ
+'NumStability.FiniteCoordinate.sweep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.advance_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) (cell : Cell) :
+  data.cellVolume cell • NumStability.FiniteCoordinate.advance data rule d dt current cell =
+    data.cellVolume cell • current cell -
+      dt • (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteCoordinate.advance_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.finite_mass_balance.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} [Fintype Cell]
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ) :
+  ∑ cell, data.cellVolume cell • NumStability.FiniteCoordinate.advance data rule d dt current cell =
+    ∑ cell, data.cellVolume cell • current cell -
+      dt • ∑ cell, (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
+'NumStability.FiniteCoordinate.finite_mass_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.sweep_cons.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (stages : List (D × ℝ))
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteCoordinate.sweep data rule ((d, dt) :: stages) current =
+    NumStability.FiniteCoordinate.sweep data rule stages (NumStability.FiniteCoordinate.advance data rule d dt current)
+'NumStability.FiniteCoordinate.sweep_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.sweep_split.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (before after : List (D × ℝ)) (d : D) (dt : ℝ)
+  (current : Cell → Fin m → ℝ) :
+  NumStability.FiniteCoordinate.sweep data rule (before ++ (d, dt) :: after) current =
+    NumStability.FiniteCoordinate.sweep data rule after
+      (NumStability.FiniteCoordinate.advance data rule d dt
+        (NumStability.FiniteCoordinate.sweep data rule before current))
+'NumStability.FiniteCoordinate.sweep_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineLocal.{u_1, u_2, u_3} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3} {m : ℕ}
+  [DecidableEq Cell] (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) : Prop
+'NumStability.FiniteCoordinate.LineLocal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.advance_local.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+  {m : ℕ} [DecidableEq Cell] (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (stencil : D → Face → Finset Cell) (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ)
+  (hlocal : NumStability.FiniteCoordinate.LineLocal stencil rule) (d : D) (dt : ℝ) (current other : Cell → Fin m → ℝ)
+  (cell : Cell)
+  (hagree :
+    ∀ j ∈ insert cell (stencil d (data.leftFace d cell) ∪ stencil d (data.rightFace d cell)), current j = other j) :
+  NumStability.FiniteCoordinate.advance data rule d dt current cell =
+    NumStability.FiniteCoordinate.advance data rule d dt other cell
+'NumStability.FiniteCoordinate.advance_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.PhysicalData.ReferenceOn.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (d : D) (q : Point → ℝ → Fin m → ℝ) (s t : ℝ) : Prop
+'NumStability.FiniteCoordinate.PhysicalData.ReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.advance_error_le.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (current : Cell → Fin m → ℝ)
+  (q : Point → ℝ → Fin m → ℝ) {s t : ℝ} (href : data.ReferenceOn d q s t) (hst : s < t) (cell : Cell)
+  (oldBound leftBound rightBound : ℝ) (hold : ‖current cell - data.cellMean q cell s‖ ≤ oldBound)
+  (hleft :
+    ‖rule d (t - s) current (data.leftFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.leftFace d cell)) s t‖ ≤
+      leftBound)
+  (hright :
+    ‖rule d (t - s) current (data.rightFace d cell) -
+          NumStability.oneDimensionalCellAverage (data.faceFlux d q (data.rightFace d cell)) s t‖ ≤
+      rightBound) :
+  ‖NumStability.FiniteCoordinate.advance data rule d (t - s) current cell - data.cellMean q cell t‖ ≤
+    oldBound + (t - s) / data.cellVolume cell * (leftBound + rightBound)
+'NumStability.FiniteCoordinate.advance_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalConservationLaw.RectangleReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (left right horizon : ℝ) : Prop
+'NumStability.LocalConservationLaw.RectangleReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalConservationLaw.SmoothReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (states : Set (Fin m → ℝ)) (left right horizon : ℝ) : Prop
+'NumStability.LocalConservationLaw.SmoothReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalConservationLaw.SpatialRectangleReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : ℝ → (Fin m → ℝ) → Fin m → ℝ) (left right horizon : ℝ) : Prop
+'NumStability.LocalConservationLaw.SpatialRectangleReferenceOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalConservationLaw.SpatialSmoothReferenceOn {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : ℝ → (Fin m → ℝ) → Fin m → ℝ) (states : Set (Fin m → ℝ)) (left right horizon : ℝ) : Prop
+'NumStability.LocalConservationLaw.SpatialSmoothReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalConservationLaw.spatial_rectangle_const_iff {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) (left right horizon : ℝ) :
+  NumStability.LocalConservationLaw.SpatialRectangleReferenceOn q (fun x => flux) left right horizon ↔
+    NumStability.LocalConservationLaw.RectangleReferenceOn q flux left right horizon
+'NumStability.LocalConservationLaw.spatial_rectangle_const_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalConservationLaw.spatial_smooth_const_iff {m : ℕ} (q : ℝ → ℝ → Fin m → ℝ)
+  (flux : (Fin m → ℝ) → Fin m → ℝ) (states : Set (Fin m → ℝ)) (left right horizon : ℝ) :
+  NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q (fun x => flux) states left right horizon ↔
+    NumStability.LocalConservationLaw.SmoothReferenceOn q flux states left right horizon
+'NumStability.LocalConservationLaw.spatial_smooth_const_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.windowVariation {m : ℕ} (start : ℤ) (count : ℕ) (values : ℤ → Fin m → ℝ) : ℝ
+'NumStability.DirectionalLine.windowVariation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.LineFamily (m : ℕ) : Type
+'NumStability.DirectionalLine.LineFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.LineFamily.advance {m : ℕ} (family : NumStability.DirectionalLine.LineFamily m) (n : ℕ)
+  (values : ℤ → Fin m → ℝ) (j : ℤ) : Fin m → ℝ
+'NumStability.DirectionalLine.LineFamily.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.LineFamily.InitialProjection {m : ℕ} (family : NumStability.DirectionalLine.LineFamily m)
+  (n : ℕ) (q : ℝ → ℝ → Fin m → ℝ) (values : ℤ → Fin m → ℝ) : Prop
+'NumStability.DirectionalLine.LineFamily.InitialProjection' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.LineFamily.HasControlledHighResolution {m : ℕ}
+  (family : NumStability.DirectionalLine.LineFamily m) : Prop
+'NumStability.DirectionalLine.LineFamily.HasControlledHighResolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalLine.LineFamily.HasControlledHighResolution.perturbed_accuracy {m : ℕ}
+  (family : NumStability.DirectionalLine.LineFamily m) (quality : family.HasControlledHighResolution) :
+  ∃ p L,
+    1 < p ∧
+      0 ≤ L ∧
+        ∀ (q : ℝ → ℝ → Fin m → ℝ),
+          NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q family.flux family.states family.left
+              family.right family.horizon →
+            ∃ C,
+              0 ≤ C ∧
+                ∃ N,
+                  ∀ (n : ℕ),
+                    N ≤ n →
+                      ∀ (projected values : ℤ → Fin m → ℝ),
+                        family.InitialProjection n q projected →
+                          family.admitted n values →
+                            ∀ (E : ℝ),
+                              0 ≤ E →
+                                (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + ↑(family.inputCount n)),
+                                    ‖values j - projected j‖ ≤ E) →
+                                  ∀
+                                    j ∈
+                                      Finset.Ico (family.activeStart n)
+                                        (family.activeStart n + ↑(family.activeCount n)),
+                                    ‖family.advance n values j -
+                                          NumStability.finiteVolumeCellAverageOn (family.grid n)
+                                            (fun x => q x (family.dt n)) j‖ ≤
+                                      (1 + L * family.dt n) * E + C * family.dt n * family.mesh n ^ p
+'NumStability.DirectionalLine.LineFamily.HasControlledHighResolution.perturbed_accuracy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.DirectionalLine.LineFamily.stabilityRate {m : ℕ} (family : NumStability.DirectionalLine.LineFamily m)
+  (quality : family.HasControlledHighResolution) : ℝ
+'NumStability.DirectionalLine.LineFamily.stabilityRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.DirectionalLine.LineFamily.stabilityRate_spec {m : ℕ} (family : NumStability.DirectionalLine.LineFamily m)
+  (quality : family.HasControlledHighResolution) :
+  0 ≤ family.stabilityRate quality ∧
+    ∀ (n : ℕ) (values other : ℤ → Fin m → ℝ),
+      family.admitted n values →
+        family.admitted n other →
+          ∀ (E : ℝ),
+            0 ≤ E →
+              (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + ↑(family.inputCount n)),
+                  ‖values j - other j‖ ≤ E) →
+                ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + ↑(family.activeCount n)),
+                  ‖family.advance n values j - family.advance n other j‖ ≤
+                    (1 + family.stabilityRate quality * family.dt n) * E
+'NumStability.DirectionalLine.LineFamily.stabilityRate_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineCoordinates.{u_7, u_8, u_9, u_10} {m : ℕ} (D : Type u_7) (Cell : Type u_8)
+  (Face : Type u_9) (Line : Type u_10) : Type (max (max (max u_10 u_7) u_8) u_9)
+'NumStability.FiniteCoordinate.LineCoordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineCoordinates.extract.{u_1, u_2, u_3, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Line : Type u_6} {m : ℕ} (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line)
+  (d : D) (line : Line) (current : Cell → Fin m → ℝ) (j : ℤ) : Fin m → ℝ
+'NumStability.FiniteCoordinate.LineCoordinates.extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineCoordinates.extract_cell.{u_1, u_2, u_3, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Line : Type u_6} {m : ℕ} (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line)
+  (d : D) (current : Cell → Fin m → ℝ) (cell : Cell) :
+  coord.extract d (coord.cellLine d cell) current (coord.cellIndex d cell) = current cell
+'NumStability.FiniteCoordinate.LineCoordinates.extract_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineCoordinates.extract_local.{u_1, u_2, u_3, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Line : Type u_6} {m : ℕ} (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line)
+  (d : D) (line : Line) (current other : Cell → Fin m → ℝ)
+  (h : ∀ (cell : Cell), coord.cellLine d cell = line → current cell = other cell) :
+  coord.extract d line current = coord.extract d line other
+'NumStability.FiniteCoordinate.LineCoordinates.extract_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line)
+  (family : D → Line → NumStability.DirectionalLine.LineFamily m) : Type (max u_1 u_6)
+'NumStability.FiniteCoordinate.LineRealization' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.rule.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family) (d : D) (_dt : ℝ)
+  (current : Cell → Fin m → ℝ) (face : Face) : Fin m → ℝ
+'NumStability.FiniteCoordinate.LineRealization.rule' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.Admitted.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family) (d : D) (current : Cell → Fin m → ℝ) :
+  Prop
+'NumStability.FiniteCoordinate.LineRealization.Admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.advance_eq.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family) (d : D) (current : Cell → Fin m → ℝ)
+  (cell : Cell) :
+  NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d) current cell =
+    (family d (coord.cellLine d cell)).advance (realization.level d (coord.cellLine d cell))
+      (coord.extract d (coord.cellLine d cell) current) (coord.cellIndex d cell)
+'NumStability.FiniteCoordinate.LineRealization.advance_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.SequentialError.execution.{u_1, u_2} {Cell : Type u_1} {E : Type u_2} (step : ℕ → (Cell → E) → Cell → E)
+  (initial : Cell → E) : ℕ → Cell → E
+'NumStability.SequentialError.execution' does not depend on any axioms
+NumStability.SequentialError.errorBudget (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ) : ℕ → ℝ
+'NumStability.SequentialError.errorBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.SequentialError.execution_error_le.{u_1, u_2} {Cell : Type u_1} {E : Type u_2} [NormedAddCommGroup E]
+  (step : ℕ → (Cell → E) → Cell → E) (admitted : ℕ → (Cell → E) → Prop) (initial : Cell → E)
+  (reference directionalReference : ℕ → Cell → E) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+  (hinitial : ∀ (cell : Cell), ‖initial cell - reference 0 cell‖ ≤ initialError)
+  (hactual : ∀ (n : ℕ), admitted n (NumStability.SequentialError.execution step initial n))
+  (hrefadmit : ∀ (n : ℕ), admitted n (reference n))
+  (hstable :
+    ∀ (n : ℕ) (q other : Cell → E),
+      admitted n q →
+        admitted n other →
+          ∀ (error : ℝ),
+            (∀ (cell : Cell), ‖q cell - other cell‖ ≤ error) →
+              ∀ (cell : Cell), ‖step n q cell - step n other cell‖ ≤ amplification n * error)
+  (hlocal : ∀ (n : ℕ) (cell : Cell), ‖step n (reference n) cell - directionalReference n cell‖ ≤ localDefect n)
+  (hsplit : ∀ (n : ℕ) (cell : Cell), ‖directionalReference n cell - reference (n + 1) cell‖ ≤ splittingDefect n) (n : ℕ)
+  (cell : Cell) :
+  ‖NumStability.SequentialError.execution step initial n cell - reference n cell‖ ≤
+    NumStability.SequentialError.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.SequentialError.execution_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.SequentialError.execution_error_le_upto.{u_1, u_2} {Cell : Type u_1} {E : Type u_2} [NormedAddCommGroup E]
+  (step : ℕ → (Cell → E) → Cell → E) (admitted : ℕ → (Cell → E) → Prop) (initial : Cell → E)
+  (reference directionalReference : ℕ → Cell → E) (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ)
+  (steps : ℕ) (hinitial : ∀ (cell : Cell), ‖initial cell - reference 0 cell‖ ≤ initialError)
+  (hactual : ∀ n < steps, admitted n (NumStability.SequentialError.execution step initial n))
+  (hrefadmit : ∀ n < steps, admitted n (reference n))
+  (hstable :
+    ∀ n < steps,
+      ∀ (q other : Cell → E),
+        admitted n q →
+          admitted n other →
+            ∀ (error : ℝ),
+              (∀ (cell : Cell), ‖q cell - other cell‖ ≤ error) →
+                ∀ (cell : Cell), ‖step n q cell - step n other cell‖ ≤ amplification n * error)
+  (hlocal : ∀ n < steps, ∀ (cell : Cell), ‖step n (reference n) cell - directionalReference n cell‖ ≤ localDefect n)
+  (hsplit : ∀ n < steps, ∀ (cell : Cell), ‖directionalReference n cell - reference (n + 1) cell‖ ≤ splittingDefect n)
+  (n : ℕ) :
+  n ≤ steps →
+    ∀ (cell : Cell),
+      ‖NumStability.SequentialError.execution step initial n cell - reference n cell‖ ≤
+        NumStability.SequentialError.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.SequentialError.execution_error_le_upto' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.SequentialError.errorBudget_uniform_le (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError A delta : ℝ) (hA : 1 ≤ A) (hE : 0 ≤ initialError) (hd : 0 ≤ delta)
+  (ha : ∀ (n : ℕ), 0 ≤ amplification n ∧ amplification n ≤ A) (hl : ∀ (n : ℕ), 0 ≤ localDefect n)
+  (hs : ∀ (n : ℕ), 0 ≤ splittingDefect n) (hdefect : ∀ (n : ℕ), localDefect n + splittingDefect n ≤ delta) (n : ℕ) :
+  NumStability.SequentialError.errorBudget amplification localDefect splittingDefect initialError n ≤
+    A ^ n * (initialError + ↑n * delta)
+'NumStability.SequentialError.errorBudget_uniform_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.LineCoordinates.extract_error_le.{u_1, u_2, u_3, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Line : Type u_6} {m : ℕ} (coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line)
+  (d : D) (line : Line) (current other : Cell → Fin m → ℝ) {E : ℝ} (hE : 0 ≤ E)
+  (herr : ∀ (cell : Cell), ‖current cell - other cell‖ ≤ E) (j : ℤ) :
+  ‖coord.extract d line current j - coord.extract d line other j‖ ≤ E
+'NumStability.FiniteCoordinate.LineCoordinates.extract_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.coordinate_stability.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (d : D)
+  (current other : Cell → Fin m → ℝ) (hc : realization.Admitted d current) (ho : realization.Admitted d other) {E A : ℝ}
+  (hE : 0 ≤ E) (herr : ∀ (cell : Cell), ‖current cell - other cell‖ ≤ E)
+  (hA : ∀ (cell : Cell), 1 + (family d (coord.cellLine d cell)).stabilityRate ⋯ * realization.duration d ≤ A)
+  (cell : Cell) :
+  ‖NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d) current cell -
+        NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d) other cell‖ ≤
+    A * E
+'NumStability.FiniteCoordinate.LineRealization.coordinate_stability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.coordinate_local.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family) (d : D)
+  (current other : Cell → Fin m → ℝ) (cell : Cell)
+  (h : ∀ (c : Cell), coord.cellLine d c = coord.cellLine d cell → current c = other c) :
+  NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d) current cell =
+    NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d) other cell
+'NumStability.FiniteCoordinate.LineRealization.coordinate_local' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCoordinate.LineRealization.smooth_accuracy.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (realization : NumStability.FiniteCoordinate.LineRealization data coord family)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (d : D) (cell : Cell) :
+  ∃ p L,
+    1 < p ∧
+      0 ≤ L ∧
+        ∀ (q : ℝ → ℝ → Fin m → ℝ),
+          NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q (family d (coord.cellLine d cell)).flux
+              (family d (coord.cellLine d cell)).states (family d (coord.cellLine d cell)).left
+              (family d (coord.cellLine d cell)).right (family d (coord.cellLine d cell)).horizon →
+            ∃ C,
+              0 ≤ C ∧
+                ∃ N,
+                  N ≤ realization.level d (coord.cellLine d cell) →
+                    ∀ (projected current : Cell → Fin m → ℝ),
+                      (family d (coord.cellLine d cell)).InitialProjection (realization.level d (coord.cellLine d cell))
+                          q (coord.extract d (coord.cellLine d cell) projected) →
+                        realization.Admitted d current →
+                          ∀ (E : ℝ),
+                            0 ≤ E →
+                              (∀ (c : Cell), ‖current c - projected c‖ ≤ E) →
+                                ‖NumStability.FiniteCoordinate.advance data realization.rule d (realization.duration d)
+                                        current cell -
+                                      NumStability.finiteVolumeCellAverageOn
+                                        ((family d (coord.cellLine d cell)).grid
+                                          (realization.level d (coord.cellLine d cell)))
+                                        (fun x => q x (realization.duration d)) (coord.cellIndex d cell)‖ ≤
+                                  (1 + L * realization.duration d) * E +
+                                    C * realization.duration d *
+                                      (family d (coord.cellLine d cell)).mesh
+                                          (realization.level d (coord.cellLine d cell)) ^
+                                        p
+'NumStability.FiniteCoordinate.LineRealization.smooth_accuracy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCoordinate.shared_face_cancels.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] {m : ℕ} (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m)
+  (rule : D → ℝ → (Cell → Fin m → ℝ) → Face → Fin m → ℝ) (d : D) (dt : ℝ) (current : Cell → Fin m → ℝ)
+  (left right : Cell) (shared : data.rightFace d left = data.leftFace d right) :
+  -(dt • rule d dt current (data.rightFace d left)) + dt • rule d dt current (data.leftFace d right) = 0
+'NumStability.FiniteCoordinate.shared_face_cancels' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.coordinateStep.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D) (n : ℕ) :
+  (Cell → Fin m → ℝ) → Cell → Fin m → ℝ
+'NumStability.FiniteCoordinate.coordinateStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.coordinateExecution.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D)
+  (initial : Cell → Fin m → ℝ) : ℕ → Cell → Fin m → ℝ
+'NumStability.FiniteCoordinate.coordinateExecution' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.coordinateExecution_succ.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6} [MeasurableSpace Point]
+  [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D)
+  (initial : Cell → Fin m → ℝ) (n : ℕ) :
+  NumStability.FiniteCoordinate.coordinateExecution method direction initial (n + 1) =
+    NumStability.FiniteCoordinate.advance data (method n).rule (direction n) ((method n).duration (direction n))
+      (NumStability.FiniteCoordinate.coordinateExecution method direction initial n)
+'NumStability.FiniteCoordinate.coordinateExecution_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.coordinateExecution_ordered.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D)
+  (initial : Cell → Fin m → ℝ) (n : ℕ) :
+  NumStability.FiniteCoordinate.coordinateExecution method direction initial n =
+    NumStability.orderedOperatorSweep
+      (List.map (NumStability.FiniteCoordinate.coordinateStep method direction) (List.range n)) initial
+'NumStability.FiniteCoordinate.coordinateExecution_ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCoordinate.coordinateExecution_physical_error.{u_1, u_2, u_3, u_4, u_5, u_6} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} {Line : Type u_6}
+  [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m}
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (initial : Cell → Fin m → ℝ)
+  (physical : ℕ → Point → ℝ → Fin m → ℝ) (steps : ℕ) (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError : ℝ) (leftError rightError : ℕ → Cell → ℝ)
+  (href : ∀ n < steps, data.ReferenceOn (direction n) (physical n) 0 ((method n).duration (direction n)))
+  (hinitial : ∀ (cell : Cell), ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError)
+  (hactual :
+    ∀ n < steps,
+      (method n).Admitted (direction n) (NumStability.FiniteCoordinate.coordinateExecution method direction initial n))
+  (hrefadmit : ∀ n < steps, (method n).Admitted (direction n) fun cell => data.cellMean (physical n) cell 0)
+  (hamplification :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        1 +
+            (family (direction n) (coord.cellLine (direction n) cell)).stabilityRate ⋯ *
+              (method n).duration (direction n) ≤
+          amplification n)
+  (hleft :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.leftFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.leftFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          leftError n cell)
+  (hright :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.rightFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.rightFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          rightError n cell)
+  (hlocal :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        (method n).duration (direction n) / data.cellVolume cell * (leftError n cell + rightError n cell) ≤
+          localDefect n)
+  (hsplit :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖data.cellMean (physical n) cell ((method n).duration (direction n)) -
+              data.cellMean (physical (n + 1)) cell 0‖ ≤
+          splittingDefect n)
+  (n : ℕ) :
+  n ≤ steps →
+    ∀ (cell : Cell),
+      ‖NumStability.FiniteCoordinate.coordinateExecution method direction initial n cell -
+            data.cellMean (physical n) cell 0‖ ≤
+        NumStability.SequentialError.errorBudget amplification localDefect splittingDefect initialError n
+'NumStability.FiniteCoordinate.coordinateExecution_physical_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.CartesianGrid.integral_cellBox_projection.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (q : ℝ → Fin m → ℝ)
+  (hq : IntervalIntegrable q MeasureTheory.volume ((axes d).cellLeft (cell d)) ((axes d).cellRight (cell d))) :
+  ∫ (x : D → ℝ) in NumStability.CartesianGrid.cellBox axes cell, q (x d) =
+    NumStability.CartesianGrid.faceArea axes d cell •
+      ∫ (x : ℝ) in (axes d).cellLeft (cell d)..(axes d).cellRight (cell d), q x
+'NumStability.CartesianGrid.integral_cellBox_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CartesianGrid.cellVolumeAverage_projection.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (q : ℝ → Fin m → ℝ)
+  (hq : IntervalIntegrable q MeasureTheory.volume ((axes d).cellLeft (cell d)) ((axes d).cellRight (cell d))) :
+  (NumStability.cellVolumeAverage MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes cell) fun x =>
+      q (x d)) =
+    NumStability.finiteVolumeCellAverageOn (axes d) q (cell d)
+'NumStability.CartesianGrid.cellVolumeAverage_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.axis_right_eq_next_left (axis : NumStability.OneDimensionalFiniteVolumeGrid) (j : ℤ) :
+  axis.cellRight j = axis.cellLeft (j + 1)
+'NumStability.FiniteCartesian.axis_right_eq_next_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.axis_left_strictMono (axis : NumStability.OneDimensionalFiniteVolumeGrid) :
+  StrictMono axis.cellLeft
+'NumStability.FiniteCartesian.axis_left_strictMono' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.axis_index_unique (axis : NumStability.OneDimensionalFiniteVolumeGrid) {a b : ℤ} {x : ℝ}
+  (ha : x ∈ Set.Ico (axis.cellLeft a) (axis.cellRight a)) (hb : x ∈ Set.Ico (axis.cellLeft b) (axis.cellRight b)) :
+  a = b
+'NumStability.FiniteCartesian.axis_index_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.cellBox_disjoint.{u_1} {D : Type u_1}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) {a b : D → ℤ} (hab : a ≠ b) :
+  Disjoint (NumStability.CartesianGrid.cellBox axes a) (NumStability.CartesianGrid.cellBox axes b)
+'NumStability.FiniteCartesian.cellBox_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.cellBox_measurable.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ) :
+  MeasurableSet (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesian.cellBox_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.tangentialFaceBox_measurable.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  MeasurableSet (NumStability.CartesianGrid.tangentialFaceBox axes d face)
+'NumStability.FiniteCartesian.tangentialFaceBox_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.cells.{u_1} {D : Type u_1} [Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty) :
+  NumStability.FiniteVolumeCellPartition (↥active) (D → ℝ)
+'NumStability.FiniteCartesian.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.facePoint_measurable.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  Measurable (NumStability.CartesianGrid.facePoint axes d face)
+'NumStability.FiniteCartesian.facePoint_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.faceMeasure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) : MeasureTheory.Measure (D → ℝ)
+'NumStability.FiniteCartesian.faceMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.left_face_in_closure.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ)
+  (hp : point ∈ NumStability.CartesianGrid.tangentialFaceBox axes d cell) :
+  NumStability.CartesianGrid.facePoint axes d cell point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesian.left_face_in_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.right_face_in_closure.{u_1} {D : Type u_1} [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) (point : { e // e ≠ d } → ℝ)
+  (hp : point ∈ NumStability.CartesianGrid.tangentialFaceBox axes d (Function.update cell d (cell d + 1))) :
+  NumStability.CartesianGrid.facePoint axes d (Function.update cell d (cell d + 1)) point ∈
+    closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesian.right_face_in_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.left_face_ae_incidence.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂NumStability.FiniteCartesian.faceMeasure axes d cell,
+    point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesian.left_face_ae_incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.right_face_ae_incidence.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂NumStability.FiniteCartesian.faceMeasure axes d (Function.update cell d (cell d + 1)),
+    point ∈ closure (NumStability.CartesianGrid.cellBox axes cell)
+'NumStability.FiniteCartesian.right_face_ae_incidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) :
+  NumStability.FiniteCoordinate.PhysicalData D (↥active) (D → ℤ) (D → ℝ) (D → ℝ) m
+'NumStability.FiniteCartesian.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_cell_measure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (cell : ↥active) :
+  (NumStability.FiniteCartesian.data axes active hne states flux hflux).measure.restrict
+      ((NumStability.FiniteCartesian.data axes active hne states flux hflux).cells.cellRegion cell) =
+    MeasureTheory.volume.restrict (NumStability.CartesianGrid.cellBox axes ↑cell)
+'NumStability.FiniteCartesian.data_cell_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_cellVolume.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (cell : ↥active) :
+  (NumStability.FiniteCartesian.data axes active hne states flux hflux).cellVolume cell =
+    NumStability.CartesianGrid.cellVolume axes ↑cell
+'NumStability.FiniteCartesian.data_cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_face_measure.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  MeasureTheory.Measure.map ((NumStability.FiniteCartesian.data axes active hne states flux hflux).facePoint d face)
+      ((NumStability.FiniteCartesian.data axes active hne states flux hflux).faceMeasure d face) =
+    MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d face)
+      (MeasureTheory.volume.restrict (NumStability.CartesianGrid.tangentialFaceBox axes d face))
+'NumStability.FiniteCartesian.data_face_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_shared_face.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (left right : ↥active)
+  (hadjacent : ↑right = Function.update (↑left) d (↑left d + 1)) :
+  (NumStability.FiniteCartesian.data axes active hne states flux hflux).rightFace d left =
+    (NumStability.FiniteCartesian.data axes active hne states flux hflux).leftFace d right
+'NumStability.FiniteCartesian.data_shared_face' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_left_position.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (cell : ↥active) :
+  (NumStability.FiniteCartesian.data axes active hne states flux hflux).leftFace d cell = ↑cell
+'NumStability.FiniteCartesian.data_left_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_right_position.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (cell : ↥active) :
+  (NumStability.FiniteCartesian.data axes active hne states flux hflux).rightFace d cell =
+    Function.update (↑cell) d (↑cell d + 1)
+'NumStability.FiniteCartesian.data_right_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_face_measurable.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  AEMeasurable ((NumStability.FiniteCartesian.data axes active hne states flux hflux).facePoint d face)
+    ((NumStability.FiniteCartesian.data axes active hne states flux hflux).faceMeasure d face)
+'NumStability.FiniteCartesian.data_face_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.data_normal_flux.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ) :
+  ∀ᵐ (point : D → ℝ) ∂(NumStability.FiniteCartesian.data axes active hne states flux hflux).faceMeasure d face,
+    ∀ (value : Fin m → ℝ),
+      (NumStability.FiniteCartesian.data axes active hne states flux hflux).normalFlux d face point value = flux d value
+'NumStability.FiniteCartesian.data_normal_flux' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.faceMeasure_area.{u_1} {D : Type u_1} [Fintype D] [DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (face : D → ℤ) :
+  ((NumStability.FiniteCartesian.faceMeasure axes d face) Set.univ).toReal =
+    NumStability.CartesianGrid.faceArea axes d face
+'NumStability.FiniteCartesian.faceMeasure_area' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m)
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : Cell → D → ℤ)
+  (facePosition : D → Face → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ) : Prop
+'NumStability.FiniteCartesian.CartesianIdentification' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux) (cell : Cell) :
+  data.cellVolume cell = NumStability.CartesianGrid.cellVolume axes (cellPosition cell)
+'NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : (D → ℝ) → ℝ → Fin m → ℝ) (cell : Cell) (t : ℝ) :
+  data.cellMean q cell t =
+    NumStability.cellVolumeAverage MeasureTheory.volume (NumStability.CartesianGrid.cellBox axes (cellPosition cell))
+      fun x => q x t
+'NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.faceFlux_eq.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : (D → ℝ) → ℝ → Fin m → ℝ) (d : D) (face : Face) (t : ℝ)
+  (hmeas :
+    MeasureTheory.AEStronglyMeasurable (fun x => flux d (q x t))
+      (MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d (facePosition d face))
+        (MeasureTheory.volume.restrict (NumStability.CartesianGrid.tangentialFaceBox axes d (facePosition d face))))) :
+  data.faceFlux d q face t =
+    ∫ (point : { e // e ≠ d } → ℝ) in NumStability.CartesianGrid.tangentialFaceBox axes d (facePosition d face),
+      flux d (q (NumStability.CartesianGrid.facePoint axes d (facePosition d face) point) t)
+'NumStability.FiniteCartesian.CartesianIdentification.faceFlux_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.cellMean_lift.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : ℝ → ℝ → Fin m → ℝ) (d : D) (cell : Cell) (t : ℝ)
+  (hq :
+    IntervalIntegrable (fun x => q x t) MeasureTheory.volume ((axes d).cellLeft (cellPosition cell d))
+      ((axes d).cellRight (cellPosition cell d))) :
+  data.cellMean (fun x τ => q (x d) τ) cell t =
+    NumStability.finiteVolumeCellAverageOn (axes d) (fun x => q x t) (cellPosition cell d)
+'NumStability.FiniteCartesian.CartesianIdentification.cellMean_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : Face) (t : ℝ) :
+  data.faceFlux d (fun x τ => q (x d) τ) face t =
+    NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+      flux d (q ((axes d).cellLeft (facePosition d face d)) t)
+'NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift.{u_1, u_2, u_3, u_4} {D : Type u_1}
+  {Cell : Type u_2} {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint]
+  {m : ℕ} {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+  (h : NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux)
+  (q : ℝ → ℝ → Fin m → ℝ) (d : D) (hq : NumStability.IsRectangleConservationLawSolution q (flux d)) (cell : Cell)
+  (s t : ℝ) :
+  data.cellVolume cell • (data.cellMean (fun x τ => q (x d) τ) cell t - data.cellMean (fun x τ => q (x d) τ) cell s) =
+    ∫ (τ : ℝ) in s..t,
+      data.faceFlux d (fun x τ => q (x d) τ) (data.leftFace d cell) τ -
+        data.faceFlux d (fun x τ => q (x d) τ) (data.rightFace d cell) τ
+'NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalLinearAdvection.local_integral_hasDerivAt.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] (F F' : ℝ → ℝ → E) {a b c d t : ℝ} (hab : a ≤ b) (ht : t ∈ Set.Ioo c d)
+  (hc : ContinuousOn (Function.uncurry F) (Set.Icc c d ×ˢ Set.Icc a b))
+  (hc' : ContinuousOn (Function.uncurry F') (Set.Icc c d ×ˢ Set.Icc a b))
+  (hd : ∀ r ∈ Set.Ioo c d, ∀ x ∈ Set.Icc a b, HasDerivAt (fun s => F s x) (F' r x) r) :
+  HasDerivAt (fun s => ∫ (x : ℝ) in a..b, F s x) (∫ (x : ℝ) in a..b, F' t x) t
+'NumStability.LocalLinearAdvection.local_integral_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.eq_zero_of_local_integrals.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] [CompleteSpace E] (g : ℝ → E) {L R x : ℝ} (hc : ContinuousOn g (Set.Ioo L R)) (hx : x ∈ Set.Ioo L R)
+  (hi : ∀ a ∈ Set.Ioo L R, ∀ b ∈ Set.Ioo L R, ∫ (y : ℝ) in a..b, g y = 0) : g x = 0
+'NumStability.LocalLinearAdvection.eq_zero_of_local_integrals' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalLinearAdvection.qt.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E] (q : ℝ → ℝ → E)
+  (x t : ℝ) : E
+'NumStability.LocalLinearAdvection.qt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.qx.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E] (q : ℝ → ℝ → E)
+  (x t : ℝ) : E
+'NumStability.LocalLinearAdvection.qx' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.partial_time.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {q : ℝ → ℝ → E} {x t : ℝ} (hd : DifferentiableAt ℝ (Function.uncurry q) (x, t)) :
+  HasDerivAt (q x) (NumStability.LocalLinearAdvection.qt q x t) t
+'NumStability.LocalLinearAdvection.partial_time' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.partial_space.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {q : ℝ → ℝ → E} {x t : ℝ} (hd : DifferentiableAt ℝ (Function.uncurry q) (x, t)) :
+  HasDerivAt (fun y => q y t) (NumStability.LocalLinearAdvection.qx q x t) x
+'NumStability.LocalLinearAdvection.partial_space' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.smooth_reference_interior {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) :
+  ContDiffOn ℝ (↑⊤) (Function.uncurry q) (Set.Ioo L R ×ˢ Set.Ioo 0 H)
+'NumStability.LocalLinearAdvection.smooth_reference_interior' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.interior_partials_continuous.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {q : ℝ → ℝ → E} {L R H : ℝ}
+  (hq : ContDiffOn ℝ (↑⊤) (Function.uncurry q) (Set.Ioo L R ×ˢ Set.Ioo 0 H)) :
+  ContinuousOn (Function.uncurry (NumStability.LocalLinearAdvection.qt q)) (Set.Ioo L R ×ˢ Set.Ioo 0 H) ∧
+    ContinuousOn (Function.uncurry (NumStability.LocalLinearAdvection.qx q)) (Set.Ioo L R ×ˢ Set.Ioo 0 H)
+'NumStability.LocalLinearAdvection.interior_partials_continuous' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalLinearAdvection.interior_differentiableAt.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {q : ℝ → ℝ → E} {L R H x t : ℝ}
+  (hq : ContDiffOn ℝ (↑⊤) (Function.uncurry q) (Set.Ioo L R ×ˢ Set.Ioo 0 H)) (hx : x ∈ Set.Ioo L R)
+  (ht : t ∈ Set.Ioo 0 H) : DifferentiableAt ℝ (Function.uncurry q) (x, t)
+'NumStability.LocalLinearAdvection.interior_differentiableAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.interior_mass_derivative.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {q : ℝ → ℝ → E} {L R H a b t : ℝ} (hq : ContDiffOn ℝ (↑⊤) (Function.uncurry q) (Set.Ioo L R ×ˢ Set.Ioo 0 H))
+  (ha : a ∈ Set.Ioo L R) (hb : b ∈ Set.Ioo L R) (hab : a ≤ b) (ht : t ∈ Set.Ioo 0 H) :
+  HasDerivAt (fun r => ∫ (x : ℝ) in a..b, q x r) (∫ (x : ℝ) in a..b, NumStability.LocalLinearAdvection.qt q x t) t
+'NumStability.LocalLinearAdvection.interior_mass_derivative' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.rectangle_mass_derivative {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H a b t : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) (ha : a ∈ Set.Ioo L R)
+  (hb : b ∈ Set.Ioo L R) (ht : t ∈ Set.Ioo 0 H) : HasDerivAt (fun r => ∫ (x : ℝ) in a..b, q x r) (q a t - q b t) t
+'NumStability.LocalLinearAdvection.rectangle_mass_derivative' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.interior_classical {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H x t : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) (hx : x ∈ Set.Ioo L R)
+  (ht : t ∈ Set.Ioo 0 H) : NumStability.IsLinearAdvectionSolutionAt q 1 x t
+'NumStability.LocalLinearAdvection.interior_classical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.characteristic_propagation {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H x t : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) (ht : t ∈ Set.Icc 0 H)
+  (hleft : L ≤ x - t) (hright : x ≤ R) : q x t = q (x - t) 0
+'NumStability.LocalLinearAdvection.characteristic_propagation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalLinearAdvection.local_cell_average_shift {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H a b t : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) (hab : a ≤ b)
+  (ht : t ∈ Set.Icc 0 H) (hleft : L ≤ a - t) (hright : b ≤ R) :
+  NumStability.oneDimensionalCellAverage (fun x => q x t) a b =
+    NumStability.oneDimensionalCellAverage (fun x => q x 0) (a - t) (b - t)
+'NumStability.LocalLinearAdvection.local_cell_average_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.grid (h : ℝ) (hh : 0 < h) : NumStability.OneDimensionalFiniteVolumeGrid
+'NumStability.CFLUnitShift.grid' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.grid_volume (h : ℝ) (hh : 0 < h) (j : ℤ) :
+  (NumStability.CFLUnitShift.grid h hh).cellVolume j = h
+'NumStability.CFLUnitShift.grid_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) : ℤ → ι → ℝ
+'NumStability.CFLUnitShift.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_eq_shift.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) (j : ℤ) :
+  NumStability.CFLUnitShift.advance h hh Q j = Q (j - 1)
+'NumStability.CFLUnitShift.advance_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.averaged.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ) (t : ℝ)
+  (j : ℤ) : ι → ℝ
+'NumStability.CFLUnitShift.averaged' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.averaged_eq_shift.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+  (t : ℝ) (j : ℤ) :
+  NumStability.CFLUnitShift.averaged h hh φ (t + h) j = NumStability.CFLUnitShift.averaged h hh φ t (j - 1)
+'NumStability.CFLUnitShift.averaged_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_averaged_exact.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+  (t : ℝ) (j : ℤ) :
+  NumStability.CFLUnitShift.advance h hh (NumStability.CFLUnitShift.averaged h hh φ t) j =
+    NumStability.CFLUnitShift.averaged h hh φ (t + h) j
+'NumStability.CFLUnitShift.advance_averaged_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.averaged_is_cell_average.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ MeasureTheory.volume a b) (t : ℝ) (j : ℤ) :
+  NumStability.IsOneDimensionalCellAverage (fun x => φ (x - t)) ((NumStability.CFLUnitShift.grid h hh).cellLeft j)
+    ((NumStability.CFLUnitShift.grid h hh).cellRight j) (NumStability.CFLUnitShift.averaged h hh φ t j)
+'NumStability.CFLUnitShift.averaged_is_cell_average' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.translated_is_conserved.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ MeasureTheory.volume a b) :
+  NumStability.IsRectangleConservationLawSolution (fun x t => φ (x - t)) id
+'NumStability.CFLUnitShift.translated_is_conserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.physical_exactness.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ MeasureTheory.volume a b) (h : ℝ) (hh : 0 < h) (t : ℝ) (j : ℤ) (p : ℝ)
+  (_hp : 1 < p) :
+  NumStability.IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    NumStability.IsOneDimensionalCellAverage (fun x => φ (x - t)) ((NumStability.CFLUnitShift.grid h hh).cellLeft j)
+        ((NumStability.CFLUnitShift.grid h hh).cellRight j) (NumStability.CFLUnitShift.averaged h hh φ t j) ∧
+      ‖NumStability.CFLUnitShift.advance h hh (NumStability.CFLUnitShift.averaged h hh φ t) j -
+            NumStability.CFLUnitShift.averaged h hh φ (t + h) j‖ ≤
+        0 * h ^ p
+'NumStability.CFLUnitShift.physical_exactness' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.window.{u_1} {E : Type u_1} (Q : ℤ → E) (start : ℤ) (N : ℕ) : Fin N → E
+'NumStability.CFLUnitShift.window' does not depend on any axioms
+NumStability.CFLUnitShift.advance_window.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) :
+  NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh Q) start N =
+    NumStability.CFLUnitShift.window Q (start - 1) N
+'NumStability.CFLUnitShift.advance_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.windowTV.{u_1} {ι : Type u_1} [Fintype ι] (Q : ℤ → ι → ℝ) (start : ℤ) (N : ℕ) : ℝ
+'NumStability.CFLUnitShift.windowTV' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_windowTV.{u_1} {ι : Type u_1} [Fintype ι] (h : ℝ) (hh : 0 < h) (Q : ℤ → ι → ℝ)
+  (start : ℤ) (N : ℕ) :
+  NumStability.CFLUnitShift.windowTV (NumStability.CFLUnitShift.advance h hh Q) start N =
+    NumStability.CFLUnitShift.windowTV Q (start - 1) N
+'NumStability.CFLUnitShift.advance_windowTV' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_no_overshoot (h : ℝ) (hh : 0 < h) (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ)
+  (lower upper : ℝ)
+  (hbound :
+    ∀ (i : Fin N),
+      lower ≤ NumStability.CFLUnitShift.window Q (start - 1) N i 0 ∧
+        NumStability.CFLUnitShift.window Q (start - 1) N i 0 ≤ upper)
+  (i : Fin N) :
+  lower ≤ NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh Q) start N i 0 ∧
+    NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh Q) start N i 0 ≤ upper
+'NumStability.CFLUnitShift.advance_no_overshoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_preserves_monotone (h : ℝ) (hh : 0 < h) (Q : ℤ → Fin 1 → ℝ) (start : ℤ) (N : ℕ)
+  (hmono : Monotone fun i => NumStability.CFLUnitShift.window Q (start - 1) N i 0) :
+  Monotone fun i => NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh Q) start N i 0
+'NumStability.CFLUnitShift.advance_preserves_monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.meshSize (n : ℕ) : ℝ
+'NumStability.CFLUnitShift.meshSize' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.meshSize_pos (n : ℕ) : 0 < NumStability.CFLUnitShift.meshSize n
+'NumStability.CFLUnitShift.meshSize_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.meshSize_tendsto_zero :
+  Filter.Tendsto NumStability.CFLUnitShift.meshSize Filter.atTop (nhds 0)
+'NumStability.CFLUnitShift.meshSize_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.flux_locality.{u_1} {ι : Type u_1} (Q R : ℤ → ι → ℝ) (face : ℤ)
+  (h : Q (face - 1) = R (face - 1)) : (fun j => Q (j - 1)) face = (fun j => R (j - 1)) face
+'NumStability.CFLUnitShift.flux_locality' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.advance_extension_independent.{u_1} {ι : Type u_1} (h : ℝ) (hh : 0 < h) (Q R : ℤ → ι → ℝ)
+  (start : ℤ) (N : ℕ)
+  (heq : NumStability.CFLUnitShift.window Q (start - 1) N = NumStability.CFLUnitShift.window R (start - 1) N) :
+  NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh Q) start N =
+    NumStability.CFLUnitShift.window (NumStability.CFLUnitShift.advance h hh R) start N
+'NumStability.CFLUnitShift.advance_extension_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.refinement_accuracy.{u_1} {ι : Type u_1} [Fintype ι] (φ : ℝ → ι → ℝ)
+  (hφ : ∀ (a b : ℝ), IntervalIntegrable φ MeasureTheory.volume a b) (p : ℝ) (_hp : 1 < p) :
+  NumStability.IsRectangleConservationLawSolution (fun x t => φ (x - t)) id ∧
+    ∃ C,
+      0 ≤ C ∧
+        ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+          ‖NumStability.CFLUnitShift.window
+                  (NumStability.CFLUnitShift.advance (NumStability.CFLUnitShift.meshSize n) ⋯
+                    (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯ φ t))
+                  start N i -
+                NumStability.CFLUnitShift.window
+                  (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯ φ
+                    (t + NumStability.CFLUnitShift.meshSize n))
+                  start N i‖ ≤
+            C * NumStability.CFLUnitShift.meshSize n * NumStability.CFLUnitShift.meshSize n ^ p
+'NumStability.CFLUnitShift.refinement_accuracy' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.refinement_oscillation.{u_1} {ι : Type u_1} [Fintype ι] (Q : ℤ → ι → ℝ) (n : ℕ) (start : ℤ)
+  (N : ℕ) :
+  NumStability.CFLUnitShift.windowTV (NumStability.CFLUnitShift.advance (NumStability.CFLUnitShift.meshSize n) ⋯ Q)
+      start N ≤
+    (1 + 0 * NumStability.CFLUnitShift.meshSize n) * NumStability.CFLUnitShift.windowTV Q (start - 1) N + 0
+'NumStability.CFLUnitShift.refinement_oscillation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.smoothProfile (x : ℝ) : Fin 1 → ℝ
+'NumStability.CFLUnitShift.smoothProfile' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.smoothProfile_smooth : ContDiff ℝ (↑⊤) NumStability.CFLUnitShift.smoothProfile
+'NumStability.CFLUnitShift.smoothProfile_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.smoothProfile_integrable (a b : ℝ) :
+  IntervalIntegrable NumStability.CFLUnitShift.smoothProfile MeasureTheory.volume a b
+'NumStability.CFLUnitShift.smoothProfile_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.smoothProfile_nonconstant :
+  NumStability.CFLUnitShift.smoothProfile 0 ≠ NumStability.CFLUnitShift.smoothProfile 1
+'NumStability.CFLUnitShift.smoothProfile_nonconstant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.stepProfile : ℝ → Fin 1 → ℝ
+'NumStability.CFLUnitShift.stepProfile' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.stepProfile_integrable (a b : ℝ) :
+  IntervalIntegrable NumStability.CFLUnitShift.stepProfile MeasureTheory.volume a b
+'NumStability.CFLUnitShift.stepProfile_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.stepProfile_discontinuous : ¬ContinuousAt NumStability.CFLUnitShift.stepProfile 0
+'NumStability.CFLUnitShift.stepProfile_discontinuous' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.smooth_refinement (p : ℝ) (hp : 1 < p) :
+  ContDiff ℝ (↑⊤) NumStability.CFLUnitShift.smoothProfile ∧
+    NumStability.CFLUnitShift.smoothProfile 0 ≠ NumStability.CFLUnitShift.smoothProfile 1 ∧
+      NumStability.IsRectangleConservationLawSolution (fun x t => NumStability.CFLUnitShift.smoothProfile (x - t)) id ∧
+        ∃ C,
+          0 ≤ C ∧
+            ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+              ‖NumStability.CFLUnitShift.window
+                      (NumStability.CFLUnitShift.advance (NumStability.CFLUnitShift.meshSize n) ⋯
+                        (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯
+                          NumStability.CFLUnitShift.smoothProfile t))
+                      start N i -
+                    NumStability.CFLUnitShift.window
+                      (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯
+                        NumStability.CFLUnitShift.smoothProfile (t + NumStability.CFLUnitShift.meshSize n))
+                      start N i‖ ≤
+                C * NumStability.CFLUnitShift.meshSize n * NumStability.CFLUnitShift.meshSize n ^ p
+'NumStability.CFLUnitShift.smooth_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.CFLUnitShift.step_refinement (p : ℝ) (hp : 1 < p) :
+  ¬ContinuousAt NumStability.CFLUnitShift.stepProfile 0 ∧
+    NumStability.IsRectangleConservationLawSolution (fun x t => NumStability.CFLUnitShift.stepProfile (x - t)) id ∧
+      ∃ C,
+        0 ≤ C ∧
+          ∀ (n : ℕ) (t : ℝ) (start : ℤ) (N : ℕ) (i : Fin N),
+            ‖NumStability.CFLUnitShift.window
+                    (NumStability.CFLUnitShift.advance (NumStability.CFLUnitShift.meshSize n) ⋯
+                      (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯
+                        NumStability.CFLUnitShift.stepProfile t))
+                    start N i -
+                  NumStability.CFLUnitShift.window
+                    (NumStability.CFLUnitShift.averaged (NumStability.CFLUnitShift.meshSize n) ⋯
+                      NumStability.CFLUnitShift.stepProfile (t + NumStability.CFLUnitShift.meshSize n))
+                    start N i‖ ≤
+              C * NumStability.CFLUnitShift.meshSize n * NumStability.CFLUnitShift.meshSize n ^ p
+'NumStability.CFLUnitShift.step_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.local_cfl1_exact {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ} {states : Set (Fin m → ℝ)}
+  {L R H : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H) (h : ℝ) (hh : 0 < h)
+  (hhH : h ≤ H) (j : ℤ) (hleft : L ≤ (NumStability.CFLUnitShift.grid h hh).cellLeft j - h)
+  (hright : (NumStability.CFLUnitShift.grid h hh).cellRight j ≤ R) :
+  NumStability.CFLUnitShift.advance h hh
+      (fun k => NumStability.finiteVolumeCellAverageOn (NumStability.CFLUnitShift.grid h hh) (fun x => q x 0) k) j =
+    NumStability.finiteVolumeCellAverageOn (NumStability.CFLUnitShift.grid h hh) (fun x => q x h) j
+'NumStability.LocalLinearAdvection.local_cfl1_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.LocalLinearAdvection.local_cfl1_exact_of_projection {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ}
+  {states : Set (Fin m → ℝ)} {L R H : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H)
+  (h : ℝ) (hh : 0 < h) (hhH : h ≤ H) (j : ℤ) (hleft : L ≤ (NumStability.CFLUnitShift.grid h hh).cellLeft j - h)
+  (hright : (NumStability.CFLUnitShift.grid h hh).cellRight j ≤ R) (values : ℤ → Fin m → ℝ)
+  (hprojection :
+    values (j - 1) =
+      NumStability.finiteVolumeCellAverageOn (NumStability.CFLUnitShift.grid h hh) (fun x => q x 0) (j - 1)) :
+  NumStability.CFLUnitShift.advance h hh values j =
+    NumStability.finiteVolumeCellAverageOn (NumStability.CFLUnitShift.grid h hh) (fun x => q x h) j
+'NumStability.LocalLinearAdvection.local_cfl1_exact_of_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.LocalLinearAdvection.local_refinement_zero_defect {m : ℕ} {q : ℝ → ℝ → Fin m → ℝ}
+  {states : Set (Fin m → ℝ)} {L R H : ℝ} (hq : NumStability.LocalConservationLaw.SmoothReferenceOn q id states L R H)
+  (p : ℝ) (_hp : 1 < p) :
+  ∃ C,
+    0 ≤ C ∧
+      ∀ (n : ℕ) (j : ℤ),
+        NumStability.CFLUnitShift.meshSize n ≤ H →
+          L ≤
+              (NumStability.CFLUnitShift.grid (NumStability.CFLUnitShift.meshSize n) ⋯).cellLeft j -
+                NumStability.CFLUnitShift.meshSize n →
+            (NumStability.CFLUnitShift.grid (NumStability.CFLUnitShift.meshSize n) ⋯).cellRight j ≤ R →
+              ∀ (values : ℤ → Fin m → ℝ),
+                values (j - 1) =
+                    NumStability.finiteVolumeCellAverageOn
+                      (NumStability.CFLUnitShift.grid (NumStability.CFLUnitShift.meshSize n) ⋯) (fun x => q x 0)
+                      (j - 1) →
+                  ‖NumStability.CFLUnitShift.advance (NumStability.CFLUnitShift.meshSize n) ⋯ values j -
+                        NumStability.finiteVolumeCellAverageOn
+                          (NumStability.CFLUnitShift.grid (NumStability.CFLUnitShift.meshSize n) ⋯)
+                          (fun x => q x (NumStability.CFLUnitShift.meshSize n)) j‖ ≤
+                    C * NumStability.CFLUnitShift.meshSize n * NumStability.CFLUnitShift.meshSize n ^ p
+'NumStability.LocalLinearAdvection.local_refinement_zero_defect' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.HighResolutionAdvectionLine.h (n : ℕ) : ℝ
+'NumStability.HighResolutionAdvectionLine.h' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.h_pos (n : ℕ) : 0 < NumStability.HighResolutionAdvectionLine.h n
+'NumStability.HighResolutionAdvectionLine.h_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.h_eq (n : ℕ) : NumStability.HighResolutionAdvectionLine.h n = 1 / (↑n + 2)
+'NumStability.HighResolutionAdvectionLine.h_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.h_mul (n : ℕ) : NumStability.HighResolutionAdvectionLine.h n * (↑n + 2) = 1
+'NumStability.HighResolutionAdvectionLine.h_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.h_le_half (n : ℕ) : NumStability.HighResolutionAdvectionLine.h n ≤ 1 / 2
+'NumStability.HighResolutionAdvectionLine.h_le_half' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.h_tendsto_zero :
+  Filter.Tendsto NumStability.HighResolutionAdvectionLine.h Filter.atTop (nhds 0)
+'NumStability.HighResolutionAdvectionLine.h_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.input_geometry (n : ℕ) (j : ℤ) (hj : j ∈ Finset.Ico (-1) (-1 + ↑(n + 5))) :
+  -2 ≤ (NumStability.CFLUnitShift.grid (NumStability.HighResolutionAdvectionLine.h n) ⋯).cellLeft j ∧
+    (NumStability.CFLUnitShift.grid (NumStability.HighResolutionAdvectionLine.h n) ⋯).cellRight j ≤ 2
+'NumStability.HighResolutionAdvectionLine.input_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.active_coverage (n : ℕ) (x : ℝ) (hx : x ∈ Set.Icc 0 1) :
+  ∃ j ∈ Finset.Ico 0 (0 + ↑(n + 4)),
+    x ∈
+      Set.Icc ((NumStability.CFLUnitShift.grid (NumStability.HighResolutionAdvectionLine.h n) ⋯).cellLeft j)
+        ((NumStability.CFLUnitShift.grid (NumStability.HighResolutionAdvectionLine.h n) ⋯).cellRight j)
+'NumStability.HighResolutionAdvectionLine.active_coverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.family (m : ℕ) : NumStability.DirectionalLine.LineFamily m
+'NumStability.HighResolutionAdvectionLine.family' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.family_advance (m n : ℕ) (values : ℤ → Fin m → ℝ) (j : ℤ) :
+  (NumStability.HighResolutionAdvectionLine.family m).advance n values j = values (j - 1)
+'NumStability.HighResolutionAdvectionLine.family_advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.family_quality (m : ℕ) :
+  (NumStability.HighResolutionAdvectionLine.family m).HasControlledHighResolution
+'NumStability.HighResolutionAdvectionLine.family_quality' depends on axioms: [propext, Classical.choice, Quot.sound]
+NumStability.HighResolutionAdvectionLine.smooth_local_reference :
+  NumStability.LocalConservationLaw.SpatialSmoothReferenceOn
+    (fun x t => NumStability.CFLUnitShift.smoothProfile (x - t)) (fun x => id) Set.univ (-2) 2 1
+'NumStability.HighResolutionAdvectionLine.smooth_local_reference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.HighResolutionAdvectionLine.smooth_initial_projection (n : ℕ) :
+  (NumStability.HighResolutionAdvectionLine.family 1).InitialProjection n
+    (fun x t => NumStability.CFLUnitShift.smoothProfile (x - t)) fun j =>
+    NumStability.finiteVolumeCellAverageOn
+      (NumStability.CFLUnitShift.grid (NumStability.HighResolutionAdvectionLine.h n) ⋯)
+      NumStability.CFLUnitShift.smoothProfile j
+'NumStability.HighResolutionAdvectionLine.smooth_initial_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.HighResolutionAdvectionLine.step_local_reference :
+  NumStability.LocalConservationLaw.SpatialRectangleReferenceOn
+      (fun x t => NumStability.CFLUnitShift.stepProfile (x - t)) (fun x => id) (-2) 2 1 ∧
+    ¬ContinuousAt NumStability.CFLUnitShift.stepProfile 0
+'NumStability.HighResolutionAdvectionLine.step_local_reference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.HighResolutionAdvectionLine.scalar_family_exists :
+  ∃ f,
+    f.HasControlledHighResolution ∧
+      f.targetLeft = 0 ∧
+        f.targetRight = 1 ∧ (f.flux = fun x => id) ∧ ∀ (n : ℕ) (values : ℤ → Fin 1 → ℝ), f.admitted n values
+'NumStability.HighResolutionAdvectionLine.scalar_family_exists' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+NumStability.HighResolutionCoordinateSweep.coordinate_highResolution_specification.{u_1, u_2, u_3, u_4, u_5}
+  {D : Type u_1} {Cell : Type u_2} {Face : Type u_3} {FacePoint : Type u_4} {Line : Type u_5} [Fintype D]
+  [DecidableEq D] [Fintype Cell] [MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {coord : NumStability.FiniteCoordinate.LineCoordinates D Cell Face Line}
+  {family : D → Line → NumStability.DirectionalLine.LineFamily m} (hm : 0 < m) (hD : 0 < Fintype.card D)
+  (method : ℕ → NumStability.FiniteCoordinate.LineRealization data coord family) (direction : ℕ → D)
+  (quality : ∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) (initial : Cell → Fin m → ℝ)
+  (physical : ℕ → (D → ℝ) → ℝ → Fin m → ℝ) (steps : ℕ) (amplification localDefect splittingDefect : ℕ → ℝ)
+  (initialError : ℝ) (leftError rightError : ℕ → Cell → ℝ)
+  (href : ∀ n < steps, data.ReferenceOn (direction n) (physical n) 0 ((method n).duration (direction n)))
+  (hinitial : ∀ (cell : Cell), ‖initial cell - data.cellMean (physical 0) cell 0‖ ≤ initialError)
+  (hactual :
+    ∀ n < steps,
+      (method n).Admitted (direction n) (NumStability.FiniteCoordinate.coordinateExecution method direction initial n))
+  (hrefadmit : ∀ n < steps, (method n).Admitted (direction n) fun cell => data.cellMean (physical n) cell 0)
+  (hamplification :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        1 +
+            (family (direction n) (coord.cellLine (direction n) cell)).stabilityRate ⋯ *
+              (method n).duration (direction n) ≤
+          amplification n)
+  (hleft :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.leftFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.leftFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          leftError n cell)
+  (hright :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖(method n).rule (direction n) ((method n).duration (direction n)) (fun c => data.cellMean (physical n) c 0)
+                (data.rightFace (direction n) cell) -
+              NumStability.oneDimensionalCellAverage
+                (data.faceFlux (direction n) (physical n) (data.rightFace (direction n) cell)) 0
+                ((method n).duration (direction n))‖ ≤
+          rightError n cell)
+  (hlocal :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        (method n).duration (direction n) / data.cellVolume cell * (leftError n cell + rightError n cell) ≤
+          localDefect n)
+  (hsplit :
+    ∀ n < steps,
+      ∀ (cell : Cell),
+        ‖data.cellMean (physical n) cell ((method n).duration (direction n)) -
+              data.cellMean (physical (n + 1)) cell 0‖ ≤
+          splittingDefect n)
+  (hschedule : ∀ (d : D), ∃ n < steps, direction n = d) :
+  0 < m ∧
+    0 < Fintype.card D ∧
+      (∀ (d : D), ∃ n < steps, direction n = d) ∧
+        (∀ (d : D) (line : Line), (family d line).HasControlledHighResolution) ∧
+          (∀ (d : D) (line : Line),
+              ∃ p L,
+                1 < p ∧
+                  0 ≤ L ∧
+                    ∀ (q : ℝ → ℝ → Fin m → ℝ),
+                      NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q (family d line).flux
+                          (family d line).states (family d line).left (family d line).right (family d line).horizon →
+                        ∃ C,
+                          0 ≤ C ∧
+                            ∃ N,
+                              ∀ (n : ℕ),
+                                N ≤ n →
+                                  ∀ (projected values : ℤ → Fin m → ℝ),
+                                    (family d line).InitialProjection n q projected →
+                                      (family d line).admitted n values →
+                                        ∀ (E : ℝ),
+                                          0 ≤ E →
+                                            (∀
+                                                j ∈
+                                                  Finset.Ico ((family d line).inputStart n)
+                                                    ((family d line).inputStart n + ↑((family d line).inputCount n)),
+                                                ‖values j - projected j‖ ≤ E) →
+                                              ∀
+                                                j ∈
+                                                  Finset.Ico ((family d line).activeStart n)
+                                                    ((family d line).activeStart n + ↑((family d line).activeCount n)),
+                                                ‖(family d line).advance n values j -
+                                                      NumStability.finiteVolumeCellAverageOn ((family d line).grid n)
+                                                        (fun x => q x ((family d line).dt n)) j‖ ≤
+                                                  (1 + L * (family d line).dt n) * E +
+                                                    C * (family d line).dt n * (family d line).mesh n ^ p) ∧
+            (∀ n ≤ steps,
+                NumStability.FiniteCoordinate.coordinateExecution method direction initial n =
+                  NumStability.orderedOperatorSweep
+                    (List.map (NumStability.FiniteCoordinate.coordinateStep method direction) (List.range n)) initial) ∧
+              (∀ n < steps,
+                  ∀ (cell : Cell),
+                    NumStability.FiniteCoordinate.coordinateExecution method direction initial (n + 1) cell =
+                      (family (direction n) (coord.cellLine (direction n) cell)).advance
+                        ((method n).level (direction n) (coord.cellLine (direction n) cell))
+                        (coord.extract (direction n) (coord.cellLine (direction n) cell)
+                          (NumStability.FiniteCoordinate.coordinateExecution method direction initial n))
+                        (coord.cellIndex (direction n) cell)) ∧
+                (∀ n < steps,
+                    ∑ cell,
+                        data.cellVolume cell •
+                          NumStability.FiniteCoordinate.coordinateExecution method direction initial (n + 1) cell =
+                      ∑ cell,
+                          data.cellVolume cell •
+                            NumStability.FiniteCoordinate.coordinateExecution method direction initial n cell -
+                        (method n).duration (direction n) •
+                          ∑ cell,
+                            ((method n).rule (direction n) ((method n).duration (direction n))
+                                (NumStability.FiniteCoordinate.coordinateExecution method direction initial n)
+                                (data.rightFace (direction n) cell) -
+                              (method n).rule (direction n) ((method n).duration (direction n))
+                                (NumStability.FiniteCoordinate.coordinateExecution method direction initial n)
+                                (data.leftFace (direction n) cell))) ∧
+                  (∀ n < steps,
+                      ∀ (cell : Cell) (current other : Cell → Fin m → ℝ),
+                        (∀ (c : Cell),
+                            coord.cellLine (direction n) c = coord.cellLine (direction n) cell → current c = other c) →
+                          NumStability.FiniteCoordinate.advance data (method n).rule (direction n)
+                              ((method n).duration (direction n)) current cell =
+                            NumStability.FiniteCoordinate.advance data (method n).rule (direction n)
+                              ((method n).duration (direction n)) other cell) ∧
+                    (∀ n < steps,
+                        ∀ (cell : Cell),
+                          ∃ p L,
+                            1 < p ∧
+                              0 ≤ L ∧
+                                ∀ (q : ℝ → ℝ → Fin m → ℝ),
+                                  NumStability.LocalConservationLaw.SpatialSmoothReferenceOn q
+                                      (family (direction n) (coord.cellLine (direction n) cell)).flux
+                                      (family (direction n) (coord.cellLine (direction n) cell)).states
+                                      (family (direction n) (coord.cellLine (direction n) cell)).left
+                                      (family (direction n) (coord.cellLine (direction n) cell)).right
+                                      (family (direction n) (coord.cellLine (direction n) cell)).horizon →
+                                    ∃ C,
+                                      0 ≤ C ∧
+                                        ∃ N,
+                                          N ≤ (method n).level (direction n) (coord.cellLine (direction n) cell) →
+                                            ∀ (projected current : Cell → Fin m → ℝ),
+                                              (family (direction n)
+                                                      (coord.cellLine (direction n) cell)).InitialProjection
+                                                  ((method n).level (direction n) (coord.cellLine (direction n) cell)) q
+                                                  (coord.extract (direction n) (coord.cellLine (direction n) cell)
+                                                    projected) →
+                                                (method n).Admitted (direction n) current →
+                                                  ∀ (E : ℝ),
+                                                    0 ≤ E →
+                                                      (∀ (c : Cell), ‖current c - projected c‖ ≤ E) →
+                                                        ‖NumStability.FiniteCoordinate.advance data (method n).rule
+                                                                (direction n) ((method n).duration (direction n))
+                                                                current cell -
+                                                              NumStability.finiteVolumeCellAverageOn
+                                                                ((family (direction n)
+                                                                      (coord.cellLine (direction n) cell)).grid
+                                                                  ((method n).level (direction n)
+                                                                    (coord.cellLine (direction n) cell)))
+                                                                (fun x => q x ((method n).duration (direction n)))
+                                                                (coord.cellIndex (direction n) cell)‖ ≤
+                                                          (1 + L * (method n).duration (direction n)) * E +
+                                                            C * (method n).duration (direction n) *
+                                                              (family (direction n)
+                                                                      (coord.cellLine (direction n) cell)).mesh
+                                                                  ((method n).level (direction n)
+                                                                    (coord.cellLine (direction n) cell)) ^
+                                                                p) ∧
+                      (∀ n < steps,
+                          ∀ u ∈ Set.uIcc 0 ((method n).duration (direction n)),
+                            ∀ v ∈ Set.uIcc 0 ((method n).duration (direction n)),
+                              ∀ (cell : Cell),
+                                data.cellVolume cell •
+                                    (data.cellMean (physical n) cell v - data.cellMean (physical n) cell u) =
+                                  ∫ (τ : ℝ) in u..v,
+                                    data.faceFlux (direction n) (physical n) (data.leftFace (direction n) cell) τ -
+                                      data.faceFlux (direction n) (physical n) (data.rightFace (direction n) cell) τ) ∧
+                        (∀ n ≤ steps,
+                            ∀ (cell : Cell),
+                              ‖NumStability.FiniteCoordinate.coordinateExecution method direction initial n cell -
+                                    data.cellMean (physical n) cell 0‖ ≤
+                                NumStability.SequentialError.errorBudget amplification localDefect splittingDefect
+                                  initialError n) ∧
+                          ∀ (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : Cell → D → ℤ)
+                            (facePosition : D → Face → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ),
+                            NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition
+                                flux →
+                              (∀ (cell : Cell),
+                                  data.cellVolume cell =
+                                    NumStability.CartesianGrid.cellVolume axes (cellPosition cell)) ∧
+                                (∀ (q : (D → ℝ) → ℝ → Fin m → ℝ) (cell : Cell) (t : ℝ),
+                                    data.cellMean q cell t =
+                                      NumStability.cellVolumeAverage MeasureTheory.volume
+                                        (NumStability.CartesianGrid.cellBox axes (cellPosition cell)) fun x => q x t) ∧
+                                  (∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : Face) (t : ℝ),
+                                      data.faceFlux d (fun x τ => q (x d) τ) face t =
+                                        NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+                                          flux d (q ((axes d).cellLeft (facePosition d face d)) t)) ∧
+                                    ∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D),
+                                      NumStability.IsRectangleConservationLawSolution q (flux d) →
+                                        ∀ (cell : Cell) (s t : ℝ),
+                                          data.cellVolume cell •
+                                              (data.cellMean (fun x τ => q (x d) τ) cell t -
+                                                data.cellMean (fun x τ => q (x d) τ) cell s) =
+                                            ∫ (τ : ℝ) in s..t,
+                                              data.faceFlux d (fun x τ => q (x d) τ) (data.leftFace d cell) τ -
+                                                data.faceFlux d (fun x τ => q (x d) τ) (data.rightFace d cell) τ
+'NumStability.HighResolutionCoordinateSweep.coordinate_highResolution_specification' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

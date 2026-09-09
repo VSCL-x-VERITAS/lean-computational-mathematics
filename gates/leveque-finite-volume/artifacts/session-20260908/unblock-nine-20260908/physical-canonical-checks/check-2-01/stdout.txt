@@ -1,0 +1,225 @@
+NumStability.leveque01_coordinateHighResolutionMethods_sourceContract.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [DecidableEq.{u_1 + 1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat} (hm : LT.lt.{0} 0 m)
+  (hD : LT.lt.{0} 0 (Fintype.card.{u_1} D))
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m)
+  (quality : NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} family) (level : Nat)
+  (direction : Nat → D) (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) (steps : Nat)
+  (hschedule : ∀ (d : D), ∃ k, And (LT.lt.{0} k steps) (Eq.{u_1 + 1} (direction k) d))
+  (hvalid :
+    NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} family level direction duration ghost initial
+      steps) :
+  And (LT.lt.{0} 0 m)
+    (And (LT.lt.{0} 0 (Fintype.card.{u_1} D))
+      (And
+        (NumStability.PhysicalHighResolutionSweep.Specification.{u_1, u_2} family level direction duration ghost initial
+          steps)
+        (NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} family level direction duration ghost initial
+          steps)))
+'NumStability.leveque01_coordinateHighResolutionMethods_sourceContract' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.{u_3, u_4} (D : Type u_3) (FacePoint : Type u_4) [Fintype.{u_3} D]
+  [MeasurableSpace.{u_4} FacePoint] (m : Nat) : Type (max (max 1 u_3) u_4)
+'NumStability.PhysicalRefinementQuality.Family' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.SmoothReference.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (d : D)
+  (q : (D → Real) → Real → Fin m → Real) : Prop
+'NumStability.PhysicalRefinementQuality.Family.SmoothReference' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (d : D)
+  (q : (D → Real) → Real → Fin m → Real) (p : Real) : Type
+'NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) : Prop
+'NumStability.PhysicalRefinementQuality.Family.HasHighResolution' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at.{u_1, u_2} {D : Type u_1}
+  {FacePoint : Type u_2} [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) {d : D}
+  {q : (D → Real) → Real → Fin m → Real} {p : Real}
+  (certificate : NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.{u_1, u_2} family d q p) (n : Nat)
+  (hn :
+    LE.le.{0} (NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.threshold.{u_1, u_2} certificate) n)
+  (dt : Real) (hdt : LT.lt.{0} 0 dt)
+  (hT : LE.le.{0} dt (NumStability.PhysicalRefinementQuality.Family.horizon.{u_1, u_2} family))
+  (ghost : D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family n → Int → Fin m → Real)
+  (current : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family n → Fin m → Real)
+  (hactual :
+    NumStability.CapacityCoordinate.Method.Admitted.{u_1, 0, 0, u_1, u_2, 0}
+      (NumStability.CapacityCoordinate.Method.withGhost.{u_1, 0, 0, u_1, u_2, 0}
+        (NumStability.PhysicalRefinementQuality.Family.method.{u_1, u_2} family n) ghost)
+      d dt current)
+  (hprojected :
+    NumStability.CapacityCoordinate.Method.Admitted.{u_1, 0, 0, u_1, u_2, 0}
+      (NumStability.CapacityCoordinate.Method.withGhost.{u_1, 0, 0, u_1, u_2, 0}
+        (NumStability.PhysicalRefinementQuality.Family.method.{u_1, u_2} family n)
+        (NumStability.PhysicalRefinementQuality.Family.referenceGhost.{u_1, u_2} family n q))
+      d dt (NumStability.PhysicalRefinementQuality.Family.projected.{u_1, u_2} family n q 0))
+  (A E G : Real)
+  (hstable :
+    NumStability.CapacityCoordinate.Method.StableAt.{u_1, 0, 0, u_1, u_2, 0}
+      (NumStability.PhysicalRefinementQuality.Family.method.{u_1, u_2} family n) d dt A)
+  (hcell :
+    ∀ (cell : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family n),
+      LE.le.{0}
+        (Norm.norm.{0}
+          (HSub.hSub.{0, 0, 0} (current cell)
+            (NumStability.PhysicalRefinementQuality.Family.projected.{u_1, u_2} family n q 0 cell)))
+        E)
+  (hghost :
+    ∀ (cell : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family n) (j : Int),
+      Eq.{1}
+          (NumStability.FiniteCoordinate.LineCoordinates.lookup.{u_1, 0, 0, 0}
+            (NumStability.PhysicalRefinementQuality.Family.coordinates.{u_1, u_2} family n) d
+            (NumStability.FiniteCoordinate.LineCoordinates.cellLine.{u_1, 0, 0, 0}
+              (NumStability.PhysicalRefinementQuality.Family.coordinates.{u_1, u_2} family n) d cell)
+            j)
+          Option.none.{0} →
+        LE.le.{0}
+          (Norm.norm.{0}
+            (HSub.hSub.{0, 0, 0}
+              (ghost d
+                (NumStability.FiniteCoordinate.LineCoordinates.cellLine.{u_1, 0, 0, 0}
+                  (NumStability.PhysicalRefinementQuality.Family.coordinates.{u_1, u_2} family n) d cell)
+                j)
+              (NumStability.PhysicalRefinementQuality.Family.referenceGhost.{u_1, u_2} family n q d
+                (NumStability.FiniteCoordinate.LineCoordinates.cellLine.{u_1, 0, 0, 0}
+                  (NumStability.PhysicalRefinementQuality.Family.coordinates.{u_1, u_2} family n) d cell)
+                j)))
+          G)
+  (cell : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family n) :
+  LE.le.{0}
+    (Norm.norm.{0}
+      (HSub.hSub.{0, 0, 0}
+        (NumStability.FiniteCoordinate.advance.{u_1, 0, 0, u_1, u_2}
+          (NumStability.PhysicalRefinementQuality.Family.data.{u_1, u_2} family n)
+          (NumStability.CapacityCoordinate.Method.rule.{u_1, 0, 0, u_1, u_2, 0}
+            (NumStability.CapacityCoordinate.Method.withGhost.{u_1, 0, 0, u_1, u_2, 0}
+              (NumStability.PhysicalRefinementQuality.Family.method.{u_1, u_2} family n) ghost))
+          d dt current cell)
+        (NumStability.PhysicalRefinementQuality.Family.projected.{u_1, u_2} family n q dt cell)))
+    (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} A (Max.max.{0} E G))
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.constant.{u_1, u_2} certificate) dt)
+        (HPow.hPow.{0, 0, 0} (NumStability.PhysicalRefinementQuality.Family.mesh.{u_1, u_2} family n) p)))
+'NumStability.PhysicalRefinementQuality.Family.AccuracyCertificate.perturbed_at' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available.{u_1, u_2} {D : Type u_1}
+  {FacePoint : Type u_2} [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m)
+  (quality : NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} family) (n : Nat) (d : D)
+  (ghost : D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family n → Int → Fin m → Real)
+  (left right : Fin m → Real)
+  (hl : Membership.mem.{0, 0} (NumStability.PhysicalRefinementQuality.Family.states.{u_1, u_2} family d) left)
+  (hr : Membership.mem.{0, 0} (NumStability.PhysicalRefinementQuality.Family.states.{u_1, u_2} family d) right)
+  (side : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family n → Prop) [DecidablePred.{1} side]
+  (hg :
+    ∀ (line : NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family n) (j : Int),
+      Eq.{1}
+          (NumStability.FiniteCoordinate.LineCoordinates.lookup.{u_1, 0, 0, 0}
+            (NumStability.PhysicalRefinementQuality.Family.coordinates.{u_1, u_2} family n) d line j)
+          Option.none.{0} →
+        Membership.mem.{0, 0} (NumStability.PhysicalRefinementQuality.Family.states.{u_1, u_2} family d)
+          (ghost d line j)) :
+  ∃ dt,
+    And (LT.lt.{0} 0 dt)
+      (And (LE.le.{0} dt (NumStability.PhysicalRefinementQuality.Family.horizon.{u_1, u_2} family))
+        (NumStability.CapacityCoordinate.Method.Admitted.{u_1, 0, 0, u_1, u_2, 0}
+          (NumStability.CapacityCoordinate.Method.withGhost.{u_1, 0, 0, u_1, u_2, 0}
+            (NumStability.PhysicalRefinementQuality.Family.method.{u_1, u_2} family n) ghost)
+          d dt fun cell => ite.{1} (side cell) left right))
+'NumStability.PhysicalRefinementQuality.Family.HasHighResolution.two_state_available' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.coordinates.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2} [Fintype.{u_1} D]
+  [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (level : Nat)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (k : Nat) :
+  NumStability.FiniteCoordinate.LineCoordinates.{u_1, 0, 0, 0} D
+    (NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level)
+    (NumStability.PhysicalRefinementQuality.Family.Face.{u_1, u_2} family level)
+    (NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level)
+'NumStability.PhysicalHighResolutionSweep.coordinates' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.method.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2} [Fintype.{u_1} D]
+  [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (level : Nat)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (k : Nat) :
+  NumStability.CapacityCoordinate.Method.{u_1, 0, 0, u_1, u_2, 0}
+    (NumStability.PhysicalRefinementQuality.Family.data.{u_1, u_2} family level)
+    (NumStability.PhysicalHighResolutionSweep.coordinates.{u_1, u_2} family level ghost k)
+'NumStability.PhysicalHighResolutionSweep.method' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.execution.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2} [Fintype.{u_1} D]
+  [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (level : Nat) (direction : Nat → D)
+  (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) :
+  Nat → NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real
+'NumStability.PhysicalHighResolutionSweep.execution' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.Specification.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [DecidableEq.{u_1 + 1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (level : Nat) (direction : Nat → D)
+  (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) (steps : Nat) :
+  Prop
+'NumStability.PhysicalHighResolutionSweep.Specification' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.specification.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [DecidableEq.{u_1 + 1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m)
+  (quality : NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} family) (level : Nat)
+  (direction : Nat → D) (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) (steps : Nat)
+  (hschedule : ∀ (d : D), ∃ k, And (LT.lt.{0} k steps) (Eq.{u_1 + 1} (direction k) d)) :
+  NumStability.PhysicalHighResolutionSweep.Specification.{u_1, u_2} family level direction duration ghost initial steps
+'NumStability.PhysicalHighResolutionSweep.specification' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m) (level : Nat) (direction : Nat → D)
+  (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) (steps : Nat) :
+  Prop
+'NumStability.PhysicalHighResolutionSweep.ValidSubsteps' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+NumStability.PhysicalHighResolutionSweep.admitted_specification.{u_1, u_2} {D : Type u_1} {FacePoint : Type u_2}
+  [Fintype.{u_1} D] [DecidableEq.{u_1 + 1} D] [MeasurableSpace.{u_2} FacePoint] {m : Nat}
+  (family : NumStability.PhysicalRefinementQuality.Family.{u_1, u_2} D FacePoint m)
+  (quality : NumStability.PhysicalRefinementQuality.Family.HasHighResolution.{u_1, u_2} family) (level : Nat)
+  (direction : Nat → D) (duration : Nat → Real)
+  (ghost : Nat → D → NumStability.PhysicalRefinementQuality.Family.Line.{u_1, u_2} family level → Int → Fin m → Real)
+  (initial : NumStability.PhysicalRefinementQuality.Family.Cell.{u_1, u_2} family level → Fin m → Real) (steps : Nat)
+  (hschedule : ∀ (d : D), ∃ k, And (LT.lt.{0} k steps) (Eq.{u_1 + 1} (direction k) d))
+  (hvalid :
+    NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} family level direction duration ghost initial
+      steps) :
+  And
+    (NumStability.PhysicalHighResolutionSweep.Specification.{u_1, u_2} family level direction duration ghost initial
+      steps)
+    (NumStability.PhysicalHighResolutionSweep.ValidSubsteps.{u_1, u_2} family level direction duration ghost initial
+      steps)
+'NumStability.PhysicalHighResolutionSweep.admitted_specification' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

@@ -1,0 +1,307 @@
+structure NumStability.LocalRiemannInformation.Routine.{u_1, u_2} {m : ℕ}
+  (law : NumStability.LocalRiemannInformation.Law m)
+  (Result : NumStability.LocalRiemannInformation.Problem law → Type u_1) (Information : Type u_2) : Type (max u_1 u_2)
+number of parameters: 4
+fields:
+  NumStability.LocalRiemannInformation.Routine.domain : NumStability.LocalRiemannInformation.Problem law → Prop
+  NumStability.LocalRiemannInformation.Routine.solve : (problem : NumStability.LocalRiemannInformation.Problem law) →
+      self.domain problem → Result problem
+  NumStability.LocalRiemannInformation.Routine.extract : {problem : NumStability.LocalRiemannInformation.Problem law} →
+      Result problem → Information
+  NumStability.LocalRiemannInformation.Routine.numericalFlux : Information → Fin m → ℝ
+constructor:
+  NumStability.LocalRiemannInformation.Routine.mk.{u_1, u_2} {m : ℕ} {law : NumStability.LocalRiemannInformation.Law m}
+    {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} {Information : Type u_2}
+    (domain : NumStability.LocalRiemannInformation.Problem law → Prop)
+    (solve : (problem : NumStability.LocalRiemannInformation.Problem law) → domain problem → Result problem)
+    (extract : {problem : NumStability.LocalRiemannInformation.Problem law} → Result problem → Information)
+    (numericalFlux : Information → Fin m → ℝ) : NumStability.LocalRiemannInformation.Routine law Result Information
+def NumStability.LocalRiemannInformation.Routine.flux.{u_1, u_2} : {m : ℕ} →
+  {law : NumStability.LocalRiemannInformation.Law m} →
+    {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} →
+      {Information : Type u_2} →
+        (routine : NumStability.LocalRiemannInformation.Routine law Result Information) →
+          (problem : NumStability.LocalRiemannInformation.Problem law) → routine.domain problem → Fin m → ℝ :=
+fun {m} {law} {Result} {Information} routine problem admitted =>
+  routine.numericalFlux (routine.extract (routine.solve problem admitted))
+def NumStability.LocalRiemannInformation.Routine.Consistent.{u_1, u_2} : {m : ℕ} →
+  {law : NumStability.LocalRiemannInformation.Law m} →
+    {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} →
+      {Information : Type u_2} → NumStability.LocalRiemannInformation.Routine law Result Information → Prop :=
+fun {m} {law} {Result} {Information} routine =>
+  ∀ (problem : NumStability.LocalRiemannInformation.Problem law) (admitted : routine.domain problem),
+    problem.left = problem.right → routine.flux problem admitted = law.flux problem.left
+def NumStability.LocalRiemannInformation.biasedRoutine : {m : ℕ} →
+  (law : NumStability.LocalRiemannInformation.Law m) →
+    (Fin m → ℝ) →
+      NumStability.LocalRiemannInformation.Routine law (fun x => (Fin m → ℝ) × (Fin m → ℝ))
+        ((Fin m → ℝ) × (Fin m → ℝ)) :=
+fun {m} law bias =>
+  { domain := fun x => True, solve := fun problem x => (problem.left, problem.right),
+    extract := fun {problem} result => result, numericalFlux := fun information => law.flux information.1 + bias }
+@NumStability.LocalRiemannInformation.routine_local_interface_contract : ∀ {m : ℕ}
+  (law : NumStability.LocalRiemannInformation.Law m)
+  {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} {Information : Type u_2}
+  (routine : NumStability.LocalRiemannInformation.Routine law Result Information) (left center right : Fin m → ℝ)
+  (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states) (hrightState : right ∈ law.states)
+  {a b s t : ℝ},
+  a < b →
+    ∀ (hst : s < t)
+      (hleftDomain :
+        routine.domain
+          { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+            duration_pos := ⋯ })
+      (hrightDomain :
+        routine.domain
+          { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+            duration_pos := ⋯ })
+      (oldDensity newDensity leftPhysicalFlux rightPhysicalFlux : ℝ → Fin m → ℝ),
+      IntervalIntegrable oldDensity MeasureTheory.volume a b →
+        IntervalIntegrable newDensity MeasureTheory.volume a b →
+          IntervalIntegrable leftPhysicalFlux MeasureTheory.volume s t →
+            IntervalIntegrable rightPhysicalFlux MeasureTheory.volume s t →
+              (∫ (x : ℝ) in a..b, newDensity x) - ∫ (x : ℝ) in a..b, oldDensity x =
+                  ∫ (τ : ℝ) in s..t, leftPhysicalFlux τ - rightPhysicalFlux τ →
+                let leftProblem :=
+                  { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+                    duration_pos := ⋯ };
+                let rightProblem :=
+                  { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                    duration := t - s, duration_pos := ⋯ };
+                have leftFlux := routine.flux leftProblem hleftDomain;
+                have rightFlux := routine.flux rightProblem hrightDomain;
+                have next := NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                0 < m ∧
+                  NumStability.IsHyperbolicFluxOn law.flux law.states ∧
+                    leftProblem.left = left ∧
+                      leftProblem.right = center ∧
+                        rightProblem.left = center ∧
+                          rightProblem.right = right ∧
+                            leftProblem.duration = t - s ∧
+                              rightProblem.duration = t - s ∧
+                                leftFlux =
+                                    routine.numericalFlux (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                  rightFlux =
+                                      routine.numericalFlux
+                                        (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                    NumStability.IsOneDimensionalCellAverage oldDensity a b
+                                        (NumStability.oneDimensionalCellAverage oldDensity a b) ∧
+                                      NumStability.IsOneDimensionalCellAverage newDensity a b
+                                          (NumStability.oneDimensionalCellAverage newDensity a b) ∧
+                                        NumStability.IsOneDimensionalCellAverage leftPhysicalFlux s t
+                                            (NumStability.oneDimensionalCellAverage leftPhysicalFlux s t) ∧
+                                          NumStability.IsOneDimensionalCellAverage rightPhysicalFlux s t
+                                              (NumStability.oneDimensionalCellAverage rightPhysicalFlux s t) ∧
+                                            NumStability.oneDimensionalCellAverage oldDensity a b =
+                                                NumStability.cellVolumeAverage MeasureTheory.volume (Set.Ioc a b)
+                                                  oldDensity ∧
+                                              next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                (b - a) •
+                                                      (next - NumStability.oneDimensionalCellAverage newDensity a b) =
+                                                    (b - a) •
+                                                        (center -
+                                                          NumStability.oneDimensionalCellAverage oldDensity a b) +
+                                                      (t - s) •
+                                                        (leftFlux -
+                                                            NumStability.oneDimensionalCellAverage leftPhysicalFlux s
+                                                              t -
+                                                          (rightFlux -
+                                                            NumStability.oneDimensionalCellAverage rightPhysicalFlux s
+                                                              t)) ∧
+                                                  (∀ (oldBound leftBound rightBound : ℝ),
+                                                      ‖center - NumStability.oneDimensionalCellAverage oldDensity a b‖ ≤
+                                                          oldBound →
+                                                        ‖leftFlux -
+                                                                NumStability.oneDimensionalCellAverage leftPhysicalFlux
+                                                                  s t‖ ≤
+                                                            leftBound →
+                                                          ‖rightFlux -
+                                                                  NumStability.oneDimensionalCellAverage
+                                                                    rightPhysicalFlux s t‖ ≤
+                                                              rightBound →
+                                                            ‖next -
+                                                                  NumStability.oneDimensionalCellAverage newDensity a
+                                                                    b‖ ≤
+                                                              oldBound + (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                    ∀
+                                                      (leftReference :
+                                                        NumStability.LocalRiemannInformation.Reference leftProblem)
+                                                      (rightReference :
+                                                        NumStability.LocalRiemannInformation.Reference rightProblem)
+                                                      (leftSolverBound rightSolverBound : ℝ),
+                                                      ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                        ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                          NumStability.IsRiemannData (fun x => leftReference.field x 0)
+                                                              left center ∧
+                                                            NumStability.IsRiemannData
+                                                                (fun x => rightReference.field x 0) center right ∧
+                                                              NumStability.IsOneDimensionalCellAverage
+                                                                  (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                  (t - s) leftReference.meanFlux ∧
+                                                                NumStability.IsOneDimensionalCellAverage
+                                                                    (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                    (t - s) rightReference.meanFlux ∧
+                                                                  ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                    ‖center -
+                                                                            NumStability.oneDimensionalCellAverage
+                                                                              oldDensity a b‖ ≤
+                                                                        oldBound →
+                                                                      ‖leftReference.meanFlux -
+                                                                              NumStability.oneDimensionalCellAverage
+                                                                                leftPhysicalFlux s t‖ ≤
+                                                                          leftComparison →
+                                                                        ‖rightReference.meanFlux -
+                                                                                NumStability.oneDimensionalCellAverage
+                                                                                  rightPhysicalFlux s t‖ ≤
+                                                                            rightComparison →
+                                                                          ‖next -
+                                                                                NumStability.oneDimensionalCellAverage
+                                                                                  newDensity a b‖ ≤
+                                                                            oldBound +
+                                                                              (t - s) / (b - a) *
+                                                                                (leftSolverBound + leftComparison +
+                                                                                  (rightSolverBound + rightComparison))
+@NumStability.leveque01_localRiemannRoutineInterface_sourceContract : ∀ {m : ℕ}
+  (law : NumStability.LocalRiemannInformation.Law m) (bias : Fin m → ℝ),
+  (∃ available,
+      ∃ (admitted : ∀ (problem : NumStability.LocalRiemannInformation.Problem law), available.domain problem),
+        ∀ (problem : NumStability.LocalRiemannInformation.Problem law),
+          available.extract (available.solve problem ⋯) = (problem.left, problem.right) ∧
+            available.flux problem ⋯ = law.flux problem.left + bias) ∧
+    ∀ {Result : NumStability.LocalRiemannInformation.Problem law → Type u_1} {Information : Type u_2}
+      (routine : NumStability.LocalRiemannInformation.Routine law Result Information) (left center right : Fin m → ℝ)
+      (hleftState : left ∈ law.states) (hcenterState : center ∈ law.states) (hrightState : right ∈ law.states)
+      {a b s t : ℝ},
+      a < b →
+        ∀ (hst : s < t)
+          (hleftDomain :
+            routine.domain
+              { left := left, right := center, left_mem := hleftState, right_mem := hcenterState, duration := t - s,
+                duration_pos := ⋯ })
+          (hrightDomain :
+            routine.domain
+              { left := center, right := right, left_mem := hcenterState, right_mem := hrightState, duration := t - s,
+                duration_pos := ⋯ })
+          (q : ℝ → ℝ → Fin m → ℝ),
+          IntervalIntegrable (fun x => q x s) MeasureTheory.volume a b →
+            IntervalIntegrable (fun x => q x t) MeasureTheory.volume a b →
+              IntervalIntegrable (fun τ => law.flux (q a τ)) MeasureTheory.volume s t →
+                IntervalIntegrable (fun τ => law.flux (q b τ)) MeasureTheory.volume s t →
+                  (∫ (x : ℝ) in a..b, (fun x => q x t) x) - ∫ (x : ℝ) in a..b, (fun x => q x s) x =
+                      ∫ (τ : ℝ) in s..t, (fun τ => law.flux (q a τ)) τ - (fun τ => law.flux (q b τ)) τ →
+                    let leftProblem :=
+                      { left := left, right := center, left_mem := hleftState, right_mem := hcenterState,
+                        duration := t - s, duration_pos := ⋯ };
+                    let rightProblem :=
+                      { left := center, right := right, left_mem := hcenterState, right_mem := hrightState,
+                        duration := t - s, duration_pos := ⋯ };
+                    have leftFlux := routine.flux leftProblem hleftDomain;
+                    have rightFlux := routine.flux rightProblem hrightDomain;
+                    have next :=
+                      NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) center (rightFlux - leftFlux);
+                    0 < m ∧
+                      NumStability.IsHyperbolicFluxOn law.flux law.states ∧
+                        leftProblem.left = left ∧
+                          leftProblem.right = center ∧
+                            rightProblem.left = center ∧
+                              rightProblem.right = right ∧
+                                leftProblem.duration = t - s ∧
+                                  rightProblem.duration = t - s ∧
+                                    leftFlux =
+                                        routine.numericalFlux
+                                          (routine.extract (routine.solve leftProblem hleftDomain)) ∧
+                                      rightFlux =
+                                          routine.numericalFlux
+                                            (routine.extract (routine.solve rightProblem hrightDomain)) ∧
+                                        NumStability.IsOneDimensionalCellAverage (fun x => q x s) a b
+                                            (NumStability.oneDimensionalCellAverage (fun x => q x s) a b) ∧
+                                          NumStability.IsOneDimensionalCellAverage (fun x => q x t) a b
+                                              (NumStability.oneDimensionalCellAverage (fun x => q x t) a b) ∧
+                                            NumStability.IsOneDimensionalCellAverage (fun τ => law.flux (q a τ)) s t
+                                                (NumStability.oneDimensionalCellAverage (fun τ => law.flux (q a τ)) s
+                                                  t) ∧
+                                              NumStability.IsOneDimensionalCellAverage (fun τ => law.flux (q b τ)) s t
+                                                  (NumStability.oneDimensionalCellAverage (fun τ => law.flux (q b τ)) s
+                                                    t) ∧
+                                                (NumStability.oneDimensionalCellAverage (fun x => q x s) a b =
+                                                    NumStability.cellVolumeAverage MeasureTheory.volume (Set.Ioc a b)
+                                                      fun x => q x s) ∧
+                                                  next = center - ((t - s) / (b - a)) • (rightFlux - leftFlux) ∧
+                                                    (b - a) •
+                                                          (next -
+                                                            NumStability.oneDimensionalCellAverage (fun x => q x t) a
+                                                              b) =
+                                                        (b - a) •
+                                                            (center -
+                                                              NumStability.oneDimensionalCellAverage (fun x => q x s) a
+                                                                b) +
+                                                          (t - s) •
+                                                            (leftFlux -
+                                                                NumStability.oneDimensionalCellAverage
+                                                                  (fun τ => law.flux (q a τ)) s t -
+                                                              (rightFlux -
+                                                                NumStability.oneDimensionalCellAverage
+                                                                  (fun τ => law.flux (q b τ)) s t)) ∧
+                                                      (∀ (oldBound leftBound rightBound : ℝ),
+                                                          ‖center -
+                                                                  NumStability.oneDimensionalCellAverage
+                                                                    (fun x => q x s) a b‖ ≤
+                                                              oldBound →
+                                                            ‖leftFlux -
+                                                                    NumStability.oneDimensionalCellAverage
+                                                                      (fun τ => law.flux (q a τ)) s t‖ ≤
+                                                                leftBound →
+                                                              ‖rightFlux -
+                                                                      NumStability.oneDimensionalCellAverage
+                                                                        (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                  rightBound →
+                                                                ‖next -
+                                                                      NumStability.oneDimensionalCellAverage
+                                                                        (fun x => q x t) a b‖ ≤
+                                                                  oldBound +
+                                                                    (t - s) / (b - a) * (leftBound + rightBound)) ∧
+                                                        ∀
+                                                          (leftReference :
+                                                            NumStability.LocalRiemannInformation.Reference leftProblem)
+                                                          (rightReference :
+                                                            NumStability.LocalRiemannInformation.Reference rightProblem)
+                                                          (leftSolverBound rightSolverBound : ℝ),
+                                                          ‖leftFlux - leftReference.meanFlux‖ ≤ leftSolverBound →
+                                                            ‖rightFlux - rightReference.meanFlux‖ ≤ rightSolverBound →
+                                                              NumStability.IsRiemannData
+                                                                  (fun x => leftReference.field x 0) left center ∧
+                                                                NumStability.IsRiemannData
+                                                                    (fun x => rightReference.field x 0) center right ∧
+                                                                  NumStability.IsOneDimensionalCellAverage
+                                                                      (fun τ => law.flux (leftReference.field 0 τ)) 0
+                                                                      (t - s) leftReference.meanFlux ∧
+                                                                    NumStability.IsOneDimensionalCellAverage
+                                                                        (fun τ => law.flux (rightReference.field 0 τ)) 0
+                                                                        (t - s) rightReference.meanFlux ∧
+                                                                      ∀ (oldBound leftComparison rightComparison : ℝ),
+                                                                        ‖center -
+                                                                                NumStability.oneDimensionalCellAverage
+                                                                                  (fun x => q x s) a b‖ ≤
+                                                                            oldBound →
+                                                                          ‖leftReference.meanFlux -
+                                                                                  NumStability.oneDimensionalCellAverage
+                                                                                    (fun τ => law.flux (q a τ)) s t‖ ≤
+                                                                              leftComparison →
+                                                                            ‖rightReference.meanFlux -
+                                                                                    NumStability.oneDimensionalCellAverage
+                                                                                      (fun τ => law.flux (q b τ)) s t‖ ≤
+                                                                                rightComparison →
+                                                                              ‖next -
+                                                                                    NumStability.oneDimensionalCellAverage
+                                                                                      (fun x => q x t) a b‖ ≤
+                                                                                oldBound +
+                                                                                  (t - s) / (b - a) *
+                                                                                    (leftSolverBound + leftComparison +
+                                                                                      (rightSolverBound +
+                                                                                        rightComparison))
+'NumStability.LocalRiemannInformation.routine_local_interface_contract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NumStability.leveque01_localRiemannRoutineInterface_sourceContract' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

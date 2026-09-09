@@ -1,0 +1,42 @@
+89:theorem h_pos (n : ℕ) : 0 < h n := meshSize_pos (n + 1)
+91:theorem h_eq (n : ℕ) : h n = 1 / ((n : ℝ) + 2) := by
+95:theorem h_mul (n : ℕ) : h n * ((n : ℝ) + 2) = 1 := by
+96:  rw [h_eq]
+100:theorem h_le_half (n : ℕ) : h n ≤ 1 / 2 := by
+101:  rw [h_eq, div_le_div_iff₀ (by positivity) (by norm_num)]
+104:theorem h_tendsto_zero : Tendsto h atTop (𝓝 0) :=
+107:theorem input_geometry (n : ℕ) (j : ℤ)
+109:    (-2 : ℝ) ≤ (grid (h n) (h_pos n)).cellLeft j ∧
+110:    (grid (h n) (h_pos n)).cellRight j ≤ 2 := by
+117:  have hl := mul_le_mul_of_nonneg_right hjl (h_pos n).le
+118:  have hr := mul_le_mul_of_nonneg_right hjr (h_pos n).le
+119:  have hp := h_pos n
+120:  have hb := h_le_half n
+121:  have he := h_mul n
+124:theorem active_coverage (n : ℕ) (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
+126:      x ∈ Icc ((grid (h n) (h_pos n)).cellLeft j)
+127:        ((grid (h n) (h_pos n)).cellRight j) := by
+141:    have hl := mul_le_mul_of_nonneg_right hkle (h_pos n).le
+142:    have hr := mul_lt_mul_of_pos_right hklt (h_pos n)
+143:    have he := h_mul n
+166:  grid := fun n => grid (h n) (h_pos n)
+168:  mesh_pos := h_pos
+169:  mesh_tendsto := h_tendsto_zero
+173:  dt_pos := h_pos
+174:  dt_le_horizon := fun n => (h_le_half n).trans (by norm_num)
+184:  active_coverage := active_coverage
+191:  input_geometry := by
+193:    obtain ⟨hl, hr⟩ := input_geometry n j hj
+204:theorem family_advance (m n : ℕ) (values : ℤ → Fin m → ℝ) (j : ℤ) :
+206:  advance_eq_shift (h n) (h_pos n) values j
+221:    have hgeom := input_geometry n (j - 1) hpred
+222:    have hgeomj := input_geometry n j (by
+224:    have hl : (-2 : ℝ) ≤ (grid (h n) (h_pos n)).cellLeft j - h n := by
+225:      have he : (grid (h n) (h_pos n)).cellLeft j - h n =
+226:          (grid (h n) (h_pos n)).cellLeft (j - 1) := by
+232:      (h n) (h_pos n) ((h_le_half n).trans (by norm_num)) j hl hgeomj.2 values
+234:    change ‖advance (h n) (h_pos n) values j -
+235:      finiteVolumeCellAverageOn (grid (h n) (h_pos n)) (fun x => q x (h n)) j‖ ≤
+241:    rw [family_advance, family_advance]
+252:    simp only [family_advance]
+273:      (fun j => finiteVolumeCellAverageOn (grid (h n) (h_pos n)) smoothProfile j) := by

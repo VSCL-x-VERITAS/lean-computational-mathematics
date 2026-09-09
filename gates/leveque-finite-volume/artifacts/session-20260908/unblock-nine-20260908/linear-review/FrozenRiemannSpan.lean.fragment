@@ -1,0 +1,60 @@
+/-- Positive component dimension is structural. This is equation/data classification only. -/
+theorem positive_dimensional_problem_capstone {m : ℕ}
+    (problem : FirstOrderInitialValueProblem (Fin (m + 1))) :
+    problem.IsRiemann ↔
+      (∃ leftState rightState,
+        problem.governing.IsHyperbolic ∧
+        leftState ∈ problem.governing.admissibleStates ∧
+        rightState ∈ problem.governing.admissibleStates ∧
+        (∀ x, x < 0 → problem.initialState x = leftState) ∧
+        (∀ x, 0 < x → problem.initialState x = rightState)) ∧
+      (∀ x t state qt qx,
+        problem.governing.residual x t state qt qx = 0 ↔
+          qt + (problem.governing.principal x t state).mulVec qx =
+            problem.governing.forcing x t state) :=
+  problem.isRiemann_characterization
+
+/-- Equal sides remain admissible in the broad family, while the jump subfamily is distinct. -/
+theorem equal_or_distinct_initial_states {m : ℕ}
+    (equation : FirstOrderEquation (Fin (m + 1))) (hhyper : equation.IsHyperbolic)
+    (leftState origin rightState : Fin (m + 1) → ℝ)
+    (hleft : leftState ∈ equation.admissibleStates)
+    (hright : rightState ∈ equation.admissibleStates) :
+    (fromStates equation leftState origin rightState).IsRiemannWithStates leftState rightState ∧
+    (leftState = rightState →
+      ¬ (fromStates equation leftState origin rightState).IsJumpRiemann) ∧
+    (leftState ≠ rightState →
+      (fromStates equation leftState origin rightState).IsJumpRiemann) := by
+  refine ⟨fromStates_isRiemannWithStates equation hhyper _ _ _ hleft hright, ?_,
+    fromStates_isJumpRiemann equation hhyper _ _ _ hleft hright⟩
+  intro hequal
+  subst rightState
+  exact fromEqualStates_not_isJumpRiemann equation leftState origin
+
+/-- Concrete scalar fixture: principal coefficient one, zero forcing, all states admissible. -/
+def scalarEquation : FirstOrderEquation (Fin 1) :=
+  FirstOrderEquation.constantLinear (1 : Matrix (Fin 1) (Fin 1) ℝ)
+
+theorem scalarEquation_hyperbolic : scalarEquation.IsHyperbolic := by
+  apply FirstOrderEquation.constantLinear_isHyperbolic
+  refine ⟨fun _ => 1, Pi.basisFun ℝ (Fin 1), ?_⟩
+  intro p
+  simp only [Matrix.one_mulVec, one_smul]
+
+theorem scalar_problem_fixture (origin : Fin 1 → ℝ) :
+    (fromStates scalarEquation (fun _ => 0) origin (fun _ => 1)).IsJumpRiemann ∧
+    (fromStates scalarEquation (fun _ => 0) origin (fun _ => 0)).IsRiemann ∧
+    ¬ (fromStates scalarEquation (fun _ => 0) origin (fun _ => 0)).IsJumpRiemann ∧
+    (∀ x t state qt qx,
+      scalarEquation.residual x t state qt qx = 0 ↔ qt + qx = 0) := by
+  refine ⟨fromStates_isJumpRiemann scalarEquation scalarEquation_hyperbolic
+    _ _ _ (Set.mem_univ _) (Set.mem_univ _) ?_,
+    fromEqualStates_isRiemann scalarEquation scalarEquation_hyperbolic _ _ (Set.mem_univ _),
+    fromEqualStates_not_isJumpRiemann scalarEquation _ _, ?_⟩
+  · intro heq
+    have hc := congrFun heq (0 : Fin 1)
+    norm_num at hc
+  · intro x t state qt qx
+    simpa [scalarEquation, FirstOrderEquation.constantLinear] using
+      scalarEquation.residual_eq_zero_iff x t state qt qx
+

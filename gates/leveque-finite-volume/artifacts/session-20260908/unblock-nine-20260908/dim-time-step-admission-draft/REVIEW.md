@@ -1,0 +1,21 @@
+# Inputwise time-step availability: bounded native slice
+
+This packet is artifact-only reusable mathematics. It does not select a new source interpretation, repair a gate row, construct a complete higher-order family, or claim source acceptance.
+
+`Domain` records actual supplied interval-cell geometry, a finite input window, a mesh equal to its largest width (with an attained maximum), and a time-step-dependent admission predicate. Admission is local to that complete input window. Its availability field requires that each physical-state input has some positive admitted step no larger than that actual mesh. The quantifier order is input then step. No common step for all inputs, downward closure of admission, data-independent CFL bound, or common step for a pair of inputs is inferred.
+
+`Domain.jump_available` applies this universal input coverage to every integer-cut two-state jump with both states in the declared domain. The array is made from the existing `riemannData` producer, assigning the right state at the cut. `jump_available_with_oscillation` combines availability with a separately supplied quantitative oscillation condition. It is not merely a nonconstant example and does not replace availability by an arbitrary auxiliary eligibility predicate.
+
+`SameStepStability` and `OscillationControl` each quantify over the actual supplied positive dt. Stability requires both arrays to be admitted at that same dt. These are separate analysis predicates, not extra properties silently built into the user's high-resolution convention. The slice deliberately makes no order claim. Smooth-reference projection admission, uniform all-level order, physical capacity projection, and global error propagation remain the explicit next obligations in `FUTURE-QUALITY-REQUIREMENTS.md`.
+
+The scalar `CFL1.domain` uses the canonical physical grid with width `h n = 1/(n+2)` and the original finite input window. Admission is exactly `dt = h n`, for every input. This stronger instance-specific choice proves positive availability and is tied to the actual FV operator, not a label. The flux accepts the full line array and obeys the canonical finite-stencil locality theorem. `advance_at_h` is a definitional bridge to the canonical family; `advance_admitted` proves the exact one-cell shift. Pairwise stability has rate zero. A uniform oscillation bound is reused directly from the canonical family's existing oscillation component. The theorem does not reclassify the entire old family or reuse its smooth-order claim. `jump_moves` proves movement of every two-state jump; `nonconstant_jump` gives an explicit scalar 0/1 discontinuity and its one-cell movement.
+
+## Reuse decisions
+
+- Reuse `NumStability.riemannData` and its explicit origin-value convention; avoid a duplicate continuous Riemann-data definition. The small integer-sampling lemma is new.
+- Reuse `CFLUnitShift.grid_volume`, the actual `riemannFiniteVolumeUpdate`, `HighResolutionAdvectionLine.family`, `family_advance`, and its `line_local` and oscillation component. No integral or conservation basics are reproved.
+- Keep old `LineFamily.admitted : n → array → Prop` unchanged. Its arbitrary fixed-step predicate cannot supply the new inputwise positive-step requirement for a general nonlinear state domain.
+- Pinned Mathlib searches found standard conditional/set support; these do not supply the numerical admission/geometry contract. Existing simplification and integer arithmetic close the sampled-jump and finite-window proofs.
+- Root's frozen `PhysicalCapacityBridge` is a future consumer boundary, not an imported mutable scratch module. Its missing-lookup capacity 1 is not used to certify mesh or physical CFL here. Every cell in this slice's input window has explicitly supplied real interval geometry.
+
+All raw searches and native attempts are retained. Native checks import only canonical current modules. Because one imported theorem's package also contains the old analytic regularity definition, this packet pins those current source/compiled bytes and requires a fresh replay on any later changed dependency; this slice itself never assumes or asserts analytic/C-infinity reference accuracy. The independently recorded C-infinity Fin2 replay concerns another packet and is not claimed as this slice's verification.

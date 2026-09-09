@@ -1,0 +1,308 @@
+import Lean
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.Examples.HighResolutionAdvectionLine
+
+/-! Artifact-only interval-line branch. General measured physical-refinement
+quality is a separate construction: capacities are never identified with
+widths outside this explicit one-dimensional interval geometry. -/
+namespace IntervalQualityRepairDraft
+open NumStability NumStability.DirectionalLine NumStability.LocalConservationLaw Filter
+open scoped Topology BigOperators
+variable {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+structure Geometry (m : ℕ) where
+  flux : ℝ → (Fin m → ℝ) → Fin m → ℝ
+  states : Set (Fin m → ℝ)
+  left right horizon : ℝ
+  interval_nonempty : left < right
+  horizon_pos : 0 < horizon
+  hyperbolic : ∀ x ∈ Set.Icc left right, IsHyperbolicFluxOn (flux x) states
+  grid : ℕ → OneDimensionalFiniteVolumeGrid
+  inputStart activeStart : ℕ → ℤ
+  inputCount activeCount : ℕ → ℕ
+  active_two_le : ∀ n, 2 ≤ activeCount n
+  input_covers : ∀ n, Finset.Ico (activeStart n) (activeStart n + activeCount n) ⊆
+    Finset.Ico (inputStart n) (inputStart n + inputCount n)
+  mesh : ℕ → ℝ
+  mesh_pos : ∀ n, 0 < mesh n
+  mesh_tendsto : Tendsto mesh atTop (𝓝 0)
+  input_geometry : ∀ n j, j ∈ Finset.Ico (inputStart n) (inputStart n + inputCount n) →
+    left ≤ (grid n).cellLeft j ∧ (grid n).cellRight j ≤ right ∧ (grid n).cellVolume j ≤ mesh n
+  mesh_attained : ∀ n, ∃ j ∈ Finset.Ico (inputStart n) (inputStart n + inputCount n),
+    (grid n).cellVolume j = mesh n
+  targetLeft targetRight : ℝ
+  target_nonempty : targetLeft < targetRight
+  target_inside : left < targetLeft ∧ targetRight < right
+  active_coverage : ∀ n x, x ∈ Set.Icc targetLeft targetRight →
+    ∃ j ∈ Finset.Ico (activeStart n) (activeStart n + activeCount n),
+      x ∈ Set.Icc ((grid n).cellLeft j) ((grid n).cellRight j)
+
+def Geometry.Projection (geometry : Geometry m) (n : ℕ)
+    (q : ℝ → ℝ → State) (values : ℤ → State) : Prop :=
+  ∀ j ∈ Finset.Ico (geometry.inputStart n) (geometry.inputStart n + geometry.inputCount n),
+    values j = finiteVolumeCellAverageOn (geometry.grid n) (fun x => q x 0) j
+
+/-- Actual supplied positive time steps. No unit-dependent upper coefficient,
+fixed time step, state-independent CFL, or downward closure is imposed. -/
+structure Method (m : ℕ) where
+  geometry : Geometry m
+  numericalFlux : ℕ → ℝ → (ℤ → Fin m → ℝ) → ℤ → Fin m → ℝ
+  admitted : ℕ → ℝ → (ℤ → Fin m → ℝ) → Prop
+  admission_local : ∀ n dt values other,
+    (∀ j ∈ Finset.Ico (geometry.inputStart n) (geometry.inputStart n + geometry.inputCount n),
+      values j = other j) → (admitted n dt values ↔ admitted n dt other)
+  positive_available : ∀ n values,
+    (∀ j ∈ Finset.Ico (geometry.inputStart n) (geometry.inputStart n + geometry.inputCount n),
+      values j ∈ geometry.states) → ∃ dt : ℝ, 0 < dt ∧ admitted n dt values
+  flux_local : ∀ n dt values other,
+    (∀ j ∈ Finset.Ico (geometry.inputStart n) (geometry.inputStart n + geometry.inputCount n),
+      values j = other j) →
+    ∀ j ∈ Finset.Icc (geometry.activeStart n) (geometry.activeStart n + geometry.activeCount n),
+      numericalFlux n dt values j = numericalFlux n dt other j
+
+noncomputable def Method.advance (method : Method m) (n : ℕ) (dt : ℝ) (values : ℤ → State) :
+    ℤ → State := riemannFiniteVolumeUpdate (method.geometry.grid n) dt values
+      (method.numericalFlux n dt values)
+
+/-- C,N and the all-level statement are one witness, chosen before any later
+level, dt or realization. Projection admission is separate from state membership. -/
+structure SmoothCertificate (method : Method m) (q : ℝ → ℝ → State) (p : ℝ) where
+  constant : ℝ
+  constant_nonneg : 0 ≤ constant
+  threshold : ℕ
+  projected_available : ∀ n, threshold ≤ n → ∀ projected,
+    method.geometry.Projection n q projected →
+    ∃ dt : ℝ, 0 < dt ∧ dt ≤ method.geometry.horizon ∧ method.admitted n dt projected
+  bound : ∀ n, threshold ≤ n → ∀ dt : ℝ, 0 < dt → dt ≤ method.geometry.horizon →
+    ∀ projected, method.geometry.Projection n q projected → method.admitted n dt projected →
+    ∀ j ∈ Finset.Ico (method.geometry.activeStart n)
+      (method.geometry.activeStart n + method.geometry.activeCount n),
+      ‖method.advance n dt projected j -
+        finiteVolumeCellAverageOn (method.geometry.grid n) (fun x => q x dt) j‖ ≤
+          constant * dt * method.geometry.mesh n ^ p
+
+/-- Core quality has precisely smooth order and quantitative oscillation;
+the method itself separately guarantees physical-input positive-step coverage. -/
+structure CoreQuality (method : Method m) : Prop where
+  order : ∃ p : ℝ, 1 < p ∧ ∀ q : ℝ → ℝ → State,
+    SpatialSmoothReferenceOn q method.geometry.flux method.geometry.states
+      method.geometry.left method.geometry.right method.geometry.horizon →
+      Nonempty (SmoothCertificate method q p)
+  oscillation : ∃ K : ℝ, 0 ≤ K ∧ ∃ noise : ℕ → ℝ,
+    (∀ n, 0 ≤ noise n) ∧ Tendsto noise atTop (𝓝 0) ∧
+    ∀ n dt, 0 < dt → ∀ values, method.admitted n dt values →
+      windowVariation (method.geometry.activeStart n) (method.geometry.activeCount n - 1)
+        (method.advance n dt values) ≤
+      (1 + K * dt) * windowVariation (method.geometry.inputStart n)
+        (method.geometry.inputCount n - 1) values + dt * noise n
+
+/-- Optional analysis hypothesis. Both inputs use the same actual positive dt. -/
+def SameStepStability (method : Method m) (L : ℝ) : Prop :=
+  0 ≤ L ∧ ∀ n dt, 0 < dt → ∀ values other,
+    method.admitted n dt values → method.admitted n dt other → ∀ E : ℝ, 0 ≤ E →
+    (∀ j ∈ Finset.Ico (method.geometry.inputStart n)
+      (method.geometry.inputStart n + method.geometry.inputCount n), ‖values j - other j‖ ≤ E) →
+    ∀ j ∈ Finset.Ico (method.geometry.activeStart n)
+      (method.geometry.activeStart n + method.geometry.activeCount n),
+      ‖method.advance n dt values j - method.advance n dt other j‖ ≤ (1 + L * dt) * E
+
+/-- Apply the same stored C,N at an actual level. Availability of some dt
+does not imply projected admission at the current input's dt; both are explicit. -/
+theorem SmoothCertificate.perturbed_at {method : Method m} {q : ℝ → ℝ → State} {p L : ℝ}
+    (certificate : SmoothCertificate method q p) (stability : SameStepStability method L)
+    (n : ℕ) (hn : certificate.threshold ≤ n) (dt : ℝ) (hdt : 0 < dt)
+    (horizon : dt ≤ method.geometry.horizon) (projected values : ℤ → State)
+    (hproj : method.geometry.Projection n q projected) (hp : method.admitted n dt projected)
+    (hv : method.admitted n dt values) {E : ℝ} (hE : 0 ≤ E)
+    (herr : ∀ j ∈ Finset.Ico (method.geometry.inputStart n)
+      (method.geometry.inputStart n + method.geometry.inputCount n), ‖values j - projected j‖ ≤ E)
+    (j : ℤ) (hj : j ∈ Finset.Ico (method.geometry.activeStart n)
+      (method.geometry.activeStart n + method.geometry.activeCount n)) :
+    ‖method.advance n dt values j -
+      finiteVolumeCellAverageOn (method.geometry.grid n) (fun x => q x dt) j‖ ≤
+      (1 + L * dt) * E + certificate.constant * dt * method.geometry.mesh n ^ p :=
+  (norm_sub_le_norm_sub_add_norm_sub _ (method.advance n dt projected j) _).trans
+    (add_le_add (stability.2 n dt hdt values projected hv hp E hE herr j hj)
+      (certificate.bound n hn dt hdt horizon projected hproj hp j hj))
+
+theorem SmoothCertificate.projected_step_exists {method : Method m} {q : ℝ → ℝ → State} {p : ℝ}
+    (certificate : SmoothCertificate method q p) (n : ℕ) (hn : certificate.threshold ≤ n) :
+    ∃ projected : ℤ → State, method.geometry.Projection n q projected ∧
+      ∃ dt : ℝ, 0 < dt ∧ dt ≤ method.geometry.horizon ∧ method.admitted n dt projected := by
+  let projected := fun j => finiteVolumeCellAverageOn (method.geometry.grid n) (fun x => q x 0) j
+  have hp : method.geometry.Projection n q projected := fun _ _ => rfl
+  exact ⟨projected, hp, certificate.projected_available n hn projected hp⟩
+
+theorem Method.two_state_step (method : Method m) (n : ℕ) (left right : State)
+    (hl : left ∈ method.geometry.states) (hr : right ∈ method.geometry.states) (cut : ℤ) :
+    ∃ dt : ℝ, 0 < dt ∧ method.admitted n dt (fun j =>
+      riemannData left right right ((j : ℝ) - (cut : ℝ))) := by
+  apply method.positive_available
+  intro j _
+  simp only [riemannData, ite_self]
+  split <;> assumption
+
+namespace CFL1
+open HighResolutionAdvectionLine
+
+noncomputable def geometry : Geometry 1 where
+  flux := (family 1).flux
+  states := (family 1).states
+  left := (family 1).left
+  right := (family 1).right
+  horizon := (family 1).horizon
+  interval_nonempty := (family 1).interval_nonempty
+  horizon_pos := (family 1).horizon_pos
+  hyperbolic := (family 1).hyperbolic
+  grid := (family 1).grid
+  inputStart := (family 1).inputStart
+  inputCount := (family 1).inputCount
+  activeStart := (family 1).activeStart
+  activeCount := (family 1).activeCount
+  active_two_le := (family 1).activeCount_two_le
+  input_covers := (family 1).input_covers
+  mesh := h
+  mesh_pos := h_pos
+  mesh_tendsto := h_tendsto_zero
+  input_geometry := by
+    intro n j hj
+    exact ⟨((family 1).input_geometry n j hj).1,
+      ((family 1).input_geometry n j hj).2.1, ((family 1).input_geometry n j hj).2.2.1⟩
+  mesh_attained := by
+    intro n
+    refine ⟨0, ?_, CFLUnitShift.grid_volume (h n) (h_pos n) 0⟩
+    simp only [family, Finset.mem_Ico, Nat.cast_add, Nat.cast_ofNat]
+    omega
+  targetLeft := (family 1).targetLeft
+  targetRight := (family 1).targetRight
+  target_nonempty := (family 1).target_nonempty
+  target_inside := (family 1).target_inside
+  active_coverage := (family 1).active_coverage
+
+noncomputable def method : Method 1 where
+  geometry := geometry
+  numericalFlux := fun n _ => (family 1).numericalFlux n
+  admitted := fun n dt _ => dt = h n
+  admission_local := by intros; rfl
+  positive_available := by intro n values _; exact ⟨h n, h_pos n, rfl⟩
+  flux_local := by intro n dt values other heq; exact (family 1).line_local n values other heq
+
+theorem advance_eq (n : ℕ) (values : ℤ → Fin 1 → ℝ) :
+    method.advance n (h n) values = (family 1).advance n values := rfl
+
+theorem core_quality : CoreQuality method := by
+  constructor
+  · obtain ⟨p, hp, accuracy⟩ := (family_quality 1).order
+    refine ⟨p, hp, ?_⟩
+    intro q hq
+    obtain ⟨C, hC, N, bound⟩ := accuracy q hq
+    refine ⟨⟨C, hC, N, ?_, ?_⟩⟩
+    · intro n hn projected hproj
+      exact ⟨h n, h_pos n, (family 1).dt_le_horizon n, rfl⟩
+    · intro n hn dt hdt hH projected hproj hadmit j hj
+      change dt = h n at hadmit
+      subst dt
+      exact (bound n hn projected hproj).2 j hj
+  · obtain ⟨K, hK, noise, hn, ht, bound⟩ := (family_quality 1).oscillation
+    refine ⟨K, hK, noise, hn, ht, ?_⟩
+    intro n dt hdt values hadmit
+    change dt = h n at hadmit
+    subst dt
+    exact bound n values True.intro
+
+theorem separate_stability : ∃ L : ℝ, SameStepStability method L := by
+  obtain ⟨L, hL, bound⟩ := (family_quality 1).stability
+  refine ⟨L, hL, ?_⟩
+  intro n dt hdt values other hv ho E hE herr j hj
+  change dt = h n at hv
+  subst dt
+  exact bound n values other True.intro True.intro E hE herr j hj
+
+theorem smooth_nonconstant_certificate :
+    CFLUnitShift.smoothProfile 0 ≠ CFLUnitShift.smoothProfile 1 ∧
+    ∃ p : ℝ, 1 < p ∧ Nonempty (SmoothCertificate method
+      (fun x t => CFLUnitShift.smoothProfile (x - t)) p) := by
+  obtain ⟨p, hp, cert⟩ := core_quality.order
+  exact ⟨CFLUnitShift.smoothProfile_nonconstant, p, hp,
+    cert _ HighResolutionAdvectionLine.smooth_local_reference⟩
+
+theorem every_jump_available (n : ℕ) (left right : Fin 1 → ℝ) (cut : ℤ) :
+    0 < h n ∧ method.admitted n (h n) (fun j =>
+      riemannData left right right ((j : ℝ) - (cut : ℝ))) := ⟨h_pos n, rfl⟩
+
+end CFL1
+
+theorem cinfty_definition (q : ℝ → ℝ → State) (flux : ℝ → State → State)
+    (states : Set State) (a b T : ℝ) :
+    SpatialSmoothReferenceOn q flux states a b T ↔
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (Function.uncurry q)
+        (Set.Icc a b ×ˢ Set.Icc 0 T) ∧ SpatialRectangleReferenceOn q flux a b T ∧
+        ∀ x ∈ Set.Icc a b, ∀ t ∈ Set.Icc 0 T, q x t ∈ states := Iff.rfl
+
+end IntervalQualityRepairDraft
+
+set_option pp.fullNames true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check IntervalQualityRepairDraft.Geometry
+#print axioms IntervalQualityRepairDraft.Geometry
+
+#check IntervalQualityRepairDraft.Geometry.Projection
+#print axioms IntervalQualityRepairDraft.Geometry.Projection
+
+#check IntervalQualityRepairDraft.Method
+#print axioms IntervalQualityRepairDraft.Method
+
+#check IntervalQualityRepairDraft.Method.advance
+#print axioms IntervalQualityRepairDraft.Method.advance
+
+#check IntervalQualityRepairDraft.SmoothCertificate
+#print axioms IntervalQualityRepairDraft.SmoothCertificate
+
+#check IntervalQualityRepairDraft.CoreQuality
+#print axioms IntervalQualityRepairDraft.CoreQuality
+
+#check IntervalQualityRepairDraft.SameStepStability
+#print axioms IntervalQualityRepairDraft.SameStepStability
+
+#check IntervalQualityRepairDraft.SmoothCertificate.perturbed_at
+#print axioms IntervalQualityRepairDraft.SmoothCertificate.perturbed_at
+
+#check IntervalQualityRepairDraft.SmoothCertificate.projected_step_exists
+#print axioms IntervalQualityRepairDraft.SmoothCertificate.projected_step_exists
+
+#check IntervalQualityRepairDraft.Method.two_state_step
+#print axioms IntervalQualityRepairDraft.Method.two_state_step
+
+#check IntervalQualityRepairDraft.CFL1.geometry
+#print axioms IntervalQualityRepairDraft.CFL1.geometry
+
+#check IntervalQualityRepairDraft.CFL1.method
+#print axioms IntervalQualityRepairDraft.CFL1.method
+
+#check IntervalQualityRepairDraft.CFL1.advance_eq
+#print axioms IntervalQualityRepairDraft.CFL1.advance_eq
+
+#check IntervalQualityRepairDraft.CFL1.core_quality
+#print axioms IntervalQualityRepairDraft.CFL1.core_quality
+
+#check IntervalQualityRepairDraft.CFL1.separate_stability
+#print axioms IntervalQualityRepairDraft.CFL1.separate_stability
+
+#check IntervalQualityRepairDraft.CFL1.smooth_nonconstant_certificate
+#print axioms IntervalQualityRepairDraft.CFL1.smooth_nonconstant_certificate
+
+#check IntervalQualityRepairDraft.CFL1.every_jump_available
+#print axioms IntervalQualityRepairDraft.CFL1.every_jump_available
+
+#check IntervalQualityRepairDraft.cinfty_definition
+#print axioms IntervalQualityRepairDraft.cinfty_definition
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let some info := env.find? `IntervalQualityRepairDraft.CoreQuality.mk | throwError "Missing core constructor"
+  if info.type.getUsedConstantsAsSet.contains `IntervalQualityRepairDraft.SameStepStability then
+    throwError "Stability must remain separate from core quality"
+  logInfo "CORE_QUALITY_STABILITY_SEPARATE"

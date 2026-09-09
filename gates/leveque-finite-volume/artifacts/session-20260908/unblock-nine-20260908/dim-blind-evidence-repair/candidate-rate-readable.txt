@@ -1,0 +1,24 @@
+fun {m} family quality =>
+  (Classical.indefiniteDescription
+      (fun L =>
+        And (Real.instLE.le 0 L)
+          (∀ (n : Nat) (values other : Int → Fin m → Real),
+            family.admitted n values →
+              family.admitted n other →
+                ∀ (E : Real),
+                  Real.instLE.le 0 E →
+                    (∀ (j : Int),
+                        SetLike.instMembership.mem
+                            (Finset.Ico (family.inputStart n)
+                              (instHAdd.hAdd (family.inputStart n) (family.inputCount n).cast))
+                            j →
+                          Real.instLE.le (Pi.normedRing.norm (instHSub.hSub (values j) (other j))) E) →
+                      ∀ (j : Int),
+                        SetLike.instMembership.mem
+                            (Finset.Ico (family.activeStart n)
+                              (instHAdd.hAdd (family.activeStart n) (family.activeCount n).cast))
+                            j →
+                          Real.instLE.le
+                            (Pi.normedRing.norm (instHSub.hSub (family.advance n values j) (family.advance n other j)))
+                            (instHMul.hMul (instHAdd.hAdd 1 (instHMul.hMul L (family.dt n))) E)))
+      ⋯).val

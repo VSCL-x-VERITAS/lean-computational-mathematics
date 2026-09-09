@@ -1,0 +1,35 @@
+{
+  "before_sha256": "59f44433c75768cb2375a7aedacdf55146f16429fe088f098690ec711d1ae82a",
+  "after_sha256": "03af5fbd675396f6dd8ae529b96cefaa8a3fbf7b68e79ec36bc511b2a71d46b6",
+  "edits": [
+    [
+      "LIB = O / \"lib02\"",
+      "LIB = O / \"lib03\""
+    ],
+    [
+      "P / \"runs02\" / label",
+      "P / \"runs03\" / label"
+    ],
+    [
+      "str(P / \"run_overlay_v2.py\")",
+      "str(P / \"run_overlay_v3.py\")"
+    ],
+    [
+      "P / \"environment-v2.json\"",
+      "P / \"environment-v3.json\""
+    ],
+    [
+      "P / \"dependency-resolutions-v2.json\"",
+      "P / \"dependency-resolutions-v3.json\""
+    ],
+    [
+      "P / \"completion-v2.json\"",
+      "P / \"completion-v3.json\""
+    ],
+    [
+      "after fresh LIB creation",
+      "os.makedirs(native(LIB))\n# Lean 4.29 selects the first root containing the entire package prefix.\n# Copy only unchanged members of the checked import closure; affected outputs\n# must be absent until this run rebuilds them in topological order.\nunchanged_copies = []\nfor mod, entry in plan[\"project_import_closure\"].items():\n    if mod in plan[\"affected_modules_topological\"]:\n        continue\n    for original in entry[\"compiled_before\"]:\n        original_path = R / original[\"path\"]\n        relative = original_path.relative_to(R / \".lake/build/lib/lean\")\n        copied = create(LIB / relative, raw(original_path))\n        assert copied[\"sha256\"] == original[\"sha256\"]\n        unchanged_copies.append({\"module\": mod, \"original\": original, \"overlay\": copied})\ncreate(P / \"unchanged-compiled-copies-v3.json\", {\"copies\": unchanged_copies,\n    \"reason\": \"Lean.Util.Path.SearchPath.findWithExt chooses one root for the package prefix.\",\n    \"affected_old_oleans_copied\": 0})\ninherited ="
+    ]
+  ],
+  "source_changes": false
+}

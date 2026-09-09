@@ -1,0 +1,65 @@
+
+namespace DimLocalCharacteristicWitness
+open CFL1RefinementWitness
+open NumStability
+open MeasureTheory Set
+variable {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A smooth local physical reference advances exactly at CFL one, provided
+the active cell and its backward-shifted predecessor stay in the box. -/
+theorem local_cfl1_exact {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (h : ℝ) (hh : 0 < h) (hhH : h ≤ H) (j : ℤ)
+    (hleft : L ≤ (grid h hh).cellLeft j - h)
+    (hright : (grid h hh).cellRight j ≤ R) :
+    advance h hh (fun k => finiteVolumeCellAverageOn (grid h hh) (fun x => q x 0) k) j =
+      finiteVolumeCellAverageOn (grid h hh) (fun x => q x h) j := by
+  rw [advance_eq_shift]
+  have havg := local_cell_average_shift hq
+    ((grid h hh).cell_nonempty j).le ⟨hh.le, hhH⟩ hleft hright
+  have hl : (grid h hh).cellLeft j - h = (grid h hh).cellLeft (j - 1) := by
+    simp only [grid, Int.cast_sub, Int.cast_one]
+    ring
+  have hr : (grid h hh).cellRight j - h = (grid h hh).cellRight (j - 1) := by
+    simp only [grid, Int.cast_sub, Int.cast_one]
+    ring
+  rw [hl, hr] at havg
+  exact havg.symm
+
+/-- Only the actually entering predecessor average is needed at CFL one.
+There is no condition on values at unused exterior cells. -/
+theorem local_cfl1_exact_of_projection {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (h : ℝ) (hh : 0 < h) (hhH : h ≤ H) (j : ℤ)
+    (hleft : L ≤ (grid h hh).cellLeft j - h)
+    (hright : (grid h hh).cellRight j ≤ R)
+    (values : ℤ → State)
+    (hprojection : values (j - 1) =
+      finiteVolumeCellAverageOn (grid h hh) (fun x => q x 0) (j - 1)) :
+    advance h hh values j = finiteVolumeCellAverageOn (grid h hh) (fun x => q x h) j := by
+  rw [advance_eq_shift, hprojection]
+  simpa only [advance_eq_shift] using local_cfl1_exact hq h hh hhH j hleft hright
+
+/-- The zero constant is uniform for every smooth local rectangle reference,
+every admitted mesh, and every cell obeying the stated physical containment.
+This is the local-reference accuracy component; family geometry/admission and
+finite-window oscillation remain separate obligations. -/
+theorem local_refinement_zero_defect {q : ℝ → ℝ → State} {states : Set State}
+    {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
+    (p : ℝ) (_hp : 1 < p) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (j : ℤ), meshSize n ≤ H →
+      L ≤ (grid (meshSize n) (meshSize_pos n)).cellLeft j - meshSize n →
+      (grid (meshSize n) (meshSize_pos n)).cellRight j ≤ R →
+      ∀ values : ℤ → State,
+        values (j - 1) = finiteVolumeCellAverageOn (grid (meshSize n) (meshSize_pos n))
+          (fun x => q x 0) (j - 1) →
+        ‖advance (meshSize n) (meshSize_pos n) values j -
+          finiteVolumeCellAverageOn (grid (meshSize n) (meshSize_pos n))
+            (fun x => q x (meshSize n)) j‖ ≤ C * meshSize n * (meshSize n) ^ p := by
+  refine ⟨0, le_rfl, ?_⟩
+  intro n j hH hl hr values hproj
+  rw [local_cfl1_exact_of_projection hq (meshSize n) (meshSize_pos n) hH j hl hr values hproj]
+  simp only [sub_self, norm_zero, zero_mul, le_refl]
+
+end DimLocalCharacteristicWitness

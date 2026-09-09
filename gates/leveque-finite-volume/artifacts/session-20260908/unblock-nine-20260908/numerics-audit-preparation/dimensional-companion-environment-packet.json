@@ -1,0 +1,88 @@
+{
+  "format": "proof-free-lean-environment-evidence-1",
+  "scope": "Exact native type output for two companion declarations and a complete Cartesian instantiation of the primary coordinate-splitting contract. Supporting dependency/applicability evidence only: the primary audit target is unchanged, and these companions are not additional accepted source rows. No source-correspondence conclusion or requested classification is supplied.",
+  "runtime": {
+    "native_receipt": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-receipt.json",
+      "sha256": "694554ca2875ab8a18e12f0bb0baa45158126cce6469a4be5b6f9d42ce40b198"
+    },
+    "native_output": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-output.txt",
+      "sha256": "1e1c6b839912c9fc37f8b8aaa3bcba2a41a8b7d2c91913ffb6dcb8a5147bd5c6"
+    },
+    "native_input": {
+      "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/CheckDeclarations.lean",
+      "sha256": "38107fbcf26efd0cddf1e460ca303c63d2b47329bb758abdb7763f2d5c6a183d"
+    },
+    "source_bindings": [
+      {
+        "path": "ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateSplittingBalance.lean",
+        "sha256": "97243527d30b5e798ec00646a7eb12ec0a5ab0c068e77d5ed7dd2dcd57c63445"
+      }
+    ],
+    "native_exit_code": 0,
+    "inputs_unchanged": true
+  },
+  "native_output_spans": [
+    {
+      "declaration": "NumStability.leveque01_coordinateSplittingBalance_information",
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-output.txt",
+      "source_sha256": "1e1c6b839912c9fc37f8b8aaa3bcba2a41a8b7d2c91913ffb6dcb8a5147bd5c6",
+      "start_byte": 13037,
+      "end_byte_exclusive": 15338,
+      "span_sha256": "d6f3a34eda5af1d1476f0f667bfada0ea7b4c11f21e9b03089cfeb8a4a7116b9",
+      "first_line": 164,
+      "last_line": 190,
+      "exact_text": "@NumStability.leveque01_coordinateSplittingBalance_information : ∀ {D : Type u_1} [inst : DecidableEq D] {m : ℕ}\n  {laws : D → NumStability.OneDimensionalHyperbolicConservationLaw (Fin m)}\n  {Result : (d : D) → NumStability.HyperbolicRiemannProblem (laws d) → Type u_2} {Information : D → Type u_3}\n  (methods : (d : D) → ℝ → NumStability.RiemannInformationFluxMethod (laws d) (Result d) (Information d))\n  (cellVolume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ) (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)\n  (stages : List (D × ℝ)) (state : (D → ℤ) → Fin m → ℝ),\n  NumStability.RiemannInformationCoordinate.SweepAdmitted methods cellVolume area fallback stages state →\n    (∀ (other : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ),\n        NumStability.CoordinateLineBalance.sweep cellVolume\n            (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) stages state =\n          NumStability.CoordinateLineBalance.sweep cellVolume\n            (NumStability.RiemannInformationCoordinate.guardedRule methods area other) stages state) ∧\n      ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),\n        stages = before ++ (d, dt) :: after →\n          ∀ (cell : D → ℤ),\n            have current :=\n              NumStability.CoordinateLineBalance.sweep cellVolume\n                (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) before state;\n            ∃ (admitted : NumStability.RiemannInformationCoordinate.FaceAdmitted methods d dt current cell),\n              let problem :=\n                NumStability.adjacentCellRiemannProblem (laws d) (fun j => current (Function.update cell d j)) (cell d);\n              have result := (methods d dt).solve problem admitted;\n              problem.leftState = current (Function.update cell d (cell d - 1)) ∧\n                problem.rightState = current cell ∧\n                  NumStability.CoordinateLineBalance.normalFaceFlux\n                      (NumStability.RiemannInformationCoordinate.guardedRule methods area fallback) d dt current cell =\n                    area d cell • (methods d dt).numericalFlux ((methods d dt).extract result)\n"
+    },
+    {
+      "declaration": "NumStability.leveque01_coordinateSplittingBalance_cartesian",
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-output.txt",
+      "source_sha256": "1e1c6b839912c9fc37f8b8aaa3bcba2a41a8b7d2c91913ffb6dcb8a5147bd5c6",
+      "start_byte": 15463,
+      "end_byte_exclusive": 16852,
+      "span_sha256": "58b5bf000588965a9fe5d7afa040f02925054de9521c4ff461533ba80d833690",
+      "first_line": 194,
+      "last_line": 210,
+      "exact_text": "@NumStability.leveque01_coordinateSplittingBalance_cartesian : ∀ {D : Type u_1} [inst : Fintype D]\n  [inst_1 : DecidableEq D] {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)\n  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),\n  (∀ (cell : D → ℤ), 0 < NumStability.CartesianGrid.cellVolume axes cell) ∧\n    (∀ (cell : D → ℤ),\n        (volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =\n          NumStability.CartesianGrid.cellVolume axes cell) ∧\n      (∀ (cell : D → ℤ),\n          (volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =\n            NumStability.CartesianGrid.faceArea axes d cell) ∧\n        (∀ (cell : D → ℤ), (axes d).cellRight (cell d) = (axes d).cellLeft (Function.update cell d (cell d + 1) d)) ∧\n          (fun j =>\n              NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)\n                (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt state\n                (Function.update base d j)) =\n            NumStability.riemannFiniteVolumeUpdate (axes d) dt (fun j => state (Function.update base d j)) fun j =>\n              rule d (Function.update base d j) dt fun k => state (Function.update base d k)\n"
+    },
+    {
+      "declaration": "NumStability.NumericsSourceChecks.cartesian_primary_instantiation",
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-output.txt",
+      "source_sha256": "1e1c6b839912c9fc37f8b8aaa3bcba2a41a8b7d2c91913ffb6dcb8a5147bd5c6",
+      "start_byte": 34258,
+      "end_byte_exclusive": 39045,
+      "span_sha256": "16db22953e5545404726953e28c67e9bd77228819536095232af826dcd4bbae5",
+      "first_line": 425,
+      "last_line": 481,
+      "exact_text": "@NumStability.NumericsSourceChecks.cartesian_primary_instantiation : ∀ {D : Type u_1} [inst : Fintype D]\n  [inst_1 : DecidableEq D] {m : ℕ} (axes : D → NumStability.OneDimensionalFiniteVolumeGrid)\n  (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) (stages : List (D × ℝ)),\n  stages ≠ [] →\n    (∀ (d : D), ∃ dt, (d, dt) ∈ stages) →\n      (∀ stage ∈ stages, 0 < stage.2) →\n        ∀ (state : (D → ℤ) → Fin m → ℝ),\n          stages ≠ [] ∧\n            (∀ (d : D), ∃ dt, (d, dt) ∈ stages) ∧\n              (∀ stage ∈ stages, 0 < stage.2) ∧\n                ∀ (before : List (D × ℝ)) (d : D) (dt : ℝ) (after : List (D × ℝ)),\n                  stages = before ++ (d, dt) :: after →\n                    have current :=\n                      NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)\n                        (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) before state;\n                    NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)\n                          (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) stages state =\n                        NumStability.CoordinateLineBalance.sweep (NumStability.CartesianGrid.cellVolume axes)\n                          (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) after\n                          (NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)\n                            (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current) ∧\n                      (∀ (cell : D → ℤ),\n                          NumStability.CartesianGrid.cellVolume axes cell •\n                              NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)\n                                (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current cell =\n                            NumStability.CartesianGrid.cellVolume axes cell • current cell -\n                              dt •\n                                NumStability.CoordinateLineBalance.netOutwardFlux\n                                  (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current\n                                  cell) ∧\n                        (∀ (base : D → ℤ) (start : ℤ) (count : ℕ),\n                            ∑ k ∈ Finset.range count,\n                                NumStability.CartesianGrid.cellVolume axes (Function.update base d (start + ↑k)) •\n                                  NumStability.CoordinateLineBalance.advance\n                                    (NumStability.CartesianGrid.cellVolume axes)\n                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current\n                                    (Function.update base d (start + ↑k)) =\n                              ∑ k ∈ Finset.range count,\n                                  NumStability.CartesianGrid.cellVolume axes (Function.update base d (start + ↑k)) •\n                                    current (Function.update base d (start + ↑k)) -\n                                dt •\n                                  (NumStability.CoordinateLineBalance.normalFaceFlux\n                                      (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current\n                                      (Function.update base d (start + ↑count)) -\n                                    NumStability.CoordinateLineBalance.normalFaceFlux\n                                      (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current\n                                      (Function.update base d start))) ∧\n                          ∀ (other : (D → ℤ) → Fin m → ℝ) (base : D → ℤ),\n                            (∀ (j : ℤ), current (Function.update base d j) = other (Function.update base d j)) →\n                              ∀ (j : ℤ),\n                                NumStability.CoordinateLineBalance.advance (NumStability.CartesianGrid.cellVolume axes)\n                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt current\n                                    (Function.update base d j) =\n                                  NumStability.CoordinateLineBalance.advance\n                                    (NumStability.CartesianGrid.cellVolume axes)\n                                    (NumStability.CartesianCoordinateUpdate.areaWeightedRule axes rule) d dt other\n                                    (Function.update base d j)\n"
+    }
+  ],
+  "probe_commands": [
+    {
+      "argv": [
+        "C:\\Users\\qed_s\\.elan\\bin\\lake.EXE",
+        "env",
+        "lean",
+        "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/CheckDeclarations.lean"
+      ],
+      "cwd": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics",
+      "input": {
+        "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/CheckDeclarations.lean",
+        "sha256": "38107fbcf26efd0cddf1e460ca303c63d2b47329bb758abdb7763f2d5c6a183d"
+      },
+      "receipt": {
+        "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-receipt.json",
+        "sha256": "694554ca2875ab8a18e12f0bb0baa45158126cce6469a4be5b6f9d42ce40b198"
+      },
+      "output": {
+        "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/numerics-review/declarations-03-output.txt",
+        "sha256": "1e1c6b839912c9fc37f8b8aaa3bcba2a41a8b7d2c91913ffb6dcb8a5147bd5c6"
+      }
+    }
+  ],
+  "omissions": [
+    "Proof terms, implementation-review conclusions and prior audit judgments are not included.",
+    "The two companions do not replace or enlarge the exact selected primary source claim. Their meaning and applicability must be independently inspected; any independent source claim needs its own appropriate audit treatment."
+  ]
+}

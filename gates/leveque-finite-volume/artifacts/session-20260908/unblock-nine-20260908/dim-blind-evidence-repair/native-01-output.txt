@@ -1,0 +1,131 @@
+def NumStability.DirectionalLine.LineFamily.stabilityRate : {m : ℕ} →
+  (family : NumStability.DirectionalLine.LineFamily m) → family.HasControlledHighResolution → ℝ :=
+fun {m} family quality => Classical.choose ⋯
+def BlindEvidenceDiagnostic.explicitRate : {m : ℕ} →
+  (family : NumStability.DirectionalLine.LineFamily m) → family.HasControlledHighResolution → ℝ :=
+fun {m} family quality =>
+  ↑(Classical.indefiniteDescription
+      (fun L =>
+        0 ≤ L ∧
+          ∀ (n : ℕ) (values other : ℤ → Fin m → ℝ),
+            family.admitted n values →
+              family.admitted n other →
+                ∀ (E : ℝ),
+                  0 ≤ E →
+                    (∀ j ∈ Finset.Ico (family.inputStart n) (family.inputStart n + ↑(family.inputCount n)),
+                        ‖values j - other j‖ ≤ E) →
+                      ∀ j ∈ Finset.Ico (family.activeStart n) (family.activeStart n + ↑(family.activeCount n)),
+                        ‖family.advance n values j - family.advance n other j‖ ≤ (1 + L * family.dt n) * E)
+      ⋯)
+BlindEvidenceDiagnostic.explicitRate_eq {m : ℕ} (family : NumStability.DirectionalLine.LineFamily m)
+  (quality : family.HasControlledHighResolution) :
+  BlindEvidenceDiagnostic.explicitRate family quality = family.stabilityRate quality
+'BlindEvidenceDiagnostic.explicitRate_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.DirectionalLine.LineFamily.stabilityRate : {m : Nat} →
+  (family : NumStability.DirectionalLine.LineFamily m) →
+    @NumStability.DirectionalLine.LineFamily.HasControlledHighResolution m family → Real :=
+fun {m} family quality =>
+  @Classical.choose Real
+    (fun x =>
+      And (@LE.le Real Real.instLE (@OfNat.ofNat Real (nat_lit 0) (@Zero.toOfNat0 Real Real.instZero)) x)
+        (∀ (n : Nat) (values other : Int → Fin m → Real),
+          @NumStability.DirectionalLine.LineFamily.admitted m family n values →
+            @NumStability.DirectionalLine.LineFamily.admitted m family n other →
+              ∀ (E : Real),
+                @LE.le Real Real.instLE (@OfNat.ofNat Real (nat_lit 0) (@Zero.toOfNat0 Real Real.instZero)) E →
+                  (∀ (j : Int),
+                      @Membership.mem Int (Finset Int)
+                          (@SetLike.instMembership (Finset Int) Int (@Finset.instSetLike Int))
+                          (@Finset.Ico Int
+                            (@PartialOrder.toPreorder Int
+                              (@ConditionallyCompletePartialOrderSup.toPartialOrder Int
+                                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup Int
+                                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder Int
+                                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice Int
+                                      instConditionallyCompleteLinearOrder)))))
+                            Int.instLocallyFiniteOrder (@NumStability.DirectionalLine.LineFamily.inputStart m family n)
+                            (@HAdd.hAdd Int Int Int (@instHAdd Int Int.instAdd)
+                              (@NumStability.DirectionalLine.LineFamily.inputStart m family n)
+                              (@Nat.cast Int instNatCastInt
+                                (@NumStability.DirectionalLine.LineFamily.inputCount m family n))))
+                          j →
+                        @LE.le Real Real.instLE
+                          (@norm (Fin m → Real)
+                            (@NormedRing.toNorm (Fin m → Real)
+                              (@Pi.normedRing (Fin m) (fun a => Real) (Fin.fintype m) fun i =>
+                                @NormedCommRing.toNormedRing Real Real.normedCommRing))
+                            (@HSub.hSub (Fin m → Real) (Fin m → Real) (Fin m → Real)
+                              (@instHSub (Fin m → Real) (@Pi.instSub (Fin m) (fun a => Real) fun i => Real.instSub))
+                              (values j) (other j)))
+                          E) →
+                    ∀ (j : Int),
+                      @Membership.mem Int (Finset Int)
+                          (@SetLike.instMembership (Finset Int) Int (@Finset.instSetLike Int))
+                          (@Finset.Ico Int
+                            (@PartialOrder.toPreorder Int
+                              (@ConditionallyCompletePartialOrderSup.toPartialOrder Int
+                                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup Int
+                                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder Int
+                                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice Int
+                                      instConditionallyCompleteLinearOrder)))))
+                            Int.instLocallyFiniteOrder (@NumStability.DirectionalLine.LineFamily.activeStart m family n)
+                            (@HAdd.hAdd Int Int Int (@instHAdd Int Int.instAdd)
+                              (@NumStability.DirectionalLine.LineFamily.activeStart m family n)
+                              (@Nat.cast Int instNatCastInt
+                                (@NumStability.DirectionalLine.LineFamily.activeCount m family n))))
+                          j →
+                        @LE.le Real Real.instLE
+                          (@norm (Fin m → Real)
+                            (@NormedRing.toNorm (Fin m → Real)
+                              (@Pi.normedRing (Fin m) (fun a => Real) (Fin.fintype m) fun i =>
+                                @NormedCommRing.toNormedRing Real Real.normedCommRing))
+                            (@HSub.hSub (Fin m → Real) (Fin m → Real) (Fin m → Real)
+                              (@instHSub (Fin m → Real) (@Pi.instSub (Fin m) (fun a => Real) fun i => Real.instSub))
+                              (@NumStability.DirectionalLine.LineFamily.advance m family n values j)
+                              (@NumStability.DirectionalLine.LineFamily.advance m family n other j)))
+                          (@HMul.hMul Real Real Real (@instHMul Real Real.instMul)
+                            (@HAdd.hAdd Real Real Real (@instHAdd Real Real.instAdd)
+                              (@OfNat.ofNat Real (nat_lit 1) (@One.toOfNat1 Real Real.instOne))
+                              (@HMul.hMul Real Real Real (@instHMul Real Real.instMul) x
+                                (@NumStability.DirectionalLine.LineFamily.dt m family n)))
+                            E)))
+    ⋯
+def ContDiffOn.{u, uE, uF} : (𝕜 : Type u) →
+  [inst : NontriviallyNormedField 𝕜] →
+    {E : Type uE} →
+      [inst_1 : NormedAddCommGroup E] →
+        [NormedSpace 𝕜 E] →
+          {F : Type uF} → [inst_3 : NormedAddCommGroup F] → [NormedSpace 𝕜 F] → WithTop ℕ∞ → (E → F) → Set E → Prop :=
+fun 𝕜 [NontriviallyNormedField 𝕜] {E} [NormedAddCommGroup E] [NormedSpace 𝕜 E] {F} [NormedAddCommGroup F]
+    [NormedSpace 𝕜 F] n f s =>
+  ∀ x ∈ s, ContDiffWithinAt 𝕜 n f s x
+def ContDiffWithinAt.{u, uE, uF} : (𝕜 : Type u) →
+  [inst : NontriviallyNormedField 𝕜] →
+    {E : Type uE} →
+      [inst_1 : NormedAddCommGroup E] →
+        [NormedSpace 𝕜 E] →
+          {F : Type uF} →
+            [inst_3 : NormedAddCommGroup F] → [NormedSpace 𝕜 F] → WithTop ℕ∞ → (E → F) → Set E → E → Prop :=
+fun 𝕜 [NontriviallyNormedField 𝕜] {E} [NormedAddCommGroup E] [NormedSpace 𝕜 E] {F} [NormedAddCommGroup F]
+    [NormedSpace 𝕜 F] n f s x =>
+  match n with
+  | none =>
+    ∃ u ∈ nhdsWithin x (insert x s), ∃ p, HasFTaylorSeriesUpToOn ⊤ f p u ∧ ∀ (i : ℕ), AnalyticOn 𝕜 (fun x => p x i) u
+  | some n => ∀ (m : ℕ), ↑m ≤ n → ∃ u ∈ nhdsWithin x (insert x s), ∃ p, HasFTaylorSeriesUpToOn (↑m) f p u
+structure HasFTaylorSeriesUpToOn.{u, uE, uF} {𝕜 : Type u} [NontriviallyNormedField 𝕜] {E : Type uE}
+  [NormedAddCommGroup E] [NormedSpace 𝕜 E] {F : Type uF} [NormedAddCommGroup F] [NormedSpace 𝕜 F] (n : WithTop ℕ∞)
+  (f : E → F) (p : E → FormalMultilinearSeries 𝕜 E F) (s : Set E) : Prop
+number of parameters: 12
+fields:
+  HasFTaylorSeriesUpToOn.zero_eq : ∀ x ∈ s, (p x 0).curry0 = f x
+  HasFTaylorSeriesUpToOn.fderivWithin : ∀ (m : ℕ),
+      ↑m < n → ∀ x ∈ s, HasFDerivWithinAt (fun x => p x m) (p x m.succ).curryLeft s x
+  HasFTaylorSeriesUpToOn.cont : ∀ (m : ℕ), ↑m ≤ n → ContinuousOn (fun x => p x m) s
+constructor:
+  HasFTaylorSeriesUpToOn.mk.{u, uE, uF} {𝕜 : Type u} [NontriviallyNormedField 𝕜] {E : Type uE} [NormedAddCommGroup E]
+    [NormedSpace 𝕜 E] {F : Type uF} [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : WithTop ℕ∞} {f : E → F}
+    {p : E → FormalMultilinearSeries 𝕜 E F} {s : Set E} (zero_eq : ∀ x ∈ s, (p x 0).curry0 = f x)
+    (fderivWithin : ∀ (m : ℕ), ↑m < n → ∀ x ∈ s, HasFDerivWithinAt (fun x => p x m) (p x m.succ).curryLeft s x)
+    (cont : ∀ (m : ℕ), ↑m ≤ n → ContinuousOn (fun x => p x m) s) : HasFTaylorSeriesUpToOn n f p s
+@Top.top.{0} (WithTop.{0} ENat) (@WithTop.top.{0} ENat) : WithTop.{0} ENat
+@WithTop.some.{0} ENat (@Top.top.{0} ENat instTopENat) : WithTop.{0} ENat

@@ -1,0 +1,92 @@
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/fv-local-domain-review/LocalCellErrorDraft.lean:43:0: warning: automatically included section variable(s) unused in theorem `FVLocalDomainDraft.local_cell_error_contract`:
+  [CompleteSpace E]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [CompleteSpace E] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/fv-local-domain-review/LocalCellErrorDraft.lean:137:72: error: unsolved goals
+h : IsRectangleConservationLawSolution lateJump fun x => 0
+balance : 1 = 1 * 0
+⊢ False
+gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/fv-local-domain-review/LocalCellErrorDraft.lean:169:0: warning: automatically included section variable(s) unused in theorem `FVLocalDomainDraft.interval_average_congr_ae`:
+  [CompleteSpace E]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [CompleteSpace E] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+FVLocalDomainDraft.local_cell_error_contract.{u_1, u_2, u_3} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] {Cell : Type u_2} {Face : Type u_3} (oldDensity newDensity : ℝ → E) (physicalFlux : Face → ℝ → E)
+  (numericalOld : Cell → E) (rule : (Cell → E) → Face → E) (cell : Cell) (leftFace rightFace : Face) {a b s t : ℝ}
+  (hab : a < b) (hst : s < t) (holdDensity : IntervalIntegrable oldDensity volume a b)
+  (hnewDensity : IntervalIntegrable newDensity volume a b)
+  (hleftFlux : IntervalIntegrable (physicalFlux leftFace) volume s t)
+  (hrightFlux : IntervalIntegrable (physicalFlux rightFace) volume s t)
+  (hphysicalBalance :
+    (∫ (x : ℝ) in a..b, newDensity x) - ∫ (x : ℝ) in a..b, oldDensity x =
+      ∫ (τ : ℝ) in s..t, physicalFlux leftFace τ - physicalFlux rightFace τ) :
+  NumStability.IsOneDimensionalCellAverage oldDensity a b (NumStability.oneDimensionalCellAverage oldDensity a b) ∧
+    NumStability.IsOneDimensionalCellAverage newDensity a b (NumStability.oneDimensionalCellAverage newDensity a b) ∧
+      NumStability.IsOneDimensionalCellAverage (physicalFlux leftFace) s t
+          (NumStability.oneDimensionalCellAverage (physicalFlux leftFace) s t) ∧
+        NumStability.IsOneDimensionalCellAverage (physicalFlux rightFace) s t
+            (NumStability.oneDimensionalCellAverage (physicalFlux rightFace) s t) ∧
+          NumStability.oneDimensionalCellAverage oldDensity a b =
+              NumStability.cellVolumeAverage volume (Set.Ioc a b) oldDensity ∧
+            NumStability.oneDimensionalCellAverage (physicalFlux leftFace) s t =
+                NumStability.cellVolumeAverage volume (Set.Ioc s t) (physicalFlux leftFace) ∧
+              NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) (numericalOld cell)
+                    (rule numericalOld rightFace - rule numericalOld leftFace) =
+                  numericalOld cell - ((t - s) / (b - a)) • (rule numericalOld rightFace - rule numericalOld leftFace) ∧
+                (b - a) •
+                      (NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) (numericalOld cell)
+                          (rule numericalOld rightFace - rule numericalOld leftFace) -
+                        NumStability.oneDimensionalCellAverage newDensity a b) =
+                    (b - a) • (numericalOld cell - NumStability.oneDimensionalCellAverage oldDensity a b) +
+                      (t - s) •
+                        (rule numericalOld leftFace -
+                            NumStability.oneDimensionalCellAverage (physicalFlux leftFace) s t -
+                          (rule numericalOld rightFace -
+                            NumStability.oneDimensionalCellAverage (physicalFlux rightFace) s t)) ∧
+                  ∀ (oldBound leftBound rightBound : ℝ),
+                    ‖numericalOld cell - NumStability.oneDimensionalCellAverage oldDensity a b‖ ≤ oldBound →
+                      ‖rule numericalOld leftFace -
+                              NumStability.oneDimensionalCellAverage (physicalFlux leftFace) s t‖ ≤
+                          leftBound →
+                        ‖rule numericalOld rightFace -
+                                NumStability.oneDimensionalCellAverage (physicalFlux rightFace) s t‖ ≤
+                            rightBound →
+                          ‖NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) (numericalOld cell)
+                                  (rule numericalOld rightFace - rule numericalOld leftFace) -
+                                NumStability.oneDimensionalCellAverage newDensity a b‖ ≤
+                            oldBound + (t - s) / (b - a) * (leftBound + rightBound)
+FVLocalDomainDraft.global_pointwise_consumer.{u_2} {m : ℕ} {Cell : Type u_2} {q : ℝ → ℝ → Fin m → ℝ}
+  {flux : (Fin m → ℝ) → Fin m → ℝ} (hq : NumStability.IsRectangleConservationLawSolution q flux)
+  (numericalOld : Cell → Fin m → ℝ) (rule : (Cell → Fin m → ℝ) → Bool → Fin m → ℝ) (cell : Cell) {a b s t : ℝ}
+  (hab : a < b) (hst : s < t) {oldBound leftBound rightBound : ℝ}
+  (hold : ‖numericalOld cell - NumStability.oneDimensionalCellAverage (fun x => q x s) a b‖ ≤ oldBound)
+  (hleft : ‖rule numericalOld false - NumStability.oneDimensionalCellAverage (fun τ => flux (q a τ)) s t‖ ≤ leftBound)
+  (hright :
+    ‖rule numericalOld true - NumStability.oneDimensionalCellAverage (fun τ => flux (q b τ)) s t‖ ≤ rightBound) :
+  ‖NumStability.finiteVolumeCellAverageUpdate (t - s) (b - a) (numericalOld cell)
+          (rule numericalOld true - rule numericalOld false) -
+        NumStability.oneDimensionalCellAverage (fun x => q x t) a b‖ ≤
+    oldBound + (t - s) / (b - a) * (leftBound + rightBound)
+FVLocalDomainDraft.lateJump_not_global :
+  ¬NumStability.IsRectangleConservationLawSolution FVLocalDomainDraft.lateJump fun x => 0
+FVLocalDomainDraft.local_nonzero_error_consumer :
+  ‖NumStability.finiteVolumeCellAverageUpdate 1 1 0 (1 - 0) -
+        NumStability.oneDimensionalCellAverage (fun x => FVLocalDomainDraft.lateJump x 1) 0 1‖ ≤
+    1
+FVLocalDomainDraft.local_nonzero_error_value :
+  ‖NumStability.finiteVolumeCellAverageUpdate 1 1 0 (1 - 0) -
+        NumStability.oneDimensionalCellAverage (fun x => FVLocalDomainDraft.lateJump x 1) 0 1‖ =
+    1
+FVLocalDomainDraft.interval_average_congr_ae.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [CompleteSpace E] {u v : ℝ → E} {a b : ℝ} (hab : a < b) (h : u =ᶠ[ae (volume.restrict (Set.Ioc a b))] v) :
+  NumStability.oneDimensionalCellAverage u a b = NumStability.oneDimensionalCellAverage v a b
+'FVLocalDomainDraft.local_cell_error_contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FVLocalDomainDraft.global_pointwise_consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FVLocalDomainDraft.lateJump_not_global' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'FVLocalDomainDraft.local_nonzero_error_consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FVLocalDomainDraft.local_nonzero_error_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FVLocalDomainDraft.interval_average_congr_ae' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,56 @@
+def load_additional_supplement(root, extension):
+ """Read exact native spans and an explicit pinned file allowlist; no judgments."""
+ assert isinstance(extension,dict) and set(extension)=={'packet','environment_config'}
+ def unique(pairs):
+  result={}
+  for key,value in pairs:
+   assert key not in result,('duplicate JSON key',key)
+   result[key]=value
+  return result
+ def load_ref(reference):
+  assert isinstance(reference,dict) and set(reference)=={'path','sha256'}
+  rel=reference['path'];digest=reference['sha256']
+  assert isinstance(rel,str) and rel and '\\' not in rel and ':' not in rel
+  assert all(part not in ('','.','..') for part in rel.split('/'))
+  assert not Path(rel).is_absolute()
+  assert isinstance(digest,str) and len(digest)==64 and all(c in '0123456789abcdef' for c in digest)
+  path=root/rel
+  assert path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(root.resolve())
+  data=path.read_bytes();assert hashlib.sha256(data).hexdigest()==digest,(rel,'hash changed')
+  return data
+ config=json.loads(load_ref(extension['environment_config']),object_pairs_hook=unique)
+ assert set(config)=={'format','environment_files'} and config['format']=='pinned-audit-environment-extension-1'
+ assert isinstance(config['environment_files'],list) and config['environment_files']
+ pins={}
+ for reference in config['environment_files']:
+  load_ref(reference)
+  assert reference['path'] not in pins,('duplicate environment path',reference['path'])
+  pins[reference['path']]=reference['sha256']
+ raw=load_ref(extension['packet']);packet=json.loads(raw,object_pairs_hook=unique)
+ assert set(packet)=={'format','scope','runtime','native_output_spans','probe_commands','omissions'}
+ assert packet['format']=='proof-free-lean-environment-evidence-1'
+ assert isinstance(packet['scope'],str) and isinstance(packet['runtime'],dict)
+ assert isinstance(packet['probe_commands'],list) and isinstance(packet['omissions'],list)
+ assert isinstance(packet['native_output_spans'],list) and packet['native_output_spans']
+ for span in packet['native_output_spans']:
+  needed={'source_path','source_sha256','start_byte','end_byte_exclusive','span_sha256','exact_text'}
+  assert isinstance(span,dict) and needed <= set(span)
+  assert pins.get(span['source_path'])==span['source_sha256'],('span source absent from pinned environment',span['source_path'])
+  data=load_ref({'path':span['source_path'],'sha256':span['source_sha256']})
+  start=span['start_byte'];end=span['end_byte_exclusive']
+  assert type(start) is int and type(end) is int and 0<=start<end<=len(data)
+  exact=data[start:end]
+  assert isinstance(span['exact_text'],str) and exact==span['exact_text'].encode('utf-8')
+  assert hashlib.sha256(exact).hexdigest()==span['span_sha256']
+  if 'first_line' in span:assert span['first_line']==data[:start].count(b'\n')+1
+  if 'last_line' in span:assert span['last_line']==data[:end].count(b'\n')
+ return packet,raw,[extension['packet'],extension['environment_config'],*config['environment_files']]
+
+def merge_additional_supplement(base_bytes, base_spans, extra_packet, extra_bytes, extension):
+ if base_bytes is None:return extra_bytes
+ base=json.loads(base_bytes);merged=json.loads(base_bytes)
+ merged['native_output_spans']=[*base_spans,*extra_packet['native_output_spans']]
+ merged['additional_environment_packets']=[*base.get('additional_environment_packets',[]),
+  {'packet':extension['packet'],'environment_config':extension['environment_config'],
+   'metadata':{key:value for key,value in extra_packet.items() if key!='native_output_spans'}}]
+ return (json.dumps(merged,indent=2,ensure_ascii=False)+'\n').encode('utf-8')

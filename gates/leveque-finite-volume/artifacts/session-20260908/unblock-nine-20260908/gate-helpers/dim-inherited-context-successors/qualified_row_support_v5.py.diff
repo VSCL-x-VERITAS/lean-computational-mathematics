@@ -1,0 +1,27 @@
+--- qualified_row_support_v4.py
++++ qualified_row_support_v5.py
+@@ -400,6 +400,10 @@
+ }
+ 
+ 
++DIM_INHERITED_HYPERBOLICITY_CONTEXT = {'path': 'gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/dim-inherited-hyperbolicity-context/source-context-v3.json', 'sha256': 'd7a7c44b22d98b4d2125f1438f7ee7315893302ef9202fa9bcb13d9450910206'}
++REVIEWED_HIGH_RESOLUTION_CONTEXTS = (HIGH_RESOLUTION_CONTEXT, DIM_INHERITED_HYPERBOLICITY_CONTEXT)
++
++
+ def validate_scoped_context_receipts(request, extension, packet, source, configured, environment):
+     """Bind exact literal receipts without changing their authority or judging them."""
+     extra_path = HIGH_RESOLUTION_RECEIPT['path']
+@@ -409,11 +413,11 @@
+     if has_extra:
+         require(request['row'] == 'LEV-CH01-DIMENSIONAL-SPLITTING',
+                 'the literal high-resolution answer is scoped only to the dimensional-splitting row')
+-        require(request['source_context_extension'] == HIGH_RESOLUTION_CONTEXT,
++        require(request['source_context_extension'] in REVIEWED_HIGH_RESOLUTION_CONTEXTS,
+                 'the high-resolution answer requires the exact reviewed extended source context')
+         expected.append(HIGH_RESOLUTION_RECEIPT)
+     else:
+-        require(request['source_context_extension'] != HIGH_RESOLUTION_CONTEXT,
++        require(request['source_context_extension'] not in REVIEWED_HIGH_RESOLUTION_CONTEXTS,
+                 'the literal high-resolution answer cannot be silently omitted from its source context')
+     require(extension['interpretation_receipts'] == expected,
+             'source context must retain the exact original scoped receipts in their recorded order')

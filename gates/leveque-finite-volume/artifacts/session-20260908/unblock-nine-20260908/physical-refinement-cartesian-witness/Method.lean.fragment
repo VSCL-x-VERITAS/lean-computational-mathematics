@@ -1,0 +1,74 @@
+
+namespace CapacityCoordinate
+open MeasureTheory NumStability NumStability.FiniteCoordinate NumStability.SequentialError
+open scoped BigOperators
+variable {D Cell Face Point FacePoint Line : Type*}
+variable [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
+local notation "State" => Fin m → ℝ
+
+/-- A supplied capacity line method. The numerical outputs are integrated fluxes.
+Admission is indexed by the actual supplied time step; no common area or
+hyperbolicity of an averaged flux is asserted. -/
+structure Method (data : PhysicalData D Cell Face Point FacePoint m)
+    (coord : LineCoordinates (m := m) D Cell Face Line) where
+  incidence : PhysicalCapacityBridge.Incidence data coord
+  numericalFlux : D → Line → ℝ → (ℤ → State) → ℤ → State
+  admitted : D → Line → ℝ → (ℤ → State) → Prop
+
+variable {data : PhysicalData D Cell Face Point FacePoint m}
+variable {coord : LineCoordinates (m := m) D Cell Face Line}
+
+noncomputable def Method.rule (method : Method data coord) :=
+  PhysicalCapacityBridge.faceRule coord method.numericalFlux
+
+def Method.Admitted (method : Method data coord) (d : D) (dt : ℝ) (current : Cell → State) : Prop :=
+  ∀ cell, method.admitted d (coord.cellLine d cell) dt
+    (coord.extract d (coord.cellLine d cell) current)
+
+/-- A separate conditional stability estimate for the same supplied time step.
+Only actual cell positions are observed; fixed numerical ghosts are included in
+the extracted array, without declaring them physical cells. -/
+def Method.StableAt (method : Method data coord) (d : D) (dt A : ℝ) : Prop :=
+  ∀ cell values other,
+    method.admitted d (coord.cellLine d cell) dt values →
+    method.admitted d (coord.cellLine d cell) dt other →
+    ∀ E : ℝ, 0 ≤ E → (∀ j, ‖values j - other j‖ ≤ E) →
+      ‖PhysicalCapacityBridge.lineAdvance data coord method.numericalFlux d
+          (coord.cellLine d cell) dt values (coord.cellIndex d cell) -
+        PhysicalCapacityBridge.lineAdvance data coord method.numericalFlux d
+          (coord.cellLine d cell) dt other (coord.cellIndex d cell)‖ ≤ A * E
+
+theorem Method.advance_eq (method : Method data coord) (d : D) (dt : ℝ)
+    (current : Cell → State) (cell : Cell) :
+    advance data method.rule d dt current cell =
+      PhysicalCapacityBridge.lineAdvance data coord method.numericalFlux d
+        (coord.cellLine d cell) dt (coord.extract d (coord.cellLine d cell) current)
+          (coord.cellIndex d cell) :=
+  PhysicalCapacityBridge.advance_eq data coord method.incidence method.numericalFlux d dt current cell
+
+theorem Method.coordinate_stability (method : Method data coord) (d : D) (dt A : ℝ)
+    (hstable : method.StableAt d dt A) (current other : Cell → State)
+    (hc : method.Admitted d dt current) (ho : method.Admitted d dt other)
+    {E : ℝ} (hE : 0 ≤ E) (herr : ∀ cell, ‖current cell - other cell‖ ≤ E) :
+    ∀ cell, ‖advance data method.rule d dt current cell -
+      advance data method.rule d dt other cell‖ ≤ A * E := by
+  intro cell
+  rw [method.advance_eq, method.advance_eq]
+  exact hstable cell _ _ (hc cell) (ho cell) E hE
+    (coord.extract_error_le d (coord.cellLine d cell) current other hE herr)
+
+theorem Method.projection_cell (_method : Method data coord) (d : D)
+    (q : Point → ℝ → State) (t : ℝ) (cell : Cell) :
+    coord.extract d (coord.cellLine d cell) (fun c => data.cellMean q c t) (coord.cellIndex d cell) =
+      cellVolumeAverage data.measure (data.cells.cellRegion cell) (fun x => q x t) :=
+  PhysicalCapacityBridge.projection_cell data coord q d t cell
+
+/-- A cell observes only its own coordinate line, with supplied ghosts fixed. -/
+theorem Method.coordinate_local (method : Method data coord) (d : D) (dt : ℝ)
+    (current other : Cell → State) (cell : Cell)
+    (h : ∀ c, coord.cellLine d c = coord.cellLine d cell → current c = other c) :
+    advance data method.rule d dt current cell = advance data method.rule d dt other cell :=
+  PhysicalCapacityBridge.advance_line_local data coord method.incidence method.numericalFlux
+    d dt current other cell h
+
+end CapacityCoordinate

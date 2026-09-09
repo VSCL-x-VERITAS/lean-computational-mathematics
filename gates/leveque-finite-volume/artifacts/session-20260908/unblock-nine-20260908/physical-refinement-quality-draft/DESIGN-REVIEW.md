@@ -1,0 +1,15 @@
+# Physical refinement quality draft
+
+This is a proposed reusable interface, not a compiled source theorem or an accepted audit. It is layered on the separately checked capacity coordinate method. A standalone single-grid method remains available without constructing a refinement family.
+
+The fixed physical tensor flux, admissible state sets and measure precede every mesh. Each supplied face normal contracts that same tensor; the existing PhysicalData retains its actual pointwise hyperbolicity, measured face integration and physical incidence. No theorem derives hyperbolicity of an integral or constructs normals from a chart.
+
+The target has nonempty interior and is covered at every refinement. Mesh is exactly the finite maximum of actual cell diameters, with bounded cells, geometric positivity and convergence to zero explicit. It does not equate volume with width or assume minimum diameter, uniform shape ratios, or common face area.
+
+A single genuine C-infinity physical field is fixed before n. Its smoothness includes the closure of the physical region, and its ReferenceOn condition uses each actual mesh with the shared law. Exact active projections and reference ghost inputs are normalized integrals of that same field. Boundary regions are supplied data; they are not added to the active physical partition. The current full-line method interface has no finite used-ghost footprint, so all boundary slots carry positive finite measurable filler regions. These unused slots must not be presented as active geometry or evidence of coverage. A later finite-footprint interface may reduce this bookkeeping without changing the update meaning.
+
+Core quality separates physical-state input availability from exact projected-input availability. This matters for nonconvex admissible state sets. Boundary averages are not asserted to belong to the pointwise state set. Each reference certificate fixes C,N before every admitted positive within-horizon dt at every n beyond N; it also exhibits such a projected dt. The quantitative variation includes both boundary sides and counts each coordinate edge once. Pairwise perturbation stability remains an additional conditional analysis premise.
+
+Independent review found that the first draft counted interior differences twice and boundary differences once. A unit shift moving a boundary jump into the interior then doubled the reported variation. The current draft instead sums each left edge once and adds a right edge only when the next physical lookup is absent. This is a correction to the proposed observable, before any native check or source acceptance. The review and this explanation preserve the rejected counting choice.
+
+Remaining work includes actual compilation against the checked withGhost interface, a conditional perturbation/error corollary using explicit cell and boundary errors, a nonconstant physical refinement instance and joint source-facing construction, and a fresh independent source audit. This draft itself does not establish any of those outcomes.

@@ -1,0 +1,837 @@
+
+
+Exact role prompt SHA256 71d0e907952d37b16b7bef99522bb626cf3df3180b3e7c127346b9e4aca81967
+# Role: round-trip source-versus-translation judge
+
+You are a fresh, independent judge. Compare the selected source result with the
+blind mathematical translation of the Lean proposition.
+
+## Isolation rule
+
+You may read the source locator, authoritative source, source contract, blind
+translation, configured semantic checklist, this prompt, and its schema. Do not
+read Lean, declaration dossiers, context notes, task paraphrases, the direct
+judgment, or prior conversation.
+
+Check that the translation and dependency ledger express the same binders,
+hypotheses, conclusions, objects, structures, constants, indices, exceptional
+cases, and domain semantics as the source. Complete every semantic check. Use
+`not-applicable` only with a concrete reason.
+
+Decide translation-implies-source and source-implies-translation separately,
+then use the fixed classification vocabulary. Missing information is
+`unclear`, not permission to infer intended meaning.
+
+Return only JSON conforming to `schemas/roundtrip_judge.schema.json`. Request
+adjudication for unresolved evidence or implications.
+
+
+Exact output schema SHA256 351baf7ff912de27ee6cd55e69d60be6582fedf399c2750d58de92755d1f139c
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Round-trip source-versus-translation judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "blind_translation_sha256", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "roundtrip-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_translation_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_implies_source", "source_implies_translation"],
+      "properties": {
+        "translation_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_translation": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "translation_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "translation_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "translation_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 3d01722038cd1d12f6dc83f9f2e9eff03a6e6c07a953b2fe991ffc511767e1e5
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.2 paragraph on modifying cell averages by edge fluxes computed from approximate averages",
+      "location": "raw PDF page 27; printed Chapter 1 page 5"
+    },
+    {
+      "anchor": "Inherited context explicitly referenced by the primary Section 1.2 paragraph: equation (1.10) and its immediately following endpoint-flux mass-balance explanation.",
+      "location": "raw PDF page 26; printed Chapter 1 page 4"
+    },
+    {
+      "anchor": "Inherited discontinuity context in Section 1.1.2; integral conservation continues to hold at discontinuities.",
+      "location": "raw PDF pages 26\u201327; printed Chapter 1 pages 4\u20135"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-FV-LOCAL-FLUX-UPDATE-NORM-COMPLETE-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 e1bba0a95311c6e8b4419f7fa0859f721d9c4131a47bc0f43c2bd30486630964
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-FV-LOCAL-FLUX-UPDATE-NORM-COMPLETE-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 26; printed page 4; Section 1.1.1, equation (1.10)",
+      "anchor": "for any two points x₁ and x₂",
+      "observation": "The integral conservation law is d/dt ∫ from x₁ to x₂ q(x,t) dx = f(q(x₁,t)) − f(q(x₂,t))."
+    },
+    {
+      "location": "Raw PDF page 26; printed page 4; paragraph immediately following equation (1.10)",
+      "anchor": "Each component of q measures the density of some conserved quantity",
+      "observation": "The integral represents the total amount of a conserved quantity between the endpoints; its change is due only to flux past those endpoints. The paragraph separately states that nonconservation requires source terms."
+    },
+    {
+      "location": "Raw PDF pages 26–27; printed pages 4–5; Section 1.1.2",
+      "anchor": "provided that q and f(q) are sufficiently smooth; integral conservation law (1.10) ... does continue to hold",
+      "observation": "The differential equation can be derived from the integral equation under sufficient smoothness. At discontinuities the differential equation does not hold in the classical sense, while the integral conservation law continues to hold."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "finite volume methods, which are based on the integral form (1.10)",
+      "observation": "Finite volume methods divide the domain into grid cells and approximate the integral of q over each cell, or its cell average, defined as the integral divided by the cell volume."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "These values are modified in each time step by the flux through the edges of the grid cells",
+      "observation": "Cell values are updated through edge fluxes. The principal computational problem is to determine numerical flux functions that approximate the correct fluxes reasonably well using the approximate cell averages, described as the only available data."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "q(x,t) denotes the conserved state as a function of position x and time t; its components measure conserved densities [printed page 4, equation (1.10) and immediately following paragraph].",
+      "f is the physical flux function applied to q [printed page 4, equation (1.10)].",
+      "x₁ and x₂ are any two spatial points in the integral conservation statement [printed page 4, Section 1.1.1, 'for any two points'].",
+      "Grid cells and successive time steps are the objects over which the numerical description operates; the selected paragraph introduces no formal cell index or time index [printed page 5, Section 1.2, first paragraph]."
+    ],
+    "hypotheses": [
+      "The governing conservation law has integral form (1.10), with change in the conserved amount accounted for by endpoint fluxes [printed page 4, equation (1.10) and its explanation; printed page 5, Section 1.2, explicit reference to (1.10)].",
+      "The domain is divided into grid cells, and approximate cell averages supply the data for determining numerical fluxes [printed page 5, Section 1.2, first paragraph]."
+    ],
+    "conclusions": [
+      "The time derivative of the integral of q over the interval from x₁ to x₂ equals f(q(x₁,t)) − f(q(x₂,t)) [printed page 4, equation (1.10)].",
+      "Finite volume methods represent cell integrals or cell averages and modify these values at each time step through fluxes across cell edges [printed page 5, Section 1.2, first paragraph].",
+      "Numerical flux functions are to approximate the correct fluxes reasonably well using approximate cell averages; this is presented as the primary computational problem, rather than a proved quantitative accuracy assertion [printed page 5, Section 1.2, first paragraph].",
+      "The integral conservation law continues to hold at discontinuities where the differential equation fails in the classical sense [printed page 5, Section 1.1.2, concluding paragraph]."
+    ],
+    "definitions_and_conventions": [
+      "A cell average is the integral of q over a grid cell divided by the volume of that cell [printed page 5, Section 1.2, 'this integral divided by the volume of the cell'].",
+      "Each component of q is a density; its spatial integral is the corresponding total conserved amount, termed 'total mass' in the explanation [printed page 4, paragraph following (1.10)].",
+      "The endpoint-flux signs in the displayed one-dimensional balance are positive at x₁ and negative at x₂ [printed page 4, equation (1.10)].",
+      "Numerical flux functions approximate physical fluxes using approximate cell averages [printed page 5, Section 1.2, first paragraph]."
+    ],
+    "implicit_context": [
+      "Sufficient smoothness is a condition for deriving the differential equation from the integral equation; it is not imposed in the selected paragraph as a requirement for finite volume treatment of discontinuous solutions [printed pages 4–5, Section 1.1.2; printed page 5, Section 1.2].",
+      "The selected description concerns conserved quantities governed by the displayed balance without source terms. The source separately notes that nonconserved quantities require source terms [printed page 4, paragraph following (1.10)].",
+      "The finite volume discussion is motivated by accurate approximation of discontinuous solutions, for which classical finite difference methods can break down near discontinuities [printed page 5, Section 1.2, opening sentences]."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Exact balance versus numerical approximation",
+        "details": [
+          "Equation (1.10) states a physical integral balance; the numerical paragraph describes approximate cell data and approximate fluxes [printed page 4, equation (1.10); printed page 5, Section 1.2].",
+          "The selected paragraph does not assert that approximate cell averages determine the exact physical edge flux [printed page 5, Section 1.2, 'approximate the correct fluxes reasonably well']."
+        ]
+      },
+      {
+        "topic": "Update mechanism and scope",
+        "details": [
+          "The stated update mechanism is flux through cell edges during each time step [printed page 5, Section 1.2, 'modified in each time step'].",
+          "The paragraph supplies no explicit discrete update equation, time-step coefficient, mesh-width coefficient, or time integration prescription [printed page 5, Section 1.2, first paragraph].",
+          "The paragraph identifies approximate cell averages as available data but does not specify a stencil or a particular number of neighboring cells [printed page 5, Section 1.2, 'based on the approximate cell averages, the only data available']."
+        ]
+      },
+      {
+        "topic": "Discontinuities",
+        "details": [
+          "Discontinuities can develop from smooth initial data, and the source retains integral conservation at such discontinuities [printed page 5, Section 1.1.2].",
+          "The selected pages do not specify a trace convention or temporal interpretation of equation (1.10) at discontinuities crossing an endpoint [printed pages 4–5, equation (1.10) and Section 1.1.2]."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "Preserve the distinction between cell averages and pointwise grid values [printed page 5, Section 1.2, 'Rather than pointwise approximations at grid points'].",
+    "Preserve division by cell volume in the definition of a cell average [printed page 5, Section 1.2, definition of cell average].",
+    "Preserve the endpoint order and subtraction in equation (1.10) [printed page 4, equation (1.10)].",
+    "Preserve edge fluxes as the stated mechanism for changing cell values and approximate cell averages as the stated numerical input [printed page 5, Section 1.2, first paragraph].",
+    "Do not turn 'reasonably well' into a particular norm estimate, accuracy order, convergence theorem, stability theorem, or completeness claim: none is specified in the selected paragraph [printed page 5, Section 1.2, discussion of numerical flux functions].",
+    "Do not require classical smoothness for all solutions covered by the finite volume discussion [printed pages 4–5, Section 1.1.2, and printed page 5, Section 1.2]."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The accuracy requirement for numerical fluxes is qualitative.",
+      "evidence": "Printed page 5, Section 1.2: numerical flux functions should 'approximate the correct fluxes reasonably well'.",
+      "impact": "No norm, error tolerance, rate, or quantitative bound can be extracted."
+    },
+    {
+      "issue": "The discrete update and its spatial dependency are unspecified.",
+      "evidence": "Printed page 5, Section 1.2: values are modified by edge fluxes based on approximate cell averages, without a displayed numerical formula or stencil.",
+      "impact": "The passage does not determine a unique update operator, time discretization, or nearest-neighbor dependency."
+    },
+    {
+      "issue": "The mathematical interpretation at discontinuities is not fully specified on the supplied pages.",
+      "evidence": "Printed page 5, Section 1.1.2 states that (1.10) continues to hold at discontinuities and refers to later theory beginning in Chapter 11.",
+      "impact": "Endpoint traces, temporal differentiability qualifications, and a precise weak-solution formulation remain unspecified here."
+    },
+    {
+      "issue": "Mesh geometry and admissibility conditions are not formalized.",
+      "evidence": "Printed page 5, Section 1.2 defines averages using cell volume but supplies no explicit mesh assumptions.",
+      "impact": "Uniform spacing, boundary conditions, indexing conventions, and explicit nonzero-volume hypotheses cannot be attributed to this paragraph."
+    }
+  ],
+  "contract_plain_english": "The source describes finite volume methods as using approximate integrals or averages over grid cells, with a cell average equal to the cell integral divided by its volume. These values change at each time step through cell-edge fluxes, and numerical flux functions are constructed from approximate cell averages to approximate the physical fluxes reasonably well [printed page 5, Section 1.2]. The inherited physical balance states that the time derivative of the conserved amount between two endpoints equals the flux at the first endpoint minus the flux at the second [printed page 4, equation (1.10)]. Integral conservation remains applicable at discontinuities even when the differential equation does not hold classically [printed page 5, Section 1.1.2]. The selected numerical description provides no specific update formula, stencil, or quantitative approximation bound [printed page 5, Section 1.2]."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Separate coordinator-selected source interpretation under the user goal; not a printed-source assertion SHA256 27b20ced2dbc1cd6dd4044679e9bc68ac69513b309d0d7aaefa8052df6e15263
+{
+  "format": "coordinator-selected-source-interpretation-1",
+  "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+  "exact_user_objective": "I want you to unblock all nine of them.",
+  "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+  "selection_receipt": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+    "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+  },
+  "scope_row": "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE",
+  "choice": {
+    "choice_id": "Q7",
+    "rows": [
+      "LEV-CH01-FINITE-VOLUME-FLUX-UPDATE",
+      "LEV-CH01-RIEMANN-INTERFACE-FLUX"
+    ],
+    "selected_interpretation": "Interpret qualitative accuracy by explicit independent old-cell-average and time-averaged physical face-flux error bounds yielding a next-step error bound. Allow information-only exact or approximate Riemann routines; impose no compulsory complete returned field. Do not infer an unconditional accuracy theorem or a tolerance, norm/order chosen by the book."
+  },
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "preservation": [
+    "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+    "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+    "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+    "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+    "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+  ],
+  "comparison_rule": "Assess the exact selected claim under this explicit coordinator-selected interpretation. This is authorized task work, not a literal detailed user answer or a printed-source assertion. Independently decide both implications; any acceptance must be interpretation-qualified and preserve source ambiguity. No requested verdict is supplied."
+}
+
+The user requested that all nine rows be unblocked. The coordinator selected the documented convention for this row within that task. This is not a literal detailed user answer. Assess the exact source claim under this explicitly selected convention. The convention is separate from source evidence and supplies no requested verdict. Independently compare every exact target claim, hypothesis, and domain with the source under that convention. Preserve the original source-only ambiguity as such; do not attribute the convention to the book. Any acceptance and implication reasoning must explicitly be qualified as under the recorded coordinator-selected interpretation. The convention does not apply to other source rows.
+
+
+Separate exact inherited user interpretation; retain original authority and scope and assess applicability independently SHA256 e9639ae291cb408a0c21fd068f48325f75a99e701b69ee4fb7d85bcb08cb80ff
+{
+  "format": "inherited-source-interpretation-evidence-1",
+  "source": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+    "sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5"
+  },
+  "source_context_extension": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/fv-local-domain-review/source-context-extension-pinned.json",
+    "sha256": "2e18f66d33e5fc3f65a795b358f789650965d521c2c7a84967420cfc25ed4e51"
+  },
+  "primary_locations": [
+    {
+      "anchor": "Section 1.2 paragraph on modifying cell averages by edge fluxes computed from approximate averages",
+      "location": "raw PDF page 27; printed Chapter 1 page 5"
+    }
+  ],
+  "inherited_locations": [
+    {
+      "location": "raw PDF page 26; printed Chapter 1 page 4",
+      "anchor": "Inherited context explicitly referenced by the primary Section 1.2 paragraph: equation (1.10) and its immediately following endpoint-flux mass-balance explanation."
+    },
+    {
+      "location": "raw PDF pages 26–27; printed Chapter 1 pages 4–5",
+      "anchor": "Inherited discontinuity context in Section 1.1.2; integral conservation continues to hold at discontinuities."
+    }
+  ],
+  "interpretation_receipts": [
+    {
+      "receipt": {
+        "path": "gates/leveque-finite-volume/artifacts/session-20260908/user-discontinuity-interpretation-20260908.json",
+        "sha256": "b27e7d260e93edcd5408daa8c5d291ba8bfefd9e66a079480ae6b940aa869030"
+      },
+      "exact_receipt_bytes_utf8": "{\n  \"schema\": 1,\n  \"kind\": \"explicit user-adopted source interpretation\",\n  \"recorded_at_utc\": \"2026-09-08T11:32:48.390154+00:00\",\n  \"question_item_id\": [\n    \"request_user_input_async\",\n    \"call_GV856xXH10OQXasWapraHP5y\",\n    0\n  ],\n  \"question\": \"For Chapter 1’s discontinuity discussion around (1.10), should the audit use this explicit interpretation: rectangle conservation, with the mass-rate identity almost everywhere in time for each fixed spatial interval, and classical solutionhood requiring spatial state differentiability? The general comparison now compiles, but the printed source leaves these conventions implicit. This is separate from your adopted convention for (1.2)–(1.3).\",\n  \"answer\": \"Adopt this interpretation and preserve the source ambiguity\",\n  \"source_sha256\": \"b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5\",\n  \"scope\": \"Chapter 1 discontinuity discussion around equation (1.10), particularly LEV-CH01-DISCONTINUITY-INTEGRAL-LAW.\",\n  \"adopted_interpretation\": [\n    \"Represent conservation at discontinuities by finite rectangle conservation, including the explicit integrability conditions.\",\n    \"The mass-rate identity holds almost everywhere in time for each fixed spatial interval; the null set may depend on the interval.\",\n    \"Classical solutionhood requires spatial state differentiability, so genuine state discontinuity precludes classical solutionhood.\",\n    \"Do not equate classical solutionhood with the existing weaker conservative residual predicate, which only differentiates temporal state and spatial composed flux.\"\n  ],\n  \"preservation\": [\n    \"Keep the original printed source wording and ambiguity unchanged.\",\n    \"Retain the earlier nonaccepted discontinuity audit and all actual roles/evidence.\",\n    \"Perform a fresh independently judged audit of the new general target under this explicit interpretation.\",\n    \"The earlier user convention for equations (1.2)-(1.3) is separately recorded and unchanged.\"\n  ],\n  \"authority_limit\": \"This records the actual user reply supplied in this task, not a host event, source-text correction, operator receipt, integration authorization, or permission for remote writes.\"\n}\n",
+      "exact_fields": {
+        "schema": 1,
+        "kind": "explicit user-adopted source interpretation",
+        "recorded_at_utc": "2026-09-08T11:32:48.390154+00:00",
+        "question_item_id": [
+          "request_user_input_async",
+          "call_GV856xXH10OQXasWapraHP5y",
+          0
+        ],
+        "question": "For Chapter 1’s discontinuity discussion around (1.10), should the audit use this explicit interpretation: rectangle conservation, with the mass-rate identity almost everywhere in time for each fixed spatial interval, and classical solutionhood requiring spatial state differentiability? The general comparison now compiles, but the printed source leaves these conventions implicit. This is separate from your adopted convention for (1.2)–(1.3).",
+        "answer": "Adopt this interpretation and preserve the source ambiguity",
+        "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+        "scope": "Chapter 1 discontinuity discussion around equation (1.10), particularly LEV-CH01-DISCONTINUITY-INTEGRAL-LAW.",
+        "adopted_interpretation": [
+          "Represent conservation at discontinuities by finite rectangle conservation, including the explicit integrability conditions.",
+          "The mass-rate identity holds almost everywhere in time for each fixed spatial interval; the null set may depend on the interval.",
+          "Classical solutionhood requires spatial state differentiability, so genuine state discontinuity precludes classical solutionhood.",
+          "Do not equate classical solutionhood with the existing weaker conservative residual predicate, which only differentiates temporal state and spatial composed flux."
+        ],
+        "preservation": [
+          "Keep the original printed source wording and ambiguity unchanged.",
+          "Retain the earlier nonaccepted discontinuity audit and all actual roles/evidence.",
+          "Perform a fresh independently judged audit of the new general target under this explicit interpretation.",
+          "The earlier user convention for equations (1.2)-(1.3) is separately recorded and unchanged."
+        ],
+        "authority_limit": "This records the actual user reply supplied in this task, not a host event, source-text correction, operator receipt, integration authorization, or permission for remote writes."
+      }
+    }
+  ],
+  "scope_rule": "The primary claim remains the original selection. Added locations supply explicitly identified inherited context. Preserve each exact user receipt and its original scope; independently assess whether and how that scope applies to the primary claim. Do not enlarge a user answer, attribute it to the printed source, or infer global solution extensions or pointwise representative conventions. The coordinator Q-choice is separately supplied with its different authority. No prior judgment or requested verdict is supplied."
+}
+
+This inherited receipt is distinct from the coordinator-selected convention. Its literal answer and scope must remain unchanged. Independently assess both implications under the applicable recorded conventions without importing prior judgments. Added source context does not add independently audited source rows.
+
+
+Complete blind translation; blind_translation_sha256 is this file hash SHA256 2e3cfad33b292a57249cbf1f6e588d5e0f68b84a0342f871a4feb42a42268cb1
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "afc52ab91691739eb8f946a0dc4b9573cf709b7c2cad22a019f98be15a323af6",
+  "dependency_coverage": [
+    {"id":"D001","name":"LocalDef001","meaning":"For a real normed vector space E, this predicate says left < right, the field is interval integrable between those endpoints, and average equals LocalDef004 field left right.","effect_on_target":"Each of four conjuncts certifies a specified normalized integral, its integrability, and positive interval length; it asserts no pointwise representative or mean-value witness.","status":"understood"},
+    {"id":"D002","name":"LocalDef002","meaning":"The integral of field with respect to μ restricted to region, multiplied by the reciprocal of (μ region).toReal.","effect_on_target":"Identifies the old spatial average and the left temporal flux average with normalized restricted-measure integrals on (a,b] and (s,t], respectively.","status":"understood"},
+    {"id":"D003","name":"LocalDef003","meaning":"The map (timeStep, cellVolume, oldAverage, netOutwardFlux) ↦ oldAverage − (timeStep/cellVolume) • netOutwardFlux in a real module.","effect_on_target":"Defines the updated vector using the right numerical flux minus the left numerical flux.","status":"understood"},
+    {"id":"D004","name":"LocalDef004","meaning":"The oriented interval integral of field from left to right, multiplied by (right − left)⁻¹.","effect_on_target":"Defines both spatial density averages and both temporal boundary-flux averages.","status":"understood"},
+    {"id":"D005","name":"Algebra.id","meaning":"The algebra of a commutative semiring over itself, with identity algebra map and scalar action given by multiplication.","effect_on_target":"Real scalar multiplication of real coordinates is ordinary real multiplication.","status":"understood"},
+    {"id":"D006","name":"Algebra.toSMul","meaning":"Extracts the scalar action from an algebra structure.","effect_on_target":"Supplies the real-on-real scalar action used in vector scaling.","status":"understood"},
+    {"id":"D007","name":"And","meaning":"Logical conjunction: both propositions hold.","effect_on_target":"All listed conclusions hold simultaneously; the average predicates also contain conjunctions.","status":"understood"},
+    {"id":"D008","name":"CommSemiring.toSemiring","meaning":"Extracts the underlying semiring of a commutative semiring.","effect_on_target":"Supplies scalar arithmetic structure without adding a hypothesis.","status":"understood"},
+    {"id":"D009","name":"DivInvMonoid.toDiv","meaning":"Extracts division from a monoid equipped with inversion and division.","effect_on_target":"Selects real division in the time-to-length ratio.","status":"understood"},
+    {"id":"D010","name":"Eq","meaning":"Equality of two objects of the same type.","effect_on_target":"Vector equalities assert equality in every coordinate, not equality merely of norms or integrals of errors.","status":"understood"},
+    {"id":"D011","name":"Fin","meaning":"Fin m is the type of natural-number indices less than m.","effect_on_target":"State vectors have m real coordinates indexed by 0 through m−1.","status":"understood"},
+    {"id":"D012","name":"Fin.fintype","meaning":"The finite enumeration of Fin n using finRange n.","effect_on_target":"Provides finiteness needed for the product norm and finite-dimensional vector structures.","status":"understood"},
+    {"id":"D013","name":"Function.hasSMul","meaning":"Lifts a scalar action to functions by acting at each argument.","effect_on_target":"Every displayed scalar multiple of a vector is coordinatewise.","status":"understood"},
+    {"id":"D014","name":"HAdd.hAdd","meaning":"Extracts the addition operation from the selected heterogeneous-addition structure.","effect_on_target":"Denotes real addition in bounds and vector addition in the error identity.","status":"understood"},
+    {"id":"D015","name":"HDiv.hDiv","meaning":"Extracts the selected division operation.","effect_on_target":"Forms (t−s)/(b−a).","status":"understood"},
+    {"id":"D016","name":"HMul.hMul","meaning":"Extracts the selected multiplication operation.","effect_on_target":"Multiplies the scalar time-to-length ratio by the sum of flux-error bounds.","status":"understood"},
+    {"id":"D017","name":"HSMul.hSMul","meaning":"Extracts the selected scalar multiplication operation.","effect_on_target":"Scales vectors by interval lengths, reciprocals, and the time-to-length ratio.","status":"understood"},
+    {"id":"D018","name":"HSub.hSub","meaning":"Extracts the selected subtraction operation.","effect_on_target":"Forms interval lengths, flux differences, and numerical-minus-average errors with the displayed signs.","status":"understood"},
+    {"id":"D019","name":"InnerProductSpace.toNormedSpace","meaning":"Extracts the normed vector-space structure of an inner-product space.","effect_on_target":"Provides the real coordinate normed-space structure; the target contains no inner-product assertion.","status":"understood"},
+    {"id":"D020","name":"IntervalIntegrable","meaning":"Integrability on both (a,b] and (b,a] with respect to the given measure.","effect_on_target":"For the strictly ordered endpoints here, requires integrability on the forward half-open interval; the reversed interval is empty.","status":"understood"},
+    {"id":"D021","name":"LE.le","meaning":"Extracts the non-strict order relation.","effect_on_target":"All error estimates use ≤, including their three antecedent bounds.","status":"understood"},
+    {"id":"D022","name":"LT.lt","meaning":"Extracts the strict order relation.","effect_on_target":"Expresses positive dimension and strictly increasing spatial and temporal endpoints.","status":"understood"},
+    {"id":"D023","name":"MeasureTheory.MeasureSpace.toMeasurableSpace","meaning":"Extracts the measurable-space structure from a measure space.","effect_on_target":"Supplies the measurable structure for the real restricted-measure averages.","status":"understood"},
+    {"id":"D024","name":"MeasureTheory.MeasureSpace.volume","meaning":"Extracts the distinguished measure of a measure space.","effect_on_target":"Every integral and integrability condition uses the distinguished measure of Real.measureSpace.","status":"understood"},
+    {"id":"D025","name":"Nat","meaning":"The natural numbers, including zero.","effect_on_target":"The dimension m is a natural number, subsequently restricted by 0 < m.","status":"understood"},
+    {"id":"D026","name":"NonUnitalNonAssocSemiring.toAddCommMonoid","meaning":"Extracts the commutative additive monoid from the indicated semiring structure.","effect_on_target":"Supplies the additive scalar structure needed to construct the function module.","status":"understood"},
+    {"id":"D027","name":"NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing","meaning":"Forgets multiplicative commutativity while retaining the underlying seminormed ring structure.","effect_on_target":"Preserves real operations and norm in the normed-space construction.","status":"understood"},
+    {"id":"D028","name":"NonUnitalSeminormedRing.toSeminormedAddCommGroup","meaning":"Retains a seminormed ring's norm, additive commutative group, and pseudometric.","effect_on_target":"Provides the real additive seminormed structure used by vector integration and scaling.","status":"understood"},
+    {"id":"D029","name":"NonUnitalSemiring.toNonUnitalNonAssocSemiring","meaning":"Extracts the structure obtained by forgetting the associativity requirement on multiplication.","effect_on_target":"An inheritance step supplying real additive structure; no new restriction is imposed.","status":"understood"},
+    {"id":"D030","name":"Norm.norm","meaning":"Extracts the real-valued norm function from a norm structure.","effect_on_target":"Measures vector errors using the particular Pi.normedRing norm selected in the target.","status":"understood"},
+    {"id":"D031","name":"NormedAddCommGroup.toNormedAddGroup","meaning":"Forgets additive commutativity while retaining the norm, group operations, and metric.","effect_on_target":"Supplies the coordinate normed-group structure for interval integrability.","status":"understood"},
+    {"id":"D032","name":"NormedAddGroup.toENormedAddMonoid","meaning":"Provides the extended-nonnegative-valued norm and additive monoid inherited from a normed additive group.","effect_on_target":"Enables integrability predicates for the vector-valued slices.","status":"understood"},
+    {"id":"D033","name":"NormedCommRing.toNormedRing","meaning":"Extracts the underlying normed ring of a normed commutative ring.","effect_on_target":"Supplies the coordinate normed rings used to construct the vector norm.","status":"understood"},
+    {"id":"D034","name":"NormedCommRing.toSeminormedCommRing","meaning":"Retains ring operations, norm, and pseudometric while forgetting norm separation.","effect_on_target":"Preserves the real coordinate structures used in the normed-space instance.","status":"understood"},
+    {"id":"D035","name":"NormedRing.toNorm","meaning":"Extracts a normed ring's norm.","effect_on_target":"Selects the function-space norm for every error inequality.","status":"understood"},
+    {"id":"D036","name":"NormedSpace.toModule","meaning":"Extracts the underlying scalar module of a normed space.","effect_on_target":"Supplies the real module structure needed by the update definition.","status":"understood"},
+    {"id":"D037","name":"OfNat.ofNat","meaning":"Interprets a natural-number numeral in the selected type.","effect_on_target":"Interprets the zero in 0 < m as natural-number zero.","status":"understood"},
+    {"id":"D038","name":"Pi.Function.module","meaning":"The module of functions into a module, with operations defined pointwise.","effect_on_target":"The update acts on m-coordinate real vectors with coordinatewise linear operations.","status":"understood"},
+    {"id":"D039","name":"Pi.addCommGroup","meaning":"The pointwise additive commutative group on dependent functions.","effect_on_target":"Provides vector addition, subtraction, and additive inverses for the update.","status":"understood"},
+    {"id":"D040","name":"Pi.instAdd","meaning":"Function addition is defined by (f+g)(i)=f(i)+g(i).","effect_on_target":"The sum in the error identity is coordinatewise.","status":"understood"},
+    {"id":"D041","name":"Pi.instSub","meaning":"Function subtraction is defined by (f−g)(i)=f(i)−g(i).","effect_on_target":"All vector differences have their literal coordinatewise meaning.","status":"understood"},
+    {"id":"D042","name":"Pi.normedAddCommGroup","meaning":"Constructs a finite product normed additive commutative group, inheriting norm and pseudometric from Pi.seminormedAddGroup.","effect_on_target":"Provides the normed vector codomain for all integrals. The underlying product-norm formula is not expanded in the packet.","status":"understood"},
+    {"id":"D043","name":"Pi.normedAddGroup","meaning":"Constructs a finite product normed additive group from Pi.seminormedAddGroup.","effect_on_target":"Provides the vector norm structure used by interval integrability; its underlying norm formula is outside the supplied expansion.","status":"understood"},
+    {"id":"D044","name":"Pi.normedRing","meaning":"Constructs a finite product normed ring, inheriting its norm from Pi.seminormedRing.","effect_on_target":"Fixes the exact norm in the final bound. The packet does not expand Pi.seminormedRing, so a numerical coordinate formula for this norm is not independently exposed.","status":"unclear"},
+    {"id":"D045","name":"Pi.normedSpace","meaning":"The normed-space structure on a finite product, with its pointwise module structure.","effect_on_target":"Supports real scalar multiplication and vector-valued integration without imposing additional conditions on q.","status":"understood"},
+    {"id":"D046","name":"Pi.topologicalSpace","meaning":"The product topology, constructed as the infimum of topologies induced by coordinate evaluations.","effect_on_target":"Integrability of the vector slices uses the product topology of the real coordinates.","status":"understood"},
+    {"id":"D047","name":"PseudoMetricSpace.toUniformSpace","meaning":"Extracts the uniform structure underlying a pseudometric space.","effect_on_target":"Connects the real distance to the topology used in vector integrability.","status":"understood"},
+    {"id":"D048","name":"RCLike.toInnerProductSpaceReal","meaning":"Makes an RCLike scalar type into a real inner-product space, retaining its normed algebra's real normed-space structure.","effect_on_target":"At Real, supplies real scalar multiplication and the coordinate normed-space instance; no complex-valued coordinates are introduced.","status":"understood"},
+    {"id":"D049","name":"Real","meaning":"The real-number type.","effect_on_target":"Space and time variables, coordinates, scalar factors, and bounds are real-valued.","status":"understood"},
+    {"id":"D050","name":"Real.instAdd","meaning":"Real-number addition.","effect_on_target":"Supplies scalar addition and coordinate addition.","status":"understood"},
+    {"id":"D051","name":"Real.instAddCommGroup","meaning":"The additive commutative group structure on the reals.","effect_on_target":"Provides additive operations for the coordinate vector group.","status":"understood"},
+    {"id":"D052","name":"Real.instCommSemiring","meaning":"The commutative semiring structure on the reals.","effect_on_target":"Supports the identity real algebra and hence ordinary coordinate scalar multiplication.","status":"understood"},
+    {"id":"D053","name":"Real.instDivInvMonoid","meaning":"The real multiplicative monoid with inverse, with division defined as multiplication by inverse.","effect_on_target":"Determines the ratio (t−s)/(b−a); its denominator is positive under the hypotheses.","status":"understood"},
+    {"id":"D054","name":"Real.instLE","meaning":"The real non-strict order.","effect_on_target":"Compares norms and real error bounds.","status":"understood"},
+    {"id":"D055","name":"Real.instLT","meaning":"The real strict order.","effect_on_target":"Requires positive spatial and temporal interval lengths.","status":"understood"},
+    {"id":"D056","name":"Real.instMul","meaning":"Real-number multiplication.","effect_on_target":"Forms the scalar contribution of the two flux-error bounds.","status":"understood"},
+    {"id":"D057","name":"Real.instPreorder","meaning":"The preorder inherited from the real order.","effect_on_target":"Determines membership in the half-open real intervals.","status":"understood"},
+    {"id":"D058","name":"Real.instRCLike","meaning":"The RCLike structure on Real, with real part the identity and imaginary part and distinguished imaginary element zero.","effect_on_target":"Provides the usual real normed-space infrastructure; it imposes no extra condition on the state vectors.","status":"understood"},
+    {"id":"D059","name":"Real.instRing","meaning":"The ring structure on the reals.","effect_on_target":"Provides the scalar algebraic structure used by the vector module.","status":"understood"},
+    {"id":"D060","name":"Real.instSub","meaning":"Real subtraction defined by adding the negation of the second argument.","effect_on_target":"Fixes the signs of interval lengths and all coordinate differences.","status":"understood"},
+    {"id":"D061","name":"Real.measureSpace","meaning":"A selected measure-space instance on Real; its supplied body is only inferInstance.","effect_on_target":"Fixes the measure used throughout. The packet does not expose the instance's actual measure or normalization, so its identification with Lebesgue measure cannot be independently recovered from this body.","status":"unclear"},
+    {"id":"D062","name":"Real.normedAddCommGroup","meaning":"The real additive group equipped with Real.norm and Real.metricSpace.","effect_on_target":"Supplies coordinate norms and the normed additive codomain of integration.","status":"understood"},
+    {"id":"D063","name":"Real.normedCommRing","meaning":"The real commutative ring equipped with the norm and metric inherited from Real.normedAddCommGroup.","effect_on_target":"Supplies the coordinate normed-ring structure from which the target's vector norm is built.","status":"understood"},
+    {"id":"D064","name":"Real.normedField","meaning":"The real field with its inherited norm and metric, multiplicative norm, and totalized inversion satisfying inverse of zero equals zero.","effect_on_target":"Supports real normed spaces and reciprocal normalization; positive lengths avoid zero denominators in the interval averages and update.","status":"understood"},
+    {"id":"D065","name":"Real.pseudoMetricSpace","meaning":"The real pseudometric with distance |x−y|.","effect_on_target":"Determines the usual real topology entering the product topology and integrability conditions.","status":"understood"},
+    {"id":"D066","name":"Real.semiring","meaning":"The semiring structure on the reals.","effect_on_target":"Supplies the scalar semiring for the function module.","status":"understood"},
+    {"id":"D067","name":"Ring.toSemiring","meaning":"Extracts the underlying semiring of a ring.","effect_on_target":"An algebraic inheritance step retaining real addition and multiplication.","status":"understood"},
+    {"id":"D068","name":"SeminormedCommRing.toNonUnitalSeminormedCommRing","meaning":"Forgets the unit while retaining additive operations, multiplication, norm, and pseudometric.","effect_on_target":"Preserves the real structures used in the coordinate normed-space construction.","status":"understood"},
+    {"id":"D069","name":"Semiring.toNonUnitalSemiring","meaning":"Extracts the underlying nonunital semiring.","effect_on_target":"Provides an inheritance step toward the additive structure used by the module.","status":"understood"},
+    {"id":"D070","name":"Set.Ioc","meaning":"The set of x satisfying a < x and x ≤ b.","effect_on_target":"The restricted averages and forward integrals use intervals open at the left endpoint and closed at the right.","status":"understood"},
+    {"id":"D071","name":"UniformSpace.toTopologicalSpace","meaning":"Extracts the topology of a uniform space.","effect_on_target":"Supplies the coordinate real topology used by the product topology.","status":"understood"},
+    {"id":"D072","name":"instHAdd","meaning":"Uses ordinary addition as heterogeneous addition with all types equal.","effect_on_target":"Routes displayed additions to real or pointwise vector addition.","status":"understood"},
+    {"id":"D073","name":"instHDiv","meaning":"Uses ordinary division as heterogeneous division with all types equal.","effect_on_target":"Routes the ratio to real division.","status":"understood"},
+    {"id":"D074","name":"instHMul","meaning":"Uses ordinary multiplication as heterogeneous multiplication with all types equal.","effect_on_target":"Routes multiplication in the final bound to real multiplication.","status":"understood"},
+    {"id":"D075","name":"instHSMul","meaning":"Uses a scalar action as heterogeneous scalar multiplication.","effect_on_target":"Routes displayed vector scaling to the chosen real scalar action.","status":"understood"},
+    {"id":"D076","name":"instHSub","meaning":"Uses ordinary subtraction as heterogeneous subtraction with all types equal.","effect_on_target":"Routes displayed differences to real or pointwise vector subtraction.","status":"understood"},
+    {"id":"D077","name":"instLTNat","meaning":"The natural-number strict order Nat.lt.","effect_on_target":"The assumption and first conclusion require m to be strictly positive.","status":"understood"},
+    {"id":"D078","name":"instOfNatNat","meaning":"Interprets a natural-number numeral as itself.","effect_on_target":"The numeral in 0 < m is exactly zero.","status":"understood"},
+    {"id":"D079","name":"intervalIntegral","meaning":"The integral over (a,b] minus the integral over (b,a], using the given measure restricted to each set.","effect_on_target":"Fixes orientation of the physical balance and all averages; for increasing endpoints the reverse interval is empty.","status":"understood"},
+    {"id":"D080","name":"AddCommGroup","meaning":"An additive group with commutative addition.","effect_on_target":"The update definition uses subtraction in such a group, instantiated by real coordinate vectors.","status":"understood"},
+    {"id":"D081","name":"AddCommGroup.toAddCommMonoid","meaning":"Forgets inverses while retaining the commutative additive monoid.","effect_on_target":"Supplies additive structure required by the scalar module.","status":"understood"},
+    {"id":"D082","name":"AddCommGroup.toAddGroup","meaning":"Extracts the underlying additive group.","effect_on_target":"Provides the additive-group operations underlying the generic update.","status":"understood"},
+    {"id":"D083","name":"AddGroup.toSubNegMonoid","meaning":"Extracts addition, negation, and subtraction structure from an additive group.","effect_on_target":"Supports subtraction in the update definition.","status":"understood"},
+    {"id":"D084","name":"AddMonoid.toAddZeroClass","meaning":"Retains addition and its zero identity from an additive monoid.","effect_on_target":"Supplies the zero-compatible additive structure needed for scalar-action inheritance.","status":"understood"},
+    {"id":"D085","name":"AddZero.toZero","meaning":"Extracts the zero element.","effect_on_target":"Provides the underlying additive zero for module and integration structures.","status":"understood"},
+    {"id":"D086","name":"AddZeroClass.toAddZero","meaning":"Extracts addition and zero while forgetting their identity laws.","effect_on_target":"An inheritance step preserving the vector zero.","status":"understood"},
+    {"id":"D087","name":"DFunLike.coe","meaning":"Coerces a function-like object to its underlying function.","effect_on_target":"Allows the measure in the regional-average definition to be evaluated on a set.","status":"understood"},
+    {"id":"D088","name":"DistribMulAction.toDistribSMul","meaning":"Retains a scalar action and its preservation of zero and addition.","effect_on_target":"Supplies the distributive scalar action underlying the generic update and averages.","status":"understood"},
+    {"id":"D089","name":"DistribSMul.toSMulZeroClass","meaning":"Extracts a scalar action that preserves zero.","effect_on_target":"An inheritance step selecting the same scalar multiplication in local definitions.","status":"understood"},
+    {"id":"D090","name":"ENNReal","meaning":"The nonnegative real numbers with an added top element, representing positive infinity.","effect_on_target":"Measure values are extended nonnegative reals before conversion in the regional normalization.","status":"understood"},
+    {"id":"D091","name":"ENNReal.toReal","meaning":"Converts an extended nonnegative real by first applying toNNReal and then coercing to Real.","effect_on_target":"Determines the scalar denominator in LocalDef002. The supplied body does not expand the behavior of toNNReal at infinity.","status":"unclear"},
+    {"id":"D092","name":"ENormedAddCommMonoid.toESeminormedAddCommMonoid","meaning":"Forgets norm separation while retaining the extended seminormed commutative additive monoid.","effect_on_target":"Supplies inherited additive and extended-norm infrastructure for integrability.","status":"understood"},
+    {"id":"D093","name":"ESeminormedAddCommMonoid.toAddCommMonoid","meaning":"Extracts the commutative additive monoid from its extended-seminormed structure.","effect_on_target":"Preserves the additive operations used by integration-related structures.","status":"understood"},
+    {"id":"D094","name":"ESeminormedAddCommMonoid.toESeminormedAddMonoid","meaning":"Forgets commutativity while retaining the extended-seminormed additive monoid.","effect_on_target":"An inheritance step for the same vector integrability infrastructure.","status":"understood"},
+    {"id":"D095","name":"ESeminormedAddMonoid.toAddMonoid","meaning":"Extracts the underlying additive monoid.","effect_on_target":"Provides addition and zero without changing the target's mathematical data.","status":"understood"},
+    {"id":"D096","name":"Inv.inv","meaning":"Extracts the selected inversion operation.","effect_on_target":"Forms reciprocal interval lengths and reciprocal converted regional measures.","status":"understood"},
+    {"id":"D097","name":"MeasurableSpace","meaning":"A measurable-space structure specifying a sigma-algebra of sets.","effect_on_target":"The regional-average construction requires this structure, instantiated by the one from Real.measureSpace.","status":"understood"},
+    {"id":"D098","name":"MeasureTheory.Measure","meaning":"A measure on a measurable space, taking extended nonnegative values on sets.","effect_on_target":"Provides the integration measure and regional mass used in normalization.","status":"understood"},
+    {"id":"D099","name":"MeasureTheory.Measure.instFunLike","meaning":"Evaluates a measure on sets through its underlying outer measure.","effect_on_target":"The denominator in LocalDef002 uses the mass of the whole specified region.","status":"understood"},
+    {"id":"D100","name":"MeasureTheory.Measure.restrict","meaning":"The restriction of a measure to a specified set, implemented through restrictₗ.","effect_on_target":"Limits the integrations to the designated half-open intervals; the internal implementation of restrictₗ is not expanded.","status":"understood"},
+    {"id":"D101","name":"MeasureTheory.integral","meaning":"A vector-valued integration operator whose supplied implementation is the opaque projection MeasureTheory.wrapped✝.1.","effect_on_target":"All interval and regional integrals depend on this operator. Its Bochner-integral construction and behavior on nonintegrable inputs are not exposed by the supplied body.","status":"unclear"},
+    {"id":"D102","name":"Module","meaning":"An additive commutative monoid with a unital, associative, distributive scalar action by a semiring.","effect_on_target":"At real scalars and vector additive groups, provides the vector-space operations used by the update.","status":"understood"},
+    {"id":"D103","name":"Module.toDistribMulAction","meaning":"Extracts the distributive multiplicative scalar action from a module.","effect_on_target":"Provides scalar multiplication for the generic local definitions.","status":"understood"},
+    {"id":"D104","name":"NormedAddCommGroup","meaning":"An additive commutative group equipped with a norm and its compatible metric.","effect_on_target":"Provides the normed additive structure required by the averages and vector integrals.","status":"understood"},
+    {"id":"D105","name":"NormedAddCommGroup.toENormedAddCommMonoid","meaning":"Obtains an extended-normed additive commutative monoid from a normed additive commutative group.","effect_on_target":"Permits the integrability predicate in LocalDef001 to use the same vector normed structure.","status":"understood"},
+    {"id":"D106","name":"NormedAddCommGroup.toSeminormedAddCommGroup","meaning":"Retains the norm, additive commutative group, and pseudometric while forgetting separation.","effect_on_target":"Supplies the underlying seminormed structure required by real normed spaces.","status":"understood"},
+    {"id":"D107","name":"NormedSpace","meaning":"A module over a normed field with a norm-compatible scalar action.","effect_on_target":"The average definitions use real normed vector spaces, instantiated by the finite product of reals.","status":"understood"},
+    {"id":"D108","name":"Real.instInv","meaning":"The selected real inverse operation, implemented by Real.inv'✝.","effect_on_target":"Provides reciprocal normalization; the real field structure includes inverse of zero equal to zero.","status":"understood"},
+    {"id":"D109","name":"Real.instMonoid","meaning":"The multiplicative monoid of real numbers.","effect_on_target":"Supplies the multiplicative structure underlying real inversion and division.","status":"understood"},
+    {"id":"D110","name":"SMulZeroClass.toSMul","meaning":"Extracts a scalar action from a zero-preserving scalar action.","effect_on_target":"Selects the same real scalar multiplication in local definitions.","status":"understood"},
+    {"id":"D111","name":"SeminormedAddCommGroup.toPseudoMetricSpace","meaning":"Extracts the compatible pseudometric of a seminormed additive commutative group.","effect_on_target":"Supplies topology-related structure for vector integration.","status":"understood"},
+    {"id":"D112","name":"Set","meaning":"A set of elements of α is a predicate α → Prop.","effect_on_target":"Regions and half-open intervals impose membership conditions on integration variables.","status":"understood"},
+    {"id":"D113","name":"SubNegMonoid.toAddMonoid","meaning":"Extracts the additive monoid underlying subtraction and negation structure.","effect_on_target":"Preserves the addition and zero used in the generic update's module infrastructure.","status":"understood"},
+    {"id":"D114","name":"SubNegMonoid.toSub","meaning":"Extracts subtraction from a subtraction-and-negation monoid.","effect_on_target":"Supplies the subtraction oldAverage − scaled netOutwardFlux in LocalDef003.","status":"understood"}
+  ],
+  "translation": {
+    "binders": [
+      "Universally quantify a natural number m with 0 < m. Write V = {0,…,m−1} → ℝ for the real coordinate-vector space.",
+      "Universally quantify arbitrary types Cell and Face, potentially in different universes.",
+      "Universally quantify q : ℝ → ℝ → V and flux : V → V. The first and second real arguments of q serve as the spatial and temporal variables in the displayed integrals.",
+      "Universally quantify numericalOld : Cell → V and rule : (Cell → V) → Face → V. The rule receives the entire old numerical assignment and a face label.",
+      "Universally quantify cell ∈ Cell and leftFace, rightFace ∈ Face.",
+      "Universally quantify real endpoints a, b, s, t, subject to a < b and s < t.",
+      "Within the final conjunct, universally quantify real numbers oldBound, leftBound, rightBound, followed by three conditional norm-bound assumptions. These bounds may be chosen after all the preceding data.",
+      "There are no existential quantifiers or existential witnesses. Every average and the updated vector are explicitly defined expressions in the universally quantified data."
+    ],
+    "hypotheses": [
+      "m > 0.",
+      "a < b and s < t.",
+      "x ↦ q(x,s) and x ↦ q(x,t) are interval integrable from a to b with respect to μ = Real.measureSpace.volume.",
+      "τ ↦ flux(q(a,τ)) and τ ↦ flux(q(b,τ)) are interval integrable from s to t with respect to μ.",
+      "The vector balance ∫_a^b q(x,t) dμ(x) − ∫_a^b q(x,s) dμ(x) = ∫_s^t [flux(q(a,τ)) − flux(q(b,τ))] dμ(τ) holds."
+    ],
+    "conclusions": [
+      "m > 0.",
+      "a < b, x ↦ q(x,s) is interval integrable from a to b, and A_s equals (b−a)⁻¹ • ∫_a^b q(x,s) dμ(x).",
+      "a < b, x ↦ q(x,t) is interval integrable from a to b, and A_t equals (b−a)⁻¹ • ∫_a^b q(x,t) dμ(x).",
+      "s < t, τ ↦ flux(q(a,τ)) is interval integrable from s to t, and F_L equals (t−s)⁻¹ • ∫_s^t flux(q(a,τ)) dμ(τ).",
+      "s < t, τ ↦ flux(q(b,τ)) is interval integrable from s to t, and F_R equals (t−s)⁻¹ • ∫_s^t flux(q(b,τ)) dμ(τ).",
+      "A_s = ((μ((a,b])).toReal)⁻¹ • ∫ q(x,s) d(μ restricted to (a,b])(x).",
+      "F_L = ((μ((s,t])).toReal)⁻¹ • ∫ flux(q(a,τ)) d(μ restricted to (s,t])(τ).",
+      "U_new = U − ((t−s)/(b−a)) • (G_R − G_L).",
+      "(b−a) • (U_new − A_t) = (b−a) • (U − A_s) + (t−s) • [(G_L − F_L) − (G_R − F_R)].",
+      "For every oldBound, leftBound, rightBound ∈ ℝ, if ‖U−A_s‖_Π ≤ oldBound, ‖G_L−F_L‖_Π ≤ leftBound, and ‖G_R−F_R‖_Π ≤ rightBound, then ‖U_new−A_t‖_Π ≤ oldBound + ((t−s)/(b−a))(leftBound+rightBound)."
+    ],
+    "mathematical_definitions": [
+      "μ denotes exactly the distinguished measure selected by Real.measureSpace. Its construction is not expanded in the packet.",
+      "For a vector-valued function h, ∫_u^v h dμ means the integral with respect to μ restricted to (u,v], minus the integral with respect to μ restricted to (v,u].",
+      "Interval integrability from u to v means integrability on both (u,v] and (v,u].",
+      "Define Avg(h;u,v) = (v−u)⁻¹ • ∫_u^v h dμ.",
+      "Define A_s = Avg(x ↦ q(x,s);a,b) and A_t = Avg(x ↦ q(x,t);a,b).",
+      "Define F_L = Avg(τ ↦ flux(q(a,τ));s,t) and F_R = Avg(τ ↦ flux(q(b,τ));s,t).",
+      "Define U = numericalOld(cell), G_L = rule(numericalOld,leftFace), and G_R = rule(numericalOld,rightFace).",
+      "Define Update(Δt,Δx,U,N) = U − (Δt/Δx) • N and U_new = Update(t−s,b−a,U,G_R−G_L).",
+      "All vector additions, subtractions, scalar multiplications, and equalities are coordinatewise. The notation ‖·‖_Π denotes exactly the norm extracted from the supplied Pi.normedRing instance on V.",
+      "The regional average is the restricted-measure integral multiplied by the reciprocal of the real conversion of the region's extended-nonnegative measure."
+    ],
+    "proposition_plain_english": "For every positive finite number of real state coordinates, arbitrary cell and face label types, state field q, flux map, old numerical assignment, face rule, selected cell and two selected faces, and strictly increasing spatial and temporal endpoints, assume the four specified slices are interval integrable and that the change of the spatial integral equals the temporal integral of left physical flux minus right physical flux. Then all ten listed conclusions hold simultaneously: positive dimension is retained; the four explicitly defined normalized integrals satisfy their average predicates; the old spatial average and left temporal flux average agree with the corresponding measure-normalized regional integrals; the update is the old numerical vector minus the time-to-length ratio times right numerical flux minus left numerical flux; its length-weighted error relative to the new spatial average equals the old length-weighted error plus the time-weighted difference of the left and right flux errors; and any three real upper bounds on those old and boundary errors give the stated upper bound on the new error."
+  },
+  "restrictions_and_vacuity_risks": [
+    "The dimension is finite and strictly positive. The zero-dimensional case is excluded by hypothesis.",
+    "The intervals have strictly positive real lengths, so neither the update ratio nor the interval-average reciprocals encounter a zero denominator.",
+    "Cell and Face carry no geometry, order, adjacency, finiteness, or mesh structure. Supplying cell and the two face labels requires inhabited types for an actual instance; quantification over their elements is vacuous for empty types.",
+    "leftFace and rightFace need not be distinct, and no encoded relation identifies them geometrically with a and b or as faces of cell.",
+    "The balance equation is assumed for this single pair of spatial and temporal intervals. No differential equation, weak-solution condition on all regions, differentiability, or interior space-time integrability is asserted.",
+    "q and flux have no global continuity, measurability, or regularity requirements beyond the four composite slices' integrability.",
+    "The numerical rule is arbitrary and may depend on the entire old assignment. No locality, consistency with flux, monotonicity, accuracy order, stability condition, or restriction on the time-to-length ratio is imposed.",
+    "No assumption equates the old numerical vector with the old spatial average. Their discrepancy appears explicitly in the conclusions.",
+    "The updated vector is an expression for the selected cell, not a separately quantified new assignment or an asserted evolution across multiple steps.",
+    "The three error bounds are arbitrary real numbers. If any is negative, its corresponding norm-bound antecedent cannot hold. For actual vectors, bounds can be chosen as their norms, so the conditional estimate is not inherently vacuous.",
+    "The four average predicates repeat integrability and ordering hypotheses and equate each defined average with itself. They do not assert the existence of a point attaining the average.",
+    "Only the old spatial average and left temporal flux average are explicitly equated to regional averages; there are no corresponding regional-average conjuncts for the new spatial average or right temporal flux average.",
+    "The general regional-average definition has no explicit positive-finite-measure guard. Its behavior outside positive finite regions depends on the totalized real conversion and inverse operations.",
+    "The final estimate uses the selected product norm; the target does not quantify over arbitrary norms."
+  ],
+  "ambiguities": [
+    "The supplied body of Real.measureSpace is only inferInstance. A fully independent identification of μ with Lebesgue measure, including interval-mass normalization, requires an expansion absent from the packet. The translation therefore retains μ explicitly.",
+    "Pi.normedRing inherits its norm from the unexpanded Pi.seminormedRing, and the related product additive structures also inherit unexpanded norms. The packet does not itself expose a coordinate formula that would justify replacing ‖·‖_Π by a maximum norm or another explicit formula.",
+    "MeasureTheory.integral is supplied only as MeasureTheory.wrapped✝.1. Its exact integration construction and exceptional-input conventions are not recoverable from this body; the translation retains the specified integral operator.",
+    "ENNReal.toReal delegates to an unexpanded toNNReal. Its behavior at infinity is not independently specified by the displayed definition, although the target does not explicitly introduce an infinite-measure region."
+  ]
+}
+Roundtrip isolation: do not read Lean, direct or blind input packets, declaration dossiers, dependency inventories, direct judgment, or any prior output other than the supplied source contract, blind translation, and separately labeled user interpretation.
+
+Attached primary source rendering: raw PDF page 26.
+
+Attached primary source rendering: raw PDF page 27.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

@@ -1,0 +1,101 @@
+PACKAGE_TASK_ID = 'LEV-CH01-PHYSICAL-HIGH-RESOLUTION-PACKAGE-COMMAND-PRODUCTION-20260908'
+PACKAGE_ROW_ID = 'LEV-CH01-DIMENSIONAL-SPLITTING'
+PACKAGE_TARGET = {'path': 'ComputationalMathematics/Source/LeVeque/Chapter01/CoordinateHighResolutionMethods.lean',
+                  'declaration': 'NumStability.leveque01_coordinateHighResolutionMethods_sourceContract'}
+
+
+def package_require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def package_json(raw):
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            package_require(key not in result, 'duplicate compiler-extension JSON key: ' + key)
+            result[key] = value
+        return result
+    return json.loads(raw, object_pairs_hook=unique)
+
+
+def package_bound_bytes(root, reference):
+    package_require(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'invalid compiler FileRef')
+    relative, digest = reference['path'], reference['sha256']
+    package_require(isinstance(relative, str) and relative and '\\' not in relative and ':' not in relative
+                    and all(part not in ('', '.', '..') for part in relative.split('/'))
+                    and not Path(relative).is_absolute(), 'invalid compiler relative path')
+    package_require(isinstance(digest, str) and len(digest) == 64
+                    and all(char in '0123456789abcdef' for char in digest), 'invalid compiler digest')
+    path = root / relative
+    package_require(path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(root.resolve()),
+                    'compiler reference escapes or is not a regular file')
+    raw = path.read_bytes()
+    package_require(hashlib.sha256(raw).hexdigest() == digest, 'compiler input changed: ' + relative)
+    return raw
+
+
+def package_compiler_inputs(reference, plan):
+    result = {}
+    for item in [reference, plan['adapter'], plan['descriptor'], *plan['environment_files']]:
+        path = item['path']
+        package_require(path not in result or result[path] == item, 'conflicting compiler input pin')
+        result[path] = item
+    return list(result.values())
+
+
+def load_package_compiler_command(root, spec):
+    package_require(spec.get('task_id') == PACKAGE_TASK_ID and spec.get('row_id') == PACKAGE_ROW_ID,
+                    'compiler extension is limited to the exact package task and row')
+    package_require(spec.get('target') == PACKAGE_TARGET, 'compiler extension target changed')
+    package_require(spec.get('compiler_command_extension') == PACKAGE_COMPILER_EXTENSION,
+                    'compiler extension pointer changed')
+    plan = package_json(package_bound_bytes(root, PACKAGE_COMPILER_EXTENSION))
+    package_require(isinstance(plan, dict) and set(plan) == {
+        'format', 'task_id', 'row_id', 'target_file', 'target_declaration', 'command',
+        'adapter', 'descriptor', 'environment_files'}, 'wrong compiler extension schema')
+    package_require(plan == PACKAGE_COMPILER_PLAN, 'compiler extension differs from reviewed exact plan')
+    package_require(plan['format'] == 'exact-package-command-extension-1'
+                    and plan['task_id'] == PACKAGE_TASK_ID and plan['row_id'] == PACKAGE_ROW_ID
+                    and plan['target_file'] == PACKAGE_TARGET['path']
+                    and plan['target_declaration'] == PACKAGE_TARGET['declaration'], 'compiler extension identity changed')
+    package_bound_bytes(root, plan['adapter'])
+    package_bound_bytes(root, plan['descriptor'])
+    package_require(plan['command'] == ['python3', '-B', plan['adapter']['path'], '--descriptor',
+                                      plan['descriptor']['path'], '--descriptor-sha256', plan['descriptor']['sha256']],
+                    'unreviewed compiler command shape')
+    refs = plan['environment_files']
+    package_require(isinstance(refs, list) and refs, 'compiler environment must be a nonempty FileRef list')
+    for item in refs:
+        package_bound_bytes(root, item)
+    package_require(len({item['path'] for item in refs}) == len(refs), 'duplicate compiler environment path')
+    for item in package_compiler_inputs(PACKAGE_COMPILER_EXTENSION, plan):
+        package_bound_bytes(root, item)
+    return plan
+
+
+def apply_package_compiler_command(config, plan):
+    package_require(config['lean']['command'] == ['lake', 'env', 'lean'], 'prior compiler command must remain exact')
+    result = json.loads(json.dumps(config))
+    result['lean']['command'] = list(plan['command'])
+    return result
+
+
+def verify_package_compiler_command(root, spec, config, manifested=None, lineage=None):
+    plan = load_package_compiler_command(root, spec)
+    package_require(config['lean']['command'] == plan['command'], 'configured compiler command differs')
+    pins = package_compiler_inputs(PACKAGE_COMPILER_EXTENSION, plan)
+    for reference in pins:
+        package_require(config['lean']['environment_files'].count(reference['path']) == 1,
+                        'compiler input absent or repeated in exact configuration')
+        if manifested is not None:
+            found = [item for item in manifested['lean_environment'] if item['path'] == reference['path']]
+            package_require(len(found) == 1 and found[0]['sha256'] == reference['sha256'],
+                            'compiler input not uniquely manifest-bound')
+    if lineage is not None:
+        package_require(lineage.get('compiler_command_extension') == PACKAGE_COMPILER_EXTENSION
+                        and lineage.get('compiler_command') == plan['command']
+                        and lineage.get('prior_compiler_command') == ['lake', 'env', 'lean']
+                        and lineage.get('compiler_environment_inputs') == pins,
+                        'compiler preparation lineage differs')
+    return pins

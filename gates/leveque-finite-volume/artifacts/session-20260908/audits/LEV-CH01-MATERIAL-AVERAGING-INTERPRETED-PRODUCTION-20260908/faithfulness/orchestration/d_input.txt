@@ -1,0 +1,3766 @@
+
+
+Exact role prompt SHA256 e8fc01dc20710b1b6634a745a340c6a7b4d461047e09ee662cbf3c0afc518ba9
+# Role: direct source-versus-Lean judge
+
+You are a fresh, independent judge. Compare the selected source result directly
+with the Lean proposition. The authoritative source and elaborated declaration
+dossier are primary evidence; the source contract supports extraction but does
+not replace checking the source.
+
+## Required analysis
+
+1. Re-read the cited source passage and relevant inherited context.
+2. Read the proof-free source header, readable target type, and fully explicit
+   target type in `direct_review_packet.md`.
+3. Inspect every `Dxxx` dependency. A full section requires an
+   `interpretation`; a reuse section requires its exact `reuse_sha256`. Reuse
+   covers declaration meaning only. Independently determine each dependency's
+   effect on this target and whether it matches the selected source result.
+4. Complete every configured semantic check, in order, with direct evidence.
+   Use `not-applicable` only with a concrete reason.
+5. Decide Lean-implies-source and source-implies-Lean separately.
+6. Classify with the fixed vocabulary.
+
+Additional hypotheses and narrower domains are reduced applicability, not
+stronger theorems. Test satisfiability and nonvacuity. Request adjudication for
+any unresolved evidence, dependency, semantic check, or implication.
+
+Return only JSON conforming to `schemas/direct_judge.schema.json`.
+
+
+Exact output schema SHA256 6e31ec9d39783d43bc0cacbca8ee2512a7f3d75cb59f26265111372c6ded6693
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Direct source-versus-Lean judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "task_id", "source_sha256", "dossier_sha256", "dependency_coverage", "semantic_checklist", "implications", "classification", "accepted", "requires_adjudication", "findings", "rationale"],
+  "properties": {
+    "schema_version": {"const": "formalization-faithfulness-1"},
+    "role": {"const": "direct-judge"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "dossier_sha256": {"$ref": "#/$defs/sha256"},
+    "dependency_coverage": {"type": "array", "minItems": 1, "items": {"oneOf": [{"$ref": "#/$defs/reviewedDependency"}, {"$ref": "#/$defs/reusedDependency"}]}},
+    "semantic_checklist": {"$ref": "#/$defs/semanticChecklist"},
+    "implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_implies_source", "source_implies_lean"],
+      "properties": {
+        "lean_implies_source": {"$ref": "#/$defs/implication"},
+        "source_implies_lean": {"$ref": "#/$defs/implication"}
+      }
+    },
+    "classification": {"$ref": "#/$defs/classification"},
+    "accepted": {"type": "boolean"},
+    "requires_adjudication": {"type": "boolean"},
+    "findings": {"$ref": "#/$defs/findings"},
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "taskId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["faithful-equivalent", "faithful-stronger", "not-faithful-weaker", "not-faithful-different", "undetermined"]},
+    "implication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reasoning"],
+      "properties": {
+        "verdict": {"enum": ["yes", "no", "unclear"]},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "reviewedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "interpretation", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "interpretation": {"type": "string", "minLength": 1},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "reusedDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "reuse_sha256", "effect_on_target", "source_match", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^D[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "reuse_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_on_target": {"type": "string", "minLength": 1},
+        "source_match": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]}
+      }
+    },
+    "semanticChecklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "source_evidence", "lean_evidence", "reasoning"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"},
+          "status": {"enum": ["pass", "fail", "unclear", "not-applicable"]},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "reasoning": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "source_evidence", "lean_evidence", "impact"],
+        "properties": {
+          "severity": {"enum": ["critical", "major", "minor", "note"]},
+          "category": {"type": "string", "minLength": 1},
+          "source_evidence": {"type": "string", "minLength": 1},
+          "lean_evidence": {"type": "string", "minLength": 1},
+          "impact": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
+
+Fresh isolated role. Return only schema JSON. Do not write files. Primary source PDF is C:\Users\qed_s\OneDrive\Documents\ChatGPT\VSCL-x-VERITAS\lean-computational-mathematics\gates\leveque-finite-volume\artifacts\session-20260908\source\LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf. The attached PNG images render the indicated raw PDF pages. Independently inspect the primary source and necessary inherited context. The PDF is authoritative, the source contract supports extraction. If using tools, read only the allowed source and inline role evidence. Native Python with pypdf is available at C:/Users/qed_s/AppData/Local/Programs/Python/Python312-arm64/python.exe. Do not read other tasks or prior audit runs, task paraphrases, repository context notes, target proof, or conversation. Read only the role evidence supplied here and the primary source.
+
+Source locator SHA256 3c7dda4d75345e43979e12836bab9cbe5587eebdfc8790d227451af0686f116a
+{
+  "evidence_policy": "Use the immutable source and surrounding source context as authority. Do not use context notes or task metadata paraphrases as semantic evidence.",
+  "schema_version": "formalization-faithfulness-1",
+  "source_locations": [
+    {
+      "anchor": "Section 1.4 paragraph assigning material properties by averaging parameters over each cell volume",
+      "location": "raw PDF page 30; printed Chapter 1 page 8"
+    }
+  ],
+  "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/source/LeVeque_Finite_Volume_Methods_for_Hyperbolic_Problems_2002.pdf",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_version": "First published in printed format 2002 (PDF copyright 2004)",
+  "task_id": "LEV-CH01-MATERIAL-AVERAGING-INTERPRETED-PRODUCTION-20260908"
+}
+
+
+Source contract SHA256 243f89afd5deb79f410328dd51248d3a4bc0e251893ce7c8f2154f98b5d09441
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "LEV-CH01-MATERIAL-AVERAGING-INTERPRETED-PRODUCTION-20260908",
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "source_evidence": [
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph",
+      "anchor": "each grid cell can be assigned different material properties via an appropriate averaging of the material parameters over the volume enclosed by the cell",
+      "observation": "The selected claim describes assigning material properties to individual finite-volume grid cells by appropriately averaging material parameters over their enclosed volumes. It does not give an averaging formula."
+    },
+    {
+      "location": "Raw PDF page 29; printed page 7; Section 1.4, final paragraph",
+      "anchor": "materials that are not homogeneous and isotropic",
+      "observation": "The application context is wave propagation in heterogeneous materials. The paragraph discusses both slowly varying heterogeneity and sharp interfaces where material parameters have jump discontinuities."
+    },
+    {
+      "location": "Raw PDF page 29; printed page 7; Section 1.4, final sentence",
+      "anchor": "many high-order methods can have difficulties near interfaces, where the solution is typically not smooth",
+      "observation": "Interface-related lack of smoothness motivates the discussion of finite-volume methods in the following paragraph."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph",
+      "anchor": "high-resolution finite volume methods based on solving Riemann problems can be an attractive alternative",
+      "observation": "The cellwise material assignment is presented as a reason finite-volume methods are a natural choice for heterogeneous media, within a qualitative discussion of suitability."
+    },
+    {
+      "location": "Raw PDF page 27; printed page 5; Section 1.2, first paragraph",
+      "anchor": "the cell average of q, which is this integral divided by the volume of the cell",
+      "observation": "For the solution quantity q, the source explicitly defines a cell average as the integral over the grid cell divided by its volume. This definition concerns q; the selected material-parameter passage instead says appropriate averaging without specifying its formula."
+    },
+    {
+      "location": "Raw PDF page 30; printed page 8; Section 1.4, first paragraph",
+      "anchor": "a discontinuity in the medium at x = 0 as well as a discontinuity in the initial data",
+      "observation": "The surrounding paragraph extends the Riemann-problem idea to discontinuous media. Solving the interface problem decomposes data into waves entering each cell and includes reflection and transmission effects."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "Each grid cell in a finite-volume discretization of a heterogeneous medium is the object receiving assigned material properties; this is prose-level scope, without a formal index set or quantified theorem (raw PDF page 30, printed page 8, Section 1.4: 'each grid cell can be assigned').",
+      "The material parameters over the volume enclosed by that cell are the quantities to be averaged; their mathematical types and number are unspecified (raw PDF page 30, printed page 8, Section 1.4: 'averaging of the material parameters over the volume enclosed by the cell')."
+    ],
+    "hypotheses": [
+      "The stated application is a heterogeneous medium represented using finite-volume grid cells (raw PDF page 30, printed page 8, Section 1.4: 'a natural choice for heterogeneous media, since each grid cell').",
+      "Surrounding context includes slowly varying material heterogeneity and sharp material interfaces; jump discontinuities are an included situation, not an explicit requirement for every cellwise assignment (raw PDF page 29, printed page 7, Section 1.4: 'The heterogeneity may be slowly varying' and 'sharp interfaces between different materials')."
+    ],
+    "conclusions": [
+      "Each grid cell can receive material properties obtained through an appropriate averaging of material parameters over its enclosed volume (raw PDF page 30, printed page 8, Section 1.4: 'each grid cell can be assigned different material properties via an appropriate averaging').",
+      "This ability to assign material properties cell by cell is offered as a reason finite-volume methods are a natural choice for heterogeneous media (raw PDF page 30, printed page 8, Section 1.4: 'a natural choice for heterogeneous media, since')."
+    ],
+    "definitions_and_conventions": [
+      "The averaging region is the volume enclosed by the individual grid cell (raw PDF page 30, printed page 8, Section 1.4: 'over the volume enclosed by the cell').",
+      "In the earlier definition for the solution quantity q, a cell average is its integral over the grid cell divided by the cell volume (raw PDF page 27, printed page 5, Section 1.2: 'this integral divided by the volume of the cell').",
+      "The selected material-parameter passage uses the qualification 'appropriate' and provides no corresponding explicit operator, normalization, or formula (raw PDF page 30, printed page 8, Section 1.4: 'an appropriate averaging of the material parameters')."
+    ],
+    "implicit_context": [
+      "The discussion concerns numerical treatment of wave propagation in heterogeneous media, including acoustic and seismic applications (raw PDF page 29, printed page 7, Section 1.4, final paragraph: 'wave-propagation problems' and 'acoustic or seismic waves').",
+      "The numerical-method context is high-resolution finite-volume methods based on solving Riemann problems (raw PDF page 30, printed page 8, Section 1.4, opening sentence).",
+      "The adjoining interface discussion allows discontinuities in both medium and initial data and describes reflected and transmitted waves through the interface Riemann solution; it supplies motivation rather than an averaging formula (raw PDF page 30, printed page 8, Section 1.4: 'discontinuity in the medium' and 'effects of reflection and transmission')."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "Cellwise assignment and variation",
+        "details": [
+          "Properties are assigned separately to each grid cell and may differ between cells (raw PDF page 30, printed page 8, Section 1.4: 'each grid cell can be assigned different material properties').",
+          "The wording permits differing properties; it does not require pairwise unequal properties for every pair of cells (raw PDF page 30, printed page 8, Section 1.4: 'can be assigned different material properties')."
+        ]
+      },
+      {
+        "topic": "Material parameters versus solution averages",
+        "details": [
+          "The selected passage averages material parameters associated with the medium (raw PDF page 30, printed page 8, Section 1.4: 'material parameters').",
+          "The explicit integral-divided-by-volume definition on the earlier page concerns the solution q; identifying this with the required averaging of material parameters would be an additional interpretation (raw PDF page 27, printed page 5, Section 1.2: 'cell average of q'; raw PDF page 30, printed page 8, Section 1.4: 'appropriate averaging')."
+        ]
+      },
+      {
+        "topic": "Strength of the source claim",
+        "details": [
+          "The passage asserts a modeling capability and qualitative suitability, rather than a numbered theorem or an equality involving averaged parameters (raw PDF page 30, printed page 8, Section 1.4: 'can be assigned' and 'a natural choice').",
+          "No error estimate, convergence rate, uniqueness assertion, or preservation identity accompanies the selected averaging claim (raw PDF page 30, printed page 8, Section 1.4, sentence beginning 'Finite volume methods are a natural choice')."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "The assigned objects must represent material properties of individual grid cells, and the averaged inputs must represent material parameters of the medium (raw PDF page 30, printed page 8, Section 1.4: 'material properties' and 'material parameters').",
+    "The spatial region for the stated averaging is the volume enclosed by the relevant cell (raw PDF page 30, printed page 8, Section 1.4: 'over the volume enclosed by the cell').",
+    "The source leaves the appropriate material-averaging procedure unspecified; a particular arithmetic, harmonic, weighted, or other formula cannot be attributed to this sentence as an explicit assertion (raw PDF page 30, printed page 8, Section 1.4: 'an appropriate averaging').",
+    "The explicit definition of the cell average of q must remain distinguished from the unspecified averaging of material parameters (raw PDF page 27, printed page 5, Section 1.2: 'cell average of q'; raw PDF page 30, printed page 8, Section 1.4: 'material parameters').",
+    "The qualitative statement of suitability must retain its scope as a capability for heterogeneous media, without becoming a universal quantitative guarantee (raw PDF page 30, printed page 8, Section 1.4: 'can be an attractive alternative' and 'can be assigned')."
+  ],
+  "ambiguities": [
+    {
+      "issue": "The appropriate averaging operator is not specified.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4 says 'an appropriate averaging of the material parameters'; raw PDF page 27, printed page 5, Section 1.2 explicitly supplies an integral-divided-by-volume formula only for q.",
+      "impact": "The selected passage does not determine whether material averaging uses that formula, another mean, weights, or a procedure depending on the parameter and physical model."
+    },
+    {
+      "issue": "The parameter space and relationship between parameters and assigned properties are unspecified.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4 refers generically to 'material properties' and 'material parameters' without defining their types or a conversion between them.",
+      "impact": "Scalar, vector, or tensor representations, componentwise treatment, and any conversion from averaged parameters to properties require additional modeling choices."
+    },
+    {
+      "issue": "Conditions for a mathematically defined average are not stated.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4 mentions 'the volume enclosed by the cell' but supplies no integrability, measurability, finiteness, or nonzero-volume conditions in the averaging sentence.",
+      "impact": "A precise integral construction may need such assumptions, but the passage does not specify their form or exceptional-case behavior."
+    },
+    {
+      "issue": "The criterion making an average appropriate is not defined.",
+      "evidence": "Raw PDF page 30, printed page 8, Section 1.4 uses 'appropriate averaging' and then discusses interface Riemann solutions, reflection, and transmission without stating a condition connecting these to a particular average.",
+      "impact": "The source does not establish that any chosen average preserves specified interface coefficients, effective wave speeds, conservation properties, or numerical accuracy."
+    }
+  ],
+  "contract_plain_english": "In its discussion of wave propagation in heterogeneous media, the source says finite-volume methods are a natural choice because each grid cell can be assigned its own material properties through appropriate averaging of material parameters over the volume enclosed by that cell (raw PDF page 30, printed page 8, Section 1.4, first paragraph). Heterogeneity may vary slowly or include sharp interfaces with jumps in material parameters (raw PDF page 29, printed page 7, Section 1.4, final paragraph). This is a qualitative modeling claim. The material-averaging formula and its admissibility conditions are not specified by 'appropriate averaging' (raw PDF page 30, printed page 8). The earlier integral-divided-by-volume definition explicitly concerns the cell average of the solution q and does not by itself settle the material-averaging choice (raw PDF page 27, printed page 5, Section 1.2)."
+}
+
+Exact methodology SHA256 929b8dfb4f08d64ecf14ec00cc5078b11bf4520fc7b21afc92e966c6081c01b9
+# Formalization faithfulness audit methodology
+
+## 1. Purpose
+
+This protocol determines whether a fixed Lean proposition represents a result
+selected from an authoritative source. It does not judge proof elegance or
+repair formalizations. Kernel acceptance proves that a term inhabits the Lean
+type; it does not prove that the type says what the source says.
+
+The audited objects are:
+
+1. the selected source claim in its inherited context;
+2. the elaborated Lean proposition;
+3. every definition that contributes semantic meaning to that proposition.
+
+### 1.1 Methodological origin and extensions
+
+This protocol adapts the semantic-correctness audit in Section 3.2.1 of
+Theodore Meek, Siyuan Ge, Di Qiu Xiang, Simon Chess, and Vasily Ilin,
+"Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond
+Kernel Acceptance," arXiv:2606.14000v1 [cs.AI], 2026
+(<https://arxiv.org/abs/2606.14000>). In particular, it retains direct
+source-versus-Lean judgment, blind back-translation, round-trip judgment, and
+separate evaluation of both implication directions.
+
+This package is an independent extension rather than an exact reproduction of
+the paper's experiments. It adds recursive imported-definition coverage,
+immutable source contracts, configurable semantic checklists, hash-bound
+evidence, conditional adjudication, detailed runtime provenance, and
+machine-readable per-task history. `REFERENCES.md` records the exact
+relationship and suggested citation.
+
+## 2. Classification policy
+
+Every judge answers two questions separately:
+
+1. Does the Lean proposition imply the source result under the source context?
+2. Does the source result imply the Lean proposition?
+
+| Lean implies source | Source implies Lean | Classification |
+|---|---|---|
+| yes | yes | `faithful-equivalent` |
+| yes | no | `faithful-stronger` only for genuine nonvacuous strength |
+| no | yes | `not-faithful-weaker` |
+| no | no | `not-faithful-different` |
+| unclear | any | `undetermined` |
+
+Accepted classifications are `faithful-equivalent` and
+`faithful-stronger`. Additional hypotheses, restricted types, missing cases,
+or impossible premises reduce applicability; they are not stronger results.
+A harmless definitional reformulation can remain equivalent. A specialization
+must be described explicitly and assessed against what the benchmark claims to
+measure.
+
+## 3. Evidence hierarchy
+
+The authoritative evidence is the exact source file and exact Lean environment.
+Task metadata locates evidence but is not itself proof of source meaning. A
+context note or informal paraphrase is an object to check, not authority. The
+Lean proof is excluded because the audit concerns the proposition.
+
+Preparation verifies and records:
+
+- source, target, task metadata, and optional context hashes;
+- selected prompts, schemas, scripts, and semantic-check profiles;
+- Lean toolchain and package-manifest hashes when configured;
+- compilation of the unchanged target and local imports;
+- readable and fully explicit elaborated target types;
+- recursive semantic dependencies and their source modules.
+
+## 4. Declaration coverage
+
+A role must not infer meaning from a declaration name. The generated dossier
+contains:
+
+1. the proof-free source header when extractable;
+2. Lean's readable elaborated target type;
+3. Lean's fully explicit target type, exposing implicit arguments, instances,
+   coercions, and notation;
+4. recursive types and bodies of declarations owned by configured local
+   modules;
+5. the one-level external semantic frontier where traversal stops;
+6. exact hashes and complete source text for local imported modules in the
+   full dossier.
+
+Each dependency receives a stable task-local ID and a semantic SHA-256. The
+hash excludes graph distance and task-local ID but includes declaration role,
+name, owner, kind, type, explicit type, and one-level body. Every translating or
+direct-judging role accounts for each dependency exactly once.
+
+## 5. Independent roles
+
+Every role runs in a fresh stateless agent. Only the orchestrator writes files.
+Invalid JSON is retried with another fresh role, not repaired through follow-up
+conversation. The orchestrator records each role's runtime, exact model,
+reasoning effort, agent ID, and timestamps in `agent_runs.json`. A runtime field
+that is not exposed is recorded as null with an explanatory note; model identity
+must never be inferred from a default or conversation setting.
+
+### 5.1 Source-contract extractor
+
+Receives only the immutable source, source locator, prompt, and schema. It reads
+the selected passage, enclosing result, definitions, standing assumptions, and
+cross-references. It receives no Lean material or informal target paraphrase.
+
+### 5.2 Blind translator
+
+Receives an anonymized elaborated Lean dossier inline, its hash, prompt, and
+schema. It receives no source identity, task ID, target source, proof,
+filesystem, tools, prior output, or conversation history. It reconstructs the
+mathematical proposition and records restrictions, vacuity risks, and
+ambiguities.
+
+### 5.3 Direct judge
+
+Receives the primary source, source contract, exact Lean review packet,
+dependency ledger, and semantic checklist. It independently checks the source
+and every declaration dependency before deciding both implication directions.
+
+### 5.4 Round-trip judge
+
+Receives the primary source, source contract, blind translation, and semantic
+checklist, but no Lean or direct judgment. It tests whether the independently
+reconstructed proposition matches the source.
+
+### 5.5 Adjudicator
+
+Runs only when judges disagree, an implication is unclear, a dependency or
+semantic check remains unclear, or a judge explicitly requests adjudication.
+It receives the exact trigger reasons and complete primary evidence. It
+resolves items individually; it does not vote or average model opinions.
+
+## 6. Semantic checklist
+
+The core checklist applies to any mathematical statement. Domain profiles add
+checks for specialized semantics such as algorithms, norms, floating-point
+models, or asymptotic truncation. Each judge returns `pass`, `fail`, `unclear`,
+or `not-applicable` with evidence and reasoning.
+
+Not every check must be applicable. `not-applicable` is valid when explained;
+for example, a closed algebraic identity need not be linked to an algorithm.
+An applicable failed check is substantive evidence that must be reconciled with
+the implication decision. An unresolved `unclear` check triggers adjudication.
+
+## 7. Source batches and reuse
+
+Tasks sharing one immutable source and `source_group` may use a single batch
+source extractor. The batch output contains one independent contract per task
+and is hash-bound before splitting into task-local files. Blind translators and
+all judges remain task-local.
+
+An interpretation of a Lean dependency may be reused only if its semantic hash
+exactly matches a validated earlier interpretation. Reuse covers declaration
+meaning only. The new judge must still determine its effect on the new target
+and whether that effect matches the selected source claim.
+
+## 8. Finalization
+
+The orchestrator validates schemas, coverage order, hashes, implication and
+classification consistency, adjudication triggers, and acceptance policy. It
+writes `decision.json`, renders `report.md`, and marks the manifest completed
+only after complete-phase validation passes.
+
+An audit never edits its inputs. A changed target, selected source, task
+metadata, relevant imported definition, checklist, prompt, schema, or audit
+script invalidates the recorded hashes and requires a new run. Prior artifacts
+are archived rather than deleted.
+
+## 9. Interpretation and limitations
+
+Agreement among agents is not a formal proof of semantic equivalence. The
+protocol strengthens evidence through independent information paths, complete
+dependency accounting, primary-source citation, implication analysis, and
+deterministic provenance. Remaining ambiguity is reported as `undetermined`.
+
+Source defects require a separate policy decision. A corrected-source theorem
+may be useful, but it should not silently be counted as faithful to a false or
+incomplete printed statement. Record source validity separately and define any
+exclusion from corpus-level statistics transparently.
+
+
+Semantic checks C01-C12 first SHA256 33ee1dd6aff97f75e3bf25d6f05898a6a8ffe24713822375934e45a2d03eb2a1
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "core",
+  "checks": [
+    {
+      "id": "C01",
+      "name": "source-selection",
+      "requirement": "The exact source version, passage, enclosing result, and inherited context are correctly selected."
+    },
+    {
+      "id": "C02",
+      "name": "binders-and-types",
+      "requirement": "Every binder, mathematical type, structure, dimension, and index domain has the intended meaning."
+    },
+    {
+      "id": "C03",
+      "name": "quantifier-scope",
+      "requirement": "Quantifier order, scope, witness dependence, and any Skolemization are preserved."
+    },
+    {
+      "id": "C04",
+      "name": "hypotheses-and-side-conditions",
+      "requirement": "Explicit, inherited, and implicit hypotheses match, including positivity, nonzero, regularity, and membership conditions."
+    },
+    {
+      "id": "C05",
+      "name": "conclusion-completeness",
+      "requirement": "Every conclusion, conjunct, case, witness, and stated dependency is represented."
+    },
+    {
+      "id": "C06",
+      "name": "operators-and-definitions",
+      "requirement": "Every nontrivial operator, notation, coercion, and imported local definition has been interpreted from its declaration rather than its name."
+    },
+    {
+      "id": "C07",
+      "name": "relation-strength",
+      "requirement": "Equality, inequality direction, strictness, logical connective, and conclusion strength match."
+    },
+    {
+      "id": "C08",
+      "name": "object-identity-and-roles",
+      "requirement": "Distinct source objects, sequences, functions, witnesses, exact values, constructed values, and transformed values are not conflated."
+    },
+    {
+      "id": "C09",
+      "name": "constants-and-indexing",
+      "requirement": "Constants, coefficients, exponents, index offsets, ranges, and parameter dependence match."
+    },
+    {
+      "id": "C10",
+      "name": "specialization-and-generalization",
+      "requirement": "Any change of scalar field, finiteness, dimension, domain, or other specialization/generalization is identified and classified correctly."
+    },
+    {
+      "id": "C11",
+      "name": "exceptional-and-boundary-cases",
+      "requirement": "Undefined operations, boundary values, degenerate cases, and source exclusions are handled consistently."
+    },
+    {
+      "id": "C12",
+      "name": "nonvacuity",
+      "requirement": "The Lean hypotheses are satisfiable in the intended setting and the conclusion is not true only for an unintended trivial reason."
+    }
+  ]
+}
+
+
+Semantic checks N01-N06 second SHA256 9b2580ebd7d48a8763dd393c917c661e1f3242e5e2f8a21b189618239776f6d6
+{
+  "schema_version": "formalization-faithfulness-checks-1",
+  "profile": "numerical-analysis",
+  "checks": [
+    {
+      "id": "N01",
+      "name": "algorithm-or-process-linkage",
+      "requirement": "When the source result concerns an algorithm, recurrence, discretization, or process, the formal statement remains linked to that same construction and execution semantics."
+    },
+    {
+      "id": "N02",
+      "name": "norm-metric-and-component-semantics",
+      "requirement": "Norm, seminorm, metric, squared form, componentwise interpretation, and induced/operator conventions match."
+    },
+    {
+      "id": "N03",
+      "name": "error-and-stability-notion",
+      "requirement": "Forward, backward, mixed, residual, truncation, discretization, conditioning, and stability notions are not substituted for one another."
+    },
+    {
+      "id": "N04",
+      "name": "exact-versus-computed-quantities",
+      "requirement": "Exact, approximate, rounded, perturbed, iterated, and computed quantities retain their source roles."
+    },
+    {
+      "id": "N05",
+      "name": "asymptotic-and-higher-order-terms",
+      "requirement": "Big-O terms, first-order simplifications, exact remainders, limits, and asymptotic regimes are represented with the same logical status."
+    },
+    {
+      "id": "N06",
+      "name": "existence-uniqueness-and-well-posedness",
+      "requirement": "Existence, uniqueness, rank, invertibility, regularity, and well-posedness requirements used by the numerical claim are preserved."
+    }
+  ]
+}
+
+
+Separate coordinator-selected source interpretation under the user goal; not a printed-source assertion SHA256 aaefcc144aeefcef600cf39053fd6fb40c748de39de966fadf4da247fa04d66e
+{
+  "format": "coordinator-selected-source-interpretation-1",
+  "authority": "The user explicitly requested that all nine remaining rows be unblocked. The coordinator selects the documented conventions within that requested scope. This is not a verbatim user answer selecting each detailed convention.",
+  "exact_user_objective": "I want you to unblock all nine of them.",
+  "goal_observation_sha256": "bc4ecebfbb772906b62139c10a487a092ceaff5aeaf79439655c2a7ac40134ca",
+  "selection_receipt": {
+    "path": "gates/leveque-finite-volume/artifacts/session-20260908/unblock-nine-20260908/selected-interpretations.json",
+    "sha256": "cfde240a9dda9a58be99f85369b43e99003b0024c7147a33ffa8b071ca7dcf34"
+  },
+  "scope_row": "LEV-CH01-HETEROGENEOUS-CELL-AVERAGING",
+  "choice": {
+    "choice_id": "Q8",
+    "rows": [
+      "LEV-CH01-HETEROGENEOUS-CELL-AVERAGING"
+    ],
+    "selected_interpretation": "Select normalized integration over each physical cell volume, with the relevant integrability and positive finite volume conditions. Preserve the possibility of other model-dependent averaging rules. Heterogeneous inputs need not yield unequal cell averages."
+  },
+  "source_sha256": "b3adec0d3616dbde57a5522cfce1861890887d7c03a2232d2136cb94c9bac1d5",
+  "preservation": [
+    "Original PDF bytes, printed wording and ambiguities remain unchanged.",
+    "Prior source-only extractions and rejected/undetermined audits remain historical evidence.",
+    "Any acceptance must explicitly be qualified by the selected interpretation, never attributed to an explicit printed hypothesis.",
+    "Source extraction remains blind to these choices; target translation remains blind to source and choice identity.",
+    "Selection authorizes fresh target preparation, proof work and independent audits; it does not prescribe an audit verdict or certify any row complete."
+  ],
+  "comparison_rule": "Assess the exact selected claim under this explicit coordinator-selected interpretation. This is authorized task work, not a literal detailed user answer or a printed-source assertion. Independently decide both implications; any acceptance must be interpretation-qualified and preserve source ambiguity. No requested verdict is supplied."
+}
+
+The user requested that all nine rows be unblocked. The coordinator selected the documented convention for this row within that task. This is not a literal detailed user answer. Assess the exact source claim under this explicitly selected convention. The convention is separate from source evidence and supplies no requested verdict. Independently compare every exact target claim, hypothesis, and domain with the source under that convention. Preserve the original source-only ambiguity as such; do not attribute the convention to the book. Any acceptance and implication reasoning must explicitly be qualified as under the recorded coordinator-selected interpretation. The convention does not apply to other source rows.
+
+
+Complete direct review packet; dossier_sha256 is this packet hash SHA256 e8b4b67438b33bc4ae768f9305ec0b56059364d691f74a7ebce1d7cdca041830
+# Declaration dossier for LEV-CH01-MATERIAL-AVERAGING-INTERPRETED-PRODUCTION-20260908
+
+This dossier describes the theorem statement only. Its proof is excluded.
+Interpret every dependency from its supplied declaration; names are not definitions.
+
+## Proof-free source declaration
+
+```lean
+theorem leveque01_materialCellVolumeAveraging
+    {Cell Point Parameter : Type*} [MeasurableSpace Point]
+    [NormedAddCommGroup Parameter] [NormedSpace ℝ Parameter] [CompleteSpace Parameter]
+    (grid : FiniteVolumeCellPartition Cell Point) (physicalVolume : Measure Point)
+    (materialParameter : Point → Parameter)
+    (hpositive : ∀ cell, physicalVolume (grid.cellRegion cell) ≠ 0)
+    (hfinite : ∀ cell, physicalVolume (grid.cellRegion cell) ≠ ⊤)
+    (hintegrable : ∀ cell, IntegrableOn materialParameter (grid.cellRegion cell) physicalVolume) :
+    ∃ assigned : Cell → Parameter,
+      (∀ cell, IsCellVolumeAverage physicalVolume (grid.cellRegion cell)
+        materialParameter (assigned cell)) ∧
+      (∀ other : Cell → Parameter,
+        (∀ cell, IsCellVolumeAverage physicalVolume (grid.cellRegion cell)
+          materialParameter (other cell)) → other = assigned) ∧
+      (∀ cell alternativeParameter,
+        Set.EqOn materialParameter alternativeParameter (grid.cellRegion cell) →
+          assigned cell = cellVolumeAverage physicalVolume (grid.cellRegion cell)
+            alternativeParameter) ∧
+      (∀ cell (parameter : Parameter),
+        cellVolumeAverage physicalVolume (grid.cellRegion cell) (fun _ => parameter) = parameter)
+```
+
+## Elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {Point : Type u_2} {Parameter : Type u_3} [inst : MeasurableSpace Point]
+  [inst_1 : NormedAddCommGroup Parameter] [inst_2 : NormedSpace Real Parameter] [CompleteSpace Parameter]
+  (grid : NumStability.FiniteVolumeCellPartition Cell Point) (physicalVolume : MeasureTheory.Measure Point)
+  (materialParameter : Point → Parameter),
+  (∀ (cell : Cell), Ne (MeasureTheory.Measure.instFunLike.coe physicalVolume (grid.cellRegion cell)) 0) →
+    (∀ (cell : Cell),
+        Ne (MeasureTheory.Measure.instFunLike.coe physicalVolume (grid.cellRegion cell)) instTopENNReal.top) →
+      (∀ (cell : Cell), MeasureTheory.IntegrableOn materialParameter (grid.cellRegion cell) physicalVolume) →
+        Exists fun assigned =>
+          And
+            (∀ (cell : Cell),
+              NumStability.IsCellVolumeAverage physicalVolume (grid.cellRegion cell) materialParameter (assigned cell))
+            (And
+              (∀ (other : Cell → Parameter),
+                (∀ (cell : Cell),
+                    NumStability.IsCellVolumeAverage physicalVolume (grid.cellRegion cell) materialParameter
+                      (other cell)) →
+                  Eq other assigned)
+              (And
+                (∀ (cell : Cell) (alternativeParameter : Point → Parameter),
+                  Set.EqOn materialParameter alternativeParameter (grid.cellRegion cell) →
+                    Eq (assigned cell)
+                      (NumStability.cellVolumeAverage physicalVolume (grid.cellRegion cell) alternativeParameter))
+                (∀ (cell : Cell) (parameter : Parameter),
+                  Eq (NumStability.cellVolumeAverage physicalVolume (grid.cellRegion cell) fun x => parameter)
+                    parameter)))
+```
+
+## Fully explicit elaborated target type
+
+```lean
+∀ {Cell : Type u_1} {Point : Type u_2} {Parameter : Type u_3} [inst : MeasurableSpace.{u_2} Point]
+  [inst_1 : NormedAddCommGroup.{u_3} Parameter]
+  [inst_2 :
+    @NormedSpace.{0, u_3} Real Parameter Real.normedField
+      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1)]
+  [@CompleteSpace.{u_3} Parameter
+      (@PseudoMetricSpace.toUniformSpace.{u_3} Parameter
+        (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} Parameter
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1)))]
+  (grid : @NumStability.FiniteVolumeCellPartition.{u_1, u_2} Cell Point inst)
+  (physicalVolume : @MeasureTheory.Measure.{u_2} Point inst) (materialParameter : Point → Parameter)
+  (hpositive :
+    ∀ (cell : Cell),
+      @Ne.{1} ENNReal
+        (@DFunLike.coe.{u_2 + 1, u_2 + 1, 1} (@MeasureTheory.Measure.{u_2} Point inst) (Set.{u_2} Point)
+          (fun (x : Set.{u_2} Point) => ENNReal) (@MeasureTheory.Measure.instFunLike.{u_2} Point inst) physicalVolume
+          (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell))
+        (@OfNat.ofNat.{0} ENNReal (nat_lit 0) (@Zero.toOfNat0.{0} ENNReal instZeroENNReal)))
+  (hfinite :
+    ∀ (cell : Cell),
+      @Ne.{1} ENNReal
+        (@DFunLike.coe.{u_2 + 1, u_2 + 1, 1} (@MeasureTheory.Measure.{u_2} Point inst) (Set.{u_2} Point)
+          (fun (x : Set.{u_2} Point) => ENNReal) (@MeasureTheory.Measure.instFunLike.{u_2} Point inst) physicalVolume
+          (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell))
+        (@Top.top.{0} ENNReal instTopENNReal))
+  (hintegrable :
+    ∀ (cell : Cell),
+      @MeasureTheory.IntegrableOn.{u_2, u_3} Point Parameter inst
+        (@UniformSpace.toTopologicalSpace.{u_3} Parameter
+          (@PseudoMetricSpace.toUniformSpace.{u_3} Parameter
+            (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} Parameter
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} Parameter
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} Parameter
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} Parameter inst_1)))
+        materialParameter (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell)
+        physicalVolume),
+  @Exists.{max (u_1 + 1) (u_3 + 1)} (Cell → Parameter) fun (assigned : Cell → Parameter) =>
+    And
+      (∀ (cell : Cell),
+        @NumStability.IsCellVolumeAverage.{u_2, u_3} Point Parameter inst inst_1 inst_2 physicalVolume
+          (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell) materialParameter
+          (assigned cell))
+      (And
+        (∀ (other : Cell → Parameter),
+          (∀ (cell : Cell),
+              @NumStability.IsCellVolumeAverage.{u_2, u_3} Point Parameter inst inst_1 inst_2 physicalVolume
+                (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell)
+                materialParameter (other cell)) →
+            @Eq.{max (u_1 + 1) (u_3 + 1)} (Cell → Parameter) other assigned)
+        (And
+          (∀ (cell : Cell) (alternativeParameter : Point → Parameter),
+            @Set.EqOn.{u_2, u_3} Point Parameter materialParameter alternativeParameter
+                (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell) →
+              @Eq.{u_3 + 1} Parameter (assigned cell)
+                (@NumStability.cellVolumeAverage.{u_2, u_3} Point Parameter inst inst_1 inst_2 physicalVolume
+                  (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell)
+                  alternativeParameter))
+          (∀ (cell : Cell) (parameter : Parameter),
+            @Eq.{u_3 + 1} Parameter
+              (@NumStability.cellVolumeAverage.{u_2, u_3} Point Parameter inst inst_1 inst_2 physicalVolume
+                (@NumStability.FiniteVolumeCellPartition.cellRegion.{u_1, u_2} Cell Point inst grid cell)
+                fun (x : Point) => parameter)
+              parameter)))
+```
+
+## Local import graph
+
+- `AuditTarget` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellVolumeAverage`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage` imports: `Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic`, `Mathlib.MeasureTheory.Integral.Bochner.Basic`
+- `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellVolumeAverage` imports: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`, `Mathlib.MeasureTheory.Integral.Average`
+
+## Semantic dependency inventory
+
+`local` declarations are followed recursively through types and bodies. `external-frontier` declarations mark the one-level library trust boundary.
+
+### D001: `NumStability.FiniteVolumeCellPartition`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `643d6beb37c358dd676e40a0ed44bb8a1161a339bf1a86fade7e9a749db8accc`
+
+Type:
+
+```lean
+Type u_1 → (Point : Type u_2) → [MeasurableSpace Point] → Type (max u_1 u_2)
+```
+
+Fully explicit type:
+
+```lean
+(Cell : Type u_1) → (Point : Type u_2) → [MeasurableSpace.{u_2} Point] → Type (max u_1 u_2)
+```
+
+### D002: `NumStability.FiniteVolumeCellPartition.cellRegion`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `32dd6b17c69eb1ad645253a6f164e371ce8f60b4e07173cb0964fefc72bfff00`
+
+Type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace Point] → NumStability.FiniteVolumeCellPartition Cell Point → Cell → Set Point
+```
+
+Fully explicit type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace.{u_2} Point] →
+      (self : @NumStability.FiniteVolumeCellPartition.{u_1, u_2} Cell Point inst) → Cell → Set.{u_2} Point
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun Cell Point [MeasurableSpace Point] self => self.2
+```
+
+### D003: `NumStability.IsCellVolumeAverage`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `fdb0d6e4b63ff1207708b54fb213ff70402e3b030bfa1a6ab9148ed8b55e6006`
+
+Type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] →
+        [NormedSpace Real E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E → Prop
+```
+
+Fully explicit type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace.{u_1} Point] →
+      [inst_1 : NormedAddCommGroup.{u_2} E] →
+        [@NormedSpace.{0, u_2} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_2} E inst_1)] →
+          (μ : @MeasureTheory.Measure.{u_1} Point inst) →
+            (region : Set.{u_1} Point) → (field : Point → E) → (average : E) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] μ region field average =>
+  And (Ne (MeasureTheory.Measure.instFunLike.coe μ region) 0)
+    (And (Ne (MeasureTheory.Measure.instFunLike.coe μ region) instTopENNReal.top)
+      (And (MeasureTheory.IntegrableOn field region μ) (Eq average (NumStability.cellVolumeAverage μ region field))))
+```
+
+### D004: `NumStability.cellVolumeAverage`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `bc8800385daf12f69f5f7359f6f4ae6dcc02bae04ea06c59c19ad641935524ed`
+
+Type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] → [NormedSpace Real E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E
+```
+
+Fully explicit type:
+
+```lean
+{Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace.{u_1} Point] →
+      [inst_1 : NormedAddCommGroup.{u_2} E] →
+        [@NormedSpace.{0, u_2} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_2} E inst_1)] →
+          (μ : @MeasureTheory.Measure.{u_1} Point inst) → (region : Set.{u_1} Point) → (field : Point → E) → E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] μ region field =>
+  instHSMul.hSMul (Real.instInv.inv (MeasureTheory.Measure.instFunLike.coe μ region).toReal)
+    (MeasureTheory.integral (μ.restrict region) fun point => field point)
+```
+
+### D005: `NumStability.FiniteVolumeCellPartition.mk`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage`
+- Declaration kind: `constructor`
+- Distance from target type: `2`
+- Semantic SHA-256: `739bab2b22ae879c4f9ff0943c6641c3a50b089aa099d9b3ca55f7e3dbb2945b`
+
+Type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      (domain : Set Point) →
+        (cellRegion : Cell → Set Point) →
+          Nonempty Cell →
+            (∀ (cell : Cell), MeasurableSet (cellRegion cell)) →
+              (∀ {cell₁ cell₂ : Cell}, Ne cell₁ cell₂ → Disjoint (cellRegion cell₁) (cellRegion cell₂)) →
+                (∀ (point : Point),
+                    Iff (Set.instMembership.mem domain point)
+                      (Exists fun cell => Set.instMembership.mem (cellRegion cell) point)) →
+                  NumStability.FiniteVolumeCellPartition Cell Point
+```
+
+Fully explicit type:
+
+```lean
+{Cell : Type u_1} →
+  {Point : Type u_2} →
+    [inst : MeasurableSpace.{u_2} Point] →
+      (domain : Set.{u_2} Point) →
+        (cellRegion : Cell → Set.{u_2} Point) →
+          (cells_nonempty : Nonempty.{u_1 + 1} Cell) →
+            (measurable_cell : ∀ (cell : Cell), @MeasurableSet.{u_2} Point inst (cellRegion cell)) →
+              (disjoint_cells :
+                  ∀ {cell₁ cell₂ : Cell},
+                    @Ne.{u_1 + 1} Cell cell₁ cell₂ →
+                      @Disjoint.{u_2} (Set.{u_2} Point)
+                        (@OmegaCompletePartialOrder.toPartialOrder.{u_2} (Set.{u_2} Point)
+                          (@CompleteLattice.instOmegaCompletePartialOrder.{u_2} (Set.{u_2} Point)
+                            (@CompleteBooleanAlgebra.toCompleteLattice.{u_2} (Set.{u_2} Point)
+                              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{u_2} (Set.{u_2} Point)
+                                (@Set.instCompleteAtomicBooleanAlgebra.{u_2} Point)))))
+                        (@HeytingAlgebra.toOrderBot.{u_2} (Set.{u_2} Point)
+                          (@Order.Frame.toHeytingAlgebra.{u_2} (Set.{u_2} Point)
+                            (@CompleteDistribLattice.toFrame.{u_2} (Set.{u_2} Point)
+                              (@CompleteBooleanAlgebra.toCompleteDistribLattice.{u_2} (Set.{u_2} Point)
+                                (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{u_2} (Set.{u_2} Point)
+                                  (@Set.instCompleteAtomicBooleanAlgebra.{u_2} Point))))))
+                        (cellRegion cell₁) (cellRegion cell₂)) →
+                (covers_domain :
+                    ∀ (point : Point),
+                      Iff
+                        (@Membership.mem.{u_2, u_2} Point (Set.{u_2} Point) (@Set.instMembership.{u_2} Point) domain
+                          point)
+                        (@Exists.{u_1 + 1} Cell fun (cell : Cell) =>
+                          @Membership.mem.{u_2, u_2} Point (Set.{u_2} Point) (@Set.instMembership.{u_2} Point)
+                            (cellRegion cell) point)) →
+                  @NumStability.FiniteVolumeCellPartition.{u_1, u_2} Cell Point inst
+```
+
+### D006: `And`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D007: `CompleteSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Cauchy`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `0551d9b48389890091faefdb29b280e798958c385ce1b812011819c3ac7d5a01`
+
+Type:
+
+```lean
+(α : Type u) → [UniformSpace α] → Prop
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → [UniformSpace.{u} α] → Prop
+```
+
+### D008: `DFunLike.coe`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.FunLike.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `9db5c150b3c86d10b50e19602d0c0af9e5012dfe5f13b0d7b57925729f2478f0`
+
+Type:
+
+```lean
+{F : Sort u_1} → {α : outParam (Sort u_2)} → {β : outParam (α → Sort u_3)} → [self : DFunLike F α β] → F → (a : α) → β a
+```
+
+Fully explicit type:
+
+```lean
+{F : Sort u_1} →
+  {α : outParam.{u_2 + 1} (Sort u_2)} →
+    {β : outParam.{max u_2 (u_3 + 1)} (α → Sort u_3)} → [self : DFunLike.{u_1, u_2, u_3} F α β] → F → (a : α) → β a
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun F {α} {β} [self : DFunLike F α β] => self.1
+```
+
+### D009: `ENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `5b8f4d61311ebccecf6a54ceca44191d394e0108c8596129a77f03c15a7e457f`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop NNReal
+```
+
+### D010: `Eq`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7`
+
+Type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u_1} → α → α → Prop
+```
+
+### D011: `Exists`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde`
+
+Type:
+
+```lean
+{α : Sort u} → (α → Prop) → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (p : α → Prop) → Prop
+```
+
+### D012: `MeasurableSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `6825e55082259c6be2028d5ee0624c796293eccdd78af118da4583180067d196`
+
+Type:
+
+```lean
+Type u_7 → Type u_7
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u_7) → Type u_7
+```
+
+### D013: `MeasureTheory.IntegrableOn`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Integral.IntegrableOn`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `dabc1688ef0e599a1f54ac0aa2c596e2bf70ce60ba22c33b537a76452e7cb6ed`
+
+Type:
+
+```lean
+{α : Type u_1} →
+  {ε : Type u_3} →
+    {mα : MeasurableSpace α} →
+      [inst : TopologicalSpace ε] →
+        [ContinuousENorm ε] →
+          (α → ε) → Set α → autoParam (MeasureTheory.Measure α) MeasureTheory.IntegrableOn._auto_1 → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} →
+  {ε : Type u_3} →
+    {mα : MeasurableSpace.{u_1} α} →
+      [inst : TopologicalSpace.{u_3} ε] →
+        [@ContinuousENorm.{u_3} ε inst] →
+          (f : α → ε) →
+            (s : Set.{u_1} α) →
+              (μ : autoParam.{u_1 + 1} (@MeasureTheory.Measure.{u_1} α mα) MeasureTheory.IntegrableOn._auto_1) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {ε} {mα} [TopologicalSpace ε] [ContinuousENorm ε] f s μ => MeasureTheory.Integrable f (μ.restrict s)
+```
+
+### D014: `MeasureTheory.Measure`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `ba8c23c70f3135407096406cee0b4d7d9f02d088e8b1d1a1e105071821a3a51b`
+
+Type:
+
+```lean
+(α : Type u_6) → [MeasurableSpace α] → Type u_6
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u_6) → [MeasurableSpace.{u_6} α] → Type u_6
+```
+
+### D015: `MeasureTheory.Measure.instFunLike`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `94b2becf9230ce3d438e9b668f79f08e69dbe28c937b1aaca32d96e94b64a5b2`
+
+Type:
+
+```lean
+{α : Type u_1} → [inst : MeasurableSpace α] → FunLike (MeasureTheory.Measure α) (Set α) ENNReal
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} →
+  [inst : MeasurableSpace.{u_1} α] →
+    FunLike.{u_1 + 1, u_1 + 1, 1} (@MeasureTheory.Measure.{u_1} α inst) (Set.{u_1} α) ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [MeasurableSpace α] =>
+  { coe := fun μ => MeasureTheory.OuterMeasure.instFunLikeSetENNReal.coe μ.toOuterMeasure, coe_injective' := ⋯ }
+```
+
+### D016: `Ne`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6`
+
+Type:
+
+```lean
+{α : Sort u} → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Sort u} → (a b : α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} a b => Not (Eq a b)
+```
+
+### D017: `NormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741`
+
+Type:
+
+```lean
+Type u_8 → Type u_8
+```
+
+Fully explicit type:
+
+```lean
+(E : Type u_8) → Type u_8
+```
+
+### D018: `NormedAddCommGroup.toSeminormedAddCommGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be`
+
+Type:
+
+```lean
+{E : Type u_5} → [NormedAddCommGroup E] → SeminormedAddCommGroup E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_5} → [NormedAddCommGroup.{u_5} E] → SeminormedAddCommGroup.{u_5} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : NormedAddCommGroup E] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D019: `NormedSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960`
+
+Type:
+
+```lean
+(𝕜 : Type u_6) → (E : Type u_7) → [NormedField 𝕜] → [SeminormedAddCommGroup E] → Type (max u_6 u_7)
+```
+
+Fully explicit type:
+
+```lean
+(𝕜 : Type u_6) → (E : Type u_7) → [NormedField.{u_6} 𝕜] → [SeminormedAddCommGroup.{u_7} E] → Type (max u_6 u_7)
+```
+
+### D020: `OfNat.ofNat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead`
+
+Type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat α x] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → (x : Nat) → [self : OfNat.{u} α x] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α x [self : OfNat α x] => self.1
+```
+
+### D021: `PseudoMetricSpace.toUniformSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799`
+
+Type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace α] → UniformSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : PseudoMetricSpace.{u} α] → UniformSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : PseudoMetricSpace α] => self.7
+```
+
+### D022: `Real`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `inductive`
+- Distance from target type: `1`
+- Semantic SHA-256: `38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90`
+
+Type:
+
+```lean
+Type
+```
+
+Fully explicit type:
+
+```lean
+Type
+```
+
+### D023: `Real.normedField`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Field.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b`
+
+Type:
+
+```lean
+NormedField Real
+```
+
+Fully explicit type:
+
+```lean
+NormedField.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+let __src := Real.normedAddCommGroup;
+let __src_1 := Real.instField;
+{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,
+  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,
+  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,
+  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,
+  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,
+  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,
+  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,
+  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,
+  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,
+  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,
+  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,
+  toDiv := __src_1.toDiv, div_eq_mul_inv := ⋯, zpow := __src_1.zpow, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯,
+  toNontrivial := ⋯, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := ⋯,
+  inv_zero := ⋯, nnratCast_def := ⋯, nnqsmul := __src_1.nnqsmul, nnqsmul_def := ⋯, ratCast_def := ⋯,
+  qsmul := __src_1.qsmul, qsmul_def := ⋯, toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul := ⋯ }
+```
+
+### D024: `SeminormedAddCommGroup.toPseudoMetricSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126`
+
+Type:
+
+```lean
+{E : Type u_8} → [self : SeminormedAddCommGroup E] → PseudoMetricSpace E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} → [self : SeminormedAddCommGroup.{u_8} E] → PseudoMetricSpace.{u_8} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E [self : SeminormedAddCommGroup E] => self.3
+```
+
+### D025: `SeminormedAddCommGroup.toSeminormedAddGroup`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `8cf35215f509cdee10a3a95158cbaadd3c5fb584bc0d1f4fad6ecfc69b1bd205`
+
+Type:
+
+```lean
+{E : Type u_5} → [SeminormedAddCommGroup E] → SeminormedAddGroup E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_5} → [SeminormedAddCommGroup.{u_5} E] → SeminormedAddGroup.{u_5} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : SeminormedAddCommGroup E] =>
+  have __src := inst;
+  { toNorm := __src.toNorm, toAddGroup := __src.toAddGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,
+    dist_eq := ⋯ }
+```
+
+### D026: `SeminormedAddGroup.toContinuousENorm`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `17a83cbf3059dd0bbaefd43c93ce329f1d6b760d440889322b3582a18b23a141`
+
+Type:
+
+```lean
+{E : Type u_4} → [inst : SeminormedAddGroup E] → ContinuousENorm E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_4} →
+  [inst : SeminormedAddGroup.{u_4} E] →
+    @ContinuousENorm.{u_4} E
+      (@UniformSpace.toTopologicalSpace.{u_4} E
+        (@PseudoMetricSpace.toUniformSpace.{u_4} E (@SeminormedAddGroup.toPseudoMetricSpace.{u_4} E inst)))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [SeminormedAddGroup E] => { toENorm := NNNorm.toENorm, continuous_enorm := ⋯ }
+```
+
+### D027: `Set`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `a6e551515032966c16e4f42e4548ff1854c2dce05ffe51e98b66943caecc78ec`
+
+Type:
+
+```lean
+Type u → Type u
+```
+
+Fully explicit type:
+
+```lean
+(α : Type u) → Type u
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α => α → Prop
+```
+
+### D028: `Set.EqOn`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Operations`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `88b1d8f315765b4f906b7dc15f6306e2a1fc00845d751cfe72cf1217abf8ca3d`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → (α → β) → (α → β) → Set α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → (f₁ f₂ : α → β) → (s : Set.{u} α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} f₁ f₂ s => ∀ ⦃x : α⦄, Set.instMembership.mem s x → Eq (f₁ x) (f₂ x)
+```
+
+### D029: `Top.top`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Notation`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `32c978930b5eb9164add86b32aeacdc99d2d10df09b4b1989d12a6e346774504`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : Top α] → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [self : Top.{u_1} α] → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Top α] => self.1
+```
+
+### D030: `UniformSpace.toTopologicalSpace`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Topology.UniformSpace.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8`
+
+Type:
+
+```lean
+{α : Type u} → [self : UniformSpace α] → TopologicalSpace α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : UniformSpace.{u} α] → TopologicalSpace.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : UniformSpace α] => self.1
+```
+
+### D031: `Zero.toOfNat0`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a`
+
+Type:
+
+```lean
+{α : Type u_1} → [Zero α] → OfNat α 0
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Zero.{u_1} α] → OfNat.{u_1} α (nat_lit 0)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Zero α] => { ofNat := inst.zero }
+```
+
+### D032: `instTopENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `fc363bb86fd9c29e754e22d842cff17acbad13559cb0e03d31f4863045cd3c07`
+
+Type:
+
+```lean
+Top ENNReal
+```
+
+Fully explicit type:
+
+```lean
+Top.{0} ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop.top
+```
+
+### D033: `instZeroENNReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `6e5878abb65d5809d3258e569c8ff0f08b39804b377a07fec18d700b4e3fea86`
+
+Type:
+
+```lean
+Zero ENNReal
+```
+
+Fully explicit type:
+
+```lean
+Zero.{0} ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+WithTop.zero
+```
+
+### D034: `AddMonoid.toAddZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddMonoid M] → AddZeroClass M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u} → [self : AddMonoid.{u} M] → AddZeroClass.{u} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := ⋯, add_zero := ⋯ }
+```
+
+### D035: `AddZero.toZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc`
+
+Type:
+
+```lean
+{M : Type u_2} → [self : AddZero M] → Zero M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_2} → [self : AddZero.{u_2} M] → Zero.{u_2} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZero M] => self.1
+```
+
+### D036: `AddZeroClass.toAddZero`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213`
+
+Type:
+
+```lean
+{M : Type u} → [self : AddZeroClass M] → AddZero M
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u} → [self : AddZeroClass.{u} M] → AddZero.{u} M
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M [self : AddZeroClass M] => self.1
+```
+
+### D037: `DistribMulAction.toDistribSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02`
+
+Type:
+
+```lean
+{M : Type u_1} → {A : Type u_7} → [inst : Monoid M] → [inst_1 : AddMonoid A] → [DistribMulAction M A] → DistribSMul M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_1} →
+  {A : Type u_7} →
+    [inst : Monoid.{u_1} M] →
+      [inst_1 : AddMonoid.{u_7} A] →
+        [@DistribMulAction.{u_1, u_7} M A inst inst_1] →
+          @DistribSMul.{u_1, u_7} M A (@AddMonoid.toAddZeroClass.{u_7} A inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>
+  let __src := inst_2;
+  { toSMul := __src.toSMul, smul_zero := ⋯, smul_add := ⋯ }
+```
+
+### D038: `DistribSMul.toSMulZeroClass`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : AddZeroClass A} → [self : DistribSMul M A] → SMulZeroClass M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_12} →
+  {A : Type u_13} →
+    {inst : AddZeroClass.{u_13} A} →
+      [self : @DistribSMul.{u_12, u_13} M A inst] →
+        @SMulZeroClass.{u_12, u_13} M A (@AddZero.toZero.{u_13} A (@AddZeroClass.toAddZero.{u_13} A inst))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : DistribSMul M A] => self.1
+```
+
+### D039: `ENNReal.toReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `1aa070f54e8aff7a6558c977220472990963777ddc5f04c5284f49422c06b41f`
+
+Type:
+
+```lean
+ENNReal → Real
+```
+
+Fully explicit type:
+
+```lean
+(a : ENNReal) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun a => a.toNNReal.toReal
+```
+
+### D040: `ENormedAddCommMonoid.toESeminormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ENormedAddCommMonoid E] → ESeminormedAddCommMonoid E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} →
+  {inst : TopologicalSpace.{u_8} E} →
+    [self : @ENormedAddCommMonoid.{u_8} E inst] → @ESeminormedAddCommMonoid.{u_8} E inst
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ENormedAddCommMonoid E] => self.1
+```
+
+### D041: `ESeminormedAddCommMonoid.toAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220`
+
+Type:
+
+```lean
+{E : Type u_8} → [inst : TopologicalSpace E] → [self : ESeminormedAddCommMonoid E] → AddCommMonoid E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} →
+  [inst : TopologicalSpace.{u_8} E] → [self : @ESeminormedAddCommMonoid.{u_8} E inst] → AddCommMonoid.{u_8} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm := ⋯ }
+```
+
+### D042: `ESeminormedAddCommMonoid.toESeminormedAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddCommMonoid E] → ESeminormedAddMonoid E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} →
+  {inst : TopologicalSpace.{u_8} E} →
+    [self : @ESeminormedAddCommMonoid.{u_8} E inst] → @ESeminormedAddMonoid.{u_8} E inst
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1
+```
+
+### D043: `ESeminormedAddMonoid.toAddMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901`
+
+Type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace E} → [self : ESeminormedAddMonoid E] → AddMonoid E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_8} → {inst : TopologicalSpace.{u_8} E} → [self : @ESeminormedAddMonoid.{u_8} E inst] → AddMonoid.{u_8} E
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun E {inst} [self : ESeminormedAddMonoid E] => self.2
+```
+
+### D044: `HSMul.hSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HSMul α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HSMul.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HSMul α β γ] => self.1
+```
+
+### D045: `Inv.inv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `c3aea3c6e2edd31a7b2cf071814315808ef7d84fd01d8c9b719313846ebca438`
+
+Type:
+
+```lean
+{α : Type u} → [self : Inv α] → α → α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : Inv.{u} α] → α → α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : Inv α] => self.1
+```
+
+### D046: `MeasureTheory.Measure.restrict`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Measure.Restrict`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `63c4446a3ae02833cbb1104dcc4f2ea534c0eae36f5642bfa8858a6593aa11e8`
+
+Type:
+
+```lean
+{α : Type u_2} → {_m0 : MeasurableSpace α} → MeasureTheory.Measure α → Set α → MeasureTheory.Measure α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} →
+  {_m0 : MeasurableSpace.{u_2} α} →
+    (μ : @MeasureTheory.Measure.{u_2} α _m0) → (s : Set.{u_2} α) → @MeasureTheory.Measure.{u_2} α _m0
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {_m0} μ s => LinearMap.instFunLike.coe (MeasureTheory.Measure.restrictₗ s) μ
+```
+
+### D047: `MeasureTheory.integral`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.Integral.Bochner.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `428563f3d6b771605a3267457bf33b62ec2efa91a42b57b96121b85c0269a9ab`
+
+Type:
+
+```lean
+{α : Type u_6} →
+  {G : Type u_7} →
+    [inst : NormedAddCommGroup G] →
+      [NormedSpace Real G] → {x : MeasurableSpace α} → MeasureTheory.Measure α → (α → G) → G
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_6} →
+  {G : Type u_7} →
+    [inst : NormedAddCommGroup.{u_7} G] →
+      [@NormedSpace.{0, u_7} Real G Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_7} G inst)] →
+        {x : MeasurableSpace.{u_6} α} → (μ : @MeasureTheory.Measure.{u_6} α x) → (f : α → G) → G
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+MeasureTheory.wrapped✝.1
+```
+
+### D048: `Module.toDistribMulAction`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.Module.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60`
+
+Type:
+
+```lean
+{R : Type u} →
+  {M : Type v} → {inst : Semiring R} → {inst_1 : AddCommMonoid M} → [self : Module R M] → DistribMulAction R M
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u} →
+  {M : Type v} →
+    {inst : Semiring.{u} R} →
+      {inst_1 : AddCommMonoid.{v} M} →
+        [self : @Module.{u, v} R M inst inst_1] →
+          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))
+            (@AddCommMonoid.toAddMonoid.{v} M inst_1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun R M {inst} {inst_1} [self : Module R M] => self.1
+```
+
+### D049: `NormedAddCommGroup.toENormedAddCommMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb`
+
+Type:
+
+```lean
+{E : Type u_4} → [inst : NormedAddCommGroup E] → ENormedAddCommMonoid E
+```
+
+Fully explicit type:
+
+```lean
+{E : Type u_4} →
+  [inst : NormedAddCommGroup.{u_4} E] →
+    @ENormedAddCommMonoid.{u_4} E
+      (@UniformSpace.toTopologicalSpace.{u_4} E
+        (@PseudoMetricSpace.toUniformSpace.{u_4} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_4} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_4} E inst))))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {E} [inst : NormedAddCommGroup E] =>
+  let __spread.0 := NormedAddGroup.toENormedAddMonoid;
+  have __spread.1 := inst;
+  { toESeminormedAddMonoid := __spread.0.toESeminormedAddMonoid, add_comm := ⋯, enorm_eq_zero := ⋯ }
+```
+
+### D050: `NormedSpace.toModule`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.Normed.Module.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4`
+
+Type:
+
+```lean
+{𝕜 : Type u_6} →
+  {E : Type u_7} → {inst : NormedField 𝕜} → {inst_1 : SeminormedAddCommGroup E} → [self : NormedSpace 𝕜 E] → Module 𝕜 E
+```
+
+Fully explicit type:
+
+```lean
+{𝕜 : Type u_6} →
+  {E : Type u_7} →
+    {inst : NormedField.{u_6} 𝕜} →
+      {inst_1 : SeminormedAddCommGroup.{u_7} E} →
+        [self : @NormedSpace.{u_6, u_7} 𝕜 E inst inst_1] →
+          @Module.{u_6, u_7} 𝕜 E
+            (@DivisionSemiring.toSemiring.{u_6} 𝕜
+              (@Semifield.toDivisionSemiring.{u_6} 𝕜 (@Field.toSemifield.{u_6} 𝕜 (@NormedField.toField.{u_6} 𝕜 inst))))
+            (@AddCommGroup.toAddCommMonoid.{u_7} E (@SeminormedAddCommGroup.toAddCommGroup.{u_7} E inst_1))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun 𝕜 E {inst} {inst_1} [self : NormedSpace 𝕜 E] => self.1
+```
+
+### D051: `Real.instInv`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `8996fd673a1e2289aaf761085a60a161bdafebda8cdd48d1efb3c89da1382980`
+
+Type:
+
+```lean
+Inv Real
+```
+
+Fully explicit type:
+
+```lean
+Inv.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ inv := Real.inv'✝ }
+```
+
+### D052: `Real.instMonoid`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8`
+
+Type:
+
+```lean
+Monoid Real
+```
+
+Fully explicit type:
+
+```lean
+Monoid.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D053: `Real.semiring`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c`
+
+Type:
+
+```lean
+Semiring Real
+```
+
+Fully explicit type:
+
+```lean
+Semiring.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+inferInstance
+```
+
+### D054: `SMulZeroClass.toSMul`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Algebra.GroupWithZero.Action.Defs`
+- Declaration kind: `abbrev`
+- Distance from target type: `2`
+- Semantic SHA-256: `a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6`
+
+Type:
+
+```lean
+{M : Type u_12} → {A : Type u_13} → {inst : Zero A} → [self : SMulZeroClass M A] → SMul M A
+```
+
+Fully explicit type:
+
+```lean
+{M : Type u_12} →
+  {A : Type u_13} → {inst : Zero.{u_13} A} → [self : @SMulZeroClass.{u_12, u_13} M A inst] → SMul.{u_12, u_13} M A
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun M A {inst} [self : SMulZeroClass M A] => self.1
+```
+
+### D055: `instHSMul`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `2`
+- Semantic SHA-256: `04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3`
+
+Type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul α β] → HSMul α β β
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → {β : Type u_2} → [SMul.{u_1, u_2} α β] → HSMul.{u_1, u_2, u_2} α β β
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} {β} [inst : SMul α β] => { hSMul := inst.smul }
+```
+
+### D056: `CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `3a25d65eea18eac65c870b595439bf5f5b25e6d990cea7e3a635eb81bad4a258`
+
+Type:
+
+```lean
+{α : Type u} → [self : CompleteAtomicBooleanAlgebra α] → CompleteBooleanAlgebra α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : CompleteAtomicBooleanAlgebra.{u} α] → CompleteBooleanAlgebra.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteAtomicBooleanAlgebra α] => self.1
+```
+
+### D057: `CompleteBooleanAlgebra.toCompleteDistribLattice`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5b7b6334d9d65401dbf1e65d1fba2f464f54b88cbfb541ea9f6fe64419b9d357`
+
+Type:
+
+```lean
+{α : Type u} → [CompleteBooleanAlgebra α] → CompleteDistribLattice α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [CompleteBooleanAlgebra.{u} α] → CompleteDistribLattice.{u} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : CompleteBooleanAlgebra α] =>
+  let __spread.0 := inst;
+  let __spread.1 := BooleanAlgebra.toBiheytingAlgebra;
+  { toCompleteLattice := __spread.0.toCompleteLattice, toHImp := __spread.0.toHImp, le_himp_iff := ⋯,
+    toCompl := __spread.0.toCompl, himp_bot := ⋯, toSDiff := __spread.0.toSDiff, sdiff_le_iff := ⋯,
+    toHNot := __spread.1.toHNot, top_sdiff := ⋯ }
+```
+
+### D058: `CompleteBooleanAlgebra.toCompleteLattice`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `ef39a255ef10c0230be1cee558369fc7eb1b981c98d0e640e56097b98344a675`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : CompleteBooleanAlgebra α] → CompleteLattice α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [self : CompleteBooleanAlgebra.{u_1} α] → CompleteLattice.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteBooleanAlgebra α] => self.1
+```
+
+### D059: `CompleteDistribLattice.toFrame`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `9575e3922b928b13137e39541f6916c83a8c3d846f283ef286612bada2e926b1`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : CompleteDistribLattice α] → Order.Frame α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [self : CompleteDistribLattice.{u_1} α] → Order.Frame.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : CompleteDistribLattice α] => self.1
+```
+
+### D060: `CompleteLattice.instOmegaCompletePartialOrder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.OmegaCompletePartialOrder`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `a588686a2b08b742c60791d874ae481ba89fc2f75533682f87dbe461bb89639e`
+
+Type:
+
+```lean
+{α : Type u_2} → [CompleteLattice α] → OmegaCompletePartialOrder α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_2} → [CompleteLattice.{u_2} α] → OmegaCompletePartialOrder.{u_2} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : CompleteLattice α] =>
+  { toPartialOrder := inst.toCompleteSemilatticeInf.toPartialOrder,
+    ωSup := fun c => iSup fun i => OmegaCompletePartialOrder.Chain.instFunLikeNat.coe c i, le_ωSup := ⋯, ωSup_le := ⋯ }
+```
+
+### D061: `Disjoint`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Disjoint`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `b3c1a3f72029bdabf392b01ef59e09df14985ee45c8304a6e3013b31345ac3bb`
+
+Type:
+
+```lean
+{α : Type u_1} → [inst : PartialOrder α] → [OrderBot α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} →
+  [inst : PartialOrder.{u_1} α] →
+    [@OrderBot.{u_1} α (@Preorder.toLE.{u_1} α (@PartialOrder.toPreorder.{u_1} α inst))] → (a b : α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : PartialOrder α] [inst_1 : OrderBot α] a b => ∀ ⦃x : α⦄, inst.le x a → inst.le x b → inst.le x inst_1.bot
+```
+
+### D062: `HeytingAlgebra.toOrderBot`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.Heyting.Basic`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `2ee82a12c7227f6741bb957fb8033ec6bd4dc5696e0118ba976cd5cc433ce74c`
+
+Type:
+
+```lean
+{α : Type u_4} → [self : HeytingAlgebra α] → OrderBot α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_4} →
+  [self : HeytingAlgebra.{u_4} α] →
+    @OrderBot.{u_4} α
+      (@Preorder.toLE.{u_4} α
+        (@PartialOrder.toPreorder.{u_4} α
+          (@SemilatticeSup.toPartialOrder.{u_4} α
+            (@Lattice.toSemilatticeSup.{u_4} α
+              (@GeneralizedHeytingAlgebra.toLattice.{u_4} α
+                (@HeytingAlgebra.toGeneralizedHeytingAlgebra.{u_4} α self))))))
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : HeytingAlgebra α] => self.2
+```
+
+### D063: `Iff`
+
+- Role: `external-frontier`
+- Owner module: `Init.Core`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b`
+
+Type:
+
+```lean
+Prop → Prop → Prop
+```
+
+Fully explicit type:
+
+```lean
+(a b : Prop) → Prop
+```
+
+### D064: `MeasurableSet`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `2e9235174f4747f2e37b86692acc96182e23810c202fe6e159a326c4a72cf4ff`
+
+Type:
+
+```lean
+{α : Type u_1} → [MeasurableSpace α] → Set α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [MeasurableSpace.{u_1} α] → (s : Set.{u_1} α) → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : MeasurableSpace α] s => inst.MeasurableSet' s
+```
+
+### D065: `Membership.mem`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `941ea3346e809f919727c21bfcdeea342714a6b83f1cf871d648aa2cb14d6e9e`
+
+Type:
+
+```lean
+{α : outParam (Type u)} → {γ : Type v} → [self : Membership α γ] → γ → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : outParam.{u + 2} (Type u)} → {γ : Type v} → [self : Membership.{u, v} α γ] → γ → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} γ [self : Membership α γ] => self.1
+```
+
+### D066: `Nonempty`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `inductive`
+- Distance from target type: `3`
+- Semantic SHA-256: `37c79de378d44cb9dc334502b161bb140da0544579086aded2cf83ff99c462c7`
+
+Type:
+
+```lean
+Sort u → Prop
+```
+
+Fully explicit type:
+
+```lean
+(α : Sort u) → Prop
+```
+
+### D067: `OmegaCompletePartialOrder.toPartialOrder`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.OmegaCompletePartialOrder`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `04c999d7f177b80a86d128413a961873b394ba8a928e9f40ec1711b6050fc2de`
+
+Type:
+
+```lean
+{α : Type u_6} → [self : OmegaCompletePartialOrder α] → PartialOrder α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_6} → [self : OmegaCompletePartialOrder.{u_6} α] → PartialOrder.{u_6} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : OmegaCompletePartialOrder α] => self.1
+```
+
+### D068: `Order.Frame.toHeytingAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Order.CompleteBooleanAlgebra`
+- Declaration kind: `abbrev`
+- Distance from target type: `3`
+- Semantic SHA-256: `d4cf848cdacfde27a40baabeb09bc470dcfcc4d195ff7dedbad201a5ff6a03ab`
+
+Type:
+
+```lean
+{α : Type u_1} → [self : Order.Frame α] → HeytingAlgebra α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [self : Order.Frame.{u_1} α] → HeytingAlgebra.{u_1} α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α self =>
+  { toLattice := self.toLattice, toOrderTop := self.toOrderTop, toHImp := self.toHImp, le_himp_iff := ⋯,
+    toOrderBot := self.toOrderBot, toCompl := self.toCompl, himp_bot := ⋯ }
+```
+
+### D069: `Set.instCompleteAtomicBooleanAlgebra`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.BooleanAlgebra`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5ebef163c77bbddf9cd7439ed0b00fe337f343e5a1bbb203a126211604f9e398`
+
+Type:
+
+```lean
+{α : Type u_1} → CompleteAtomicBooleanAlgebra (Set α)
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → CompleteAtomicBooleanAlgebra.{u_1} (Set.{u_1} α)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} =>
+  let __src := Set.instBooleanAlgebra;
+  { toLattice := __src.toLattice, toSupSet := Set.instSupSet, le_sSup := ⋯, sSup_le := ⋯, toInfSet := Set.instInfSet,
+    sInf_le := ⋯, le_sInf := ⋯, toTop := __src.toTop, le_top := ⋯, toBot := __src.toBot, bot_le := ⋯, le_sup_inf := ⋯,
+    toCompl := __src.toCompl, toSDiff := __src.toSDiff, toHImp := __src.toHImp, inf_compl_le_bot := ⋯,
+    top_le_sup_compl := ⋯, sdiff_eq := ⋯, himp_eq := ⋯, iInf_iSup_eq := ⋯ }
+```
+
+### D070: `Set.instMembership`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Set.Defs`
+- Declaration kind: `def`
+- Distance from target type: `3`
+- Semantic SHA-256: `5858be77d319c5a0e238602f16818ed6fb2e2b52a81ff7edb07bc219d652f201`
+
+Type:
+
+```lean
+{α : Type u} → Membership α (Set α)
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → Membership.{u, u} α (Set.{u} α)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} => { mem := Set.Mem }
+```
+
+
+Complete dependency inventory SHA256 4f69d50b1ed4fe82e7358e3acf7fc903976cb990962d1c719f26bd571286b49a
+{
+  "dependencies": [
+    {
+      "blind_name": "LocalDef001",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D001",
+      "kind": "inductive",
+      "name": "NumStability.FiniteVolumeCellPartition",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage",
+      "role": "local",
+      "semantic_sha256": "643d6beb37c358dd676e40a0ed44bb8a1161a339bf1a86fade7e9a749db8accc",
+      "type_explicit": "(Cell : Type u_1) \u2192 (Point : Type u_2) \u2192 [MeasurableSpace.{u_2} Point] \u2192 Type (max u_1 u_2)",
+      "type_readable": "Type u_1 \u2192 (Point : Type u_2) \u2192 [MeasurableSpace Point] \u2192 Type (max u_1 u_2)"
+    },
+    {
+      "blind_name": "LocalDef002",
+      "body_readable": "fun Cell Point [MeasurableSpace Point] self => self.2",
+      "distance": 1,
+      "id": "D002",
+      "kind": "abbrev",
+      "name": "NumStability.FiniteVolumeCellPartition.cellRegion",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage",
+      "role": "local",
+      "semantic_sha256": "32dd6b17c69eb1ad645253a6f164e371ce8f60b4e07173cb0964fefc72bfff00",
+      "type_explicit": "{Cell : Type u_1} \u2192\n  {Point : Type u_2} \u2192\n    [inst : MeasurableSpace.{u_2} Point] \u2192\n      (self : @NumStability.FiniteVolumeCellPartition.{u_1, u_2} Cell Point inst) \u2192 Cell \u2192 Set.{u_2} Point",
+      "type_readable": "{Cell : Type u_1} \u2192\n  {Point : Type u_2} \u2192\n    [inst : MeasurableSpace Point] \u2192 NumStability.FiniteVolumeCellPartition Cell Point \u2192 Cell \u2192 Set Point"
+    },
+    {
+      "blind_name": "LocalDef003",
+      "body_readable": "fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] \u03bc region field average =>\n  And (Ne (MeasureTheory.Measure.instFunLike.coe \u03bc region) 0)\n    (And (Ne (MeasureTheory.Measure.instFunLike.coe \u03bc region) instTopENNReal.top)\n      (And (MeasureTheory.IntegrableOn field region \u03bc) (Eq average (NumStability.cellVolumeAverage \u03bc region field))))",
+      "distance": 1,
+      "id": "D003",
+      "kind": "def",
+      "name": "NumStability.IsCellVolumeAverage",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage",
+      "role": "local",
+      "semantic_sha256": "fdb0d6e4b63ff1207708b54fb213ff70402e3b030bfa1a6ab9148ed8b55e6006",
+      "type_explicit": "{Point : Type u_1} \u2192\n  {E : Type u_2} \u2192\n    [inst : MeasurableSpace.{u_1} Point] \u2192\n      [inst_1 : NormedAddCommGroup.{u_2} E] \u2192\n        [@NormedSpace.{0, u_2} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_2} E inst_1)] \u2192\n          (\u03bc : @MeasureTheory.Measure.{u_1} Point inst) \u2192\n            (region : Set.{u_1} Point) \u2192 (field : Point \u2192 E) \u2192 (average : E) \u2192 Prop",
+      "type_readable": "{Point : Type u_1} \u2192\n  {E : Type u_2} \u2192\n    [inst : MeasurableSpace Point] \u2192\n      [inst_1 : NormedAddCommGroup E] \u2192\n        [NormedSpace Real E] \u2192 MeasureTheory.Measure Point \u2192 Set Point \u2192 (Point \u2192 E) \u2192 E \u2192 Prop"
+    },
+    {
+      "blind_name": "LocalDef004",
+      "body_readable": "fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace Real E] \u03bc region field =>\n  instHSMul.hSMul (Real.instInv.inv (MeasureTheory.Measure.instFunLike.coe \u03bc region).toReal)\n    (MeasureTheory.integral (\u03bc.restrict region) fun point => field point)",
+      "distance": 1,
+      "id": "D004",
+      "kind": "def",
+      "name": "NumStability.cellVolumeAverage",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage",
+      "role": "local",
+      "semantic_sha256": "bc8800385daf12f69f5f7359f6f4ae6dcc02bae04ea06c59c19ad641935524ed",
+      "type_explicit": "{Point : Type u_1} \u2192\n  {E : Type u_2} \u2192\n    [inst : MeasurableSpace.{u_1} Point] \u2192\n      [inst_1 : NormedAddCommGroup.{u_2} E] \u2192\n        [@NormedSpace.{0, u_2} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_2} E inst_1)] \u2192\n          (\u03bc : @MeasureTheory.Measure.{u_1} Point inst) \u2192 (region : Set.{u_1} Point) \u2192 (field : Point \u2192 E) \u2192 E",
+      "type_readable": "{Point : Type u_1} \u2192\n  {E : Type u_2} \u2192\n    [inst : MeasurableSpace Point] \u2192\n      [inst_1 : NormedAddCommGroup E] \u2192 [NormedSpace Real E] \u2192 MeasureTheory.Measure Point \u2192 Set Point \u2192 (Point \u2192 E) \u2192 E"
+    },
+    {
+      "blind_name": "LocalDef005",
+      "body_readable": "",
+      "distance": 2,
+      "id": "D005",
+      "kind": "constructor",
+      "name": "NumStability.FiniteVolumeCellPartition.mk",
+      "owner_module": "ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage",
+      "role": "local",
+      "semantic_sha256": "739bab2b22ae879c4f9ff0943c6641c3a50b089aa099d9b3ca55f7e3dbb2945b",
+      "type_explicit": "{Cell : Type u_1} \u2192\n  {Point : Type u_2} \u2192\n    [inst : MeasurableSpace.{u_2} Point] \u2192\n      (domain : Set.{u_2} Point) \u2192\n        (cellRegion : Cell \u2192 Set.{u_2} Point) \u2192\n          (cells_nonempty : Nonempty.{u_1 + 1} Cell) \u2192\n            (measurable_cell : \u2200 (cell : Cell), @MeasurableSet.{u_2} Point inst (cellRegion cell)) \u2192\n              (disjoint_cells :\n                  \u2200 {cell\u2081 cell\u2082 : Cell},\n                    @Ne.{u_1 + 1} Cell cell\u2081 cell\u2082 \u2192\n                      @Disjoint.{u_2} (Set.{u_2} Point)\n                        (@OmegaCompletePartialOrder.toPartialOrder.{u_2} (Set.{u_2} Point)\n                          (@CompleteLattice.instOmegaCompletePartialOrder.{u_2} (Set.{u_2} Point)\n                            (@CompleteBooleanAlgebra.toCompleteLattice.{u_2} (Set.{u_2} Point)\n                              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{u_2} (Set.{u_2} Point)\n                                (@Set.instCompleteAtomicBooleanAlgebra.{u_2} Point)))))\n                        (@HeytingAlgebra.toOrderBot.{u_2} (Set.{u_2} Point)\n                          (@Order.Frame.toHeytingAlgebra.{u_2} (Set.{u_2} Point)\n                            (@CompleteDistribLattice.toFrame.{u_2} (Set.{u_2} Point)\n                              (@CompleteBooleanAlgebra.toCompleteDistribLattice.{u_2} (Set.{u_2} Point)\n                                (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{u_2} (Set.{u_2} Point)\n                                  (@Set.instCompleteAtomicBooleanAlgebra.{u_2} Point))))))\n                        (cellRegion cell\u2081) (cellRegion cell\u2082)) \u2192\n                (covers_domain :\n                    \u2200 (point : Point),\n                      Iff\n                        (@Membership.mem.{u_2, u_2} Point (Set.{u_2} Point) (@Set.instMembership.{u_2} Point) domain\n                          point)\n                        (@Exists.{u_1 + 1} Cell fun (cell : Cell) =>\n                          @Membership.mem.{u_2, u_2} Point (Set.{u_2} Point) (@Set.instMembership.{u_2} Point)\n                            (cellRegion cell) point)) \u2192\n                  @NumStability.FiniteVolumeCellPartition.{u_1, u_2} Cell Point inst",
+      "type_readable": "{Cell : Type u_1} \u2192\n  {Point : Type u_2} \u2192\n    [inst : MeasurableSpace Point] \u2192\n      (domain : Set Point) \u2192\n        (cellRegion : Cell \u2192 Set Point) \u2192\n          Nonempty Cell \u2192\n            (\u2200 (cell : Cell), MeasurableSet (cellRegion cell)) \u2192\n              (\u2200 {cell\u2081 cell\u2082 : Cell}, Ne cell\u2081 cell\u2082 \u2192 Disjoint (cellRegion cell\u2081) (cellRegion cell\u2082)) \u2192\n                (\u2200 (point : Point),\n                    Iff (Set.instMembership.mem domain point)\n                      (Exists fun cell => Set.instMembership.mem (cellRegion cell) point)) \u2192\n                  NumStability.FiniteVolumeCellPartition Cell Point"
+    },
+    {
+      "blind_name": "And",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D006",
+      "kind": "inductive",
+      "name": "And",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37ecdc009aa953e3d4924ef10e6a1fb591f6af993cd344fd5a6b5321466517c9",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "CompleteSpace",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D007",
+      "kind": "inductive",
+      "name": "CompleteSpace",
+      "owner_module": "Mathlib.Topology.UniformSpace.Cauchy",
+      "role": "external-frontier",
+      "semantic_sha256": "0551d9b48389890091faefdb29b280e798958c385ce1b812011819c3ac7d5a01",
+      "type_explicit": "(\u03b1 : Type u) \u2192 [UniformSpace.{u} \u03b1] \u2192 Prop",
+      "type_readable": "(\u03b1 : Type u) \u2192 [UniformSpace \u03b1] \u2192 Prop"
+    },
+    {
+      "blind_name": "DFunLike.coe",
+      "body_readable": "fun F {\u03b1} {\u03b2} [self : DFunLike F \u03b1 \u03b2] => self.1",
+      "distance": 1,
+      "id": "D008",
+      "kind": "abbrev",
+      "name": "DFunLike.coe",
+      "owner_module": "Mathlib.Data.FunLike.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "9db5c150b3c86d10b50e19602d0c0af9e5012dfe5f13b0d7b57925729f2478f0",
+      "type_explicit": "{F : Sort u_1} \u2192\n  {\u03b1 : outParam.{u_2 + 1} (Sort u_2)} \u2192\n    {\u03b2 : outParam.{max u_2 (u_3 + 1)} (\u03b1 \u2192 Sort u_3)} \u2192 [self : DFunLike.{u_1, u_2, u_3} F \u03b1 \u03b2] \u2192 F \u2192 (a : \u03b1) \u2192 \u03b2 a",
+      "type_readable": "{F : Sort u_1} \u2192 {\u03b1 : outParam (Sort u_2)} \u2192 {\u03b2 : outParam (\u03b1 \u2192 Sort u_3)} \u2192 [self : DFunLike F \u03b1 \u03b2] \u2192 F \u2192 (a : \u03b1) \u2192 \u03b2 a"
+    },
+    {
+      "blind_name": "ENNReal",
+      "body_readable": "WithTop NNReal",
+      "distance": 1,
+      "id": "D009",
+      "kind": "def",
+      "name": "ENNReal",
+      "owner_module": "Mathlib.Data.ENNReal.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "5b8f4d61311ebccecf6a54ceca44191d394e0108c8596129a77f03c15a7e457f",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Eq",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D010",
+      "kind": "inductive",
+      "name": "Eq",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "63e9afa87e04d13393a2fe09e8e76489d96be3982734b4b40a52fc6ebea863d7",
+      "type_explicit": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u_1} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Exists",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D011",
+      "kind": "inductive",
+      "name": "Exists",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "a24a6eb72dcf5b3765659a28bb9d3814ed7ebd3e3fa1fd11e8f3c7acc80e0dde",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (p : \u03b1 \u2192 Prop) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 (\u03b1 \u2192 Prop) \u2192 Prop"
+    },
+    {
+      "blind_name": "MeasurableSpace",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D012",
+      "kind": "inductive",
+      "name": "MeasurableSpace",
+      "owner_module": "Mathlib.MeasureTheory.MeasurableSpace.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "6825e55082259c6be2028d5ee0624c796293eccdd78af118da4583180067d196",
+      "type_explicit": "(\u03b1 : Type u_7) \u2192 Type u_7",
+      "type_readable": "Type u_7 \u2192 Type u_7"
+    },
+    {
+      "blind_name": "MeasureTheory.IntegrableOn",
+      "body_readable": "fun {\u03b1} {\u03b5} {m\u03b1} [TopologicalSpace \u03b5] [ContinuousENorm \u03b5] f s \u03bc => MeasureTheory.Integrable f (\u03bc.restrict s)",
+      "distance": 1,
+      "id": "D013",
+      "kind": "def",
+      "name": "MeasureTheory.IntegrableOn",
+      "owner_module": "Mathlib.MeasureTheory.Integral.IntegrableOn",
+      "role": "external-frontier",
+      "semantic_sha256": "dabc1688ef0e599a1f54ac0aa2c596e2bf70ce60ba22c33b537a76452e7cb6ed",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192\n  {\u03b5 : Type u_3} \u2192\n    {m\u03b1 : MeasurableSpace.{u_1} \u03b1} \u2192\n      [inst : TopologicalSpace.{u_3} \u03b5] \u2192\n        [@ContinuousENorm.{u_3} \u03b5 inst] \u2192\n          (f : \u03b1 \u2192 \u03b5) \u2192\n            (s : Set.{u_1} \u03b1) \u2192\n              (\u03bc : autoParam.{u_1 + 1} (@MeasureTheory.Measure.{u_1} \u03b1 m\u03b1) MeasureTheory.IntegrableOn._auto_1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u_1} \u2192\n  {\u03b5 : Type u_3} \u2192\n    {m\u03b1 : MeasurableSpace \u03b1} \u2192\n      [inst : TopologicalSpace \u03b5] \u2192\n        [ContinuousENorm \u03b5] \u2192\n          (\u03b1 \u2192 \u03b5) \u2192 Set \u03b1 \u2192 autoParam (MeasureTheory.Measure \u03b1) MeasureTheory.IntegrableOn._auto_1 \u2192 Prop"
+    },
+    {
+      "blind_name": "MeasureTheory.Measure",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D014",
+      "kind": "inductive",
+      "name": "MeasureTheory.Measure",
+      "owner_module": "Mathlib.MeasureTheory.Measure.MeasureSpaceDef",
+      "role": "external-frontier",
+      "semantic_sha256": "ba8c23c70f3135407096406cee0b4d7d9f02d088e8b1d1a1e105071821a3a51b",
+      "type_explicit": "(\u03b1 : Type u_6) \u2192 [MeasurableSpace.{u_6} \u03b1] \u2192 Type u_6",
+      "type_readable": "(\u03b1 : Type u_6) \u2192 [MeasurableSpace \u03b1] \u2192 Type u_6"
+    },
+    {
+      "blind_name": "MeasureTheory.Measure.instFunLike",
+      "body_readable": "fun {\u03b1} [MeasurableSpace \u03b1] =>\n  { coe := fun \u03bc => MeasureTheory.OuterMeasure.instFunLikeSetENNReal.coe \u03bc.toOuterMeasure, coe_injective' := \u22ef }",
+      "distance": 1,
+      "id": "D015",
+      "kind": "def",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "owner_module": "Mathlib.MeasureTheory.Measure.MeasureSpaceDef",
+      "role": "external-frontier",
+      "semantic_sha256": "94b2becf9230ce3d438e9b668f79f08e69dbe28c937b1aaca32d96e94b64a5b2",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192\n  [inst : MeasurableSpace.{u_1} \u03b1] \u2192\n    FunLike.{u_1 + 1, u_1 + 1, 1} (@MeasureTheory.Measure.{u_1} \u03b1 inst) (Set.{u_1} \u03b1) ENNReal",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [inst : MeasurableSpace \u03b1] \u2192 FunLike (MeasureTheory.Measure \u03b1) (Set \u03b1) ENNReal"
+    },
+    {
+      "blind_name": "Ne",
+      "body_readable": "fun {\u03b1} a b => Not (Eq a b)",
+      "distance": 1,
+      "id": "D016",
+      "kind": "def",
+      "name": "Ne",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "635adc1f9e4a981a5c01b21338fdf89e637bd4ef0aa6911bda4dc03acfe9fba6",
+      "type_explicit": "{\u03b1 : Sort u} \u2192 (a b : \u03b1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Sort u} \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "NormedAddCommGroup",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D017",
+      "kind": "inductive",
+      "name": "NormedAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7289fc1f1aac42f488a1fe69c897c4d418a0fa8699118dd0f273085d7d95b741",
+      "type_explicit": "(E : Type u_8) \u2192 Type u_8",
+      "type_readable": "Type u_8 \u2192 Type u_8"
+    },
+    {
+      "blind_name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "body_readable": "fun {E} [inst : NormedAddCommGroup E] =>\n  have __src := inst;\n  { toNorm := __src.toNorm, toAddCommGroup := __src.toAddCommGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,\n    dist_eq := \u22ef }",
+      "distance": 1,
+      "id": "D018",
+      "kind": "def",
+      "name": "NormedAddCommGroup.toSeminormedAddCommGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7327759e5e9417c54393e7566584cd72d79c77b4ca018ea408c5d024667587be",
+      "type_explicit": "{E : Type u_5} \u2192 [NormedAddCommGroup.{u_5} E] \u2192 SeminormedAddCommGroup.{u_5} E",
+      "type_readable": "{E : Type u_5} \u2192 [NormedAddCommGroup E] \u2192 SeminormedAddCommGroup E"
+    },
+    {
+      "blind_name": "NormedSpace",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D019",
+      "kind": "inductive",
+      "name": "NormedSpace",
+      "owner_module": "Mathlib.Analysis.Normed.Module.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "6b6b5b2582dac5d94b5d2a99eac51e4b8bee1f8e652cdec27b52f9c5d5ca5960",
+      "type_explicit": "(\ud835\udd5c : Type u_6) \u2192 (E : Type u_7) \u2192 [NormedField.{u_6} \ud835\udd5c] \u2192 [SeminormedAddCommGroup.{u_7} E] \u2192 Type (max u_6 u_7)",
+      "type_readable": "(\ud835\udd5c : Type u_6) \u2192 (E : Type u_7) \u2192 [NormedField \ud835\udd5c] \u2192 [SeminormedAddCommGroup E] \u2192 Type (max u_6 u_7)"
+    },
+    {
+      "blind_name": "OfNat.ofNat",
+      "body_readable": "fun \u03b1 x [self : OfNat \u03b1 x] => self.1",
+      "distance": 1,
+      "id": "D020",
+      "kind": "abbrev",
+      "name": "OfNat.ofNat",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "6a6a0720d091cfeb582747fe67b977e948f09706c0beae1f2f21830aa5821ead",
+      "type_explicit": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat.{u} \u03b1 x] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 (x : Nat) \u2192 [self : OfNat \u03b1 x] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "PseudoMetricSpace.toUniformSpace",
+      "body_readable": "fun \u03b1 [self : PseudoMetricSpace \u03b1] => self.7",
+      "distance": 1,
+      "id": "D021",
+      "kind": "abbrev",
+      "name": "PseudoMetricSpace.toUniformSpace",
+      "owner_module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a6831039b3ad5e37bd0e7692fd995a699d8bef791976e20262da929990521799",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace.{u} \u03b1] \u2192 UniformSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : PseudoMetricSpace \u03b1] \u2192 UniformSpace \u03b1"
+    },
+    {
+      "blind_name": "Real",
+      "body_readable": "",
+      "distance": 1,
+      "id": "D022",
+      "kind": "inductive",
+      "name": "Real",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "38529f0578472feffc4c79d5d0755fa10fc3edafb232ab5e442336d13630ee90",
+      "type_explicit": "Type",
+      "type_readable": "Type"
+    },
+    {
+      "blind_name": "Real.normedField",
+      "body_readable": "let __src := Real.normedAddCommGroup;\nlet __src_1 := Real.instField;\n{ toNorm := __src.toNorm, toAddMonoid := __src.toAddMonoid, add_comm := Real.normedField._proof_1,\n  toMul := __src_1.toMul, left_distrib := Real.normedField._proof_2, right_distrib := Real.normedField._proof_3,\n  zero_mul := Real.normedField._proof_4, mul_zero := Real.normedField._proof_5, mul_assoc := Real.normedField._proof_6,\n  toOne := __src_1.toOne, one_mul := Real.normedField._proof_7, mul_one := Real.normedField._proof_8,\n  toNatCast := __src_1.toNatCast, natCast_zero := Real.normedField._proof_9, natCast_succ := Real.normedField._proof_10,\n  npow := __src_1.npow, npow_zero := Real.normedField._proof_11, npow_succ := Real.normedField._proof_12,\n  toNeg := __src.toNeg, toSub := __src.toSub, sub_eq_add_neg := Real.normedField._proof_13, zsmul := __src.zsmul,\n  zsmul_zero' := Real.normedField._proof_14, zsmul_succ' := Real.normedField._proof_15,\n  zsmul_neg' := Real.normedField._proof_16, neg_add_cancel := Real.normedField._proof_17,\n  toIntCast := __src_1.toIntCast, intCast_ofNat := Real.normedField._proof_18,\n  intCast_negSucc := Real.normedField._proof_19, mul_comm := Real.normedField._proof_20, toInv := __src_1.toInv,\n  toDiv := __src_1.toDiv, div_eq_mul_inv := \u22ef, zpow := __src_1.zpow, zpow_zero' := \u22ef, zpow_succ' := \u22ef, zpow_neg' := \u22ef,\n  toNontrivial := \u22ef, toNNRatCast := __src_1.toNNRatCast, toRatCast := __src_1.toRatCast, mul_inv_cancel := \u22ef,\n  inv_zero := \u22ef, nnratCast_def := \u22ef, nnqsmul := __src_1.nnqsmul, nnqsmul_def := \u22ef, ratCast_def := \u22ef,\n  qsmul := __src_1.qsmul, qsmul_def := \u22ef, toMetricSpace := __src.toMetricSpace, dist_eq := \u22ef, norm_mul := \u22ef }",
+      "distance": 1,
+      "id": "D023",
+      "kind": "def",
+      "name": "Real.normedField",
+      "owner_module": "Mathlib.Analysis.Normed.Field.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "3249555a2824aa1e4e9c966b630ef876ae52df63ed09d0838da173aa28c0f77b",
+      "type_explicit": "NormedField.{0} Real",
+      "type_readable": "NormedField Real"
+    },
+    {
+      "blind_name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "body_readable": "fun E [self : SeminormedAddCommGroup E] => self.3",
+      "distance": 1,
+      "id": "D024",
+      "kind": "abbrev",
+      "name": "SeminormedAddCommGroup.toPseudoMetricSpace",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "3f8499f7dfc2e8115a48b4ac0bec5328dd7223a18dd71fc0061e711fbd543126",
+      "type_explicit": "{E : Type u_8} \u2192 [self : SeminormedAddCommGroup.{u_8} E] \u2192 PseudoMetricSpace.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 [self : SeminormedAddCommGroup E] \u2192 PseudoMetricSpace E"
+    },
+    {
+      "blind_name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "body_readable": "fun {E} [inst : SeminormedAddCommGroup E] =>\n  have __src := inst;\n  { toNorm := __src.toNorm, toAddGroup := __src.toAddGroup, toPseudoMetricSpace := __src.toPseudoMetricSpace,\n    dist_eq := \u22ef }",
+      "distance": 1,
+      "id": "D025",
+      "kind": "def",
+      "name": "SeminormedAddCommGroup.toSeminormedAddGroup",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "8cf35215f509cdee10a3a95158cbaadd3c5fb584bc0d1f4fad6ecfc69b1bd205",
+      "type_explicit": "{E : Type u_5} \u2192 [SeminormedAddCommGroup.{u_5} E] \u2192 SeminormedAddGroup.{u_5} E",
+      "type_readable": "{E : Type u_5} \u2192 [SeminormedAddCommGroup E] \u2192 SeminormedAddGroup E"
+    },
+    {
+      "blind_name": "SeminormedAddGroup.toContinuousENorm",
+      "body_readable": "fun {E} [SeminormedAddGroup E] => { toENorm := NNNorm.toENorm, continuous_enorm := \u22ef }",
+      "distance": 1,
+      "id": "D026",
+      "kind": "def",
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "role": "external-frontier",
+      "semantic_sha256": "17a83cbf3059dd0bbaefd43c93ce329f1d6b760d440889322b3582a18b23a141",
+      "type_explicit": "{E : Type u_4} \u2192\n  [inst : SeminormedAddGroup.{u_4} E] \u2192\n    @ContinuousENorm.{u_4} E\n      (@UniformSpace.toTopologicalSpace.{u_4} E\n        (@PseudoMetricSpace.toUniformSpace.{u_4} E (@SeminormedAddGroup.toPseudoMetricSpace.{u_4} E inst)))",
+      "type_readable": "{E : Type u_4} \u2192 [inst : SeminormedAddGroup E] \u2192 ContinuousENorm E"
+    },
+    {
+      "blind_name": "Set",
+      "body_readable": "fun \u03b1 => \u03b1 \u2192 Prop",
+      "distance": 1,
+      "id": "D027",
+      "kind": "def",
+      "name": "Set",
+      "owner_module": "Mathlib.Data.Set.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a6e551515032966c16e4f42e4548ff1854c2dce05ffe51e98b66943caecc78ec",
+      "type_explicit": "(\u03b1 : Type u) \u2192 Type u",
+      "type_readable": "Type u \u2192 Type u"
+    },
+    {
+      "blind_name": "Set.EqOn",
+      "body_readable": "fun {\u03b1} {\u03b2} f\u2081 f\u2082 s => \u2200 \u2983x : \u03b1\u2984, Set.instMembership.mem s x \u2192 Eq (f\u2081 x) (f\u2082 x)",
+      "distance": 1,
+      "id": "D028",
+      "kind": "def",
+      "name": "Set.EqOn",
+      "owner_module": "Mathlib.Data.Set.Operations",
+      "role": "external-frontier",
+      "semantic_sha256": "88b1d8f315765b4f906b7dc15f6306e2a1fc00845d751cfe72cf1217abf8ca3d",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 (f\u2081 f\u2082 : \u03b1 \u2192 \u03b2) \u2192 (s : Set.{u} \u03b1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 (\u03b1 \u2192 \u03b2) \u2192 (\u03b1 \u2192 \u03b2) \u2192 Set \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Top.top",
+      "body_readable": "fun \u03b1 [self : Top \u03b1] => self.1",
+      "distance": 1,
+      "id": "D029",
+      "kind": "abbrev",
+      "name": "Top.top",
+      "owner_module": "Mathlib.Order.Notation",
+      "role": "external-frontier",
+      "semantic_sha256": "32c978930b5eb9164add86b32aeacdc99d2d10df09b4b1989d12a6e346774504",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [self : Top.{u_1} \u03b1] \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [self : Top \u03b1] \u2192 \u03b1"
+    },
+    {
+      "blind_name": "UniformSpace.toTopologicalSpace",
+      "body_readable": "fun \u03b1 [self : UniformSpace \u03b1] => self.1",
+      "distance": 1,
+      "id": "D030",
+      "kind": "abbrev",
+      "name": "UniformSpace.toTopologicalSpace",
+      "owner_module": "Mathlib.Topology.UniformSpace.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "4d18df801a98905221e0935ec2ddacda684a1430b8d198ebc23fad0643bce2a8",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : UniformSpace.{u} \u03b1] \u2192 TopologicalSpace.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : UniformSpace \u03b1] \u2192 TopologicalSpace \u03b1"
+    },
+    {
+      "blind_name": "Zero.toOfNat0",
+      "body_readable": "fun {\u03b1} [inst : Zero \u03b1] => { ofNat := inst.zero }",
+      "distance": 1,
+      "id": "D031",
+      "kind": "def",
+      "name": "Zero.toOfNat0",
+      "owner_module": "Init.Data.Zero",
+      "role": "external-frontier",
+      "semantic_sha256": "f7ebe8a983de002c1ee751fd3c144a7c1933b3bb95c87c5001a3cabf5709031a",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [Zero.{u_1} \u03b1] \u2192 OfNat.{u_1} \u03b1 (nat_lit 0)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [Zero \u03b1] \u2192 OfNat \u03b1 0"
+    },
+    {
+      "blind_name": "instTopENNReal",
+      "body_readable": "WithTop.top",
+      "distance": 1,
+      "id": "D032",
+      "kind": "def",
+      "name": "instTopENNReal",
+      "owner_module": "Mathlib.Data.ENNReal.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "fc363bb86fd9c29e754e22d842cff17acbad13559cb0e03d31f4863045cd3c07",
+      "type_explicit": "Top.{0} ENNReal",
+      "type_readable": "Top ENNReal"
+    },
+    {
+      "blind_name": "instZeroENNReal",
+      "body_readable": "WithTop.zero",
+      "distance": 1,
+      "id": "D033",
+      "kind": "def",
+      "name": "instZeroENNReal",
+      "owner_module": "Mathlib.Data.ENNReal.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "6e5878abb65d5809d3258e569c8ff0f08b39804b377a07fec18d700b4e3fea86",
+      "type_explicit": "Zero.{0} ENNReal",
+      "type_readable": "Zero ENNReal"
+    },
+    {
+      "blind_name": "AddMonoid.toAddZeroClass",
+      "body_readable": "fun M self => { toZero := self.toZero, toAdd := self.toAdd, zero_add := \u22ef, add_zero := \u22ef }",
+      "distance": 2,
+      "id": "D034",
+      "kind": "abbrev",
+      "name": "AddMonoid.toAddZeroClass",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "4b5cfcaa0e3b1157089b486d5bfd51b9d15b881ea9cad302a6c8f701cae9ef1a",
+      "type_explicit": "{M : Type u} \u2192 [self : AddMonoid.{u} M] \u2192 AddZeroClass.{u} M",
+      "type_readable": "{M : Type u} \u2192 [self : AddMonoid M] \u2192 AddZeroClass M"
+    },
+    {
+      "blind_name": "AddZero.toZero",
+      "body_readable": "fun M [self : AddZero M] => self.1",
+      "distance": 2,
+      "id": "D035",
+      "kind": "abbrev",
+      "name": "AddZero.toZero",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "aa06299f9d38f11e9dad40701d7541d8eba2a4ac673c643f4c5f5ce1369490cc",
+      "type_explicit": "{M : Type u_2} \u2192 [self : AddZero.{u_2} M] \u2192 Zero.{u_2} M",
+      "type_readable": "{M : Type u_2} \u2192 [self : AddZero M] \u2192 Zero M"
+    },
+    {
+      "blind_name": "AddZeroClass.toAddZero",
+      "body_readable": "fun M [self : AddZeroClass M] => self.1",
+      "distance": 2,
+      "id": "D036",
+      "kind": "abbrev",
+      "name": "AddZeroClass.toAddZero",
+      "owner_module": "Mathlib.Algebra.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "8f64c653a96443ff67b52a5edb3fc264d279905b936c7303e9dd2469af000213",
+      "type_explicit": "{M : Type u} \u2192 [self : AddZeroClass.{u} M] \u2192 AddZero.{u} M",
+      "type_readable": "{M : Type u} \u2192 [self : AddZeroClass M] \u2192 AddZero M"
+    },
+    {
+      "blind_name": "DistribMulAction.toDistribSMul",
+      "body_readable": "fun {M} {A} [Monoid M] [AddMonoid A] [inst_2 : DistribMulAction M A] =>\n  let __src := inst_2;\n  { toSMul := __src.toSMul, smul_zero := \u22ef, smul_add := \u22ef }",
+      "distance": 2,
+      "id": "D037",
+      "kind": "def",
+      "name": "DistribMulAction.toDistribSMul",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "17a3c7e66a4c2897891d468da70a58e73aa0b8e044ea0cc90d8d6e9e51c08f02",
+      "type_explicit": "{M : Type u_1} \u2192\n  {A : Type u_7} \u2192\n    [inst : Monoid.{u_1} M] \u2192\n      [inst_1 : AddMonoid.{u_7} A] \u2192\n        [@DistribMulAction.{u_1, u_7} M A inst inst_1] \u2192\n          @DistribSMul.{u_1, u_7} M A (@AddMonoid.toAddZeroClass.{u_7} A inst_1)",
+      "type_readable": "{M : Type u_1} \u2192 {A : Type u_7} \u2192 [inst : Monoid M] \u2192 [inst_1 : AddMonoid A] \u2192 [DistribMulAction M A] \u2192 DistribSMul M A"
+    },
+    {
+      "blind_name": "DistribSMul.toSMulZeroClass",
+      "body_readable": "fun M A {inst} [self : DistribSMul M A] => self.1",
+      "distance": 2,
+      "id": "D038",
+      "kind": "abbrev",
+      "name": "DistribSMul.toSMulZeroClass",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "f640928ea31b161891006aaf9950d636ac5e1fbda413a7712f36546c938b3fdf",
+      "type_explicit": "{M : Type u_12} \u2192\n  {A : Type u_13} \u2192\n    {inst : AddZeroClass.{u_13} A} \u2192\n      [self : @DistribSMul.{u_12, u_13} M A inst] \u2192\n        @SMulZeroClass.{u_12, u_13} M A (@AddZero.toZero.{u_13} A (@AddZeroClass.toAddZero.{u_13} A inst))",
+      "type_readable": "{M : Type u_12} \u2192 {A : Type u_13} \u2192 {inst : AddZeroClass A} \u2192 [self : DistribSMul M A] \u2192 SMulZeroClass M A"
+    },
+    {
+      "blind_name": "ENNReal.toReal",
+      "body_readable": "fun a => a.toNNReal.toReal",
+      "distance": 2,
+      "id": "D039",
+      "kind": "def",
+      "name": "ENNReal.toReal",
+      "owner_module": "Mathlib.Data.ENNReal.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "1aa070f54e8aff7a6558c977220472990963777ddc5f04c5284f49422c06b41f",
+      "type_explicit": "(a : ENNReal) \u2192 Real",
+      "type_readable": "ENNReal \u2192 Real"
+    },
+    {
+      "blind_name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "body_readable": "fun E {inst} [self : ENormedAddCommMonoid E] => self.1",
+      "distance": 2,
+      "id": "D040",
+      "kind": "abbrev",
+      "name": "ENormedAddCommMonoid.toESeminormedAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "7d58c19063063d627291b91068fa4bf2bf5ff88679897376ac465b9f52e93642",
+      "type_explicit": "{E : Type u_8} \u2192\n  {inst : TopologicalSpace.{u_8} E} \u2192\n    [self : @ENormedAddCommMonoid.{u_8} E inst] \u2192 @ESeminormedAddCommMonoid.{u_8} E inst",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ENormedAddCommMonoid E] \u2192 ESeminormedAddCommMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "body_readable": "fun E [TopologicalSpace E] self => { toAddMonoid := self.toAddMonoid, add_comm := \u22ef }",
+      "distance": 2,
+      "id": "D041",
+      "kind": "abbrev",
+      "name": "ESeminormedAddCommMonoid.toAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "38db724db757c42f8e8affdaa0b60310db98b78e8ba320c452775788f7191220",
+      "type_explicit": "{E : Type u_8} \u2192\n  [inst : TopologicalSpace.{u_8} E] \u2192 [self : @ESeminormedAddCommMonoid.{u_8} E inst] \u2192 AddCommMonoid.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 [inst : TopologicalSpace E] \u2192 [self : ESeminormedAddCommMonoid E] \u2192 AddCommMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "body_readable": "fun E {inst} [self : ESeminormedAddCommMonoid E] => self.1",
+      "distance": 2,
+      "id": "D042",
+      "kind": "abbrev",
+      "name": "ESeminormedAddCommMonoid.toESeminormedAddMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "ad2e3c6c509dab0e1668564037784368e6c01e3dc381545577f451993c8283a4",
+      "type_explicit": "{E : Type u_8} \u2192\n  {inst : TopologicalSpace.{u_8} E} \u2192\n    [self : @ESeminormedAddCommMonoid.{u_8} E inst] \u2192 @ESeminormedAddMonoid.{u_8} E inst",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ESeminormedAddCommMonoid E] \u2192 ESeminormedAddMonoid E"
+    },
+    {
+      "blind_name": "ESeminormedAddMonoid.toAddMonoid",
+      "body_readable": "fun E {inst} [self : ESeminormedAddMonoid E] => self.2",
+      "distance": 2,
+      "id": "D043",
+      "kind": "abbrev",
+      "name": "ESeminormedAddMonoid.toAddMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "bf6ea4b699c55bfcdc7d32c89ca4d866413afa4dc5af86c3f4ff641d96cab901",
+      "type_explicit": "{E : Type u_8} \u2192 {inst : TopologicalSpace.{u_8} E} \u2192 [self : @ESeminormedAddMonoid.{u_8} E inst] \u2192 AddMonoid.{u_8} E",
+      "type_readable": "{E : Type u_8} \u2192 {inst : TopologicalSpace E} \u2192 [self : ESeminormedAddMonoid E] \u2192 AddMonoid E"
+    },
+    {
+      "blind_name": "HSMul.hSMul",
+      "body_readable": "fun \u03b1 \u03b2 {\u03b3} [self : HSMul \u03b1 \u03b2 \u03b3] => self.1",
+      "distance": 2,
+      "id": "D044",
+      "kind": "abbrev",
+      "name": "HSMul.hSMul",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "f1757307432fadbd23925bbf0a318b8da57d17711478e1073a19ce64c21d55f4",
+      "type_explicit": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam.{w + 2} (Type w)} \u2192 [self : HSMul.{u, v, w} \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3",
+      "type_readable": "{\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 {\u03b3 : outParam (Type w)} \u2192 [self : HSMul \u03b1 \u03b2 \u03b3] \u2192 \u03b1 \u2192 \u03b2 \u2192 \u03b3"
+    },
+    {
+      "blind_name": "Inv.inv",
+      "body_readable": "fun \u03b1 [self : Inv \u03b1] => self.1",
+      "distance": 2,
+      "id": "D045",
+      "kind": "abbrev",
+      "name": "Inv.inv",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "c3aea3c6e2edd31a7b2cf071814315808ef7d84fd01d8c9b719313846ebca438",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : Inv.{u} \u03b1] \u2192 \u03b1 \u2192 \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : Inv \u03b1] \u2192 \u03b1 \u2192 \u03b1"
+    },
+    {
+      "blind_name": "MeasureTheory.Measure.restrict",
+      "body_readable": "fun {\u03b1} {_m0} \u03bc s => LinearMap.instFunLike.coe (MeasureTheory.Measure.restrict\u2097 s) \u03bc",
+      "distance": 2,
+      "id": "D046",
+      "kind": "def",
+      "name": "MeasureTheory.Measure.restrict",
+      "owner_module": "Mathlib.MeasureTheory.Measure.Restrict",
+      "role": "external-frontier",
+      "semantic_sha256": "63c4446a3ae02833cbb1104dcc4f2ea534c0eae36f5642bfa8858a6593aa11e8",
+      "type_explicit": "{\u03b1 : Type u_2} \u2192\n  {_m0 : MeasurableSpace.{u_2} \u03b1} \u2192\n    (\u03bc : @MeasureTheory.Measure.{u_2} \u03b1 _m0) \u2192 (s : Set.{u_2} \u03b1) \u2192 @MeasureTheory.Measure.{u_2} \u03b1 _m0",
+      "type_readable": "{\u03b1 : Type u_2} \u2192 {_m0 : MeasurableSpace \u03b1} \u2192 MeasureTheory.Measure \u03b1 \u2192 Set \u03b1 \u2192 MeasureTheory.Measure \u03b1"
+    },
+    {
+      "blind_name": "MeasureTheory.integral",
+      "body_readable": "MeasureTheory.wrapped\u271d.1",
+      "distance": 2,
+      "id": "D047",
+      "kind": "def",
+      "name": "MeasureTheory.integral",
+      "owner_module": "Mathlib.MeasureTheory.Integral.Bochner.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "428563f3d6b771605a3267457bf33b62ec2efa91a42b57b96121b85c0269a9ab",
+      "type_explicit": "{\u03b1 : Type u_6} \u2192\n  {G : Type u_7} \u2192\n    [inst : NormedAddCommGroup.{u_7} G] \u2192\n      [@NormedSpace.{0, u_7} Real G Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_7} G inst)] \u2192\n        {x : MeasurableSpace.{u_6} \u03b1} \u2192 (\u03bc : @MeasureTheory.Measure.{u_6} \u03b1 x) \u2192 (f : \u03b1 \u2192 G) \u2192 G",
+      "type_readable": "{\u03b1 : Type u_6} \u2192\n  {G : Type u_7} \u2192\n    [inst : NormedAddCommGroup G] \u2192\n      [NormedSpace Real G] \u2192 {x : MeasurableSpace \u03b1} \u2192 MeasureTheory.Measure \u03b1 \u2192 (\u03b1 \u2192 G) \u2192 G"
+    },
+    {
+      "blind_name": "Module.toDistribMulAction",
+      "body_readable": "fun R M {inst} {inst_1} [self : Module R M] => self.1",
+      "distance": 2,
+      "id": "D048",
+      "kind": "abbrev",
+      "name": "Module.toDistribMulAction",
+      "owner_module": "Mathlib.Algebra.Module.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "88cb31241158a61c2eaae8459f700e8db39d9fca998e95d4fa73b87b68be8c60",
+      "type_explicit": "{R : Type u} \u2192\n  {M : Type v} \u2192\n    {inst : Semiring.{u} R} \u2192\n      {inst_1 : AddCommMonoid.{v} M} \u2192\n        [self : @Module.{u, v} R M inst inst_1] \u2192\n          @DistribMulAction.{u, v} R M (@MonoidWithZero.toMonoid.{u} R (@Semiring.toMonoidWithZero.{u} R inst))\n            (@AddCommMonoid.toAddMonoid.{v} M inst_1)",
+      "type_readable": "{R : Type u} \u2192\n  {M : Type v} \u2192 {inst : Semiring R} \u2192 {inst_1 : AddCommMonoid M} \u2192 [self : Module R M] \u2192 DistribMulAction R M"
+    },
+    {
+      "blind_name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "body_readable": "fun {E} [inst : NormedAddCommGroup E] =>\n  let __spread.0 := NormedAddGroup.toENormedAddMonoid;\n  have __spread.1 := inst;\n  { toESeminormedAddMonoid := __spread.0.toESeminormedAddMonoid, add_comm := \u22ef, enorm_eq_zero := \u22ef }",
+      "distance": 2,
+      "id": "D049",
+      "kind": "def",
+      "name": "NormedAddCommGroup.toENormedAddCommMonoid",
+      "owner_module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "role": "external-frontier",
+      "semantic_sha256": "eac639a9ae15f19554f668c9811538a135f4f05df04330bd8145b300efe57cfb",
+      "type_explicit": "{E : Type u_4} \u2192\n  [inst : NormedAddCommGroup.{u_4} E] \u2192\n    @ENormedAddCommMonoid.{u_4} E\n      (@UniformSpace.toTopologicalSpace.{u_4} E\n        (@PseudoMetricSpace.toUniformSpace.{u_4} E\n          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_4} E\n            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_4} E inst))))",
+      "type_readable": "{E : Type u_4} \u2192 [inst : NormedAddCommGroup E] \u2192 ENormedAddCommMonoid E"
+    },
+    {
+      "blind_name": "NormedSpace.toModule",
+      "body_readable": "fun \ud835\udd5c E {inst} {inst_1} [self : NormedSpace \ud835\udd5c E] => self.1",
+      "distance": 2,
+      "id": "D050",
+      "kind": "abbrev",
+      "name": "NormedSpace.toModule",
+      "owner_module": "Mathlib.Analysis.Normed.Module.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "5ced27e2d9cc2259d662cced299ca3071b9598822fc551dad5a5d6dd0f3a9df4",
+      "type_explicit": "{\ud835\udd5c : Type u_6} \u2192\n  {E : Type u_7} \u2192\n    {inst : NormedField.{u_6} \ud835\udd5c} \u2192\n      {inst_1 : SeminormedAddCommGroup.{u_7} E} \u2192\n        [self : @NormedSpace.{u_6, u_7} \ud835\udd5c E inst inst_1] \u2192\n          @Module.{u_6, u_7} \ud835\udd5c E\n            (@DivisionSemiring.toSemiring.{u_6} \ud835\udd5c\n              (@Semifield.toDivisionSemiring.{u_6} \ud835\udd5c (@Field.toSemifield.{u_6} \ud835\udd5c (@NormedField.toField.{u_6} \ud835\udd5c inst))))\n            (@AddCommGroup.toAddCommMonoid.{u_7} E (@SeminormedAddCommGroup.toAddCommGroup.{u_7} E inst_1))",
+      "type_readable": "{\ud835\udd5c : Type u_6} \u2192\n  {E : Type u_7} \u2192 {inst : NormedField \ud835\udd5c} \u2192 {inst_1 : SeminormedAddCommGroup E} \u2192 [self : NormedSpace \ud835\udd5c E] \u2192 Module \ud835\udd5c E"
+    },
+    {
+      "blind_name": "Real.instInv",
+      "body_readable": "{ inv := Real.inv'\u271d }",
+      "distance": 2,
+      "id": "D051",
+      "kind": "def",
+      "name": "Real.instInv",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "8996fd673a1e2289aaf761085a60a161bdafebda8cdd48d1efb3c89da1382980",
+      "type_explicit": "Inv.{0} Real",
+      "type_readable": "Inv Real"
+    },
+    {
+      "blind_name": "Real.instMonoid",
+      "body_readable": "inferInstance",
+      "distance": 2,
+      "id": "D052",
+      "kind": "def",
+      "name": "Real.instMonoid",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "37978679365b30167654c1ef9ecb0fa938325c2047191daa7208aee389c0b4b8",
+      "type_explicit": "Monoid.{0} Real",
+      "type_readable": "Monoid Real"
+    },
+    {
+      "blind_name": "Real.semiring",
+      "body_readable": "inferInstance",
+      "distance": 2,
+      "id": "D053",
+      "kind": "def",
+      "name": "Real.semiring",
+      "owner_module": "Mathlib.Data.Real.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "c0106cafec59cbaa840a6e4c7ee72e629b4456feb6db98c6bf8c3085fcac475c",
+      "type_explicit": "Semiring.{0} Real",
+      "type_readable": "Semiring Real"
+    },
+    {
+      "blind_name": "SMulZeroClass.toSMul",
+      "body_readable": "fun M A {inst} [self : SMulZeroClass M A] => self.1",
+      "distance": 2,
+      "id": "D054",
+      "kind": "abbrev",
+      "name": "SMulZeroClass.toSMul",
+      "owner_module": "Mathlib.Algebra.GroupWithZero.Action.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "a8cadadddb0c9fd4a7bcb7c57401fafb43a1f330afa35fdacacb6d0e82d0bcf6",
+      "type_explicit": "{M : Type u_12} \u2192\n  {A : Type u_13} \u2192 {inst : Zero.{u_13} A} \u2192 [self : @SMulZeroClass.{u_12, u_13} M A inst] \u2192 SMul.{u_12, u_13} M A",
+      "type_readable": "{M : Type u_12} \u2192 {A : Type u_13} \u2192 {inst : Zero A} \u2192 [self : SMulZeroClass M A] \u2192 SMul M A"
+    },
+    {
+      "blind_name": "instHSMul",
+      "body_readable": "fun {\u03b1} {\u03b2} [inst : SMul \u03b1 \u03b2] => { hSMul := inst.smul }",
+      "distance": 2,
+      "id": "D055",
+      "kind": "def",
+      "name": "instHSMul",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "04ea7c06812eccb8531b763b7aa28fd8f968befff069e74166ff1b406f7512e3",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [SMul.{u_1, u_2} \u03b1 \u03b2] \u2192 HSMul.{u_1, u_2, u_2} \u03b1 \u03b2 \u03b2",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 {\u03b2 : Type u_2} \u2192 [SMul \u03b1 \u03b2] \u2192 HSMul \u03b1 \u03b2 \u03b2"
+    },
+    {
+      "blind_name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "body_readable": "fun \u03b1 [self : CompleteAtomicBooleanAlgebra \u03b1] => self.1",
+      "distance": 3,
+      "id": "D056",
+      "kind": "abbrev",
+      "name": "CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra",
+      "owner_module": "Mathlib.Order.CompleteBooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "3a25d65eea18eac65c870b595439bf5f5b25e6d990cea7e3a635eb81bad4a258",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [self : CompleteAtomicBooleanAlgebra.{u} \u03b1] \u2192 CompleteBooleanAlgebra.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [self : CompleteAtomicBooleanAlgebra \u03b1] \u2192 CompleteBooleanAlgebra \u03b1"
+    },
+    {
+      "blind_name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "body_readable": "fun {\u03b1} [inst : CompleteBooleanAlgebra \u03b1] =>\n  let __spread.0 := inst;\n  let __spread.1 := BooleanAlgebra.toBiheytingAlgebra;\n  { toCompleteLattice := __spread.0.toCompleteLattice, toHImp := __spread.0.toHImp, le_himp_iff := \u22ef,\n    toCompl := __spread.0.toCompl, himp_bot := \u22ef, toSDiff := __spread.0.toSDiff, sdiff_le_iff := \u22ef,\n    toHNot := __spread.1.toHNot, top_sdiff := \u22ef }",
+      "distance": 3,
+      "id": "D057",
+      "kind": "def",
+      "name": "CompleteBooleanAlgebra.toCompleteDistribLattice",
+      "owner_module": "Mathlib.Order.CompleteBooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "5b7b6334d9d65401dbf1e65d1fba2f464f54b88cbfb541ea9f6fe64419b9d357",
+      "type_explicit": "{\u03b1 : Type u} \u2192 [CompleteBooleanAlgebra.{u} \u03b1] \u2192 CompleteDistribLattice.{u} \u03b1",
+      "type_readable": "{\u03b1 : Type u} \u2192 [CompleteBooleanAlgebra \u03b1] \u2192 CompleteDistribLattice \u03b1"
+    },
+    {
+      "blind_name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "body_readable": "fun \u03b1 [self : CompleteBooleanAlgebra \u03b1] => self.1",
+      "distance": 3,
+      "id": "D058",
+      "kind": "abbrev",
+      "name": "CompleteBooleanAlgebra.toCompleteLattice",
+      "owner_module": "Mathlib.Order.CompleteBooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "ef39a255ef10c0230be1cee558369fc7eb1b981c98d0e640e56097b98344a675",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [self : CompleteBooleanAlgebra.{u_1} \u03b1] \u2192 CompleteLattice.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [self : CompleteBooleanAlgebra \u03b1] \u2192 CompleteLattice \u03b1"
+    },
+    {
+      "blind_name": "CompleteDistribLattice.toFrame",
+      "body_readable": "fun \u03b1 [self : CompleteDistribLattice \u03b1] => self.1",
+      "distance": 3,
+      "id": "D059",
+      "kind": "abbrev",
+      "name": "CompleteDistribLattice.toFrame",
+      "owner_module": "Mathlib.Order.CompleteBooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "9575e3922b928b13137e39541f6916c83a8c3d846f283ef286612bada2e926b1",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [self : CompleteDistribLattice.{u_1} \u03b1] \u2192 Order.Frame.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [self : CompleteDistribLattice \u03b1] \u2192 Order.Frame \u03b1"
+    },
+    {
+      "blind_name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "body_readable": "fun {\u03b1} [inst : CompleteLattice \u03b1] =>\n  { toPartialOrder := inst.toCompleteSemilatticeInf.toPartialOrder,\n    \u03c9Sup := fun c => iSup fun i => OmegaCompletePartialOrder.Chain.instFunLikeNat.coe c i, le_\u03c9Sup := \u22ef, \u03c9Sup_le := \u22ef }",
+      "distance": 3,
+      "id": "D060",
+      "kind": "def",
+      "name": "CompleteLattice.instOmegaCompletePartialOrder",
+      "owner_module": "Mathlib.Order.OmegaCompletePartialOrder",
+      "role": "external-frontier",
+      "semantic_sha256": "a588686a2b08b742c60791d874ae481ba89fc2f75533682f87dbe461bb89639e",
+      "type_explicit": "{\u03b1 : Type u_2} \u2192 [CompleteLattice.{u_2} \u03b1] \u2192 OmegaCompletePartialOrder.{u_2} \u03b1",
+      "type_readable": "{\u03b1 : Type u_2} \u2192 [CompleteLattice \u03b1] \u2192 OmegaCompletePartialOrder \u03b1"
+    },
+    {
+      "blind_name": "Disjoint",
+      "body_readable": "fun {\u03b1} [inst : PartialOrder \u03b1] [inst_1 : OrderBot \u03b1] a b => \u2200 \u2983x : \u03b1\u2984, inst.le x a \u2192 inst.le x b \u2192 inst.le x inst_1.bot",
+      "distance": 3,
+      "id": "D061",
+      "kind": "def",
+      "name": "Disjoint",
+      "owner_module": "Mathlib.Order.Disjoint",
+      "role": "external-frontier",
+      "semantic_sha256": "b3c1a3f72029bdabf392b01ef59e09df14985ee45c8304a6e3013b31345ac3bb",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192\n  [inst : PartialOrder.{u_1} \u03b1] \u2192\n    [@OrderBot.{u_1} \u03b1 (@Preorder.toLE.{u_1} \u03b1 (@PartialOrder.toPreorder.{u_1} \u03b1 inst))] \u2192 (a b : \u03b1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [inst : PartialOrder \u03b1] \u2192 [OrderBot \u03b1] \u2192 \u03b1 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "HeytingAlgebra.toOrderBot",
+      "body_readable": "fun \u03b1 [self : HeytingAlgebra \u03b1] => self.2",
+      "distance": 3,
+      "id": "D062",
+      "kind": "abbrev",
+      "name": "HeytingAlgebra.toOrderBot",
+      "owner_module": "Mathlib.Order.Heyting.Basic",
+      "role": "external-frontier",
+      "semantic_sha256": "2ee82a12c7227f6741bb957fb8033ec6bd4dc5696e0118ba976cd5cc433ce74c",
+      "type_explicit": "{\u03b1 : Type u_4} \u2192\n  [self : HeytingAlgebra.{u_4} \u03b1] \u2192\n    @OrderBot.{u_4} \u03b1\n      (@Preorder.toLE.{u_4} \u03b1\n        (@PartialOrder.toPreorder.{u_4} \u03b1\n          (@SemilatticeSup.toPartialOrder.{u_4} \u03b1\n            (@Lattice.toSemilatticeSup.{u_4} \u03b1\n              (@GeneralizedHeytingAlgebra.toLattice.{u_4} \u03b1\n                (@HeytingAlgebra.toGeneralizedHeytingAlgebra.{u_4} \u03b1 self))))))",
+      "type_readable": "{\u03b1 : Type u_4} \u2192 [self : HeytingAlgebra \u03b1] \u2192 OrderBot \u03b1"
+    },
+    {
+      "blind_name": "Iff",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D063",
+      "kind": "inductive",
+      "name": "Iff",
+      "owner_module": "Init.Core",
+      "role": "external-frontier",
+      "semantic_sha256": "b9f48489cd9ca513eeae7e3e4fb154f354b93867eda8b67d1630275c4cb4f30b",
+      "type_explicit": "(a b : Prop) \u2192 Prop",
+      "type_readable": "Prop \u2192 Prop \u2192 Prop"
+    },
+    {
+      "blind_name": "MeasurableSet",
+      "body_readable": "fun {\u03b1} [inst : MeasurableSpace \u03b1] s => inst.MeasurableSet' s",
+      "distance": 3,
+      "id": "D064",
+      "kind": "def",
+      "name": "MeasurableSet",
+      "owner_module": "Mathlib.MeasureTheory.MeasurableSpace.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "2e9235174f4747f2e37b86692acc96182e23810c202fe6e159a326c4a72cf4ff",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [MeasurableSpace.{u_1} \u03b1] \u2192 (s : Set.{u_1} \u03b1) \u2192 Prop",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [MeasurableSpace \u03b1] \u2192 Set \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Membership.mem",
+      "body_readable": "fun {\u03b1} \u03b3 [self : Membership \u03b1 \u03b3] => self.1",
+      "distance": 3,
+      "id": "D065",
+      "kind": "abbrev",
+      "name": "Membership.mem",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "941ea3346e809f919727c21bfcdeea342714a6b83f1cf871d648aa2cb14d6e9e",
+      "type_explicit": "{\u03b1 : outParam.{u + 2} (Type u)} \u2192 {\u03b3 : Type v} \u2192 [self : Membership.{u, v} \u03b1 \u03b3] \u2192 \u03b3 \u2192 \u03b1 \u2192 Prop",
+      "type_readable": "{\u03b1 : outParam (Type u)} \u2192 {\u03b3 : Type v} \u2192 [self : Membership \u03b1 \u03b3] \u2192 \u03b3 \u2192 \u03b1 \u2192 Prop"
+    },
+    {
+      "blind_name": "Nonempty",
+      "body_readable": "",
+      "distance": 3,
+      "id": "D066",
+      "kind": "inductive",
+      "name": "Nonempty",
+      "owner_module": "Init.Prelude",
+      "role": "external-frontier",
+      "semantic_sha256": "37c79de378d44cb9dc334502b161bb140da0544579086aded2cf83ff99c462c7",
+      "type_explicit": "(\u03b1 : Sort u) \u2192 Prop",
+      "type_readable": "Sort u \u2192 Prop"
+    },
+    {
+      "blind_name": "OmegaCompletePartialOrder.toPartialOrder",
+      "body_readable": "fun \u03b1 [self : OmegaCompletePartialOrder \u03b1] => self.1",
+      "distance": 3,
+      "id": "D067",
+      "kind": "abbrev",
+      "name": "OmegaCompletePartialOrder.toPartialOrder",
+      "owner_module": "Mathlib.Order.OmegaCompletePartialOrder",
+      "role": "external-frontier",
+      "semantic_sha256": "04c999d7f177b80a86d128413a961873b394ba8a928e9f40ec1711b6050fc2de",
+      "type_explicit": "{\u03b1 : Type u_6} \u2192 [self : OmegaCompletePartialOrder.{u_6} \u03b1] \u2192 PartialOrder.{u_6} \u03b1",
+      "type_readable": "{\u03b1 : Type u_6} \u2192 [self : OmegaCompletePartialOrder \u03b1] \u2192 PartialOrder \u03b1"
+    },
+    {
+      "blind_name": "Order.Frame.toHeytingAlgebra",
+      "body_readable": "fun \u03b1 self =>\n  { toLattice := self.toLattice, toOrderTop := self.toOrderTop, toHImp := self.toHImp, le_himp_iff := \u22ef,\n    toOrderBot := self.toOrderBot, toCompl := self.toCompl, himp_bot := \u22ef }",
+      "distance": 3,
+      "id": "D068",
+      "kind": "abbrev",
+      "name": "Order.Frame.toHeytingAlgebra",
+      "owner_module": "Mathlib.Order.CompleteBooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "d4cf848cdacfde27a40baabeb09bc470dcfcc4d195ff7dedbad201a5ff6a03ab",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 [self : Order.Frame.{u_1} \u03b1] \u2192 HeytingAlgebra.{u_1} \u03b1",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 [self : Order.Frame \u03b1] \u2192 HeytingAlgebra \u03b1"
+    },
+    {
+      "blind_name": "Set.instCompleteAtomicBooleanAlgebra",
+      "body_readable": "fun {\u03b1} =>\n  let __src := Set.instBooleanAlgebra;\n  { toLattice := __src.toLattice, toSupSet := Set.instSupSet, le_sSup := \u22ef, sSup_le := \u22ef, toInfSet := Set.instInfSet,\n    sInf_le := \u22ef, le_sInf := \u22ef, toTop := __src.toTop, le_top := \u22ef, toBot := __src.toBot, bot_le := \u22ef, le_sup_inf := \u22ef,\n    toCompl := __src.toCompl, toSDiff := __src.toSDiff, toHImp := __src.toHImp, inf_compl_le_bot := \u22ef,\n    top_le_sup_compl := \u22ef, sdiff_eq := \u22ef, himp_eq := \u22ef, iInf_iSup_eq := \u22ef }",
+      "distance": 3,
+      "id": "D069",
+      "kind": "def",
+      "name": "Set.instCompleteAtomicBooleanAlgebra",
+      "owner_module": "Mathlib.Data.Set.BooleanAlgebra",
+      "role": "external-frontier",
+      "semantic_sha256": "5ebef163c77bbddf9cd7439ed0b00fe337f343e5a1bbb203a126211604f9e398",
+      "type_explicit": "{\u03b1 : Type u_1} \u2192 CompleteAtomicBooleanAlgebra.{u_1} (Set.{u_1} \u03b1)",
+      "type_readable": "{\u03b1 : Type u_1} \u2192 CompleteAtomicBooleanAlgebra (Set \u03b1)"
+    },
+    {
+      "blind_name": "Set.instMembership",
+      "body_readable": "fun {\u03b1} => { mem := Set.Mem }",
+      "distance": 3,
+      "id": "D070",
+      "kind": "def",
+      "name": "Set.instMembership",
+      "owner_module": "Mathlib.Data.Set.Defs",
+      "role": "external-frontier",
+      "semantic_sha256": "5858be77d319c5a0e238602f16818ed6fb2e2b52a81ff7edb07bc219d652f201",
+      "type_explicit": "{\u03b1 : Type u} \u2192 Membership.{u, u} \u03b1 (Set.{u} \u03b1)",
+      "type_readable": "{\u03b1 : Type u} \u2192 Membership \u03b1 (Set \u03b1)"
+    }
+  ],
+  "schema_version": "formalization-faithfulness-1"
+}
+
+
+Exact proof-free native Lean environment supplement; independently inspect its declarations and provenance SHA256 c4502161b4182fc98d4b89eeb2f8e08b5ae688cdc7f99ba63671f5a511f196e2
+{
+  "format": "proof-free-lean-environment-evidence-1",
+  "scope": "Exact native declaration output and runtime provenance for independent dependency inspection. No source correspondence conclusion is supplied.",
+  "runtime": {
+    "lean_runtime_version": "Lean (version 4.29.0-rc3, x86_64-w64-windows-gnu, commit 5d86aa4032284a5242470e95fbe25f1ff506763d, Release)",
+    "lean_binary": "c:\\Users\\qed_s\\.elan\\toolchains\\leanprover--lean4---v4.29.0-rc3\\bin\\lean.exe",
+    "lean_binary_sha256": "58da8685e404b9ad5bf7a5aadbe8fa4d3856d0d37feb61186a577171340dfd81",
+    "mathlib_package": {
+      "url": "https://github.com/leanprover-community/mathlib4",
+      "type": "git",
+      "subDir": null,
+      "scope": "leanprover-community",
+      "rev": "e8ea1afc32790ce1d4e1a4e45cc412ba9388716b",
+      "name": "mathlib",
+      "manifestFile": "lake-manifest.json",
+      "inputRev": "e8ea1afc32790ce1d4e1a4e45cc412ba9388716b",
+      "inherited": false,
+      "configFile": "lakefile.lean"
+    },
+    "direct_runtime_imports": [
+      {
+        "path": "c:\\Users\\qed_s\\.elan\\toolchains\\leanprover--lean4---v4.29.0-rc3\\lib\\lean\\Init.olean",
+        "sha256": "1aac160a76da0326066bd100a052b98a0ae811429870dbca5f9c7ef2578a4cd6"
+      },
+      {
+        "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\.lake\\build\\lib\\lean\\ComputationalMathematics\\Source\\LeVeque\\Chapter01\\Equation03TransportSolution.olean",
+        "sha256": "f76e9c8fe2634e57a5e9ff13de8f739462ee5bcd8b47e42f02e7f5b42c94c462"
+      },
+      {
+        "path": "C:\\Users\\qed_s\\OneDrive\\Documents\\ChatGPT\\VSCL-x-VERITAS\\lean-computational-mathematics\\.lake\\packages\\mathlib\\.lake\\build\\lib\\lean\\Mathlib\\MeasureTheory\\Measure\\Lebesgue\\Basic.olean",
+        "sha256": "b9dfc64bc137ae949f62ced211657771737cbbc93c84f16f596812b7413018b9"
+      }
+    ],
+    "selected_source_and_compiled_files": [
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/MeasureSpaceDef.lean",
+        "source_sha256": "1695334459d21bb93eaf92ee65d2d44c166d7c40805609e529f67de3ab6ed098",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Measure/MeasureSpaceDef.olean",
+        "compiled_sha256": "8325f3318936588fb411002b3c30e8eb1d63c1d56ee09b7679e1cb9191d0fb7e"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.lean",
+        "source_sha256": "a17229afda24793e6e255534668dc45f460314b36e1a1f962f6ed0b7671656ba",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.olean",
+        "compiled_sha256": "4cf330b36c63da003d092fc17a393ff298835ca72094c8df6f1b83dc7a020599"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Haar/OfBasis.lean",
+        "source_sha256": "e68c4c29829e969c2015c854eb7fb1ba0bf25d4d2bdf991a058b4ce388faf870",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Measure/Haar/OfBasis.olean",
+        "compiled_sha256": "2d8b499d33c894fb0f27f7a7b488631851d61a79b8664ae600e7f52989e7d3b6"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Haar/Basic.lean",
+        "source_sha256": "8893e5c9c307d2eb6a8dbaab9eed3f6155ba9af6b09e693d363b50e6263d212b",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Measure/Haar/Basic.olean",
+        "compiled_sha256": "13f885237a438f112674c58f7c15d5a6de2c3ce555ff9dca20442a98d9764302"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Stieltjes.lean",
+        "source_sha256": "f204083aefc0df4d811254261bdd82377bf907b631c74264c9ee986d3c886749",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Measure/Stieltjes.olean",
+        "compiled_sha256": "c12f5be5e78048f1de776396c0a55718fbd640c07cce0fc4b927cfbd957f9003"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/Basic.lean",
+        "source_sha256": "03b46f81f48a6c39b58eca9233b3a1fbc833ce31b88465e988e2b56ce13d1c58",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Measure/Lebesgue/Basic.olean",
+        "compiled_sha256": "b9dfc64bc137ae949f62ced211657771737cbbc93c84f16f596812b7413018b9"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/PiL2.lean",
+        "source_sha256": "2337191043e0888930b8600dbd92956358cb7532d98890c2af907c84f0cf177e",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/InnerProductSpace/PiL2.olean",
+        "compiled_sha256": "78f6d416b9c7239010951cdb82b46a2077724d309c6029fb91eec1f674ed9940"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Data/ENNReal/Basic.lean",
+        "source_sha256": "40f80e0dd7eadcd8c1824bdee62a964ba20ff804997f876b547d5ff270dd0798",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/ENNReal/Basic.olean",
+        "compiled_sha256": "ebad557f1f15eb3af7b88d4b9f753089fc1bae370e5efc5a1ef1da19ceea896c"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Basic.lean",
+        "source_sha256": "028dd2a92e75e1865c76a01bfe22b895c9302f89dc43fbd4165ec387eb12e5be",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/InnerProductSpace/Basic.olean",
+        "compiled_sha256": "6a322496f59c56387613fc6bae7fb1f05abd941d388396bc20ee44ec5fb155f3"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Analysis/RCLike/Lemmas.lean",
+        "source_sha256": "e05d2fa582015e501e4a17940faf632f59bd3714bf1008a8a130295f3de51ddc",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/RCLike/Lemmas.olean",
+        "compiled_sha256": "c7fa893e9d27beed20840d7d660a1a6acadb2711354e9a61f8cdae89676a260a"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Analysis/RCLike/Basic.lean",
+        "source_sha256": "e1cd8499613250202a1f83fd8cfc7a8f8c626238ef100915cf567f7e328df03b",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/RCLike/Basic.olean",
+        "compiled_sha256": "d04219ba976162632205683c46a1c5ecf8145b31799a061d98d6ae7a3eeec806"
+      },
+      {
+        "source_path": ".lake/packages/mathlib/Mathlib/Analysis/Normed/Group/Real.lean",
+        "source_sha256": "bf25db0750988daa58095497f981562b7066492c1307b520d545328bd242e9f5",
+        "compiled_path": ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Normed/Group/Real.olean",
+        "compiled_sha256": "c357bbc8b5ad28387f200a45db4feb5b5b80188d857650bea8d0da0a5f6b1a8f"
+      }
+    ]
+  },
+  "native_output_spans": [
+    {
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/first-elaboration.txt",
+      "source_sha256": "7be3be03f5df7bf69b9e52d494efca5cddb3180221def1b02c67692f5fbd9cff",
+      "start_byte": 0,
+      "end_byte_exclusive": 14071,
+      "span_sha256": "7be3be03f5df7bf69b9e52d494efca5cddb3180221def1b02c67692f5fbd9cff",
+      "first_line": 1,
+      "last_line": 205,
+      "exact_text": "@[implicit_reducible] def Real.measureSpace : MeasureTheory.MeasureSpace.{0} Real :=\r\n@inferInstance.{1} (MeasureTheory.MeasureSpace.{0} Real)\r\n  (@measureSpaceOfInnerProductSpace.{0} Real Real.normedAddCommGroup\r\n    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)\r\n    (@FiniteDimensional.rclike_to_real.{0} Real Real.instRCLike) Real.measurableSpace Real.borelSpace)\r\n@[implicit_reducible] def measureSpaceOfInnerProductSpace.{u_3} : {E : Type u_3} \u2192\r\n  [inst : NormedAddCommGroup.{u_3} E] \u2192\r\n    [inst_1 :\r\n        @InnerProductSpace.{0, u_3} Real E Real.instRCLike\r\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)] \u2192\r\n      [@FiniteDimensional.{0, u_3} Real E Real.instDivisionRing (@NormedAddCommGroup.toAddCommGroup.{u_3} E inst)\r\n            (@NormedSpace.toModule.{0, u_3} Real E Real.normedField\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))] \u2192\r\n        [inst_3 : MeasurableSpace.{u_3} E] \u2192\r\n          [@BorelSpace.{u_3} E\r\n                (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                  (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n                inst_3] \u2192\r\n            MeasureTheory.MeasureSpace.{u_3} E :=\r\nfun {E : Type u_3} [inst : NormedAddCommGroup.{u_3} E]\r\n    [inst_1 :\r\n      @InnerProductSpace.{0, u_3} Real E Real.instRCLike (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)]\r\n    [inst_2 :\r\n      @FiniteDimensional.{0, u_3} Real E Real.instDivisionRing (@NormedAddCommGroup.toAddCommGroup.{u_3} E inst)\r\n        (@NormedSpace.toModule.{0, u_3} Real E Real.normedField\r\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n          (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))]\r\n    [inst_3 : MeasurableSpace.{u_3} E]\r\n    [inst_4 :\r\n      @BorelSpace.{u_3} E\r\n        (@UniformSpace.toTopologicalSpace.{u_3} E\r\n          (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n            (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n        inst_3] =>\r\n  @MeasureTheory.MeasureSpace.mk.{u_3} E inst_3\r\n    (@Module.Basis.addHaar.{0, u_3}\r\n      (Fin\r\n        (@Module.finrank.{0, u_3} Real E\r\n          (@DivisionSemiring.toSemiring.{0} Real\r\n            (@Semifield.toDivisionSemiring.{0} Real\r\n              (@Field.toSemifield.{0} Real\r\n                (@NormedField.toField.{0} Real\r\n                  (@DenselyNormedField.toNormedField.{0} Real\r\n                    (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))\r\n          (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E\r\n            (@UniformSpace.toTopologicalSpace.{u_3} E\r\n              (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n            (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E\r\n              (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n              (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))\r\n          (@NormedSpace.toModule.{0, u_3} Real E\r\n            (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))\r\n            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n            (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))\r\n      E\r\n      (Fin.fintype\r\n        (@Module.finrank.{0, u_3} Real E\r\n          (@DivisionSemiring.toSemiring.{0} Real\r\n            (@Semifield.toDivisionSemiring.{0} Real\r\n              (@Field.toSemifield.{0} Real\r\n                (@NormedField.toField.{0} Real\r\n                  (@DenselyNormedField.toNormedField.{0} Real\r\n                    (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))\r\n          (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E\r\n            (@UniformSpace.toTopologicalSpace.{u_3} E\r\n              (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n            (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E\r\n              (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n              (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))\r\n          (@NormedSpace.toModule.{0, u_3} Real E\r\n            (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))\r\n            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n            (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))\r\n      inst\r\n      (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n        (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1)\r\n      inst_3 inst_4\r\n      (@OrthonormalBasis.toBasis.{0, 0, u_3}\r\n        (Fin\r\n          (@Module.finrank.{0, u_3} Real E\r\n            (@DivisionSemiring.toSemiring.{0} Real\r\n              (@Semifield.toDivisionSemiring.{0} Real\r\n                (@Field.toSemifield.{0} Real\r\n                  (@NormedField.toField.{0} Real\r\n                    (@DenselyNormedField.toNormedField.{0} Real\r\n                      (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))\r\n            (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E\r\n              (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n              (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E\r\n                (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                  (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n                (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))\r\n            (@NormedSpace.toModule.{0, u_3} Real E\r\n              (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))\r\n        Real Real.instRCLike E inst inst_1\r\n        (Fin.fintype\r\n          (@Module.finrank.{0, u_3} Real E\r\n            (@DivisionSemiring.toSemiring.{0} Real\r\n              (@Semifield.toDivisionSemiring.{0} Real\r\n                (@Field.toSemifield.{0} Real\r\n                  (@NormedField.toField.{0} Real\r\n                    (@DenselyNormedField.toNormedField.{0} Real\r\n                      (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))))))\r\n            (@ESeminormedAddCommMonoid.toAddCommMonoid.{u_3} E\r\n              (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n              (@ENormedAddCommMonoid.toESeminormedAddCommMonoid.{u_3} E\r\n                (@UniformSpace.toTopologicalSpace.{u_3} E\r\n                  (@PseudoMetricSpace.toUniformSpace.{u_3} E\r\n                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E\r\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst))))\r\n                (@NormedAddCommGroup.toENormedAddCommMonoid.{u_3} E inst)))\r\n            (@NormedSpace.toModule.{0, u_3} Real E\r\n              (@DenselyNormedField.toNormedField.{0} Real (@RCLike.toDenselyNormedField.{0} Real Real.instRCLike))\r\n              (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst)\r\n              (@InnerProductSpace.toNormedSpace.{0, u_3} Real E Real.instRCLike\r\n                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst) inst_1))))\r\n        (@stdOrthonormalBasis.{0, u_3} Real Real.instRCLike E inst inst_1 inst_2)))\r\ndef MeasureTheory.MeasureSpace.volume.{u_6} : {\u03b1 : Type u_6} \u2192\r\n  [self : MeasureTheory.MeasureSpace.{u_6} \u03b1] \u2192\r\n    @MeasureTheory.Measure.{u_6} \u03b1 (@MeasureTheory.MeasureSpace.toMeasurableSpace.{u_6} \u03b1 self) :=\r\nfun (\u03b1 : Type u_6) [self : MeasureTheory.MeasureSpace.{u_6} \u03b1] => self.2\r\n@MeasureTheory.MeasureSpace.volume.{0} Real\r\n  Real.measureSpace : @MeasureTheory.Measure.{0} Real\r\n  (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Real Real.measureSpace)\r\n@[irreducible] def Module.Basis.addHaar.{u_5, u_6} : {\u03b9 : Type u_5} \u2192\r\n  {E : Type u_6} \u2192\r\n    [Fintype \u03b9] \u2192\r\n      [inst : NormedAddCommGroup E] \u2192\r\n        [inst_1 : NormedSpace \u211d E] \u2192 [inst_2 : MeasurableSpace E] \u2192 [BorelSpace E] \u2192 Module.Basis \u03b9 \u211d E \u2192 Measure E :=\r\nModule.Basis.wrapped\u271d.1\r\nModule.Basis.addHaar_def.{u_5, u_6} {\u03b9 : Type u_5} {E : Type u_6} [Fintype \u03b9] [NormedAddCommGroup E] [NormedSpace \u211d E]\r\n  [MeasurableSpace E] [BorelSpace E] (b : Module.Basis \u03b9 \u211d E) : b.addHaar = Measure.addHaarMeasure b.parallelepiped\r\ndef MeasureTheory.Measure.addHaarMeasure.{u_1} : {G : Type u_1} \u2192\r\n  [inst : AddGroup G] \u2192\r\n    [inst_1 : TopologicalSpace G] \u2192\r\n      [IsTopologicalAddGroup G] \u2192\r\n        [inst : MeasurableSpace G] \u2192 [BorelSpace G] \u2192 TopologicalSpace.PositiveCompacts G \u2192 Measure G :=\r\nfun {G} [AddGroup G] [TopologicalSpace G] [IsTopologicalAddGroup G] [MeasurableSpace G] [BorelSpace G] K\u2080 =>\r\n  ((Measure.haar.addHaarContent K\u2080).measure \u2191K\u2080)\u207b\u00b9 \u2022 (Measure.haar.addHaarContent K\u2080).measure\r\nMeasureTheory.Measure.addHaarMeasure_self.{u_1} {G : Type u_1} [AddGroup G] [TopologicalSpace G]\r\n  [IsTopologicalAddGroup G] [MeasurableSpace G] [BorelSpace G] {K\u2080 : TopologicalSpace.PositiveCompacts G} :\r\n  (Measure.addHaarMeasure K\u2080) \u2191K\u2080 = 1\r\nModule.Basis.addHaar_self.{u_1, u_3} {\u03b9 : Type u_1} {E : Type u_3} [Fintype \u03b9] [NormedAddCommGroup E] [NormedSpace \u211d E]\r\n  [MeasurableSpace E] [BorelSpace E] (b : Module.Basis \u03b9 \u211d E) : b.addHaar (parallelepiped \u21d1b) = 1\r\nprotected def StieltjesFunction.id : StieltjesFunction \u211d :=\r\n{ toFun := id, mono' := StieltjesFunction.id._proof_1, right_continuous' := StieltjesFunction.id._proof_2 }\r\nStieltjesFunction.measure_Ioc.{u_1} {R : Type u_1} [LinearOrder R] [TopologicalSpace R] (f : StieltjesFunction R)\r\n  [OrderTopology R] [CompactIccSpace R] [MeasurableSpace R] [BorelSpace R] [SecondCountableTopology R]\r\n  [DenselyOrdered R] (a b : R) : f.measure (Set.Ioc a b) = ENNReal.ofReal (\u2191f b - \u2191f a)\r\nReal.volume_eq_stieltjes_id : volume = StieltjesFunction.id.measure\r\nReal.volume_Icc {a b : \u211d} : volume (Set.Icc a b) = ENNReal.ofReal (b - a)\r\nReal.volume_Ioc {a b : \u211d} : volume (Set.Ioc a b) = ENNReal.ofReal (b - a)\r\nReal.volume_real_Icc_of_le {a b : \u211d} (hab : a \u2264 b) : volume.real (Set.Icc a b) = b - a\r\nReal.volume_real_Ioc_of_le {a b : \u211d} (hab : a \u2264 b) : volume.real (Set.Ioc a b) = b - a\r\ngates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/probe.lean:50:2: warning: try 'simp' instead of 'simpa'\r\n\r\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\r\nRealMeasureDependency.selectedInstance : Real.measureSpace = measureSpaceOfInnerProductSpace\r\nRealMeasureDependency.selectedVolume : volume = (stdOrthonormalBasis \u211d \u211d).toBasis.addHaar\r\nRealMeasureDependency.stieltjesIdentity : volume = StieltjesFunction.id.measure\r\nRealMeasureDependency.unitInterval : volume (Set.Ioc 0 1) = 1\r\n'Real.measureSpace' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'measureSpaceOfInnerProductSpace' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Module.Basis.addHaar_def' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'MeasureTheory.Measure.addHaarMeasure_self' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Module.Basis.addHaar_self' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'StieltjesFunction.measure_Ioc' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Real.volume_eq_stieltjes_id' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Real.volume_Icc' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Real.volume_Ioc' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Real.volume_real_Icc_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'Real.volume_real_Ioc_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'RealMeasureDependency.selectedInstance' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'RealMeasureDependency.selectedVolume' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'RealMeasureDependency.stieltjesIdentity' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n'RealMeasureDependency.unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n"
+    },
+    {
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/borel-elaboration.txt",
+      "source_sha256": "efe36a7c6f19ce48180fd95a7a7dedbb19b6fe0b7dcebc62c85bd8f5dde9f0c0",
+      "start_byte": 0,
+      "end_byte_exclusive": 84,
+      "span_sha256": "46ffcb6b110a453b74664e4e404e59dbf085c0d715c04366a3c69b7bf28c69db",
+      "first_line": 1,
+      "last_line": 2,
+      "exact_text": "@[implicit_reducible] def Real.measurableSpace : MeasurableSpace \u211d :=\r\nborel \u211d\r\n"
+    },
+    {
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/borel-elaboration.txt",
+      "source_sha256": "efe36a7c6f19ce48180fd95a7a7dedbb19b6fe0b7dcebc62c85bd8f5dde9f0c0",
+      "start_byte": 155,
+      "end_byte_exclusive": 3656,
+      "span_sha256": "9d02c73101102cc67b7bb7356af43bebc7637212a5e1f18fd585dabb58d50007",
+      "first_line": 5,
+      "last_line": 53,
+      "exact_text": "Real.volume_eq_stieltjes_id : @Eq.{1}\r\n  (@MeasureTheory.Measure.{0} Real (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Real Real.measureSpace))\r\n  (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace)\r\n  (@StieltjesFunction.measure.{0} Real Real.linearOrder\r\n    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\r\n    StieltjesFunction.id instOrderTopologyReal\r\n    (@ConditionallyCompleteLinearOrder.toCompactIccSpace.{0} Real Real.instConditionallyCompleteLinearOrder\r\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\r\n      instOrderTopologyReal)\r\n    Real.measurableSpace Real.borelSpace instSecondCountableTopologyReal\r\n    (@LinearOrderedSemiField.toDenselyOrdered.{0} Real (@Field.toSemifield.{0} Real Real.instField) Real.partialOrder\r\n      (@PosMulReflectLE.toPosMulReflectLT.{0} Real\r\n        (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real\r\n          (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Real\r\n            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real\r\n              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real\r\n                (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real\r\n                  (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))))\r\n        Real.partialOrder\r\n        (@PosMulStrictMono.toPosMulReflectLE.{0} Real\r\n          (@MulZeroClass.toMul.{0} Real\r\n            (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real\r\n              (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Real\r\n                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real\r\n                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real\r\n                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real\r\n                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))))\r\n          (@MulZeroClass.toZero.{0} Real\r\n            (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real\r\n              (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Real\r\n                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real\r\n                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real\r\n                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real\r\n                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))))\r\n          Real.linearOrder\r\n          (@IsStrictOrderedRing.toPosMulStrictMono.{0} Real Real.semiring Real.partialOrder\r\n            Real.instIsStrictOrderedRing)))\r\n      Real.instIsStrictOrderedRing))\r\n@Real.volume_Ioc : \u2200 {a b : Real},\r\n  @Eq.{1} ENNReal\r\n    (@DFunLike.coe.{1, 1, 1}\r\n      (@MeasureTheory.Measure.{0} Real (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Real Real.measureSpace))\r\n      (Set.{0} Real) (fun (x : Set.{0} Real) => ENNReal)\r\n      (@MeasureTheory.Measure.instFunLike.{0} Real\r\n        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Real Real.measureSpace))\r\n      (@MeasureTheory.MeasureSpace.volume.{0} Real Real.measureSpace) (@Set.Ioc.{0} Real Real.instPreorder a b))\r\n    (ENNReal.ofReal (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) b a))\r\nRealMeasureDependency.selectedBorel : Real.measureSpace.toMeasurableSpace = borel \u211d\r\n'RealMeasureDependency.selectedBorel' depends on axioms: [propext, Classical.choice, Quot.sound]\r\n"
+    }
+  ],
+  "probe_commands": [
+    {
+      "command": "lake env lean gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/probe.lean",
+      "exit_code": 0,
+      "output": "first-elaboration.txt"
+    },
+    {
+      "command": "lake env lean gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/borel-probe.lean",
+      "exit_code": 0,
+      "output": "borel-elaboration.txt"
+    },
+    {
+      "command": "lake env lean --version",
+      "exit_code": 0,
+      "output": "lean-version-output.txt"
+    },
+    {
+      "command": "lake env lean --deps gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/probe.lean",
+      "exit_code": 0,
+      "output": "lean-deps-output.txt"
+    }
+  ],
+  "omissions": [
+    {
+      "source_path": "gates/leveque-finite-volume/artifacts/session-20260908/real-measure-dependency/borel-elaboration.txt",
+      "first_line": 3,
+      "last_line": 4,
+      "reason": "Printed theorem proof body omitted to preserve proof-free role evidence; original raw output remains hash-bound."
+    }
+  ]
+}
+
+This supplement contains exact native output spans and runtime/source hash provenance. It supplies no prior audit judgment. Treat declaration output as evidence to inspect independently, not a requested interpretation or classification. It is bound by the prepared manifest as Lean-environment evidence. Preserve any unresolved source or dependency meaning.
+
+Direct isolation: do not read blind translation, roundtrip judgment, or prior judgments.
+
+Attached primary source rendering: raw PDF page 27.
+
+Attached primary source rendering: raw PDF page 29.
+
+Attached primary source rendering: raw PDF page 30.
+
+Tools are forbidden in this fresh role session. Independently inspect the attached primary-source page images and the exact inline evidence. Do not access the filesystem, network, shell, or other tools. The orchestrator verified source bytes and rendering hashes; do not claim to have independently recomputed them.

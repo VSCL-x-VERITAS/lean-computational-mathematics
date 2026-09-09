@@ -1,0 +1,409 @@
+structure NumStability.FiniteVolumeCellPartition.{u_1, u_2} (Cell : Type u_1) (Point : Type u_2)
+  [MeasurableSpace Point] : Type (max u_1 u_2)
+number of parameters: 3
+fields:
+  NumStability.FiniteVolumeCellPartition.domain : Set Point
+  NumStability.FiniteVolumeCellPartition.cellRegion : Cell → Set Point
+  NumStability.FiniteVolumeCellPartition.cells_nonempty : Nonempty Cell
+  NumStability.FiniteVolumeCellPartition.measurable_cell : ∀ (cell : Cell), MeasurableSet (self.cellRegion cell)
+  NumStability.FiniteVolumeCellPartition.disjoint_cells : ∀ {cell₁ cell₂ : Cell},
+      cell₁ ≠ cell₂ → Disjoint (self.cellRegion cell₁) (self.cellRegion cell₂)
+  NumStability.FiniteVolumeCellPartition.covers_domain : ∀ (point : Point),
+      point ∈ self.domain ↔ ∃ cell, point ∈ self.cellRegion cell
+constructor:
+  NumStability.FiniteVolumeCellPartition.mk.{u_1, u_2} {Cell : Type u_1} {Point : Type u_2} [MeasurableSpace Point]
+    (domain : Set Point) (cellRegion : Cell → Set Point) (cells_nonempty : Nonempty Cell)
+    (measurable_cell : ∀ (cell : Cell), MeasurableSet (cellRegion cell))
+    (disjoint_cells : ∀ {cell₁ cell₂ : Cell}, cell₁ ≠ cell₂ → Disjoint (cellRegion cell₁) (cellRegion cell₂))
+    (covers_domain : ∀ (point : Point), point ∈ domain ↔ ∃ cell, point ∈ cellRegion cell) :
+    NumStability.FiniteVolumeCellPartition Cell Point
+'NumStability.FiniteVolumeCellPartition' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.cellVolumeAverage.{u_1, u_2} : {Point : Type u_1} →
+  {E : Type u_2} →
+    [inst : MeasurableSpace Point] →
+      [inst_1 : NormedAddCommGroup E] → [NormedSpace ℝ E] → MeasureTheory.Measure Point → Set Point → (Point → E) → E :=
+fun {Point} {E} [MeasurableSpace Point] [NormedAddCommGroup E] [NormedSpace ℝ E] μ region field =>
+  (μ region).toReal⁻¹ • ∫ (point : Point) in region, field point ∂μ
+'NumStability.cellVolumeAverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.FiniteCoordinate.PhysicalData.{u_1, u_2, u_3, u_4, u_5} (D : Type u_1) (Cell : Type u_2)
+  (Face : Type u_3) (Point : Type u_4) (FacePoint : Type u_5) [MeasurableSpace Point] [TopologicalSpace Point]
+  [MeasurableSpace FacePoint] (m : ℕ) : Type (max (max (max (max u_1 u_2) u_3) u_4) u_5)
+number of parameters: 9
+fields:
+  NumStability.FiniteCoordinate.PhysicalData.cells : NumStability.FiniteVolumeCellPartition Cell Point
+  NumStability.FiniteCoordinate.PhysicalData.measure : MeasureTheory.Measure Point
+  NumStability.FiniteCoordinate.PhysicalData.positive : ∀ (cell : Cell), self.measure (self.cells.cellRegion cell) ≠ 0
+  NumStability.FiniteCoordinate.PhysicalData.finite : ∀ (cell : Cell), self.measure (self.cells.cellRegion cell) ≠ ⊤
+  NumStability.FiniteCoordinate.PhysicalData.leftFace : D → Cell → Face
+  NumStability.FiniteCoordinate.PhysicalData.rightFace : D → Cell → Face
+  NumStability.FiniteCoordinate.PhysicalData.faceMeasure : D → Face → MeasureTheory.Measure FacePoint
+  NumStability.FiniteCoordinate.PhysicalData.facePoint : D → Face → FacePoint → Point
+  NumStability.FiniteCoordinate.PhysicalData.left_incidence : ∀ (d : D) (cell : Cell),
+      ∀ᵐ (point : FacePoint) ∂self.faceMeasure d (self.leftFace d cell),
+        self.facePoint d (self.leftFace d cell) point ∈ closure (self.cells.cellRegion cell)
+  NumStability.FiniteCoordinate.PhysicalData.right_incidence : ∀ (d : D) (cell : Cell),
+      ∀ᵐ (point : FacePoint) ∂self.faceMeasure d (self.rightFace d cell),
+        self.facePoint d (self.rightFace d cell) point ∈ closure (self.cells.cellRegion cell)
+  NumStability.FiniteCoordinate.PhysicalData.admissibleStates : D → Set (Fin m → ℝ)
+  NumStability.FiniteCoordinate.PhysicalData.normalFlux : D → Face → FacePoint → (Fin m → ℝ) → Fin m → ℝ
+  NumStability.FiniteCoordinate.PhysicalData.hyperbolic : ∀ (d : D) (face : Face) (point : FacePoint),
+      NumStability.IsHyperbolicFluxOn (self.normalFlux d face point) (self.admissibleStates d)
+constructor:
+  NumStability.FiniteCoordinate.PhysicalData.mk.{u_1, u_2, u_3, u_4, u_5} {D : Type u_1} {Cell : Type u_2}
+    {Face : Type u_3} {Point : Type u_4} {FacePoint : Type u_5} [MeasurableSpace Point] [TopologicalSpace Point]
+    [MeasurableSpace FacePoint] {m : ℕ} (cells : NumStability.FiniteVolumeCellPartition Cell Point)
+    (measure : MeasureTheory.Measure Point) (positive : ∀ (cell : Cell), measure (cells.cellRegion cell) ≠ 0)
+    (finite : ∀ (cell : Cell), measure (cells.cellRegion cell) ≠ ⊤) (leftFace rightFace : D → Cell → Face)
+    (faceMeasure : D → Face → MeasureTheory.Measure FacePoint) (facePoint : D → Face → FacePoint → Point)
+    (left_incidence :
+      ∀ (d : D) (cell : Cell),
+        ∀ᵐ (point : FacePoint) ∂faceMeasure d (leftFace d cell),
+          facePoint d (leftFace d cell) point ∈ closure (cells.cellRegion cell))
+    (right_incidence :
+      ∀ (d : D) (cell : Cell),
+        ∀ᵐ (point : FacePoint) ∂faceMeasure d (rightFace d cell),
+          facePoint d (rightFace d cell) point ∈ closure (cells.cellRegion cell))
+    (admissibleStates : D → Set (Fin m → ℝ)) (normalFlux : D → Face → FacePoint → (Fin m → ℝ) → Fin m → ℝ)
+    (hyperbolic :
+      ∀ (d : D) (face : Face) (point : FacePoint),
+        NumStability.IsHyperbolicFluxOn (normalFlux d face point) (admissibleStates d)) :
+    NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m
+'NumStability.FiniteCoordinate.PhysicalData' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalData.cellVolume.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} → NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m → Cell → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data cell =>
+  (data.measure (data.cells.cellRegion cell)).toReal
+'NumStability.FiniteCoordinate.PhysicalData.cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalData.cellMean.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} →
+                  NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                    (Point → ℝ → Fin m → ℝ) → Cell → ℝ → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data q cell t =>
+  NumStability.cellVolumeAverage data.measure (data.cells.cellRegion cell) fun x => q x t
+'NumStability.FiniteCoordinate.PhysicalData.cellMean' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalData.faceFlux.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} →
+                  NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                    D → (Point → ℝ → Fin m → ℝ) → Face → ℝ → Fin m → ℝ :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data d q face t =>
+  ∫ (point : FacePoint), data.normalFlux d face point (q (data.facePoint d face point) t) ∂data.faceMeasure d face
+'NumStability.FiniteCoordinate.PhysicalData.faceFlux' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCoordinate.PhysicalData.ReferenceOn.{u_1, u_2, u_3, u_4, u_5} : {D : Type u_1} →
+  {Cell : Type u_2} →
+    {Face : Type u_3} →
+      {Point : Type u_4} →
+        {FacePoint : Type u_5} →
+          [inst : MeasurableSpace Point] →
+            [inst_1 : TopologicalSpace Point] →
+              [inst_2 : MeasurableSpace FacePoint] →
+                {m : ℕ} →
+                  NumStability.FiniteCoordinate.PhysicalData D Cell Face Point FacePoint m →
+                    D → (Point → ℝ → Fin m → ℝ) → ℝ → ℝ → Prop :=
+fun {D} {Cell} {Face} {Point} {FacePoint} [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint]
+    {m} data d q s t =>
+  (∀ (cell : Cell),
+      ∀ τ ∈ Set.uIcc s t, MeasureTheory.IntegrableOn (fun x => q x τ) (data.cells.cellRegion cell) data.measure) ∧
+    (∀ (cell : Cell),
+        ∀ τ ∈ Set.uIcc s t,
+          MeasureTheory.Integrable
+              (fun point =>
+                data.normalFlux d (data.leftFace d cell) point (q (data.facePoint d (data.leftFace d cell) point) τ))
+              (data.faceMeasure d (data.leftFace d cell)) ∧
+            MeasureTheory.Integrable
+              (fun point =>
+                data.normalFlux d (data.rightFace d cell) point (q (data.facePoint d (data.rightFace d cell) point) τ))
+              (data.faceMeasure d (data.rightFace d cell))) ∧
+      (∀ x ∈ data.cells.domain, ∀ τ ∈ Set.uIcc s t, q x τ ∈ data.admissibleStates d) ∧
+        ∀ u ∈ Set.uIcc s t,
+          ∀ v ∈ Set.uIcc s t,
+            (∀ (cell : Cell),
+                IntervalIntegrable (data.faceFlux d q (data.leftFace d cell)) MeasureTheory.MeasureSpace.volume u v ∧
+                  IntervalIntegrable (data.faceFlux d q (data.rightFace d cell)) MeasureTheory.MeasureSpace.volume u
+                    v) ∧
+              ∀ (cell : Cell),
+                data.cellVolume cell • (data.cellMean q cell v - data.cellMean q cell u) =
+                  ∫ (τ : ℝ) in u..v,
+                    data.faceFlux d q (data.leftFace d cell) τ - data.faceFlux d q (data.rightFace d cell) τ
+'NumStability.FiniteCoordinate.PhysicalData.ReferenceOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.IsHyperbolicFluxAt : {m : ℕ} → ((Fin m → ℝ) → Fin m → ℝ) → (Fin m → ℝ) → Prop :=
+fun {m} flux state =>
+  ∃ derivative,
+    HasFDerivAt flux derivative state ∧ NumStability.IsRealHyperbolicMatrix (LinearMap.toMatrix' ↑derivative)
+'NumStability.IsHyperbolicFluxAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.IsHyperbolicFluxOn : {m : ℕ} → ((Fin m → ℝ) → Fin m → ℝ) → Set (Fin m → ℝ) → Prop :=
+fun {m} flux states => ∀ state ∈ states, NumStability.IsHyperbolicFluxAt flux state
+'NumStability.IsHyperbolicFluxOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.FiniteCartesian.CartesianIdentification.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+  (data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m)
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cellPosition : Cell → D → ℤ)
+  (facePosition : D → Face → D → ℤ) (flux : D → (Fin m → ℝ) → Fin m → ℝ) : Prop
+number of parameters: 13
+fields:
+  NumStability.FiniteCartesian.CartesianIdentification.left_position : ∀ (d : D) (cell : Cell),
+      facePosition d (data.leftFace d cell) = cellPosition cell
+  NumStability.FiniteCartesian.CartesianIdentification.right_position : ∀ (d : D) (cell : Cell),
+      facePosition d (data.rightFace d cell) = Function.update (cellPosition cell) d (cellPosition cell d + 1)
+  NumStability.FiniteCartesian.CartesianIdentification.cell_measure : ∀ (cell : Cell),
+      data.measure.restrict (data.cells.cellRegion cell) =
+        MeasureTheory.MeasureSpace.volume.restrict (NumStability.CartesianGrid.cellBox axes (cellPosition cell))
+  NumStability.FiniteCartesian.CartesianIdentification.face_measurable : ∀ (d : D) (face : Face),
+      AEMeasurable (data.facePoint d face) (data.faceMeasure d face)
+  NumStability.FiniteCartesian.CartesianIdentification.face_measure : ∀ (d : D) (face : Face),
+      MeasureTheory.Measure.map (data.facePoint d face) (data.faceMeasure d face) =
+        MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d (facePosition d face))
+          (MeasureTheory.MeasureSpace.volume.restrict
+            (NumStability.CartesianGrid.tangentialFaceBox axes d (facePosition d face)))
+  NumStability.FiniteCartesian.CartesianIdentification.normal_flux : ∀ (d : D) (face : Face),
+      ∀ᵐ (point : FacePoint) ∂data.faceMeasure d face,
+        ∀ (value : Fin m → ℝ), data.normalFlux d face point value = flux d value
+constructor:
+  NumStability.FiniteCartesian.CartesianIdentification.mk.{u_1, u_2, u_3, u_4} {D : Type u_1} {Cell : Type u_2}
+    {Face : Type u_3} {FacePoint : Type u_4} [Fintype D] [DecidableEq D] [MeasurableSpace FacePoint] {m : ℕ}
+    {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+    {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+    {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ}
+    (left_position : ∀ (d : D) (cell : Cell), facePosition d (data.leftFace d cell) = cellPosition cell)
+    (right_position :
+      ∀ (d : D) (cell : Cell),
+        facePosition d (data.rightFace d cell) = Function.update (cellPosition cell) d (cellPosition cell d + 1))
+    (cell_measure :
+      ∀ (cell : Cell),
+        data.measure.restrict (data.cells.cellRegion cell) =
+          MeasureTheory.MeasureSpace.volume.restrict (NumStability.CartesianGrid.cellBox axes (cellPosition cell)))
+    (face_measurable : ∀ (d : D) (face : Face), AEMeasurable (data.facePoint d face) (data.faceMeasure d face))
+    (face_measure :
+      ∀ (d : D) (face : Face),
+        MeasureTheory.Measure.map (data.facePoint d face) (data.faceMeasure d face) =
+          MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d (facePosition d face))
+            (MeasureTheory.MeasureSpace.volume.restrict
+              (NumStability.CartesianGrid.tangentialFaceBox axes d (facePosition d face))))
+    (normal_flux :
+      ∀ (d : D) (face : Face),
+        ∀ᵐ (point : FacePoint) ∂data.faceMeasure d face,
+          ∀ (value : Fin m → ℝ), data.normalFlux d face point value = flux d value) :
+    NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux
+'NumStability.FiniteCartesian.CartesianIdentification' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCartesian.cells.{u_1} : {D : Type u_1} →
+  [Fintype D] →
+    (D → NumStability.OneDimensionalFiniteVolumeGrid) →
+      (active : Finset (D → ℤ)) → active.Nonempty → NumStability.FiniteVolumeCellPartition (↥active) (D → ℝ) :=
+fun {D} [Fintype D] axes active hne =>
+  { domain := ⋃ cell, NumStability.CartesianGrid.cellBox axes ↑cell,
+    cellRegion := fun cell => NumStability.CartesianGrid.cellBox axes ↑cell, cells_nonempty := ⋯, measurable_cell := ⋯,
+    disjoint_cells := ⋯, covers_domain := ⋯ }
+'NumStability.FiniteCartesian.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCartesian.faceMeasure.{u_1} : {D : Type u_1} →
+  [Fintype D] →
+    [DecidableEq D] → (D → NumStability.OneDimensionalFiniteVolumeGrid) → D → (D → ℤ) → MeasureTheory.Measure (D → ℝ) :=
+fun {D} [Fintype D] [DecidableEq D] axes d face =>
+  MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d face)
+    (MeasureTheory.MeasureSpace.volume.restrict (NumStability.CartesianGrid.tangentialFaceBox axes d face))
+'NumStability.FiniteCartesian.faceMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.FiniteCartesian.data.{u_1} : {D : Type u_1} →
+  [Fintype D] →
+    [DecidableEq D] →
+      {m : ℕ} →
+        (D → NumStability.OneDimensionalFiniteVolumeGrid) →
+          (active : Finset (D → ℤ)) →
+            active.Nonempty →
+              (states : D → Set (Fin m → ℝ)) →
+                (flux : D → (Fin m → ℝ) → Fin m → ℝ) →
+                  (∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) →
+                    NumStability.FiniteCoordinate.PhysicalData D (↥active) (D → ℤ) (D → ℝ) (D → ℝ) m :=
+fun {D} [Fintype D] [DecidableEq D] {m} axes active hne states flux hflux =>
+  { cells := NumStability.FiniteCartesian.cells axes active hne, measure := MeasureTheory.MeasureSpace.volume,
+    positive := ⋯, finite := ⋯, leftFace := fun x cell => ↑cell,
+    rightFace := fun d cell => Function.update (↑cell) d (↑cell d + 1),
+    faceMeasure := NumStability.FiniteCartesian.faceMeasure axes, facePoint := fun x x_1 point => point,
+    left_incidence := ⋯, right_incidence := ⋯, admissibleStates := states, normalFlux := fun d x x_1 => flux d,
+    hyperbolic := ⋯ }
+'NumStability.FiniteCartesian.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure NumStability.OneDimensionalFiniteVolumeGrid : Type
+number of parameters: 0
+fields:
+  NumStability.OneDimensionalFiniteVolumeGrid.cellLeft : ℤ → ℝ
+  NumStability.OneDimensionalFiniteVolumeGrid.cellRight : ℤ → ℝ
+  NumStability.OneDimensionalFiniteVolumeGrid.cell_nonempty : ∀ (i : ℤ), self.cellLeft i < self.cellRight i
+  NumStability.OneDimensionalFiniteVolumeGrid.adjacent : ∀ (i : ℤ), self.cellRight (i - 1) = self.cellLeft i
+constructor:
+  NumStability.OneDimensionalFiniteVolumeGrid.mk (cellLeft cellRight : ℤ → ℝ)
+    (cell_nonempty : ∀ (i : ℤ), cellLeft i < cellRight i) (adjacent : ∀ (i : ℤ), cellRight (i - 1) = cellLeft i) :
+    NumStability.OneDimensionalFiniteVolumeGrid
+'NumStability.OneDimensionalFiniteVolumeGrid' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.OneDimensionalFiniteVolumeGrid.cellVolume : NumStability.OneDimensionalFiniteVolumeGrid → ℤ → ℝ :=
+fun grid i => grid.cellRight i - grid.cellLeft i
+'NumStability.OneDimensionalFiniteVolumeGrid.cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CartesianGrid.cellBox.{u_1} : {D : Type u_1} →
+  (D → NumStability.OneDimensionalFiniteVolumeGrid) → (D → ℤ) → Set (D → ℝ) :=
+fun {D} axes cell => Set.univ.pi fun d => Set.Ico ((axes d).cellLeft (cell d)) ((axes d).cellRight (cell d))
+'NumStability.CartesianGrid.cellBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CartesianGrid.cellVolume.{u_1} : {D : Type u_1} →
+  [Fintype D] → (D → NumStability.OneDimensionalFiniteVolumeGrid) → (D → ℤ) → ℝ :=
+fun {D} [Fintype D] axes cell => ∏ d, (axes d).cellVolume (cell d)
+'NumStability.CartesianGrid.cellVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CartesianGrid.faceArea.{u_1} : {D : Type u_1} →
+  [Fintype D] → [DecidableEq D] → (D → NumStability.OneDimensionalFiniteVolumeGrid) → D → (D → ℤ) → ℝ :=
+fun {D} [Fintype D] [DecidableEq D] axes d cell => ∏ e ∈ Finset.univ.erase d, (axes e).cellVolume (cell e)
+'NumStability.CartesianGrid.faceArea' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CartesianGrid.tangentialFaceBox.{u_1} : {D : Type u_1} →
+  (D → NumStability.OneDimensionalFiniteVolumeGrid) → (d : D) → (D → ℤ) → Set ({ e // e ≠ d } → ℝ) :=
+fun {D} axes d cell => Set.univ.pi fun e => Set.Ico ((axes ↑e).cellLeft (cell ↑e)) ((axes ↑e).cellRight (cell ↑e))
+'NumStability.CartesianGrid.tangentialFaceBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+def NumStability.CartesianGrid.facePoint.{u_1} : {D : Type u_1} →
+  [DecidableEq D] →
+    (D → NumStability.OneDimensionalFiniteVolumeGrid) → (d : D) → (D → ℤ) → ({ e // e ≠ d } → ℝ) → D → ℝ :=
+fun {D} [DecidableEq D] axes d cell point e => if h : e = d then (axes d).cellLeft (cell d) else point ⟨e, h⟩
+'NumStability.CartesianGrid.facePoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.isHyperbolicFluxAt_iff_independent_real_eigenvectors : ∀ {m : ℕ} (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (state : Fin m → ℝ) (derivative : (Fin m → ℝ) →L[ℝ] Fin m → ℝ),
+  HasFDerivAt flux derivative state →
+    (NumStability.IsHyperbolicFluxAt flux state ↔
+      ∃ eigenvalues eigenvectors,
+        LinearIndependent ℝ eigenvectors ∧ ∀ (p : Fin m), derivative (eigenvectors p) = eigenvalues p • eigenvectors p)
+'NumStability.isHyperbolicFluxAt_iff_independent_real_eigenvectors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.isHyperbolicFluxOn_iff_independent_real_eigenvectors : ∀ {m : ℕ} (flux : (Fin m → ℝ) → Fin m → ℝ)
+  (states : Set (Fin m → ℝ)) (derivative : (Fin m → ℝ) → (Fin m → ℝ) →L[ℝ] Fin m → ℝ),
+  (∀ state ∈ states, HasFDerivAt flux (derivative state) state) →
+    (NumStability.IsHyperbolicFluxOn flux states ↔
+      ∀ state ∈ states,
+        ∃ eigenvalues eigenvectors,
+          LinearIndependent ℝ eigenvectors ∧
+            ∀ (p : Fin m), (derivative state) (eigenvectors p) = eigenvalues p • eigenvectors p)
+'NumStability.isHyperbolicFluxOn_iff_independent_real_eigenvectors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq : ∀ {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [inst : Fintype D] [inst_1 : DecidableEq D]
+  [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ},
+  NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux →
+    ∀ (cell : Cell), data.cellVolume cell = NumStability.CartesianGrid.cellVolume axes (cellPosition cell)
+'NumStability.FiniteCartesian.CartesianIdentification.cellVolume_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq : ∀ {D : Type u_1} {Cell : Type u_2} {Face : Type u_3}
+  {FacePoint : Type u_4} [inst : Fintype D] [inst_1 : DecidableEq D] [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ},
+  NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux →
+    ∀ (q : (D → ℝ) → ℝ → Fin m → ℝ) (cell : Cell) (t : ℝ),
+      data.cellMean q cell t =
+        NumStability.cellVolumeAverage MeasureTheory.MeasureSpace.volume
+          (NumStability.CartesianGrid.cellBox axes (cellPosition cell)) fun x => q x t
+'NumStability.FiniteCartesian.CartesianIdentification.cellMean_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift : ∀ {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [inst : Fintype D] [inst_1 : DecidableEq D]
+  [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ},
+  NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux →
+    ∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D) (face : Face) (t : ℝ),
+      data.faceFlux d (fun x τ => q (x d) τ) face t =
+        NumStability.CartesianGrid.faceArea axes d (facePosition d face) •
+          flux d (q ((axes d).cellLeft (facePosition d face d)) t)
+'NumStability.FiniteCartesian.CartesianIdentification.faceFlux_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift : ∀ {D : Type u_1} {Cell : Type u_2}
+  {Face : Type u_3} {FacePoint : Type u_4} [inst : Fintype D] [inst_1 : DecidableEq D]
+  [inst_2 : MeasurableSpace FacePoint] {m : ℕ}
+  {data : NumStability.FiniteCoordinate.PhysicalData D Cell Face (D → ℝ) FacePoint m}
+  {axes : D → NumStability.OneDimensionalFiniteVolumeGrid} {cellPosition : Cell → D → ℤ}
+  {facePosition : D → Face → D → ℤ} {flux : D → (Fin m → ℝ) → Fin m → ℝ},
+  NumStability.FiniteCartesian.CartesianIdentification data axes cellPosition facePosition flux →
+    ∀ (q : ℝ → ℝ → Fin m → ℝ) (d : D),
+      NumStability.IsRectangleConservationLawSolution q (flux d) →
+        ∀ (cell : Cell) (s t : ℝ),
+          data.cellVolume cell •
+              (data.cellMean (fun x τ => q (x d) τ) cell t - data.cellMean (fun x τ => q (x d) τ) cell s) =
+            ∫ (τ : ℝ) in s..t,
+              data.faceFlux d (fun x τ => q (x d) τ) (data.leftFace d cell) τ -
+                data.faceFlux d (fun x τ => q (x d) τ) (data.rightFace d cell) τ
+'NumStability.FiniteCartesian.CartesianIdentification.rectangle_balance_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NumStability.FiniteCartesian.data_face_measure : ∀ {D : Type u_1} [inst : Fintype D] [inst_1 : DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ),
+  MeasureTheory.Measure.map ((NumStability.FiniteCartesian.data axes active hne states flux hflux).facePoint d face)
+      ((NumStability.FiniteCartesian.data axes active hne states flux hflux).faceMeasure d face) =
+    MeasureTheory.Measure.map (NumStability.CartesianGrid.facePoint axes d face)
+      (MeasureTheory.MeasureSpace.volume.restrict (NumStability.CartesianGrid.tangentialFaceBox axes d face))
+'NumStability.FiniteCartesian.data_face_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.FiniteCartesian.data_normal_flux : ∀ {D : Type u_1} [inst : Fintype D] [inst_1 : DecidableEq D] {m : ℕ}
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (active : Finset (D → ℤ)) (hne : active.Nonempty)
+  (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)
+  (hflux : ∀ (d : D), NumStability.IsHyperbolicFluxOn (flux d) (states d)) (d : D) (face : D → ℤ),
+  ∀ᵐ (point : D → ℝ) ∂(NumStability.FiniteCartesian.data axes active hne states flux hflux).faceMeasure d face,
+    ∀ (value : Fin m → ℝ),
+      (NumStability.FiniteCartesian.data axes active hne states flux hflux).normalFlux d face point value = flux d value
+'NumStability.FiniteCartesian.data_normal_flux' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.CartesianGrid.cellBox_volume : ∀ {D : Type u_1} [inst : Fintype D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (cell : D → ℤ),
+  (MeasureTheory.MeasureSpace.volume (NumStability.CartesianGrid.cellBox axes cell)).toReal =
+    NumStability.CartesianGrid.cellVolume axes cell
+'NumStability.CartesianGrid.cellBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NumStability.CartesianGrid.tangentialFaceBox_volume : ∀ {D : Type u_1} [inst : Fintype D] [inst_1 : DecidableEq D]
+  (axes : D → NumStability.OneDimensionalFiniteVolumeGrid) (d : D) (cell : D → ℤ),
+  (MeasureTheory.MeasureSpace.volume (NumStability.CartesianGrid.tangentialFaceBox axes d cell)).toReal =
+    NumStability.CartesianGrid.faceArea axes d cell
+'NumStability.CartesianGrid.tangentialFaceBox_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MeasureTheory.volume_pi : ∀ {ι : Type u_1} {α : ι → Type u_2} [inst : Fintype ι]
+  [inst_1 : (i : ι) → MeasureTheory.MeasureSpace (α i)],
+  MeasureTheory.MeasureSpace.volume = MeasureTheory.Measure.pi fun x => MeasureTheory.MeasureSpace.volume
+'MeasureTheory.volume_pi' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MeasureTheory.Measure.pi_pi : ∀ {ι : Type u_1} {α : ι → Type u_2} [inst : Fintype ι]
+  [inst_1 : (i : ι) → MeasurableSpace (α i)] (μ : (i : ι) → MeasureTheory.Measure (α i))
+  [∀ (i : ι), MeasureTheory.SigmaFinite (μ i)] (s : (i : ι) → Set (α i)),
+  (MeasureTheory.Measure.pi μ) (Set.univ.pi s) = ∏ i, (μ i) (s i)
+'MeasureTheory.Measure.pi_pi' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Real.volume_Ico : ∀ {a b : ℝ}, MeasureTheory.MeasureSpace.volume (Set.Ico a b) = ENNReal.ofReal (b - a)
+'Real.volume_Ico' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Real.volume_pi_Ico_toReal : ∀ {ι : Type u_1} [inst : Fintype ι] {a b : ι → ℝ},
+  a ≤ b → (MeasureTheory.MeasureSpace.volume (Set.univ.pi fun i => Set.Ico (a i) (b i))).toReal = ∏ i, (b i - a i)
+'Real.volume_pi_Ico_toReal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MeasureTheory.Measure.map_apply_of_aemeasurable : ∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α}
+  {mβ : MeasurableSpace β} {μ : MeasureTheory.Measure α} {f : α → β},
+  AEMeasurable f μ → ∀ {s : Set β}, MeasurableSet s → (MeasureTheory.Measure.map f μ) s = μ (f ⁻¹' s)
+'MeasureTheory.Measure.map_apply_of_aemeasurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MeasureTheory.integral_map : ∀ {α : Type u_1} {G : Type u_2} [inst : NormedAddCommGroup G] [inst_1 : NormedSpace ℝ G]
+  {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_3} [inst_2 : MeasurableSpace β] {φ : α → β},
+  AEMeasurable φ μ →
+    ∀ {f : β → G},
+      MeasureTheory.AEStronglyMeasurable f (MeasureTheory.Measure.map φ μ) →
+        ∫ (y : β), f y ∂MeasureTheory.Measure.map φ μ = ∫ (x : α), f (φ x) ∂μ
+'MeasureTheory.integral_map' depends on axioms: [propext, Classical.choice, Quot.sound]
