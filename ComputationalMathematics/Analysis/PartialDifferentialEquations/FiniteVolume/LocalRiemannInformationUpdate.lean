@@ -19,6 +19,9 @@ open MeasureTheory
 namespace NumStability.LocalRiemannInformation
 open NumStability
 
+/-- The interface Riemann problem at `face` built from the current cell values: the left and
+right states are `old (leftCell face)` and `old (rightCell face)`, admissible by `hstates`, and
+the time horizon is the positive step `duration`. -/
 def adjacentProblem {m : ℕ} (law : Law m) {Cell Face : Type*}
     (leftCell rightCell : Face → Cell) (old : Cell → Fin m → ℝ)
     (hstates : ∀ cell, old cell ∈ law.states) (duration : ℝ) (hduration : 0 < duration)

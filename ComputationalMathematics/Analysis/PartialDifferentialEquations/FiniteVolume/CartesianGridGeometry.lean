@@ -20,13 +20,23 @@ open scoped BigOperators
 
 variable {D : Type*} [Fintype D] [DecidableEq D]
 
+/-- The half-open box in `D → ℝ` occupied by the Cartesian cell with integer multi-index `cell`:
+the product over every axis `d` of the one-dimensional cell
+`[cellLeft (cell d), cellRight (cell d))` of the grid `axes d`. -/
 def cellBox (axes : D → OneDimensionalFiniteVolumeGrid) (cell : (D → ℤ)) : Set (D → ℝ) :=
   Set.pi Set.univ (fun d => Set.Ico ((axes d).cellLeft (cell d))
     ((axes d).cellRight (cell d)))
 
+/-- The volume of the Cartesian cell `cell`: the product over every axis of the one-dimensional
+cell widths.  It is positive (`cellVolume_pos`) and equals the Lebesgue measure of `cellBox`
+(`cellBox_volume`). -/
 def cellVolume (axes : D → OneDimensionalFiniteVolumeGrid) (cell : (D → ℤ)) : ℝ :=
   ∏ d, (axes d).cellVolume (cell d)
 
+/-- The area of the face of the Cartesian cell `cell` normal to axis `d`: the product of the
+one-dimensional cell widths over every axis other than `d`.  It does not depend on the `d`-th
+index of `cell` (`faceArea_update`), so the same value serves both faces of the cell in direction
+`d`, and cell volume factors as width times face area (`cellVolume_eq_width_mul_area`). -/
 def faceArea (axes : D → OneDimensionalFiniteVolumeGrid) (d : D) (cell : (D → ℤ)) : ℝ :=
   ∏ e ∈ Finset.univ.erase d, (axes e).cellVolume (cell e)
 
@@ -52,6 +62,11 @@ theorem faceArea_update (axes : D → OneDimensionalFiniteVolumeGrid) (d : D) (c
   intro e he
   rw [Function.update_of_ne (Finset.mem_erase.mp he).1]
 
+/-- The face of the Cartesian cell `cell` normal to axis `d`, described in the transverse
+coordinates `{e : D // e ≠ d} → ℝ`: the product over every axis `e ≠ d` of the one-dimensional
+cell `[cellLeft (cell e), cellRight (cell e))` of the grid `axes e`.  Its Lebesgue measure is
+`faceArea axes d cell` (`tangentialFaceBox_volume`), and it does not depend on the `d`-th index
+of `cell` (`tangentialFaceBox_update`). -/
 def tangentialFaceBox (axes : D → OneDimensionalFiniteVolumeGrid) (d : D) (cell : (D → ℤ)) :
     Set ({e : D // e ≠ d} → ℝ) :=
   Set.pi Set.univ (fun e => Set.Ico ((axes e.1).cellLeft (cell e.1))
@@ -72,6 +87,11 @@ theorem tangentialFaceBox_update (axes : D → OneDimensionalFiniteVolumeGrid) (
   funext e
   rw [Function.update_of_ne e.property]
 
+/-- Embed a transverse point of the face normal to axis `d` into physical space `D → ℝ`: the
+`d`-th coordinate is fixed at the left endpoint `cellLeft (cell d)` of the cell `cell` along axis
+`d`, and every other coordinate `e ≠ d` is read from `point`.  This is the left face of `cell` in
+direction `d`, which by `shared_face_position` coincides with the right face of the neighbouring
+cell whose `d`-th index is one smaller. -/
 def facePoint (axes : D → OneDimensionalFiniteVolumeGrid) (d : D) (cell : (D → ℤ))
     (point : {e : D // e ≠ d} → ℝ) : D → ℝ :=
   fun e => if h : e = d then (axes d).cellLeft (cell d) else point ⟨e, h⟩

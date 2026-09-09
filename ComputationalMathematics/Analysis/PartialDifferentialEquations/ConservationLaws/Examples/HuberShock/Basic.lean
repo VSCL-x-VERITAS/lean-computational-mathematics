@@ -27,9 +27,17 @@ def outerPotential (x t : ℝ) : ℝ := -x ^ 2 / 2 - t * |x| + t / 2 - t ^ 2 / 2
 /-- Right trace is selected at the stationary interface. -/
 def outerState (x t : ℝ) : ℝ := if x < 0 then t - x else -t - x
 
+/-- The potential of the shock profile: `centralPotential` on the contracting central region
+`t < 1 - |x|` and `outerPotential` elsewhere. Its spatial derivative is `shockState` and its time
+derivative is `-huberFlux (shockState x t)`; the two branches agree on the interface
+(`potential_match`). -/
 def shockPotential (x t : ℝ) : ℝ :=
   if t < 1 - |x| then centralPotential x t else outerPotential x t
 
+/-- The scalar shock profile for the Huber flux: the compression wave `-x / (1 - t)` on the
+central region `t < 1 - |x|`, whose characteristics focus at the origin at time one, and the
+transported outer state `outerState` elsewhere. It starts from the smooth initial field `-x` and
+develops a stationary jump at `x = 0` once `1 ≤ t`. -/
 def shockState (x t : ℝ) : ℝ :=
   if t < 1 - |x| then -x / (1 - t) else outerState x t
 

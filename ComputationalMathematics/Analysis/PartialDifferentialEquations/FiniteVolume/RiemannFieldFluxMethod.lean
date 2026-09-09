@@ -23,14 +23,24 @@ wave information or an exact certificate, but no exact certificate is required. 
 structure RiemannFieldFluxMethod
     (law : OneDimensionalHyperbolicConservationLaw (Fin m))
     (Result : HyperbolicRiemannProblem law → Type*) (Information : Type*) where
+  /-- The ordered Riemann problems the method is able to solve. `constants_in_domain`
+  guarantees that every constant-state problem belongs to it. -/
   domain : HyperbolicRiemannProblem law → Prop
+  /-- Solve an ordered Riemann problem, given evidence that it lies in the method domain,
+  returning the method's own result type for that problem. -/
   solve : (problem : HyperbolicRiemannProblem law) → domain problem → Result problem
+  /-- The space-time field `x ↦ t ↦ state` read off a result; `initial` certifies its
+  ordered Riemann initial trace and `trace_integrable` the integrability of its
+  interface flux trace at `x = 0` over every finite time interval. -/
   field : {problem : HyperbolicRiemannProblem law} → Result problem → ℝ → ℝ → (Fin m → ℝ)
   initial : ∀ {problem} (result : Result problem),
     IsRiemannData (fun x => field result x 0) problem.leftState problem.rightState
   trace_integrable : ∀ {problem} (result : Result problem) (s t : ℝ),
     IntervalIntegrable (fun τ => law.physicalFlux (field result 0 τ)) volume s t
+  /-- Extract the method-specific information used to form an interface flux from a
+  result of the solver. -/
   extract : {problem : HyperbolicRiemannProblem law} → Result problem → Information
+  /-- Convert extracted Riemann information into a numerical flux vector. -/
   numericalFlux : Information → (Fin m → ℝ)
   constants_in_domain : ∀ state,
     domain ({ leftState := state, rightState := state } : HyperbolicRiemannProblem law)

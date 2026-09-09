@@ -22,11 +22,18 @@ namespace NumStability.LocalRiemannInformation
 separate properties, not prerequisites for constructing or using a routine. -/
 structure Routine {m : ℕ} (law : Law m)
     (Result : Problem law → Type*) (Information : Type*) where
+  /-- The problems the routine accepts; `solve` is only defined on them. -/
   domain : Problem law → Prop
+  /-- Run the routine on an accepted problem, producing its problem-indexed result. -/
   solve : (problem : Problem law) → domain problem → Result problem
+  /-- Extract the routine-specific information from a result of the routine. -/
   extract : {problem : Problem law} → Result problem → Information
+  /-- Convert extracted information into a numerical interface flux vector. -/
   numericalFlux : Information → Fin m → ℝ
 
+/-- The numerical flux the routine assigns to an accepted problem: solve it, extract the
+routine's information from the result, and convert that information into a flux vector.
+Unlike `Method.flux`, no accuracy or consistency certificate is attached. -/
 def Routine.flux {m : ℕ} {law : Law m}
     {Result : Problem law → Type*} {Information : Type*}
     (routine : Routine law Result Information) (problem : Problem law)

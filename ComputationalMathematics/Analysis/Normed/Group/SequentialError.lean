@@ -16,10 +16,18 @@ open scoped BigOperators
 namespace NumStability.SequentialError
 variable {Cell E : Type*} [NormedAddCommGroup E]
 
+/-- The state of a successive-operator computation after `n` steps: `execution step initial 0` is
+the initial state `initial`, and `execution step initial (n + 1)` applies the `n`-th step operator
+`step n` to the state after `n` steps. Each state assigns a value in `E` to every cell. -/
 def execution (step : ℕ → (Cell → E) → Cell → E) (initial : Cell → E) : ℕ → Cell → E
   | 0 => initial
   | n + 1 => step n (execution step initial n)
 
+/-- The recursively propagated error bound for a successive-operator computation: the budget at
+step `0` is `initialError`, and the budget at step `n + 1` is the budget at step `n` amplified by
+the stability factor `amplification n`, plus the local (directional consistency) defect
+`localDefect n` and the reference/splitting mismatch `splittingDefect n` of that step. The two
+defects are kept separate so that no higher order is inferred for the composite. -/
 def errorBudget (amplification localDefect splittingDefect : ℕ → ℝ) (initialError : ℝ) : ℕ → ℝ
   | 0 => initialError
   | n + 1 => amplification n * errorBudget amplification localDefect splittingDefect initialError n +

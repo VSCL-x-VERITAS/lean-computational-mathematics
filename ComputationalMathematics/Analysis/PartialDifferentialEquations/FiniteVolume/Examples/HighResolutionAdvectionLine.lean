@@ -60,7 +60,7 @@ This is the local-reference accuracy component; family geometry/admission and
 finite-window oscillation remain separate obligations. -/
 theorem local_refinement_zero_defect {q : ℝ → ℝ → State} {states : Set State}
     {L R H : ℝ} (hq : SmoothReferenceOn q id states L R H)
-    (p : ℝ) (_hp : 1 < p) :
+    (p : ℝ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ (n : ℕ) (j : ℤ), meshSize n ≤ H →
       L ≤ (grid (meshSize n) (meshSize_pos n)).cellLeft j - meshSize n →
       (grid (meshSize n) (meshSize_pos n)).cellRight j ≤ R →
@@ -84,6 +84,10 @@ open NumStability.CFLUnitShift
 open MeasureTheory Set Filter
 open scoped BigOperators Topology
 
+/-- Cell width of the `n`-th refinement, `h n = meshSize (n + 1) = 1 / (n + 2)` (`h_eq`). Starting
+the mesh sequence one index late keeps every width at most `1 / 2` (`h_le_half`), which is what
+lets the time step `dt = h` fit under the horizon `1` and the input window fit inside the physical
+interval `[-2, 2]`. -/
 noncomputable def h (n : ℕ) : ℝ := meshSize (n + 1)
 
 theorem h_pos (n : ℕ) : 0 < h n := meshSize_pos (n + 1)
@@ -149,6 +153,15 @@ theorem active_coverage (n : ℕ) (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
     dsimp [k] at *
     constructor <;> nlinarith
 
+/-- The concrete refining line family for unit-speed linear advection of `m`-component states:
+the flux is `id` at every point of the physical interval `[-2, 2]`, every state is admissible,
+the horizon is `1`, and refinement `n` uses the uniform grid of cell width `h n` with time step
+`dt n = h n` (CFL number one, mesh ratio one). The active window is the cells `0 ≤ j < n + 4`,
+which cover the target interval `[0, 1]` (`active_coverage`); the input window adds the single
+upstream cell `j = -1` (`input_geometry`). The numerical flux at the left face of cell `j` is the
+upwind value `values (j - 1)` and every input line is admitted, so the update is the exact
+one-cell shift (`family_advance`) and the family has controlled high resolution
+(`family_quality`). -/
 noncomputable def family (m : ℕ) : LineFamily m where
   flux := fun _ => id
   states := Set.univ

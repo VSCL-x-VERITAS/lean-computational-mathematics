@@ -22,6 +22,12 @@ variable {Information : D → Type*}
 variable (methods : (d : D) → ℝ → RiemannInformationFluxMethod (laws d) (Result d) (Information d))
 
 
+/-- Every stage of an ordered coordinate-line sweep is admitted on its actual preceding output.
+The empty sweep is admitted. A stage `(d, dt)` is admitted when every cell's adjacent-cell
+Riemann problem in direction `d` lies in the domain of `methods d dt` (`StageAdmitted`), and the
+remaining stages are then checked on the state produced by advancing with the guarded rule
+`guardedRule methods area fallback` and the cell volumes `volume`. The `fallback` enters only
+through these intermediate states; `sweepAdmitted_fallback_independent` shows it is irrelevant. -/
 def SweepAdmitted (volume : (D → ℤ) → ℝ) (area : D → (D → ℤ) → ℝ)
     (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ) :
     List (D × ℝ) → ((D → ℤ) → Fin m → ℝ) → Prop

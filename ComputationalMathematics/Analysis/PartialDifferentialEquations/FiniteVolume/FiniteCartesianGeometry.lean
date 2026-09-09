@@ -64,6 +64,11 @@ theorem tangentialFaceBox_measurable (axes : D → OneDimensionalFiniteVolumeGri
     (d : D) (face : D → ℤ) : MeasurableSet (CartesianGrid.tangentialFaceBox axes d face) :=
   MeasurableSet.univ_pi fun _ => measurableSet_Ico
 
+/-- The finite-volume cell partition of `D → ℝ` cut out by a nonempty finite set `active` of
+Cartesian multi-indices: each active index `cell` is assigned the half-open box
+`CartesianGrid.cellBox axes cell`, and the domain is the union of these boxes.  Distinct
+indices give disjoint boxes (`cellBox_disjoint`) and every box is measurable
+(`cellBox_measurable`). -/
 def cells (axes : D → OneDimensionalFiniteVolumeGrid)
     (active : Finset (D → ℤ)) (hne : active.Nonempty) :
     FiniteVolumeCellPartition ↥active (D → ℝ) where
@@ -90,6 +95,11 @@ theorem facePoint_measurable (axes : D → OneDimensionalFiniteVolumeGrid)
   · simpa only [CartesianGrid.facePoint_transverse axes d face _ e he] using
       (measurable_pi_apply (⟨e, he⟩ : {e : D // e ≠ d}))
 
+/-- The surface measure on the face of Cartesian cell `face` normal to axis `d`, as a measure on
+the ambient space `D → ℝ`: Lebesgue measure on the tangential coordinates, restricted to
+`CartesianGrid.tangentialFaceBox axes d face`, pushed forward along the embedding
+`CartesianGrid.facePoint axes d face` that fixes the `d`-th coordinate at the left endpoint of the
+cell.  Its total mass is the face area (`faceMeasure_area`). -/
 noncomputable def faceMeasure (axes : D → OneDimensionalFiniteVolumeGrid)
     (d : D) (face : D → ℤ) : Measure (D → ℝ) :=
   Measure.map (CartesianGrid.facePoint axes d face)
@@ -145,6 +155,12 @@ theorem right_face_ae_incidence (axes : D → OneDimensionalFiniteVolumeGrid)
   filter_upwards [ae_restrict_mem (tangentialFaceBox_measurable axes d _)] with point hp
   exact right_face_in_closure axes d cell point hp
 
+/-- The `PhysicalData` instance of a nonempty finite selection `active` of Cartesian cells under
+Lebesgue measure.  Faces are identified by multi-indices: the left face of a cell in direction `d`
+is the cell's own index and its right face is the index with the `d`-th entry incremented, so
+adjacent cells share one face ID (`data_shared_face`).  Face measures are the pushforward measures
+`faceMeasure`, face points are ambient points, and the normal flux along axis `d` is the
+direction-wise flux `flux d`, hyperbolic on `states d` by `hflux d`. -/
 noncomputable def data (axes : D → OneDimensionalFiniteVolumeGrid)
     (active : Finset (D → ℤ)) (hne : active.Nonempty)
     (states : D → Set (Fin m → ℝ)) (flux : D → (Fin m → ℝ) → Fin m → ℝ)

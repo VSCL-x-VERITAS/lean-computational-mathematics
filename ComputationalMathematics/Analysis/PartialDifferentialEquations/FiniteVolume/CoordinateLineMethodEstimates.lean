@@ -106,6 +106,9 @@ variable {data : PhysicalData D Cell Face Point FacePoint m}
 variable {coord : LineCoordinates (m := m) D Cell Face Line} {family : D → Line → LineFamily m}
 local notation "V" => Fin m → ℝ
 
+/-- The `n`-th stage operator of a coordinate-line splitting: one finite-volume `advance` of every
+cell in the coordinate direction `direction n`, using the numerical flux rule and step duration of
+the line realization `method n` selected for that stage. -/
 noncomputable def coordinateStep (method : ℕ → LineRealization data coord family)
     (direction : ℕ → D) (n : ℕ) : (Cell → V) → Cell → V :=
   advance data (method n).rule (direction n) ((method n).duration (direction n))

@@ -26,15 +26,26 @@ hyperbolicity of an averaged flux is asserted. -/
 structure Method (data : PhysicalData D Cell Face Point FacePoint m)
     (coord : LineCoordinates (m := m) D Cell Face Line) where
   incidence : NumStability.FiniteCoordinate.PhysicalLine.Incidence data coord
+  /-- The supplied already-integrated numerical face flux: for a direction `d`, a coordinate
+  line, the actual supplied time step `dt` and the extracted line array (actual cells plus
+  fixed ghosts), the flux through the face with line index `j`. -/
   numericalFlux : D → Line → ℝ → (ℤ → State) → ℤ → State
+  /-- The admission predicate of one coordinate line: whether the extracted line array is an
+  admissible input at the actual supplied time step `dt` in direction `d`. -/
   admitted : D → Line → ℝ → (ℤ → State) → Prop
 
 variable {data : PhysicalData D Cell Face Point FacePoint m}
 variable {coord : LineCoordinates (m := m) D Cell Face Line}
 
+/-- The face rule induced by the method: the numerical flux evaluated on the line array
+extracted along each face's coordinate line, at that face's index. This is the rule fed to
+`advance`. -/
 noncomputable def Method.rule (method : Method data coord) :=
   NumStability.FiniteCoordinate.PhysicalLine.faceRule coord method.numericalFlux
 
+/-- The whole numerical array `current` is admitted at the supplied time step `dt` in
+direction `d` when, for every cell, the array extracted along that cell's coordinate line
+satisfies the method's line admission predicate. -/
 def Method.Admitted (method : Method data coord) (d : D) (dt : ℝ) (current : Cell → State) : Prop :=
   ∀ cell, method.admitted d (coord.cellLine d cell) dt
     (coord.extract d (coord.cellLine d cell) current)

@@ -21,16 +21,31 @@ local notation "State" => Fin m → ℝ
 values where the finite physical array has no cell. A lookup can neither
 broadcast an unrelated cell nor read a different coordinate line. -/
 structure LineCoordinates (D Cell Face Line : Type*) where
+  /-- The coordinate line, in direction `d`, on which each finite physical cell lies. -/
   cellLine : D → Cell → Line
+  /-- The integer position of each finite physical cell along its coordinate line in
+  direction `d`. -/
   cellIndex : D → Cell → ℤ
+  /-- The coordinate line, in direction `d`, on which each face lies. -/
   faceLine : D → Face → Line
+  /-- The integer position of each face along its coordinate line in direction `d`, in the
+  same integer indexing as the cells of that line. -/
   faceIndex : D → Face → ℤ
+  /-- The finite cell, if any, at integer position `j` on coordinate line `line` in direction
+  `d`; `none` marks a position outside the finite physical array. By `lookup_cell` and
+  `lookup_sound` it is exactly the inverse of the cell coordinates `(cellLine, cellIndex)`. -/
   lookup : D → Line → ℤ → Option Cell
   lookup_cell : ∀ d cell, lookup d (cellLine d cell) (cellIndex d cell) = some cell
   lookup_sound : ∀ d line j cell, lookup d line j = some cell →
     cellLine d cell = line ∧ cellIndex d cell = j
+  /-- The supplied ghost state at positions where `lookup` finds no finite cell: for direction
+  `d`, line `line` and integer index `j`, the `m`-component value that the extracted line
+  array reports there. -/
   ghost : D → Line → ℤ → (Fin m → ℝ)
 
+/-- The line array extracted from a cell state `current`: for direction `d` and coordinate line
+`line`, position `j` reads the actual cell found by `lookup`, and the supplied `ghost` value
+where the finite physical array has no cell. -/
 def LineCoordinates.extract (coord : LineCoordinates (m := m) D Cell Face Line)
     (d : D) (line : Line) (current : Cell → State) (j : ℤ) : State :=
   match coord.lookup d line j with

@@ -22,7 +22,17 @@ open scoped BigOperators
 /-- Only finite active and one-cell neighboring indices are physical inputs.
 The clamp provides genuine bounded filler cells at never-read totalized slots. -/
 def boundaryIndex (n : ℕ) (j : ℤ) : ℤ := min (max j (-1)) (n + 4)
+
+/-- Componentwise clamp of an integer position into the index band `[-1, n + 4]` surrounding
+the active cells, applying `boundaryIndex n` in each direction. Active cells and their
+one-cell neighbors, the only positions the lookup ever reads, are left unchanged. -/
 def boundaryPosition (n : ℕ) (pos : Position) : Position := fun d => boundaryIndex n (pos d)
+
+/-- The supplied boundary region at index `j` along direction `d` of the coordinate line
+`line`: the Cartesian cell box of `axes n` at the clamped position obtained by setting the
+`d`-coordinate of `line` to `j`. It is a genuine bounded cell of volume `h n ^ 2` inside
+`region`, whose measured average serves as reference ghost data; the clamp only totalizes
+positions the lookup never reads and encodes no boundary condition. -/
 def boundaryRegion (n : ℕ) (d : Direction) (line : Position) (j : ℤ) : Set Point :=
   CartesianGrid.cellBox (axes n) (boundaryPosition n (Function.update line d j))
 
@@ -98,6 +108,12 @@ theorem boundary_on_neighbor (n : ℕ) (cell : Cell n) (d : Direction) (j : ℤ)
     have hb := cell_index_bounds n cell k
     constructor <;> omega
 
+/-- Finite line coordinates of the level-`n` refining Cartesian grid with supplied `ghost`
+values. A cell or face lies on the line obtained by zeroing its `d`-coordinate and has index
+equal to that coordinate. `lookup d line j` returns the active cell at
+`Function.update line d j` exactly when `line d = 0` and that position is active, and `none`
+otherwise, so the ghost values are read only off the finite array and no boundary condition
+is inferred from the lookup. -/
 noncomputable def coord (n : ℕ) (ghost : Direction → Position → ℤ → State) :
     LineCoordinates (m := 1) Direction (Cell n) Position Position where
   cellLine := fun d cell => Function.update cell.val d 0

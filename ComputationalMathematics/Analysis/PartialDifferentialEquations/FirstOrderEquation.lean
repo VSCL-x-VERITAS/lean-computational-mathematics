@@ -20,8 +20,14 @@ variable {ι : Type*} [Fintype ι]
 
 /-- A concrete first-order quasilinear equation, with a declared state domain. -/
 structure FirstOrderEquation (ι : Type*) [Fintype ι] where
+  /-- The set of state vectors `q` on which the equation is posed; hyperbolicity and the
+  classical relation are only required at these states. -/
   admissibleStates : Set (ι → ℝ)
+  /-- The principal matrix `A(x, t, q)`, evaluated at position `x`, time `t` and state `q`,
+  which multiplies the space derivative `q_x` in `q_t + A(x, t, q) q_x = b(x, t, q)`. -/
   principal : ℝ → ℝ → (ι → ℝ) → Matrix ι ι ℝ
+  /-- The forcing term `b(x, t, q)`, evaluated at position `x`, time `t` and state `q`, which
+  appears on the right-hand side of `q_t + A(x, t, q) q_x = b(x, t, q)`. -/
   forcing : ℝ → ℝ → (ι → ℝ) → (ι → ℝ)
 
 namespace FirstOrderEquation

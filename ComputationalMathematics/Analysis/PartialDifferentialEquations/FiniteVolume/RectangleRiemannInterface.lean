@@ -33,6 +33,8 @@ structure CertifiedRectangleRiemannSolution
     {Component : Type*} [Fintype Component]
     (law : OneDimensionalHyperbolicConservationLaw Component)
     (problem : HyperbolicRiemannProblem law) where
+  /-- The space-time field proposed as the solution of `problem`; `solves` certifies its
+  ordered Riemann initial trace and its time-integrated rectangle conservation. -/
   solution : ℝ → ℝ → (Component → ℝ)
   solves : IsRectangleHyperbolicRiemannSolution law problem solution
 
@@ -43,11 +45,18 @@ structure RectangleRiemannInterfaceFluxMethod
     {Component : Type*} [Fintype Component]
     (law : OneDimensionalHyperbolicConservationLaw Component)
     (Information : Type*) where
+  /-- The ordered Riemann problems the solver is able to solve. `constants_in_domain`
+  guarantees that every constant-state problem belongs to it. -/
   domain : HyperbolicRiemannProblem law → Prop
+  /-- Solve an ordered Riemann problem, given evidence that it lies in the solver domain,
+  and certify the resulting field. -/
   solve : (problem : HyperbolicRiemannProblem law) → domain problem →
     CertifiedRectangleRiemannSolution law problem
+  /-- Extract the method-specific information used to form an interface flux from a
+  certified rectangle-conserving Riemann solution. -/
   extractInformation : {problem : HyperbolicRiemannProblem law} →
     CertifiedRectangleRiemannSolution law problem → Information
+  /-- Convert extracted Riemann information into a numerical flux vector. -/
   numericalFluxFromInformation : Information → (Component → ℝ)
   constants_in_domain : ∀ state,
     domain ({ leftState := state, rightState := state } : HyperbolicRiemannProblem law)
@@ -69,6 +78,10 @@ def adjacentCellRectangleRiemannInformation
   method.extractInformation
     (method.solve (adjacentCellRiemannProblem law cellAverages i) (hdomain i))
 
+/-- The numerical flux at interface `i`: the method's flux procedure applied to the
+information extracted from the certified solution of the problem ordered from cell `i - 1`
+to cell `i`, using the evidence `hdomain` that every adjacent-cell problem lies in the
+solver domain. -/
 def rectangleRiemannInterfaceFlux
     {Component Information : Type*} [Fintype Component]
     {law : OneDimensionalHyperbolicConservationLaw Component}

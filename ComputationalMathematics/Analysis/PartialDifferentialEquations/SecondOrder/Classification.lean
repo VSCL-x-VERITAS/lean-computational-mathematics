@@ -18,8 +18,12 @@ namespace NumStability
 /-- Coefficients of a homogeneous two-variable second-order principal part:
 `timeTime * p_tt + timeSpace * p_tx + spaceSpace * p_xx`. -/
 structure SecondOrderPrincipalPart where
+  /-- Coefficient of the second time derivative `p_tt`. -/
   timeTime : ℝ
+  /-- Full coefficient of the mixed derivative `p_tx`; no factor of `2` is split off, so the
+  classifying discriminant is `timeSpace ^ 2 - 4 * timeTime * spaceSpace`. -/
   timeSpace : ℝ
+  /-- Coefficient of the second space derivative `p_xx`. -/
   spaceSpace : ℝ
 
 /-- Positive discriminant is the hyperbolic case of the two-variable

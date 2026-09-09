@@ -47,6 +47,9 @@ def SpatialRectangleReferenceOn (q : ℝ → ℝ → State) (flux : ℝ → Stat
       (∫ x in a..b, q x t) - (∫ x in a..b, q x s) =
         ∫ τ in s..t, flux a (q a τ) - flux b (q b τ)
 
+/-- Smooth variant of `SpatialRectangleReferenceOn`: the state `q` is `C^∞` on the closed
+space/time box, satisfies local conservation on every subrectangle for the spatially varying
+directional flux law `flux`, and takes values in the state domain `states`. -/
 def SpatialSmoothReferenceOn (q : ℝ → ℝ → State) (flux : ℝ → State → State)
     (states : Set State) (left right horizon : ℝ) : Prop :=
   ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (Function.uncurry q) (Set.Icc left right ×ˢ Set.Icc 0 horizon) ∧

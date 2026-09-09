@@ -25,10 +25,20 @@ local notation "State" => Fin m → ℝ
 variable {data : PhysicalData D Cell Face Point FacePoint m}
 variable {coord : ℕ → LineCoordinates (m := m) D Cell Face Line}
 
+/-- The `n`-th stage operator of an ordered capacity sweep: one conservative finite-volume
+`advance` of the whole cell array, using the face rule of that stage's own method `method n`
+(a method for the stage coordinates `coord k` at `k = n`), in the sweep direction `direction n`
+with the actual supplied time step `duration n`. Boundary/ghost data may change from stage to
+stage through the stage method. -/
 noncomputable def step (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
     (duration : ℕ → ℝ) (n : ℕ) : (Cell → State) → Cell → State :=
   advance data (method n).rule (direction n) (duration n)
 
+/-- The actual ordered capacity execution with stage-dependent coordinates, methods, sweep
+directions and time steps: `run method direction duration initial 0` is `initial`, and the array
+after `n + 1` stages applies the stage operator `step method direction duration n` to the array
+after `n` stages. By `run_ordered` this is the `orderedOperatorSweep` of the first `n` stage
+operators, so the constant-coordinate sweep is the special case of a constant `coord`. -/
 noncomputable def run (method : ∀ k, Method data (coord k)) (direction : ℕ → D)
     (duration : ℕ → ℝ) (initial : Cell → State) : ℕ → Cell → State :=
   execution (step method direction duration) initial

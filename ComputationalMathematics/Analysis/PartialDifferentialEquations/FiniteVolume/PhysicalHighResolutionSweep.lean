@@ -26,13 +26,27 @@ local notation "Point" => D → ℝ
 local notation "State" => Fin m → ℝ
 variable (family : NumStability.PhysicalRefinementQuality.Family D FacePoint m)
 
+/-- The line coordinates of refinement level `level` with the supplied numerical ghost values
+replaced by the stage-`k` boundary data `ghost k`. Only the ghost values change: the physical
+cells, faces, coordinate lines and lookups of `family.coordinates level` are retained, so each
+stage of a sweep may use its own boundary data on the same mesh. -/
 def coordinates (level : ℕ) (ghost : ℕ → D → family.Line level → ℤ → State) (k : ℕ) :=
   (family.coordinates level).withGhost (ghost k)
 
+/-- The supplied capacity line method of level `level`, re-indexed to the stage-`k`
+coordinates `coordinates family level ghost k`. Its numerical-flux and admission functions are
+exactly those of `family.method level`; only the ghost data seen through the coordinates
+changes with the stage `k`. -/
 def method (level : ℕ) (ghost : ℕ → D → family.Line level → ℤ → State) (k : ℕ) :
     NumStability.CapacityCoordinate.Method (family.data level) (coordinates family level ghost k) :=
   (family.method level).withGhost (ghost k)
 
+/-- The ordered capacity sweep of level `level` on its actual physical mesh:
+`execution family level direction duration ghost initial k` is the cell array after `k` stages,
+where stage `n` advances the whole array in direction `direction n` with the actual time step
+`duration n` using the stage method `method family level ghost n`, and stage `0` returns
+`initial`. This is bare algebraic execution: no admission, stability or step-size hypothesis is
+needed to define it. -/
 noncomputable def execution (level : ℕ) (direction : ℕ → D) (duration : ℕ → ℝ)
     (ghost : ℕ → D → family.Line level → ℤ → State) (initial : family.Cell level → State) :=
   NumStability.CapacityCoordinate.Sweep.run (method family level ghost) direction duration initial

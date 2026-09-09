@@ -71,6 +71,13 @@ theorem finite_sum_isRectangleSolution
     exact (intervalIntegral.integral_finset_sum
       (fun p _ => ((hq p).2.1 a s t).sub ((hq p).2.1 b s t))).symm
 
+/-- The eigenmode superposition solving the Riemann problem for a constant-coefficient linear
+system with real eigenbasis `eigenbasis` and eigenvalues `eigenvalues`: the left, origin and right
+states are expanded in the eigenbasis, and for each mode `p` the scalar `riemannData` step formed
+from their `p`-th coordinates travels at speed `eigenvalues p` and is carried by `eigenbasis p`.
+At time zero the sum reproduces `riemannData leftState valueAtOrigin rightState`, and when every
+`eigenbasis p` is an eigenvector of the coefficient matrix with eigenvalue `eigenvalues p` it is
+a rectangle conservation-law solution. -/
 noncomputable def linearRiemannSolution
     {ι : Type*} [Fintype ι] (eigenbasis : Module.Basis ι ℝ (ι → ℝ))
     (eigenvalues : ι → ℝ) (leftState valueAtOrigin rightState : ι → ℝ) :
@@ -130,6 +137,10 @@ theorem linearRiemannSolution_selfSimilar
     rw [sub_mul, div_mul_cancel₀ _ ht.ne']]
   rw [riemannData_mul_pos _ _ _ _ ht]
 
+/-- The state of `linearRiemannSolution` on the ray `x = 0`, read off at time `t = 1`.  By
+self-similarity (`linearRiemannSolution_rayZero`) this is its value at `x = 0` for every `t > 0`:
+modes with positive speed contribute their `leftState` coordinate, modes with negative speed their
+`rightState` coordinate, and a mode with zero speed the coordinate selected by `valueAtOrigin`. -/
 noncomputable def selectedLinearRiemannRayZeroValue
     {ι : Type*} [Fintype ι] (eigenbasis : Module.Basis ι ℝ (ι → ℝ))
     (eigenvalues : ι → ℝ) (leftState valueAtOrigin rightState : ι → ℝ) : ι → ℝ :=

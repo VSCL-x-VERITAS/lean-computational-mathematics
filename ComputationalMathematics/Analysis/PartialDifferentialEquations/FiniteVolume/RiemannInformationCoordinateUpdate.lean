@@ -24,19 +24,31 @@ variable {Result : (d : D) → HyperbolicRiemannProblem (laws d) → Type*}
 variable {Information : D → Type*}
 variable (methods : (d : D) → ℝ → RiemannInformationFluxMethod (laws d) (Result d) (Information d))
 
-
+/-- The shared face in direction `d` with right cell `cell` is admitted when the adjacent-cell
+Riemann problem read from its coordinate line, oriented from the coordinate predecessor of
+`cell` to `cell`, lies in the explicit domain of the direction-`d` routine at step `dt`. -/
 def FaceAdmitted (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ) : Prop :=
   (methods d dt).domain (adjacentCellRiemannProblem (laws d)
     (fun j => state (Function.update cell d j)) (cell d))
 
+/-- Every shared face in direction `d` is admitted, so the whole direction-`d` update stage of
+`state` at step `dt` executes the actual routine at each face and never consults a fallback. -/
 def StageAdmitted (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) : Prop :=
   ∀ cell, FaceAdmitted methods d dt state cell
 
+/-- The numerical flux at an admitted face: the direction-`d` routine solves the face's
+adjacent-cell Riemann problem using the admission proof `h`, extracts its information and
+evaluates the flux. The face-area factor is not included; `guardedRule` supplies it. -/
 def selectedFaceFlux (d : D) (dt : ℝ) (state : (D → ℤ) → Fin m → ℝ) (cell : D → ℤ)
     (h : FaceAdmitted methods d dt state cell) : Fin m → ℝ :=
   (methods d dt).numericalFlux ((methods d dt).extract ((methods d dt).solve
     (adjacentCellRiemannProblem (laws d) (fun j => state (Function.update cell d j)) (cell d)) h))
 
+/-- A face-flux rule in the shape read by `CoordinateLineBalance.normalFaceFlux`. On the
+coordinate `line` through the face in direction `d` with right cell `cell`, it returns the
+area-weighted numerical flux of the direction-`d` routine whenever the adjacent-cell Riemann
+problem is in that routine's domain (decided classically), and otherwise the supplied
+`fallback`, which has no solver meaning. -/
 noncomputable def guardedRule (area : D → (D → ℤ) → ℝ)
     (fallback : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
     (d : D) (cell : D → ℤ) (dt : ℝ) (line : ℤ → Fin m → ℝ) : Fin m → ℝ := by

@@ -35,38 +35,74 @@ methods. Single-grid execution does not require this structure. The fixed
 physical flux and state domain are shared by every level; normals are supplied
 geometric data, and no hyperbolicity of an integrated flux is inferred. -/
 structure Family (D FacePoint : Type*) [Fintype D] [MeasurableSpace FacePoint] (m : ℕ) where
+  /-- The type of active physical cells at refinement level `n`; each level is a finite type by
+  `finiteCell`. -/
   Cell : ℕ → Type
+  /-- The type of face IDs at refinement level `n`; the two cells incident to an interior face
+  report the same ID, so one numerical flux serves both. -/
   Face : ℕ → Type
+  /-- The type of coordinate lines at refinement level `n`, along which `coordinates n` indexes
+  the cells and faces by integer positions. -/
   Line : ℕ → Type
+  /-- Finiteness of the cells of every level. It supplies the finite maximum of cell diameters in
+  `mesh_actual` and the finite sums of `variation`. -/
   finiteCell : ∀ n, Fintype (Cell n)
+  /-- The measured physical geometry of level `n`: the cell partition of `D → ℝ`, its volume
+  measure, face IDs, face measures, face-point embeddings from `FacePoint` and the normal flux. -/
   data : ∀ n, PhysicalData D (Cell n) (Face n) (D → ℝ) FacePoint m
+  /-- The coordinate-line indexing of the cells and faces of level `n`, with sound lookup and
+  supplied ghost values at positions where the finite array has no cell. -/
   coordinates : ∀ n, LineCoordinates (m := m) D (Cell n) (Face n) (Line n)
+  /-- The supplied capacity coordinate method executed on level `n`: an integrated numerical
+  flux and a time-step admission predicate on the line arrays extracted by `coordinates n`. -/
   method : ∀ n, NumStability.CapacityCoordinate.Method (data n) (coordinates n)
+  /-- The single physical volume measure on `D → ℝ` shared by every level; `measure_eq`
+  identifies it with the measure of each `data n`, and boundary means are taken against it. -/
   measure : Measure (D → ℝ)
   measure_eq : ∀ n, (data n).measure = measure
+  /-- The fixed nonempty set of admissible conserved states in each direction, shared by every
+  level (`states_eq`). Admissible cell and ghost inputs take their values in it. -/
   states : D → Set (Fin m → ℝ)
   states_nonempty : ∀ d, (states d).Nonempty
   states_eq : ∀ n d, (data n).admissibleStates d = states d
+  /-- The fixed tensor flux of the shared physical law: at a physical point and a conserved
+  state, the flux vector in each coordinate direction of `D`. No hyperbolicity of this tensor or
+  of any integrated flux is asserted. -/
   physicalFlux : (D → ℝ) → (Fin m → ℝ) → D → Fin m → ℝ
+  /-- The supplied geometric normal, as a vector indexed by `D`, of each face of level `n` in
+  direction `d` at each face point. By `normal_flux_eq` the normal flux of `data n` is the
+  contraction of `physicalFlux` against this normal. -/
   normal : ∀ n, D → Face n → FacePoint → D → ℝ
   normal_flux_eq : ∀ n d face point state,
     (data n).normalFlux d face point state =
       ∑ k, normal n d face point k • physicalFlux ((data n).facePoint d face point) state k
+  /-- The fixed physical region containing every active cell of every level (`active_inside`)
+  and every boundary region (`boundary_inside`). Smooth references are required on its
+  closure. -/
   region : Set (D → ℝ)
+  /-- The fixed target set on which the refinement is assessed: it has nonempty interior, lies
+  inside `region` and is covered by the active cells of every level (`target_covered`). -/
   target : Set (D → ℝ)
   target_interior_nonempty : (interior target).Nonempty
   target_inside : target ⊆ region
   active_inside : ∀ n cell, (data n).cells.cellRegion cell ⊆ region
   target_covered : ∀ n x, x ∈ target → ∃ cell, x ∈ (data n).cells.cellRegion cell
   bounded_cells : ∀ n cell, Bornology.IsBounded ((data n).cells.cellRegion cell)
+  /-- The mesh size of each level. By `mesh_actual` it is the maximum actual cell diameter
+  `FiniteVolumeCellPartition.mesh (data n).cells`; it is positive and tends to `0`. -/
   mesh : ℕ → ℝ
   mesh_actual : ∀ n, mesh n = (by
     letI := finiteCell n
     exact NumStability.FiniteVolumeCellPartition.mesh (data n).cells)
   mesh_pos : ∀ n, 0 < mesh n
   mesh_tendsto : Tendsto mesh atTop (𝓝 0)
+  /-- The fixed positive time horizon: admitted time steps are restricted to `(0, horizon]` and
+  reference smoothness and balances are required on `[0, horizon]`. -/
   horizon : ℝ
   horizon_pos : 0 < horizon
+  /-- The supplied measurable boundary region of positive finite measure inside `region`, for
+  level `n`, direction `d`, coordinate line `line` and integer position `j`. The normalized mean
+  of a reference field over it is the exact boundary datum `referenceGhost`. -/
   boundaryRegion : ∀ n, D → Line n → ℤ → Set (D → ℝ)
   boundary_measurable : ∀ n d line j, MeasurableSet (boundaryRegion n d line j)
   boundary_positive : ∀ n d line j, measure (boundaryRegion n d line j) ≠ 0
@@ -84,6 +120,8 @@ noncomputable def referenceGhost (n : ℕ) (q : Point → ℝ → State) :
   fun d line j => cellVolumeAverage family.measure (family.boundaryRegion n d line j)
     (fun x => q x 0)
 
+/-- The exact projection of a reference field `q` onto the cells of level `n` at time `t`: each
+cell receives its measured mean `(family.data n).cellMean q cell t`. -/
 noncomputable def projected (n : ℕ) (q : Point → ℝ → State) (t : ℝ) : family.Cell n → State :=
   fun cell => (family.data n).cellMean q cell t
 
@@ -100,8 +138,12 @@ def SmoothReference (d : D) (q : Point → ℝ → State) : Prop :=
 /-- One physical reference, one constant and one threshold. The certificate
 is chosen before any later mesh level, time step or coordinate execution. -/
 structure AccuracyCertificate (d : D) (q : Point → ℝ → State) (p : ℝ) where
+  /-- The fixed nonnegative constant of the one-step accuracy bound `constant * dt * mesh n ^ p`
+  asserted by `bound`. -/
   constant : ℝ
   constant_nonneg : 0 ≤ constant
+  /-- The fixed refinement level from which `projection_available` and `bound` are asserted. It
+  is chosen once, before any later level or time step. -/
   threshold : ℕ
   projection_available : ∀ n, threshold ≤ n → ∃ dt : ℝ,
     0 < dt ∧ dt ≤ family.horizon ∧

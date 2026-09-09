@@ -23,9 +23,19 @@ equal-state numerical flux is required. -/
 structure LineRealization (data : PhysicalData D Cell Face Point FacePoint m)
     (coord : LineCoordinates (m := m) D Cell Face Line)
     (family : D → Line → LineFamily m) where
+  /-- The refinement level selected on each coordinate line: in direction `d`, the line `line`
+  executes the member `level d line` of its refining family `family d line`, which fixes the
+  one-dimensional grid, time step, active window and numerical flux used there. -/
   level : D → Line → ℕ
+  /-- The actual time-step duration of one sweep in direction `d`. By `duration_eq` it equals
+  the selected family time step `(family d line).dt (level d line)` on every line of that
+  direction, so all coordinate lines of a sweep share the same step. -/
   duration : D → ℝ
   duration_eq : ∀ d line, duration d = (family d line).dt (level d line)
+  /-- The common positive transverse area of the coordinate line `line` in direction `d`. By
+  `volume_eq` every physical cell volume on the line is this area times the one-dimensional
+  cell length, and by `physical_flux` every integrated physical face flux is this area times
+  the one-dimensional flux, so the line family is realized up to this fixed scale. -/
   area : D → Line → ℝ
   area_pos : ∀ d line, 0 < area d line
   left_line : ∀ d cell, coord.faceLine d (data.leftFace d cell) = coord.cellLine d cell
@@ -47,6 +57,11 @@ structure LineRealization (data : PhysicalData D Cell Face Point FacePoint m)
           (coord.faceIndex d face)) state
   states_eq : ∀ d line, (family d line).states = data.admissibleStates d
 
+/-- The face rule induced by the realization: for a direction `d`, the current cell array and a
+face, the selected family's numerical flux at the chosen level, evaluated on the line array
+extracted along that face's coordinate line at the face's index and scaled by the line's common
+area. The time-step argument is fixed by the `advance` interface and is not read: the actual
+step is `duration`, already encoded in the selected level. This is the rule fed to `advance`. -/
 noncomputable def LineRealization.rule
     {data : PhysicalData D Cell Face Point FacePoint m}
     {coord : LineCoordinates (m := m) D Cell Face Line} {family : D → Line → LineFamily m}
@@ -57,6 +72,9 @@ noncomputable def LineRealization.rule
       (realization.level d (coord.faceLine d face))
       (coord.extract d (coord.faceLine d face) current) (coord.faceIndex d face)
 
+/-- The whole numerical array `current` is admitted in direction `d` when, for every cell, the
+line array extracted along that cell's coordinate line (actual cells plus supplied ghosts) is
+admitted by the selected family member at the chosen level. -/
 def LineRealization.Admitted
     {data : PhysicalData D Cell Face Point FacePoint m}
     {coord : LineCoordinates (m := m) D Cell Face Line} {family : D → Line → LineFamily m}

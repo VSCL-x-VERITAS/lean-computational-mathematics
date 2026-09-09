@@ -21,17 +21,32 @@ open NumStability MeasureTheory Set Filter
 open NumStability.FiniteCoordinate NumStability.DirectionalLine NumStability.FiniteCartesian
 open scoped BigOperators Topology
 
+/-- The two coordinate directions of the plane, indexed by `Fin 2`. -/
 abbrev Direction := Fin 2
+/-- Scalar states: one-component vectors `Fin 1 → ℝ`, the state space of the identity flux law
+carried by `physical`. -/
 abbrev State := Fin 1 → ℝ
+/-- Logical Cartesian multi-indices `Direction → ℤ` labelling the cells of the two-dimensional
+grid. -/
 abbrev Position := Direction → ℤ
+/-- Physical points of the plane `Direction → ℝ`; the same type also serves as the face points of
+the geometry. -/
 abbrev Point := Direction → ℝ
 
+/-- Cell width `h n = 1 / (n + 2)` of the `n`-th refinement, shared by both axes. It is the width
+`HighResolutionAdvectionLine.h n` of the reused interval grid, positive (`h_pos`) and tending to
+zero (`h_tendsto`). -/
 noncomputable def h (n : ℕ) : ℝ := HighResolutionAdvectionLine.h n
 theorem h_pos (n : ℕ) : 0 < h n := HighResolutionAdvectionLine.h_pos n
 theorem h_tendsto : Tendsto h atTop (𝓝 0) := HighResolutionAdvectionLine.h_tendsto_zero
 
+/-- The active cells of the `n`-th refinement: the `(n + 4)^2` multi-indices whose two coordinates
+both lie in `[0, n + 4)` (`mem_active`, `active_card`). Their boxes cover the target square
+(`target_covered`) and stay inside the physical region (`active_inside`). -/
 noncomputable def active (n : ℕ) : Finset Position :=
   Fintype.piFinset (fun _ => Finset.Ico (0 : ℤ) (n + 4))
+/-- An active cell of the `n`-th refinement: a multi-index together with a proof that it lies in
+`active n`. -/
 abbrev Cell (n : ℕ) := ↥(active n)
 
 theorem mem_active (n : ℕ) (p : Position) :
@@ -48,6 +63,10 @@ theorem active_card (n : ℕ) : (active n).card = (n + 4)^2 := by
   simp [active]
   omega
 
+/-- The one-dimensional grids along the two axes of the `n`-th refinement. Both directions reuse
+the uniform interval grid of width `h n` from `HighResolutionAdvectionLine.family 1`, so on every
+axis cell `j` occupies `[(j - 1) * h n, j * h n)` and has width `h n` (`axis_left`, `axis_right`,
+`axis_volume`). -/
 noncomputable def axes (n : ℕ) : Direction → OneDimensionalFiniteVolumeGrid :=
   fun _ => (HighResolutionAdvectionLine.family 1).grid n
 
@@ -64,6 +83,10 @@ theorem identity_hyperbolic : ∀ _ : Direction, IsHyperbolicFluxOn (id : State 
   exact (HighResolutionAdvectionLine.family 1).hyperbolic 0
     (by norm_num [HighResolutionAdvectionLine.family]) state hs
 
+/-- The physical data of the `n`-th refinement: the Cartesian geometry `data` built from `axes n`
+on the active cells, with every state admissible and the identity flux in both directions. Cell
+volumes are `h n ^ 2` (`physical_volume`) and each face measure has total mass `h n`
+(`physical_area`). -/
 noncomputable def physical (n : ℕ) : PhysicalData Direction (Cell n) Position Point Point 1 :=
   data (axes n) (active n) (active_nonempty n) (fun _ => univ) (fun _ => id)
     identity_hyperbolic
@@ -79,7 +102,11 @@ theorem physical_area (n : ℕ) (d : Direction) (face : Position) :
   rw [faceMeasure_area]
   fin_cases d <;> simp [CartesianGrid.faceArea, axis_volume]
 
+/-- The fixed nonempty open target square `(0, 1)^2`, covered by the active cells of every
+refinement (`target_covered`). -/
 def target : Set Point := Set.pi univ (fun _ => Ioo (0 : ℝ) 1)
+/-- The fixed closed physical region `[-2, 2]^2`. It contains every active cell box
+(`active_inside`) and the target square in its interior (`target_inside`). -/
 def region : Set Point := Set.pi univ (fun _ => Icc (-2 : ℝ) 2)
 
 theorem target_nonempty : target.Nonempty := by
@@ -164,6 +191,10 @@ theorem box_diameter_le (n : ℕ) (pos : Position) :
     rw [axis_left, axis_right]; ring
   rw [he]
 
+/-- The actual mesh size of the `n`-th refinement: the maximum metric diameter of the active cell
+boxes of `physical n` (`FiniteVolumeCellPartition.mesh`), not a capacity or index spacing. It is
+positive, at most `h n`, and tends to zero (`actualMesh_positive`, `actualMesh_le`,
+`actualMesh_tendsto`). -/
 noncomputable def actualMesh (n : ℕ) : ℝ := NumStability.FiniteVolumeCellPartition.mesh (physical n).cells
 
 theorem actualMesh_le (n : ℕ) : actualMesh n ≤ h n := by
@@ -225,9 +256,14 @@ theorem physicalWith_measure (n : ℕ) (flux : Direction → State → State)
     (hflux : ∀ d, IsHyperbolicFluxOn (flux d) univ) :
     (physicalWith n flux hflux).measure = volume := rfl
 
+/-- The position-independent flux tensor field of a directional flux `flux`: at every point and
+state `q`, its component in direction `d` is `flux d q`. Contracting it with the coordinate normal
+`normal d` at the face point recovers the normal flux of `physicalWith` (`physical_normal_flux`). -/
 def tensorFlux (flux : Direction → State → State) : Point → State → Direction → State :=
   fun _ q d => flux d q
 
+/-- The unit coordinate normal in direction `d`: the vector with component `1` in direction `d`
+and `0` in every other direction. -/
 def normal (d : Direction) : Direction → ℝ := fun k => if k = d then 1 else 0
 
 theorem physical_normal_flux (n : ℕ) (flux : Direction → State → State)

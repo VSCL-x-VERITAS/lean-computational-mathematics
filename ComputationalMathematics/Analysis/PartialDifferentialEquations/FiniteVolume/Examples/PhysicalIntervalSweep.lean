@@ -23,6 +23,9 @@ open DirectionalFiniteVolume
 local notation "Cell" => Fin 1 → ℤ
 local notation "State" => Fin 1 → ℝ
 
+/-- The unit-interval partition of the real line indexed by `Fin 1 → ℤ`: the cell with index
+`j` occupies the half-open interval `Ioc (j - 1) j`, so consecutive cells share their actual
+endpoints and the cells together cover all of `ℝ`. -/
 def cells : FiniteVolumeCellPartition Cell ℝ where
   domain := Set.univ
   cellRegion := fun cell => Set.Ioc ((cell 0 : ℝ) - 1) (cell 0)
@@ -44,6 +47,9 @@ def cells : FiniteVolumeCellPartition Cell ℝ where
       exact ⟨fun _ => ⌈x⌉, Int.ceil_eq_iff.mp rfl⟩
     · intro _; trivial
 
+/-- The one-dimensional grid of unit cells `[j - 1, j]` matching `cells`; it identifies the
+physical cell means and face fluxes of `data` with the existing one-dimensional cell averages
+and the Cartesian reference of `cartesian_reference`. -/
 def axis : OneDimensionalFiniteVolumeGrid where
   cellLeft := fun j => (j : ℝ) - 1
   cellRight := fun j => j
@@ -53,6 +59,10 @@ def axis : OneDimensionalFiniteVolumeGrid where
 theorem cell_measure (cell : Cell) : volume (cells.cellRegion cell) = 1 := by
   simp [cells, Real.volume_Ioc]
 
+/-- The physical geometry and law realizing every directional-method premise at once: the unit
+cells of `cells` with Lebesgue measure, a one-point Dirac face measure located at the shared
+left endpoint `j - 1` of cell `j`, every state admissible, and the identity normal flux of
+unit-speed transport, which is hyperbolic. -/
 noncomputable def data : PhysicalData (Fin 1) ℝ Unit 1 where
   cells := cells
   measure := volume
@@ -111,6 +121,9 @@ theorem reference_on (q : ℝ → ℝ → State)
     simpa [IsDirectionalReference, hf, CartesianGrid.cellVolume, CartesianGrid.faceArea,
       axis, OneDimensionalFiniteVolumeGrid.cellVolume] using h
 
+/-- The exact unit-speed transport solution starting from the Riemann step with state `0` on
+the left of the origin and state `1` on its right; it is the conserved field against which the
+numerical sweep is measured. -/
 noncomputable def reference : ℝ → ℝ → State := StationaryRiemannField.reference 0 1
 
 theorem reference_conserved : IsRectangleConservationLawSolution reference id := by
@@ -118,6 +131,9 @@ theorem reference_conserved : IsRectangleConservationLawSolution reference id :=
     funext StationaryRiemannField.physicalFlux
   simpa only [heq] using StationaryRiemannField.reference_rectangle (0 : State) 1
 
+/-- The left-state numerical face flux: on the face to the left of `cell` it returns the value
+stored by the coordinate line at the neighbouring index `cell d - 1`. The time-step argument
+is required by the generic rule interface but does not enter the value. -/
 def rule (d : Fin 1) (cell : Cell) (_dt : ℝ) (line : ℤ → State) : State :=
   line (cell d - 1)
 
@@ -131,12 +147,20 @@ theorem constant_consistent (d : Fin 1) (cell : Cell) (dt : ℝ) (value : State)
     exact integrable_const _
   · simp [rule, data]
 
+/-- The step initial data: state `0` on every cell with index at most `0` and state `1` on
+every other cell, so the sweep starts from a nonconstant field. -/
 def initial (cell : Cell) : State := if cell 0 ≤ 0 then 0 else 1
 
+/-- The input residual of the stage following the stages `before`: the norm of the difference
+between the swept numerical state on `cell` and the cell mean of `reference` at time `0`. The
+direction and time step belong to the generic error signature but do not enter the value. -/
 noncomputable def oldError (before : List (Fin 1 × ℝ)) (_d : Fin 1) (_dt : ℝ) (cell : Cell) : ℝ :=
   ‖CoordinateLineBalance.sweep data.cellVolume rule before initial cell -
     data.cellMean reference cell 0‖
 
+/-- The face residual of the stage `(d, dt)` following the stages `before`: the norm of the
+difference between the numerical normal face flux of `rule` on the swept state and the time
+average over `[0, dt]` of the physical face flux of `reference` at `cell`. -/
 noncomputable def faceError (before : List (Fin 1 × ℝ)) (d : Fin 1) (dt : ℝ) (cell : Cell) : ℝ :=
   ‖CoordinateLineBalance.normalFaceFlux rule d dt
       (CoordinateLineBalance.sweep data.cellVolume rule before initial) cell -

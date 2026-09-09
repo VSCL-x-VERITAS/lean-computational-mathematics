@@ -21,7 +21,10 @@ variable {ι : Type*} [Fintype ι]
 
 /-- An initial-value problem consists of an actual governing equation and its initial field. -/
 structure FirstOrderInitialValueProblem (ι : Type*) [Fintype ι] where
+  /-- The governing first-order quasilinear equation, carrying its own admissible states,
+  principal matrix and forcing. -/
   governing : FirstOrderEquation ι
+  /-- The prescribed initial field: the `ι`-component state at each position at time zero. -/
   initialState : ℝ → (ι → ℝ)
 
 namespace FirstOrderInitialValueProblem
@@ -34,6 +37,9 @@ def IsRiemannWithStates (problem : FirstOrderInitialValueProblem ι)
   rightState ∈ problem.governing.admissibleStates ∧
   IsRiemannData problem.initialState leftState rightState
 
+/-- Membership in the broad Riemann family for some pair of side states: the governing equation
+is hyperbolic, both side states are admissible, and the initial field is constant on each strict
+half-line. The origin value is free and equal side states are permitted. -/
 def IsRiemann (problem : FirstOrderInitialValueProblem ι) : Prop :=
   ∃ leftState rightState, problem.IsRiemannWithStates leftState rightState
 

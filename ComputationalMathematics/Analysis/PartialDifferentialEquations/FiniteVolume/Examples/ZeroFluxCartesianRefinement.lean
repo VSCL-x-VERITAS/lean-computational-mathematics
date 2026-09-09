@@ -21,14 +21,27 @@ open NumStability.FiniteCoordinate NumStability.DirectionalLine NumStability.Fin
 open scoped BigOperators Topology
 open NumStability.RefiningCartesianGrid (Direction State Point Position Cell)
 
+/-- The zero directional flux of the two-direction Cartesian state law: every direction and
+every state is sent to the zero state. Both arguments are ignored by design, so the family
+transports nothing at any refinement level. -/
 def zeroFlux : Direction → State → State := fun _ _ => 0
 
 theorem zero_hyperbolic : ∀ d, IsHyperbolicFluxOn (zeroFlux d) univ :=
   fun _ => NumStability.constantFlux_isHyperbolicOn 0 univ
 
+/-- The level-`n` physical data of the refining Cartesian grid equipped with the zero flux:
+the already verified growing measured boxes of `RefiningCartesianGrid.physicalWith`, with
+hyperbolicity supplied by the constant-flux lemma `zero_hyperbolic`. -/
 noncomputable def data (n : ℕ) := NumStability.RefiningCartesianGrid.physicalWith n zeroFlux zero_hyperbolic
+
+/-- The level-`n` finite line coordinates of the refining Cartesian grid with every ghost value
+fixed to the zero state. Lookups read only the finite active array, so no boundary condition
+is inferred from the coordinates. -/
 noncomputable def coordinates (n : ℕ) := NumStability.RefiningCartesianGrid.coord n (fun _ _ _ => 0)
 
+/-- The zero-flux capacity line method at level `n`: face and cell coordinate lines and indices
+are incident by unfolding `coord` and the box geometry, the supplied integrated numerical flux
+is identically zero, and every line array is admitted at every supplied time step. -/
 noncomputable def method (n : ℕ) : NumStability.CapacityCoordinate.Method (data n) (coordinates n) where
   incidence := {
     left_line := fun _ _ => rfl
@@ -95,6 +108,9 @@ theorem family_stable (n : ℕ) (d : Direction) (dt : ℝ) :
     (family.method n).StableAt d dt 1 :=
   family.zero_flux_stable (by intros; rfl) n d dt
 
+/-- The fixed spatially nonconstant stationary reference field `(x, t) ↦ x 0 + x 1`, stored in
+the single scalar state component. The time argument is ignored by design: the field is
+stationary, so its cell means are constant in time exactly as the zero-flux law requires. -/
 def stationary (x : Point) (_t : ℝ) : State := fun _ => x 0 + x 1
 
 theorem stationary_smooth :

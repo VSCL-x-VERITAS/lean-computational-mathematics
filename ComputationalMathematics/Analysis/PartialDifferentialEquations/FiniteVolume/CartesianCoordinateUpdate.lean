@@ -27,7 +27,11 @@ open MeasureTheory RiemannInformationCoordinate
 local notation "line" => (fun (d : D) (base : D → ℤ)
   (state : (D → ℤ) → Fin m → ℝ) (j : ℤ) => state (Function.update base d j))
 
-
+/-- Area weighting of a full-line flux rule. `rule d cell dt old` is the per-unit-area normal
+flux through the `d`-face indexed by `cell`, read from the coordinate line `old`; scaling it by
+the tangential face area `CartesianGrid.faceArea axes d cell` gives the area-integrated flux
+that `CoordinateLineBalance.advance` consumes, so the line restriction of that advance is the
+one-dimensional update `riemannFiniteVolumeUpdate (axes d)` (`cartesian_full_line_update`). -/
 def areaWeightedRule (axes : D → OneDimensionalFiniteVolumeGrid)
     (rule : D → (D → ℤ) → ℝ → (ℤ → Fin m → ℝ) → Fin m → ℝ)
     (d : D) (cell : (D → ℤ)) (dt : ℝ) (old : ℤ → Fin m → ℝ) : Fin m → ℝ :=

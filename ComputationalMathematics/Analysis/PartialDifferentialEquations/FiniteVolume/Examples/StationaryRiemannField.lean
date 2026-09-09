@@ -47,6 +47,10 @@ information. Its upwind flux is consistent even though its field is inexact. -/
 def StationaryResult (problem : HyperbolicRiemannProblem (transportLaw (m := m))) :=
   {field : ℝ → ℝ → (Fin m → ℝ) // field = stationary problem.leftState problem.rightState}
 
+/-- The field-producing method for unit-speed transport that admits every problem and returns
+the stationary field `stationary`. Its extracted information is the returned field's interface
+state at time `1`, and its numerical flux is the physical flux of that state; consistency on
+constant states holds even though the returned field is not rectangle-conserved. -/
 noncomputable def method : RiemannFieldFluxMethod (transportLaw (m := m)) StationaryResult (Fin m → ℝ) where
   domain := fun _ => True
   solve := fun problem _ => ⟨stationary problem.leftState problem.rightState, rfl⟩

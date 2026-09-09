@@ -25,6 +25,9 @@ noncomputable def advance (data : PhysicalData D Cell Face Point FacePoint m)
   finiteVolumeCellAverageUpdate dt (data.cellVolume cell) (current cell)
     (rule d dt current (data.rightFace d cell) - rule d dt current (data.leftFace d cell))
 
+/-- Apply the conservative `advance` steps of `stages` in listed order: each stage `(d, dt)`
+advances the current cell array along coordinate direction `d` by the time increment `dt`,
+and its output is the input of the next stage. -/
 noncomputable def sweep (data : PhysicalData D Cell Face Point FacePoint m)
     (rule : D → ℝ → (Cell → State) → Face → State)
     (stages : List (D × ℝ)) (current : Cell → State) : Cell → State :=
@@ -61,7 +64,10 @@ theorem sweep_split (data : PhysicalData D Cell Face Point FacePoint m)
       sweep data rule after (advance data rule d dt (sweep data rule before current)) := by
   simp [sweep, orderedOperatorSweep, List.foldl_append]
 
-def LineLocal [DecidableEq Cell]
+/-- A numerical flux `rule` is line-local for `stencil` when its value on a face, for any
+direction and time step, depends only on the current values of the cells in that face's
+stencil: two cell arrays agreeing on `stencil d face` yield the same flux through `face`. -/
+def LineLocal
     (stencil : D → Face → Finset Cell)
     (rule : D → ℝ → (Cell → State) → Face → State) : Prop :=
   ∀ d dt current other face,

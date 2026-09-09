@@ -26,6 +26,9 @@ open NumStability
 
 namespace NumStability.CFLUnitShift
 
+/-- The uniform one-dimensional grid of cell width `h`: cell `j` is the interval
+`[(j - 1) * h, j * h]`, so adjacent cells share their endpoints and every cell has
+volume `h` (`grid_volume`). -/
 def grid (h : ℝ) (hh : 0 < h) : OneDimensionalFiniteVolumeGrid where
   cellLeft j := ((j : ℝ) - 1) * h
   cellRight j := (j : ℝ) * h
@@ -37,6 +40,10 @@ theorem grid_volume (h : ℝ) (hh : 0 < h) (j : ℤ) :
   simp only [OneDimensionalFiniteVolumeGrid.cellVolume, grid]
   ring
 
+/-- One upwind finite-volume step for unit-speed transport on `grid h hh`, with time step equal
+to the cell width `h` (CFL number one). The flux through the face at the left end of cell `j`
+is the upwind cell value `Q (j - 1)`; at this CFL number the conservative update is exactly the
+one-cell shift `j ↦ Q (j - 1)` (`advance_eq_shift`). -/
 noncomputable def advance {ι : Type*} (h : ℝ) (hh : 0 < h)
     (Q : ℤ → ι → ℝ) : ℤ → ι → ℝ :=
   riemannFiniteVolumeUpdate (grid h hh) h Q (fun j => Q (j - 1))
@@ -47,6 +54,10 @@ theorem advance_eq_shift {ι : Type*} (h : ℝ) (hh : 0 < h)
     add_sub_cancel_right, one_smul]
   abel
 
+/-- The cell average over cell `j` of `grid h hh` of the profile `φ` transported at unit speed
+for time `t`, that is, of `x ↦ φ (x - t)`. Advancing the time by one cell width shifts the
+cell index by one (`averaged_eq_shift`), which is why `advance` reproduces these averages
+exactly (`advance_averaged_exact`). -/
 noncomputable def averaged {ι : Type*} [Fintype ι] (h : ℝ) (hh : 0 < h)
     (φ : ℝ → ι → ℝ) (t : ℝ) (j : ℤ) : ι → ℝ :=
   finiteVolumeCellAverageOn (grid h hh) (fun x => φ (x - t)) j
@@ -94,6 +105,10 @@ theorem physical_exactness {ι : Type*} [Fintype ι]
   refine ⟨translated_is_conserved φ hφ, averaged_is_cell_average h hh φ hφ t j, ?_⟩
   simp only [advance_averaged_exact, sub_self, norm_zero, zero_mul, le_refl]
 
+/-- The finite window of `N` consecutive entries of the integer-indexed array `Q` starting at
+index `start`: entry `i` is `Q (start + i)`. The finite-window statements about `advance` are
+phrased through it, since the output window at `start` is the input window at `start - 1`
+(`advance_window`). -/
 def window {E : Type*} (Q : ℤ → E) (start : ℤ) (N : ℕ) : Fin N → E :=
   fun i => Q (start + (i.val : ℤ))
 
@@ -137,6 +152,8 @@ theorem advance_preserves_monotone (h : ℝ) (hh : 0 < h)
   rw [advance_window]
   exact hmono
 
+/-- The `n`-th mesh width `1 / (n + 1)` of the refinement sequence used in the refinement
+statements; it is positive (`meshSize_pos`) and tends to zero (`meshSize_tendsto_zero`). -/
 noncomputable def meshSize (n : ℕ) : ℝ := 1 / ((n : ℝ) + 1)
 
 theorem meshSize_pos (n : ℕ) : 0 < meshSize n := by unfold meshSize; positivity
@@ -181,6 +198,9 @@ theorem refinement_oscillation {ι : Type*} [Fintype ι]
       (1 + (0 : ℝ) * meshSize n) * windowTV Q (start - 1) N + 0 := by
   simp only [advance_windowTV, zero_mul, add_zero, one_mul, le_refl]
 
+/-- The identity profile `x ↦ x`, packaged as a one-component state in `Fin 1 → ℝ`. It is a
+smooth (`smoothProfile_smooth`) and nonconstant (`smoothProfile_nonconstant`) transported
+profile, showing that the exactness statements are not vacuous. -/
 def smoothProfile (x : ℝ) : Fin 1 → ℝ := fun _ => x
 
 theorem smoothProfile_smooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) smoothProfile := by
@@ -195,6 +215,10 @@ theorem smoothProfile_nonconstant : smoothProfile 0 ≠ smoothProfile 1 := by
   have h0 := congrFun h 0
   norm_num [smoothProfile] at h0
 
+/-- The one-component unit step `riemannData 1 0 0`: the constant state `1` on `x < 0` and `0`
+on `x ≥ 0`, with the jump placed at the origin. It is locally integrable
+(`stepProfile_integrable`) but discontinuous at `0` (`stepProfile_discontinuous`), giving a
+transported jump that still satisfies the exactness statements. -/
 noncomputable def stepProfile : ℝ → Fin 1 → ℝ := riemannData 1 0 0
 
 theorem stepProfile_integrable (a b : ℝ) :

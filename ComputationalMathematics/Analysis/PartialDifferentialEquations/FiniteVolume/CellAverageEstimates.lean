@@ -18,7 +18,7 @@ namespace NumStability
 
 /-- A pointwise error bound controls the difference of interval averages. -/
 theorem norm_oneDimensionalCellAverage_sub_le {E : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
     {f g : ℝ → E} {s t bound : ℝ} (hst : s < t)
     (hf : IntervalIntegrable f volume s t) (hg : IntervalIntegrable g volume s t)
     (herror : ∀ τ ∈ Set.uIoc s t, ‖f τ - g τ‖ ≤ bound) :

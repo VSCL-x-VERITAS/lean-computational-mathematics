@@ -58,9 +58,15 @@ theorem eq_zero_of_local_integrals [CompleteSpace E] (g : ℝ → E) {L R x : �
       exact (hi x hx b hb).symm)
   exact hz.unique (hasDerivAt_const x 0)
 
+/-- The partial time derivative `∂q/∂t` of a space–time field `q x t` at the point `(x, t)`,
+realised as the Fréchet derivative of the uncurried map `(x, t) ↦ q x t` applied to the time
+direction `(0, 1)`. It is a junk value where `q` is not differentiable. -/
 noncomputable def qt (q : ℝ → ℝ → E) (x t : ℝ) : E :=
   fderiv ℝ (Function.uncurry q) (x, t) (0, 1)
 
+/-- The partial space derivative `∂q/∂x` of a space–time field `q x t` at the point `(x, t)`,
+realised as the Fréchet derivative of the uncurried map `(x, t) ↦ q x t` applied to the space
+direction `(1, 0)`. It is a junk value where `q` is not differentiable. -/
 noncomputable def qx (q : ℝ → ℝ → E) (x t : ℝ) : E :=
   fderiv ℝ (Function.uncurry q) (x, t) (1, 0)
 

@@ -33,6 +33,9 @@ theorem movingStep_rectangle (v : ℝ) :
     travelingWave_isRectangleConservationLawSolution (riemannData (0 : ℝ) v 1)
       (riemannData_intervalIntegrable 0 v 1) 1
 
+/-- The mass `∫ x in 0..1, movingStep v x t` of the moving step inside the unit cell `[0, 1]` at
+time `t`, for jump value `v`. It equals `1` for `t ≤ 0` and `1 - t` for `t ∈ [0, 1]`, so it has
+a corner at the crossing time `t = 0`, whatever value `v` is selected at the jump. -/
 def stepMass (v t : ℝ) : ℝ := ∫ x in (0 : ℝ)..1, movingStep v x t
 
 theorem stepMass_nonpositive (v : ℝ) {t : ℝ} (ht : t ≤ 0) : stepMass v t = 1 := by

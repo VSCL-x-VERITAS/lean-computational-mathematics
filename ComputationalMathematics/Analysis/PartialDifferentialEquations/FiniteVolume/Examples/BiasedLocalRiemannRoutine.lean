@@ -19,6 +19,9 @@ accuracy certificate is stored in the numerical result.
 namespace NumStability.BiasedLocalRiemannRoutine
 open LocalRiemannInformation
 
+/-- Scalar unit-speed transport on the proper state set `[0, 1]`: the flux is the physical
+flux of `StationaryRiemannField.transportLaw`, but only states whose single coordinate lies
+in `[0, 1]` are admissible, so hyperbolicity is classified only there. -/
 noncomputable def law : Law 1 where
   positive_dimension := by decide
   states := {state | 0 ≤ state 0 ∧ state 0 ≤ 1}
@@ -58,6 +61,9 @@ theorem actual_error (problem : Problem law) (bias : Fin 1 → ℝ) :
   simp only [Routine.flux, biasedRoutine, law,
     StationaryRiemannField.physicalFlux, add_sub_cancel_left]
 
+/-- The equal-state Riemann problem for `law` with both ordered states `0` and unit horizon.
+A consistent routine must return the physical flux `0` here, so this problem witnesses the
+failure of consistency for any nonzero bias. -/
 def equalProblem : Problem law where
   left := 0
   right := 0

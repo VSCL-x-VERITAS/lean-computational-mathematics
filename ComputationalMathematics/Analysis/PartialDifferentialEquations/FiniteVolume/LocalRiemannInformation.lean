@@ -23,16 +23,21 @@ open NumStability
 /-- The physical law is classified only at its explicitly admissible states. -/
 structure Law (m : ℕ) where
   positive_dimension : 0 < m
+  /-- The set of admissible conserved states at which the law is classified. -/
   states : Set (Fin m → ℝ)
+  /-- The physical flux as a function of the conserved state. -/
   flux : (Fin m → ℝ) → Fin m → ℝ
   hyperbolic : IsHyperbolicFluxOn flux states
 
 /-- Ordered admissible states and the actual positive time horizon. -/
 structure Problem {m : ℕ} (law : Law m) where
+  /-- The constant admissible initial state to the left of the interface. -/
   left : Fin m → ℝ
+  /-- The constant admissible initial state to the right of the interface. -/
   right : Fin m → ℝ
   left_mem : left ∈ law.states
   right_mem : right ∈ law.states
+  /-- The positive length of the finite time slab on which the problem is posed. -/
   duration : ℝ
   duration_pos : 0 < duration
 
@@ -40,6 +45,7 @@ structure Problem {m : ℕ} (law : Law m) where
 Existential selection may depend on the method; its numerical result type need not contain this field. Values after the horizon
 are irrelevant; the initial interface value is left unspecified. -/
 structure Reference {m : ℕ} {law : Law m} (problem : Problem law) where
+  /-- The space-time state field of the reference, evaluated at position `x` and time `τ`. -/
   field : ℝ → ℝ → Fin m → ℝ
   initial : IsRiemannData (fun x => field x 0) problem.left problem.right
   admissible : ∀ x τ, 0 < τ → τ ≤ problem.duration → field x τ ∈ law.states
@@ -51,6 +57,8 @@ structure Reference {m : ℕ} {law : Law m} (problem : Problem law) where
     (∫ x in a..b, field x t) - (∫ x in a..b, field x s) =
       ∫ τ in s..t, (law.flux (field a τ) - law.flux (field b τ))
 
+/-- The time average over `[0, problem.duration]` of the physical flux of the reference
+field at the interface `x = 0`: the mean physical flux through the interface on the slab. -/
 noncomputable def Reference.meanFlux {m : ℕ} {law : Law m} {problem : Problem law}
     (reference : Reference problem) : Fin m → ℝ :=
   oneDimensionalCellAverage (fun τ => law.flux (reference.field 0 τ)) 0 problem.duration
@@ -62,16 +70,24 @@ does not require the numerical procedure to construct or return that solution.
 No nonconstant accuracy or solution existence is inferred from consistency. -/
 structure Method {m : ℕ} (law : Law m)
     (Result : Problem law → Type*) (Information : Type*) where
+  /-- The problems the procedure accepts; `solve` is only defined on them. -/
   domain : Problem law → Prop
+  /-- Run the procedure on an accepted problem, producing its problem-indexed result. -/
   solve : (problem : Problem law) → domain problem → Result problem
+  /-- Extract the method-specific information from a result of the procedure. -/
   extract : {problem : Problem law} → Result problem → Information
+  /-- Convert extracted information into a numerical interface flux vector. -/
   numericalFlux : Information → Fin m → ℝ
+  /-- The certified bound, for each problem, on the distance between the numerical flux and
+  the mean flux of some rectangle-conserved Riemann reference of that problem. -/
   errorBound : Problem law → ℝ
   accurate : ∀ problem hdomain, ∃ reference : Reference problem,
     ‖numericalFlux (extract (solve problem hdomain)) - reference.meanFlux‖ ≤ errorBound problem
   consistent : ∀ problem hdomain, problem.left = problem.right →
     numericalFlux (extract (solve problem hdomain)) = law.flux problem.left
 
+/-- The numerical flux the procedure assigns to an accepted problem: solve it, extract the
+method's information from the result, and convert that information into a flux vector. -/
 noncomputable def Method.flux {m : ℕ} {law : Law m}
     {Result : Problem law → Type*} {Information : Type*}
     (method : Method law Result Information) (problem : Problem law) (hdomain : method.domain problem) :

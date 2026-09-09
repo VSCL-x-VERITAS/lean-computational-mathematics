@@ -22,6 +22,10 @@ variable {D Cell Face Point FacePoint Line : Type*}
 variable [MeasurableSpace Point] [TopologicalSpace Point] [MeasurableSpace FacePoint] {m : ℕ}
 local notation "State" => Fin m → ℝ
 
+/-- Compatibility of the face IDs of `data` with the line coordinates `coord`: in every direction
+`d`, the `leftFace` and `rightFace` of a cell lie on that cell's coordinate line, the left face
+carries the cell's own integer index and the right face the index one higher. This is what lets
+a shared-face `faceRule` update be rewritten as the line update `lineAdvance` (`advance_eq`). -/
 structure Incidence (data : PhysicalData D Cell Face Point FacePoint m)
     (coord : LineCoordinates (m := m) D Cell Face Line) : Prop where
   left_line : ∀ d cell, coord.faceLine d (data.leftFace d cell) = coord.cellLine d cell
@@ -29,6 +33,10 @@ structure Incidence (data : PhysicalData D Cell Face Point FacePoint m)
   left_index : ∀ d cell, coord.faceIndex d (data.leftFace d cell) = coord.cellIndex d cell
   right_index : ∀ d cell, coord.faceIndex d (data.rightFace d cell) = coord.cellIndex d cell + 1
 
+/-- The cell-volume weight at integer position `j` of coordinate line `line` in direction `d`: the
+measured physical `cellVolume` of the actual cell that `coord.lookup` finds there, and the positive
+totalization value `1` where the finite physical array has no cell. The missing-lookup value is
+never a physical cell size or mesh diameter; it only keeps the weight positive (`capacity_pos`). -/
 noncomputable def capacity (data : PhysicalData D Cell Face Point FacePoint m)
     (coord : LineCoordinates (m := m) D Cell Face Line) (d : D) (line : Line) (j : ℤ) : ℝ :=
   match coord.lookup d line j with
@@ -55,6 +63,11 @@ def faceRule (coord : LineCoordinates (m := m) D Cell Face Line)
   numericalFlux d (coord.faceLine d face) dt
     (coord.extract d (coord.faceLine d face) current) (coord.faceIndex d face)
 
+/-- The conservative update of position `j` on coordinate line `line` in direction `d`: the line
+array `values` is advanced by the time step `dt` through `finiteVolumeCellAverageUpdate`, using
+`capacity` as the cell volume and the difference of the already-integrated numerical fluxes
+`numericalFlux` at positions `j + 1` and `j` as the net outward flux. At an actual cell it agrees
+with the shared-face `advance` under `faceRule` (`advance_eq`). -/
 noncomputable def lineAdvance (data : PhysicalData D Cell Face Point FacePoint m)
     (coord : LineCoordinates (m := m) D Cell Face Line)
     (numericalFlux : D → Line → ℝ → (ℤ → State) → ℤ → State)

@@ -303,6 +303,26 @@ _HDP_GENERATED_SIMPNF_DEFERRED = {
     ),
 }
 
+_PDE_GENERATED_SIMPNF_DEFERRED = {
+    "disposition": REVIEWED_DEFERRED_MIGRATION,
+    "rationale": (
+        "This simpNF finding names the automatically generated injectivity lemma "
+        "of a PDE result structure whose Prop fields pin its data fields, so simp "
+        "can already prove the equation; there is no editable source declaration "
+        "at the reported position. Erasing the generated simp attribute is not "
+        "persisted to importing modules and reshaping the structure is an API "
+        "change, so it is deferred outside this lint repair."
+    ),
+    "expiry_release": "next reviewed PDE structure/simp-set migration",
+    "reconsideration_trigger": (
+        "Reconsider when the owning structure or its generated simp declarations are "
+        "next revised, or when a toolchain change alters the generated theorem."
+    ),
+}
+_PDE_GENERATED_SIMPNF_DECLARATIONS = (
+    "NumStability.LeftStateInformationFlux.OrderedResult.mk.injEq",
+)
+
 _PRESERVED_PUBLIC_ARGUMENT = {
     "disposition": REVIEWED_COMPATIBILITY_EXCEPTION,
     "rationale": (
@@ -401,6 +421,29 @@ _PRESERVED_PUBLIC_ARGUMENT_DECLARATIONS = (
     "NumStability.IsQuasilinearConservationLawSolutionAt",
     "NumStability.leveque01_advectionWaveIdentity",
     "NumStability.leveque01_equation06_acousticsMatrixForm",
+    # 2026-09-09 LeVeque Chapter 1 finite-volume lane: every argument below is
+    # either a binder of a function-typed definition consumed through a
+    # higher-order flux-rule interface (the slot is required by the interface
+    # type, the value is deliberately constant in it), or a hypothesis of an
+    # exact source-facing or contract-instantiating theorem statement. Removing
+    # any of them changes a public signature or a stated theorem.
+    "NumStability.FiniteCoordinate.LineRealization.rule",
+    "NumStability.CFLUnitShift.physical_exactness",
+    "NumStability.CFLUnitShift.refinement_accuracy",
+    "NumStability.CFLUnitShift.smoothProfile",
+    "NumStability.CoordinateLineBalance.Witness.interiorFlux",
+    "NumStability.LeftStateInformationFlux.localTrace",
+    "NumStability.PhysicalIntervalSweep.rule",
+    "NumStability.PhysicalIntervalSweep.oldError",
+    "NumStability.PhysicalIntervalSweep.constant_consistent",
+    "NumStability.RefiningCartesianGrid.axes",
+    "NumStability.RefiningCartesianGrid.identity_hyperbolic",
+    "NumStability.RefiningCartesianGrid.tensorFlux",
+    "NumStability.StationaryRiemannField.stationary",
+    "NumStability.ZeroFluxCartesianRefinement.zeroFlux",
+    "NumStability.ZeroFluxCartesianRefinement.stationary",
+    "NumStability.leveque01_riemannRayZeroValue_iff",
+    "NumStability.leveque01_equation05_linearAcousticsAt_iff",
 )
 
 _PUBLIC_REDUCIBLE_DEF_DECLARATIONS = (
@@ -422,6 +465,10 @@ REVIEWED_DISPOSITIONS_BY_DECLARATION: dict[tuple[str, str], dict[str, Any]] = {
     **{
         ("simpNF", d): _HDP_GENERATED_SIMPNF_DEFERRED
         for d in _HDP_GENERATED_SIMPNF_DECLARATIONS
+    },
+    **{
+        ("simpNF", d): _PDE_GENERATED_SIMPNF_DEFERRED
+        for d in _PDE_GENERATED_SIMPNF_DECLARATIONS
     },
     **{
         ("unusedArguments", d): _PRESERVED_PUBLIC_ARGUMENT

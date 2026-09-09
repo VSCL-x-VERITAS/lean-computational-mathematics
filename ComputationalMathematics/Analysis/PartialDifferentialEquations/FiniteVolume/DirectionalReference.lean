@@ -30,6 +30,10 @@ def IsDirectionalReference (cellVolume : Cell → ℝ)
   ∀ cell, cellVolume cell • (mean cell t - mean cell s) =
     ∫ τ in s..t, physical cell τ - physical (Function.update cell d (cell d + 1)) τ
 
+/-- Time average over `[s, t]` of the supplied physical face reference `physical cell`, namely
+`(t - s)⁻¹ • ∫ τ in s..t, physical cell τ`. Faces are indexed by the cell they belong to, so
+`reference_weighted_balance` restates the conservation law of `IsDirectionalReference` as the
+`(t - s)`-weighted difference of these averages at `cell` and at its neighbour in direction `d`. -/
 noncomputable def faceAverage (physical : Cell → ℝ → State) (s t : ℝ) (cell : Cell) : State :=
   oneDimensionalCellAverage (physical cell) s t
 

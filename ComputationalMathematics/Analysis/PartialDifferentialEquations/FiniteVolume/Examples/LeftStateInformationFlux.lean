@@ -21,8 +21,13 @@ namespace NumStability.LeftStateInformationFlux
 
 variable {m : ℕ} {law : OneDimensionalHyperbolicConservationLaw (Fin m)}
 
+/-- The stored result of the left-state routine for the Riemann `problem`: only the two
+ordered state vectors, each pinned to the corresponding state of `problem`. No approximate
+solution field is stored, so nothing beyond the ordered pair is available for extraction. -/
 structure OrderedResult (problem : HyperbolicRiemannProblem law) where
+  /-- The first stored vector; `left_eq` identifies it with the left state of `problem`. -/
   left : Fin m → ℝ
+  /-- The second stored vector; `right_eq` identifies it with the right state of `problem`. -/
   right : Fin m → ℝ
   left_eq : left = problem.leftState
   right_eq : right = problem.rightState
