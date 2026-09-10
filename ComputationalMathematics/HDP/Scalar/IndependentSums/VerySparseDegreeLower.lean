@@ -116,6 +116,68 @@ lemma eventually_logLogDegreeScale_div_128_le_threshold :
   dsimp [verySparseDegreeThreshold]
   nlinarith
 
+/-- A uniform upper bound on expected degree makes edges internal to the
+quarter-power test-center set negligible. -/
+lemma eventually_exact_center_internal_mass_le_of_expectedDegree_upper
+    (p : ℕ → Set.Icc (0 : ℝ) 1) (C : ℝ) (hC : 0 ≤ C)
+    (hupper : ∀ᶠ n : ℕ in Filter.atTop,
+      ((n - 1 : ℕ) : ℝ) * (p n : ℝ) ≤ C) :
+    ∀ᶠ n : ℕ in Filter.atTop,
+      (graphDegreeExactTestCenterCount n : ℝ) ^ 2 * (p n : ℝ) ≤
+        (1 : ℝ) / 20 := by
+  have hroot : Filter.Tendsto
+      (fun n : ℕ => Real.exp (Real.log (n : ℝ) / 2))
+      Filter.atTop Filter.atTop := by
+    exact Real.tendsto_exp_atTop.comp
+      ((Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).atTop_div_const
+        (by norm_num))
+  filter_upwards [hupper, hroot.eventually_ge_atTop (40 * C),
+    Filter.eventually_atTop.2 ⟨2, fun n hn => hn⟩] with n hdegree hlarge hn
+  let s : ℝ := Real.exp (Real.log (n : ℝ) / 2)
+  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
+  have hnpos : 0 < (n : ℝ) := by positivity
+  have hspos : 0 < s := by dsimp [s]; positivity
+  have hsquare : s ^ 2 = (n : ℝ) := by
+    dsimp [s]
+    rw [pow_two, ← Real.exp_add]
+    have hexponent : Real.log (n : ℝ) / 2 + Real.log (n : ℝ) / 2 =
+        Real.log (n : ℝ) := by ring
+    rw [hexponent, Real.exp_log hnpos]
+  have hxSquare : x ^ 2 = s := by
+    dsimp [x, s]
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring
+  have hcountFloor : graphDegreeExactTestCenterCount n ≤ ⌊x⌋₊ :=
+    min_le_right _ _
+  have hfloor : (⌊x⌋₊ : ℝ) ≤ x := Nat.floor_le (by positivity)
+  have hcount : (graphDegreeExactTestCenterCount n : ℝ) ≤ x := by
+    have hcountCast : (graphDegreeExactTestCenterCount n : ℝ) ≤ (⌊x⌋₊ : ℝ) := by
+      exact_mod_cast hcountFloor
+    exact hcountCast.trans hfloor
+  have hcountSq : (graphDegreeExactTestCenterCount n : ℝ) ^ 2 ≤ s := by
+    rw [← hxSquare]
+    exact pow_le_pow_left₀ (by positivity) hcount 2
+  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 0 < n - 1 by omega)
+  have hp : (p n : ℝ) ≤ C / ((n - 1 : ℕ) : ℝ) := by
+    rw [le_div_iff₀ hnsubpos]
+    simpa [mul_comm] using hdegree
+  have hratio : s * C / ((n - 1 : ℕ) : ℝ) ≤ (1 : ℝ) / 20 := by
+    rw [div_le_iff₀ hnsubpos]
+    have hnle : (n : ℝ) ≤ 2 * ((n - 1 : ℕ) : ℝ) := by
+      exact_mod_cast (show n ≤ 2 * (n - 1) by omega)
+    change 40 * C ≤ s at hlarge
+    nlinarith [hsquare]
+  calc
+    (graphDegreeExactTestCenterCount n : ℝ) ^ 2 * (p n : ℝ) ≤
+        s * (p n : ℝ) :=
+      mul_le_mul_of_nonneg_right hcountSq (p n).2.1
+    _ ≤ s * (C / ((n - 1 : ℕ) : ℝ)) :=
+      mul_le_mul_of_nonneg_left hp hspos.le
+    _ = s * C / ((n - 1 : ℕ) : ℝ) := by ring
+    _ ≤ (1 : ℝ) / 20 := hratio
+
 lemma eventually_pos_logLogDegreeScale :
     ∀ᶠ n : ℕ in atTop, 0 < logLogDegreeScale n := by
   filter_upwards [eventually_atTop.2 ⟨3, fun n hn => hn⟩] with n hn
