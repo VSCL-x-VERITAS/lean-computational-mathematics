@@ -1,3 +1,0 @@
-import NumStability.Source.Higham.Chapter21.Equation09
-
-#check NumStability.higham21Eq21_9NormwiseMatrixBudget

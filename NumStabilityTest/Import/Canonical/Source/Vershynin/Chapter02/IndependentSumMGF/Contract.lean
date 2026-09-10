@@ -1,3 +1,0 @@
-import NumStability.Source.Vershynin.Chapter02.IndependentSumMGF.Contract
-
-#check NumStability.HDP.Contract.hdp_02_hlem_hmgf_hindependent_hsum
