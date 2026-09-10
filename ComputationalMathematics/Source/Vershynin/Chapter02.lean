@@ -51,6 +51,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise05A.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise09.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise10A.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.ConstantPsiTwoNorm.Contract

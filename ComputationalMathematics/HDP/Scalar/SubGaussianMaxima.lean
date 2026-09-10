@@ -1,5 +1,6 @@
 import ComputationalMathematics.HDP.Scalar.SubGaussian
 import Mathlib.Analysis.PSeries
+import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 
 /-!
 # Maxima of countable sub-Gaussian families
@@ -48,12 +49,24 @@ def logWeightedAbsTailEvent {Ω : Type*} (X : ℕ → Ω → ℝ) (t : ℝ) : Se
 def logWeightedAbsSup {Ω : Type*} (X : ℕ → Ω → ℝ) (ω : Ω) : ENNReal :=
   ⨆ i, ENNReal.ofReal (|X i ω| / logIndexWeight i)
 
+/-- The weighted supremum normalized by the common scale `4 * K`. -/
+def normalizedLogWeightedAbsSup
+    {Ω : Type*} (X : ℕ → Ω → ℝ) (K : ℝ) (ω : Ω) : ENNReal :=
+  (ENNReal.ofReal (4 * K))⁻¹ * logWeightedAbsSup X ω
+
 lemma measurable_logWeightedAbsSup
     {Ω : Type*} [MeasurableSpace Ω]
     {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) :
     Measurable (logWeightedAbsSup X) := by
   unfold logWeightedAbsSup
   fun_prop
+
+lemma measurable_normalizedLogWeightedAbsSup
+    {Ω : Type*} [MeasurableSpace Ω]
+    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) (K : ℝ) :
+    Measurable (normalizedLogWeightedAbsSup X K) := by
+  unfold normalizedLogWeightedAbsSup
+  exact measurable_const.mul (measurable_logWeightedAbsSup hX)
 
 lemma logWeightedAbsSup_tailEvent
     {Ω : Type*} (X : ℕ → Ω → ℝ) {t : ℝ} (ht : 0 ≤ t) :
@@ -67,6 +80,27 @@ lemma logWeightedAbsSup_tailEvent
     exact ⟨i, (ENNReal.ofReal_lt_ofReal_iff_of_nonneg ht).mp hi⟩
   · rintro ⟨i, hi⟩
     exact ⟨i, (ENNReal.ofReal_lt_ofReal_iff_of_nonneg ht).mpr hi⟩
+
+lemma normalizedLogWeightedAbsSup_tailEvent
+    {Ω : Type*} (X : ℕ → Ω → ℝ) {K t : ℝ}
+    (hK : 0 < K) (ht : 0 ≤ t) :
+    {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω} =
+      logWeightedAbsTailEvent X (4 * K * t) := by
+  let a : ENNReal := ENNReal.ofReal (4 * K)
+  have ha0 : a ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr (by positivity)
+  have haTop : a ≠ (⊤ : ENNReal) := ENNReal.ofReal_ne_top
+  calc
+    {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω} =
+        {ω | ENNReal.ofReal (4 * K * t) < logWeightedAbsSup X ω} := by
+      ext ω
+      simp only [Set.mem_setOf_eq]
+      change ENNReal.ofReal t < a⁻¹ * logWeightedAbsSup X ω ↔ _
+      rw [← ENNReal.div_eq_inv_mul,
+        ENNReal.lt_div_iff_mul_lt (Or.inl ha0) (Or.inl haTop)]
+      rw [← ENNReal.ofReal_mul ht]
+      ring_nf
+    _ = logWeightedAbsTailEvent X (4 * K * t) :=
+      logWeightedAbsSup_tailEvent X (by positivity)
 
 /-- Pointwise layer-cake identity for an extended nonnegative value. -/
 lemma layerCakePointwiseENNReal (z : ENNReal) :
@@ -197,6 +231,33 @@ lemma summable_one_div_natCast_add_one_sq :
   rw [abs_of_nonneg hi]
   exact congrArg (fun z : ℝ => 1 / z)
     (Real.rpow_natCast ((i : ℝ) + 1) 2)
+
+/-- The universal shifted inverse-square sum used in the maximum estimate. -/
+def inverseSquareIndexSum : ℝ :=
+  ∑' i : ℕ, 1 / ((i : ℝ) + 1) ^ 2
+
+lemma inverseSquareIndexSum_nonneg : 0 ≤ inverseSquareIndexSum := by
+  exact tsum_nonneg (fun _ => by positivity)
+
+/-- A concrete universal constant for the weighted maximum estimate. -/
+def logWeightedMaxConstant : ℝ :=
+  4 * (1 + 2 * inverseSquareIndexSum)
+
+lemma logWeightedMaxConstant_pos : 0 < logWeightedMaxConstant := by
+  unfold logWeightedMaxConstant
+  nlinarith [inverseSquareIndexSum_nonneg]
+
+/-- The supremum of the exact `ψ₂` gauges of a countable family. -/
+def sequencePsiTwoGauge
+    {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) (X : ℕ → Ω → ℝ) : ENNReal :=
+  ⨆ i, PsiTwoGauge μ (X i)
+
+lemma psiTwoGauge_le_sequencePsiTwoGauge
+    {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) (X : ℕ → Ω → ℝ) (i : ℕ) :
+    PsiTwoGauge μ (X i) ≤ sequencePsiTwoGauge μ X :=
+  le_iSup (fun j => PsiTwoGauge μ (X j)) i
 
 /-- Pointwise comparison between a logarithmically weighted Gaussian tail and
 the shifted inverse-square sequence. -/
@@ -380,5 +441,279 @@ theorem measureReal_logWeightedAbsTailEvent_four_mul_le_of_psiTwoGauge_le
         ∑' i : ℕ, 1 / ((i : ℝ) + 1) ^ 2 :=
   measureReal_logWeightedAbsTailEvent_four_mul_le hK ht
     (uniformSubGaussianTail_of_psiTwoGauge_le hX hK hGauge)
+
+/-- Extended expectation bound for the normalized logarithmically weighted
+supremum. -/
+theorem lintegral_normalizedLogWeightedAbsSup_le_of_psiTwoGauge_le
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ} {K : ℝ}
+    (hX : ∀ i, Measurable (X i)) (hK : 0 < K)
+    (hGauge : ∀ i, PsiTwoGauge μ (X i) ≤ ENNReal.ofReal K) :
+    (∫⁻ ω, normalizedLogWeightedAbsSup X K ω ∂μ) ≤
+      ENNReal.ofReal (1 + 2 * inverseSquareIndexSum) := by
+  have hCake := layerCakeLIntegralENNReal μ
+    (measurable_normalizedLogWeightedAbsSup hX K)
+  rw [hCake]
+  have hSplit : Set.Ioi (0 : ℝ) =
+      Set.Ioc (0 : ℝ) 1 ∪ Set.Ioi (1 : ℝ) := by
+    ext t
+    simp only [Set.mem_Ioi, Set.mem_union, Set.mem_Ioc]
+    constructor
+    · intro ht
+      by_cases ht1 : t ≤ 1
+      · exact Or.inl ⟨ht, ht1⟩
+      · exact Or.inr (lt_of_not_ge ht1)
+    · rintro (ht | ht)
+      · exact ht.1
+      · linarith
+  rw [hSplit, lintegral_union measurableSet_Ioi Set.Ioc_disjoint_Ioi_same]
+  have hLow :
+      (∫⁻ t in Set.Ioc (0 : ℝ) 1,
+        μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω}) ≤ 1 := by
+    calc
+      (∫⁻ t in Set.Ioc (0 : ℝ) 1,
+          μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω}) ≤
+          ∫⁻ _t in Set.Ioc (0 : ℝ) 1, (1 : ENNReal) := by
+        apply setLIntegral_mono' measurableSet_Ioc
+        intro t ht
+        simpa using (measure_mono (μ := μ)
+          (Set.subset_univ {ω | ENNReal.ofReal t <
+            normalizedLogWeightedAbsSup X K ω}))
+      _ = 1 := by simp
+  have hTail : ∀ t : ℝ, 1 < t →
+      μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω} ≤
+        ENNReal.ofReal
+          ((2 * inverseSquareIndexSum) * Real.exp (-t)) := by
+    intro t ht
+    have htOne : 1 ≤ t := ht.le
+    have ht0 : 0 ≤ t := le_trans zero_le_one htOne
+    rw [normalizedLogWeightedAbsSup_tailEvent X hK ht0]
+    rw [← ofReal_measureReal]
+    apply ENNReal.ofReal_le_ofReal
+    calc
+      μ.real (logWeightedAbsTailEvent X (4 * K * t)) ≤
+          (2 * Real.exp (-2 * t ^ 2)) * inverseSquareIndexSum := by
+        simpa [inverseSquareIndexSum] using
+          measureReal_logWeightedAbsTailEvent_four_mul_le_of_psiTwoGauge_le
+            hX hK hGauge htOne
+      _ ≤ (2 * inverseSquareIndexSum) * Real.exp (-t) := by
+        have hExp : Real.exp (-2 * t ^ 2) ≤ Real.exp (-t) := by
+          apply Real.exp_le_exp.mpr
+          nlinarith
+        calc
+          (2 * Real.exp (-2 * t ^ 2)) * inverseSquareIndexSum =
+              (2 * inverseSquareIndexSum) * Real.exp (-2 * t ^ 2) := by ring
+          _ ≤ (2 * inverseSquareIndexSum) * Real.exp (-t) :=
+            mul_le_mul_of_nonneg_left hExp
+              (mul_nonneg (by norm_num) inverseSquareIndexSum_nonneg)
+  have hHigh :
+      (∫⁻ t in Set.Ioi (1 : ℝ),
+        μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω}) ≤
+        ENNReal.ofReal (2 * inverseSquareIndexSum) := by
+    calc
+      (∫⁻ t in Set.Ioi (1 : ℝ),
+          μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω}) ≤
+          ∫⁻ t in Set.Ioi (1 : ℝ),
+            ENNReal.ofReal
+              ((2 * inverseSquareIndexSum) * Real.exp (-t)) := by
+        apply setLIntegral_mono' measurableSet_Ioi
+        intro t ht
+        exact hTail t ht
+      _ = ENNReal.ofReal
+          (∫ t in Set.Ioi (1 : ℝ),
+            (2 * inverseSquareIndexSum) * Real.exp (-t) ∂volume) := by
+        symm
+        apply ofReal_integral_eq_lintegral_ofReal
+        · exact (integrableOn_exp_neg_Ioi 1).const_mul _
+        · filter_upwards [] with t
+          exact mul_nonneg (mul_nonneg (by norm_num) inverseSquareIndexSum_nonneg)
+            (Real.exp_nonneg _)
+      _ = ENNReal.ofReal
+          ((2 * inverseSquareIndexSum) * Real.exp (-1)) := by
+        congr 1
+        rw [MeasureTheory.integral_const_mul, integral_exp_neg_Ioi]
+      _ ≤ ENNReal.ofReal (2 * inverseSquareIndexSum) := by
+        apply ENNReal.ofReal_le_ofReal
+        have hexp : Real.exp (-1) ≤ 1 := by
+          exact Real.exp_le_one_iff.mpr (by norm_num : (-1 : ℝ) ≤ 0)
+        exact mul_le_of_le_one_right
+          (mul_nonneg (by norm_num) inverseSquareIndexSum_nonneg) hexp
+  calc
+    (∫⁻ t in Set.Ioc (0 : ℝ) 1,
+        μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω}) +
+        ∫⁻ t in Set.Ioi (1 : ℝ),
+          μ {ω | ENNReal.ofReal t < normalizedLogWeightedAbsSup X K ω} ≤
+        1 + ENNReal.ofReal (2 * inverseSquareIndexSum) := add_le_add hLow hHigh
+    _ = ENNReal.ofReal (1 + 2 * inverseSquareIndexSum) := by
+      rw [ENNReal.ofReal_add (by norm_num : (0 : ℝ) ≤ 1)
+        (mul_nonneg (by norm_num) inverseSquareIndexSum_nonneg)]
+      norm_num
+
+/-- Extended expectation form of the countable weighted maximum estimate. -/
+theorem lintegral_logWeightedAbsSup_le_of_psiTwoGauge_le
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ} {K : ℝ}
+    (hX : ∀ i, Measurable (X i)) (hK : 0 < K)
+    (hGauge : ∀ i, PsiTwoGauge μ (X i) ≤ ENNReal.ofReal K) :
+    (∫⁻ ω, logWeightedAbsSup X ω ∂μ) ≤
+      ENNReal.ofReal (logWeightedMaxConstant * K) := by
+  let a : ENNReal := ENNReal.ofReal (4 * K)
+  have ha0 : a ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr (by positivity)
+  have haTop : a ≠ (⊤ : ENNReal) := ENNReal.ofReal_ne_top
+  have hPoint : ∀ ω,
+      logWeightedAbsSup X ω =
+        a * normalizedLogWeightedAbsSup X K ω := by
+    intro ω
+    unfold normalizedLogWeightedAbsSup
+    change logWeightedAbsSup X ω =
+      a * (a⁻¹ * logWeightedAbsSup X ω)
+    rw [← mul_assoc, ENNReal.mul_inv_cancel ha0 haTop, one_mul]
+  calc
+    (∫⁻ ω, logWeightedAbsSup X ω ∂μ) =
+        ∫⁻ ω, a * normalizedLogWeightedAbsSup X K ω ∂μ := by
+      apply lintegral_congr
+      exact hPoint
+    _ = a * ∫⁻ ω, normalizedLogWeightedAbsSup X K ω ∂μ := by
+      rw [lintegral_const_mul _
+        (measurable_normalizedLogWeightedAbsSup hX K)]
+    _ ≤ a * ENNReal.ofReal (1 + 2 * inverseSquareIndexSum) :=
+      by
+        gcongr
+        exact lintegral_normalizedLogWeightedAbsSup_le_of_psiTwoGauge_le
+          hX hK hGauge
+    _ = ENNReal.ofReal (logWeightedMaxConstant * K) := by
+      dsimp [a]
+      rw [← ENNReal.ofReal_mul (by positivity : 0 ≤ 4 * K)]
+      congr 1
+      unfold logWeightedMaxConstant
+      ring
+
+/-- The countable weighted supremum is finite almost everywhere under the
+uniform exact-`ψ₂` gauge bound. -/
+theorem ae_logWeightedAbsSup_lt_top_of_psiTwoGauge_le
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ} {K : ℝ}
+    (hX : ∀ i, Measurable (X i)) (hK : 0 < K)
+    (hGauge : ∀ i, PsiTwoGauge μ (X i) ≤ ENNReal.ofReal K) :
+    ∀ᵐ ω ∂μ, logWeightedAbsSup X ω < (⊤ : ENNReal) := by
+  apply ae_lt_top (measurable_logWeightedAbsSup hX)
+  exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top
+    (lintegral_logWeightedAbsSup_le_of_psiTwoGauge_le hX hK hGauge)
+
+/-- Real representative of the countable weighted supremum.  The accompanying
+almost-everywhere finiteness theorem is what makes this representative
+semantically valid in the maximum estimate. -/
+def logWeightedAbsSupReal {Ω : Type*} (X : ℕ → Ω → ℝ) (ω : Ω) : ℝ :=
+  (logWeightedAbsSup X ω).toReal
+
+lemma measurable_logWeightedAbsSupReal
+    {Ω : Type*} [MeasurableSpace Ω]
+    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) :
+    Measurable (logWeightedAbsSupReal X) :=
+  (measurable_logWeightedAbsSup hX).ennreal_toReal
+
+/-- Real expectation form of Exercise 2.5.10's first estimate, with the common
+upper bound `K` on exact `ψ₂` gauges made explicit. -/
+theorem expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ} {K : ℝ}
+    (hX : ∀ i, Measurable (X i)) (hK : 0 < K)
+    (hGauge : ∀ i, PsiTwoGauge μ (X i) ≤ ENNReal.ofReal K) :
+    Integrable (logWeightedAbsSupReal X) μ ∧
+      NumStability.HDP.Scalar.Preliminaries.expectation μ
+        (logWeightedAbsSupReal X) ≤
+        logWeightedMaxConstant * K := by
+  have hBound := lintegral_logWeightedAbsSup_le_of_psiTwoGauge_le
+    hX hK hGauge
+  have hFinite : (∫⁻ ω, logWeightedAbsSup X ω ∂μ) < (⊤ : ENNReal) :=
+    lt_of_le_of_lt hBound ENNReal.ofReal_lt_top
+  have hAeFinite := ae_logWeightedAbsSup_lt_top_of_psiTwoGauge_le
+    hX hK hGauge
+  have hAe : (fun ω => ENNReal.ofReal (logWeightedAbsSupReal X ω)) =ᵐ[μ]
+      logWeightedAbsSup X := by
+    filter_upwards [hAeFinite] with ω hω
+    exact ENNReal.ofReal_toReal hω.ne
+  have hAeNorm :
+      (fun ω => ENNReal.ofReal |logWeightedAbsSupReal X ω|) =ᵐ[μ]
+        logWeightedAbsSup X := by
+    filter_upwards [hAe] with ω hω
+    have hNonneg : 0 ≤ logWeightedAbsSupReal X ω := ENNReal.toReal_nonneg
+    rw [abs_of_nonneg hNonneg]
+    exact hω
+  have hInt : Integrable (logWeightedAbsSupReal X) μ := by
+    refine ⟨(measurable_logWeightedAbsSupReal hX).aestronglyMeasurable, ?_⟩
+    rw [hasFiniteIntegral_iff_norm]
+    simp only [Real.norm_eq_abs]
+    exact lt_of_eq_of_lt (lintegral_congr_ae hAeNorm) hFinite
+  refine ⟨hInt, ?_⟩
+  apply (ENNReal.ofReal_le_ofReal_iff
+    (mul_nonneg logWeightedMaxConstant_pos.le hK.le)).mp
+  unfold NumStability.HDP.Scalar.Preliminaries.expectation
+  rw [ofReal_integral_eq_lintegral_ofReal hInt
+    (Filter.Eventually.of_forall (fun _ => ENNReal.toReal_nonneg))]
+  exact (lintegral_congr_ae hAe).trans_le hBound
+
+lemma ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hGaugeZero : ∀ i, PsiTwoGauge μ (X i) = 0) :
+    logWeightedAbsSup X =ᵐ[μ] (fun _ => (0 : ENNReal)) := by
+  have hAll : ∀ᵐ ω ∂μ, ∀ i, X i ω = 0 :=
+    ae_all_iff.2 fun i =>
+      (psiTwoGauge_eq_zero_iff_ae_eq_zero (hX i)).mp (hGaugeZero i)
+  filter_upwards [hAll] with ω hω
+  simp [logWeightedAbsSup, hω]
+
+/-- Common-gauge-bound form including the zero-scale endpoint. -/
+theorem expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le_of_nonneg
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ} {K : ℝ}
+    (hX : ∀ i, Measurable (X i)) (hK : 0 ≤ K)
+    (hGauge : ∀ i, PsiTwoGauge μ (X i) ≤ ENNReal.ofReal K) :
+    Integrable (logWeightedAbsSupReal X) μ ∧
+      NumStability.HDP.Scalar.Preliminaries.expectation μ
+        (logWeightedAbsSupReal X) ≤ logWeightedMaxConstant * K := by
+  rcases eq_or_lt_of_le hK with rfl | hKPos
+  · have hGaugeZero : ∀ i, PsiTwoGauge μ (X i) = 0 := by
+      intro i
+      simpa only [ENNReal.ofReal_zero, nonpos_iff_eq_zero] using hGauge i
+    have hSupZero :=
+      ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero hX hGaugeZero
+    have hRealZero : logWeightedAbsSupReal X =ᵐ[μ] (fun _ => (0 : ℝ)) := by
+      filter_upwards [hSupZero] with ω hω
+      simp [logWeightedAbsSupReal, hω]
+    have hInt : Integrable (logWeightedAbsSupReal X) μ :=
+      (integrable_zero Ω ℝ μ).congr hRealZero.symm
+    refine ⟨hInt, ?_⟩
+    unfold NumStability.HDP.Scalar.Preliminaries.expectation
+    rw [integral_congr_ae hRealZero]
+    simp
+  · exact expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le
+      hX hKPos hGauge
+
+/-- Exercise 2.5.10's first estimate using the actual supremum of the exact
+`ψ₂` gauges of the sequence.  No independence assumption is present. -/
+theorem expectation_logWeightedAbsSupReal_le_sequencePsiTwoGauge
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal)) :
+    Integrable (logWeightedAbsSupReal X) μ ∧
+      NumStability.HDP.Scalar.Preliminaries.expectation μ
+        (logWeightedAbsSupReal X) ≤
+          logWeightedMaxConstant * (sequencePsiTwoGauge μ X).toReal := by
+  apply expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le_of_nonneg
+    hX ENNReal.toReal_nonneg
+  intro i
+  rw [ENNReal.ofReal_toReal hFinite.ne]
+  exact psiTwoGauge_le_sequencePsiTwoGauge μ X i
 
 end NumStability.HDP.Scalar.SubGaussian
