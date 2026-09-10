@@ -4060,11 +4060,21 @@
       "source_page": 28,
       "source_statement": "X_1, X_2, ... sub-gaussian, not necessarily independent, K = max_i ||X_i||_{psi_2}: E max_i |X_i|/sqrt(1 + log i) <= C K.",
       "source_proof": "none",
-      "next_foundation": "Follow the hint: normalize `Y_i = X_i/(C K sqrt(1 + log i))`, use the sub-gaussian tail (2.14) with a union bound to get `P{exists i, |Y_i| >= t} <~ exp(-t^2)` for `t >= 1`, then integrate the tail via the layer-cake formula `NumStability.HDP.Scalar.Preliminaries.momentTailFormula`, splitting the integral over [0,1] and [1, infinity). Needs HDP-02-EQ-2.14 recorded as a usable tail bound plus a countable union bound over the index set.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: No maximal-inequality machinery exists in this lane; nothing bounds `E max_i |X_i|` for a possibly dependent sub-gaussian family. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "next_foundation": "Use the new countable union event foundation with `psiTwoGaugeToTail`; prove a summable explicit Gaussian majorant for the logarithmically weighted tails for `t >= 1`, then integrate it through the layer-cake formula, splitting the integral over [0,1] and [1, infinity).",
+      "attempted_routes": "Repository and pinned Mathlib searches for `maximum subGaussian`, `measure exists tsum`, `measure_iUnion_le`, `layerCake`, `momentTailFormula`, `psiTwoGaugeToTail`, `lt_div_iff₀`, and logarithmic square-root positivity found no existing countable maximum theorem. Selected Mathlib `MeasureTheory.measure_iUnion_le` as the measure producer, the current-tree `psiTwoGaugeToTail` for the later individual tails, and the existing layer-cake API for the later expectation step. Added reusable logarithmic index weights and countable weighted-tail union bounds without duplicating any of those producers.",
+      "lean_declarations": [
+        "NumStability.HDP.Scalar.SubGaussian.logIndexWeight",
+        "NumStability.HDP.Scalar.SubGaussian.one_le_logIndexWeight",
+        "NumStability.HDP.Scalar.SubGaussian.logWeightedAbsTailEvent",
+        "NumStability.HDP.Scalar.SubGaussian.measure_logWeightedAbsTailEvent_le_tsum",
+        "NumStability.HDP.Scalar.SubGaussian.measure_logWeightedAbsTailEvent_le_tsum_of_le"
+      ],
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No maximal-inequality machinery exists in this lane; nothing bounds `E max_i |X_i|` for a possibly dependent sub-gaussian family.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Searched the current project and pinned Mathlib for `maximum subGaussian`, `measure exists tsum`, `measure_iUnion_le`, `layerCake`, `momentTailFormula`, `psiTwoGaugeToTail`, `lt_div_iff₀`, and logarithmic square-root positivity. Rejected finite-only `measureReal_iUnion_fintype_le` and direct reproving of the union bound; no countable maximum producer was found.",
+        "Selected Mathlib `MeasureTheory.measure_iUnion_le` for the countable measure bound, current-tree `psiTwoGaugeToTail` for the next individual-tail step, and the current-tree layer-cake API for the later expectation step.",
+        "Added reusable `logIndexWeight`, its positivity bound, the exact countable weighted-tail event identity, and `measure_logWeightedAbsTailEvent_le_tsum(_of_le)` in `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`; the focused Lean check passes."
       ],
       "open_reason": "No Lean declaration covers this printed row. No maximal-inequality machinery exists in this lane; nothing bounds `E max_i |X_i|` for a possibly dependent sub-gaussian family."
     },
