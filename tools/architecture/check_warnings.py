@@ -919,42 +919,6 @@ REVIEWED_DISPOSITIONS: dict[tuple[str, str], dict[str, str]] = {
         "linter.unusedSimpArgs",
     ): _UPSTREAM_VENDORED,
     (
-        "NumStabilityTest/Reorganization/R06/OldOnly/"
-        "NumStability_Source_Higham_Chapter09_Problems.lean",
-        "deprecation",
-    ): {
-        "disposition": "reviewed_compatibility_exception",
-        "rationale": (
-            "This old-only R06 test exists to exercise the historical "
-            "declaration surface, and the deprecated constructor index is part "
-            "of that surface. Rewriting the call would delete the coverage the "
-            "test was written to provide."
-        ),
-        "expiry_release": "alias-removal release",
-        "reconsideration_trigger": (
-            "Reconsider when the deprecated alias is removed upstream, which "
-            "makes the historical surface unavailable and the test obsolete."
-        ),
-    },
-    (
-        "NumStabilityTest/Reorganization/R06/OldOnly/"
-        "NumStability_Source_Higham_Chapter11_Section01_PartialPivoting.lean",
-        "deprecation",
-    ): {
-        "disposition": "reviewed_compatibility_exception",
-        "rationale": (
-            "This old-only R06 test exists to exercise the historical "
-            "declaration surface, and the deprecated constructor index is part "
-            "of that surface. Rewriting the call would delete the coverage the "
-            "test was written to provide."
-        ),
-        "expiry_release": "alias-removal release",
-        "reconsideration_trigger": (
-            "Reconsider when the deprecated alias is removed upstream, which "
-            "makes the historical surface unavailable and the test obsolete."
-        ),
-    },
-    (
         "ComputationalMathematics/Algorithms/NormEstimation/TwoNorm/Dixon/Algebra/"
         "DixonCompletion.lean",
         "deprecation",
