@@ -43,44 +43,64 @@ faithfully.
 
 ## Current repository status
 
-The source-only figures below compare the clean publishing base
-`718beac641a8094611dc249c3508a2f5415381a3` with the repaired integration tree
-captured during the passing source-gate run on 2026-09-06, 08:19:11–08:26:38 UTC.
-The capture preceded its commit; that exact repaired source is now published in
-candidate `51c5540984780b0011f41739b9ddaf8e505b7c93`, including the explicit
-public-instance name. These figures are not a build or full-interface-preservation claim.
-Its normalized source-tree SHA-256 is
-`915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
+Figures below are measured at the current `main`.
 
-On 2026-09-09 the audit evidence trees were retired to their gate-bound files:
-18,205 working artifacts (1.30 GB) were removed and 7,151 evidence files kept,
-taking the tracked tree from 41,651 files to 23,451. The source figures below are
-unaffected, since no Lean module, build target or diagnostic baseline changed. See
-`docs/architecture/reviews/2026-09-evidence-retirement.md`.
+| Metric | Value |
+|---|---:|
+| Production Lean modules | 2,691 |
+| Declaration-bearing / import-only | 2,087 / 604 |
+| Reusable / source / aggregate / internal / upstream | 706 / 1,526 / 449 / 5 / 5 |
+| Classified modules | 2,691 / 2,691 (100%) |
+| Mixed or unclassified modules | 0 |
+| Nonblank Lean source lines | 1,520,612 |
+| Direct imports | 29,817 |
+| Import cycles / unresolved project imports | 0 / 0 |
+| Forbidden reusable-to-source import paths | 0 |
+| Test Lean modules | 151 |
+| Reviewed lint baseline | 3,698 findings |
+| Tracked files / size | 3,419 / 100.1 MB |
+
+The checks find no `sorry` or `admit`, no unreviewed project axiom
+declaration, and no canonical production import of a historical path. Five
+attributed upstream modules and 127 Apache-2.0-marked production files are
+covered by the provenance gate.
+
+Release 0.2.0 (2026-09-10) removed the 3,334 historical `NumStability` import
+forwarders and the working record of the completed audit and reorganization
+campaigns. The tracked tree went from 41,651 files and 1,764 MB to its present
+size, and the Lean library from 17% of the tree to 74%. No Lean statement,
+proof, import or build target changed in that work, and the reviewed lint
+baseline is unchanged. See
+[`CHANGELOG.md`](CHANGELOG.md) and the retirement records under
+[`docs/architecture/reviews/`](docs/architecture/reviews/).
+
+### Historical: the 2026-09 identity migration
+
+The figures in this subsection describe the tree as it stood on 2026-09-06,
+before release 0.2.0, and are kept because the migration evidence is stated
+against them. They are not current, and they are not a build or
+full-interface-preservation claim. They compare the clean publishing base
+`718beac641a8094611dc249c3508a2f5415381a3` with the repaired integration tree
+captured during the passing source-gate run on 2026-09-06,
+08:19:11-08:26:38 UTC, published as candidate
+`51c5540984780b0011f41739b9ddaf8e505b7c93`, whose normalized source-tree
+SHA-256 is
+`915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
 
 | Metric | Clean base | Migrated tree |
 |---|---:|---:|
-| Production Lean modules, including compatibility | 3,198 | **5,599** |
-| Canonical implementation / aggregate modules | 2,401 | **2,401** |
-| Retained old import forwarders | 797 | **3,198** |
-| Nonblank Lean source lines | 1,475,097 | **1,503,619** |
-| Direct imports | 31,987 | **47,223** |
-| Internal / external direct imports | 20,049 / 11,938 | **32,152 / 15,071** |
-| Import cycles / unresolved project imports | 0 / 0 | **0 / 0** |
-| Classified modules | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
-| Modules with module documentation | 3,198 / 3,198 | **5,599 / 5,599 (100%)** |
-| Aggregate modules | 443 | **443** |
-| Reusable / source / internal / upstream modules | 593 / 1,355 / 5 / 5 | **593 / 1,355 / 5 / 5** |
-| Mixed or unclassified modules | 0 | **0** |
-| Forbidden reusable-to-source import paths | 0 | **0** |
+| Production Lean modules, including compatibility | 3,198 | 5,599 |
+| Canonical implementation / aggregate modules | 2,401 | 2,401 |
+| Old import forwarders, since removed | 797 | 3,198 |
+| Nonblank Lean source lines | 1,475,097 | 1,503,619 |
+| Direct imports | 31,987 | 47,223 |
+| Import cycles / unresolved project imports | 0 / 0 | 0 / 0 |
 
-The additional files preserve existing import interfaces; they add no new
-mathematical results. The migrated compatibility map contains all 3,198 old
-paths, 2,401 unique canonical targets and 14,552 forwarding edges. The checks
-found no canonical production imports of historical paths, no `sorry` or
-`admit`, and no unreviewed project axiom declaration. Five attributed upstream
-modules and 264 Apache-2.0-marked production files, including retained
-forwarding notices, are covered by the provenance gate.
+The additional files preserved existing import interfaces and added no
+mathematical results. The compatibility map of that tree recorded all 3,198 old
+paths, 2,401 unique canonical targets and 14,552 forwarding edges; it is
+retained as
+[`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md).
 
 Canonical modules use `ComputationalMathematics`. The package remains
 `numStability`, the test root remains `NumStabilityTest`, and authored
@@ -104,23 +124,34 @@ and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
 
 ### CI status
 
+The badge tracks `main`. Release 0.2.0 and the retirements that followed it were
+each verified green before the next landed; the run on the tagged commit
+`e93dd14c1` passed every step, including the library build, the `lake test`
+driver and both reviewed diagnostic baselines.
+
+The remainder of this subsection records the earlier validated source revision,
+whose evidence the migration reports are stated against.
+
 Validated source commit [`51c5540984780b0011f41739b9ddaf8e505b7c93`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/51c5540984780b0011f41739b9ddaf8e505b7c93)
 passed [clean CI run 34021942176](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/34021942176)
-on 2026-09-06 at 12:45:10 UTC. All three libraries, `lake test`, warning/lint
-enforcement and the independent 13-fixture consumer passed. Authenticated
+on 2026-09-06 at 12:45:10 UTC. All three libraries of that tree, `lake test`,
+warning/lint enforcement and the independent 13-fixture consumer passed. Authenticated
 compiled comparison preserved all 58,420 declarations and their signature/body
 edges, with zero differences; seven representative axiom sets also matched.
 Actual Git dependency resolution and all nine dependency pins were verified.
 
-CI checks architecture, compatibility, provenance and source policy. Manual
+CI checks architecture, provenance and source policy. It builds
+`ComputationalMathematics` and `NumStabilityTest`, runs the `lake test` driver,
+and enforces the reviewed warning and lint baselines. The clean-project
+consumer builds the six canonical identity fixtures. Manual
 `clean_project=true` builds fresh project artifacts; the recorded run skipped
 project cache restore/save while using the permitted Mathlib cache. It captures
 the compiled graph, axiom reports and canonical/old/mixed consumer build with
 exact source/fixture/pin checks. Artifacts are retained for 14 days; ordinary
 push/PR cache behavior is unchanged.
 
-The badge tracks `main`. The validated source commit and any later documentation
-publication commit are distinct; a run certifies its own SHA. The
+The validated source commit and any later documentation publication commit are
+distinct; a run certifies its own SHA. The
 [validation record](docs/migrations/lean-computational-mathematics/validation.md)
 contains exact evidence, preserved attempt history and platform/scope limits.
 The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
@@ -241,12 +272,12 @@ paths.
 ## Building
 
 Install Git and [elan](https://github.com/leanprover/elan), then clone the
-active repository and select the validated source commit for reproduction:
+active repository. Check out the release tag for a reproducible tree:
 
 ```bash
 git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
 cd lean-computational-mathematics
-git checkout 51c5540984780b0011f41739b9ddaf8e505b7c93
+git checkout v0.2.0
 lake exe cache get
 lake build ComputationalMathematics NumStabilityTest
 lake test
@@ -294,14 +325,13 @@ release 0.2.0 removed them are documented in
 
 ## Use as a dependency
 
-For reproducing the validated source revision, retain package name
-`numStability` and pin its commit:
+Retain the package name `numStability` and pin a revision:
 
 ```toml
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "51c5540984780b0011f41739b9ddaf8e505b7c93"
+rev = "v0.2.0"
 ```
 
 Pin a reviewed commit when reproducibility is required. The inherited
@@ -361,9 +391,9 @@ ComputationalMathematics/
 NumStabilityTest.lean                     complete test-library entry point
 NumStabilityTest/
 ├── Import/
-│   └── Canonical/                        canonical and entry-point smoke tests
-├── Reorganization/                       migration and declaration-placement tests
-└── Worker/                               focused proof-audit and integration suites
+│   ├── HDPCheckpointSync/               canonical HDP contract and signature checks
+│   └── ProjectIdentity/Canonical/       identity fixtures the clean-project consumer builds
+└── Reorganization/                      private-name placement checks
 
 ledgers/                                  source/workflow issues, limitations, and inconsistencies
 docs/                                     architecture, source coverage, and benchmarks
