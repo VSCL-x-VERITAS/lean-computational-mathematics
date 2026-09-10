@@ -14,7 +14,7 @@ theorem hdp_02_hex_h2_d4_d4
       (fun n => (k n : ℝ) / Real.log (n : ℝ)) atTop (𝓝 0)) :
     ∀ᶠ n in atTop,
       (erdosRenyiModel n (p n)).graphLaw.real {G |
-        ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥
+        ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥
       (9 : ℝ) / 10
 ```
 
@@ -30,7 +30,8 @@ theorem hdp_02_hex_h2_d4_d4
             ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).graphLaw.real
               (setOf fun G =>
                 Exists fun v =>
-                  Eq ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).degree v G) (k n)))
+                  instLENat.le (k n)
+                    ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).degree v G)))
             (9 / 10))
         Filter.atTop
 ```
@@ -82,10 +83,9 @@ theorem hdp_02_hex_h2_d4_d4
             (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)))
           (@setOf.{0} (SimpleGraph.{0} (Fin n)) fun (G : SimpleGraph.{0} (Fin n)) =>
             @Exists.{1} (Fin n) fun (v : Fin n) =>
-              @Eq.{1} Nat
+              @LE.le.{0} Nat instLENat (k n)
                 (@NumStability.HDP.Scalar.IndependentSums.Chernoff.ErdosRenyiModelData.degree n (p n)
-                  (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)) v G)
-                (k n)))
+                  (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)) v G)))
         (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
           (@OfNat.ofNat.{0} Real (nat_lit 9)
             (@instOfNatAtLeastTwo.{0} Real (nat_lit 9) Real.instNatCast
@@ -103,7 +103,7 @@ theorem hdp_02_hex_h2_d4_d4
 - `AuditTarget` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling`, `ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Signature`
 - `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw` imports: `Mathlib.Probability.Combinatorics.BinomialRandomGraph.Defs`, `Mathlib.Combinatorics.SimpleGraph.Finite`, `Mathlib.Probability.HasLaw`, `Mathlib.Probability.ProbabilityMassFunction.Binomial`, `Mathlib.Tactic`
 - `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic` imports: `Mathlib.Probability.ProbabilityMassFunction.Binomial`, `Mathlib.Probability.ProbabilityMassFunction.Integrals`, `Mathlib.Probability.Distributions.Gaussian.Real`, `Mathlib.Probability.Distributions.Poisson`, `Mathlib.MeasureTheory.Function.ConvergenceInDistribution`, `Mathlib.Probability.StrongLaw`, `Mathlib.Tactic`
-- `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw`, `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic`, `Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics`, `Mathlib.Data.Nat.Choose.Bounds`, `Mathlib.Probability.Independence.InfinitePi`
+- `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw`, `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic`, `Mathlib.Data.Nat.Choose.Bounds`, `Mathlib.Probability.Independence.InfinitePi`
 - `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic` imports: `Mathlib.Probability.Moments.Variance`, `Mathlib.Probability.CDF`, `Mathlib.MeasureTheory.Function.LpSpace.Basic`, `Mathlib.MeasureTheory.Function.LpSpace.Complete`, `Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm`, `Mathlib.MeasureTheory.Function.LpSeminorm.Indicator`, `Mathlib.Probability.UniformOn`, `Mathlib.Analysis.Convex.Integral`, `Mathlib.Analysis.Convex.Continuous`, `Mathlib.MeasureTheory.Integral.Bochner.Set`, `Mathlib.MeasureTheory.Integral.Lebesgue.Markov`, `Mathlib.MeasureTheory.Integral.Layercake`, `Mathlib.MeasureTheory.Measure.Lebesgue.Integral`, `Mathlib.Probability.Distributions.Cauchy`, `Mathlib.Analysis.SpecialFunctions.NonIntegrable`, `Mathlib.Analysis.SpecialFunctions.Pow.Integral`, `Mathlib.Tactic`
 - `ComputationalMathematics.Source.Vershynin.Chapter01.ConvexFunction.Contract` imports: `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic`
 - `ComputationalMathematics.Source.Vershynin.Chapter01.DistributionDetermined.Contract` imports: `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic`
@@ -582,7 +582,33 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HSub α β γ] => self.1
 ```
 
-### D018: `MeasureTheory.Measure.real`
+### D018: `LE.le`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `54a32f2661f788eb2b860006c4d1e8031e126febafe1c8d03ce50529b773dc48`
+
+Type:
+
+```lean
+{α : Type u} → [self : LE α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LE.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LE α] => self.1
+```
+
+### D019: `MeasureTheory.Measure.real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -608,7 +634,7 @@ Definition body (one-level semantic boundary):
 fun {α} {m} μ s => (MeasureTheory.Measure.instFunLike.coe μ s).toReal
 ```
 
-### D019: `Membership.mem`
+### D020: `Membership.mem`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -634,7 +660,7 @@ Definition body (one-level semantic boundary):
 fun {α} γ [self : Membership α γ] => self.1
 ```
 
-### D020: `Nat`
+### D021: `Nat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -654,7 +680,7 @@ Fully explicit type:
 Type
 ```
 
-### D021: `Nat.cast`
+### D022: `Nat.cast`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Cast`
@@ -680,7 +706,7 @@ Definition body (one-level semantic boundary):
 fun {R} [inst : NatCast R] => inst.natCast
 ```
 
-### D022: `Nat.instAtLeastTwoHAddOfNat`
+### D023: `Nat.instAtLeastTwoHAddOfNat`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Init`
@@ -703,7 +729,7 @@ Fully explicit type:
       (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
 ```
 
-### D023: `Nat.instNeZeroSucc`
+### D024: `Nat.instNeZeroSucc`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Nat.Basic`
@@ -726,7 +752,7 @@ Fully explicit type:
       (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
 ```
 
-### D024: `Nat.instPreorder`
+### D025: `Nat.instPreorder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Basic`
@@ -752,7 +778,7 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D025: `OfNat.ofNat`
+### D026: `OfNat.ofNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -778,7 +804,7 @@ Definition body (one-level semantic boundary):
 fun α x [self : OfNat α x] => self.1
 ```
 
-### D026: `One.toOfNat1`
+### D027: `One.toOfNat1`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Zero`
@@ -804,7 +830,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : One α] => { ofNat := inst.one }
 ```
 
-### D027: `PseudoMetricSpace.toUniformSpace`
+### D028: `PseudoMetricSpace.toUniformSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -830,7 +856,7 @@ Definition body (one-level semantic boundary):
 fun α [self : PseudoMetricSpace α] => self.7
 ```
 
-### D028: `Real`
+### D029: `Real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -850,7 +876,7 @@ Fully explicit type:
 Type
 ```
 
-### D029: `Real.instDivInvMonoid`
+### D030: `Real.instDivInvMonoid`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -878,7 +904,7 @@ Definition body (one-level semantic boundary):
   zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
 ```
 
-### D030: `Real.instLE`
+### D031: `Real.instLE`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -904,7 +930,7 @@ Definition body (one-level semantic boundary):
 { le := Real.le✝ }
 ```
 
-### D031: `Real.instMul`
+### D032: `Real.instMul`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -930,7 +956,7 @@ Definition body (one-level semantic boundary):
 { mul := Real.mul✝ }
 ```
 
-### D032: `Real.instNatCast`
+### D033: `Real.instNatCast`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -956,7 +982,7 @@ Definition body (one-level semantic boundary):
 { natCast := fun n => { cauchy := n.cast } }
 ```
 
-### D033: `Real.instOne`
+### D034: `Real.instOne`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -982,7 +1008,7 @@ Definition body (one-level semantic boundary):
 { one := Real.one✝ }
 ```
 
-### D034: `Real.instPreorder`
+### D035: `Real.instPreorder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1008,7 +1034,7 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D035: `Real.instZero`
+### D036: `Real.instZero`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1034,7 +1060,7 @@ Definition body (one-level semantic boundary):
 { zero := Real.zero✝ }
 ```
 
-### D036: `Real.log`
+### D037: `Real.log`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.SpecialFunctions.Log.Basic`
@@ -1060,7 +1086,7 @@ Definition body (one-level semantic boundary):
 fun x => if hx : Eq x 0 then 0 else (instFunLikeOrderIso (Set.Ioi 0).Elem Real).coe Real.expOrderIso.symm ⟨abs x, ⋯⟩
 ```
 
-### D037: `Real.pseudoMetricSpace`
+### D038: `Real.pseudoMetricSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -1088,7 +1114,7 @@ Definition body (one-level semantic boundary):
   cobounded_sets := Real.pseudoMetricSpace._proof_4 }
 ```
 
-### D038: `Set`
+### D039: `Set`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1114,7 +1140,7 @@ Definition body (one-level semantic boundary):
 fun α => α → Prop
 ```
 
-### D039: `Set.Elem`
+### D040: `Set.Elem`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.CoeSort`
@@ -1140,7 +1166,7 @@ Definition body (one-level semantic boundary):
 fun {α} s => Subtype fun x => Set.instMembership.mem s x
 ```
 
-### D040: `Set.Icc`
+### D041: `Set.Icc`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.Interval.Set.Defs`
@@ -1166,7 +1192,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Preorder α] a b => setOf fun x => And (inst.le a x) (inst.le x b)
 ```
 
-### D041: `Set.instMembership`
+### D042: `Set.instMembership`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1192,7 +1218,7 @@ Definition body (one-level semantic boundary):
 fun {α} => { mem := Set.Mem }
 ```
 
-### D042: `SimpleGraph`
+### D043: `SimpleGraph`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Basic`
@@ -1212,7 +1238,7 @@ Fully explicit type:
 (V : Type u) → Type u
 ```
 
-### D043: `SimpleGraph.instMeasurableSpace`
+### D044: `SimpleGraph.instMeasurableSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Constructions.SimpleGraph`
@@ -1238,7 +1264,7 @@ Definition body (one-level semantic boundary):
 fun {V} => MeasurableSpace.comap SimpleGraph.Adj inferInstance
 ```
 
-### D044: `Subtype.val`
+### D045: `Subtype.val`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1264,7 +1290,7 @@ Definition body (one-level semantic boundary):
 fun α p self => self.1
 ```
 
-### D045: `UniformSpace.toTopologicalSpace`
+### D046: `UniformSpace.toTopologicalSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.UniformSpace.Defs`
@@ -1290,7 +1316,7 @@ Definition body (one-level semantic boundary):
 fun α [self : UniformSpace α] => self.1
 ```
 
-### D046: `Zero.toOfNat0`
+### D047: `Zero.toOfNat0`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Zero`
@@ -1316,7 +1342,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Zero α] => { ofNat := inst.zero }
 ```
 
-### D047: `instHDiv`
+### D048: `instHDiv`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1342,7 +1368,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
 ```
 
-### D048: `instHMul`
+### D049: `instHMul`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1368,7 +1394,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Mul α] => { hMul := fun a b => inst.mul a b }
 ```
 
-### D049: `instHSub`
+### D050: `instHSub`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1394,7 +1420,33 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Sub α] => { hSub := fun a b => inst.sub a b }
 ```
 
-### D050: `instOfNatAtLeastTwo`
+### D051: `instLENat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `002e628e28a06e89ab80e69408fa3be9fc3e200fafd33e0f71d9111a8944875e`
+
+Type:
+
+```lean
+LE Nat
+```
+
+Fully explicit type:
+
+```lean
+LE.{0} Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ le := Nat.le }
+```
+
+### D052: `instOfNatAtLeastTwo`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Cast.Defs`
@@ -1420,7 +1472,7 @@ Definition body (one-level semantic boundary):
 fun {R} {n} [NatCast R] [n.AtLeastTwo] => { ofNat := n.cast }
 ```
 
-### D051: `instOfNatNat`
+### D053: `instOfNatNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1446,7 +1498,7 @@ Definition body (one-level semantic boundary):
 fun n => { ofNat := n }
 ```
 
-### D052: `instSubNat`
+### D054: `instSubNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1472,7 +1524,7 @@ Definition body (one-level semantic boundary):
 { sub := Nat.sub }
 ```
 
-### D053: `nhds`
+### D055: `nhds`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.Defs.Filter`
@@ -1498,7 +1550,7 @@ Definition body (one-level semantic boundary):
 wrapped✝.1
 ```
 
-### D054: `setOf`
+### D056: `setOf`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1524,7 +1576,7 @@ Definition body (one-level semantic boundary):
 fun {α} p => p
 ```
 
-### D055: `Fintype.ofFinite`
+### D057: `Fintype.ofFinite`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Fintype.EquivFin`
@@ -1550,7 +1602,7 @@ Definition body (one-level semantic boundary):
 fun α [Finite α] => ⋯.some
 ```
 
-### D056: `MeasureTheory.Measure`
+### D058: `MeasureTheory.Measure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -1570,7 +1622,7 @@ Fully explicit type:
 (α : Type u_6) → [MeasurableSpace.{u_6} α] → Type u_6
 ```
 
-### D057: `SimpleGraph.binomialRandom`
+### D059: `SimpleGraph.binomialRandom`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Probability.Combinatorics.BinomialRandomGraph.Defs`
@@ -1599,7 +1651,7 @@ fun V p =>
   MeasureTheory.Measure.comap SimpleGraph.edgeSet (ProbabilityTheory.setBernoulli (Set.instCompl.compl Sym2.diagSet) p)
 ```
 
-### D058: `SimpleGraph.degree`
+### D060: `SimpleGraph.degree`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Finite`
@@ -1626,7 +1678,7 @@ Definition body (one-level semantic boundary):
 fun {V} G v [Fintype (G.neighborSet v).Elem] => (G.neighborFinset v).card
 ```
 
-### D059: `SimpleGraph.neighborSet`
+### D061: `SimpleGraph.neighborSet`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Basic`
@@ -1652,7 +1704,7 @@ Definition body (one-level semantic boundary):
 fun {V} G v => setOf fun w => G.Adj v w
 ```
 
-### D060: `Finite`
+### D062: `Finite`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Finite.Defs`
@@ -1672,7 +1724,7 @@ Fully explicit type:
 (α : Sort u_3) → Prop
 ```
 
-### D061: `Subtype`
+### D063: `Subtype`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`

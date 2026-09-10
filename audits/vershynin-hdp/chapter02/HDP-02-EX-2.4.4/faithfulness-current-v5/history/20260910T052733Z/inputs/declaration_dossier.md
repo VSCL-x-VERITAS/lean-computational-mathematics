@@ -14,7 +14,7 @@ theorem hdp_02_hex_h2_d4_d4
       (fun n => (k n : ℝ) / Real.log (n : ℝ)) atTop (𝓝 0)) :
     ∀ᶠ n in atTop,
       (erdosRenyiModel n (p n)).graphLaw.real {G |
-        ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥
+        ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥
       (9 : ℝ) / 10
 ```
 
@@ -30,7 +30,8 @@ theorem hdp_02_hex_h2_d4_d4
             ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).graphLaw.real
               (setOf fun G =>
                 Exists fun v =>
-                  Eq ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).degree v G) (k n)))
+                  instLENat.le (k n)
+                    ((NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)).degree v G)))
             (9 / 10))
         Filter.atTop
 ```
@@ -82,10 +83,9 @@ theorem hdp_02_hex_h2_d4_d4
             (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)))
           (@setOf.{0} (SimpleGraph.{0} (Fin n)) fun (G : SimpleGraph.{0} (Fin n)) =>
             @Exists.{1} (Fin n) fun (v : Fin n) =>
-              @Eq.{1} Nat
+              @LE.le.{0} Nat instLENat (k n)
                 (@NumStability.HDP.Scalar.IndependentSums.Chernoff.ErdosRenyiModelData.degree n (p n)
-                  (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)) v G)
-                (k n)))
+                  (NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiModel n (p n)) v G)))
         (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
           (@OfNat.ofNat.{0} Real (nat_lit 9)
             (@instOfNatAtLeastTwo.{0} Real (nat_lit 9) Real.instNatCast
@@ -103,7 +103,7 @@ theorem hdp_02_hex_h2_d4_d4
 - `AuditTarget` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling`, `ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Signature`
 - `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw` imports: `Mathlib.Probability.Combinatorics.BinomialRandomGraph.Defs`, `Mathlib.Combinatorics.SimpleGraph.Finite`, `Mathlib.Probability.HasLaw`, `Mathlib.Probability.ProbabilityMassFunction.Binomial`, `Mathlib.Tactic`
 - `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic` imports: `Mathlib.Probability.ProbabilityMassFunction.Binomial`, `Mathlib.Probability.ProbabilityMassFunction.Integrals`, `Mathlib.Probability.Distributions.Gaussian.Real`, `Mathlib.Probability.Distributions.Poisson`, `Mathlib.MeasureTheory.Function.ConvergenceInDistribution`, `Mathlib.Probability.StrongLaw`, `Mathlib.Tactic`
-- `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw`, `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic`, `Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics`, `Mathlib.Data.Nat.Choose.Bounds`, `Mathlib.Probability.Independence.InfinitePi`
+- `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling` imports: `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw`, `ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic`, `Mathlib.Data.Nat.Choose.Bounds`, `Mathlib.Probability.Independence.InfinitePi`
 - `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic` imports: `Mathlib.Probability.Moments.Variance`, `Mathlib.Probability.CDF`, `Mathlib.MeasureTheory.Function.LpSpace.Basic`, `Mathlib.MeasureTheory.Function.LpSpace.Complete`, `Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm`, `Mathlib.MeasureTheory.Function.LpSeminorm.Indicator`, `Mathlib.Probability.UniformOn`, `Mathlib.Analysis.Convex.Integral`, `Mathlib.Analysis.Convex.Continuous`, `Mathlib.MeasureTheory.Integral.Bochner.Set`, `Mathlib.MeasureTheory.Integral.Lebesgue.Markov`, `Mathlib.MeasureTheory.Integral.Layercake`, `Mathlib.MeasureTheory.Measure.Lebesgue.Integral`, `Mathlib.Probability.Distributions.Cauchy`, `Mathlib.Analysis.SpecialFunctions.NonIntegrable`, `Mathlib.Analysis.SpecialFunctions.Pow.Integral`, `Mathlib.Tactic`
 - `ComputationalMathematics.Source.Vershynin.Chapter01.ConvexFunction.Contract` imports: `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic`
 - `ComputationalMathematics.Source.Vershynin.Chapter01.DistributionDetermined.Contract` imports: `ComputationalMathematics.HDP.Scalar.Preliminaries.Basic`
@@ -582,7 +582,33 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HSub α β γ] => self.1
 ```
 
-### D018: `MeasureTheory.Measure.real`
+### D018: `LE.le`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `1`
+- Semantic SHA-256: `54a32f2661f788eb2b860006c4d1e8031e126febafe1c8d03ce50529b773dc48`
+
+Type:
+
+```lean
+{α : Type u} → [self : LE α] → α → α → Prop
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → [self : LE.{u} α] → α → α → Prop
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α [self : LE α] => self.1
+```
+
+### D019: `MeasureTheory.Measure.real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -608,7 +634,7 @@ Definition body (one-level semantic boundary):
 fun {α} {m} μ s => (MeasureTheory.Measure.instFunLike.coe μ s).toReal
 ```
 
-### D019: `Membership.mem`
+### D020: `Membership.mem`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -634,7 +660,7 @@ Definition body (one-level semantic boundary):
 fun {α} γ [self : Membership α γ] => self.1
 ```
 
-### D020: `Nat`
+### D021: `Nat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -654,7 +680,7 @@ Fully explicit type:
 Type
 ```
 
-### D021: `Nat.cast`
+### D022: `Nat.cast`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Cast`
@@ -680,7 +706,7 @@ Definition body (one-level semantic boundary):
 fun {R} [inst : NatCast R] => inst.natCast
 ```
 
-### D022: `Nat.instAtLeastTwoHAddOfNat`
+### D023: `Nat.instAtLeastTwoHAddOfNat`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Init`
@@ -703,7 +729,7 @@ Fully explicit type:
       (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
 ```
 
-### D023: `Nat.instNeZeroSucc`
+### D024: `Nat.instNeZeroSucc`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Nat.Basic`
@@ -726,7 +752,7 @@ Fully explicit type:
       (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
 ```
 
-### D024: `Nat.instPreorder`
+### D025: `Nat.instPreorder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Basic`
@@ -752,7 +778,7 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D025: `OfNat.ofNat`
+### D026: `OfNat.ofNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -778,7 +804,7 @@ Definition body (one-level semantic boundary):
 fun α x [self : OfNat α x] => self.1
 ```
 
-### D026: `One.toOfNat1`
+### D027: `One.toOfNat1`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Zero`
@@ -804,7 +830,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : One α] => { ofNat := inst.one }
 ```
 
-### D027: `PseudoMetricSpace.toUniformSpace`
+### D028: `PseudoMetricSpace.toUniformSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -830,7 +856,7 @@ Definition body (one-level semantic boundary):
 fun α [self : PseudoMetricSpace α] => self.7
 ```
 
-### D028: `Real`
+### D029: `Real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -850,7 +876,7 @@ Fully explicit type:
 Type
 ```
 
-### D029: `Real.instDivInvMonoid`
+### D030: `Real.instDivInvMonoid`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -878,7 +904,7 @@ Definition body (one-level semantic boundary):
   zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
 ```
 
-### D030: `Real.instLE`
+### D031: `Real.instLE`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -904,7 +930,7 @@ Definition body (one-level semantic boundary):
 { le := Real.le✝ }
 ```
 
-### D031: `Real.instMul`
+### D032: `Real.instMul`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -930,7 +956,7 @@ Definition body (one-level semantic boundary):
 { mul := Real.mul✝ }
 ```
 
-### D032: `Real.instNatCast`
+### D033: `Real.instNatCast`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -956,7 +982,7 @@ Definition body (one-level semantic boundary):
 { natCast := fun n => { cauchy := n.cast } }
 ```
 
-### D033: `Real.instOne`
+### D034: `Real.instOne`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -982,7 +1008,7 @@ Definition body (one-level semantic boundary):
 { one := Real.one✝ }
 ```
 
-### D034: `Real.instPreorder`
+### D035: `Real.instPreorder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1008,7 +1034,7 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D035: `Real.instZero`
+### D036: `Real.instZero`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1034,7 +1060,7 @@ Definition body (one-level semantic boundary):
 { zero := Real.zero✝ }
 ```
 
-### D036: `Real.log`
+### D037: `Real.log`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.SpecialFunctions.Log.Basic`
@@ -1060,7 +1086,7 @@ Definition body (one-level semantic boundary):
 fun x => if hx : Eq x 0 then 0 else (instFunLikeOrderIso (Set.Ioi 0).Elem Real).coe Real.expOrderIso.symm ⟨abs x, ⋯⟩
 ```
 
-### D037: `Real.pseudoMetricSpace`
+### D038: `Real.pseudoMetricSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -1088,7 +1114,7 @@ Definition body (one-level semantic boundary):
   cobounded_sets := Real.pseudoMetricSpace._proof_4 }
 ```
 
-### D038: `Set`
+### D039: `Set`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1114,7 +1140,7 @@ Definition body (one-level semantic boundary):
 fun α => α → Prop
 ```
 
-### D039: `Set.Elem`
+### D040: `Set.Elem`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.CoeSort`
@@ -1140,7 +1166,7 @@ Definition body (one-level semantic boundary):
 fun {α} s => Subtype fun x => Set.instMembership.mem s x
 ```
 
-### D040: `Set.Icc`
+### D041: `Set.Icc`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.Interval.Set.Defs`
@@ -1166,7 +1192,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Preorder α] a b => setOf fun x => And (inst.le a x) (inst.le x b)
 ```
 
-### D041: `Set.instMembership`
+### D042: `Set.instMembership`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1192,7 +1218,7 @@ Definition body (one-level semantic boundary):
 fun {α} => { mem := Set.Mem }
 ```
 
-### D042: `SimpleGraph`
+### D043: `SimpleGraph`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Basic`
@@ -1212,7 +1238,7 @@ Fully explicit type:
 (V : Type u) → Type u
 ```
 
-### D043: `SimpleGraph.instMeasurableSpace`
+### D044: `SimpleGraph.instMeasurableSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Constructions.SimpleGraph`
@@ -1238,7 +1264,7 @@ Definition body (one-level semantic boundary):
 fun {V} => MeasurableSpace.comap SimpleGraph.Adj inferInstance
 ```
 
-### D044: `Subtype.val`
+### D045: `Subtype.val`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1264,7 +1290,7 @@ Definition body (one-level semantic boundary):
 fun α p self => self.1
 ```
 
-### D045: `UniformSpace.toTopologicalSpace`
+### D046: `UniformSpace.toTopologicalSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.UniformSpace.Defs`
@@ -1290,7 +1316,7 @@ Definition body (one-level semantic boundary):
 fun α [self : UniformSpace α] => self.1
 ```
 
-### D046: `Zero.toOfNat0`
+### D047: `Zero.toOfNat0`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Zero`
@@ -1316,7 +1342,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Zero α] => { ofNat := inst.zero }
 ```
 
-### D047: `instHDiv`
+### D048: `instHDiv`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1342,7 +1368,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
 ```
 
-### D048: `instHMul`
+### D049: `instHMul`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1368,7 +1394,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Mul α] => { hMul := fun a b => inst.mul a b }
 ```
 
-### D049: `instHSub`
+### D050: `instHSub`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1394,7 +1420,33 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Sub α] => { hSub := fun a b => inst.sub a b }
 ```
 
-### D050: `instOfNatAtLeastTwo`
+### D051: `instLENat`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `1`
+- Semantic SHA-256: `002e628e28a06e89ab80e69408fa3be9fc3e200fafd33e0f71d9111a8944875e`
+
+Type:
+
+```lean
+LE Nat
+```
+
+Fully explicit type:
+
+```lean
+LE.{0} Nat
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ le := Nat.le }
+```
+
+### D052: `instOfNatAtLeastTwo`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Cast.Defs`
@@ -1420,7 +1472,7 @@ Definition body (one-level semantic boundary):
 fun {R} {n} [NatCast R] [n.AtLeastTwo] => { ofNat := n.cast }
 ```
 
-### D051: `instOfNatNat`
+### D053: `instOfNatNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1446,7 +1498,7 @@ Definition body (one-level semantic boundary):
 fun n => { ofNat := n }
 ```
 
-### D052: `instSubNat`
+### D054: `instSubNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1472,7 +1524,7 @@ Definition body (one-level semantic boundary):
 { sub := Nat.sub }
 ```
 
-### D053: `nhds`
+### D055: `nhds`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.Defs.Filter`
@@ -1498,7 +1550,7 @@ Definition body (one-level semantic boundary):
 wrapped✝.1
 ```
 
-### D054: `setOf`
+### D056: `setOf`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -1524,7 +1576,7 @@ Definition body (one-level semantic boundary):
 fun {α} p => p
 ```
 
-### D055: `Fintype.ofFinite`
+### D057: `Fintype.ofFinite`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Fintype.EquivFin`
@@ -1550,7 +1602,7 @@ Definition body (one-level semantic boundary):
 fun α [Finite α] => ⋯.some
 ```
 
-### D056: `MeasureTheory.Measure`
+### D058: `MeasureTheory.Measure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -1570,7 +1622,7 @@ Fully explicit type:
 (α : Type u_6) → [MeasurableSpace.{u_6} α] → Type u_6
 ```
 
-### D057: `SimpleGraph.binomialRandom`
+### D059: `SimpleGraph.binomialRandom`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Probability.Combinatorics.BinomialRandomGraph.Defs`
@@ -1599,7 +1651,7 @@ fun V p =>
   MeasureTheory.Measure.comap SimpleGraph.edgeSet (ProbabilityTheory.setBernoulli (Set.instCompl.compl Sym2.diagSet) p)
 ```
 
-### D058: `SimpleGraph.degree`
+### D060: `SimpleGraph.degree`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Finite`
@@ -1626,7 +1678,7 @@ Definition body (one-level semantic boundary):
 fun {V} G v [Fintype (G.neighborSet v).Elem] => (G.neighborFinset v).card
 ```
 
-### D059: `SimpleGraph.neighborSet`
+### D061: `SimpleGraph.neighborSet`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Combinatorics.SimpleGraph.Basic`
@@ -1652,7 +1704,7 @@ Definition body (one-level semantic boundary):
 fun {V} G v => setOf fun w => G.Adj v w
 ```
 
-### D060: `Finite`
+### D062: `Finite`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Finite.Defs`
@@ -1672,7 +1724,7 @@ Fully explicit type:
 (α : Sort u_3) → Prop
 ```
 
-### D061: `Subtype`
+### D063: `Subtype`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -2800,12 +2852,11 @@ end NumStability.HDP.Scalar.LimitTheorems
 ### `ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling`
 
 Path: `lean-computational-mathematics/ComputationalMathematics/HDP/Scalar/IndependentSums/GraphDegreeDecoupling.lean`
-SHA-256: `a9378cdd2182f30fda0f73795103bac9989ba7219c9752db6be8b0ee2034e52d`
+SHA-256: `9d46da9b98aec0d6c24517e634f314fe0ec84f60cfd1bcbbfd9c05e3a80c8796`
 
 ```lean
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw
 import ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Probability.Independence.InfinitePi
 
@@ -2976,21 +3027,6 @@ degree-test centers. -/
 def graphDegreeTestNeighbors (n : ℕ) : Finset (Fin n) :=
   Finset.univ.filter fun v => ¬ v.val < n / 2
 
-/-- A quarter-power-sized center count.  The `min` only handles the empty
-graph uniformly; for every positive `n` it is the natural floor of
-`exp (log n / 4)`. -/
-noncomputable def graphDegreeExactTestCenterCount (n : ℕ) : ℕ :=
-  min n ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊
-
-/-- Sparse test centers used to turn exact restricted degree into exact full
-degree while making internal center edges negligible. -/
-noncomputable def graphDegreeExactTestCenters (n : ℕ) : Finset (Fin n) :=
-  Finset.univ.filter fun v => v.val < graphDegreeExactTestCenterCount n
-
-/-- Every vertex outside the sparse exact-degree test-center set. -/
-noncomputable def graphDegreeExactTestNeighbors (n : ℕ) : Finset (Fin n) :=
-  Finset.univ \ graphDegreeExactTestCenters n
-
 @[simp] lemma card_graphDegreeTestCenters (n : ℕ) :
     (graphDegreeTestCenters n).card = n / 2 := by
   rw [graphDegreeTestCenters, Fin.card_filter_val_lt]
@@ -3011,85 +3047,6 @@ lemma graphDegreeTestCenters_disjoint_graphDegreeTestNeighbors (n : ℕ) :
   rw [Finset.disjoint_left]
   simp [graphDegreeTestCenters, graphDegreeTestNeighbors]
 
-@[simp] lemma card_graphDegreeExactTestCenters (n : ℕ) :
-    (graphDegreeExactTestCenters n).card = graphDegreeExactTestCenterCount n := by
-  rw [graphDegreeExactTestCenters, Fin.card_filter_val_lt]
-  exact min_eq_right (min_le_left n
-    ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊)
-
-@[simp] lemma card_graphDegreeExactTestNeighbors (n : ℕ) :
-    (graphDegreeExactTestNeighbors n).card =
-      n - graphDegreeExactTestCenterCount n := by
-  rw [graphDegreeExactTestNeighbors,
-    Finset.card_sdiff_of_subset (Finset.subset_univ _)]
-  simp
-
-lemma graphDegreeExactTestCenters_disjoint_graphDegreeExactTestNeighbors (n : ℕ) :
-    Disjoint (graphDegreeExactTestCenters n) (graphDegreeExactTestNeighbors n) := by
-  rw [Finset.disjoint_left]
-  simp [graphDegreeExactTestNeighbors]
-
-lemma graphDegreeExactTestCenterCount_eq_natFloor (n : ℕ) (hn : 1 ≤ n) :
-    graphDegreeExactTestCenterCount n =
-      ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊ := by
-  rw [graphDegreeExactTestCenterCount, min_eq_right]
-  apply Nat.floor_le_of_le
-  have hnR : (1 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
-  have hlog0 : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg hnR
-  calc
-    Real.exp (Real.log (n : ℝ) / 4) ≤ Real.exp (Real.log (n : ℝ)) := by
-      apply Real.exp_le_exp.mpr
-      linarith
-    _ = (n : ℝ) := Real.exp_log (by positivity)
-
-lemma two_mul_graphDegreeExactTestCenterCount_le (n : ℕ) (hn : 16 ≤ n) :
-    2 * graphDegreeExactTestCenterCount n ≤ n := by
-  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
-  have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
-  have hcountFloor : graphDegreeExactTestCenterCount n ≤ ⌊x⌋₊ :=
-    min_le_right _ _
-  have hfloor : (⌊x⌋₊ : ℝ) ≤ x := Nat.floor_le (by positivity)
-  have hcount : (graphDegreeExactTestCenterCount n : ℝ) ≤ x := by
-    have hcountCast : (graphDegreeExactTestCenterCount n : ℝ) ≤ (⌊x⌋₊ : ℝ) := by
-      exact_mod_cast hcountFloor
-    exact hcountCast.trans hfloor
-  have hlog : Real.log (16 : ℝ) ≤ Real.log (n : ℝ) := by
-    apply Real.strictMonoOn_log.monotoneOn
-    · norm_num
-    · exact hnpos
-    · exact_mod_cast hn
-  have hx2 : (2 : ℝ) ≤ x := by
-    have hlog2 : Real.log (2 : ℝ) = Real.log (16 : ℝ) / 4 := by
-      rw [show (16 : ℝ) = 2 ^ 4 by norm_num, Real.log_pow]
-      norm_num
-    calc
-      (2 : ℝ) = Real.exp (Real.log 2) :=
-        (Real.exp_log (by norm_num)).symm
-      _ = Real.exp (Real.log 16 / 4) := by rw [hlog2]
-      _ ≤ Real.exp (Real.log (n : ℝ) / 4) := by
-        apply Real.exp_le_exp.mpr
-        linarith
-      _ = x := rfl
-  have hx4 : x ^ 4 = (n : ℝ) := by
-    dsimp [x]
-    rw [show Real.exp (Real.log (n : ℝ) / 4) ^ 4 =
-      Real.exp (4 * (Real.log (n : ℝ) / 4)) by
-        simpa using (Real.exp_nat_mul (Real.log (n : ℝ) / 4) 4).symm]
-    have hexponent : 4 * (Real.log (n : ℝ) / 4) = Real.log (n : ℝ) := by
-      ring
-    rw [hexponent, Real.exp_log hnpos]
-  have hx3 : (2 : ℝ) ≤ x ^ 3 := by
-    calc
-      (2 : ℝ) ≤ 2 ^ 3 := by norm_num
-      _ ≤ x ^ 3 := pow_le_pow_left₀ (by norm_num) hx2 3
-  have h2x : (2 : ℝ) * x ≤ (n : ℝ) := by
-    have := mul_le_mul_of_nonneg_right hx3 (by positivity : 0 ≤ x)
-    rw [← hx4]
-    nlinarith
-  have hcast : (2 : ℝ) * (graphDegreeExactTestCenterCount n : ℝ) ≤
-      (n : ℝ) := (mul_le_mul_of_nonneg_left hcount (by norm_num)).trans h2x
-  exact_mod_cast hcast
-
 /-- A restricted degree never exceeds the full degree. -/
 lemma graphRestrictedDegree_le_graphDegreeSum
     {V : Type*} [Fintype V] [DecidableEq V]
@@ -3098,73 +3055,6 @@ lemma graphRestrictedDegree_le_graphDegreeSum
   classical
   rw [graphRestrictedDegree, graphDegreeSum]
   exact Finset.sum_le_sum_of_subset (Finset.subset_univ S)
-
-/-- If `v` lies in `A` and there are no edges from `v` to another member of
-`A`, then counting neighbors in the complement of `A` gives its full degree. -/
-lemma graphRestrictedDegree_compl_eq_graphDegreeSum_of_no_internal
-    {V : Type*} [Fintype V] [DecidableEq V]
-    (G : SimpleGraph V) {A : Finset V} {v : V}
-    (hno : ∀ w ∈ A, ¬ G.Adj v w) :
-    graphRestrictedDegree v (Finset.univ \ A) G = graphDegreeSum v G := by
-  classical
-  unfold graphRestrictedDegree graphDegreeSum
-  rw [Finset.sum_subset (Finset.sdiff_subset)]
-  intro w hwU hwNot
-  have hwA : w ∈ A := by
-    by_contra hwA
-    exact hwNot (by simp [hwA])
-  simp [hno w hwA]
-
-/-- A single adjacency event has probability at most the edge parameter.  The
-diagonal case is empty; off the diagonal its probability is exactly `p`. -/
-lemma binomialRandom_graphAdjEvent_real_le
-    {V : Type*} [Countable V] [DecidableEq V] [DecidableEq (Sym2 V)]
-    (p : Set.Icc (0 : ℝ) 1) (v w : V) :
-    (SimpleGraph.binomialRandom V p).real {G | G.Adj v w} ≤ (p : ℝ) := by
-  classical
-  by_cases hvw : v = w
-  · subst w
-    simp
-    exact p.2.1
-  · have hevent : {G : SimpleGraph V | G.Adj v w} =
-        graphStarExactEvent v {w} {w} := by
-      ext G
-      simp [graphStarExactEvent]
-    rw [hevent, Measure.real_def,
-      binomialRandom_graphStarExactEvent_probability p (by simp [hvw]) (by simp)]
-    simp
-
-/-- A union bound for the event that the induced graph on `A` contains an
-edge.  Ordered pairs deliberately overcount, which keeps the bound elementary. -/
-theorem binomialRandom_exists_internalAdj_probability_le
-    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
-    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1) (A : Finset V) :
-    (SimpleGraph.binomialRandom V p).real
-        {G | ∃ a : ↑A, ∃ b : ↑A, G.Adj a.1 b.1} ≤
-      (A.card : ℝ) ^ 2 * (p : ℝ) := by
-  classical
-  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
-  let Bad : ↑A → ↑A → Set (SimpleGraph V) :=
-    fun a b ↦ {G | G.Adj a.1 b.1}
-  have hevent : {G : SimpleGraph V | ∃ a : ↑A, ∃ b : ↑A,
-      G.Adj a.1 b.1} = ⋃ a, ⋃ b, Bad a b := by
-    ext G
-    simp [Bad]
-  rw [hevent]
-  calc
-    P.real (⋃ a, ⋃ b, Bad a b) ≤
-        ∑ a, P.real (⋃ b, Bad a b) :=
-      measureReal_iUnion_fintype_le (fun a ↦ ⋃ b, Bad a b)
-    _ ≤ ∑ a, ∑ b, P.real (Bad a b) := by
-      exact Finset.sum_le_sum fun a _ha ↦
-        measureReal_iUnion_fintype_le (Bad a)
-    _ ≤ ∑ _a : ↑A, ∑ _b : ↑A, (p : ℝ) := by
-      exact Finset.sum_le_sum fun a _ha ↦
-        Finset.sum_le_sum fun b _hb ↦ by
-          simpa [P, Bad] using binomialRandom_graphAdjEvent_real_le p a.1 b.1
-    _ = (A.card : ℝ) ^ 2 * (p : ℝ) := by
-      simp
-      ring
 
 lemma measurable_graphRestrictedDegree {V : Type*} (v : V) (S : Finset V) :
     Measurable (graphRestrictedDegree v S) := by
@@ -3395,83 +3285,6 @@ lemma eventually_log_ten_le_half_card_mul_exp_of_log_ratio_tendsto_zero
     _ = ((n / 2 : ℕ) : ℝ) *
         Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
 
-/-- The quarter-power center set still contains exponentially many trials on
-the `k` scale whenever `k = o(log n)`. -/
-lemma eventually_log_twenty_le_exact_center_card_mul_exp_of_log_ratio_tendsto_zero
-    (k : ℕ → ℕ)
-    (hsmall : Filter.Tendsto
-      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
-    ∀ᶠ n in Filter.atTop,
-      Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
-        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by
-  let C : ℝ := Real.log 40 + 1 / 4
-  have hlog40 : 0 < Real.log 40 := Real.log_pos (by norm_num)
-  have hC : 0 < C := by dsimp [C]; positivity
-  let ε : ℝ := 1 / (8 * C)
-  have hε : 0 < ε := by dsimp [ε]; positivity
-  rcases (Metric.tendsto_atTop.mp hsmall) ε hε with ⟨N, hN⟩
-  have hscaled : ∀ᶠ n : ℕ in Filter.atTop,
-      (k n : ℝ) * C ≤ Real.log (n : ℝ) / 8 := by
-    refine Filter.eventually_atTop.2 ⟨max N 2, ?_⟩
-    intro n hn
-    have hnN : N ≤ n := (le_max_left N 2).trans hn
-    have hn2 : 2 ≤ n := (le_max_right N 2).trans hn
-    have hlogn : 0 < Real.log (n : ℝ) :=
-      Real.log_pos (by exact_mod_cast (show 1 < n by omega))
-    have hratio0 : 0 ≤ (k n : ℝ) / Real.log (n : ℝ) :=
-      div_nonneg (by positivity) hlogn.le
-    have hdist := hN n hnN
-    rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0,
-      div_lt_iff₀ hlogn] at hdist
-    have hmul := mul_lt_mul_of_pos_right hdist hC
-    have heq : ε * Real.log (n : ℝ) * C = Real.log (n : ℝ) / 8 := by
-      dsimp [ε]
-      field_simp
-    rw [heq] at hmul
-    exact hmul.le
-  have hlogNat : Filter.Tendsto (fun n : ℕ => Real.log (n : ℝ))
-      Filter.atTop Filter.atTop :=
-    Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
-  have hquarter : Filter.Tendsto
-      (fun n : ℕ => Real.log (n : ℝ) / 4) Filter.atTop Filter.atTop :=
-    hlogNat.atTop_div_const (by norm_num)
-  have heighth : Filter.Tendsto
-      (fun n : ℕ => Real.log (n : ℝ) / 8) Filter.atTop Filter.atTop :=
-    hlogNat.atTop_div_const (by norm_num)
-  have hquarterExp : Filter.Tendsto
-      (fun n : ℕ => Real.exp (Real.log (n : ℝ) / 4))
-        Filter.atTop Filter.atTop := Real.tendsto_exp_atTop.comp hquarter
-  have heighthExp : Filter.Tendsto
-      (fun n : ℕ => Real.exp (Real.log (n : ℝ) / 8))
-        Filter.atTop Filter.atTop := Real.tendsto_exp_atTop.comp heighth
-  filter_upwards [hscaled, hquarterExp.eventually_ge_atTop 2,
-    heighthExp.eventually_gt_atTop (2 * Real.log 20),
-    Filter.eventually_atTop.2 ⟨1, fun n hn => hn⟩] with n hkn hx2 hlarge hn1
-  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
-  have hcount : graphDegreeExactTestCenterCount n = ⌊x⌋₊ := by
-    simpa [x] using graphDegreeExactTestCenterCount_eq_natFloor n hn1
-  have hfloorlt : x < (⌊x⌋₊ : ℝ) + 1 := Nat.lt_floor_add_one x
-  have hfloorlower : x / 2 ≤ (graphDegreeExactTestCenterCount n : ℝ) := by
-    rw [hcount]
-    dsimp [x] at hx2 ⊢
-    nlinarith
-  have hexp : Real.exp (-(Real.log (n : ℝ) / 8)) ≤
-      Real.exp (-((k n : ℝ) * C)) := by
-    apply Real.exp_le_exp.mpr
-    exact neg_le_neg hkn
-  calc
-    Real.log 20 ≤ Real.exp (Real.log (n : ℝ) / 8) / 2 := by linarith
-    _ = (x / 2) * Real.exp (-(Real.log (n : ℝ) / 8)) := by
-      dsimp [x]
-      rw [div_mul_eq_mul_div, ← Real.exp_add]
-      congr 2
-      ring
-    _ ≤ (graphDegreeExactTestCenterCount n : ℝ) *
-        Real.exp (-((k n : ℝ) * C)) :=
-      mul_le_mul hfloorlower hexp (Real.exp_nonneg _) (by positivity)
-    _ = (graphDegreeExactTestCenterCount n : ℝ) *
-        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
-
 /-- The finite arithmetic linking the expected-degree identity to the
 balanced point-mass estimate. -/
 lemma balanced_ratio_mass_bound_of_degree_relation
@@ -3523,7 +3336,7 @@ lemma balanced_ratio_mass_bound_of_degree_relation
         ((B + 1 - k : ℕ) : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
       field_simp
     rw [heq, le_div_iff₀ hden]
-    nlinarith [hnsub_le]
+    nlinarith
   have hcoefNat : 4 * B ≤ 5 * (n - 1) := by
     dsimp [B]
     omega
@@ -3569,108 +3382,6 @@ lemma balanced_ratio_mass_bound_of_degree_relation
       Real.exp (-(2 * (B : ℝ) * q)))
   exact hlog.trans (mul_le_mul_of_nonneg_left hlower (by positivity))
 
-/-- The expected-degree identity supplies the same explicit point-mass lower
-bound for the sparse quarter-power center set and its complement. -/
-lemma exact_center_ratio_mass_bound_of_degree_relation
-    (n k : ℕ) (p : Set.Icc (0 : ℝ) 1)
-    (hn : 16 ≤ n) (hkpos : 0 < k) (hksmall : 4 * k ≤ n)
-    (hrel : (k : ℝ) = 10 * ((n - 1 : ℕ) : ℝ) * (p : ℝ))
-    (hlog : Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
-      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4)))) :
-    k ≤ n - graphDegreeExactTestCenterCount n ∧ (p : ℝ) ≤ 1 / 2 ∧
-      Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
-        ((((((n - graphDegreeExactTestCenterCount n : ℕ) + 1 - k : ℕ) : ℝ) /
-              (k : ℝ)) * (unitInterval.toNNReal p : ℝ)) ^ k *
-          Real.exp (-(2 * ((n - graphDegreeExactTestCenterCount n : ℕ) : ℝ) *
-            (p : ℝ)))) := by
-  let m : ℕ := graphDegreeExactTestCenterCount n
-  let B : ℕ := n - m
-  let q : ℝ := p
-  have hmhalf : 2 * m ≤ n := by
-    simpa [m] using two_mul_graphDegreeExactTestCenterCount_le n hn
-  have hkB : k ≤ B := by dsimp [B]; omega
-  have hn1 : 1 ≤ n := by omega
-  have h4k : (4 : ℝ) * (k : ℝ) ≤ (n : ℝ) := by
-    exact_mod_cast hksmall
-  have hnR : (16 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
-  have h20 : (n : ℝ) ≤ 20 * ((n - 1 : ℕ) : ℝ) := by
-    rw [Nat.cast_sub hn1]
-    norm_num
-    nlinarith
-  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
-    exact_mod_cast (show 0 < n - 1 by omega)
-  have hden : 0 < 10 * ((n - 1 : ℕ) : ℝ) := by positivity
-  have hpform : q = (k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
-    rw [eq_div_iff (ne_of_gt hden)]
-    dsimp [q]
-    nlinarith [hrel]
-  have hp : (p : ℝ) ≤ 1 / 2 := by
-    change q ≤ 1 / 2
-    rw [hpform, div_le_iff₀ hden]
-    nlinarith
-  refine ⟨by simpa [B, m] using hkB, hp, ?_⟩
-  have hnumNat : n ≤ 4 * (B + 1 - k) := by
-    dsimp [B]
-    omega
-  have hnum : (n : ℝ) ≤ 4 * ((B + 1 - k : ℕ) : ℝ) := by
-    exact_mod_cast hnumNat
-  have hnsub_le : ((n - 1 : ℕ) : ℝ) ≤ (n : ℝ) := by
-    exact_mod_cast Nat.sub_le n 1
-  have hbase : (1 : ℝ) / 40 ≤
-      (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q := by
-    have hkR : (0 : ℝ) < (k : ℝ) := by positivity
-    rw [hpform]
-    have heq : (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
-        ((k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ))) =
-        ((B + 1 - k : ℕ) : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
-      field_simp
-    rw [heq, le_div_iff₀ hden]
-    nlinarith [hnsub_le]
-  have hcoefNat : 4 * B ≤ 5 * (n - 1) := by
-    dsimp [B]
-    omega
-  have hcoef : (4 : ℝ) * (B : ℝ) ≤ 5 * ((n - 1 : ℕ) : ℝ) := by
-    exact_mod_cast hcoefNat
-  have hcoefq := mul_le_mul_of_nonneg_right hcoef p.2.1
-  have hexponent : 2 * (B : ℝ) * q ≤ (k : ℝ) / 4 := by
-    dsimp [q] at hcoefq ⊢
-    nlinarith [hrel]
-  have hbasePow : ((1 : ℝ) / 40) ^ k ≤
-      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k :=
-    pow_le_pow_left₀ (by norm_num) hbase k
-  have hexp : Real.exp (-((k : ℝ) / 4)) ≤
-      Real.exp (-(2 * (B : ℝ) * q)) := by
-    apply Real.exp_le_exp.mpr
-    exact neg_le_neg hexponent
-  have hlower : Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) ≤
-      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
-        Real.exp (-(2 * (B : ℝ) * q)) := by
-    have hpowid : ((1 : ℝ) / 40) ^ k =
-        Real.exp (-((k : ℝ) * Real.log 40)) := by
-      calc
-        ((1 : ℝ) / 40) ^ k =
-            (Real.exp (Real.log ((1 : ℝ) / 40))) ^ k := by
-              rw [Real.exp_log (by norm_num)]
-        _ = Real.exp ((k : ℝ) * Real.log ((1 : ℝ) / 40)) :=
-          (Real.exp_nat_mul _ k).symm
-        _ = Real.exp (-((k : ℝ) * Real.log 40)) := by
-          rw [show (1 : ℝ) / 40 = (40 : ℝ)⁻¹ by ring, Real.log_inv]
-          ring_nf
-    calc
-      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) =
-          ((1 : ℝ) / 40) ^ k * Real.exp (-((k : ℝ) / 4)) := by
-        rw [hpowid, ← Real.exp_add]
-        congr 1
-        ring
-      _ ≤ ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
-          Real.exp (-(2 * (B : ℝ) * q)) :=
-        mul_le_mul hbasePow hexp (Real.exp_nonneg _)
-          (pow_nonneg ((by norm_num : (0 : ℝ) ≤ 1 / 40).trans hbase) k)
-  change Real.log 20 ≤ (m : ℝ) *
-    (((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
-      Real.exp (-(2 * (B : ℝ) * q)))
-  simpa [m] using hlog.trans (mul_le_mul_of_nonneg_left hlower (by positivity))
-
 /-- An integer sequence that is little-oh of `log n` is eventually at most
 one quarter of `n`. -/
 lemma eventually_four_mul_le_of_log_ratio_tendsto_zero
@@ -3707,111 +3418,6 @@ lemma eventually_four_mul_le_of_log_ratio_tendsto_zero
   rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0, div_lt_iff₀ hnpos] at hdist
   have hcast : (4 : ℝ) * (k n : ℝ) ≤ (n : ℝ) := by nlinarith
   exact_mod_cast hcast
-
-/-- Composing `k/log n → 0` with the standard `log n = o(n¹ᐟ²)` estimate
-gives the square-root-scale estimate needed for the sparse center set. -/
-lemma tendsto_k_div_exp_half_of_log_ratio_tendsto_zero
-    (k : ℕ → ℕ)
-    (hsmall : Filter.Tendsto
-      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
-    Filter.Tendsto
-      (fun n => (k n : ℝ) / Real.exp (Real.log (n : ℝ) / 2))
-      Filter.atTop (nhds 0) := by
-  have hlogdiv : Filter.Tendsto
-      (fun n : ℕ => Real.log (n : ℝ) / (n : ℝ) ^ (1 / 2 : ℝ))
-      Filter.atTop (nhds 0) := by
-    have h := (isLittleO_log_rpow_atTop
-      (r := (1 / 2 : ℝ)) (by norm_num)).comp_tendsto
-        (tendsto_natCast_atTop_atTop : Filter.Tendsto
-          (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop)
-    simpa [Function.comp_def] using h.tendsto_div_nhds_zero
-  have hprod := hsmall.mul hlogdiv
-  have heq : (fun n : ℕ =>
-      (k n : ℝ) / Real.log (n : ℝ) *
-        (Real.log (n : ℝ) / (n : ℝ) ^ (1 / 2 : ℝ))) =ᶠ[Filter.atTop]
-      (fun n : ℕ => (k n : ℝ) /
-        Real.exp (Real.log (n : ℝ) / 2)) := by
-    filter_upwards [Filter.eventually_atTop.2 ⟨2, fun n hn => hn⟩] with n hn
-    have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
-    have hlog0 : Real.log (n : ℝ) ≠ 0 := ne_of_gt <|
-      Real.log_pos (by exact_mod_cast (show 1 < n by omega))
-    have hrpow : (n : ℝ) ^ (1 / 2 : ℝ) =
-        Real.exp (Real.log (n : ℝ) / 2) := by
-      rw [Real.rpow_def_of_pos hnpos]
-      congr 1
-      ring
-    rw [← hrpow]
-    have hrpow0 : (n : ℝ) ^ (1 / 2 : ℝ) ≠ 0 :=
-      ne_of_gt (Real.rpow_pos_of_pos hnpos _)
-    field_simp
-  simpa only [zero_mul] using hprod.congr' heq
-
-/-- For the quarter-power center set, the union-bound probability of an
-internal center edge is eventually at most `0.05`. -/
-lemma eventually_exact_center_internal_mass_le_of_degree_relation
-    (p : ℕ → Set.Icc (0 : ℝ) 1) (k : ℕ → ℕ)
-    (hrel : ∀ n, (k n : ℝ) =
-      10 * ((n - 1 : ℕ) : ℝ) * (p n : ℝ))
-    (hsmall : Filter.Tendsto
-      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
-    ∀ᶠ n in Filter.atTop,
-      (graphDegreeExactTestCenterCount n : ℝ) ^ 2 * (p n : ℝ) ≤
-        (1 : ℝ) / 20 := by
-  have hsqrt := tendsto_k_div_exp_half_of_log_ratio_tendsto_zero k hsmall
-  rcases (Metric.tendsto_atTop.mp hsqrt) ((1 : ℝ) / 4) (by norm_num) with ⟨N, hN⟩
-  refine Filter.eventually_atTop.2 ⟨max N 2, ?_⟩
-  intro n hn
-  have hnN : N ≤ n := (le_max_left N 2).trans hn
-  have hn2 : 2 ≤ n := (le_max_right N 2).trans hn
-  have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
-  let s : ℝ := Real.exp (Real.log (n : ℝ) / 2)
-  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
-  have hspos : 0 < s := by dsimp [s]; positivity
-  have hratio0 : 0 ≤ (k n : ℝ) / s := by positivity
-  have hdist := hN n hnN
-  change dist ((k n : ℝ) / s) 0 < (1 : ℝ) / 4 at hdist
-  rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0,
-    div_lt_iff₀ hspos] at hdist
-  have hsquare : s ^ 2 = (n : ℝ) := by
-    dsimp [s]
-    rw [pow_two, ← Real.exp_add]
-    have hexponent : Real.log (n : ℝ) / 2 + Real.log (n : ℝ) / 2 =
-        Real.log (n : ℝ) := by ring
-    rw [hexponent, Real.exp_log hnpos]
-  have hxSquare : x ^ 2 = s := by
-    dsimp [x, s]
-    rw [pow_two, ← Real.exp_add]
-    congr 1
-    ring
-  have hcountFloor : graphDegreeExactTestCenterCount n ≤ ⌊x⌋₊ := by
-    exact min_le_right _ _
-  have hfloor : (⌊x⌋₊ : ℝ) ≤ x := Nat.floor_le (by positivity)
-  have hcount : (graphDegreeExactTestCenterCount n : ℝ) ≤ x := by
-    have hcountCast : (graphDegreeExactTestCenterCount n : ℝ) ≤ (⌊x⌋₊ : ℝ) := by
-      exact_mod_cast hcountFloor
-    exact hcountCast.trans hfloor
-  have hcountSq : (graphDegreeExactTestCenterCount n : ℝ) ^ 2 ≤ s := by
-    rw [← hxSquare]
-    exact pow_le_pow_left₀ (by positivity) hcount 2
-  have hsk : s * (k n : ℝ) ≤ (n : ℝ) / 4 := by
-    have hmul := mul_le_mul_of_nonneg_left hdist.le hspos.le
-    nlinarith [hsquare]
-  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
-    exact_mod_cast (show 0 < n - 1 by omega)
-  have hden : 0 < 10 * ((n - 1 : ℕ) : ℝ) := by positivity
-  have hpform : (p n : ℝ) =
-      (k n : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
-    rw [eq_div_iff (ne_of_gt hden)]
-    nlinarith [hrel n]
-  have hsprob : s * (p n : ℝ) ≤ (1 : ℝ) / 20 := by
-    rw [hpform, show s * ((k n : ℝ) /
-      (10 * ((n - 1 : ℕ) : ℝ))) =
-        (s * (k n : ℝ)) / (10 * ((n - 1 : ℕ) : ℝ)) by ring,
-      div_le_iff₀ hden]
-    have hnCast : (n : ℝ) ≤ 2 * ((n - 1 : ℕ) : ℝ) := by
-      exact_mod_cast (show n ≤ 2 * (n - 1) by omega)
-    nlinarith
-  exact (mul_le_mul_of_nonneg_right hcountSq (p n).2.1).trans hsprob
 
 /-- An explicit exponential lower bound for a restricted binomial point mass.
 This is the finite analytic estimate used by the sparse-graph specialization. -/
@@ -3972,67 +3578,6 @@ theorem binomialRandom_exists_restrictedDegree_ge_probability
   rw [hHighEq, measureReal_compl hLowMeas, hLowReal]
   simp
 
-/-- Exact point-mass occurrence probability for the decoupled restricted
-degrees.  This is the equality-event counterpart of
-`binomialRandom_exists_restrictedDegree_ge_probability`. -/
-theorem binomialRandom_exists_restrictedDegree_eq_probability
-    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
-    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
-    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ) :
-    (SimpleGraph.binomialRandom V p).real
-        {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} =
-      1 - (1 - (graphRestrictedBinomialLaw B p).real {k}) ^ A.card := by
-  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
-  let ν : Measure ℕ := graphRestrictedBinomialLaw B p
-  haveI : IsProbabilityMeasure ν := by
-    dsimp [ν, graphRestrictedBinomialLaw]
-    infer_instance
-  change P.real {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} = _
-  let Avoid : Set (SimpleGraph V) :=
-    {G | ∀ a : ↑A, graphRestrictedDegree a.1 B G ≠ k}
-  have hpack := graphRestrictedDegrees_independent_binomial p hAB
-  have hAvoidEq : Avoid =
-      ⋂ a : ↑A, graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ := by
-    ext G
-    simp [Avoid]
-  have hAvoidMeas : MeasurableSet Avoid := by
-    rw [hAvoidEq]
-    exact MeasurableSet.iInter fun a ↦
-      (measurableSet_singleton k).compl.preimage
-        (measurable_graphRestrictedDegree a.1 B)
-  have hprod :
-      P (⋂ a : ↑A, graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
-        ∏ a : ↑A, P (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) := by
-    simpa [P] using hpack.1.measure_inter_preimage_eq_mul
-      Finset.univ (sets := fun _ : ↑A ↦ ({k} : Set ℕ)ᶜ)
-        (fun _ _ ↦ (measurableSet_singleton k).compl)
-  have hsingle (a : ↑A) :
-      P.real (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
-        1 - ν.real {k} := by
-    have hmap := Measure.map_apply_of_aemeasurable
-      (hpack.2 a).aemeasurable ((measurableSet_singleton k).compl)
-    have heq :
-        P (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
-          ν (({k} : Set ℕ)ᶜ) := by
-      rw [← hmap, (hpack.2 a).map_eq]
-    have hrealeq :
-        P.real (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
-          ν.real (({k} : Set ℕ)ᶜ) := by
-      simpa only [Measure.real_def] using congrArg ENNReal.toReal heq
-    rw [hrealeq, measureReal_compl (measurableSet_singleton k)]
-    simp
-  have hAvoidReal :
-      P.real Avoid = (1 - ν.real {k}) ^ A.card := by
-    rw [Measure.real_def, hAvoidEq, hprod, ENNReal.toReal_prod]
-    simp_rw [← Measure.real_def, hsingle]
-    simp
-  have hHitEq :
-      {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} = Avoidᶜ := by
-    ext G
-    simp [Avoid]
-  rw [hHitEq, measureReal_compl hAvoidMeas, hAvoidReal]
-  simp [ν]
-
 lemma one_sub_pow_le_exp_neg_nat_mul {r : ℝ} (hr1 : r ≤ 1)
     (m : ℕ) :
     (1 - r) ^ m ≤ Real.exp (-((m : ℝ) * r)) := by
@@ -4041,106 +3586,6 @@ lemma one_sub_pow_le_exp_neg_nat_mul {r : ℝ} (hr1 : r ≤ 1)
       pow_le_pow_left₀ (sub_nonneg.mpr hr1) (Real.one_sub_le_exp_neg r) m
     _ = Real.exp ((m : ℝ) * (-r)) := (Real.exp_nat_mul (-r) m).symm
     _ = Real.exp (-((m : ℝ) * r)) := by ring_nf
-
-/-- If the expected number of exact restricted-degree hits dominates
-`log 20`, then an exact hit occurs with probability at least `0.95`. -/
-theorem binomialRandom_exists_restrictedDegree_eq_probability_ge_nineteen_twentieths
-    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
-    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
-    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ)
-    (hmass : Real.log 20 ≤ (A.card : ℝ) *
-      (graphRestrictedBinomialLaw B p).real {k}) :
-    (SimpleGraph.binomialRandom V p).real
-        {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} ≥
-      (19 : ℝ) / 20 := by
-  let ν : Measure ℕ := graphRestrictedBinomialLaw B p
-  haveI : IsProbabilityMeasure ν := by
-    dsimp [ν, graphRestrictedBinomialLaw]
-    infer_instance
-  let r : ℝ := ν.real {k}
-  have hr1 : r ≤ 1 := by
-    simpa [r] using measureReal_le_one (μ := ν) (s := ({k} : Set ℕ))
-  have hpow : (1 - r) ^ A.card ≤ (1 : ℝ) / 20 := by
-    calc
-      (1 - r) ^ A.card ≤ Real.exp (-((A.card : ℝ) * r)) :=
-        one_sub_pow_le_exp_neg_nat_mul hr1 A.card
-      _ ≤ Real.exp (-Real.log 20) := by
-        apply Real.exp_le_exp.mpr
-        exact neg_le_neg (by simpa [r, ν] using hmass)
-      _ = (1 : ℝ) / 20 := by
-        rw [Real.exp_neg, Real.exp_log (by norm_num : (0 : ℝ) < 20)]
-        norm_num
-  rw [binomialRandom_exists_restrictedDegree_eq_probability p hAB k]
-  change (19 : ℝ) / 20 ≤ 1 - (1 - r) ^ A.card
-  linarith
-
-/-- Exact restricted-degree occurrence transfers to exact full degree when
-internal edges among the test centers have probability at most `0.05`. -/
-theorem binomialRandom_exists_degree_eq_probability_ge_nine_tenths
-    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
-    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
-    (A : Finset V) (k : ℕ)
-    (hmass : Real.log 20 ≤ (A.card : ℝ) *
-      (graphRestrictedBinomialLaw (Finset.univ \ A) p).real {k})
-    (hinternal : (A.card : ℝ) ^ 2 * (p : ℝ) ≤ (1 : ℝ) / 20) :
-    (SimpleGraph.binomialRandom V p).real
-        {G | ∃ v : V, graphDegreeSum v G = k} ≥ (9 : ℝ) / 10 := by
-  classical
-  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
-  let B : Finset V := Finset.univ \ A
-  let Hit : Set (SimpleGraph V) :=
-    {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k}
-  let Bad : Set (SimpleGraph V) :=
-    {G | ∃ a : ↑A, ∃ b : ↑A, G.Adj a.1 b.1}
-  let Full : Set (SimpleGraph V) := {G | ∃ v : V, graphDegreeSum v G = k}
-  have hAB : Disjoint A B := by
-    rw [Finset.disjoint_left]
-    simp [B]
-  have hHit : (19 : ℝ) / 20 ≤ P.real Hit := by
-    simpa [P, B, Hit] using
-      binomialRandom_exists_restrictedDegree_eq_probability_ge_nineteen_twentieths
-        p hAB k hmass
-  have hBad : P.real Bad ≤ (1 : ℝ) / 20 := by
-    have hBad' : P.real Bad ≤ (A.card : ℝ) ^ 2 * (p : ℝ) := by
-      simpa [P, Bad] using
-        (binomialRandom_exists_internalAdj_probability_le p A)
-    exact hBad'.trans hinternal
-  have hsubset : Hit \ Bad ⊆ Full := by
-    intro G hG
-    rcases hG.1 with ⟨a, ha⟩
-    refine ⟨a.1, ?_⟩
-    have hno : ∀ w ∈ A, ¬ G.Adj a.1 w := by
-      intro w hw hadj
-      exact hG.2 ⟨a, ⟨w, hw⟩, hadj⟩
-    have heq := graphRestrictedDegree_compl_eq_graphDegreeSum_of_no_internal
-      G (A := A) (v := a.1) hno
-    exact heq.symm.trans ha
-  have hdiff : P.real Hit - P.real Bad ≤ P.real (Hit \ Bad) :=
-    le_measureReal_diff
-  have hmono : P.real (Hit \ Bad) ≤ P.real Full :=
-    measureReal_mono hsubset
-  change (9 : ℝ) / 10 ≤ P.real Full
-  linarith
-
-/-- Fully explicit exact-degree criterion, using the reusable lower bound for
-one restricted binomial point mass. -/
-theorem binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
-    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
-    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
-    (A : Finset V) (k : ℕ) (hk : k ≤ (Finset.univ \ A).card)
-    (hp : (p : ℝ) ≤ 1 / 2)
-    (hmass : Real.log 20 ≤ (A.card : ℝ) *
-      ((((((Finset.univ \ A).card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
-          (unitInterval.toNNReal p : ℝ)) ^ k *
-        Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p : ℝ)))))
-    (hinternal : (A.card : ℝ) ^ 2 * (p : ℝ) ≤ (1 : ℝ) / 20) :
-    (SimpleGraph.binomialRandom V p).real
-        {G | ∃ v : V, graphDegreeSum v G = k} ≥ (9 : ℝ) / 10 := by
-  apply binomialRandom_exists_degree_eq_probability_ge_nine_tenths p A k
-  · exact hmass.trans (mul_le_mul_of_nonneg_left
-      (graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp
-        (Finset.univ \ A) p k hk hp) (by positivity))
-  · exact hinternal
 
 /-- A finite point-mass criterion ensuring that one of the independent
 restricted degrees reaches `k` with probability at least `0.9`. -/
@@ -4292,64 +3737,6 @@ theorem erdosRenyiSparseExistsDegreeTenExpectedEventually
       (by omega) (Nat.pos_of_ne_zero hk0) h4 (hrel n) hlog
     exact binomialRandom_exists_degree_ge_probability_ge_nine_tenths_balanced
       n (p n) (k n) harith.1 harith.2.1 harith.2.2
-
-/-- Source-faithful exact-degree version of the sparse random-graph result:
-when the integer `k` is ten times the expected degree and `k = o(log n)`, a
-vertex of degree exactly `k` exists with probability at least `0.9`. -/
-theorem erdosRenyiSparseExistsDegreeExactlyTenExpectedEventually
-    (p : ℕ → Set.Icc (0 : ℝ) 1) (k : ℕ → ℕ)
-    (hrel : ∀ n, (k n : ℝ) =
-      10 * ((n - 1 : ℕ) : ℝ) * (p n : ℝ))
-    (hsmall : Filter.Tendsto
-      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
-    ∀ᶠ n in Filter.atTop,
-      (SimpleGraph.binomialRandom (Fin n) (p n)).real
-        {G | ∃ v : Fin n, graphDegreeSum v G = k n} ≥
-      (9 : ℝ) / 10 := by
-  filter_upwards
-    [eventually_log_twenty_le_exact_center_card_mul_exp_of_log_ratio_tendsto_zero
-      k hsmall,
-      eventually_four_mul_le_of_log_ratio_tendsto_zero k hsmall,
-      eventually_exact_center_internal_mass_le_of_degree_relation p k hrel hsmall,
-      Filter.eventually_atTop.2 ⟨16, fun n hn => hn⟩] with n hlog h4 hinternal hn
-  let A : Finset (Fin n) := graphDegreeExactTestCenters n
-  have hinner : (A.card : ℝ) ^ 2 * (p n : ℝ) ≤ (1 : ℝ) / 20 := by
-    simpa [A] using hinternal
-  have hcardB : (Finset.univ \ A).card =
-      n - graphDegreeExactTestCenterCount n := by
-    dsimp [A]
-    rw [Finset.card_sdiff_of_subset (Finset.subset_univ _)]
-    simp
-  by_cases hk0 : k n = 0
-  · have hp0 : (p n : ℝ) = 0 := by
-      have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
-        exact_mod_cast (show 0 < n - 1 by omega)
-      have hrel_n := hrel n
-      rw [hk0] at hrel_n
-      norm_num at hrel_n
-      rcases hrel_n with hzero | hpzero
-      · omega
-      · simpa using congrArg Subtype.val hpzero
-    have hmass : Real.log 20 ≤ (A.card : ℝ) *
-        ((((((Finset.univ \ A).card + 1 - k n : ℕ) : ℝ) / (k n : ℝ)) *
-            (unitInterval.toNNReal (p n) : ℝ)) ^ k n *
-          Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p n : ℝ)))) := by
-      simpa [A, hk0, hp0] using hlog
-    exact binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
-      (p n) A (k n) (by simp [hk0]) (by rw [hp0]; norm_num) hmass hinner
-  · have harith := exact_center_ratio_mass_bound_of_degree_relation
-      n (k n) (p n) hn (Nat.pos_of_ne_zero hk0) h4 (hrel n) hlog
-    have hk : k n ≤ (Finset.univ \ A).card := by
-      rw [hcardB]
-      exact harith.1
-    have hmass : Real.log 20 ≤ (A.card : ℝ) *
-        ((((((Finset.univ \ A).card + 1 - k n : ℕ) : ℝ) / (k n : ℝ)) *
-            (unitInterval.toNNReal (p n) : ℝ)) ^ k n *
-          Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p n : ℝ)))) := by
-      rw [hcardB]
-      simpa [A] using harith.2.2
-    exact binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
-      (p n) A (k n) hk harith.2.1 hmass hinner
 
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
 ```
@@ -9614,7 +9001,7 @@ end NumStability.HDP.Contract
 ### `ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Signature`
 
 Path: `lean-computational-mathematics/ComputationalMathematics/Source/Vershynin/Chapter02/Section04/Exercise04/Signature.lean`
-SHA-256: `a367f78b509c0ed11acbc798fb911ec1106052c3b851340ff371a6f918ef2133`
+SHA-256: `3ca0889d59ee2f8b6ede04bf600c788ebbb4e711403a7371fe7b3e75315c9733`
 
 ```lean
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff
@@ -9623,8 +9010,8 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff
 # Frozen contract signature for Exercise 2.4.4
 
 The integer-valued threshold records the source's footnote assumption that ten
-times the expected degree is an integer.  The event uses literal degree
-equality, as required by the printed wording and its Poisson point-mass hint.
+times the expected degree is an integer.  In the surrounding lower-bound
+context, “a vertex with degree `10d`” is represented as degree at least `10d`.
 -/
 
 noncomputable section
@@ -9642,7 +9029,7 @@ def hdp_02_hex_h2_d4_d4__contract_type : Prop :=
     Tendsto (fun n => (k n : ℝ) / Real.log (n : ℝ)) atTop (𝓝 0) →
     ∀ᶠ n in atTop,
       (erdosRenyiModel n (p n)).graphLaw.real {G |
-        ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥
+        ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥
       (9 : ℝ) / 10
 
 end NumStability.HDP.Contract

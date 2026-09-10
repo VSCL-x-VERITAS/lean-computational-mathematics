@@ -4,8 +4,8 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff
 # Frozen contract signature for Exercise 2.4.4
 
 The integer-valued threshold records the source's footnote assumption that ten
-times the expected degree is an integer.  In the surrounding lower-bound
-context, “a vertex with degree `10d`” is represented as degree at least `10d`.
+times the expected degree is an integer.  The event uses literal degree
+equality, as required by the printed wording and its Poisson point-mass hint.
 -/
 
 noncomputable section
@@ -23,7 +23,7 @@ def hdp_02_hex_h2_d4_d4__contract_type : Prop :=
     Tendsto (fun n => (k n : ℝ) / Real.log (n : ℝ)) atTop (𝓝 0) →
     ∀ᶠ n in atTop,
       (erdosRenyiModel n (p n)).graphLaw.real {G |
-        ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥
+        ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥
       (9 : ℝ) / 10
 
 end NumStability.HDP.Contract

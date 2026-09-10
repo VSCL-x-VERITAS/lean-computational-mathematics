@@ -6,7 +6,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.
 
 For an Erdős--Rényi graph whose expected degree is little-oh of `log n`, an
 integer threshold equal to ten times that expected degree is eventually reached
-by some vertex with probability at least `0.9`.
+exactly by some vertex with probability at least `0.9`.
 -/
 
 noncomputable section
@@ -27,15 +27,15 @@ theorem hdp_02_hex_h2_d4_d4
       (fun n => (k n : ℝ) / Real.log (n : ℝ)) atTop (𝓝 0)) :
     ∀ᶠ n in atTop,
       (erdosRenyiModel n (p n)).graphLaw.real {G |
-        ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥
+        ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥
       (9 : ℝ) / 10 := by
-  have h := erdosRenyiSparseExistsDegreeTenExpectedEventually p k hrel hsmall
+  have h := erdosRenyiSparseExistsDegreeExactlyTenExpectedEventually p k hrel hsmall
   filter_upwards [h] with n hn
   change (SimpleGraph.binomialRandom (Fin n) (p n)).real {G |
-    ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} ≥ (9 : ℝ) / 10
+    ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} ≥ (9 : ℝ) / 10
   have hevent : {G : SimpleGraph (Fin n) |
-      ∃ v : Fin n, k n ≤ (erdosRenyiModel n (p n)).degree v G} =
-      {G : SimpleGraph (Fin n) | ∃ v : Fin n, k n ≤ graphDegreeSum v G} := by
+      ∃ v : Fin n, (erdosRenyiModel n (p n)).degree v G = k n} =
+      {G : SimpleGraph (Fin n) | ∃ v : Fin n, graphDegreeSum v G = k n} := by
     ext G
     simp only [Set.mem_setOf_eq]
     constructor
