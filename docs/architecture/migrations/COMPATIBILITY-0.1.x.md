@@ -16,7 +16,7 @@ The 2,401 implementations and aggregates have one canonical owner each. The
 are retained exactly. The table records every direct forwarding import, including
 external dependencies. Canonical production modules never import historical paths.
 
-The [approved identity contract](../migrations/lean-computational-mathematics/internal-migration.md)
+The [approved identity contract](../../migrations/lean-computational-mathematics/internal-migration.md)
 and its exact module map explain the mapping and mathematical preservation checks.
 Strict isolated import tests cover old and canonical paths. Eight source surfaces
 are empty and use exact, adversarially checked import-only closure certificates;

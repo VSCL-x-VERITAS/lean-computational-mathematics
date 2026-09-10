@@ -2,7 +2,7 @@
 
 This document defines the target organization for Lean Computational Mathematics. It applies to
 new and touched canonical modules immediately. Historical compatibility modules
-are listed in [`COMPATIBILITY.md`](COMPATIBILITY.md). Other pre-migration debt
+are listed in [`COMPATIBILITY.md`](migrations/COMPATIBILITY-0.1.x.md). Other pre-migration debt
 is grandfathered only when named in
 [`layout-exceptions.json`](layout-exceptions.json); the layout check requires
 the exact reviewed set to be updated whenever debt decreases and rejects any

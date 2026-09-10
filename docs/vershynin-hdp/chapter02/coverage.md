@@ -8,7 +8,7 @@ Book profile SHA-256:
 Module audit epoch `hdp-module-audit-2026-08-28-policy-guardrails-v3`, SHA-256
 `481184f947b961d8532149c9095e679377269aec43c0132c0eb96472367f6aa9`.
 
-The exhaustive machine-readable denominator is [`gates/ch02.json`](../../../gates/ch02.json).
+The exhaustive machine-readable denominator is [`gates/ch02.json`](../../architecture/reviews/2026-09-faithfulness-outcomes.md).
 It contains 130 source rows under gate schema 2.
 
 ## Status legend

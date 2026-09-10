@@ -5,6 +5,15 @@ follows semantic versioning for its public module paths and declaration API.
 
 ## [Unreleased]
 
+### Added
+
+- A link contract: `tools/architecture/check_links.py` fails CI on any relative
+  link or image in tracked Markdown whose target does not exist. Every removal
+  in the 0.2.0 work left such assertions behind, and grepping for a deleted
+  path finds the links but never the prose describing it. The narrative of the
+  retired campaigns is exempt and reports a count instead, so the rule is
+  exactly zero everywhere else.
+
 ### Removed
 
 - The vendored faithfulness audit kit at `.faithfulness-audit/` (45 files,

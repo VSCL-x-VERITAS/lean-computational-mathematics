@@ -5,7 +5,7 @@ Authoritative source: first-edition Chapter 1 PDF, SHA-256
 Book profile SHA-256:
 `b366ee13ce5c1890555f7dda961eda9c2bf9ce6e8ef71de6a17c3f5585196cab`.
 
-The exhaustive machine-readable denominator is [`gates/ch01.json`](../../../gates/ch01.json).
+The exhaustive machine-readable denominator is [`gates/ch01.json`](../../architecture/reviews/2026-09-faithfulness-outcomes.md).
 It contains 49 source rows under gate schema 2:
 
 - 33 `PROVED`: the moment generating function, `L^p` norm, `L^p` space,

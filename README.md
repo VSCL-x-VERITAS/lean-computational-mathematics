@@ -410,6 +410,7 @@ python tools/architecture/check_layout.py
 python tools/architecture/check_tiers.py
 python tools/architecture/check_placeholders.py
 python tools/architecture/check_provenance.py
+python tools/architecture/check_links.py
 python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
 ```
 
