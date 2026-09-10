@@ -28,7 +28,10 @@ git restore --source afb25bab1 -- gates/ audits/
 
 ## Method
 
-The audit protocol was the vendored kit in `.faithfulness-audit/` (version 1.1.0),
-which adapts the semantic-correctness audit of Meek et al., arXiv:2606.14000v1 §3.2.1.
+The audit protocol was a vendored kit, version 1.1.0, which adapts the
+semantic-correctness audit of Meek et al., arXiv:2606.14000v1 §3.2.1. The kit
+was tracked at `.faithfulness-audit/` and was removed with the rest of the
+working record on 2026-09-10; restore it with
+`git restore --source afb25bab1 -- .faithfulness-audit`.
 Its premise, in the kit's own words: kernel acceptance proves that a term inhabits
 the Lean type; it does not prove that the type says what the source says.

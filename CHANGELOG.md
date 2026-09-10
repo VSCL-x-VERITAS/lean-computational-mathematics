@@ -5,7 +5,16 @@ follows semantic versioning for its public module paths and declaration API.
 
 ## [Unreleased]
 
-Nothing yet.
+### Removed
+
+- The vendored faithfulness audit kit at `.faithfulness-audit/` (45 files,
+  204 KB) and `RENAME_LEDGER.md`. The kit survived the working-record
+  retirement because 252 audit manifests hashed its files; none remain, so it
+  followed the packages it produced. Restore either with
+  `git restore --source afb25bab1 -- <path>`; the kit's version and provenance
+  are recorded in
+  `docs/architecture/reviews/2026-09-working-record-retirement.md`.
+
 
 ## [0.2.0] - 2026-09-10
 

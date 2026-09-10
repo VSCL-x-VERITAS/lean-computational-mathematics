@@ -46,9 +46,28 @@ manifest cites 125 paths under them, but `check_tiers.py:40` treats
 `review.evidence` as a required free-text field and never resolves it as a
 path, so those citations remain valid records of who reviewed what.
 
-`.faithfulness-audit/` is retained. It is the executable protocol for auditing
-future chapters at 204 KB, and its scripts refuse any root outside the
-repository, so it cannot be relocated without being disabled.
+`.faithfulness-audit/` was retained in the first pass on the grounds that 252
+audit manifests hashed its files and that it is the executable protocol for
+auditing future chapters. The first reason expired with the manifests: none
+remain. It was removed on 2026-09-10 at the owner's decision, on the same
+reasoning as the packages it produced - if the faithfulness work is a working
+record, so is its toolkit.
+
+It is a vendored third-party kit and can be re-obtained. Its provenance, for
+anyone restoring it: version 1.1.0, 45 files, 204 KB, with a `SHA256SUMS`
+covering 42 of them, all verified matching at the time of removal. The protocol
+adapts the semantic-correctness audit of §3.2.1 of Meek et al.,
+arXiv:2606.14000v1 [cs.AI], 2026. Restore the exact copy this repository used
+with `git restore --source afb25bab1 -- .faithfulness-audit`.
+
+Twelve entries under `ledgers/skill-issues/` cite specific kit files as open
+defects. Those ledgers are kept: they record findings about the protocol, which
+outlive the copy of it.
+
+`RENAME_LEDGER.md` was removed in the same commit. It recorded the 2026-07
+`lean-fp-analysis` to `NumStability` rename, which the later identity migration
+to `ComputationalMathematics` superseded; that migration's own record covers the
+same ground, and nothing outside one archived campaign review referenced it.
 
 ### The completed reorganization campaign's data
 
