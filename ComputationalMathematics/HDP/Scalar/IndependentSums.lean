@@ -14,6 +14,7 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.LowerChernoffBoundary
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeans
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansProbability
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansSample
+import ComputationalMathematics.HDP.Scalar.IndependentSums.NormalizedRegimesDiscrepancy
 import ComputationalMathematics.HDP.Scalar.IndependentSums.PoissonChernoff
 import ComputationalMathematics.HDP.Scalar.IndependentSums.SampleMeanChebyshev
 import ComputationalMathematics.HDP.Scalar.IndependentSums.TwoSidedTail
