@@ -1,5 +1,9 @@
 # NumStability Rename and Reorganization Ledger
 
+> This ledger records the 2026-07 `lean-fp-analysis` to `NumStability` rename.
+> The later identity migration to `ComputationalMathematics` is recorded in
+> `docs/migrations/lean-computational-mathematics/rename-map.md`.
+
 This ledger records the migration from `lean-fp-analysis` / `LeanFpAnalysis` to
 `lean-numerical-stability` / `NumStability`.
 

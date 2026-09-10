@@ -1,7 +1,8 @@
 # Lean Computational Mathematics Library Lookup
 
 This file records source-facing entry points that are easy to miss from import
-graphs alone. The executable lookup remains `examples/LibraryLookup.lean`.
+graphs alone. The executable lookups are the import tests under `NumStabilityTest/Import/`,
+which `lake test` builds.
 
 ## Higham Chapter 6
 
@@ -5927,7 +5928,8 @@ When a theorem almost matches a goal, compare:
 
 ## Higham Chapter 13: Block LU Factorization
 
-This section is a human-readable companion to `examples/LibraryLookup.lean`
+This section is a human-readable companion to the import tests under
+`NumStabilityTest/Import/`
 for the Chapter 13 declarations.
 
 Canonical source entry: `ComputationalMathematics/Source/Higham/Chapter13.lean`.
@@ -6408,13 +6410,14 @@ Chapter 26's multidirectional-search entry points are `MDSSimplex`,
 assuming optimization correctness, stationarity, convergence, or termination.
 
 Representative checked entry points are listed in
-[`examples/LibraryLookup.lean`](../examples/LibraryLookup.lean). Explicit-domain
+the import tests under [`NumStabilityTest/Import/`](../NumStabilityTest/Import). Explicit-domain
 trace and source-law endpoints are named and documented with their visible
 producer assumptions and nonvacuity witnesses.
 
 ## Higham Chapter 18: Matrix Powers
 
-This section is a human-readable companion to `examples/LibraryLookup.lean`
+This section is a human-readable companion to the import tests under
+`NumStabilityTest/Import/`
 for the Chapter 18 declarations.
 
 Primary modules: `NumStability/Algorithms/MatrixPowers.lean` and `NumStability/Algorithms/MatrixPowersJordan.lean`.

@@ -40,3 +40,17 @@ Analysis: An Agent Pipeline and Quality Audit Beyond Kernel Acceptance",
 arXiv:2606.14000v1 [cs.AI], 2026 — see `REFERENCES.md` for the exact
 relationship and suggested citation. Record this if the faithfulness work is
 reported in a grant application or publication.
+
+## Local configuration repair, 2026-09-09
+
+`audit.config.json` is the only repository-specific file in this kit and is not
+covered by `SHA256SUMS`. It still described the pre-rename checkout: it resolved
+`repository_root` to the parent of this repository and looked for task metadata
+under a `lean-numerical-stability/` directory that no longer exists, so the kit
+could not locate the `audits/vershynin-hdp` packages from a current checkout.
+
+It now matches the shape of the working session configuration recorded at
+`gates/leveque-finite-volume/artifacts/session-20260908/audit.config.json`:
+`repository_root` is `..`, paths are relative to the repository root, and Lean
+runs as `lake env lean`. The task glob points at
+`audits/vershynin-hdp/**/audit-task.json`. No hashed kit file changed.

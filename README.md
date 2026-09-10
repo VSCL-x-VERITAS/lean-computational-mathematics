@@ -364,7 +364,6 @@ gates/                                    machine-readable formalization gates a
 ledgers/                                  source/workflow issues, limitations, and inconsistencies
 docs/                                     architecture, source coverage, audits, and benchmarks
 tools/                                    architecture checks and benchmark tooling
-examples/                                 representative Lean lookup examples
 experiments/                              C/Python reproductions of selected source examples
 ```
 
