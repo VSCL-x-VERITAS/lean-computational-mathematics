@@ -1,0 +1,130 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "HDP-02-DEF-2.7-ORLICZ-NORM-SPACE",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "blind_translation_sha256": "57311e8af29558915aebc797725153bef218570039ec552a3bf43ef26092732d",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "fail",
+      "source_evidence": "The source fixes a probability space, an Orlicz function, and a random variable on that probability space.",
+      "translation_evidence": "The translation quantifies over an arbitrary measurable space, arbitrary measure, structured Orlicz function, and arbitrary real-valued function.",
+      "reasoning": "The Orlicz-function role agrees, but the translated measure and function range strictly beyond the source's probability-measure and random-variable context. This is a generality increase rather than loss of any source instance."
+    },
+    {
+      "id": "C02",
+      "status": "fail",
+      "source_evidence": "The source assumes that the measure is a probability measure and that X is a random variable; it also requires the usual convexity, increase, zero normalization, and divergence properties of psi.",
+      "translation_evidence": "The structured psi carries the corresponding conditions on nonnegative inputs, but the translation states neither a probability-measure condition on mu nor measurability of X.",
+      "reasoning": "The psi hypotheses match on the only arguments used. Omitting the other two hypotheses makes the universal translated proposition stronger by extending its domain; it does not weaken the specialization to the source context."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The source defines the Orlicz norm as the infimum of positive scales satisfying the expectation bound and defines L_psi by finiteness of that norm.",
+      "translation_evidence": "The translation gives exactly an infimum formula over nonzero finite scales and an if-and-only-if between associated-space membership and gauge below infinity.",
+      "reasoning": "After identifying finite nonzero ENNReal scales with positive real scales, both displayed conclusions agree."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "The defining integrand is psi(|X|/t), expectation is taken with respect to the displayed measure, and membership means finite norm.",
+      "translation_evidence": "The scale functional is the ENNReal nonnegative integral of ENNReal.ofReal(psi(|X|/t.toReal)); the gauge is its admissible-scale infimum, and membership is gauge < infinity.",
+      "reasoning": "On admissible scales the argument of psi is nonnegative, so the psi structure makes ENNReal.ofReal nontruncating. The nonnegative integral also represents divergent expectations, matching the source's finite-versus-infinite distinction."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "The absolute-value quotient is nonnegative and psi has effective domain [0,infinity).",
+      "translation_evidence": "Although the underlying function has type Real to Real, its required properties hold on [0,infinity), and it is evaluated only at |X(omega)| divided by a finite positive scale.",
+      "reasoning": "The effective domain and codomain behavior used by the construction coincide with the source. Values of the underlying function at negative arguments are irrelevant."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The admissibility threshold is exactly 1.",
+      "translation_evidence": "The nonnegative integral is required to be at most the ENNReal numeral 1.",
+      "reasoning": "The threshold is preserved exactly."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The infimum ranges over strictly positive real t.",
+      "translation_evidence": "The infimum ranges over t in ENNReal with t not equal to 0 and not equal to infinity, and uses t.toReal in the quotient.",
+      "reasoning": "Finite nonzero extended nonnegative reals correspond exactly to strictly positive real scales, and toReal is the ordinary positive value on this restricted set."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source permits infinite norm and defines L_psi by excluding that case, while leaving the empty-admissible-set implementation implicit.",
+      "translation_evidence": "The complete-order infimum of an empty admissible set is infinity, and associated-space membership is then false because the gauge is not below infinity.",
+      "reasoning": "The formal empty-set convention realizes the source's finite-versus-infinite distinction without introducing an incompatible case."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Psi is convex and increasing on [0,infinity), is nonnegative-valued, satisfies psi(0)=0, and tends to infinity.",
+      "translation_evidence": "The structured function requires nonnegativity, ConvexOn and MonotoneOn on [0,infinity), zero normalization, and Tendsto atTop atTop.",
+      "reasoning": "The translated structure carries the same mathematical Orlicz-function conditions on the effective domain."
+    },
+    {
+      "id": "C10",
+      "status": "not-applicable",
+      "source_evidence": "The source definition contains no indexed family, numbered exceptional case, or finite-range index.",
+      "translation_evidence": "The translation contains no indexed family, numbered exceptional case, or finite-range index.",
+      "reasoning": "There are no indices to compare in this definition."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "The norm axioms are deferred to Exercise 2.7.11 rather than asserted in this definition row.",
+      "translation_evidence": "The translation explicitly describes only the gauge formula and finite-gauge membership, and disclaims norm axioms and completeness.",
+      "reasoning": "The translation stays within the source row's definitional boundary."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source allows the Orlicz norm to be infinite and places in L_psi exactly the variables having finite norm.",
+      "translation_evidence": "If no scale satisfies the integral condition, the ENNReal infimum is infinity and the strict finiteness predicate fails.",
+      "reasoning": "The construction cannot acquire vacuous finite membership from an empty admissible-scale set; the translated edge-case behavior matches the source's intended finite-norm space."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Specializing the translated universal statement to a probability measure and a measurable real-valued random variable gives the source definition, with finite nonzero ENNReal scales corresponding to positive real scales and lintegral supplying the possibly infinite expectation."
+    },
+    "source_implies_translation": {
+      "verdict": "no",
+      "reasoning": "The source only introduces the construction for probability spaces and random variables, so it does not assert the same universal statement for arbitrary measures and arbitrary, potentially nonmeasurable functions."
+    }
+  },
+  "classification": "faithful-stronger",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "minor",
+      "category": "measure generality",
+      "source_evidence": "The source works on a probability space and calls the integral an expectation.",
+      "translation_evidence": "The translation quantifies over every measure without a probability or finiteness hypothesis.",
+      "impact": "The translated proposition is stronger outside the source domain, while its specialization to probability measures preserves the source construction."
+    },
+    {
+      "severity": "minor",
+      "category": "function generality",
+      "source_evidence": "The source ranges over random variables on the probability space.",
+      "translation_evidence": "The translation ranges over arbitrary functions X : Omega to Real and states no measurability hypothesis.",
+      "impact": "The translated proposition covers additional functions but retains every source random-variable instance; its library integral convention governs those additional cases."
+    },
+    {
+      "severity": "note",
+      "category": "extended-value implementation",
+      "source_evidence": "The source leaves the codomain and empty-admissible-set convention implicit but distinguishes finite norm from infinite norm.",
+      "translation_evidence": "The gauge lives in ENNReal, whose empty-set infimum is infinity, and membership is exactly gauge < infinity.",
+      "impact": "This resolves a source ambiguity compatibly and makes divergence/nonmembership explicit."
+    }
+  ],
+  "rationale": "The translated construction preserves the Orlicz-function requirements, positive-scale optimization, exact threshold, integrand, extended expectation semantics, finite-gauge space membership, and separation from the later norm-law exercise. Its only substantive differences are universally quantified extensions from probability measures to arbitrary measures and from measurable random variables to arbitrary real-valued functions. Thus every translated instance theorem specializes to the source claim, while the source does not imply all added instances; the result is accepted as faithful-stronger without unresolved evidence."
+}

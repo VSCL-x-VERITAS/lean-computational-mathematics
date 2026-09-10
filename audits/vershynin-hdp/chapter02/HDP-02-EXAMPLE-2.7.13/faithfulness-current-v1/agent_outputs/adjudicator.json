@@ -1,0 +1,90 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "adjudicator",
+  "task_id": "HDP-02-EXAMPLE-2.7.13",
+  "trigger": [
+    "judge classifications differ",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "blind translator left dependency_coverage item D026 unclear",
+    "blind translator left dependency_coverage item D125 unclear",
+    "round-trip judge left semantic_checklist item C02 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C06 unclear",
+    "round-trip judge left semantic_checklist item C12 unclear",
+    "round-trip judge left implication translation_implies_source unclear",
+    "round-trip judge left implication source_implies_translation unclear"
+  ],
+  "resolved_items": [
+    {
+      "item": "judge classifications differ",
+      "resolution": "Resolve the disagreement in favor of faithful-equivalent: the round-trip judge's undetermined result arose solely from the blind packet's intentionally opaque external-frontier definitions, and the pinned Mathlib definitions remove that opacity without revealing any semantic mismatch.",
+      "primary_evidence": "The direct judge classified faithful-equivalent; the round-trip judge stated that all visible mathematical content matches and conditioned both implications only on D026 supplying total mass one. The pinned Mathlib Probability.lean defines IsProbabilityMeasure by measure_univ : mu univ = 1."
+    },
+    {
+      "item": "round-trip judge requested adjudication",
+      "resolution": "The request is satisfied: D026 and D125 and all consequences that depended on them are resolved from the pinned Mathlib sources.",
+      "primary_evidence": "roundtrip_judge.json requests adjudication only for unresolved imported probability-measure semantics. Mathlib/MeasureTheory/Measure/Typeclasses/Probability.lean gives those semantics explicitly, and Mathlib/Data/Nat/Init.lean together with Mathlib/Data/Nat/Cast/Defs.lean explains the numeral-only role of AtLeastTwo."
+    },
+    {
+      "item": "round-trip judge classification is undetermined",
+      "resolution": "Replace undetermined with faithful-equivalent because both previously conditional implications are yes after resolving the imported definitions.",
+      "primary_evidence": "The source contract and pinned PDF state exact equality of the Orlicz and equation-(2.13) gauges and exact equality of their finite-norm classes; D001-D015 encode the same bundled function, admissibility predicates, infima, equality, and membership iff, with D026 enforcing probability mass one."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D026 unclear",
+      "resolution": "D026 means exactly that the ambient measure has total mass one; it matches the source's probability-space hypothesis and is understood.",
+      "primary_evidence": ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Typeclasses/Probability.lean defines class IsProbabilityMeasure (mu : Measure alpha) with field measure_univ : mu univ = 1, and states isProbabilityMeasure_iff : IsProbabilityMeasure mu iff mu univ = 1."
+    },
+    {
+      "item": "blind translator left dependency_coverage item D125 unclear",
+      "resolution": "D125 has no independent mathematical effect on the audited proposition. Here it is an elaboration dictionary for the literal 2, not a target binder or a restriction on Omega, mu, or X.",
+      "primary_evidence": ".lake/packages/mathlib/Mathlib/Data/Nat/Init.lean defines Nat.AtLeastTwo n by the field 2 <= n and notes its use for numeric literals; Mathlib/Data/Nat/Cast/Defs.lean defines instOfNatAtLeastTwo to construct OfNat R n as n.cast. D016 supplies AtLeastTwo for 1+1, and D121 uses it to elaborate the constant 2 already visible in D004 and D014."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C02 unclear",
+      "resolution": "C02 passes. The Lean binders are an arbitrary measurable space, a measure satisfying total mass one, and a measurable real-valued X; these are the source's probability space and random variable. D125 adds no mathematical binder.",
+      "primary_evidence": "D001 quantifies MeasurableSpace Omega, mu : Measure Omega with IsProbabilityMeasure mu, and X : Omega -> Real with Measurable X. The pinned source says X is a random variable on a probability space, while Probability.lean identifies the typeclass with mu univ = 1."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C04 unclear",
+      "resolution": "C04 passes. Probability normalization, random-variable measurability, and strictly positive finite scales all match the source's explicit or inherited side conditions.",
+      "primary_evidence": "D026 provides mu univ = 1; D001 requires Measurable X; D008 and D014 require t != 0 and t != top, so an ENNReal scale has positive finite toReal value. The source uses a probability space, a random variable, and t > 0."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C06 unclear",
+      "resolution": "C06 passes. The operators and definitions give the same admissible scales and hence the same infimum: exp((abs X/t)^2)-1 at threshold 1 is equivalent, under total mass one, to exp(X^2/t^2) at threshold 2.",
+      "primary_evidence": "D004 is psi2(x)=exp(x^2)-1; D008 and D015 define the Orlicz admissibility predicate and lintegral; D014 defines equation-(2.13) admissibility with integrability and real integral <= 2; Probability.lean gives mu univ=1. Nonnegativity of exp(square)-1 and measurability make the lintegral/real-integral presentations coincide whenever the finite threshold holds."
+    },
+    {
+      "item": "round-trip judge left semantic_checklist item C12 unclear",
+      "resolution": "C12 passes. The hypotheses are satisfiable in ordinary probability spaces, for example a Dirac probability measure with a measurable constant random variable, and the numeral-2 instance is constructible; the conclusion is not made true by an impossible premise.",
+      "primary_evidence": "IsProbabilityMeasure is the ordinary equation mu univ=1 rather than an inconsistent predicate. Nat.AtLeastTwo 2 records the true inequality 2 <= 2 and is used by instOfNatAtLeastTwo only to elaborate 2. D001 otherwise assumes only measurability of X."
+    },
+    {
+      "item": "round-trip judge left implication translation_implies_source unclear",
+      "resolution": "Yes. Once D026 is unfolded, the blind translation is the source claim: it has the same psi2, exact gauge identity, and finite-gauge class identity on a probability space; the bundled OrliczFunction fields certify the source's Orlicz-function assertion.",
+      "primary_evidence": "The blind translation states the two exact identities and was conditional only on D026. D006-D013 certify nonnegativity on the nonnegative domain, convexity, monotonicity, value zero at zero, and divergence; Probability.lean supplies total mass one for the threshold shift."
+    },
+    {
+      "item": "round-trip judge left implication source_implies_translation unclear",
+      "resolution": "Yes. The source's exact norm identity and exact finite-norm-space identity specialize directly to the measurable real representatives quantified by Lean, and its probability-space assumption supplies D026.",
+      "primary_evidence": "The pinned PDF defines the Orlicz gauge as inf over t>0 of E psi2(abs X/t)<=1, equation (2.13) as inf over t>0 of E exp(X^2/t^2)<=2, and says both the norm and class identities are exact. D001-D015 use those same functions, thresholds, scales, infima, equality, and iff."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "The bundled psiTwoOrliczFunction certifies every Orlicz-function property used by the source. For each measurable real X and positive finite scale, abs(X)^2=X^2 and IsProbabilityMeasure gives mu(univ)=1, so the Orlicz threshold integral of exp(X^2/t^2)-1 being at most 1 is equivalent to the integrable exponential moment being at most 2. Thus the target's exact gauge equality and finite-membership iff recover all parts of Example 2.7.13."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "A source random variable is measurable, and its probability space yields an IsProbabilityMeasure instance semantically. The source explicitly asserts the exact equality of the two infimum gauges and that finite Orlicz norm is equivalent to sub-gaussianity as defined by equation (2.13), which are exactly the equality and iff in D001."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "remaining_uncertainties": [],
+  "findings": [],
+  "rationale": "The apparent judge conflict is entirely an information-boundary artifact. In the pinned Mathlib revision, IsProbabilityMeasure is exactly total mass one, the condition needed to convert the Orlicz threshold 1 for exp(x^2)-1 into the exponential-moment threshold 2. Nat.AtLeastTwo only supports elaboration of the literal 2 and imposes no source-level restriction. With these definitions exposed, all four unclear checklist items pass, both implications hold, and the target is faithfully equivalent to Example 2.7.13."
+}

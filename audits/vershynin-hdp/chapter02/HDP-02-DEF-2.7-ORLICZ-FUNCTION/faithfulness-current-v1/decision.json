@@ -1,0 +1,56 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-09-10T19:31:45.934556+00:00",
+  "findings": [
+    {
+      "category": "representation",
+      "impact": "This is a semantics-preserving encoding choice: negative inputs are outside the source domain and create neither an extra condition nor a missing condition.",
+      "lean_evidence": "The target uses an ambient map Real \u2192 Real, constrains range and shape on Set.Ici 0, and leaves negative-input behavior unrestricted.",
+      "severity": "note",
+      "source_evidence": "The source types \u03c8 directly as a map [0,\u221e) \u2192 [0,\u221e)."
+    },
+    {
+      "category": "terminology",
+      "impact": "This follows the conventional interpretation recorded in the source contract; no adjudication is required.",
+      "lean_evidence": "The target uses MonotoneOn, hence nondecreasingness.",
+      "severity": "note",
+      "source_evidence": "The source uses the unqualified word 'increasing'."
+    },
+    {
+      "category": "domain-representation",
+      "impact": "This is a harmless representation choice because negative-input values are outside the source claim.",
+      "severity": "note",
+      "source_evidence": "The source types psi directly on [0,infinity).",
+      "translation_evidence": "The translation uses f : real to real, requires nonnegative values and all shape conditions only on [0,infinity), and permits arbitrary negative-input behavior."
+    },
+    {
+      "category": "monotonicity-convention",
+      "impact": "This conventional non-strict reading is compatible with the source contract and its examples and does not change the classification.",
+      "severity": "note",
+      "source_evidence": "The source uses the unqualified word increasing, whose strictness is identified as ambiguous by the source contract.",
+      "translation_evidence": "The translation interprets increasing as nondecreasing through MonotoneOn."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "A witness \u03c8 with \u03c8.toFun=f carries, by D004, nonnegative values on [0,\u221e), convexity and nondecreasingness there, f(0)=0, and Tendsto f atTop atTop, which are all source requirements.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "Any source Orlicz function can be represented by an arbitrary real extension f; the source properties give the five constructor fields on Set.Ici 0, while negative-input behavior is unconstrained, so D004 produces the existential witness and D003 identifies its function with f.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
+  },
+  "rationale": "The target faithfully turns the printed definition into a structure-characterization equivalence. Its real-valued ambient-function encoding preserves the source's half-line domain and codomain by restricting all relevant conditions to Set.Ici 0 and requiring nonnegative output there. Convexity, nondecreasingness, \u03c8(0)=0, and divergence at positive infinity are all represented exactly. No probability-space or random-variable assumptions are introduced, the statement is satisfiable, and both implication directions hold.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-DEF-2.7-ORLICZ-FUNCTION"
+}

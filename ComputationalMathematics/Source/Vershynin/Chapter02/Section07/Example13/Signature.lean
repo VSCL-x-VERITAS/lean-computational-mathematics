@@ -14,8 +14,11 @@ def hdp_02_hexample_h2_d7_d13__contract_type : Prop :=
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {X : Ω → ℝ},
     Measurable X →
+    NumStability.HDP.Scalar.SubExponential.orliczGauge
+        NumStability.HDP.Scalar.SubExponential.psiTwoOrliczFunction μ X =
+      NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X ∧
     (NumStability.HDP.Scalar.SubExponential.orliczMember
-        NumStability.HDP.Scalar.SubExponential.psiTwoOrliczFunction μ X ↔
-      NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X < (⊤ : ENNReal))
+          NumStability.HDP.Scalar.SubExponential.psiTwoOrliczFunction μ X ↔
+        NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X < (⊤ : ENNReal))
 
 end NumStability.HDP.Contract

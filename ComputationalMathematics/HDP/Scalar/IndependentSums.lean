@@ -1,3 +1,4 @@
+import ComputationalMathematics.HDP.Scalar.IndependentSums.Bennett
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Bernstein
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinCentralMass

@@ -75,9 +75,13 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise02.
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise04.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise10.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise11.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSquareTail.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczBanach.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczFunction.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczNormSpace.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Proposition01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
@@ -86,6 +90,8 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussian
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequality.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Signature
 
 /-!
 # Vershynin Chapter 02 source contracts
