@@ -1,5 +1,9 @@
 # Documentation map
 
+> **2026-09-10.** The machine data of the completed reorganization campaign and the
+> faithfulness audit packages were retired; their narrative documents and outcomes are
+> kept. See [`architecture/reviews/2026-09-working-record-retirement.md`](architecture/reviews/2026-09-working-record-retirement.md).
+
 This directory maps Lean Computational Mathematics and separates current policy
 from dated evidence and source-audit history. When two documents disagree, use
 the precedence order below.

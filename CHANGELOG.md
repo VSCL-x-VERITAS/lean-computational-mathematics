@@ -7,6 +7,22 @@ follows semantic versioning for its public module paths and declaration API.
 
 ### Removed
 
+- The working record of completed campaigns, keeping their outcomes: the 254
+  faithfulness audit packages and their chapter gate documents (7,140 files,
+  215.2 MB), the machine data of the finished reorganization campaign (713
+  files, 118.7 MB of TSV, JSON, patches and one-off tools), and the 2,401
+  rename import witnesses. Gate verdicts are preserved in
+  `docs/architecture/reviews/2026-09-faithfulness-outcomes.md`, the 259
+  narrative documents of the campaign are kept so every documentation link
+  still resolves, and the whole pass is recorded in
+  `docs/architecture/reviews/2026-09-working-record-retirement.md`. No Lean
+  module, build target or diagnostic baseline changed.
+- Four phase checkers and thirteen one-off campaign tools, which had nothing
+  left to validate: `tools/architecture/` goes from 30 scripts to 13 and CI
+  from 21 Python invocations to 15.
+
+### Removed
+
 - 18,205 files (1.30 GB) of audit working artifacts that no gate document,
   tool, document or CI step referenced: the unreferenced part of the
   2026-09-08 formalization session, 370 superseded faithfulness reruns across
