@@ -1,5 +1,6 @@
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw
 import ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Probability.Independence.InfinitePi
 
@@ -170,6 +171,21 @@ degree-test centers. -/
 def graphDegreeTestNeighbors (n : ℕ) : Finset (Fin n) :=
   Finset.univ.filter fun v => ¬ v.val < n / 2
 
+/-- A quarter-power-sized center count.  The `min` only handles the empty
+graph uniformly; for every positive `n` it is the natural floor of
+`exp (log n / 4)`. -/
+noncomputable def graphDegreeExactTestCenterCount (n : ℕ) : ℕ :=
+  min n ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊
+
+/-- Sparse test centers used to turn exact restricted degree into exact full
+degree while making internal center edges negligible. -/
+noncomputable def graphDegreeExactTestCenters (n : ℕ) : Finset (Fin n) :=
+  Finset.univ.filter fun v => v.val < graphDegreeExactTestCenterCount n
+
+/-- Every vertex outside the sparse exact-degree test-center set. -/
+noncomputable def graphDegreeExactTestNeighbors (n : ℕ) : Finset (Fin n) :=
+  Finset.univ \ graphDegreeExactTestCenters n
+
 @[simp] lemma card_graphDegreeTestCenters (n : ℕ) :
     (graphDegreeTestCenters n).card = n / 2 := by
   rw [graphDegreeTestCenters, Fin.card_filter_val_lt]
@@ -189,6 +205,85 @@ lemma graphDegreeTestCenters_disjoint_graphDegreeTestNeighbors (n : ℕ) :
     Disjoint (graphDegreeTestCenters n) (graphDegreeTestNeighbors n) := by
   rw [Finset.disjoint_left]
   simp [graphDegreeTestCenters, graphDegreeTestNeighbors]
+
+@[simp] lemma card_graphDegreeExactTestCenters (n : ℕ) :
+    (graphDegreeExactTestCenters n).card = graphDegreeExactTestCenterCount n := by
+  rw [graphDegreeExactTestCenters, Fin.card_filter_val_lt]
+  exact min_eq_right (min_le_left n
+    ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊)
+
+@[simp] lemma card_graphDegreeExactTestNeighbors (n : ℕ) :
+    (graphDegreeExactTestNeighbors n).card =
+      n - graphDegreeExactTestCenterCount n := by
+  rw [graphDegreeExactTestNeighbors,
+    Finset.card_sdiff_of_subset (Finset.subset_univ _)]
+  simp
+
+lemma graphDegreeExactTestCenters_disjoint_graphDegreeExactTestNeighbors (n : ℕ) :
+    Disjoint (graphDegreeExactTestCenters n) (graphDegreeExactTestNeighbors n) := by
+  rw [Finset.disjoint_left]
+  simp [graphDegreeExactTestNeighbors]
+
+lemma graphDegreeExactTestCenterCount_eq_natFloor (n : ℕ) (hn : 1 ≤ n) :
+    graphDegreeExactTestCenterCount n =
+      ⌊Real.exp (Real.log (n : ℝ) / 4)⌋₊ := by
+  rw [graphDegreeExactTestCenterCount, min_eq_right]
+  apply Nat.floor_le_of_le
+  have hnR : (1 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+  have hlog0 : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg hnR
+  calc
+    Real.exp (Real.log (n : ℝ) / 4) ≤ Real.exp (Real.log (n : ℝ)) := by
+      apply Real.exp_le_exp.mpr
+      linarith
+    _ = (n : ℝ) := Real.exp_log (by positivity)
+
+lemma two_mul_graphDegreeExactTestCenterCount_le (n : ℕ) (hn : 16 ≤ n) :
+    2 * graphDegreeExactTestCenterCount n ≤ n := by
+  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
+  have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
+  have hcountFloor : graphDegreeExactTestCenterCount n ≤ ⌊x⌋₊ :=
+    min_le_right _ _
+  have hfloor : (⌊x⌋₊ : ℝ) ≤ x := Nat.floor_le (by positivity)
+  have hcount : (graphDegreeExactTestCenterCount n : ℝ) ≤ x := by
+    have hcountCast : (graphDegreeExactTestCenterCount n : ℝ) ≤ (⌊x⌋₊ : ℝ) := by
+      exact_mod_cast hcountFloor
+    exact hcountCast.trans hfloor
+  have hlog : Real.log (16 : ℝ) ≤ Real.log (n : ℝ) := by
+    apply Real.strictMonoOn_log.monotoneOn
+    · norm_num
+    · exact hnpos
+    · exact_mod_cast hn
+  have hx2 : (2 : ℝ) ≤ x := by
+    have hlog2 : Real.log (2 : ℝ) = Real.log (16 : ℝ) / 4 := by
+      rw [show (16 : ℝ) = 2 ^ 4 by norm_num, Real.log_pow]
+      norm_num
+    calc
+      (2 : ℝ) = Real.exp (Real.log 2) :=
+        (Real.exp_log (by norm_num)).symm
+      _ = Real.exp (Real.log 16 / 4) := by rw [hlog2]
+      _ ≤ Real.exp (Real.log (n : ℝ) / 4) := by
+        apply Real.exp_le_exp.mpr
+        linarith
+      _ = x := rfl
+  have hx4 : x ^ 4 = (n : ℝ) := by
+    dsimp [x]
+    rw [show Real.exp (Real.log (n : ℝ) / 4) ^ 4 =
+      Real.exp (4 * (Real.log (n : ℝ) / 4)) by
+        simpa using (Real.exp_nat_mul (Real.log (n : ℝ) / 4) 4).symm]
+    have hexponent : 4 * (Real.log (n : ℝ) / 4) = Real.log (n : ℝ) := by
+      ring
+    rw [hexponent, Real.exp_log hnpos]
+  have hx3 : (2 : ℝ) ≤ x ^ 3 := by
+    calc
+      (2 : ℝ) ≤ 2 ^ 3 := by norm_num
+      _ ≤ x ^ 3 := pow_le_pow_left₀ (by norm_num) hx2 3
+  have h2x : (2 : ℝ) * x ≤ (n : ℝ) := by
+    have := mul_le_mul_of_nonneg_right hx3 (by positivity : 0 ≤ x)
+    rw [← hx4]
+    nlinarith
+  have hcast : (2 : ℝ) * (graphDegreeExactTestCenterCount n : ℝ) ≤
+      (n : ℝ) := (mul_le_mul_of_nonneg_left hcount (by norm_num)).trans h2x
+  exact_mod_cast hcast
 
 /-- A restricted degree never exceeds the full degree. -/
 lemma graphRestrictedDegree_le_graphDegreeSum
@@ -495,6 +590,83 @@ lemma eventually_log_ten_le_half_card_mul_exp_of_log_ratio_tendsto_zero
     _ = ((n / 2 : ℕ) : ℝ) *
         Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
 
+/-- The quarter-power center set still contains exponentially many trials on
+the `k` scale whenever `k = o(log n)`. -/
+lemma eventually_log_twenty_le_exact_center_card_mul_exp_of_log_ratio_tendsto_zero
+    (k : ℕ → ℕ)
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop,
+      Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
+        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by
+  let C : ℝ := Real.log 40 + 1 / 4
+  have hlog40 : 0 < Real.log 40 := Real.log_pos (by norm_num)
+  have hC : 0 < C := by dsimp [C]; positivity
+  let ε : ℝ := 1 / (8 * C)
+  have hε : 0 < ε := by dsimp [ε]; positivity
+  rcases (Metric.tendsto_atTop.mp hsmall) ε hε with ⟨N, hN⟩
+  have hscaled : ∀ᶠ n : ℕ in Filter.atTop,
+      (k n : ℝ) * C ≤ Real.log (n : ℝ) / 8 := by
+    refine Filter.eventually_atTop.2 ⟨max N 2, ?_⟩
+    intro n hn
+    have hnN : N ≤ n := (le_max_left N 2).trans hn
+    have hn2 : 2 ≤ n := (le_max_right N 2).trans hn
+    have hlogn : 0 < Real.log (n : ℝ) :=
+      Real.log_pos (by exact_mod_cast (show 1 < n by omega))
+    have hratio0 : 0 ≤ (k n : ℝ) / Real.log (n : ℝ) :=
+      div_nonneg (by positivity) hlogn.le
+    have hdist := hN n hnN
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0,
+      div_lt_iff₀ hlogn] at hdist
+    have hmul := mul_lt_mul_of_pos_right hdist hC
+    have heq : ε * Real.log (n : ℝ) * C = Real.log (n : ℝ) / 8 := by
+      dsimp [ε]
+      field_simp
+    rw [heq] at hmul
+    exact hmul.le
+  have hlogNat : Filter.Tendsto (fun n : ℕ => Real.log (n : ℝ))
+      Filter.atTop Filter.atTop :=
+    Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
+  have hquarter : Filter.Tendsto
+      (fun n : ℕ => Real.log (n : ℝ) / 4) Filter.atTop Filter.atTop :=
+    hlogNat.atTop_div_const (by norm_num)
+  have heighth : Filter.Tendsto
+      (fun n : ℕ => Real.log (n : ℝ) / 8) Filter.atTop Filter.atTop :=
+    hlogNat.atTop_div_const (by norm_num)
+  have hquarterExp : Filter.Tendsto
+      (fun n : ℕ => Real.exp (Real.log (n : ℝ) / 4))
+        Filter.atTop Filter.atTop := Real.tendsto_exp_atTop.comp hquarter
+  have heighthExp : Filter.Tendsto
+      (fun n : ℕ => Real.exp (Real.log (n : ℝ) / 8))
+        Filter.atTop Filter.atTop := Real.tendsto_exp_atTop.comp heighth
+  filter_upwards [hscaled, hquarterExp.eventually_ge_atTop 2,
+    heighthExp.eventually_gt_atTop (2 * Real.log 20),
+    Filter.eventually_atTop.2 ⟨1, fun n hn => hn⟩] with n hkn hx2 hlarge hn1
+  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
+  have hcount : graphDegreeExactTestCenterCount n = ⌊x⌋₊ := by
+    simpa [x] using graphDegreeExactTestCenterCount_eq_natFloor n hn1
+  have hfloorlt : x < (⌊x⌋₊ : ℝ) + 1 := Nat.lt_floor_add_one x
+  have hfloorlower : x / 2 ≤ (graphDegreeExactTestCenterCount n : ℝ) := by
+    rw [hcount]
+    dsimp [x] at hx2 ⊢
+    nlinarith
+  have hexp : Real.exp (-(Real.log (n : ℝ) / 8)) ≤
+      Real.exp (-((k n : ℝ) * C)) := by
+    apply Real.exp_le_exp.mpr
+    exact neg_le_neg hkn
+  calc
+    Real.log 20 ≤ Real.exp (Real.log (n : ℝ) / 8) / 2 := by linarith
+    _ = (x / 2) * Real.exp (-(Real.log (n : ℝ) / 8)) := by
+      dsimp [x]
+      rw [div_mul_eq_mul_div, ← Real.exp_add]
+      congr 2
+      ring
+    _ ≤ (graphDegreeExactTestCenterCount n : ℝ) *
+        Real.exp (-((k n : ℝ) * C)) :=
+      mul_le_mul hfloorlower hexp (Real.exp_nonneg _) (by positivity)
+    _ = (graphDegreeExactTestCenterCount n : ℝ) *
+        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
+
 /-- The finite arithmetic linking the expected-degree identity to the
 balanced point-mass estimate. -/
 lemma balanced_ratio_mass_bound_of_degree_relation
@@ -546,7 +718,7 @@ lemma balanced_ratio_mass_bound_of_degree_relation
         ((B + 1 - k : ℕ) : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
       field_simp
     rw [heq, le_div_iff₀ hden]
-    nlinarith
+    nlinarith [hnsub_le]
   have hcoefNat : 4 * B ≤ 5 * (n - 1) := by
     dsimp [B]
     omega
@@ -592,6 +764,108 @@ lemma balanced_ratio_mass_bound_of_degree_relation
       Real.exp (-(2 * (B : ℝ) * q)))
   exact hlog.trans (mul_le_mul_of_nonneg_left hlower (by positivity))
 
+/-- The expected-degree identity supplies the same explicit point-mass lower
+bound for the sparse quarter-power center set and its complement. -/
+lemma exact_center_ratio_mass_bound_of_degree_relation
+    (n k : ℕ) (p : Set.Icc (0 : ℝ) 1)
+    (hn : 16 ≤ n) (hkpos : 0 < k) (hksmall : 4 * k ≤ n)
+    (hrel : (k : ℝ) = 10 * ((n - 1 : ℕ) : ℝ) * (p : ℝ))
+    (hlog : Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
+      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4)))) :
+    k ≤ n - graphDegreeExactTestCenterCount n ∧ (p : ℝ) ≤ 1 / 2 ∧
+      Real.log 20 ≤ (graphDegreeExactTestCenterCount n : ℝ) *
+        ((((((n - graphDegreeExactTestCenterCount n : ℕ) + 1 - k : ℕ) : ℝ) /
+              (k : ℝ)) * (unitInterval.toNNReal p : ℝ)) ^ k *
+          Real.exp (-(2 * ((n - graphDegreeExactTestCenterCount n : ℕ) : ℝ) *
+            (p : ℝ)))) := by
+  let m : ℕ := graphDegreeExactTestCenterCount n
+  let B : ℕ := n - m
+  let q : ℝ := p
+  have hmhalf : 2 * m ≤ n := by
+    simpa [m] using two_mul_graphDegreeExactTestCenterCount_le n hn
+  have hkB : k ≤ B := by dsimp [B]; omega
+  have hn1 : 1 ≤ n := by omega
+  have h4k : (4 : ℝ) * (k : ℝ) ≤ (n : ℝ) := by
+    exact_mod_cast hksmall
+  have hnR : (16 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+  have h20 : (n : ℝ) ≤ 20 * ((n - 1 : ℕ) : ℝ) := by
+    rw [Nat.cast_sub hn1]
+    norm_num
+    nlinarith
+  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 0 < n - 1 by omega)
+  have hden : 0 < 10 * ((n - 1 : ℕ) : ℝ) := by positivity
+  have hpform : q = (k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
+    rw [eq_div_iff (ne_of_gt hden)]
+    dsimp [q]
+    nlinarith [hrel]
+  have hp : (p : ℝ) ≤ 1 / 2 := by
+    change q ≤ 1 / 2
+    rw [hpform, div_le_iff₀ hden]
+    nlinarith
+  refine ⟨by simpa [B, m] using hkB, hp, ?_⟩
+  have hnumNat : n ≤ 4 * (B + 1 - k) := by
+    dsimp [B]
+    omega
+  have hnum : (n : ℝ) ≤ 4 * ((B + 1 - k : ℕ) : ℝ) := by
+    exact_mod_cast hnumNat
+  have hnsub_le : ((n - 1 : ℕ) : ℝ) ≤ (n : ℝ) := by
+    exact_mod_cast Nat.sub_le n 1
+  have hbase : (1 : ℝ) / 40 ≤
+      (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q := by
+    have hkR : (0 : ℝ) < (k : ℝ) := by positivity
+    rw [hpform]
+    have heq : (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+        ((k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ))) =
+        ((B + 1 - k : ℕ) : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
+      field_simp
+    rw [heq, le_div_iff₀ hden]
+    nlinarith [hnsub_le]
+  have hcoefNat : 4 * B ≤ 5 * (n - 1) := by
+    dsimp [B]
+    omega
+  have hcoef : (4 : ℝ) * (B : ℝ) ≤ 5 * ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast hcoefNat
+  have hcoefq := mul_le_mul_of_nonneg_right hcoef p.2.1
+  have hexponent : 2 * (B : ℝ) * q ≤ (k : ℝ) / 4 := by
+    dsimp [q] at hcoefq ⊢
+    nlinarith [hrel]
+  have hbasePow : ((1 : ℝ) / 40) ^ k ≤
+      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k :=
+    pow_le_pow_left₀ (by norm_num) hbase k
+  have hexp : Real.exp (-((k : ℝ) / 4)) ≤
+      Real.exp (-(2 * (B : ℝ) * q)) := by
+    apply Real.exp_le_exp.mpr
+    exact neg_le_neg hexponent
+  have hlower : Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) ≤
+      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+        Real.exp (-(2 * (B : ℝ) * q)) := by
+    have hpowid : ((1 : ℝ) / 40) ^ k =
+        Real.exp (-((k : ℝ) * Real.log 40)) := by
+      calc
+        ((1 : ℝ) / 40) ^ k =
+            (Real.exp (Real.log ((1 : ℝ) / 40))) ^ k := by
+              rw [Real.exp_log (by norm_num)]
+        _ = Real.exp ((k : ℝ) * Real.log ((1 : ℝ) / 40)) :=
+          (Real.exp_nat_mul _ k).symm
+        _ = Real.exp (-((k : ℝ) * Real.log 40)) := by
+          rw [show (1 : ℝ) / 40 = (40 : ℝ)⁻¹ by ring, Real.log_inv]
+          ring_nf
+    calc
+      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) =
+          ((1 : ℝ) / 40) ^ k * Real.exp (-((k : ℝ) / 4)) := by
+        rw [hpowid, ← Real.exp_add]
+        congr 1
+        ring
+      _ ≤ ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+          Real.exp (-(2 * (B : ℝ) * q)) :=
+        mul_le_mul hbasePow hexp (Real.exp_nonneg _)
+          (pow_nonneg ((by norm_num : (0 : ℝ) ≤ 1 / 40).trans hbase) k)
+  change Real.log 20 ≤ (m : ℝ) *
+    (((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+      Real.exp (-(2 * (B : ℝ) * q)))
+  simpa [m] using hlog.trans (mul_le_mul_of_nonneg_left hlower (by positivity))
+
 /-- An integer sequence that is little-oh of `log n` is eventually at most
 one quarter of `n`. -/
 lemma eventually_four_mul_le_of_log_ratio_tendsto_zero
@@ -628,6 +902,111 @@ lemma eventually_four_mul_le_of_log_ratio_tendsto_zero
   rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0, div_lt_iff₀ hnpos] at hdist
   have hcast : (4 : ℝ) * (k n : ℝ) ≤ (n : ℝ) := by nlinarith
   exact_mod_cast hcast
+
+/-- Composing `k/log n → 0` with the standard `log n = o(n¹ᐟ²)` estimate
+gives the square-root-scale estimate needed for the sparse center set. -/
+lemma tendsto_k_div_exp_half_of_log_ratio_tendsto_zero
+    (k : ℕ → ℕ)
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.exp (Real.log (n : ℝ) / 2))
+      Filter.atTop (nhds 0) := by
+  have hlogdiv : Filter.Tendsto
+      (fun n : ℕ => Real.log (n : ℝ) / (n : ℝ) ^ (1 / 2 : ℝ))
+      Filter.atTop (nhds 0) := by
+    have h := (isLittleO_log_rpow_atTop
+      (r := (1 / 2 : ℝ)) (by norm_num)).comp_tendsto
+        (tendsto_natCast_atTop_atTop : Filter.Tendsto
+          (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop)
+    simpa [Function.comp_def] using h.tendsto_div_nhds_zero
+  have hprod := hsmall.mul hlogdiv
+  have heq : (fun n : ℕ =>
+      (k n : ℝ) / Real.log (n : ℝ) *
+        (Real.log (n : ℝ) / (n : ℝ) ^ (1 / 2 : ℝ))) =ᶠ[Filter.atTop]
+      (fun n : ℕ => (k n : ℝ) /
+        Real.exp (Real.log (n : ℝ) / 2)) := by
+    filter_upwards [Filter.eventually_atTop.2 ⟨2, fun n hn => hn⟩] with n hn
+    have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
+    have hlog0 : Real.log (n : ℝ) ≠ 0 := ne_of_gt <|
+      Real.log_pos (by exact_mod_cast (show 1 < n by omega))
+    have hrpow : (n : ℝ) ^ (1 / 2 : ℝ) =
+        Real.exp (Real.log (n : ℝ) / 2) := by
+      rw [Real.rpow_def_of_pos hnpos]
+      congr 1
+      ring
+    rw [← hrpow]
+    have hrpow0 : (n : ℝ) ^ (1 / 2 : ℝ) ≠ 0 :=
+      ne_of_gt (Real.rpow_pos_of_pos hnpos _)
+    field_simp
+  simpa only [zero_mul] using hprod.congr' heq
+
+/-- For the quarter-power center set, the union-bound probability of an
+internal center edge is eventually at most `0.05`. -/
+lemma eventually_exact_center_internal_mass_le_of_degree_relation
+    (p : ℕ → Set.Icc (0 : ℝ) 1) (k : ℕ → ℕ)
+    (hrel : ∀ n, (k n : ℝ) =
+      10 * ((n - 1 : ℕ) : ℝ) * (p n : ℝ))
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop,
+      (graphDegreeExactTestCenterCount n : ℝ) ^ 2 * (p n : ℝ) ≤
+        (1 : ℝ) / 20 := by
+  have hsqrt := tendsto_k_div_exp_half_of_log_ratio_tendsto_zero k hsmall
+  rcases (Metric.tendsto_atTop.mp hsqrt) ((1 : ℝ) / 4) (by norm_num) with ⟨N, hN⟩
+  refine Filter.eventually_atTop.2 ⟨max N 2, ?_⟩
+  intro n hn
+  have hnN : N ≤ n := (le_max_left N 2).trans hn
+  have hn2 : 2 ≤ n := (le_max_right N 2).trans hn
+  have hnpos : (0 : ℝ) < (n : ℝ) := by positivity
+  let s : ℝ := Real.exp (Real.log (n : ℝ) / 2)
+  let x : ℝ := Real.exp (Real.log (n : ℝ) / 4)
+  have hspos : 0 < s := by dsimp [s]; positivity
+  have hratio0 : 0 ≤ (k n : ℝ) / s := by positivity
+  have hdist := hN n hnN
+  change dist ((k n : ℝ) / s) 0 < (1 : ℝ) / 4 at hdist
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0,
+    div_lt_iff₀ hspos] at hdist
+  have hsquare : s ^ 2 = (n : ℝ) := by
+    dsimp [s]
+    rw [pow_two, ← Real.exp_add]
+    have hexponent : Real.log (n : ℝ) / 2 + Real.log (n : ℝ) / 2 =
+        Real.log (n : ℝ) := by ring
+    rw [hexponent, Real.exp_log hnpos]
+  have hxSquare : x ^ 2 = s := by
+    dsimp [x, s]
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring
+  have hcountFloor : graphDegreeExactTestCenterCount n ≤ ⌊x⌋₊ := by
+    exact min_le_right _ _
+  have hfloor : (⌊x⌋₊ : ℝ) ≤ x := Nat.floor_le (by positivity)
+  have hcount : (graphDegreeExactTestCenterCount n : ℝ) ≤ x := by
+    have hcountCast : (graphDegreeExactTestCenterCount n : ℝ) ≤ (⌊x⌋₊ : ℝ) := by
+      exact_mod_cast hcountFloor
+    exact hcountCast.trans hfloor
+  have hcountSq : (graphDegreeExactTestCenterCount n : ℝ) ^ 2 ≤ s := by
+    rw [← hxSquare]
+    exact pow_le_pow_left₀ (by positivity) hcount 2
+  have hsk : s * (k n : ℝ) ≤ (n : ℝ) / 4 := by
+    have hmul := mul_le_mul_of_nonneg_left hdist.le hspos.le
+    nlinarith [hsquare]
+  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 0 < n - 1 by omega)
+  have hden : 0 < 10 * ((n - 1 : ℕ) : ℝ) := by positivity
+  have hpform : (p n : ℝ) =
+      (k n : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
+    rw [eq_div_iff (ne_of_gt hden)]
+    nlinarith [hrel n]
+  have hsprob : s * (p n : ℝ) ≤ (1 : ℝ) / 20 := by
+    rw [hpform, show s * ((k n : ℝ) /
+      (10 * ((n - 1 : ℕ) : ℝ))) =
+        (s * (k n : ℝ)) / (10 * ((n - 1 : ℕ) : ℝ)) by ring,
+      div_le_iff₀ hden]
+    have hnCast : (n : ℝ) ≤ 2 * ((n - 1 : ℕ) : ℝ) := by
+      exact_mod_cast (show n ≤ 2 * (n - 1) by omega)
+    nlinarith
+  exact (mul_le_mul_of_nonneg_right hcountSq (p n).2.1).trans hsprob
 
 /-- An explicit exponential lower bound for a restricted binomial point mass.
 This is the finite analytic estimate used by the sparse-graph specialization. -/
@@ -938,6 +1317,26 @@ theorem binomialRandom_exists_degree_eq_probability_ge_nine_tenths
   change (9 : ℝ) / 10 ≤ P.real Full
   linarith
 
+/-- Fully explicit exact-degree criterion, using the reusable lower bound for
+one restricted binomial point mass. -/
+theorem binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    (A : Finset V) (k : ℕ) (hk : k ≤ (Finset.univ \ A).card)
+    (hp : (p : ℝ) ≤ 1 / 2)
+    (hmass : Real.log 20 ≤ (A.card : ℝ) *
+      ((((((Finset.univ \ A).card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p : ℝ)))))
+    (hinternal : (A.card : ℝ) ^ 2 * (p : ℝ) ≤ (1 : ℝ) / 20) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ v : V, graphDegreeSum v G = k} ≥ (9 : ℝ) / 10 := by
+  apply binomialRandom_exists_degree_eq_probability_ge_nine_tenths p A k
+  · exact hmass.trans (mul_le_mul_of_nonneg_left
+      (graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp
+        (Finset.univ \ A) p k hk hp) (by positivity))
+  · exact hinternal
+
 /-- A finite point-mass criterion ensuring that one of the independent
 restricted degrees reaches `k` with probability at least `0.9`. -/
 theorem binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths
@@ -1088,5 +1487,63 @@ theorem erdosRenyiSparseExistsDegreeTenExpectedEventually
       (by omega) (Nat.pos_of_ne_zero hk0) h4 (hrel n) hlog
     exact binomialRandom_exists_degree_ge_probability_ge_nine_tenths_balanced
       n (p n) (k n) harith.1 harith.2.1 harith.2.2
+
+/-- Source-faithful exact-degree version of the sparse random-graph result:
+when the integer `k` is ten times the expected degree and `k = o(log n)`, a
+vertex of degree exactly `k` exists with probability at least `0.9`. -/
+theorem erdosRenyiSparseExistsDegreeExactlyTenExpectedEventually
+    (p : ℕ → Set.Icc (0 : ℝ) 1) (k : ℕ → ℕ)
+    (hrel : ∀ n, (k n : ℝ) =
+      10 * ((n - 1 : ℕ) : ℝ) * (p n : ℝ))
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop,
+      (SimpleGraph.binomialRandom (Fin n) (p n)).real
+        {G | ∃ v : Fin n, graphDegreeSum v G = k n} ≥
+      (9 : ℝ) / 10 := by
+  filter_upwards
+    [eventually_log_twenty_le_exact_center_card_mul_exp_of_log_ratio_tendsto_zero
+      k hsmall,
+      eventually_four_mul_le_of_log_ratio_tendsto_zero k hsmall,
+      eventually_exact_center_internal_mass_le_of_degree_relation p k hrel hsmall,
+      Filter.eventually_atTop.2 ⟨16, fun n hn => hn⟩] with n hlog h4 hinternal hn
+  let A : Finset (Fin n) := graphDegreeExactTestCenters n
+  have hinner : (A.card : ℝ) ^ 2 * (p n : ℝ) ≤ (1 : ℝ) / 20 := by
+    simpa [A] using hinternal
+  have hcardB : (Finset.univ \ A).card =
+      n - graphDegreeExactTestCenterCount n := by
+    dsimp [A]
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ _)]
+    simp
+  by_cases hk0 : k n = 0
+  · have hp0 : (p n : ℝ) = 0 := by
+      have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
+        exact_mod_cast (show 0 < n - 1 by omega)
+      have hrel_n := hrel n
+      rw [hk0] at hrel_n
+      norm_num at hrel_n
+      rcases hrel_n with hzero | hpzero
+      · omega
+      · simpa using congrArg Subtype.val hpzero
+    have hmass : Real.log 20 ≤ (A.card : ℝ) *
+        ((((((Finset.univ \ A).card + 1 - k n : ℕ) : ℝ) / (k n : ℝ)) *
+            (unitInterval.toNNReal (p n) : ℝ)) ^ k n *
+          Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p n : ℝ)))) := by
+      simpa [A, hk0, hp0] using hlog
+    exact binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
+      (p n) A (k n) (by simp [hk0]) (by rw [hp0]; norm_num) hmass hinner
+  · have harith := exact_center_ratio_mass_bound_of_degree_relation
+      n (k n) (p n) hn (Nat.pos_of_ne_zero hk0) h4 (hrel n) hlog
+    have hk : k n ≤ (Finset.univ \ A).card := by
+      rw [hcardB]
+      exact harith.1
+    have hmass : Real.log 20 ≤ (A.card : ℝ) *
+        ((((((Finset.univ \ A).card + 1 - k n : ℕ) : ℝ) / (k n : ℝ)) *
+            (unitInterval.toNNReal (p n) : ℝ)) ^ k n *
+          Real.exp (-(2 * ((Finset.univ \ A).card : ℝ) * (p n : ℝ)))) := by
+      rw [hcardB]
+      simpa [A] using harith.2.2
+    exact binomialRandom_exists_degree_eq_probability_ge_nine_tenths_of_ratio_pow
+      (p n) A (k n) hk harith.2.1 hmass hinner
 
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
