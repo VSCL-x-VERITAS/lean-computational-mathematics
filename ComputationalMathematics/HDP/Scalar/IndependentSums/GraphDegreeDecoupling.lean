@@ -428,6 +428,140 @@ lemma eventually_log_ten_le_half_card_mul_exp_of_log_ratio_tendsto_zero
     _ = ((n / 2 : ℕ) : ℝ) *
         Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
 
+/-- The finite arithmetic linking the expected-degree identity to the
+balanced point-mass estimate. -/
+lemma balanced_ratio_mass_bound_of_degree_relation
+    (n k : ℕ) (p : Set.Icc (0 : ℝ) 1)
+    (hn : 10 ≤ n) (hkpos : 0 < k) (hksmall : 4 * k ≤ n)
+    (hrel : (k : ℝ) = 10 * ((n - 1 : ℕ) : ℝ) * (p : ℝ))
+    (hlog : Real.log 10 ≤ ((n / 2 : ℕ) : ℝ) *
+      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4)))) :
+    k ≤ n - n / 2 ∧ (p : ℝ) ≤ 1 / 2 ∧
+      Real.log 10 ≤ ((n / 2 : ℕ) : ℝ) *
+        ((((((n - n / 2 : ℕ) + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+            (unitInterval.toNNReal p : ℝ)) ^ k *
+          Real.exp (-(2 * ((n - n / 2 : ℕ) : ℝ) * (p : ℝ)))) := by
+  have hn1 : 1 ≤ n := by omega
+  have hkB : k ≤ n - n / 2 := by omega
+  have h4k : (4 : ℝ) * (k : ℝ) ≤ (n : ℝ) := by exact_mod_cast hksmall
+  have hnR : (10 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+  have h20 : (n : ℝ) ≤ 20 * ((n - 1 : ℕ) : ℝ) := by
+    rw [Nat.cast_sub hn1]
+    norm_num
+    nlinarith
+  let B : ℕ := n - n / 2
+  let q : ℝ := p
+  have hq : q = (p : ℝ) := rfl
+  have hnsubpos : (0 : ℝ) < ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 0 < n - 1 by omega)
+  have hden : 0 < 10 * ((n - 1 : ℕ) : ℝ) := by positivity
+  have hpform : q = (k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
+    rw [eq_div_iff (ne_of_gt hden)]
+    rw [hq]
+    nlinarith [hrel]
+  have hp : (p : ℝ) ≤ 1 / 2 := by
+    rw [← hq, hpform, div_le_iff₀ hden]
+    nlinarith
+  refine ⟨hkB, hp, ?_⟩
+  have hnumNat : n ≤ 4 * (B + 1 - k) := by
+    dsimp [B]
+    omega
+  have hnum : (n : ℝ) ≤ 4 * ((B + 1 - k : ℕ) : ℝ) := by
+    exact_mod_cast hnumNat
+  have hnsub_le : ((n - 1 : ℕ) : ℝ) ≤ (n : ℝ) := by
+    exact_mod_cast Nat.sub_le n 1
+  have hbase : (1 : ℝ) / 40 ≤
+      (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q := by
+    have hkR : (0 : ℝ) < (k : ℝ) := by positivity
+    rw [hpform]
+    have heq : (((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+        ((k : ℝ) / (10 * ((n - 1 : ℕ) : ℝ))) =
+        ((B + 1 - k : ℕ) : ℝ) / (10 * ((n - 1 : ℕ) : ℝ)) := by
+      field_simp
+    rw [heq, le_div_iff₀ hden]
+    nlinarith
+  have hcoefNat : 4 * B ≤ 5 * (n - 1) := by
+    dsimp [B]
+    omega
+  have hcoef : (4 : ℝ) * (B : ℝ) ≤ 5 * ((n - 1 : ℕ) : ℝ) := by
+    exact_mod_cast hcoefNat
+  have hcoefq := mul_le_mul_of_nonneg_right hcoef p.2.1
+  have hexponent : 2 * (B : ℝ) * q ≤ (k : ℝ) / 4 := by
+    rw [hq]
+    nlinarith [hrel]
+  have hbasePow : ((1 : ℝ) / 40) ^ k ≤
+      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k :=
+    pow_le_pow_left₀ (by norm_num) hbase k
+  have hexp : Real.exp (-((k : ℝ) / 4)) ≤
+      Real.exp (-(2 * (B : ℝ) * q)) := by
+    apply Real.exp_le_exp.mpr
+    exact neg_le_neg hexponent
+  have hlower : Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) ≤
+      ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+        Real.exp (-(2 * (B : ℝ) * q)) := by
+    have hpowid : ((1 : ℝ) / 40) ^ k =
+        Real.exp (-((k : ℝ) * Real.log 40)) := by
+      calc
+        ((1 : ℝ) / 40) ^ k =
+            (Real.exp (Real.log ((1 : ℝ) / 40))) ^ k := by
+              rw [Real.exp_log (by norm_num)]
+        _ = Real.exp ((k : ℝ) * Real.log ((1 : ℝ) / 40)) :=
+          (Real.exp_nat_mul _ k).symm
+        _ = Real.exp (-((k : ℝ) * Real.log 40)) := by
+          rw [show (1 : ℝ) / 40 = (40 : ℝ)⁻¹ by ring, Real.log_inv]
+          ring_nf
+    calc
+      Real.exp (-((k : ℝ) * (Real.log 40 + 1 / 4))) =
+          ((1 : ℝ) / 40) ^ k * Real.exp (-((k : ℝ) / 4)) := by
+        rw [hpowid, ← Real.exp_add]
+        congr 1
+        ring
+      _ ≤ ((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+          Real.exp (-(2 * (B : ℝ) * q)) :=
+        mul_le_mul hbasePow hexp (Real.exp_nonneg _)
+          (pow_nonneg ((by norm_num : (0 : ℝ) ≤ 1 / 40).trans hbase) k)
+  change Real.log 10 ≤ ((n / 2 : ℕ) : ℝ) *
+    (((((B + 1 - k : ℕ) : ℝ) / (k : ℝ)) * q) ^ k *
+      Real.exp (-(2 * (B : ℝ) * q)))
+  exact hlog.trans (mul_le_mul_of_nonneg_left hlower (by positivity))
+
+/-- An integer sequence that is little-oh of `log n` is eventually at most
+one quarter of `n`. -/
+lemma eventually_four_mul_le_of_log_ratio_tendsto_zero
+    (k : ℕ → ℕ)
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop, 4 * k n ≤ n := by
+  have hlogdiv : Filter.Tendsto
+      (fun n : ℕ => Real.log (n : ℝ) / (n : ℝ)) Filter.atTop (nhds 0) := by
+    have h := Real.isLittleO_log_id_atTop.comp_tendsto
+      (tendsto_natCast_atTop_atTop : Filter.Tendsto
+        (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop)
+    simpa [Function.comp_def] using h.tendsto_div_nhds_zero
+  have hprod := hsmall.mul hlogdiv
+  have hkn : Filter.Tendsto
+      (fun n : ℕ => (k n : ℝ) / (n : ℝ)) Filter.atTop (nhds 0) := by
+    have heq : (fun n : ℕ =>
+        (k n : ℝ) / Real.log (n : ℝ) * (Real.log (n : ℝ) / (n : ℝ))) =ᶠ[Filter.atTop]
+        (fun n : ℕ => (k n : ℝ) / (n : ℝ)) := by
+      filter_upwards [Filter.eventually_atTop.2 ⟨2, fun n hn => hn⟩] with n hn
+      have hn0 : (n : ℝ) ≠ 0 := by positivity
+      have hlog0 : Real.log (n : ℝ) ≠ 0 := ne_of_gt <|
+        Real.log_pos (by exact_mod_cast (show 1 < n by omega))
+      field_simp
+    simpa using hprod.congr' heq
+  rcases (Metric.tendsto_atTop.mp hkn) ((1 : ℝ) / 5) (by norm_num) with ⟨N, hN⟩
+  refine Filter.eventually_atTop.2 ⟨max N 2, ?_⟩
+  intro n hn
+  have hnN : N ≤ n := (le_max_left N 2).trans hn
+  have hn2 : 2 ≤ n := (le_max_right N 2).trans hn
+  have hnpos : 0 < (n : ℝ) := by positivity
+  have hratio0 : 0 ≤ (k n : ℝ) / (n : ℝ) := by positivity
+  have hdist := hN n hnN
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0, div_lt_iff₀ hnpos] at hdist
+  have hcast : (4 : ℝ) * (k n : ℝ) ≤ (n : ℝ) := by nlinarith
+  exact_mod_cast hcast
+
 /-- An explicit exponential lower bound for a restricted binomial point mass.
 This is the finite analytic estimate used by the sparse-graph specialization. -/
 lemma graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp
@@ -715,5 +849,36 @@ theorem binomialRandom_exists_degree_ge_probability_ge_nine_tenths_balanced
   · simpa using hk
   · exact hp
   · simpa using hmass
+
+/-- In the sparse regime, if the integer threshold is ten times the expected
+degree and is little-oh of `log n`, then a vertex reaches that threshold with
+probability at least `0.9` for all sufficiently large `n`. -/
+theorem erdosRenyiSparseExistsDegreeTenExpectedEventually
+    (p : ℕ → Set.Icc (0 : ℝ) 1) (k : ℕ → ℕ)
+    (hrel : ∀ n, (k n : ℝ) =
+      10 * ((n - 1 : ℕ) : ℝ) * (p n : ℝ))
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop,
+      (SimpleGraph.binomialRandom (Fin n) (p n)).real
+        {G | ∃ v : Fin n, k n ≤ graphDegreeSum v G} ≥
+      (9 : ℝ) / 10 := by
+  filter_upwards
+    [eventually_log_ten_le_half_card_mul_exp_of_log_ratio_tendsto_zero k hsmall,
+      eventually_four_mul_le_of_log_ratio_tendsto_zero k hsmall,
+      Filter.eventually_atTop.2 ⟨400, fun n hn => hn⟩] with n hlog h4 hn
+  by_cases hk0 : k n = 0
+  · have hevent : {G : SimpleGraph (Fin n) |
+        ∃ v : Fin n, k n ≤ graphDegreeSum v G} = Set.univ := by
+      ext G
+      simp only [Set.mem_setOf_eq, Set.mem_univ, iff_true]
+      exact ⟨⟨0, by omega⟩, by simp [hk0]⟩
+    rw [hevent]
+    simp
+    norm_num
+  · have harith := balanced_ratio_mass_bound_of_degree_relation n (k n) (p n)
+      (by omega) (Nat.pos_of_ne_zero hk0) h4 (hrel n) hlog
+    exact binomialRandom_exists_degree_ge_probability_ge_nine_tenths_balanced
+      n (p n) (k n) harith.1 harith.2.1 harith.2.2
 
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
