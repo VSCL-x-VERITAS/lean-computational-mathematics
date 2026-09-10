@@ -161,6 +161,44 @@ noncomputable def graphRestrictedDegree {V : Type*}
   classical
   exact ∑ w ∈ S, if G.Adj v w then 1 else 0
 
+/-- The first half of `Fin n`, used as independent degree-test centers. -/
+def graphDegreeTestCenters (n : ℕ) : Finset (Fin n) :=
+  Finset.univ.filter fun v => v.val < n / 2
+
+/-- The complementary half of `Fin n`, used as possible neighbors of the
+degree-test centers. -/
+def graphDegreeTestNeighbors (n : ℕ) : Finset (Fin n) :=
+  Finset.univ.filter fun v => ¬ v.val < n / 2
+
+@[simp] lemma card_graphDegreeTestCenters (n : ℕ) :
+    (graphDegreeTestCenters n).card = n / 2 := by
+  rw [graphDegreeTestCenters, Fin.card_filter_val_lt]
+  exact min_eq_right (Nat.div_le_self n 2)
+
+@[simp] lemma card_graphDegreeTestNeighbors (n : ℕ) :
+    (graphDegreeTestNeighbors n).card = n - n / 2 := by
+  have hsum := Finset.card_filter_add_card_filter_not
+    (s := (Finset.univ : Finset (Fin n))) (fun v => v.val < n / 2)
+  have hsum' : (graphDegreeTestCenters n).card +
+      (graphDegreeTestNeighbors n).card = n := by
+    simpa [graphDegreeTestCenters, graphDegreeTestNeighbors] using hsum
+  rw [card_graphDegreeTestCenters] at hsum'
+  omega
+
+lemma graphDegreeTestCenters_disjoint_graphDegreeTestNeighbors (n : ℕ) :
+    Disjoint (graphDegreeTestCenters n) (graphDegreeTestNeighbors n) := by
+  rw [Finset.disjoint_left]
+  simp [graphDegreeTestCenters, graphDegreeTestNeighbors]
+
+/-- A restricted degree never exceeds the full degree. -/
+lemma graphRestrictedDegree_le_graphDegreeSum
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (G : SimpleGraph V) (v : V) (S : Finset V) :
+    graphRestrictedDegree v S G ≤ graphDegreeSum v G := by
+  classical
+  rw [graphRestrictedDegree, graphDegreeSum]
+  exact Finset.sum_le_sum_of_subset (Finset.subset_univ S)
+
 lemma measurable_graphRestrictedDegree {V : Type*} (v : V) (S : Finset V) :
     Measurable (graphRestrictedDegree v S) := by
   unfold graphRestrictedDegree
@@ -560,5 +598,51 @@ theorem binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths_of_
   exact hmass.trans (mul_le_mul_of_nonneg_left
     (graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp B p k hk hp)
     (by positivity))
+
+/-- Transfer the explicit restricted-degree lower bound to the full maximum
+degree of the graph. -/
+theorem binomialRandom_exists_degree_ge_probability_ge_nine_tenths_of_ratio_pow
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ) (hk : k ≤ B.card)
+    (hp : (p : ℝ) ≤ 1 / 2)
+    (hmass : Real.log 10 ≤ (A.card : ℝ) *
+      (((((B.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * (B.card : ℝ) * (p : ℝ))))) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ v : V, k ≤ graphDegreeSum v G} ≥
+      (9 : ℝ) / 10 := by
+  have hrestricted :=
+    binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths_of_ratio_pow
+      p hAB k hk hp hmass
+  have hmono : (SimpleGraph.binomialRandom V p).real
+      {G | ∃ a : ↑A, k ≤ graphRestrictedDegree a.1 B G} ≤
+      (SimpleGraph.binomialRandom V p).real
+        {G | ∃ v : V, k ≤ graphDegreeSum v G} := by
+    apply measureReal_mono
+    intro G hG
+    rcases hG with ⟨a, ha⟩
+    exact ⟨a.1, ha.trans (graphRestrictedDegree_le_graphDegreeSum G a.1 B)⟩
+    exact measure_ne_top _ _
+  exact hrestricted.trans hmono
+
+/-- The explicit finite lower bound specialized to the canonical balanced
+split of `Fin n`. -/
+theorem binomialRandom_exists_degree_ge_probability_ge_nine_tenths_balanced
+    (n : ℕ) (p : Set.Icc (0 : ℝ) 1) (k : ℕ)
+    (hk : k ≤ n - n / 2) (hp : (p : ℝ) ≤ 1 / 2)
+    (hmass : Real.log 10 ≤ ((n / 2 : ℕ) : ℝ) *
+      ((((((n - n / 2 : ℕ) + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * ((n - n / 2 : ℕ) : ℝ) * (p : ℝ))))) :
+    (SimpleGraph.binomialRandom (Fin n) p).real
+        {G | ∃ v : Fin n, k ≤ graphDegreeSum v G} ≥
+      (9 : ℝ) / 10 := by
+  apply binomialRandom_exists_degree_ge_probability_ge_nine_tenths_of_ratio_pow
+    p (graphDegreeTestCenters_disjoint_graphDegreeTestNeighbors n) k
+  · simpa using hk
+  · exact hp
+  · simpa using hmass
 
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
