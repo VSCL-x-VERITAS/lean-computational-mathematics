@@ -721,6 +721,67 @@ theorem binomialRandom_exists_restrictedDegree_ge_probability
   rw [hHighEq, measureReal_compl hLowMeas, hLowReal]
   simp
 
+/-- Exact point-mass occurrence probability for the decoupled restricted
+degrees.  This is the equality-event counterpart of
+`binomialRandom_exists_restrictedDegree_ge_probability`. -/
+theorem binomialRandom_exists_restrictedDegree_eq_probability
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} =
+      1 - (1 - (graphRestrictedBinomialLaw B p).real {k}) ^ A.card := by
+  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
+  let ν : Measure ℕ := graphRestrictedBinomialLaw B p
+  haveI : IsProbabilityMeasure ν := by
+    dsimp [ν, graphRestrictedBinomialLaw]
+    infer_instance
+  change P.real {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} = _
+  let Avoid : Set (SimpleGraph V) :=
+    {G | ∀ a : ↑A, graphRestrictedDegree a.1 B G ≠ k}
+  have hpack := graphRestrictedDegrees_independent_binomial p hAB
+  have hAvoidEq : Avoid =
+      ⋂ a : ↑A, graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ := by
+    ext G
+    simp [Avoid]
+  have hAvoidMeas : MeasurableSet Avoid := by
+    rw [hAvoidEq]
+    exact MeasurableSet.iInter fun a ↦
+      (measurableSet_singleton k).compl.preimage
+        (measurable_graphRestrictedDegree a.1 B)
+  have hprod :
+      P (⋂ a : ↑A, graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
+        ∏ a : ↑A, P (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) := by
+    simpa [P] using hpack.1.measure_inter_preimage_eq_mul
+      Finset.univ (sets := fun _ : ↑A ↦ ({k} : Set ℕ)ᶜ)
+        (fun _ _ ↦ (measurableSet_singleton k).compl)
+  have hsingle (a : ↑A) :
+      P.real (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
+        1 - ν.real {k} := by
+    have hmap := Measure.map_apply_of_aemeasurable
+      (hpack.2 a).aemeasurable ((measurableSet_singleton k).compl)
+    have heq :
+        P (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
+          ν (({k} : Set ℕ)ᶜ) := by
+      rw [← hmap, (hpack.2 a).map_eq]
+    have hrealeq :
+        P.real (graphRestrictedDegree a.1 B ⁻¹' ({k} : Set ℕ)ᶜ) =
+          ν.real (({k} : Set ℕ)ᶜ) := by
+      simpa only [Measure.real_def] using congrArg ENNReal.toReal heq
+    rw [hrealeq, measureReal_compl (measurableSet_singleton k)]
+    simp
+  have hAvoidReal :
+      P.real Avoid = (1 - ν.real {k}) ^ A.card := by
+    rw [Measure.real_def, hAvoidEq, hprod, ENNReal.toReal_prod]
+    simp_rw [← Measure.real_def, hsingle]
+    simp
+  have hHitEq :
+      {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} = Avoidᶜ := by
+    ext G
+    simp [Avoid]
+  rw [hHitEq, measureReal_compl hAvoidMeas, hAvoidReal]
+  simp [ν]
+
 lemma one_sub_pow_le_exp_neg_nat_mul {r : ℝ} (hr1 : r ≤ 1)
     (m : ℕ) :
     (1 - r) ^ m ≤ Real.exp (-((m : ℝ) * r)) := by
@@ -729,6 +790,38 @@ lemma one_sub_pow_le_exp_neg_nat_mul {r : ℝ} (hr1 : r ≤ 1)
       pow_le_pow_left₀ (sub_nonneg.mpr hr1) (Real.one_sub_le_exp_neg r) m
     _ = Real.exp ((m : ℝ) * (-r)) := (Real.exp_nat_mul (-r) m).symm
     _ = Real.exp (-((m : ℝ) * r)) := by ring_nf
+
+/-- If the expected number of exact restricted-degree hits dominates
+`log 20`, then an exact hit occurs with probability at least `0.95`. -/
+theorem binomialRandom_exists_restrictedDegree_eq_probability_ge_nineteen_twentieths
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ)
+    (hmass : Real.log 20 ≤ (A.card : ℝ) *
+      (graphRestrictedBinomialLaw B p).real {k}) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k} ≥
+      (19 : ℝ) / 20 := by
+  let ν : Measure ℕ := graphRestrictedBinomialLaw B p
+  haveI : IsProbabilityMeasure ν := by
+    dsimp [ν, graphRestrictedBinomialLaw]
+    infer_instance
+  let r : ℝ := ν.real {k}
+  have hr1 : r ≤ 1 := by
+    simpa [r] using measureReal_le_one (μ := ν) (s := ({k} : Set ℕ))
+  have hpow : (1 - r) ^ A.card ≤ (1 : ℝ) / 20 := by
+    calc
+      (1 - r) ^ A.card ≤ Real.exp (-((A.card : ℝ) * r)) :=
+        one_sub_pow_le_exp_neg_nat_mul hr1 A.card
+      _ ≤ Real.exp (-Real.log 20) := by
+        apply Real.exp_le_exp.mpr
+        exact neg_le_neg (by simpa [r, ν] using hmass)
+      _ = (1 : ℝ) / 20 := by
+        rw [Real.exp_neg, Real.exp_log (by norm_num : (0 : ℝ) < 20)]
+        norm_num
+  rw [binomialRandom_exists_restrictedDegree_eq_probability p hAB k]
+  change (19 : ℝ) / 20 ≤ 1 - (1 - r) ^ A.card
+  linarith
 
 /-- A finite point-mass criterion ensuring that one of the independent
 restricted degrees reaches `k` with probability at least `0.9`. -/
