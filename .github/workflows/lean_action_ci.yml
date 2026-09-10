@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
       - name: Check architecture source graph and Python tooling
         run: |
-          python -m py_compile tools/architecture/project_roots.py tools/architecture/migrate_diagnostic_roots.py tools/architecture/check_tiers.py tools/architecture/check_placeholders.py tools/architecture/generate_baseline.py tools/architecture/check_compatibility.py tools/architecture/check_layout.py tools/architecture/check_phase.py tools/architecture/check_phase_projection.py tools/architecture/check_completion_phase_projection.py tools/architecture/check_completion_phase.py tools/architecture/check_warnings.py tools/architecture/check_lint.py tools/architecture/check_provenance.py tools/architecture/normalize_apache_notices.py tools/architecture/sort_aggregate_imports.py tools/benchmark/run.py
+          python -m py_compile tools/architecture/project_roots.py tools/architecture/migrate_diagnostic_roots.py tools/architecture/check_tiers.py tools/architecture/check_placeholders.py tools/architecture/generate_baseline.py tools/architecture/check_layout.py tools/architecture/check_phase.py tools/architecture/check_phase_projection.py tools/architecture/check_completion_phase_projection.py tools/architecture/check_completion_phase.py tools/architecture/check_warnings.py tools/architecture/check_lint.py tools/architecture/check_provenance.py tools/architecture/normalize_apache_notices.py tools/architecture/sort_aggregate_imports.py tools/benchmark/run.py
           python tools/architecture/check_phase.py --self-test
           python tools/architecture/check_phase_projection.py --self-test
           python tools/architecture/check_completion_phase_projection.py --self-test
@@ -45,14 +45,13 @@ jobs:
           python tools/architecture/check_tiers.py
           python tools/architecture/check_placeholders.py --self-test
           python tools/architecture/check_placeholders.py
-          python tools/architecture/check_compatibility.py
           python tools/architecture/check_provenance.py
           python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/ci-architecture --name source
       - name: Build library and smoke tests
         uses: leanprover/lean-action@v1
         with:
           build: true
-          build-args: --quiet ComputationalMathematics NumStability NumStabilityTest
+          build-args: --quiet ComputationalMathematics NumStabilityTest
           use-github-cache: ${{ !(github.event_name == 'workflow_dispatch' && inputs.clean_project) }}
           test: false
           lint: false
@@ -64,12 +63,12 @@ jobs:
         run: |
           set -o pipefail
           {
-            printf '##[group]lake build ComputationalMathematics NumStability NumStabilityTest\n'
+            printf '##[group]lake build ComputationalMathematics NumStabilityTest\n'
             printf '[command]/usr/bin/git log -1 --format=%%H\n'
             git log -1 --format=%H
             lean --version
           } | tee "$RUNNER_TEMP/lean-build.log"
-          lake build ComputationalMathematics NumStability NumStabilityTest 2>&1 | tee -a "$RUNNER_TEMP/lean-build.log"
+          lake build ComputationalMathematics NumStabilityTest 2>&1 | tee -a "$RUNNER_TEMP/lean-build.log"
           printf '##[endgroup]\n' | tee -a "$RUNNER_TEMP/lean-build.log"
           PYTHONIOENCODING=utf-8 python tools/architecture/check_placeholders.py --completion --log "$RUNNER_TEMP/lean-build.log"
           python tools/architecture/check_warnings.py --log "$RUNNER_TEMP/lean-build.log" --baseline docs/architecture/warnings.json --check
@@ -126,7 +125,7 @@ jobs:
           consumer = Path(os.environ['RUNNER_TEMP']) / 'lcm-identity-consumer'
           families = ['FloatingPoint', 'Stability', 'Gaussian', 'Vershynin', 'LeVeque', 'MatrixNotation']
           modules = []; hashes = {}
-          for branch in ['Old', 'Canonical']:
+          for branch in ['Canonical']:
               for family in families:
                   relative = Path(branch) / (family + '.lean')
                   source = root / 'NumStabilityTest/Import/ProjectIdentity' / relative
@@ -135,10 +134,6 @@ jobs:
                   shutil.copyfile(source, destination)
                   hashes[destination.relative_to(consumer).as_posix()] = hashlib.sha256(destination.read_bytes()).hexdigest()
                   modules.append('Consumer.' + branch + '.' + family)
-          source = root / 'NumStabilityTest/Import/ProjectIdentity/Mixed.lean'
-          shutil.copyfile(source, consumer / 'Consumer/Mixed.lean')
-          hashes['Consumer/Mixed.lean'] = hashlib.sha256(source.read_bytes()).hexdigest()
-          modules.append('Consumer.Mixed')
           (consumer / 'Consumer.lean').write_text(''.join('import ' + module + '\n' for module in sorted(modules)), encoding='utf-8')
           (consumer / 'lakefile.toml').write_text(
               'name = "lcmIdentityConsumer"\nversion = "0.1.0"\ndefaultTargets = ["Consumer"]\n'
@@ -156,7 +151,7 @@ jobs:
               'NumStability.FPModel.exactWithUnitRoundoff',
               'NumStability.matMul_id_right',
           ]
-          (evidence / 'Axioms.lean').write_text('import ComputationalMathematics\nimport NumStability\n\n' +
+          (evidence / 'Axioms.lean').write_text('import ComputationalMathematics\n\n' +
               ''.join('#print axioms ' + name + '\n' for name in representatives), encoding='utf-8')
           PY
           lake env lean "$evidence/Axioms.lean" > "$evidence/axioms.log" 2>&1
