@@ -1,3 +1,0 @@
-import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.RademacherMGF.Contract
-
-/-! Historical HDP checkpoint import retained for compatibility. -/
