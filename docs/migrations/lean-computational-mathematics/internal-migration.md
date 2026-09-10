@@ -13,7 +13,7 @@ Final validation status is recorded separately in [validation](validation.md).
 | Original library/import root | `NumStability` | Retained forwarding surface |
 | Implementation/aggregate cohort | 2,401 modules | One canonical copy under `ComputationalMathematics` |
 | Existing compatibility cohort | 797 modules | Preserve old module names, retarget imports to canonical owners |
-| Total retained old imports | 3,198 modules | All retained; no removal release introduced |
+| Total retained old imports | 3,198 modules | Retained until release 0.2.0 (2026-09-10), which removed all 3,334 forwarding modules; see `docs/architecture/migrations/2026-09-forwarder-map.json` |
 | Test library/root | `NumStabilityTest` | Retained, with canonical/legacy/mixed import fixtures |
 | Authored declaration namespaces | `NumStability` and existing subnamespaces | Retained unchanged |
 | Lean / Mathlib | `4.29.0-rc3` / `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` | Retained; no dependency upgrade |
@@ -50,6 +50,8 @@ scope and earlier failed-attempt records.
 
 Consumers pinning the inherited `v0.1.0` release must use that release's old
 imports; a new module root is not retroactively added to a historical tag.
+From release 0.2.0 the forwarding paths no longer exist on the current tree,
+so a consumer moving off `v0.1.x` rewrites its imports with the forwarder map.
 
 ```lean
 import ComputationalMathematics.FloatingPoint.Model

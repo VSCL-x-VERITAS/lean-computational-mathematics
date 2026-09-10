@@ -219,11 +219,15 @@ split from the reusable library.
   are 446 imports below `ComputationalMathematics`, including 44 below
   `ComputationalMathematics.Analysis` and 73 below `ComputationalMathematics.Source`; these are
   enforced ceilings, not the live direct-import count.
-- `NumStability` retains its historical complete-tree behavior through the
-  compatibility window.
+- The historical `NumStability` import paths were removed in release 0.2.0
+  (2026-09-10) after the compatibility window closed. The old-path to
+  canonical-path table is
+  [`docs/architecture/migrations/2026-09-forwarder-map.json`](docs/architecture/migrations/2026-09-forwarder-map.json),
+  and the prose mapping is retained as
+  [`docs/architecture/migrations/COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md).
 
-Changing the meaning of `import NumStability`, removing a forwarding module, or
-renaming a supported declaration requires a planned breaking release.
+Renaming a supported declaration, or removing another advertised import path,
+requires a planned breaking release in the same way.
 
 ## Placement rules
 

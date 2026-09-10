@@ -84,7 +84,8 @@ forwarding notices, are covered by the provenance gate.
 
 Canonical modules use `ComputationalMathematics`. The package remains
 `numStability`, the test root remains `NumStabilityTest`, and authored
-declarations remain in their existing `NumStability` namespaces. The
+declarations remain in their existing `NumStability` namespaces. Release 0.2.0
+removed the historical `NumStability` import paths; the namespace is unaffected. The
 [validation record](docs/migrations/lean-computational-mathematics/validation.md)
 records passing source, clean build/test/diagnostic, downstream and strict
 compiled-comparison checks for the validated source revision. The
@@ -246,13 +247,12 @@ git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git l
 cd lean-computational-mathematics
 git checkout 51c5540984780b0011f41739b9ddaf8e505b7c93
 lake exe cache get
-lake build ComputationalMathematics NumStability NumStabilityTest
+lake build ComputationalMathematics NumStabilityTest
 lake test
 ```
 
-`lake build` selects the canonical and retained legacy libraries; the explicit
-command above also includes the test library. `lake test` uses the retained
-`NumStabilityTest` driver.
+`lake build` selects the canonical library; the explicit command above also
+includes the test library. `lake test` uses the `NumStabilityTest` driver.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -284,7 +284,6 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
-| `NumStability` | Retained old entry point forwarding through the canonical root |
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for API tiers and dependency rules.
 Historical imports and their canonical destinations are documented in
@@ -304,7 +303,8 @@ rev = "51c5540984780b0011f41739b9ddaf8e505b7c93"
 
 Pin a reviewed commit when reproducibility is required. The inherited
 `v0.1.0` tag predates the current LeVeque/HDP work and the new module root;
-consumers of that tag use its original `NumStability` imports.
+consumers of that tag use its original `NumStability` imports, which release
+0.2.0 removed from the current tree.
 
 A minimal current reusable import is:
 
@@ -319,8 +319,9 @@ open NumStability
 
 The import root and declaration namespace are different interfaces:
 `ComputationalMathematics.FloatingPoint.Model` still defines
-`NumStability.FPModel`. Existing old import paths are retained under the
-documented compatibility policy.
+`NumStability.FPModel`. The historical `NumStability` import paths were removed
+in release 0.2.0; the old-path to canonical-path table is
+[`docs/architecture/migrations/2026-09-forwarder-map.json`](docs/architecture/migrations/2026-09-forwarder-map.json).
 
 ## Repository layout
 
@@ -354,15 +355,10 @@ ComputationalMathematics/
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 
-NumStability.lean                         retained original complete-tree import
-NumStability/                            retained old imports; no duplicate implementation
-└── Higham.lean and Higham/               earlier Higham compatibility paths
-
 NumStabilityTest.lean                     complete test-library entry point
 NumStabilityTest/
 ├── Import/
-│   ├── Canonical/                        canonical and entry-point smoke tests
-│   └── Compatibility/                    forwarding-path regression tests
+│   └── Canonical/                        canonical and entry-point smoke tests
 ├── Reorganization/                       migration and declaration-placement tests
 └── Worker/                               focused proof-audit and integration suites
 
@@ -389,7 +385,7 @@ python tools/architecture/generate_baseline.py --skip-declarations --strict-sour
 ```
 
 CI additionally compiles its Python tooling, runs the architecture and
-diagnostic checker self-tests, builds `ComputationalMathematics`, `NumStability`
+diagnostic checker self-tests, builds `ComputationalMathematics`
 and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
 reviewed warning and lint baselines. Those
 baselines are review records and must not be regenerated merely to silence new

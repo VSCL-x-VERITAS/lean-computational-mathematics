@@ -5260,7 +5260,7 @@ without giving task-specific scripts.
 For exploratory work, start with:
 
 ```lean
-import NumStability
+import ComputationalMathematics
 open NumStability
 ```
 
@@ -5907,7 +5907,7 @@ rg "structure .*Spec|structure .*Error" NumStability
 Inside Lean:
 
 ```lean
-import NumStability
+import ComputationalMathematics
 open NumStability
 
 #check dotProduct_error_bound

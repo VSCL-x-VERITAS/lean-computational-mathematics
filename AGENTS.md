@@ -12,9 +12,11 @@ Package names, library targets, module roots, namespaces and other public
 interfaces require an explicit migration map and compatibility decision.
 A public repository rename alone does not authorize changing them.
 
-The approved migration uses `ComputationalMathematics` for canonical modules,
-retains old `NumStability` imports as forwarders, and keeps the `numStability`
-package, `NumStabilityTest` root and authored `NumStability` declaration names.
+The approved migration uses `ComputationalMathematics` for canonical modules and
+keeps the `numStability` package, `NumStabilityTest` root and authored
+`NumStability` declaration names. The old `NumStability` import paths were
+forwarders and were removed in release 0.2.0; the namespace and the declaration
+names are unchanged and must stay unchanged.
 Use the exact checked-in module map; do not rename mathematical suffixes or
 invent canonical counterparts for older compatibility-only paths.
 
