@@ -41,6 +41,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.OnePlusBoun
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Remark04.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Theorem01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise05.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.ExpectedGraphDegree.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeChernoff.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeUnionBound.Contract
