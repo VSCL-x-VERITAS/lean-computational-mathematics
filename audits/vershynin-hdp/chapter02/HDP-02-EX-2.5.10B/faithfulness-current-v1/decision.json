@@ -1,0 +1,49 @@
+{
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-09-10T12:09:31.937064+00:00",
+  "findings": [
+    {
+      "category": "global-gauge-scope",
+      "impact": "K remains global; iSup formalizes the source\u2019s uniform-bound reading and toReal is safe.",
+      "lean_evidence": "D004 uses all Nat; only D006 uses Fin N; D001 guards K with <\u22a4.",
+      "severity": "note",
+      "source_evidence": "K=max_i||X_i||_{\u03c8\u2082} is defined over the infinite sequence."
+    },
+    {
+      "category": "index-origin",
+      "impact": "The +1 bijection is harmless and has no off-by-one loss.",
+      "lean_evidence": "D006/D069/D070 use X 0,\u2026,X (N-1).",
+      "severity": "note",
+      "source_evidence": "The source uses X\u2081,X\u2082,\u2026 and the first N indices."
+    },
+    {
+      "category": "explicit-integrability",
+      "impact": "This exposes implicit finiteness and blocks total-integral vacuity; it does not change the claim.",
+      "lean_evidence": "D001 explicitly concludes Integrable before the Bochner-integral inequality.",
+      "severity": "note",
+      "source_evidence": "The source gives a finite real expectation bound without a separate integrability conjunct."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "After reindexing X\u2081,X\u2082,\u2026 as X 0,X 1,\u2026, Fin N is the first-N maximum and the all-Nat gauge is global K. The outer C is absolute and the Lean inequality gives the source inequality; explicit integrability is already forced by the finite bound.",
+      "verdict": "yes"
+    },
+    "source_implies_lean": {
+      "reasoning": "With the source\u2019s meaningful finite-global-K convention, sub-gaussian coordinates are measurable, their global \u03c8\u2082 supremum is below top, and their finite absolute maximum is integrable. Reindexing and the guarded toReal conversions then give every Lean conjunct without independence or centering.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
+  },
+  "rationale": "The target preserves the universal absolute constant, arbitrary dependence, absence of centering, global all-sequence \u03c8\u2082 bound, and finite first-N expected absolute maximum. All-Nat iSup defines K, whereas Fin N iSup defines the left side; Nat zero-based indexing is a bijective renaming. PsiTwoGauge implements the source infimum. Global <\u22a4 and finite-prefix structure make ENNReal.toReal sound. Explicit Integrable states finiteness implicit in the source expectation bound. Under the standard uniform-supremum reading of the source\u2019s infinite max, both implications hold.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EX-2.5.10B"
+}
