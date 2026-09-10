@@ -1,9 +1,0 @@
-# Local finite-volume replacement organization
-
-The three Chapter 1 leaves are thin source wrappers under the existing reviewed source prefix. The nine mathematical leaves have no enclosing tier prefix, so each requires an explicit reusable rule. The first census stopped at the first unclassified new module before changing the tier file; its aggregate edit and staging succeeded and are retained.
-
-LocalCellErrorBounds states a generic normed-space conservative error identity and estimate. LocalRiemannInformation defines admitted physical problems, references and information-producing methods; LocalRiemannInformationUpdate connects these to generic finite-volume cells. DirectionalReference, DirectionalReferenceError and CartesianDirectionalReference provide reference conservation, errors and Cartesian realization. PhysicalCoordinateGeometry supplies measured cells and shared physical faces. DirectionalMethodSweep composes admitted methods and derives local bounds. Examples/PhysicalIntervalSweep contains a concrete real-interval example of this reusable API. The source wording and source interpretation remain in the three Source/LeVeque wrappers.
-
-These are additive modules; old imports and declarations remain available. The chapter aggregate gains the three source imports. No reusable leaf imports a source wrapper. Existing measured geometry, coordinate sweeps, finite-volume updates, hyperbolicity and rectangle-conservation producers are reused. The source-faithfulness decisions remain separate from this organization review.
-
-All twelve source paths and exact bytes are guarded by organize-local-replacements.py and the DIM placement inventory. The new exact rules record the current input commit as the worktree baseline, not an invented future introduction commit. The final current repository scans determine the actual organization counters.

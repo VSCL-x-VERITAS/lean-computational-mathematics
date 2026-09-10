@@ -1,5 +1,0 @@
-The three Analysis leaves provide reusable numerical information routines, local update error bounds, and a biased scalar example. They contain no LeVeque equation-number declarations. The source wrapper belongs in `Source.LeVeque.Chapter01` and records the chapter-specific interpretation. Exact equal-state consistency remains an optional property, preserving the older certified Method API.
-
-The four frozen leaves contain 22 authored declarations. Their native builds, declaration/axiom checks, and two applicability checks passed; source faithfulness remains subject to the fresh independent audit. Their hashes are recorded in `riemann-routine-production/files.json` and the production receipt. The root reviewed the new primary theorem and Routine structure before this placement.
-
-Add three explicit reusable tier rules and the sorted Analysis imports. Add the source wrapper to the sorted Chapter 1 umbrella. Preserve prior declarations, imports, classifications and audit artifacts. Recompute tier counts from the actual current module census. No source acceptance or final organization count is claimed by this placement record; actual layout/build checks follow.

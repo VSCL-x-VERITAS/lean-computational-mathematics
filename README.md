@@ -205,12 +205,13 @@ Riemann-interface adapters, and operator splitting.
 The 30-module LeVeque source surface begins at
 [`ComputationalMathematics.Source.LeVeque`](ComputationalMathematics/Source/LeVeque.lean); its
 [`Chapter01` subtree](ComputationalMathematics/Source/LeVeque/Chapter01/) connects those foundations
-to Chapter 1 equations and constructions. The machine-readable
-[`Chapter 1 gate`](gates/leveque-finite-volume/chapter-01.json) and its
-[`audit artifacts`](gates/leveque-finite-volume/artifacts/) record source
-inventory, declaration and axiom checks, focused builds, organization checks,
-and per-claim faithfulness decisions. Book and workflow limitations are kept
-under [`ledgers/leveque-finite-volume/`](ledgers/leveque-finite-volume/).
+to Chapter 1 equations and constructions. The chapter gate outcomes and the
+per-claim faithfulness decisions are summarised in
+[`docs/architecture/reviews/2026-09-faithfulness-outcomes.md`](docs/architecture/reviews/2026-09-faithfulness-outcomes.md);
+the audit packages themselves were the working record of that campaign and were
+retired from the tree on 2026-09-10, recoverable at `afb25bab1`. Book and
+workflow limitations are kept under
+[`ledgers/leveque-finite-volume/`](ledgers/leveque-finite-volume/).
 
 ### Vershynin: high-dimensional probability
 
@@ -362,9 +363,8 @@ NumStabilityTest/
 ├── Reorganization/                       migration and declaration-placement tests
 └── Worker/                               focused proof-audit and integration suites
 
-gates/                                    machine-readable formalization gates and gate-bound evidence
 ledgers/                                  source/workflow issues, limitations, and inconsistencies
-docs/                                     architecture, source coverage, audits, and benchmarks
+docs/                                     architecture, source coverage, and benchmarks
 tools/                                    architecture checks and benchmark tooling
 experiments/                              C/Python reproductions of selected source examples
 ```
