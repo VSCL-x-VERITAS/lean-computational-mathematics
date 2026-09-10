@@ -54,6 +54,14 @@ PROCESS_WORDS = (
     "Whole",
 )
 GENERATED_PARTS = {"__pycache__", ".DS_Store"}
+# Session working artifacts must not be tracked under the evidence trees. The
+# 2026-09 evidence retirement removed 18,215 such files; these rules keep them
+# from returning. Raw command dumps and profiles carry no reviewable claim, a
+# rerun history supersedes itself, agent transcripts are not evidence a gate
+# binds, and rendered source pages are third-party material.
+EVIDENCE_ROOTS = ("gates/", "audits/")
+EVIDENCE_ARTIFACT_SUFFIXES = {".bin", ".pstats", ".jsonl", ".gz", ".png", ".pdf"}
+EVIDENCE_ARTIFACT_PARTS = {"orchestration", "history"}
 GENERATED_SUFFIXES = {".olean", ".ilean", ".pyc", ".pyo", ".aux", ".log", ".out"}
 FORBIDDEN_TRACKED_PREFIXES = (
     ".agents/",
@@ -196,6 +204,15 @@ def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
     )
 
 
+def is_evidence_artifact(path: Path) -> bool:
+    """Session working artifacts that must not be tracked under gates/ or audits/."""
+    if not path.as_posix().startswith(EVIDENCE_ROOTS):
+        return False
+    if path.suffix.lower() in EVIDENCE_ARTIFACT_SUFFIXES:
+        return True
+    return any(part in EVIDENCE_ARTIFACT_PARTS for part in path.parts)
+
+
 def tracked_generated() -> list[str]:
     try:
         completed = subprocess.run(
@@ -214,6 +231,7 @@ def tracked_generated() -> list[str]:
         if path.as_posix().startswith(FORBIDDEN_TRACKED_PREFIXES)
         or any(part in GENERATED_PARTS for part in path.parts)
         or path.suffix.lower() in GENERATED_SUFFIXES
+        or is_evidence_artifact(path)
     )
 
 

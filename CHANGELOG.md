@@ -5,6 +5,19 @@ follows semantic versioning for its public module paths and declaration API.
 
 ## [Unreleased]
 
+### Removed
+
+- 18,205 files (1.30 GB) of audit working artifacts that no gate document,
+  tool, document or CI step referenced: the unreferenced part of the
+  2026-09-08 formalization session, 370 superseded faithfulness reruns across
+  121 packages, the checkpoint-archive fragments already present in git
+  history, and `examples/LibraryLookup.lean`, which no Lake target built. The
+  retained evidence, the rules that computed it and the recovery commands are
+  recorded in `docs/architecture/reviews/2026-09-evidence-retirement.md`. No
+  Lean module, build target or diagnostic baseline changed.
+- The tracked copy of the LeVeque source book and its 11 rendered page images,
+  on rights grounds. Audit manifests keep their sha256 records.
+
 ### Added
 
 - Canonical `NumStability.Source` and `NumStability.Source.Higham` entry points.

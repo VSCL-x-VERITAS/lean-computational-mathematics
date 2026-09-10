@@ -52,6 +52,12 @@ public-instance name. These figures are not a build or full-interface-preservati
 Its normalized source-tree SHA-256 is
 `915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
 
+On 2026-09-09 the audit evidence trees were retired to their gate-bound files:
+18,205 working artifacts (1.30 GB) were removed and 7,151 evidence files kept,
+taking the tracked tree from 41,651 files to 23,451. The source figures below are
+unaffected, since no Lean module, build target or diagnostic baseline changed. See
+`docs/architecture/reviews/2026-09-evidence-retirement.md`.
+
 | Metric | Clean base | Migrated tree |
 |---|---:|---:|
 | Production Lean modules, including compatibility | 3,198 | **5,599** |
@@ -360,7 +366,7 @@ NumStabilityTest/
 ├── Reorganization/                       migration and declaration-placement tests
 └── Worker/                               focused proof-audit and integration suites
 
-gates/                                    machine-readable formalization gates and evidence
+gates/                                    machine-readable formalization gates and gate-bound evidence
 ledgers/                                  source/workflow issues, limitations, and inconsistencies
 docs/                                     architecture, source coverage, audits, and benchmarks
 tools/                                    architecture checks and benchmark tooling
