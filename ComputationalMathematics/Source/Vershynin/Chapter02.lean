@@ -58,6 +58,9 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.ConstantPsiTwoNorm.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise05.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise07.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Lemma08
@@ -65,11 +68,13 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Proposition
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Definition05.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example08.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example12.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise02.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise10.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSquareTail.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Contract

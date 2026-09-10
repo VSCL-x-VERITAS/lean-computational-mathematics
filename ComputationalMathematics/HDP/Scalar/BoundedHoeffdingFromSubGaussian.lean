@@ -191,20 +191,36 @@ theorem boundedIndependentHoeffdingFromSubGaussian
     (hX : ∀ i, Measurable (X i))
     (hIndep : iIndepFun X μ)
     (hbound : ∀ i, ∀ᵐ ω ∂μ, X i ω ∈ Set.Icc (m i) (M i))
-    (ht : 0 ≤ t)
-    (hWidth : 0 < ∑ i, ‖M i - m i‖ ^ 2) :
+    (ht : 0 ≤ t) :
     μ.real {ω | ∑ i, (X i ω - ∫ y, X i y ∂μ) ≥ t} ≤
       2 * Real.exp (-t ^ 2 / (4 * ∑ i, ‖M i - m i‖ ^ 2)) := by
-  have hmono :
-      μ.real {ω | ∑ i, (X i ω - ∫ y, X i y ∂μ) ≥ t} ≤
-        μ.real {ω | |∑ i, (X i ω - ∫ y, X i y ∂μ)| ≥ t} := by
-    rw [Measure.real_def, Measure.real_def]
-    exact ENNReal.toReal_mono (measure_ne_top _ _)
-      (measure_mono fun ω hω => by
-        change t ≤ ∑ i, (X i ω - ∫ y, X i y ∂μ) at hω
-        change t ≤ |∑ i, (X i ω - ∫ y, X i y ∂μ)|
-        exact hω.trans (le_abs_self _))
-  exact hmono.trans
-    (boundedIndependentTwoSidedFromSubGaussian hX hIndep hbound ht hWidth)
+  let widthEnergy : ℝ := ∑ i, ‖M i - m i‖ ^ 2
+  have hWidthNonneg : 0 ≤ widthEnergy := by
+    dsimp [widthEnergy]
+    exact Finset.sum_nonneg fun i _ => sq_nonneg ‖M i - m i‖
+  by_cases hWidthZero : widthEnergy = 0
+  · have hProb :
+        μ.real {ω | ∑ i, (X i ω - ∫ y, X i y ∂μ) ≥ t} ≤ 1 := by
+      rw [Measure.real_def]
+      exact ENNReal.toReal_mono ENNReal.one_ne_top prob_le_one
+    calc
+      μ.real {ω | ∑ i, (X i ω - ∫ y, X i y ∂μ) ≥ t} ≤ 1 := hProb
+      _ ≤ 2 * Real.exp (-t ^ 2 / (4 * ∑ i, ‖M i - m i‖ ^ 2)) := by
+        simp [widthEnergy] at hWidthZero
+        simp [hWidthZero]
+  · have hWidth : 0 < ∑ i, ‖M i - m i‖ ^ 2 := by
+      change 0 < widthEnergy
+      exact lt_of_le_of_ne hWidthNonneg (Ne.symm hWidthZero)
+    have hmono :
+        μ.real {ω | ∑ i, (X i ω - ∫ y, X i y ∂μ) ≥ t} ≤
+          μ.real {ω | |∑ i, (X i ω - ∫ y, X i y ∂μ)| ≥ t} := by
+      rw [Measure.real_def, Measure.real_def]
+      exact ENNReal.toReal_mono (measure_ne_top _ _)
+        (measure_mono fun ω hω => by
+          change t ≤ ∑ i, (X i ω - ∫ y, X i y ∂μ) at hω
+          change t ≤ |∑ i, (X i ω - ∫ y, X i y ∂μ)|
+          exact hω.trans (le_abs_self _))
+    exact hmono.trans
+      (boundedIndependentTwoSidedFromSubGaussian hX hIndep hbound ht hWidth)
 
 end NumStability.HDP.Scalar.BoundedHoeffdingFromSubGaussian

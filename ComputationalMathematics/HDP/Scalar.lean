@@ -12,7 +12,9 @@ import ComputationalMathematics.HDP.Scalar.PoissonLimit
 import ComputationalMathematics.HDP.Scalar.PoissonNormal
 import ComputationalMathematics.HDP.Scalar.Preliminaries
 import ComputationalMathematics.HDP.Scalar.SubExponential
+import ComputationalMathematics.HDP.Scalar.SubExponentialCentering
 import ComputationalMathematics.HDP.Scalar.SubExponentialCharacterization
+import ComputationalMathematics.HDP.Scalar.SubExponentialExamples
 import ComputationalMathematics.HDP.Scalar.SubExponentialPropertyThreeGauge
 import ComputationalMathematics.HDP.Scalar.SubGaussian
 import ComputationalMathematics.HDP.Scalar.SubGaussianCentering

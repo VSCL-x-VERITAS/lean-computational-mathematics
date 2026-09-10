@@ -1,0 +1,511 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "blind-translation",
+  "dossier_sha256": "083fc488f7992079c6a48f7f558a3d427f545609496508276bcbae6e80c16d32",
+  "translation": {
+    "binders": [
+      "c : ℝ is the existentially chosen universal constant.",
+      "ι is an arbitrary finite type indexing the family.",
+      "Ω is an arbitrary measurable sample space.",
+      "μ is a probability measure on Ω.",
+      "X : ι → Ω → ℝ assigns to every i a real-valued function X_i on Ω.",
+      "m M : ι → ℝ assign lower and upper endpoints m_i and M_i.",
+      "t : ℝ is the upper-tail threshold."
+    ],
+    "hypotheses": [
+      "For every i ∈ ι, X_i is measurable from Ω to the Borel measurable real line.",
+      "The indexed family of functions X is mutually independent under μ.",
+      "For every i ∈ ι, X_i(ω) ∈ [m_i,M_i] for μ-almost every ω; the exceptional null set may depend on i, although finiteness permits simultaneous almost-everywhere bounds.",
+      "t > 0.",
+      "S = ∑_{i∈ι} ‖M_i-m_i‖² > 0; because the real norm is absolute value, S = ∑_{i∈ι}|M_i-m_i|²."
+    ],
+    "conclusions": [
+      "Let E = {ω ∈ Ω | ∑_{i∈ι}(X_i(ω) - ∫_Ω X_i(y) dμ(y)) ≥ t}. Then μ.real(E) ≤ 2 · exp(-(c · t²)/S), where μ.real(E) is the real conversion of the extended-nonnegative-real measure μ(E). Since μ is a probability measure, this is the ordinary real-valued probability of E."
+    ],
+    "mathematical_definitions": [
+      "∃ c : ℝ, c > 0 ∧ ∀ finite ι, measurable Ω, probability measures μ, families X : ι → Ω → ℝ, bounds m M : ι → ℝ, and t : ℝ, measurability of every X_i → mutual independence of X under μ → almost-everywhere interval bounds for every X_i → t > 0 → ∑_i |M_i-M_i+(M_i-m_i)|² > 0 as actually written equivalently ∑_i |M_i-m_i|² > 0 → the displayed upper-tail bound.",
+      "The existential quantifier for c is outermost, so one and the same positive c must work uniformly for every later choice.",
+      "The types ι and Ω are arbitrary and may live in independent universe levels.",
+      "ι is equipped with a Fintype instance but no explicit nonemptiness assumption.",
+      "Ω is equipped with an arbitrary measurable-space structure.",
+      "μ is an arbitrary measure on Ω equipped with an IsProbabilityMeasure instance.",
+      "X, m, M, and t are universally quantified implicit parameters inside the universal assertion.",
+      "All five displayed assumptions after the binders form an implication chain whose final consequent is the probability inequality.",
+      "Every finite sum is over all i ∈ ι via Finset.univ.",
+      "The integral is taken separately for each i with respect to μ and is the Bochner integral of the real-valued function X_i.",
+      "The event concerns the sum of centered variables X_i - ∫X_i dμ.",
+      "GE.ge makes the event condition exactly 'centered sum ≥ t', not the reversed inequality.",
+      "The numeral 2 occurs both as the exponent in squares and as the multiplicative prefactor outside exp.",
+      "The exponent is the negative real number -(c t²/S)."
+    ],
+    "proposition_plain_english": "There exists a universal real constant c > 0 such that, for every finite index type ι, every measurable space Ω, every probability measure μ on Ω, every finite family X = (X_i) of real-valued measurable functions that is mutually independent under μ, every pair of real endpoint families m = (m_i) and M = (M_i), and every real threshold t, if X_i lies in the closed interval [m_i,M_i] μ-almost everywhere for every i, t > 0, and the sum S = ∑_{i∈ι} |M_i-m_i|² is positive, then μ({ω ∈ Ω | ∑_{i∈ι}(X_i(ω) - ∫_Ω X_i(y) dμ(y)) ≥ t}), regarded as a real number, is at most 2 exp(-c t²/S)."
+  },
+  "restrictions_and_vacuity_risks": [
+    "If ι is empty, S is the empty sum 0, so the hypothesis S > 0 is false and the implication is vacuous.",
+    "If every interval has zero width, then S = 0 and the implication is vacuous.",
+    "If some m_i > M_i, the closed interval [m_i,M_i] is empty. For a probability measure the asserted almost-everywhere membership is then impossible, so that instance is vacuous.",
+    "The explicit hypothesis S > 0 excludes division by zero in every nonvacuous application, even though Lean's real division is total.",
+    "No ordering assumption m_i ≤ M_i is separately stated; it is only forced in nonvacuous cases by the almost-everywhere interval hypothesis.",
+    "No integrability hypothesis is written explicitly. Measurability, almost-everywhere boundedness, finiteness of the index family, and the probability-measure assumption supply the expected mathematical setting for the displayed integrals.",
+    "The conclusion is only an upper-tail estimate; it does not directly state an absolute-value or two-sided deviation event despite the prefactor 2.",
+    "The proposition asserts existence of some positive uniform constant and does not specify its numerical value."
+  ],
+  "ambiguities": [],
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "LocalDef001",
+      "meaning": "The complete proposition asserting existence of a positive universal concentration constant and the stated bound.",
+      "effect_on_target": "It is the target itself and fixes all quantifiers, hypotheses, and the conclusion translated above.",
+      "status": "understood"
+    },
+    {
+      "id": "D002",
+      "name": "LocalDef002",
+      "meaning": "Evidence that the natural number 1 + 1 is at least two.",
+      "effect_on_target": "It supports elaboration of the numeral 2 used in real expressions and introduces no independent mathematical hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D003",
+      "name": "And",
+      "meaning": "Logical conjunction.",
+      "effect_on_target": "It joins c > 0 with the universal assertion that this same c satisfies the concentration bound.",
+      "status": "understood"
+    },
+    {
+      "id": "D004",
+      "name": "DivInvMonoid.toDiv",
+      "meaning": "The division operation inherited from a division-inversion monoid.",
+      "effect_on_target": "It supplies ordinary real division in c t²/S.",
+      "status": "understood"
+    },
+    {
+      "id": "D005",
+      "name": "Exists",
+      "meaning": "Existential quantification.",
+      "effect_on_target": "It asserts that at least one real constant c satisfying the whole uniform property exists.",
+      "status": "understood"
+    },
+    {
+      "id": "D006",
+      "name": "Filter.Eventually",
+      "meaning": "A predicate holds eventually in a filter.",
+      "effect_on_target": "Applied to the almost-everywhere filter, it says X_i belongs to [m_i,M_i] outside a μ-null exceptional set.",
+      "status": "understood"
+    },
+    {
+      "id": "D007",
+      "name": "Finset.sum",
+      "meaning": "Finite summation over a finite set.",
+      "effect_on_target": "It forms both the centered sum of the X_i and the sum S of squared interval widths.",
+      "status": "understood"
+    },
+    {
+      "id": "D008",
+      "name": "Finset.univ",
+      "meaning": "The finite set containing every element of a finite type.",
+      "effect_on_target": "It makes both sums range over every index i ∈ ι.",
+      "status": "understood"
+    },
+    {
+      "id": "D009",
+      "name": "Fintype",
+      "meaning": "A typeclass exhibiting a type as finite.",
+      "effect_on_target": "It requires the index type ι to be finite and enables Finset.univ; it does not require ι to be nonempty.",
+      "status": "understood"
+    },
+    {
+      "id": "D010",
+      "name": "GE.ge",
+      "meaning": "Greater-than-or-equal notation defined by reversing the arguments of ≤.",
+      "effect_on_target": "It makes the deviation event the set where the centered sum is at least t.",
+      "status": "understood"
+    },
+    {
+      "id": "D011",
+      "name": "HDiv.hDiv",
+      "meaning": "Dispatcher for division.",
+      "effect_on_target": "It interprets the quotient (c t²)/S as real division.",
+      "status": "understood"
+    },
+    {
+      "id": "D012",
+      "name": "HMul.hMul",
+      "meaning": "Dispatcher for multiplication.",
+      "effect_on_target": "It interprets c·t² and the prefactor 2·exp(...) as real products.",
+      "status": "understood"
+    },
+    {
+      "id": "D013",
+      "name": "HPow.hPow",
+      "meaning": "Dispatcher for exponentiation.",
+      "effect_on_target": "It interprets t² and each ‖M_i-m_i‖² as natural squares.",
+      "status": "understood"
+    },
+    {
+      "id": "D014",
+      "name": "HSub.hSub",
+      "meaning": "Dispatcher for subtraction.",
+      "effect_on_target": "It interprets M_i-m_i and X_i(ω)-∫X_i dμ as real differences.",
+      "status": "understood"
+    },
+    {
+      "id": "D015",
+      "name": "LE.le",
+      "meaning": "Dispatcher for the non-strict order relation.",
+      "effect_on_target": "It supplies the ≤ relation in the final upper bound and internally the ≥ event relation.",
+      "status": "understood"
+    },
+    {
+      "id": "D016",
+      "name": "LT.lt",
+      "meaning": "Dispatcher for strict order.",
+      "effect_on_target": "It expresses c > 0, t > 0, and S > 0.",
+      "status": "understood"
+    },
+    {
+      "id": "D017",
+      "name": "Measurable",
+      "meaning": "The assertion that a function pulls measurable sets back to measurable sets.",
+      "effect_on_target": "It requires each real-valued function X_i to be measurable.",
+      "status": "understood"
+    },
+    {
+      "id": "D018",
+      "name": "MeasurableSpace",
+      "meaning": "A sigma-algebra structure on a type.",
+      "effect_on_target": "It equips Ω with the measurable structure needed for μ, measurability, almost-everywhere statements, and integration.",
+      "status": "understood"
+    },
+    {
+      "id": "D019",
+      "name": "MeasureTheory.IsProbabilityMeasure",
+      "meaning": "The typeclass assertion that a measure has total mass one.",
+      "effect_on_target": "It restricts μ to probability measures and makes μ.real(E) an ordinary event probability.",
+      "status": "understood"
+    },
+    {
+      "id": "D020",
+      "name": "MeasureTheory.Measure",
+      "meaning": "The type of measures on a measurable space.",
+      "effect_on_target": "It is the type of μ, which controls almost-everywhere statements, independence, integrals, and the event measure.",
+      "status": "understood"
+    },
+    {
+      "id": "D021",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "meaning": "The coercion allowing a measure to be evaluated as a function on sets.",
+      "effect_on_target": "It underlies evaluation of μ on the deviation event before conversion to a real number.",
+      "status": "understood"
+    },
+    {
+      "id": "D022",
+      "name": "MeasureTheory.Measure.instOuterMeasureClass",
+      "meaning": "The outer-measure interface supplied for measures.",
+      "effect_on_target": "It supports the semantics of measuring sets and of the almost-everywhere filter; it adds no target-level assumption.",
+      "status": "understood"
+    },
+    {
+      "id": "D023",
+      "name": "MeasureTheory.Measure.real",
+      "meaning": "The real value obtained by converting the extended-nonnegative-real measure of a set with toReal.",
+      "effect_on_target": "It is the left side of the conclusion, namely the real-valued probability of the upper-tail event.",
+      "status": "understood"
+    },
+    {
+      "id": "D024",
+      "name": "MeasureTheory.ae",
+      "meaning": "The almost-everywhere filter associated with a measure.",
+      "effect_on_target": "It interprets every interval bound as holding μ-almost everywhere rather than pointwise.",
+      "status": "understood"
+    },
+    {
+      "id": "D025",
+      "name": "MeasureTheory.integral",
+      "meaning": "The Bochner integral of a function with respect to a measure.",
+      "effect_on_target": "For each i it supplies ∫X_i dμ, the centering constant subtracted from X_i(ω).",
+      "status": "understood"
+    },
+    {
+      "id": "D026",
+      "name": "Membership.mem",
+      "meaning": "Dispatcher for membership notation.",
+      "effect_on_target": "It expresses X_i(ω) ∈ [m_i,M_i] in the almost-everywhere boundedness hypothesis.",
+      "status": "understood"
+    },
+    {
+      "id": "D027",
+      "name": "Monoid.toNatPow",
+      "meaning": "Natural-number exponentiation in a monoid.",
+      "effect_on_target": "It gives the ordinary real squares appearing in t² and S.",
+      "status": "understood"
+    },
+    {
+      "id": "D028",
+      "name": "Nat",
+      "meaning": "The natural numbers.",
+      "effect_on_target": "It is the exponent type of the numeral 2 in the square operations and supports numeral elaboration.",
+      "status": "understood"
+    },
+    {
+      "id": "D029",
+      "name": "Neg.neg",
+      "meaning": "Dispatcher for unary negation.",
+      "effect_on_target": "It places a minus sign before the quotient c t²/S in the exponential.",
+      "status": "understood"
+    },
+    {
+      "id": "D030",
+      "name": "Norm.norm",
+      "meaning": "Dispatcher for the real-valued norm.",
+      "effect_on_target": "It turns each endpoint difference M_i-m_i into its norm before squaring.",
+      "status": "understood"
+    },
+    {
+      "id": "D031",
+      "name": "NormedField.toNormedSpace",
+      "meaning": "The normed-space structure of a normed field over itself.",
+      "effect_on_target": "It supplies structure needed for the real-valued Bochner integrals and introduces no additional proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D032",
+      "name": "OfNat.ofNat",
+      "meaning": "Interpretation of numeric literals in a target type.",
+      "effect_on_target": "It interprets the literals 0, 1, and 2 occurring in positivity tests, squares, and the prefactor.",
+      "status": "understood"
+    },
+    {
+      "id": "D033",
+      "name": "ProbabilityTheory.iIndepFun",
+      "meaning": "Mutual independence of an indexed family of functions under μ.",
+      "effect_on_target": "It is the independence hypothesis on the full family (X_i)_{i∈ι}.",
+      "status": "understood"
+    },
+    {
+      "id": "D034",
+      "name": "Real",
+      "meaning": "The real-number type.",
+      "effect_on_target": "It is the codomain of X_i, the type of m_i, M_i, t, and c, and the type in which the bound is compared.",
+      "status": "understood"
+    },
+    {
+      "id": "D035",
+      "name": "Real.exp",
+      "meaning": "The real exponential function.",
+      "effect_on_target": "It forms exp(-c t²/S) on the right side of the concentration bound.",
+      "status": "understood"
+    },
+    {
+      "id": "D036",
+      "name": "Real.instAddCommMonoid",
+      "meaning": "The standard additive commutative-monoid structure on ℝ.",
+      "effect_on_target": "It supplies addition and zero for the two finite real sums.",
+      "status": "understood"
+    },
+    {
+      "id": "D037",
+      "name": "Real.instDivInvMonoid",
+      "meaning": "The standard real division and inversion structure.",
+      "effect_on_target": "It makes the exponent's quotient ordinary real division.",
+      "status": "understood"
+    },
+    {
+      "id": "D038",
+      "name": "Real.instLE",
+      "meaning": "The standard ≤ relation on ℝ.",
+      "effect_on_target": "It interprets the final upper bound and the inequalities inside interval membership and the event.",
+      "status": "understood"
+    },
+    {
+      "id": "D039",
+      "name": "Real.instLT",
+      "meaning": "The standard < relation on ℝ.",
+      "effect_on_target": "It interprets all three strict positivity conditions.",
+      "status": "understood"
+    },
+    {
+      "id": "D040",
+      "name": "Real.instMonoid",
+      "meaning": "The standard multiplicative monoid on ℝ.",
+      "effect_on_target": "It supports natural powers, in particular the real squares in the formula.",
+      "status": "understood"
+    },
+    {
+      "id": "D041",
+      "name": "Real.instMul",
+      "meaning": "Ordinary multiplication on ℝ.",
+      "effect_on_target": "It supplies multiplication in c t² and 2 exp(...).",
+      "status": "understood"
+    },
+    {
+      "id": "D042",
+      "name": "Real.instNatCast",
+      "meaning": "The standard embedding of natural numbers into ℝ.",
+      "effect_on_target": "It interprets the real-valued numeral 2 used as the external prefactor.",
+      "status": "understood"
+    },
+    {
+      "id": "D043",
+      "name": "Real.instNeg",
+      "meaning": "Ordinary negation on ℝ.",
+      "effect_on_target": "It makes the exponential exponent negative.",
+      "status": "understood"
+    },
+    {
+      "id": "D044",
+      "name": "Real.instPreorder",
+      "meaning": "The standard preorder structure on ℝ.",
+      "effect_on_target": "It supports the real order relations used throughout the proposition.",
+      "status": "understood"
+    },
+    {
+      "id": "D045",
+      "name": "Real.instSub",
+      "meaning": "Ordinary subtraction on ℝ.",
+      "effect_on_target": "It gives endpoint differences and centered-variable differences.",
+      "status": "understood"
+    },
+    {
+      "id": "D046",
+      "name": "Real.instZero",
+      "meaning": "The standard zero element of ℝ.",
+      "effect_on_target": "It interprets zero in all strict positivity hypotheses.",
+      "status": "understood"
+    },
+    {
+      "id": "D047",
+      "name": "Real.measurableSpace",
+      "meaning": "The Borel measurable-space structure on ℝ.",
+      "effect_on_target": "It determines what it means for each X_i : Ω → ℝ to be measurable.",
+      "status": "understood"
+    },
+    {
+      "id": "D048",
+      "name": "Real.norm",
+      "meaning": "The real norm, equal to absolute value.",
+      "effect_on_target": "It makes the denominator S equal to the sum of squared absolute interval widths.",
+      "status": "understood"
+    },
+    {
+      "id": "D049",
+      "name": "Real.normedAddCommGroup",
+      "meaning": "The standard normed additive commutative-group structure on ℝ.",
+      "effect_on_target": "It supports real norms, subtraction, and Bochner integration.",
+      "status": "understood"
+    },
+    {
+      "id": "D050",
+      "name": "Real.normedField",
+      "meaning": "The standard normed-field structure on ℝ.",
+      "effect_on_target": "It supplies the compatible real norm, multiplication, division, and scalar structure used by the formula and integrals.",
+      "status": "understood"
+    },
+    {
+      "id": "D051",
+      "name": "Set",
+      "meaning": "A set represented as a predicate.",
+      "effect_on_target": "It is the type of the intervals and the deviation event whose μ-measure is bounded.",
+      "status": "understood"
+    },
+    {
+      "id": "D052",
+      "name": "Set.Icc",
+      "meaning": "The closed interval [a,b] = {x | a ≤ x and x ≤ b}.",
+      "effect_on_target": "It specifies the almost-sure bounds m_i ≤ X_i ≤ M_i, including the empty interval when m_i > M_i.",
+      "status": "understood"
+    },
+    {
+      "id": "D053",
+      "name": "Set.instMembership",
+      "meaning": "The membership instance for sets.",
+      "effect_on_target": "It connects the membership notation in the boundedness hypothesis to predicate evaluation.",
+      "status": "understood"
+    },
+    {
+      "id": "D054",
+      "name": "Zero.toOfNat0",
+      "meaning": "The mechanism interpreting the numeral 0 as the zero element.",
+      "effect_on_target": "It supplies the zeros compared with c, t, and S.",
+      "status": "understood"
+    },
+    {
+      "id": "D055",
+      "name": "instHDiv",
+      "meaning": "The homogeneous-to-heterogeneous division adapter.",
+      "effect_on_target": "It routes the displayed quotient to ordinary real division without changing its mathematical meaning.",
+      "status": "understood"
+    },
+    {
+      "id": "D056",
+      "name": "instHMul",
+      "meaning": "The homogeneous-to-heterogeneous multiplication adapter.",
+      "effect_on_target": "It routes the displayed products to ordinary real multiplication without adding assumptions.",
+      "status": "understood"
+    },
+    {
+      "id": "D057",
+      "name": "instHPow",
+      "meaning": "The homogeneous-to-heterogeneous power adapter.",
+      "effect_on_target": "It routes exponentiation by the natural numeral 2 to ordinary real squaring.",
+      "status": "understood"
+    },
+    {
+      "id": "D058",
+      "name": "instHSub",
+      "meaning": "The homogeneous-to-heterogeneous subtraction adapter.",
+      "effect_on_target": "It routes both displayed differences to ordinary real subtraction.",
+      "status": "understood"
+    },
+    {
+      "id": "D059",
+      "name": "instOfNatAtLeastTwo",
+      "meaning": "A generic numeral-construction instance for numerals known to be at least two.",
+      "effect_on_target": "Together with evidence for 2, it elaborates the numeral 2 in the required algebraic types; it has no separate mathematical content.",
+      "status": "understood"
+    },
+    {
+      "id": "D060",
+      "name": "instOfNatNat",
+      "meaning": "The usual interpretation of a natural-number literal as itself.",
+      "effect_on_target": "It constructs the natural exponent 2 and the natural arithmetic used in its elaboration.",
+      "status": "understood"
+    },
+    {
+      "id": "D061",
+      "name": "setOf",
+      "meaning": "Construction of a set from a predicate.",
+      "effect_on_target": "It constructs the upper-tail event from the predicate that the centered finite sum is at least t.",
+      "status": "understood"
+    },
+    {
+      "id": "D062",
+      "name": "HAdd.hAdd",
+      "meaning": "Dispatcher for addition.",
+      "effect_on_target": "It is used in the numeral evidence 1 + 1 underlying elaboration of 2, not as an additional substantive operation in the theorem statement.",
+      "status": "understood"
+    },
+    {
+      "id": "D063",
+      "name": "Nat.AtLeastTwo",
+      "meaning": "The proposition that a natural number is at least two.",
+      "effect_on_target": "It certifies the numeral-building case for 2 and imposes no hypothesis on the probabilistic data.",
+      "status": "understood"
+    },
+    {
+      "id": "D064",
+      "name": "instAddNat",
+      "meaning": "Ordinary addition on natural numbers.",
+      "effect_on_target": "It evaluates 1 + 1 in the auxiliary evidence used to construct the numeral 2.",
+      "status": "understood"
+    },
+    {
+      "id": "D065",
+      "name": "instHAdd",
+      "meaning": "The homogeneous-to-heterogeneous addition adapter.",
+      "effect_on_target": "It routes the auxiliary natural-number expression 1 + 1 to ordinary natural addition and has no independent target-level effect.",
+      "status": "understood"
+    }
+  ]
+}

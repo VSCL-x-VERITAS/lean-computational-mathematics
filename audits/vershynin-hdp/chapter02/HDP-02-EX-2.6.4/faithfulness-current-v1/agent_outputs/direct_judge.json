@@ -1,0 +1,589 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "direct-judge",
+  "task_id": "HDP-02-EX-2.6.4",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "dossier_sha256": "6eb5160d646f459fbe3df954c6df53cce98997cb6edfd5590b0bca735ea0ca20",
+  "dependency_coverage": [
+    {
+      "id": "D001",
+      "name": "NumStability.HDP.Contract.hdp_02_hex_h2_d6_d4__contract_type",
+      "interpretation": "There exists a real c>0, chosen before every finite index type, probability space, family, interval data, and threshold, such that measurable independent variables lying almost surely in the stated closed intervals satisfy the one-sided centered tail bound with right-hand side exp(-(c*t^2)/sum_i |M_i-m_i|^2).",
+      "effect_on_target": "This definition is the whole proof-free target proposition. It places the exponent constant outside all data, has no leading multiplicative prefactor, uses a one-sided event, and includes zero total width because no positivity hypothesis is imposed on the denominator.",
+      "source_match": "It matches the literal bounded-variable conclusion requested by Exercise 2.6.4 and Theorem 2.2.6 up to the permitted universal exponent constant. At zero total width Lean evaluates real division by zero as zero; the resulting RHS 1 differs from the source's undefined display, but the interval hypotheses force the centered event to have probability zero, so the theorem-level consequence agrees.",
+      "status": "pass"
+    },
+    {
+      "id": "D002",
+      "name": "And",
+      "interpretation": "Logical conjunction requiring both positivity of c and validity of the universally quantified inequality.",
+      "effect_on_target": "It makes the witness an absolute positive constant rather than merely asserting the tail family.",
+      "source_match": "The source's phrase 'absolute constant' convention requires positivity and universality, so this conjunction is appropriate.",
+      "status": "pass"
+    },
+    {
+      "id": "D003",
+      "name": "DivInvMonoid.toDiv",
+      "interpretation": "The projection that supplies ordinary division from the ambient division-and-inversion structure; here it resolves to real division.",
+      "effect_on_target": "It interprets the quotient c*t^2/V in the exponent, including the totalized real value when V=0.",
+      "source_match": "It is ordinary real division on positive V. The V=0 totalization is addressed separately and does not change the forced degenerate tail consequence.",
+      "status": "pass"
+    },
+    {
+      "id": "D004",
+      "name": "Exists",
+      "interpretation": "Existential quantification over a single real exponent constant c.",
+      "effect_on_target": "Because this quantifier precedes all data binders, one witness must work uniformly for every instance.",
+      "source_match": "This is the correct logical rendering of an unspecified absolute constant.",
+      "status": "pass"
+    },
+    {
+      "id": "D005",
+      "name": "Filter.Eventually",
+      "interpretation": "A predicate holds eventually in a filter; with MeasureTheory.ae it means almost everywhere with respect to μ.",
+      "effect_on_target": "It makes each interval-bound hypothesis an almost-sure bound rather than a pointwise bound.",
+      "source_match": "This is the standard measure-theoretic interpretation of a random variable taking values in [m_i,M_i].",
+      "status": "pass"
+    },
+    {
+      "id": "D006",
+      "name": "Finset.sum",
+      "interpretation": "Finite summation in an additive commutative monoid, instantiated here for real-valued summands.",
+      "effect_on_target": "It forms both the centered random sum and the sum of squared interval widths.",
+      "source_match": "These are exactly the two finite sums appearing in Theorem 2.2.6.",
+      "status": "pass"
+    },
+    {
+      "id": "D007",
+      "name": "Finset.univ",
+      "interpretation": "The finite set containing every element of a Fintype.",
+      "effect_on_target": "Both sums range over the entire finite index type ι.",
+      "source_match": "It corresponds to summation over i=1,...,N, with harmless invariance under finite reindexing.",
+      "status": "pass"
+    },
+    {
+      "id": "D008",
+      "name": "Fintype",
+      "interpretation": "A type equipped with a finite enumeration of all its elements.",
+      "effect_on_target": "The target permits every finite index type, including the empty type.",
+      "source_match": "Every positive N source family is represented by a finite type; the additional empty case is trivial for t>0 and does not weaken or distort the stated family.",
+      "status": "pass"
+    },
+    {
+      "id": "D009",
+      "name": "GE.ge",
+      "interpretation": "The relation a>=b, definitionally implemented as b<=a.",
+      "effect_on_target": "It defines the event that the centered finite sum is at least t.",
+      "source_match": "The event direction and non-strict threshold match Theorem 2.2.6 exactly.",
+      "status": "pass"
+    },
+    {
+      "id": "D010",
+      "name": "HDiv.hDiv",
+      "interpretation": "The heterogeneous-division operation selected by typeclass inference, here real divided by real.",
+      "effect_on_target": "It forms the exponent quotient from c*t^2 and the squared-width sum.",
+      "source_match": "It is the source quotient on nonzero denominator; its totalized zero case is semantically harmless under the target hypotheses.",
+      "status": "pass"
+    },
+    {
+      "id": "D011",
+      "name": "HMul.hMul",
+      "interpretation": "The heterogeneous multiplication operation, here ordinary real multiplication.",
+      "effect_on_target": "It forms c*t^2 in the numerator.",
+      "source_match": "This is the permitted absolute coefficient multiplying the squared deviation.",
+      "status": "pass"
+    },
+    {
+      "id": "D012",
+      "name": "HPow.hPow",
+      "interpretation": "The heterogeneous power operation, here natural-number squaring of reals.",
+      "effect_on_target": "It squares t and each absolute interval width.",
+      "source_match": "Both squares match the exponent and denominator of Theorem 2.2.6.",
+      "status": "pass"
+    },
+    {
+      "id": "D013",
+      "name": "HSub.hSub",
+      "interpretation": "The heterogeneous subtraction operation, here ordinary real subtraction.",
+      "effect_on_target": "It centers each X_i by its integral and forms each interval difference M_i-m_i.",
+      "source_match": "These are exactly the centered summands and interval widths in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D014",
+      "name": "LE.le",
+      "interpretation": "The non-strict order relation supplied by an LE instance, here ordinary real <=.",
+      "effect_on_target": "It is the comparison between real event probability and the exponential bound.",
+      "source_match": "The inequality direction and non-strictness match the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D015",
+      "name": "LT.lt",
+      "interpretation": "The strict order relation supplied by an LT instance, here ordinary real <.",
+      "effect_on_target": "It expresses both 0<c and 0<t.",
+      "source_match": "The source requires t>0, and an absolute exponent constant is positive.",
+      "status": "pass"
+    },
+    {
+      "id": "D016",
+      "name": "Measurable",
+      "interpretation": "A function whose preimages of measurable sets are measurable.",
+      "effect_on_target": "Every real-valued X_i is required to be measurable.",
+      "source_match": "Random variables are implicitly measurable in the source, so this makes inherited context explicit rather than narrowing the intended class.",
+      "status": "pass"
+    },
+    {
+      "id": "D017",
+      "name": "MeasurableSpace",
+      "interpretation": "The measurable-set structure on the sample type Ω.",
+      "effect_on_target": "It supplies the ambient measurable space needed for random variables and μ.",
+      "source_match": "This is standard formal infrastructure for the source probability space.",
+      "status": "pass"
+    },
+    {
+      "id": "D018",
+      "name": "MeasureTheory.IsProbabilityMeasure",
+      "interpretation": "A typeclass asserting that μ has total mass one.",
+      "effect_on_target": "It ensures μ is a probability law, makes μ.real finite on events, and identifies integrals with expectations.",
+      "source_match": "The source probabilities and expectations presuppose a probability measure.",
+      "status": "pass"
+    },
+    {
+      "id": "D019",
+      "name": "MeasureTheory.Measure",
+      "interpretation": "A countably additive measure on the measurable space Ω.",
+      "effect_on_target": "It is the common law with respect to which independence, almost-sure bounds, integrals, and event probability are evaluated.",
+      "source_match": "This faithfully represents the source's common probability space.",
+      "status": "pass"
+    },
+    {
+      "id": "D020",
+      "name": "MeasureTheory.Measure.instFunLike",
+      "interpretation": "The coercion allowing a measure to be evaluated on a set as an ENNReal.",
+      "effect_on_target": "It underlies μ.real and the almost-everywhere filter used by the proposition.",
+      "source_match": "This is implementation infrastructure for ordinary event probability and creates no semantic change.",
+      "status": "pass"
+    },
+    {
+      "id": "D021",
+      "name": "MeasureTheory.Measure.instOuterMeasureClass",
+      "interpretation": "The theorem installing the outer-measure interface for measures.",
+      "effect_on_target": "It supports the almost-everywhere filter and measure evaluation used in the bound.",
+      "source_match": "It is measure-theoretic infrastructure with no alteration of the source claim.",
+      "status": "pass"
+    },
+    {
+      "id": "D022",
+      "name": "MeasureTheory.Measure.real",
+      "interpretation": "The real-valued measure of a set, obtained by converting its ENNReal measure to Real.",
+      "effect_on_target": "The left side is a real event probability. Under IsProbabilityMeasure it is finite, so toReal loses no information.",
+      "source_match": "It agrees with the real probability notation in Theorem 2.2.6.",
+      "status": "pass"
+    },
+    {
+      "id": "D023",
+      "name": "MeasureTheory.ae",
+      "interpretation": "The almost-everywhere filter associated with μ, identifying predicates modulo μ-null exceptions.",
+      "effect_on_target": "It scopes each interval membership hypothesis almost surely.",
+      "source_match": "This is the conventional rigorous meaning of source boundedness for random variables.",
+      "status": "pass"
+    },
+    {
+      "id": "D024",
+      "name": "MeasureTheory.integral",
+      "interpretation": "The Bochner integral, here real-valued, used as the expectation of X_i under μ.",
+      "effect_on_target": "Each summand is X_i(ω)-integral X_i dμ. Measurability plus an almost-sure finite interval bound on a probability space makes X_i integrable, so the totalized integral agrees with expectation.",
+      "source_match": "It exactly formalizes E X_i in the source conclusion.",
+      "status": "pass"
+    },
+    {
+      "id": "D025",
+      "name": "Membership.mem",
+      "interpretation": "The membership relation supplied by a Membership instance.",
+      "effect_on_target": "It applies membership in Set.Icc to each value X_i(ω).",
+      "source_match": "It expresses the source condition X_i in [m_i,M_i].",
+      "status": "pass"
+    },
+    {
+      "id": "D026",
+      "name": "Monoid.toNatPow",
+      "interpretation": "The natural-power operation induced by a monoid, instantiated for real multiplication.",
+      "effect_on_target": "It supplies the squaring operation used for t and the interval widths.",
+      "source_match": "Natural squaring is the intended source operation.",
+      "status": "pass"
+    },
+    {
+      "id": "D027",
+      "name": "Nat",
+      "interpretation": "The natural-number type used for the power exponent.",
+      "effect_on_target": "The literal exponent 2 denotes a natural square rather than a real-valued arbitrary power.",
+      "source_match": "The source uses ordinary squares.",
+      "status": "pass"
+    },
+    {
+      "id": "D028",
+      "name": "Neg.neg",
+      "interpretation": "The unary negation operation, instantiated as real additive negation.",
+      "effect_on_target": "It makes the exponent negative after the positive coefficient quotient is formed.",
+      "source_match": "The exponential decay sign matches the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D029",
+      "name": "Norm.norm",
+      "interpretation": "The norm operation, instantiated on Real as absolute value.",
+      "effect_on_target": "The denominator uses |M_i-m_i|^2.",
+      "source_match": "For reals, |M_i-m_i|^2=(M_i-m_i)^2, including when endpoints are written in either order.",
+      "status": "pass"
+    },
+    {
+      "id": "D030",
+      "name": "NormedField.toNormedSpace",
+      "interpretation": "The canonical normed-space structure of a normed field over itself, here Real over Real.",
+      "effect_on_target": "It supplies the scalar structure required by the real Bochner integral.",
+      "source_match": "This is infrastructure for expectation and has no independent mathematical restriction.",
+      "status": "pass"
+    },
+    {
+      "id": "D031",
+      "name": "OfNat.ofNat",
+      "interpretation": "The typeclass projection interpreting a natural numeral in the requested type.",
+      "effect_on_target": "It interprets 0 and 2 in the positivity and squaring expressions.",
+      "source_match": "The corresponding source constants are the ordinary real zero and natural square exponent.",
+      "status": "pass"
+    },
+    {
+      "id": "D032",
+      "name": "ProbabilityTheory.iIndepFun",
+      "interpretation": "Mutual independence of the indexed family of measurable functions X_i with respect to μ.",
+      "effect_on_target": "It supplies exactly one common independence hypothesis for the whole finite family.",
+      "source_match": "This is the intended meaning of independent random variables X_1,...,X_N.",
+      "status": "pass"
+    },
+    {
+      "id": "D033",
+      "name": "Real",
+      "interpretation": "The real-number type.",
+      "effect_on_target": "Random-variable values, endpoints, threshold, exponent constant, integrals, and the final comparison are all real-valued.",
+      "source_match": "The source explicitly uses real random variables, real coefficients, and real thresholds.",
+      "status": "pass"
+    },
+    {
+      "id": "D034",
+      "name": "Real.exp",
+      "interpretation": "The ordinary real exponential function.",
+      "effect_on_target": "It forms the prefactor-free right-hand side exp(-c*t^2/V).",
+      "source_match": "This is exactly the exponential appearing in Theorem 2.2.6, with no multiplier outside it.",
+      "status": "pass"
+    },
+    {
+      "id": "D035",
+      "name": "Real.instAddCommMonoid",
+      "interpretation": "The additive commutative-monoid structure on Real.",
+      "effect_on_target": "It supplies zero and finite addition for both Finset sums.",
+      "source_match": "It implements ordinary finite real summation.",
+      "status": "pass"
+    },
+    {
+      "id": "D036",
+      "name": "Real.instDivInvMonoid",
+      "interpretation": "The real division-and-inversion structure; in Lean's field structure inv 0=0, hence a/0=0.",
+      "effect_on_target": "When the squared-width sum is zero, the exponent becomes -0 and the RHS becomes exp(0)=1, rather than an undefined ordinary-real quotient or an extended-real limiting value 0.",
+      "source_match": "This differs at the displayed-expression level, but not at theorem level: zero total squared width forces every bounded X_i to be almost surely constant (and the empty family is also trivial), so for t>0 the centered upper-tail event has probability zero and satisfies either bound.",
+      "status": "pass"
+    },
+    {
+      "id": "D037",
+      "name": "Real.instLE",
+      "interpretation": "The ordinary non-strict order instance on Real.",
+      "effect_on_target": "It orders the event probability below the exponential RHS.",
+      "source_match": "The source uses the same real <= relation.",
+      "status": "pass"
+    },
+    {
+      "id": "D038",
+      "name": "Real.instLT",
+      "interpretation": "The ordinary strict order instance on Real.",
+      "effect_on_target": "It gives strict positivity to c and t.",
+      "source_match": "This matches the source threshold domain and positive-constant convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D039",
+      "name": "Real.instMonoid",
+      "interpretation": "The multiplicative monoid structure on Real.",
+      "effect_on_target": "It underlies natural powers of the real quantities.",
+      "source_match": "It implements ordinary real squaring.",
+      "status": "pass"
+    },
+    {
+      "id": "D040",
+      "name": "Real.instMul",
+      "interpretation": "The ordinary multiplication operation on Real.",
+      "effect_on_target": "It multiplies c by t^2.",
+      "source_match": "The coefficient placement in the exponent matches the source's permitted replacement.",
+      "status": "pass"
+    },
+    {
+      "id": "D041",
+      "name": "Real.instNeg",
+      "interpretation": "The ordinary additive-negation operation on Real.",
+      "effect_on_target": "It makes the exponent nonpositive when V>0.",
+      "source_match": "This matches the source's decaying exponential.",
+      "status": "pass"
+    },
+    {
+      "id": "D042",
+      "name": "Real.instPreorder",
+      "interpretation": "The standard preorder inherited from the linear order on Real.",
+      "effect_on_target": "It supplies the order used to define the closed intervals.",
+      "source_match": "The intervals have their usual real-order meaning.",
+      "status": "pass"
+    },
+    {
+      "id": "D043",
+      "name": "Real.instSub",
+      "interpretation": "Ordinary real subtraction, implemented as addition of the additive inverse.",
+      "effect_on_target": "It creates centered values X_i-E X_i and widths M_i-m_i.",
+      "source_match": "Both subtractions are exactly those in Theorem 2.2.6.",
+      "status": "pass"
+    },
+    {
+      "id": "D044",
+      "name": "Real.instZero",
+      "interpretation": "The additive zero of Real.",
+      "effect_on_target": "It appears in 0<c and 0<t and is the empty Finset sum.",
+      "source_match": "It gives the intended strict-positive domains and the correct empty-sum convention.",
+      "status": "pass"
+    },
+    {
+      "id": "D045",
+      "name": "Real.measurableSpace",
+      "interpretation": "The Borel measurable-space structure on Real.",
+      "effect_on_target": "Measurability of X_i and independence are interpreted for ordinary Borel real random variables.",
+      "source_match": "This is the standard structure implicit in the source.",
+      "status": "pass"
+    },
+    {
+      "id": "D046",
+      "name": "Real.norm",
+      "interpretation": "The real norm given by absolute value.",
+      "effect_on_target": "It replaces each signed width by its absolute value before squaring.",
+      "source_match": "The square removes the sign, so this equals the source denominator term (M_i-m_i)^2.",
+      "status": "pass"
+    },
+    {
+      "id": "D047",
+      "name": "Real.normedAddCommGroup",
+      "interpretation": "The normed additive commutative-group structure on Real.",
+      "effect_on_target": "It supplies the target space structure required by the Bochner integral.",
+      "source_match": "It is standard infrastructure for real expectation.",
+      "status": "pass"
+    },
+    {
+      "id": "D048",
+      "name": "Real.normedField",
+      "interpretation": "The standard normed-field structure on Real, including its arithmetic, order-compatible norm, and totalized field inverse.",
+      "effect_on_target": "It supports the integral scalar structure and all real multiplication, powers, norm, and division in the RHS.",
+      "source_match": "It implements ordinary real arithmetic for positive denominator; the zero inverse convention has the harmless boundary effect recorded for D036.",
+      "status": "pass"
+    },
+    {
+      "id": "D049",
+      "name": "Set",
+      "interpretation": "A set of α is represented by its membership predicate α->Prop.",
+      "effect_on_target": "It represents both closed intervals and the upper-tail event as sets.",
+      "source_match": "These are the same interval and event subsets whose probability the source considers.",
+      "status": "pass"
+    },
+    {
+      "id": "D050",
+      "name": "Set.Icc",
+      "interpretation": "The closed interval {x | m<=x and x<=M} in a preorder.",
+      "effect_on_target": "Each X_i is almost surely bounded below by m_i and above by M_i.",
+      "source_match": "This exactly renders X_i in [m_i,M_i]. If m_i>M_i the premise is unsatisfiable on a probability space, consistent with the standard nonempty-interval reading.",
+      "status": "pass"
+    },
+    {
+      "id": "D051",
+      "name": "Set.instMembership",
+      "interpretation": "The canonical element-membership instance for predicate sets.",
+      "effect_on_target": "It turns X_i(ω) in Set.Icc(m_i,M_i) into the two endpoint inequalities.",
+      "source_match": "It gives the intended interval membership semantics.",
+      "status": "pass"
+    },
+    {
+      "id": "D052",
+      "name": "Zero.toOfNat0",
+      "interpretation": "The numeral-zero instance induced by a type's Zero structure.",
+      "effect_on_target": "It interprets the displayed zeros as real zero.",
+      "source_match": "The source positivity conditions use the same zero.",
+      "status": "pass"
+    },
+    {
+      "id": "D053",
+      "name": "instHDiv",
+      "interpretation": "The homogeneous HDiv instance induced from ordinary division.",
+      "effect_on_target": "It routes the exponent quotient to real division.",
+      "source_match": "It introduces no operation beyond the source quotient; the zero case is covered explicitly elsewhere.",
+      "status": "pass"
+    },
+    {
+      "id": "D054",
+      "name": "instHMul",
+      "interpretation": "The homogeneous HMul instance induced from ordinary multiplication.",
+      "effect_on_target": "It routes c*t^2 to real multiplication.",
+      "source_match": "It gives the intended real product.",
+      "status": "pass"
+    },
+    {
+      "id": "D055",
+      "name": "instHPow",
+      "interpretation": "The HPow instance induced from a homogeneous power operation.",
+      "effect_on_target": "It routes both exponent-2 expressions to natural powers on Real.",
+      "source_match": "It gives ordinary squaring.",
+      "status": "pass"
+    },
+    {
+      "id": "D056",
+      "name": "instHSub",
+      "interpretation": "The homogeneous HSub instance induced from ordinary subtraction.",
+      "effect_on_target": "It routes both centering and endpoint differences to real subtraction.",
+      "source_match": "It gives the intended source differences.",
+      "status": "pass"
+    },
+    {
+      "id": "D057",
+      "name": "instOfNatNat",
+      "interpretation": "The canonical interpretation of a natural literal as that natural number.",
+      "effect_on_target": "It fixes the power exponent as exactly 2.",
+      "source_match": "The source uses squared quantities, with no changed exponent.",
+      "status": "pass"
+    },
+    {
+      "id": "D058",
+      "name": "setOf",
+      "interpretation": "The constructor identifying a predicate with the set of points satisfying it.",
+      "effect_on_target": "It constructs the event {ω | sum_i(X_i(ω)-E X_i)>=t}.",
+      "source_match": "This is exactly the upper-tail event in Theorem 2.2.6.",
+      "status": "pass"
+    }
+  ],
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "The pinned first-edition PDF, page 18/printed 29, gives Exercise 2.6.4 and Theorem 2.6.3; page 6/printed 17 gives the complete Theorem 2.2.6 conclusion. Pages 15-18 supply the sub-Gaussian and centering context.",
+      "lean_evidence": "The direct packet identifies hdp_02_hex_h2_d6_d4 as an alias of the local contract type, whose full body is exposed as D001.",
+      "reasoning": "The selected result is the exercise's request to obtain the bounded-variable Hoeffding statement, with Theorem 2.2.6 determining the literal target form. Direct PDF inspection also establishes that displayed Theorem 2.6.3 is one-sided, notwithstanding the source-contract agent's two-sided description; this does not alter the selected bounded conclusion."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "Theorem 2.2.6 quantifies a finite family X_1,...,X_N of real random variables, real endpoints m_i,M_i, and real t>0; Exercise 2.6.4 permits an absolute exponent constant.",
+      "lean_evidence": "D001 quantifies arbitrary finite ι, sample type Ω with a probability measure, X:ι->Ω->Real, m M:ι->Real, t:Real, and an outer existential c:Real.",
+      "reasoning": "The finite-type presentation is equivalent to a finitely indexed source family. Allowing an empty finite type is a harmless generalization because its t>0 event is empty."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "The phrase 'some absolute constant' means one positive constant independent of N, t, all distributions, and all endpoints.",
+      "lean_evidence": "D001 begins Exists c, then asserts 0<c before universally quantifying ι, Ω, μ, X, m, M, and t.",
+      "reasoning": "The witness cannot depend on any problem data, so the absolute-constant scope is preserved exactly."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "Theorem 2.2.6 assumes independent random variables with X_i in [m_i,M_i] and t>0; measurability and a probability space are inherited from 'random variables'. It states no positive-width hypothesis.",
+      "lean_evidence": "D001 requires Measurable(X_i), iIndepFun X μ, almost-everywhere membership in Set.Icc(m_i,M_i), IsProbabilityMeasure μ, and 0<t, with no V>0 premise.",
+      "reasoning": "All explicit and inherited hypotheses match. Almost-everywhere interval membership is the standard rigorous bounded-random-variable reading."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "Theorem 2.2.6 concludes a one-sided centered upper-tail inequality with denominator sum_i(M_i-m_i)^2 and no leading prefactor; Exercise 2.6.4 allows replacing exponent coefficient 2 by an absolute constant.",
+      "lean_evidence": "D001 concludes μ.real{sum_i(X_i-integral X_i)>=t} <= Real.exp(-(c*t^2/sum_i ||M_i-m_i||^2)).",
+      "reasoning": "Every mathematical part of the requested inequality is represented. The target records the exercise's requested consequence; the statement audit does not require encoding a proof instruction as an additional proposition."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "The source uses probability, expectation, a closed interval, finite sums, real squaring, and the real exponential in their standard meanings.",
+      "lean_evidence": "D005/D023 give almost everywhere, D022 gives finite real measure, D024 gives the real Bochner integral, D032 gives mutual independence, D050 gives Icc, and D034 gives Real.exp; D003/D036 expose total real division.",
+      "reasoning": "The imported operators were checked from the supplied declarations and implement the intended notions. Bounded measurable variables on a probability space are integrable, so the totalized Bochner integral agrees with expectation."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "The source relation is P{centered sum>=t} <= exp(-constant*t^2/V), with a non-strict event threshold and non-strict probability upper bound.",
+      "lean_evidence": "D009 reverses LE arguments to form >= in the event, while D014/D037 form the final real <=; D028/D041 give the negative exponent.",
+      "reasoning": "Sidedness, inequality directions, strictness, and exponential decay all match."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "The source distinguishes each original X_i, its expectation E X_i, its centered value, and the two endpoint families m_i,M_i.",
+      "lean_evidence": "D001 uses X i ω separately from integral μ (fun y=>X i y), subtracts them inside the same indexed sum, and uses the matching m i and M i only in the width denominator.",
+      "reasoning": "No original, centered, endpoint, expectation, or index role is conflated."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "Exercise 2.6.4 permits some absolute positive constant in place of the coefficient 2 in the exponent, but retains the no-prefactor Theorem 2.2.6 form and sum of individual squared widths.",
+      "lean_evidence": "The unique c is outside all data, multiplies exactly t^2, and appears only inside exp; there is no leading factor. Both sums range over Finset.univ and every width is squared individually.",
+      "reasoning": "Constant dependence, exponent 2, indexing, and prefactor 1 all match the literal requested conclusion."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "The source is stated for N real random variables indexed from 1 through N.",
+      "lean_evidence": "The target is invariantly generalized to an arbitrary Fintype ι, including an empty ι.",
+      "reasoning": "Every source instance is obtained by a finite index type, and any finite type can be enumerated. The extra empty case is automatically true for t>0, so it is a conservative, nonvacuous-at-source generalization."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "Theorem 2.2.6 has no V>0 hypothesis even though its ordinary-real display divides by V=sum_i(M_i-m_i)^2; it supplies no explicit zero-denominator convention.",
+      "lean_evidence": "D036 makes real division total with a/0=0, so V=0 yields RHS exp(0)=1. From V=0 and the almost-sure Icc hypotheses, every width is zero and every X_i is almost surely constant; hence its centered term vanishes almost surely and the t>0 event has probability zero. The empty-index case is likewise empty.",
+      "reasoning": "The displayed RHS is totalized differently at the unresolved source boundary, but both implications remain valid because the hypotheses independently force probability zero there. Thus the boundary representation differs without changing the theorem's mathematical content."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "The source theorem applies to ordinary nondegenerate bounded independent variables, for example independent Bernoulli variables with nonzero interval widths.",
+      "lean_evidence": "Such families satisfy the measurable, independent, probability-space, interval, and t>0 hypotheses; D001 then asserts a genuinely decaying bound for V>0.",
+      "reasoning": "The target has abundant intended nondegenerate models and is not true only because of impossible hypotheses or the zero-denominator convention."
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "verdict": "yes",
+      "reasoning": "For positive total squared width the Lean conclusion is exactly the source's permitted absolute-constant, no-prefactor Hoeffding inequality. At zero width, the Lean assumptions force every summand to equal its mean almost surely (or the index family is empty), so the t>0 event has probability zero; consequently the source's natural degenerate-case bound also follows regardless of Lean's displayed RHS 1. Specializing an arbitrary Fintype to the source's N indices gives all source instances."
+    },
+    "source_implies_lean": {
+      "verdict": "yes",
+      "reasoning": "For every nonempty positive-width finite family, enumerate the Fintype and apply the source inequality with the same universal absolute constant. For total width zero, prove the Lean bound directly from almost-sure constancy: the event probability is zero and 0<=exp(0)=1. The empty finite type is the same trivial case. Thus the source result plus its standard probability-space semantics yields the entire Lean proposition."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [
+    {
+      "severity": "minor",
+      "category": "zero-denominator-totalization",
+      "source_evidence": "Theorem 2.2.6 states no positive-width condition and displays division by sum_i(M_i-m_i)^2 without a zero-denominator convention.",
+      "lean_evidence": "Real division is totalized with a/0=0, so the formal RHS is 1 when all widths vanish.",
+      "impact": "The formulas differ at the boundary, but there is no theorem-level strength difference: the boundedness hypotheses force the centered event probability to be zero for t>0. This should remain documented because the source expression itself is undefined in ordinary real arithmetic."
+    },
+    {
+      "severity": "note",
+      "category": "supporting-source-contract-sidedness",
+      "source_evidence": "The authoritative PDF's displayed Theorem 2.6.3 bounds P{sum_i a_i X_i >= t}; it does not put an absolute value around the sum. It does retain a leading factor 2.",
+      "lean_evidence": "The audited target is also one-sided and has the Exercise 2.6.4/Theorem 2.2.6 no-prefactor conclusion.",
+      "impact": "The source-contract output describes Theorem 2.6.3 as two-sided, but direct PDF inspection resolves this support-level error. It does not change the target judgment."
+    }
+  ],
+  "rationale": "The target now states the literal no-prefactor bounded-variable Hoeffding conclusion requested by Exercise 2.6.4: one universal positive exponent constant is quantified before all data, the event is the one-sided centered upper tail, and the variance proxy is the sum of the individual squared interval widths. All 58 dependencies support those meanings, and all configured checks pass. Lean's total real division makes the zero-width displayed RHS equal to 1, whereas the source leaves division by zero unresolved; nevertheless the hypotheses force the degenerate tail probability to be zero, so each formulation implies the other at theorem level. The target is therefore faithful-equivalent and needs no adjudication."
+}

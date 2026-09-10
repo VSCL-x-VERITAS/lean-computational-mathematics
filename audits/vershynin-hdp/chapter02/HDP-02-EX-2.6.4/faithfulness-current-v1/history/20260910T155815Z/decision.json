@@ -1,0 +1,59 @@
+{
+  "accepted": false,
+  "adjudicated": true,
+  "adjudication_reasons": [
+    "judge classifications differ",
+    "direct judge requested adjudication",
+    "round-trip judge requested adjudication",
+    "round-trip judge classification is undetermined",
+    "direct judge left dependency_coverage item D037 unclear",
+    "direct judge left semantic_checklist item C11 unclear",
+    "round-trip judge left semantic_checklist item C04 unclear",
+    "round-trip judge left semantic_checklist item C05 unclear",
+    "round-trip judge left semantic_checklist item C07 unclear",
+    "round-trip judge left semantic_checklist item C09 unclear",
+    "round-trip judge left semantic_checklist item C11 unclear",
+    "round-trip judge left implication translation_implies_source unclear"
+  ],
+  "classification": "not-faithful-weaker",
+  "completed_at_utc": "2026-09-10T15:34:12.649192+00:00",
+  "findings": [
+    {
+      "category": "retained-leading-prefactor",
+      "evidence": "Theorem 2.2.6 on PDF page 6 / printed page 17 has no leading prefactor, and Exercise 2.6.4 on PDF page 18 / printed page 29 permits replacing only the 2 in the exponent. Direct-review D001 instead concludes with 2*exp(-(c*t^2/V)).",
+      "impact": "The target is strictly weaker on the intended nondegenerate domain and does not imply the selected source result.",
+      "severity": "major"
+    },
+    {
+      "category": "zero-width-division-totalization",
+      "evidence": "D001 has no positive-width-sum premise and D037 supplies total Real division, giving quotient zero and right-hand side 2 when all widths vanish. The source display has the same denominator but no boundary convention.",
+      "impact": "The target chooses a Lean-specific numerical meaning for a source-unstated boundary case; the inequality remains trivially true there because the centered event is null.",
+      "severity": "minor"
+    },
+    {
+      "category": "empty-index-extension",
+      "evidence": "The source writes X_1,...,X_N, whereas D001 quantifies over every Fintype, including the empty type.",
+      "impact": "The extra case is independently trivial for t>0 and is not genuine nonvacuous strength, so it does not alter the classification.",
+      "severity": "note"
+    }
+  ],
+  "implications": {
+    "lean_implies_source": {
+      "reasoning": "The target gives only P(A_t) <= 2*exp(-c*t^2/V). The selected source asks for the named Theorem 2.2.6 with only its exponent coefficient relaxed, namely P(A_t) <= exp(-c_0*t^2/V). The leading factor cannot be absorbed into a positive universal exponent coefficient uniformly as t^2/V approaches zero, so the target is a strictly weaker bound on the intended nondegenerate domain.",
+      "verdict": "no"
+    },
+    "source_implies_lean": {
+      "reasoning": "For V>0, the source's no-prefactor estimate with an absolute c_0 immediately implies the target estimate with c=c_0 because exp(-c_0*t^2/V) <= 2*exp(-c_0*t^2/V). Nonempty finite index types are reindexings of source families. The target's added empty-index and V=0 cases are independently trivial for t>0: the centered event is null, while total real division makes the target right-hand side 2.",
+      "verdict": "yes"
+    }
+  },
+  "judge_classifications": {
+    "direct": "not-faithful-weaker",
+    "roundtrip": "undetermined"
+  },
+  "rationale": "Primary evidence fixes the benchmark as the literal Theorem 2.2.6 conclusion with only the exponent coefficient relaxed. Although the displayed Theorem 2.6.3 is two-sided and carries a leading 2, the exercise's instruction to deduce a named theorem from it does not authorize changing that theorem's prefactor. The target otherwise preserves the universal positive constant, independence, measurability, standard almost-sure interval bounds, termwise centering, one-sided non-strict event, positive threshold, and sum-of-squared-widths scale. Its leading 2 makes the conclusion weaker, so Lean does not imply source while source implies Lean. The total-real-division behavior at zero total width is a separate minor semantic mismatch, not a reason to leave the overall judgment undetermined. The target is nonvacuous on ordinary positive-width families, and the empty/all-singleton cases are merely trivial extensions rather than genuine mathematical strength.",
+  "remaining_uncertainties": [],
+  "role": "final-decision",
+  "schema_version": "formalization-faithfulness-1",
+  "task_id": "HDP-02-EX-2.6.4"
+}
