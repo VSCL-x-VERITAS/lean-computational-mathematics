@@ -16,6 +16,7 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansSample
 import ComputationalMathematics.HDP.Scalar.IndependentSums.PoissonChernoff
 import ComputationalMathematics.HDP.Scalar.IndependentSums.SampleMeanChebyshev
 import ComputationalMathematics.HDP.Scalar.IndependentSums.TwoSidedTail
+import ComputationalMathematics.HDP.Scalar.IndependentSums.VerySparseDegreeLower
 
 /-!
 # Independent scalar sums
