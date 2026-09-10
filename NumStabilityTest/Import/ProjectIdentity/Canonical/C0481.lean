@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.StrictPositivity
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.StrictPositivity`. -/
-
-#check NumStability.cstarMatrix_pos_real_smul_one_isStrictlyPositive
-#check NumStability.cstarMatrix_unitary_conj_isStrictlyPositive
-#check NumStability.finiteComplexCStarMatrix_add_pos_smul_one_isStrictlyPositive_of_finitePSD

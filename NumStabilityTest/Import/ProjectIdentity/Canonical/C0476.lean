@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealOrder
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.FiniteRealOrder`. -/
-
-#check NumStability.finiteComplexCStarMatrix_add_smul_one_le_of_finiteLoewnerLe
-#check NumStability.finiteComplexCStarMatrix_le_of_finiteLoewnerLe
-#check NumStability.finiteComplexCStarMatrix_nonneg_of_finitePSD

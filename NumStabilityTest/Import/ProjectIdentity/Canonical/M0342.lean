@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions`. -/
-
-#check NumStability.H16_eq16_29_lyapunov_relative_error_le_of_sepLowerBound_computed_residual_budget

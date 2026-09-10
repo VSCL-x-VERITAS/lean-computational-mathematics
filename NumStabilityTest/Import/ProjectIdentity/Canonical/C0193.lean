@@ -1,5 +1,0 @@
-import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.RemainderBounds
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.ForwardError.RemainderBounds`. -/
-
-#check NumStability.higham21_sne_formation_error_le_source_plus_quadratic

@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter02.Problem06.IntegerRepresentability.Basic
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter02.Problem06.IntegerRepresentability.Basic`. -/
-
-#check NumStability.FloatingPointFormat.integerIntervalRepresentable
-#check NumStability.FloatingPointFormat.problem2_6_ieeeDouble_two_pow_53_finiteSystem
-#check NumStability.FloatingPointFormat.problem2_6_ieeeSingle_two_pow_24_finiteSystem

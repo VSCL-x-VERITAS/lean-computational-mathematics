@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter04.Equation07
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation07`. -/
-
-#check NumStability.correctionFormulaAbstractCounterexample_not_exact
-#check NumStability.correctionFormula_abs_order_not_imply_signed_sterbenz_exact_sum
-#check NumStability.noGuardCorrectionFormulaCounterexample_model

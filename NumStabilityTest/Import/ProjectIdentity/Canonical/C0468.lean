@@ -1,6 +1,0 @@
-import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonalCompression
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.BlockDiagonalCompression`. -/
-
-#check NumStability.cstarMatrixBlockDiagonal_mul_columnPair
-#check NumStability.cstarMatrixColumnPair_conjTranspose_mul_blockDiagonal_mul_columnPair

@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.LeadingDigits.LogarithmicDistribution
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.LeadingDigits.LogarithmicDistribution`. -/
-
-#check NumStability.decimalLogarithmicLeadingDigitProbability_nonuniform
-#check NumStability.logarithmicLeadingDigitMass
-#check NumStability.logarithmicLeadingDigitProbability

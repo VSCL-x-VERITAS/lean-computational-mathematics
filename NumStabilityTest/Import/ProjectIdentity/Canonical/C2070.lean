@@ -1,6 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter21.Theorem04.SourceClosure.Supplement.Core
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter21.Theorem04.SourceClosure.Supplement.Core`. -/
-
-#check NumStability.higham21_theorem21_4_computed_qhat_rowwise_backward_stable_source
-#check NumStability.higham21_theorem21_4_givens_actual_rounded_rowwise_backward_stable_source

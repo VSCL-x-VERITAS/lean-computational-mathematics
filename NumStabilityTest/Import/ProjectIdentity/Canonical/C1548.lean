@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFamilies.Derivations
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Problem02.TriangularInversion.TwoBlockFamilies.Derivations`. -/
-
-#check NumStability.Ch14Ext.Ch14Problem142Method1BFamilyDerivation.right_residual_family
-#check NumStability.Ch14Ext.Ch14Problem142Method2CFamilyDerivation.left_residual_family
-#check NumStability.Ch14Ext.ch14ext_problem14_2_method1B_twoBlock_right_family
-#check NumStability.Ch14Ext.ch14ext_problem14_2_method2B_twoBlock_left_family
-#check NumStability.Ch14Ext.ch14ext_problem14_2_method2C_twoBlock_left_family

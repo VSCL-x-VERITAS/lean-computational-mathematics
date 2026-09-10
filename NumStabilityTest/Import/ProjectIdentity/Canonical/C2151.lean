@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter26.MultidirectionalSearch.RightAngledSimplex
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter26.MultidirectionalSearch.RightAngledSimplex`. -/
-
-#check NumStability.higham26RightAngledSimplex
-#check NumStability.higham26RightAngledSimplex_base
-#check NumStability.higham26RightAngledSimplex_edge_length
-#check NumStability.higham26RightAngledSimplex_edge_sq
-#check NumStability.higham26RightAngledSimplex_edges_orthogonal

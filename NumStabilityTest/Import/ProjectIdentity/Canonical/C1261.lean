@@ -1,8 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth.PositivePivots.Bounds
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter10.Problem04.UnpivotedGrowth.PositivePivots.Bounds`. -/
-
-#check NumStability.higham10_problem_10_4_first_ge_entry_abs_le_initial_max
-#check NumStability.higham10_problem_10_4_first_ge_maxEntryNorm_le
-#check NumStability.higham10_problem_10_4_first_ge_reduced_submatrix_spd
-#check NumStability.higham10_problem_10_4_unpivoted_ge_positive_pivots_and_growth

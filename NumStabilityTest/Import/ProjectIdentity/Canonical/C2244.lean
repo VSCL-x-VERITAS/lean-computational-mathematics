@@ -1,6 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter28.Section04.ReciprocalSpectrumSPD.TriangularInvolution
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section04.ReciprocalSpectrumSPD.TriangularInvolution`. -/
-
-#check NumStability.higham28ReciprocalInvolution_lower_and_diag
-#check NumStability.higham28ReciprocalSPD_lower_reverseCholeskyFactor

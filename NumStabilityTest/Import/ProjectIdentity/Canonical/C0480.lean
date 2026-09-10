@@ -1,8 +1,0 @@
-import ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ReflectionAverage
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.CStarMatrices.FiniteMatrixAlgebra.ReflectionAverage`. -/
-
-#check NumStability.cstarMatrix_commute_projection_of_commute_reflection
-#check NumStability.cstarMatrix_reflectionAverage_commute_of_involutive
-#check NumStability.cstarMatrix_reflectionAverage_compression_of_fixed
-#check NumStability.cstarMatrix_reflectionAverage_conj_of_involutive

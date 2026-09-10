@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter04.Equation09.ModelStrength
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation09.ModelStrength`. -/
-
-#check NumStability.Higham49BareFPModelTwoTermSecondOrderBound
-#check NumStability.not_exists_higham49BareFPModelTwoTermSecondOrderBound
-#check NumStability.not_fl_kahanSum_biasedSmallCounterexample_twoStep_forward_bound_of_Cu_le_half

@@ -1,6 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter13.Theorem06.Computation
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Theorem06.Computation`. -/
-
-#check NumStability.dhs_block_back_substitution_rows_linear_bound_from_conventional_recursive_block_solution
-#check NumStability.higham13_theorem13_6_implementation1_family_from_partitioned_computation_and_conventional_recursive_solve

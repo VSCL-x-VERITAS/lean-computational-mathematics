@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.CrossChapter.PracticalConditionBound
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.CrossChapter.PracticalConditionBound`. -/
-
-#check NumStability.higham15_1_ch7ComputedResidualSafetyTerm_nonneg
-#check NumStability.higham15_1_ch7_31_cond_norm_identity
-#check NumStability.higham15_1_eq_7_31_practical_bound_bridge

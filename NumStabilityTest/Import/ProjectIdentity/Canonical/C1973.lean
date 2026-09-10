@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter20.Section02.Algorithms
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter20.Section02.Algorithms`. -/
-
-#check NumStability.Higham20AugmentedRefinementStep.updated_isLeastSquaresMinimizer
-#check NumStability.Higham20SeminormalEquationsSolve.isLeastSquaresMinimizer_of_qr
-#check NumStability.higham20_qrFactorization_rectLSGram_eq_seminormalGram

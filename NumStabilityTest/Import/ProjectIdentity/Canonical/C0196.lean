@@ -1,8 +1,0 @@
-import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.Uniform
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.Householder.Uniform`. -/
-
-#check NumStability.higham21SNEHouseholderSourceEnvelope
-#check NumStability.higham21SNEQUniformSourceQuantity
-#check NumStability.higham21_sne_frobNorm_le_envelope
-#check NumStability.higham21_sne_householder_sourceEnvelope_nonneg

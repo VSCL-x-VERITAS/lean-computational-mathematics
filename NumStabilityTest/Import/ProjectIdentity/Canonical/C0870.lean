@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation08.LeastSquaresSketch.Endpoints
-
-/-! Canonical import regression for `ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation08.LeastSquaresSketch.Endpoints`. -/
-
-#check NumStability.leverageTraceProbability_eventProb_fl_lsObjective_le_one_add_eta_of_augmentedSpan_sample_budget

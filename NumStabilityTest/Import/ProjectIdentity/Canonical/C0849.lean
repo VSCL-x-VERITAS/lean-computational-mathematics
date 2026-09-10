@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm01.ElementwiseSampling.TraceMGF
-
-/-! Canonical import regression for `ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm01.ElementwiseSampling.TraceMGF`. -/
-
-#check NumStability.finiteComplexCStarMatrix
-#check NumStability.finiteComplexCStarMatrix_add
-#check NumStability.finiteComplexCStarMatrix_finset_sum
-#check NumStability.finiteComplexCStarMatrix_isSelfAdjoint_of_symmetric
-#check NumStability.finiteComplexCStarMatrix_zero

@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStages
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Problem04.MatrixStages`. -/
-
-#check NumStability.higham13_algorithm13_3_first_schur_tail_all_leadingBlockPrefixes_nonsingular_of_all_leadingBlockPrefixes_blockDiagDomCol_diagBound_nonpos

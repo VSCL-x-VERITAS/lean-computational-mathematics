@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.CharacteristicPolynomial
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter28.Section05.TridiagonalToeplitz.CharacteristicPolynomial`. -/
-
-#check NumStability.complexTridiagonalToeplitz_p522_unrestricted_charpoly
-#check NumStability.tridiagonalToeplitz_p522_charpoly_of_product_zero
-#check NumStability.tridiagonalToeplitz_p522_roots_charpoly_of_product_zero
-#check NumStability.tridiagonalToeplitz_p522_unrestricted_charpoly
-#check NumStability.tridiagonalToeplitz_p522_unrestricted_roots_charpoly

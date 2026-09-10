@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiRoundedSylvester
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section02.BartelsStewart.Equations04To08.QuasiRoundedSylvester`. -/
-
-#check NumStability.Wave15.H16_eq16_2_quasi_sylvesterVecCoeff_same_col_apply

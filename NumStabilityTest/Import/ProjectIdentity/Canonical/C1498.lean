@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Accumulation.GJESourceAccumulationBridge
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Algorithm04.Accumulation.GJESourceAccumulationBridge`. -/
-
-#check NumStability.Ch14Ext.ch14ext_gjeSourceTrace_recurrence_bounds_14_25b_14_26
-#check NumStability.Ch14Ext.ch14ext_gjeSourceTrace_stage2_forward_error_14_29
-#check NumStability.Ch14Ext.ch14ext_gje_stage2_forward_error_of_accumulation_14_29

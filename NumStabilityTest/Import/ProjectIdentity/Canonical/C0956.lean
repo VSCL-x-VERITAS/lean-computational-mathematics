@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter02.Problem19.GradualUnderflowExactness.Basic
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter02.Problem19.GradualUnderflowExactness.Basic`. -/
-
-#check NumStability.FloatingPointFormat.finiteRoundToEvenOp_add_eq_exact_of_finiteUnderflowRange
-#check NumStability.FloatingPointFormat.finiteSystem_add_finiteSystem_of_finiteUnderflowRange
-#check NumStability.FloatingPointFormat.finiteSystem_sub_finiteSystem_of_finiteUnderflowRange

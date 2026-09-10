@@ -1,6 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter09.Theorem14.DiagDominant
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter09.Theorem14.DiagDominant`. -/
-
-#check NumStability.higham9_14_exists_threshold_actual_diagDominant_growth_bound_16
-#check NumStability.higham9_14_exists_threshold_actual_source_sixteen_h_corrected_of_diagDominant

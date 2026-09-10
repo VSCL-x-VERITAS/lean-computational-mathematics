@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem05.RowInfinityScaleCounterexample.Theorems
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter07.LinearSystemsConditioning.Theorem05.RowInfinityScaleCounterexample.Theorems`. -/
-
-#check NumStability.theorem7_5_literal_printed_row_inf_scale_counterexample

@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter21.Equation11.Scalar
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter21.Equation11.Scalar`. -/
-
-#check NumStability.higham21_eq21_11_firstOrder_norm_le_rowwise_cond2_of_card_le_one

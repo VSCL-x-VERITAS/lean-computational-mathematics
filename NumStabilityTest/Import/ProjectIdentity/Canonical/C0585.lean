@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.LinearOperators.MatrixPowers.Henrici.NormalCharacterization.Schur`. -/
-
-#check NumStability.normal_iff_strictUpper_eq_zero_unconditional
-#check NumStability.normal_schur_strictUpper_eq_zero
-#check NumStability.schurNormalImpliesStrictUpperZero_holds

@@ -1,9 +1,0 @@
-import ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.RectangularTermination
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.NormEstimation.PNorm.Rectangular.RectangularTermination`. -/
-
-#check NumStability.RectPNormPair.gammaSeq_one_succ_eq_column_rect
-#check NumStability.RectPNormPair.infRowValueRect
-#check NumStability.RectPNormPair.oneColumnValueRect
-#check NumStability.RectPNormPair.qIn_zof_infinity_eq_row_rect
-#check NumStability.RectPNormPair.zof_infinity_eq_signed_selected_row_rect

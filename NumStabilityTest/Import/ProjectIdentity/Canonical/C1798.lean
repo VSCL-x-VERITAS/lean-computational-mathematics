@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.All
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section04.PracticalErrorBounds.Equation29Extensions.All`. -/
-
-#check NumStability.H16_eq16_28_lyapunov_aposteriori_bound_diagonal_of_vecCoeff_entrywise_abs_ge

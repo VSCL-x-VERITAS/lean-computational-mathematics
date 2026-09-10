@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.LpDiagonal
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.LpDiagonal`. -/
-
-#check NumStability.higham_eq_18_4_lower_lp_diagonalizable

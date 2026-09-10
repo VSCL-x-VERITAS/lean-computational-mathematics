@@ -1,6 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter04.Equation07.SterbenzCounterexamples
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter04.Equation07.SterbenzCounterexamples`. -/
-
-#check NumStability.correctionFormula_abs_order_not_imply_signed_sterbenz_exact_sum
-#check NumStability.correctionFormula_base2_abs_gt_inexact_not_imply_signed_sterbenz

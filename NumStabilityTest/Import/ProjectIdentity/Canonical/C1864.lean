@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBounds.Equations04And05.RealJordan`. -/
-
-#check NumStability.higham_eq_18_5_alt_real_jordan

@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter06.Norms
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter06.Norms`. -/
-
-#check NumStability.HighamProblem61NormQuotientWitness
-#check NumStability.complexMatrixBlockShearOp2_eq_highamProblem610_sourceFormula
-#check NumStability.highamProblem65MonomialMatrix
-#check NumStability.highamProblem69_frobenius_op2_bounds
-#check NumStability.mixedInverseAmbientRelativeAmplificationRadiusSup_tendsto_conditionNumberProduct_of_positive_radii

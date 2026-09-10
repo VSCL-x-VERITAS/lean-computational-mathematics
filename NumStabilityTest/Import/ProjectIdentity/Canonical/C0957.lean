@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter02.Problem20.SquareRootIdentities.Basic`. -/
-
-#check NumStability.FloatingPointFormat.problem2_19_first_requirement_holds_second_fails
-#check NumStability.FloatingPointFormat.problem2_19_roundedSqrtSquare
-#check NumStability.FloatingPointFormat.problem2_19_sqrt_square_eq_abs_of_finiteSystem

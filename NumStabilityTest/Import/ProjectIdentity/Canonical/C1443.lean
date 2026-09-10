@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.TailChain
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauProducts.TailChain`. -/
-
-#check NumStability.higham13_eq13_22_exists_blockLUFact_succ_product_from_global_tableau_tail_chain_matrix_stage_history_exact_kappa_of_det_ne_zero

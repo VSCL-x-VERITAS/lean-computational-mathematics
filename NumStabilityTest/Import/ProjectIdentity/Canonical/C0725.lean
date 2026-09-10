@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.Perturbation.LeastSquares.BackwardError
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.Perturbation.LeastSquares.BackwardError`. -/
-
-#check NumStability.LSQRSolveBackwardError
-#check NumStability.LSQRSolveBackwardError.of_rectangular_perturbed_normal_equations
-#check NumStability.LSQRSolveBackwardError.of_rectangular_perturbed_normal_equations_normBudget

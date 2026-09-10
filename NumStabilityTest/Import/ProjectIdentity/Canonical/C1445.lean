@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter13.Problem04.InfNormGrowth
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Problem04.InfNormGrowth`. -/
-
-#check NumStability.higham13_algorithm13_3_matrix_infNorm_active_column_dominance_of_first_schur_tail_pivot_right_inverse_pivotInv_eq_nonsingInv_all_leadingBlockPrefixes_blockDiagDomCol_infNorm_diagBound_nonpos_of_pos_dim

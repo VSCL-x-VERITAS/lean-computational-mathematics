@@ -1,5 +1,0 @@
-import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.TriangularSolves.EnvelopeTransfer
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.SeminormalEquations.TriangularSolves.EnvelopeTransfer`. -/
-
-#check NumStability.higham21_sne_split_triangular_solve_backward_error

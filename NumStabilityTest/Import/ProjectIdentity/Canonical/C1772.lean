@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter16.Section03.PerturbationAndConditioning.All`. -/
-
-#check NumStability.H16_eq16_22_sylvester_perturbation_equation

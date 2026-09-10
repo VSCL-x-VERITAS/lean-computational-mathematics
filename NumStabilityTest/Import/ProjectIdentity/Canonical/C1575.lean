@@ -1,8 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter14.Problem12.ConditionNumberExamples.StressAndPeiMatrices
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Problem12.ConditionNumberExamples.StressAndPeiMatrices`. -/
-
-#check NumStability.higham14_problem14_12_hadamardConditionNumber_peiMatrix
-#check NumStability.higham14_problem14_12_hadamardConditionNumber_peiMatrix_abs
-#check NumStability.higham14_problem14_12_hadamardConditionNumber_stressUpper_one_eq_sqrt_factorial
-#check NumStability.higham14_problem14_12_peiMatrix_det

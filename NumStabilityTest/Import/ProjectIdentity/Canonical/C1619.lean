@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter14.Section02.TriangularInversion.Method2C.WholeMatrixResidual.LeftResidualBounds`. -/
-
-#check NumStability.Ch14Ext.ch14ext_method2CInv_left_residual
-#check NumStability.Ch14Ext.ch14ext_method2C_whole_left_residual
-#check NumStability.Ch14Ext.ch14ext_method2C_whole_left_residual_normwise

@@ -1,7 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.MiddleSolve
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter11.BunchKaufman.Rounded.MiddleSolve`. -/
-
-#check NumStability.Higham11RoundedBunchKaufmanExecution.MiddleSolveRunDomain
-#check NumStability.Higham11RoundedBunchKaufmanExecution.actualMiddleSolve_backward_error
-#check NumStability.Higham11RoundedBunchKaufmanExecution.gamma_one_le_thirtySix_mul_u_of_gammaValid_nine

@@ -1,9 +1,0 @@
-import ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.Powers
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.LinearOperators.NumericalRadius.Berger.GeneralPowerInequality.Powers`. -/
-
-#check NumStability.norm_pow_le_two_mul_numericalRadius_pow
-#check NumStability.numericalRadiusCLM_pow_le
-#check NumStability.numericalRadiusCLM_pow_le_one_of_le_one
-#check NumStability.numericalRadiusCLM_pow_pointwise_le_of_le_one
-#check NumStability.numericalRadius_pow_le

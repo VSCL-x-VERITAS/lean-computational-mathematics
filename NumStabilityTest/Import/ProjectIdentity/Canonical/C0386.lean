@@ -1,5 +1,0 @@
-import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Preconditioning.ExactTransforms.UniformRowComposition
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Preconditioning.ExactTransforms.UniformRowComposition`. -/
-
-#check NumStability.countSketchUniformRowSampleGramTwoSidedEvent

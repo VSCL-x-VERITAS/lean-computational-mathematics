@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauGrowth
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter13.Problem04.GlobalTableauGrowth`. -/
-
-#check NumStability.higham13_algorithm13_3_upperFromMatrixStages_eq13_21_and_matrixStageHistoryGrowthFactor_le_two_of_global_tableau_activeSuffix_matrix_stage_history_final_nonsingInv_mixed_column_mass

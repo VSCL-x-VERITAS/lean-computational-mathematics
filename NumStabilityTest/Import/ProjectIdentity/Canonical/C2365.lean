@@ -1,5 +1,0 @@
-import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Signature
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02.Signature`. -/
-
-#check NumStability.HDP.Contract.hdp_02_hprop_h2_d5_d2__contract_type

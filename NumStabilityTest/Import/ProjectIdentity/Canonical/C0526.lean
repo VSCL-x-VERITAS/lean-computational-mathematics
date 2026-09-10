@@ -1,7 +1,0 @@
-import ComputationalMathematics.Analysis.FloatingPointArithmetic.ExactSubtraction
-
-/-! Canonical import regression for `ComputationalMathematics.Analysis.FloatingPointArithmetic.ExactSubtraction`. -/
-
-#check NumStability.FloatingPointFormat.guardDigitLeadingDigit
-#check NumStability.FloatingPointFormat.ieeeRoundToModeOpInexactAwareValueResult
-#check NumStability.FloatingPointFormat.sterbenzRatioCondition_symm

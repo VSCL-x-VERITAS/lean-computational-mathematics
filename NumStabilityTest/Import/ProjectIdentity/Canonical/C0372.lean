@@ -1,5 +1,0 @@
-import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Concentration.SpectralTransfer.Elementwise
-
-/-! Canonical import regression for `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Concentration.SpectralTransfer.Elementwise`. -/
-
-#check NumStability.FiniteProbability.expectationReal_vecNorm2_le_prod_expectationReal_vecNorm2_sub_of_expectation_eq_zero

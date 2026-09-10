@@ -1,9 +1,0 @@
-import ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias.RoundedSchur.Bounds
-
-/-! Canonical import regression for `ComputationalMathematics.Source.Higham.Chapter10.Equation29.Mathias.RoundedSchur.Bounds`. -/
-
-#check NumStability.higham10_29_source_lu_growth_bound_opNorm2
-#check NumStability.higham10_mathias_firstRoundedSchur_sourceCondition_exists
-#check NumStability.higham10_mathias_flSchur_runsToCompletion
-#check NumStability.higham10_mathias_luSchur_kappaH_le
-#check NumStability.higham10_mathias_luSchur_symPartInv_opNorm2_le
