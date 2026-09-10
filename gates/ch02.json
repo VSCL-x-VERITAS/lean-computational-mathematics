@@ -3,7 +3,7 @@
   "chapter_gate": "ACTIVE",
   "mode": "default",
   "plan_epoch": "replace-with-certified-plan-epoch",
-  "updated_utc": "2026-09-10T12:26:43Z",
+ "updated_utc": "2026-09-10T13:08:37Z",
   "source": {
     "unit_source": "collab:books/vershynin-hdp/source/Chapter02_Concentration of sums of independent random variables.pdf",
     "unit_source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
@@ -4196,17 +4196,38 @@
       "source_page": 28,
       "source_statement": "X_1, ..., X_N independent N(0,1): E max_{i <= N} X_i >= c sqrt(log N), showing Exercise 2.5.10 is sharp.",
       "source_proof": "none",
-      "next_foundation": "Use the exact product formula `GaussianMaxima.measure_finiteMaximum_lt_of_standardNormal` together with the proved lower half of Proposition 2.1.2 to obtain a quantitative positive-tail contribution to the expectation, while separately bounding the signed maximum's negative-tail contribution. Then choose a threshold comparable to `sqrt (log N)` and absorb the finite small-`N` range.",
-      "attempted_routes": "The current project and pinned Mathlib were searched for Gaussian/normal maximum lower bounds, `iIndepFun.meas_iInter`, product laws, finite `Finset.sup'` maxima, `HasLaw` measure transport, and Gaussian negation/symmetry. No existing maximum lower bound matches the row. The prior prerequisite was stale: the Mills-ratio lower bound is already proved as `GaussianTails.standardNormalTail_bounds`. Selected Mathlib's `Finset.sup'`, `Finset.measurable_sup'`, `Integrable.sup`, `iIndepFun.meas_iInter`, and `Measure.map_apply_of_aemeasurable` to add a reusable finite signed maximum API and the exact independent standard-normal lower-tail product formula. Rejected `independentGaussianSumLaw` because it concerns sums, and rejected a pointwise absolute-to-signed-maximum reduction because it is false for constant sample vectors.",
+      "next_foundation": "Prepare the proof-free transparent target `hdp_02_hex_h2_d5_d11__contract_type` into a fresh immutable v1 audit generation, run independent source-only, blind, direct, and round-trip roles, and record the mechanical decision before changing this row from `READY`.",
+      "attempted_routes": "The current project and pinned Mathlib were searched for Gaussian/normal maximum lower bounds, exact finite maximum laws, `iIndepFun.meas_iInter`, finite products, Mills estimates, Gaussian absolute moments, and expectation lower-bound tools. No existing theorem directly matches the row. The implementation reuses the audited Proposition 2.1.2 producer `GaussianTails.standardNormalTail_bounds`, the current-tree Gaussian producer `NumStability.integral_abs_standardGaussian_difference`, and the current-tree exponential product bound `IndependentSums.Chernoff.one_sub_pow_le_exp_neg_nat_mul`. It selects Mathlib finite suprema, measurable/integrable lattice operations, independence-to-product transport, `HasLaw` measure transport, Gaussian first moments, and elementary exponential/logarithm inequalities. The proved route obtains the exact maximum tail, extracts a fixed positive exceedance probability at `sqrt (log N)`, controls the signed negative contribution by one absolute moment, and absorbs it with the exact two-normal maximum `1/sqrt pi`; the `N=1` endpoint is proved separately. The transparent source target, wrapper, integrability clause, and receipt compile in the 3,818-job Chapter 2 build. Only a fresh semantic audit remains.",
+      "lean_declarations": [
+        "NumStability.HDP.Scalar.GaussianMaxima.finiteMaximum",
+        "NumStability.HDP.Scalar.GaussianMaxima.measure_finiteMaximum_lt_of_standardNormal",
+        "NumStability.HDP.Scalar.GaussianMaxima.measureReal_finiteMaximum_ge_of_standardNormal",
+        "NumStability.HDP.Scalar.GaussianMaxima.standardNormalMaximum_expectation_ge_threshold",
+        "NumStability.HDP.Scalar.GaussianMaxima.gaussianMaximumTailConstant_le_card_mul_tail",
+        "NumStability.HDP.Scalar.GaussianMaxima.gaussianMaximumHitConstant_le_tail_factor",
+        "NumStability.HDP.Scalar.GaussianMaxima.expectation_max_two_standardNormal",
+        "NumStability.HDP.Scalar.GaussianMaxima.gaussianMaximumLowerConstant",
+        "NumStability.HDP.Scalar.GaussianMaxima.expectation_finiteMaximum_standardNormal_ge_sqrt_log",
+        "NumStability.HDP.Scalar.GaussianMaxima.prefixMaximum",
+        "NumStability.HDP.Scalar.GaussianMaxima.expectation_prefixMaximum_standardNormal_ge_sqrt_log",
+        "NumStability.HDP.Contract.hdp_02_hex_h2_d5_d11__contract_type",
+        "NumStability.HDP.Contract.hdp_02_hex_h2_d5_d11",
+        "NumStability.HDP.Contract.hdp_02_hex_h2_d5_d11__contract"
+      ],
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No Gaussian maximum lower bound exists; `SubGaussian.independentGaussianSumLaw` handles sums, not maxima.",
         "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
         "Confirmed from the immutable source that the printed maximum is signed (`E max_{i <= N} X_i`), not an absolute maximum. Searched the current tree for `gaussian maximum`, `normal maximum`, tail products, `standardNormalTail_bounds`, Gaussian symmetry, and `HasLaw`; searched pinned Mathlib for `Finset.sup'`, `iIndepFun.meas_iInter`, finite product laws, `Measure.pi`, and map/measure transport.",
         "Selected the already-proved `NumStability.HDP.Scalar.GaussianTails.standardNormalTail_bounds` as the exact Proposition 2.1.2 producer. Selected Mathlib `Finset.sup'`, `Finset.measurable_sup'`, `Integrable.sup`, `iIndepFun.meas_iInter`, and `Measure.map_apply_of_aemeasurable`; rejected `SubGaussian.independentGaussianSumLaw` because it only transports sums.",
         "Added `GaussianMaxima.finiteMaximum` with coordinate domination, upper-bound, measurability, integrability, and absolute-integrability estimates. Added `finiteMaximum_lt_iff`, the general independent product event theorem, and `measure_finiteMaximum_lt_of_standardNormal`, which states the exact lower-tail probability as the `Fintype.card`-th power of the one-coordinate standard-normal probability.",
-        "Tested and rejected the tempting pointwise inequality `max_i |X_i| <= max_i X_i + max_i (-X_i)`: constant positive sample vectors make its right-hand side zero. No invalid reduction was retained. `lake env lean ComputationalMathematics/HDP/Scalar/GaussianMaxima.lean` passes."
+        "Tested and rejected the tempting pointwise inequality `max_i |X_i| <= max_i X_i + max_i (-X_i)`: constant positive sample vectors make its right-hand side zero. No invalid reduction was retained. `lake env lean ComputationalMathematics/HDP/Scalar/GaussianMaxima.lean` passes.",
+        "Searched the current tree for `one_sub_pow_le_exp_neg`, Gaussian absolute moments, maximum-of-two expectations, and independence-to-product laws. Reused `IndependentSums.Chernoff.one_sub_pow_le_exp_neg_nat_mul` rather than duplicating it, and reused `NumStability.integral_abs_standardGaussian_difference` to identify the exact two-normal expected maximum. Pinned Mathlib supplied `indepFun_iff_map_prod_eq_prod_map_map`, `HasLaw.integral_comp`, `integral_id_gaussianReal`, and the measurable/integrable lattice API.",
+        "Proved that the lower Mills coefficient dominates `1/(2t)` for `t >= 2`, that `N * P{g >= sqrt(log N)}` stays above a positive universal constant when `log N >= 4`, and hence that the maximum exceeds this threshold with a fixed positive probability.",
+        "Converted the tail estimate to an expectation lower bound while retaining the signed maximum: one coordinate's standard-normal absolute first moment controls the negative part. Proved separately that the expected maximum of two independent standard normals is exactly `1/sqrt pi`, then combined the small- and large-log regimes into the positive constant `gaussianMaximumLowerConstant`.",
+    "Extended the result through the `N=1` endpoint, introduced the totalized sequence prefix representation `prefixMaximum`, and added the proof-free transparent target, checked wrapper, explicit integrability clause, and mechanical receipt. `lake build ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise11.Contract ComputationalMathematics.Source.Vershynin.Chapter02` passes all 3,818 jobs.",
+    "Ran a fresh current-tree organization scan after the new module/layout increment: 6,044 Lean modules, with zero unclassified modules, mixed modules, missing module docs, legacy naming exceptions, declaration-bearing umbrellas, or unsorted aggregate imports. Classified `ComputationalMathematics.HDP.Scalar.GaussianMaxima` in the source tier because its current proof imports the existing source-tier `GaussianTails` producer; the source-facing Exercise 2.5.11 contract remains separate."
       ],
-      "open_reason": "No Lean declaration yet proves the printed expectation lower bound. The exact independent lower-tail product foundation now compiles, and the remaining local work is the quantitative positive-tail/negative-tail expectation estimate followed by the universal `sqrt (log N)` choice."
+  "open_reason": "The source-neutral foundation theorem and source-facing proof receipt compile. The row remains `READY` until a fresh complete semantic audit validates the target against the printed signed-maximum lower bound."
     },
     {
       "id": "HDP-02-EQ-2.18",
