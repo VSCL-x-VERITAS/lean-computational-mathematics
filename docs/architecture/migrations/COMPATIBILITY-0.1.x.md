@@ -1,5 +1,11 @@
 # Compatibility policy and path map
 
+> **Historical mapping for `v0.1.x` consumers.** The forwarding modules this
+> document describes were removed in release 0.2.0 (2026-09-10). It is retained
+> as the record of what each historical import path resolved to; the
+> machine-readable form is `2026-09-forwarder-map.json` in this directory.
+
+
 The canonical module and library root is `ComputationalMathematics`. The Lake
 package remains `numStability`, tests remain `NumStabilityTest`, and authored
 declaration names (including `NumStability.*`) are unchanged. Every one of the

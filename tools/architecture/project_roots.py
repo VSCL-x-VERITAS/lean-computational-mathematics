@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 
 
-PRODUCTION_ROOTS = ("ComputationalMathematics", "NumStability")
+PRODUCTION_ROOTS = ("ComputationalMathematics",)
 
 
 def is_production_module(name: str) -> bool:
@@ -42,7 +42,12 @@ def self_test() -> list[str]:
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary)
         expected: set[str] = set()
-        for name in (*PRODUCTION_ROOTS, "NumStabilityTest", "ComputationalMathematicsExtra"):
+        # NumStabilityTest and ComputationalMathematicsExtra are the neighbours a
+        # prefix match must not swallow: the test root and a longer name sharing
+        # the production prefix. NumStability is included as a negative case even
+        # though release 0.2.0 removed that tree, so a reintroduced forwarding
+        # root cannot silently rejoin the production set.
+        for name in (*PRODUCTION_ROOTS, "NumStability", "NumStabilityTest", "ComputationalMathematicsExtra"):
             (root / name).mkdir()
             for relative in (name + ".lean", name + "/Leaf.lean"):
                 (root / relative).write_text("/-! Root discovery fixture. -/\n", encoding="utf-8")
@@ -50,7 +55,7 @@ def self_test() -> list[str]:
                     expected.add(relative)
         actual = {path.relative_to(root).as_posix() for path in production_paths(root)}
         if actual != expected:
-            failures.append(f"dual-root source discovery differs: {actual ^ expected}")
+            failures.append(f"source discovery differs: {actual ^ expected}")
     return failures
 
 

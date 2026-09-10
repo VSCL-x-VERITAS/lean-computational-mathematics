@@ -159,8 +159,6 @@ def is_structural_only(module: SourceModule) -> bool:
 
 
 def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
-    if tier == "compatibility":
-        return False
     parts = module.name.split(".")[1:]
     if any(not UPPER_CAMEL_RE.fullmatch(part) for part in parts):
         return True
@@ -393,12 +391,10 @@ def check() -> int:
 
     for module in modules:
         tier = assignment.get(module.name)
-        if tier in {"aggregate", "compatibility"} and not is_structural_only(module):
+        if tier == "aggregate" and not is_structural_only(module):
             failures.append(f"{tier} module is not import-and-docstring-only: {module.name}")
 
-    structural = {
-        name for name, tier in assignment.items() if tier in {"aggregate", "compatibility"}
-    }
+    structural = {name for name, tier in assignment.items() if tier == "aggregate"}
     for aggregate, contract in sorted(aggregate_contracts.items()):
         if aggregate not in by_name:
             failures.append(f"complete aggregate is missing: {aggregate}")
