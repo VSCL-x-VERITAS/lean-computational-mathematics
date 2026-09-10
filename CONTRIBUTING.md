@@ -62,10 +62,11 @@ Run from the repository root:
 
 ```text
 python tools/architecture/check_layout.py
-python tools/architecture/check_compatibility.py
+python tools/architecture/check_tiers.py
+python tools/architecture/check_placeholders.py
 python tools/architecture/check_provenance.py
 python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
-lake build ComputationalMathematics NumStability NumStabilityTest
+lake build ComputationalMathematics NumStabilityTest
 ```
 
 Architecture batches should also build their canonical modules and isolated

@@ -374,12 +374,9 @@ experiments/                              C/Python reproductions of selected sou
 For a source-only architecture check, run:
 
 ```bash
-python tools/architecture/check_phase.py --all-phases
-python tools/architecture/check_completion_phase.py
 python tools/architecture/check_layout.py
 python tools/architecture/check_tiers.py
 python tools/architecture/check_placeholders.py
-python tools/architecture/check_compatibility.py
 python tools/architecture/check_provenance.py
 python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
 ```
