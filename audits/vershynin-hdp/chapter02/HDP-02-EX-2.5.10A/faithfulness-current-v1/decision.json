@@ -1,54 +1,25 @@
 {
-  "accepted": false,
-  "adjudicated": true,
-  "adjudication_reasons": [
-    "judge classifications differ",
-    "round-trip judge requested adjudication",
-    "round-trip judge classification is undetermined",
-    "round-trip judge left semantic_checklist item C04 unclear",
-    "round-trip judge left semantic_checklist item C05 unclear",
-    "round-trip judge left semantic_checklist item C07 unclear",
-    "round-trip judge left semantic_checklist item C10 unclear",
-    "round-trip judge left implication translation_implies_source unclear",
-    "round-trip judge left implication source_implies_translation unclear"
-  ],
-  "classification": "not-faithful-weaker",
-  "completed_at_utc": "2026-09-10T09:59:51.799424+00:00",
-  "findings": [
-    {
-      "category": "missing-ae-finiteness-bridge",
-      "evidence": "D003 defines the integrand as (D006 X \u03c9).toReal; D013 maps top to zero; D001 does not conclude D006 X \u03c9<top almost everywhere, while the source bounds the actual normalized countable maximum/supremum.",
-      "impact": "The audited theorem statement bounds a transformed representative without stating the condition that makes it agree almost everywhere with the source maximal object, so the central source conclusion is not fully represented.",
-      "severity": "major"
-    },
-    {
-      "category": "tacit-finite-uniform-scale",
-      "evidence": "The source presents K=max_i ||X_i||_{\u03c8\u2082} and C K as real quantities and the hint divides by C K; Lean states the corresponding ENNReal supremum is below top.",
-      "impact": "The K<top premise makes a tacit source well-formedness condition explicit and is not reduced applicability.",
-      "severity": "note"
-    },
-    {
-      "category": "countable-supremum-convention",
-      "evidence": "The source uses an infinite sequence and a union bound over the event that some indexed normalized variable exceeds t; D004 and D006 use countable indexed suprema.",
-      "impact": "Reading the informal infinite max as a supremum is faithful and does not require attainment.",
-      "severity": "note"
-    }
-  ],
+  "accepted": true,
+  "adjudicated": false,
+  "adjudication_reasons": [],
+  "classification": "faithful-equivalent",
+  "completed_at_utc": "2026-09-10T10:58:36.053850+00:00",
+  "findings": [],
   "implications": {
     "lean_implies_source": {
-      "reasoning": "The target type asserts only integrability and an expectation bound for Z(\u03c9)=(logWeightedAbsSup X \u03c9).toReal. Since toReal maps top to zero and the contract has no assertion that logWeightedAbsSup is finite almost everywhere, the target contract does not recover the source's expectation bound for the actual normalized supremum. A finiteness fact established only inside a proof is not part of the audited proposition.",
-      "verdict": "no"
+      "reasoning": "Map source index j>=1 to Lean index i=j-1. The finite ENNReal iSup gauge is K, the a.e.-finite iSup is the source weighted countable maximum, integrability gives its genuine expectation, and the final conjunct is exactly the source inequality with one absolute C.",
+      "verdict": "yes"
     },
     "source_implies_lean": {
-      "reasoning": "The source's real-valued K and its hint tacitly place the claim in the finite-uniform-scale setting used by Lean. A finite expectation bound for the actual nonnegative supremum entails its almost-everywhere finiteness and integrability. On that full-measure set ENNReal.toReal preserves the supremum, so the source claim yields both Lean's integrability conjunct and its inequality.",
+      "reasoning": "Under the source's standard mathematically meaningful reading of its countable max symbols as suprema and K as the finite uniform psi-two bound used in the real expression CK, the displayed finite expectation bound implies the nonnegative supremum is finite almost surely and integrable. Thus it supplies the repaired conjuncts and the Lean inequality without adding independence, centering, attainment, or a finite cutoff.",
       "verdict": "yes"
     }
   },
   "judge_classifications": {
-    "direct": "not-faithful-weaker",
-    "roundtrip": "undetermined"
+    "direct": "faithful-equivalent",
+    "roundtrip": "faithful-equivalent"
   },
-  "rationale": "The source and Lean agree on the common probability space, arbitrary dependence, absence of centering, universal positive constant, \u03c8\u2082 gauge, countable indexing, logarithmic weight, and inequality direction. The source's real K notation and its normalization by C K tacitly require a finite uniform scale, so Lean's explicit K<top premise is not an applicability defect. The decisive mismatch is instead on the left: Lean bounds the pointwise toReal conversion of an ENNReal supremum, which sends an infinite value to zero. Equality with the source maximal quantity would hold almost everywhere after establishing finiteness, but that finiteness is absent from the audited contract even if it was established internally by the proof. Thus the source claim implies the Lean contract, while the Lean contract does not state the full source claim; extra integrability is not genuine compensating strength because it follows from the source's finite expectation bound.",
+  "rationale": "The repaired target faithfully formalizes Exercise 2.5.10's first countable-sequence estimate. In particular, the new explicit a.e.-finiteness conjunct closes the prior semantic hazard from ENNReal.toReal mapping infinity to zero: together with integrability, it ensures that the real integrand is almost everywhere the actual finite countable weighted supremum. Nat indexing is correctly shifted by i+1, K is represented as the countable supremum of the exact psi-two gauges, one positive C is universal, and no independence, centering, attainment, or finite-N restriction is added.",
   "remaining_uncertainties": [],
   "role": "final-decision",
   "schema_version": "formalization-faithfulness-1",

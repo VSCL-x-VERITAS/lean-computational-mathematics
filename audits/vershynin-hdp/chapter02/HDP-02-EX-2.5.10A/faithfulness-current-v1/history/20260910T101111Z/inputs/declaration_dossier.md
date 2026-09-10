@@ -64,7 +64,7 @@ NumStability.HDP.Contract.hdp_02_hex_h2_d5_d10a__contract_type.{u_1}
 - Owner module: `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise10A.Signature`
 - Declaration kind: `def`
 - Distance from target type: `1`
-- Semantic SHA-256: `def1f048a8144c3b3d3cb447cab1f3bbd9570497f9bc843e94c088437847f4a0`
+- Semantic SHA-256: `29dc9b931951ddfa52b5bbc0d05340c578113128fe1e2b0d6d326a954018ecc3`
 
 Type:
 
@@ -87,17 +87,11 @@ Exists fun C =>
       (X : Nat → Ω → Real),
       (∀ (i : Nat), Measurable (X i)) →
         ENNReal.instPartialOrder.lt (NumStability.HDP.Scalar.SubGaussian.sequencePsiTwoGauge μ X) instTopENNReal.top →
-          And
-            (Filter.Eventually
-              (fun ω =>
-                ENNReal.instPartialOrder.lt (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSup X ω)
-                  instTopENNReal.top)
-              (MeasureTheory.ae μ))
-            (And (MeasureTheory.Integrable (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal X) μ)
-              (Real.instLE.le
-                (NumStability.HDP.Scalar.Preliminaries.expectation μ
-                  (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal X))
-                (instHMul.hMul C (NumStability.HDP.Scalar.SubGaussian.sequencePsiTwoGauge μ X).toReal))))
+          And (MeasureTheory.Integrable (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal X) μ)
+            (Real.instLE.le
+              (NumStability.HDP.Scalar.Preliminaries.expectation μ
+                (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal X))
+              (instHMul.hMul C (NumStability.HDP.Scalar.SubGaussian.sequencePsiTwoGauge μ X).toReal)))
 ```
 
 ### D002: `NumStability.HDP.Scalar.Preliminaries.expectation`
@@ -126,34 +120,7 @@ Definition body (one-level semantic boundary):
 fun {Ω} [MeasurableSpace Ω] μ X => MeasureTheory.integral μ fun ω => X ω
 ```
 
-### D003: `NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSup`
-
-- Role: `local`
-- Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
-- Declaration kind: `def`
-- Distance from target type: `2`
-- Semantic SHA-256: `1d209fd6ae7194d1b730e79b0cea4aa1aef98f1d2aef7023aa7f7c8cac1005c8`
-
-Type:
-
-```lean
-{Ω : Type u_1} → (Nat → Ω → Real) → Ω → ENNReal
-```
-
-Fully explicit type:
-
-```lean
-{Ω : Type u_1} → (X : Nat → Ω → Real) → (ω : Ω) → ENNReal
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {Ω} X ω =>
-  iSup fun i => ENNReal.ofReal (instHDiv.hDiv (abs (X i ω)) (NumStability.HDP.Scalar.SubGaussian.logIndexWeight i))
-```
-
-### D004: `NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal`
+### D003: `NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSupReal`
 
 - Role: `local`
 - Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
@@ -179,7 +146,7 @@ Definition body (one-level semantic boundary):
 fun {Ω} X ω => (NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSup X ω).toReal
 ```
 
-### D005: `NumStability.HDP.Scalar.SubGaussian.sequencePsiTwoGauge`
+### D004: `NumStability.HDP.Scalar.SubGaussian.sequencePsiTwoGauge`
 
 - Role: `local`
 - Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
@@ -206,7 +173,7 @@ Definition body (one-level semantic boundary):
 fun {Ω} [MeasurableSpace Ω] μ X => iSup fun i => NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ (X i)
 ```
 
-### D006: `NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge`
+### D005: `NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge`
 
 - Role: `local`
 - Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussian`
@@ -234,33 +201,34 @@ fun {Ω} [MeasurableSpace Ω] μ X =>
     (setOf fun t => NumStability.HDP.Scalar.SubGaussian.PsiTwoAdmissible μ X t)
 ```
 
-### D007: `NumStability.HDP.Scalar.SubGaussian.logIndexWeight`
+### D006: `NumStability.HDP.Scalar.SubGaussian.logWeightedAbsSup`
 
 - Role: `local`
 - Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
 - Declaration kind: `def`
 - Distance from target type: `3`
-- Semantic SHA-256: `deafa0f2b92a6cc30f979a8953e053a6ca4a455773ba4e43c268ac6f35fb1f9e`
+- Semantic SHA-256: `1d209fd6ae7194d1b730e79b0cea4aa1aef98f1d2aef7023aa7f7c8cac1005c8`
 
 Type:
 
 ```lean
-Nat → Real
+{Ω : Type u_1} → (Nat → Ω → Real) → Ω → ENNReal
 ```
 
 Fully explicit type:
 
 ```lean
-(i : Nat) → Real
+{Ω : Type u_1} → (X : Nat → Ω → Real) → (ω : Ω) → ENNReal
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-fun i => (instHAdd.hAdd 1 (Real.log (instHAdd.hAdd i.cast 1))).sqrt
+fun {Ω} X ω =>
+  iSup fun i => ENNReal.ofReal (instHDiv.hDiv (abs (X i ω)) (NumStability.HDP.Scalar.SubGaussian.logIndexWeight i))
 ```
 
-### D008: `NumStability.HDP.Scalar.SubGaussian.PsiTwoAdmissible`
+### D007: `NumStability.HDP.Scalar.SubGaussian.PsiTwoAdmissible`
 
 - Role: `local`
 - Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussian`
@@ -295,6 +263,32 @@ fun {Ω} [MeasurableSpace Ω] μ X t =>
             (MeasureTheory.integral μ fun ω =>
               Real.exp (instHDiv.hDiv (instHPow.hPow (X ω) 2) (instHPow.hPow t.toReal 2)))
             2))))
+```
+
+### D008: `NumStability.HDP.Scalar.SubGaussian.logIndexWeight`
+
+- Role: `local`
+- Owner module: `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
+- Declaration kind: `def`
+- Distance from target type: `4`
+- Semantic SHA-256: `deafa0f2b92a6cc30f979a8953e053a6ca4a455773ba4e43c268ac6f35fb1f9e`
+
+Type:
+
+```lean
+Nat → Real
+```
+
+Fully explicit type:
+
+```lean
+(i : Nat) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun i => (instHAdd.hAdd 1 (Real.log (instHAdd.hAdd i.cast 1))).sqrt
 ```
 
 ### D009: `NumStability.HDP.Scalar.SubGaussian.EvenMomentBound._proof_1`
@@ -438,33 +432,7 @@ Fully explicit type:
 {α : Sort u} → (p : α → Prop) → Prop
 ```
 
-### D015: `Filter.Eventually`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Order.Filter.Defs`
-- Declaration kind: `def`
-- Distance from target type: `2`
-- Semantic SHA-256: `48c8fc03616b0f899835653f1d062e3de4f566255a80b15231ebdedcb0a5c4c4`
-
-Type:
-
-```lean
-{α : Type u_1} → (α → Prop) → Filter α → Prop
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} → (p : α → Prop) → (f : Filter.{u_1} α) → Prop
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} p f => Filter.instMembership.mem f (setOf fun x => p x)
-```
-
-### D016: `HMul.hMul`
+### D015: `HMul.hMul`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -490,7 +458,7 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HMul α β γ] => self.1
 ```
 
-### D017: `LE.le`
+### D016: `LE.le`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -516,7 +484,7 @@ Definition body (one-level semantic boundary):
 fun α [self : LE α] => self.1
 ```
 
-### D018: `LT.lt`
+### D017: `LT.lt`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -542,7 +510,7 @@ Definition body (one-level semantic boundary):
 fun α [self : LT α] => self.1
 ```
 
-### D019: `Measurable`
+### D018: `Measurable`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
@@ -569,7 +537,7 @@ fun {α} {β} [MeasurableSpace α] [MeasurableSpace β] f =>
   ∀ ⦃t : Set β⦄, MeasurableSet t → MeasurableSet (Set.preimage f t)
 ```
 
-### D020: `MeasurableSpace`
+### D019: `MeasurableSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.MeasurableSpace.Defs`
@@ -589,7 +557,7 @@ Fully explicit type:
 (α : Type u_7) → Type u_7
 ```
 
-### D021: `MeasureTheory.Integrable`
+### D020: `MeasureTheory.Integrable`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Function.L1Space.Integrable`
@@ -626,7 +594,7 @@ fun {ε} [TopologicalSpace ε] [ContinuousENorm ε] {α} {x} f μ =>
   And (MeasureTheory.AEStronglyMeasurable f μ) (MeasureTheory.HasFiniteIntegral f μ)
 ```
 
-### D022: `MeasureTheory.IsProbabilityMeasure`
+### D021: `MeasureTheory.IsProbabilityMeasure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.Typeclasses.Probability`
@@ -646,7 +614,7 @@ Fully explicit type:
 {α : Type u_1} → {m0 : MeasurableSpace.{u_1} α} → (μ : @MeasureTheory.Measure.{u_1} α m0) → Prop
 ```
 
-### D023: `MeasureTheory.Measure`
+### D022: `MeasureTheory.Measure`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
@@ -666,89 +634,7 @@ Fully explicit type:
 (α : Type u_6) → [MeasurableSpace.{u_6} α] → Type u_6
 ```
 
-### D024: `MeasureTheory.Measure.instFunLike`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
-- Declaration kind: `def`
-- Distance from target type: `2`
-- Semantic SHA-256: `94b2becf9230ce3d438e9b668f79f08e69dbe28c937b1aaca32d96e94b64a5b2`
-
-Type:
-
-```lean
-{α : Type u_1} → [inst : MeasurableSpace α] → FunLike (MeasureTheory.Measure α) (Set α) ENNReal
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} →
-  [inst : MeasurableSpace.{u_1} α] →
-    FunLike.{u_1 + 1, u_1 + 1, 1} (@MeasureTheory.Measure.{u_1} α inst) (Set.{u_1} α) ENNReal
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [MeasurableSpace α] =>
-  { coe := fun μ => MeasureTheory.OuterMeasure.instFunLikeSetENNReal.coe μ.toOuterMeasure, coe_injective' := ⋯ }
-```
-
-### D025: `MeasureTheory.Measure.instOuterMeasureClass`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.MeasureTheory.Measure.MeasureSpaceDef`
-- Declaration kind: `theorem`
-- Distance from target type: `2`
-- Semantic SHA-256: `12c72524345059262ce157fe3d4314569e2e86487366f251af8f57723dda88b7`
-
-Type:
-
-```lean
-∀ {α : Type u_1} [inst : MeasurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
-```
-
-Fully explicit type:
-
-```lean
-∀ {α : Type u_1} [inst : MeasurableSpace.{u_1} α],
-  @MeasureTheory.OuterMeasureClass.{u_1, u_1} (@MeasureTheory.Measure.{u_1} α inst) α
-    (@MeasureTheory.Measure.instFunLike.{u_1} α inst)
-```
-
-### D026: `MeasureTheory.ae`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.MeasureTheory.OuterMeasure.AE`
-- Declaration kind: `def`
-- Distance from target type: `2`
-- Semantic SHA-256: `a2cf721ae5d77711462e063686e22be219128cc7ab3b90958a7ce538754e0fd5`
-
-Type:
-
-```lean
-{α : Type u_1} →
-  {F : Type u_3} → [inst : FunLike F (Set α) ENNReal] → [MeasureTheory.OuterMeasureClass F α] → F → Filter α
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} →
-  {F : Type u_3} →
-    [inst : FunLike.{u_3 + 1, u_1 + 1, 1} F (Set.{u_1} α) ENNReal] →
-      [@MeasureTheory.OuterMeasureClass.{u_3, u_1} F α inst] → (μ : F) → Filter.{u_1} α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} {F} [inst : FunLike F (Set α) ENNReal] [MeasureTheory.OuterMeasureClass F α] μ =>
-  Filter.ofCountableUnion (fun x => Eq (inst.coe μ x) 0) ⋯ ⋯
-```
-
-### D027: `Nat`
+### D023: `Nat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -768,7 +654,7 @@ Fully explicit type:
 Type
 ```
 
-### D028: `NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing`
+### D024: `NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
@@ -794,7 +680,7 @@ Definition body (one-level semantic boundary):
 fun α [self : NonUnitalSeminormedCommRing α] => self.1
 ```
 
-### D029: `NonUnitalSeminormedRing.toSeminormedAddCommGroup`
+### D025: `NonUnitalSeminormedRing.toSeminormedAddCommGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
@@ -823,7 +709,7 @@ fun {α} [inst : NonUnitalSeminormedRing α] =>
     dist_eq := ⋯ }
 ```
 
-### D030: `NormedCommRing.toSeminormedCommRing`
+### D026: `NormedCommRing.toSeminormedCommRing`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
@@ -851,7 +737,7 @@ fun {α} [β : NormedCommRing α] =>
     norm_mul_le := ⋯, mul_comm := ⋯ }
 ```
 
-### D031: `OfNat.ofNat`
+### D027: `OfNat.ofNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -877,7 +763,7 @@ Definition body (one-level semantic boundary):
 fun α x [self : OfNat α x] => self.1
 ```
 
-### D032: `PartialOrder.toPreorder`
+### D028: `PartialOrder.toPreorder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.Defs.PartialOrder`
@@ -903,7 +789,7 @@ Definition body (one-level semantic boundary):
 fun α [self : PartialOrder α] => self.1
 ```
 
-### D033: `Preorder.toLT`
+### D029: `Preorder.toLT`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.Defs.PartialOrder`
@@ -929,7 +815,7 @@ Definition body (one-level semantic boundary):
 fun α [self : Preorder α] => self.2
 ```
 
-### D034: `PseudoMetricSpace.toUniformSpace`
+### D030: `PseudoMetricSpace.toUniformSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -955,7 +841,7 @@ Definition body (one-level semantic boundary):
 fun α [self : PseudoMetricSpace α] => self.7
 ```
 
-### D035: `Real`
+### D031: `Real`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -975,7 +861,7 @@ Fully explicit type:
 Type
 ```
 
-### D036: `Real.instLE`
+### D032: `Real.instLE`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1001,7 +887,7 @@ Definition body (one-level semantic boundary):
 { le := Real.le✝ }
 ```
 
-### D037: `Real.instLT`
+### D033: `Real.instLT`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1027,7 +913,7 @@ Definition body (one-level semantic boundary):
 { lt := Real.lt✝ }
 ```
 
-### D038: `Real.instMul`
+### D034: `Real.instMul`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1053,7 +939,7 @@ Definition body (one-level semantic boundary):
 { mul := Real.mul✝ }
 ```
 
-### D039: `Real.instZero`
+### D035: `Real.instZero`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -1079,7 +965,7 @@ Definition body (one-level semantic boundary):
 { zero := Real.zero✝ }
 ```
 
-### D040: `Real.measurableSpace`
+### D036: `Real.measurableSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Constructions.BorelSpace.Basic`
@@ -1105,7 +991,7 @@ Definition body (one-level semantic boundary):
 borel Real
 ```
 
-### D041: `Real.normedCommRing`
+### D037: `Real.normedCommRing`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
@@ -1144,7 +1030,7 @@ let __src_1 := Real.commRing;
   toMetricSpace := __src.toMetricSpace, dist_eq := ⋯, norm_mul_le := Real.normedCommRing._proof_20, mul_comm := ⋯ }
 ```
 
-### D042: `Real.pseudoMetricSpace`
+### D038: `Real.pseudoMetricSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.MetricSpace.Pseudo.Defs`
@@ -1172,7 +1058,7 @@ Definition body (one-level semantic boundary):
   cobounded_sets := Real.pseudoMetricSpace._proof_4 }
 ```
 
-### D043: `SeminormedAddCommGroup.toSeminormedAddGroup`
+### D039: `SeminormedAddCommGroup.toSeminormedAddGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Defs`
@@ -1201,7 +1087,7 @@ fun {E} [inst : SeminormedAddCommGroup E] =>
     dist_eq := ⋯ }
 ```
 
-### D044: `SeminormedAddGroup.toContinuousENorm`
+### D040: `SeminormedAddGroup.toContinuousENorm`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Continuity`
@@ -1231,7 +1117,7 @@ Definition body (one-level semantic boundary):
 fun {E} [SeminormedAddGroup E] => { toENorm := NNNorm.toENorm, continuous_enorm := ⋯ }
 ```
 
-### D045: `SeminormedCommRing.toNonUnitalSeminormedCommRing`
+### D041: `SeminormedCommRing.toNonUnitalSeminormedCommRing`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Ring.Basic`
@@ -1261,7 +1147,7 @@ fun {α} [β : SeminormedCommRing α] =>
     toPseudoMetricSpace := β.toPseudoMetricSpace, dist_eq := ⋯, norm_mul_le := ⋯, mul_comm := ⋯ }
 ```
 
-### D046: `Top.top`
+### D042: `Top.top`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.Notation`
@@ -1287,7 +1173,7 @@ Definition body (one-level semantic boundary):
 fun α [self : Top α] => self.1
 ```
 
-### D047: `UniformSpace.toTopologicalSpace`
+### D043: `UniformSpace.toTopologicalSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Topology.UniformSpace.Defs`
@@ -1313,7 +1199,7 @@ Definition body (one-level semantic boundary):
 fun α [self : UniformSpace α] => self.1
 ```
 
-### D048: `Zero.toOfNat0`
+### D044: `Zero.toOfNat0`
 
 - Role: `external-frontier`
 - Owner module: `Init.Data.Zero`
@@ -1339,7 +1225,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Zero α] => { ofNat := inst.zero }
 ```
 
-### D049: `instHMul`
+### D045: `instHMul`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -1365,7 +1251,7 @@ Definition body (one-level semantic boundary):
 fun {α} [inst : Mul α] => { hMul := fun a b => inst.mul a b }
 ```
 
-### D050: `instTopENNReal`
+### D046: `instTopENNReal`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.ENNReal.Basic`
@@ -1391,7 +1277,7 @@ Definition body (one-level semantic boundary):
 WithTop.top
 ```
 
-### D051: `CompleteLinearOrder.toConditionallyCompleteLinearOrderBot`
+### D047: `CompleteLinearOrder.toConditionallyCompleteLinearOrderBot`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompleteLattice.Basic`
@@ -1423,7 +1309,7 @@ fun {α} [h : CompleteLinearOrder α] =>
     compare_eq_compareOfLessAndEq := ⋯, toOrderBot := __spread.1.toOrderBot, csSup_empty := ⋯ }
 ```
 
-### D052: `ConditionallyCompleteLattice.toConditionallyCompletePartialOrder`
+### D048: `ConditionallyCompleteLattice.toConditionallyCompletePartialOrder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompleteLattice.Basic`
@@ -1451,7 +1337,7 @@ fun {α} [inst : ConditionallyCompleteLattice α] =>
     toInfSet := inst.toInfSet, isGLB_csInf_of_directed := ⋯ }
 ```
 
-### D053: `ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice`
+### D049: `ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompleteLattice.Defs`
@@ -1477,7 +1363,7 @@ Definition body (one-level semantic boundary):
 fun α [self : ConditionallyCompleteLinearOrder α] => self.1
 ```
 
-### D054: `ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder`
+### D050: `ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompleteLattice.Defs`
@@ -1503,7 +1389,7 @@ Definition body (one-level semantic boundary):
 fun α [self : ConditionallyCompleteLinearOrderBot α] => self.1
 ```
 
-### D055: `ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup`
+### D051: `ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompletePartialOrder.Defs`
@@ -1529,7 +1415,7 @@ Definition body (one-level semantic boundary):
 fun α [self : ConditionallyCompletePartialOrder α] => self.1
 ```
 
-### D056: `ConditionallyCompletePartialOrderSup.toSupSet`
+### D052: `ConditionallyCompletePartialOrderSup.toSupSet`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompletePartialOrder.Defs`
@@ -1555,33 +1441,7 @@ Definition body (one-level semantic boundary):
 fun α [self : ConditionallyCompletePartialOrderSup α] => self.2
 ```
 
-### D057: `DivInvMonoid.toDiv`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Algebra.Group.Defs`
-- Declaration kind: `abbrev`
-- Distance from target type: `3`
-- Semantic SHA-256: `cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea`
-
-Type:
-
-```lean
-{G : Type u} → [self : DivInvMonoid G] → Div G
-```
-
-Fully explicit type:
-
-```lean
-{G : Type u} → [self : DivInvMonoid.{u} G] → Div.{u} G
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun G [self : DivInvMonoid G] => self.3
-```
-
-### D058: `ENNReal.instCompleteLinearOrder`
+### D053: `ENNReal.instCompleteLinearOrder`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.ENNReal.Basic`
@@ -1607,59 +1467,7 @@ Definition body (one-level semantic boundary):
 inferInstanceAs (CompleteLinearOrder (WithTop NNReal))
 ```
 
-### D059: `ENNReal.ofReal`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Data.ENNReal.Basic`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `ed3ef7ee60e47d07da43d414f4f32aa69df50f614988267eebc1025b2bef657d`
-
-Type:
-
-```lean
-Real → ENNReal
-```
-
-Fully explicit type:
-
-```lean
-(r : Real) → ENNReal
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun r => ENNReal.ofNNReal r.toNNReal
-```
-
-### D060: `HDiv.hDiv`
-
-- Role: `external-frontier`
-- Owner module: `Init.Prelude`
-- Declaration kind: `abbrev`
-- Distance from target type: `3`
-- Semantic SHA-256: `10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b`
-
-Type:
-
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HDiv α β γ] → α → β → γ
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HDiv.{u, v, w} α β γ] → α → β → γ
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun α β {γ} [self : HDiv α β γ] => self.1
-```
-
-### D061: `InnerProductSpace.toNormedSpace`
+### D054: `InnerProductSpace.toNormedSpace`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.InnerProductSpace.Defs`
@@ -1693,7 +1501,7 @@ Definition body (one-level semantic boundary):
 fun 𝕜 E {inst} {inst_1} [self : InnerProductSpace 𝕜 E] => self.1
 ```
 
-### D062: `MeasureTheory.integral`
+### D055: `MeasureTheory.integral`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.MeasureTheory.Integral.Bochner.Basic`
@@ -1726,7 +1534,7 @@ Definition body (one-level semantic boundary):
 MeasureTheory.wrapped✝.1
 ```
 
-### D063: `NormedAddCommGroup.toSeminormedAddCommGroup`
+### D056: `NormedAddCommGroup.toSeminormedAddCommGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Defs`
@@ -1755,7 +1563,7 @@ fun {E} [inst : NormedAddCommGroup E] =>
     dist_eq := ⋯ }
 ```
 
-### D064: `RCLike.toInnerProductSpaceReal`
+### D057: `RCLike.toInnerProductSpaceReal`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.InnerProductSpace.Basic`
@@ -1792,61 +1600,7 @@ fun {𝕜} [RCLike 𝕜] =>
     conj_inner_symm := ⋯, add_left := ⋯, smul_left := ⋯ }
 ```
 
-### D065: `Real.instAddGroup`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Data.Real.Basic`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `f0de8cbc2c873a19be749cd9b2d3cc9a6edb9ebc92020a1877714a50c23d9dc0`
-
-Type:
-
-```lean
-AddGroup Real
-```
-
-Fully explicit type:
-
-```lean
-AddGroup.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
-
-### D066: `Real.instDivInvMonoid`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Data.Real.Basic`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3`
-
-Type:
-
-```lean
-DivInvMonoid Real
-```
-
-Fully explicit type:
-
-```lean
-DivInvMonoid.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',
-  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,
-  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
-```
-
-### D067: `Real.instRCLike`
+### D058: `Real.instRCLike`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.RCLike.Basic`
@@ -1877,33 +1631,7 @@ Definition body (one-level semantic boundary):
   toPartialOrder := Real.partialOrder, le_iff_re_im := @Real.instRCLike._proof_13, toDecidableEq := Real.decidableEq }
 ```
 
-### D068: `Real.lattice`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Data.Real.Basic`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `5bccf78d647cf08233ff548c19523f80b1d1bf11b5a76aa50396199e2c0c7510`
-
-Type:
-
-```lean
-Lattice Real
-```
-
-Fully explicit type:
-
-```lean
-Lattice.{0} Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-inferInstance
-```
-
-### D069: `Real.normedAddCommGroup`
+### D059: `Real.normedAddCommGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Normed.Group.Real`
@@ -1929,34 +1657,7 @@ Definition body (one-level semantic boundary):
 { toNorm := Real.norm, toAddCommGroup := Real.instAddCommGroup, toMetricSpace := Real.metricSpace, dist_eq := ⋯ }
 ```
 
-### D070: `abs`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Algebra.Order.Group.Unbundled.Abs`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `8ec55bade8dee4d49822a9bdbd84db24c019b8d568452329d9766390229a9c1b`
-
-Type:
-
-```lean
-{α : Type u_1} → [Lattice α] → [AddGroup α] → α → α
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [Lattice.{u_1} α] → [AddGroup.{u_1} α] → (a : α) → α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [Lattice α] [AddGroup α] a =>
-  SemilatticeSup.toMax.max a (SubtractionMonoid.toSubNegZeroMonoid.toNegZeroClass.neg a)
-```
-
-### D071: `iSup`
+### D060: `iSup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.SetNotation`
@@ -1982,33 +1683,7 @@ Definition body (one-level semantic boundary):
 fun {α} {ι} [inst : SupSet α] s => inst.sSup (Set.range s)
 ```
 
-### D072: `instHDiv`
-
-- Role: `external-frontier`
-- Owner module: `Init.Prelude`
-- Declaration kind: `def`
-- Distance from target type: `3`
-- Semantic SHA-256: `ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871`
-
-Type:
-
-```lean
-{α : Type u_1} → [Div α] → HDiv α α α
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [Div.{u_1} α] → HDiv.{u_1, u_1, u_1} α α α
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
-```
-
-### D073: `ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderInf`
+### D061: `ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderInf`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompletePartialOrder.Defs`
@@ -2034,7 +1709,7 @@ Definition body (one-level semantic boundary):
 fun α self => { toPartialOrder := self.toPartialOrder, toInfSet := self.toInfSet, isGLB_csInf_of_directed := ⋯ }
 ```
 
-### D074: `ConditionallyCompletePartialOrderInf.toInfSet`
+### D062: `ConditionallyCompletePartialOrderInf.toInfSet`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.ConditionallyCompletePartialOrder.Defs`
@@ -2060,33 +1735,85 @@ Definition body (one-level semantic boundary):
 fun α [self : ConditionallyCompletePartialOrderInf α] => self.2
 ```
 
-### D075: `HAdd.hAdd`
+### D063: `DivInvMonoid.toDiv`
 
 - Role: `external-frontier`
-- Owner module: `Init.Prelude`
+- Owner module: `Mathlib.Algebra.Group.Defs`
 - Declaration kind: `abbrev`
 - Distance from target type: `4`
-- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+- Semantic SHA-256: `cf21e4a4c962ee0db8a97bd649d849a798a693692bf09312f7855ddcbeb125ea`
 
 Type:
 
 ```lean
-{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
+{G : Type u} → [self : DivInvMonoid G] → Div G
 ```
 
 Fully explicit type:
 
 ```lean
-{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HAdd.{u, v, w} α β γ] → α → β → γ
+{G : Type u} → [self : DivInvMonoid.{u} G] → Div.{u} G
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-fun α β {γ} [self : HAdd α β γ] => self.1
+fun G [self : DivInvMonoid G] => self.3
 ```
 
-### D076: `InfSet.sInf`
+### D064: `ENNReal.ofReal`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.ENNReal.Basic`
+- Declaration kind: `def`
+- Distance from target type: `4`
+- Semantic SHA-256: `ed3ef7ee60e47d07da43d414f4f32aa69df50f614988267eebc1025b2bef657d`
+
+Type:
+
+```lean
+Real → ENNReal
+```
+
+Fully explicit type:
+
+```lean
+(r : Real) → ENNReal
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun r => ENNReal.ofNNReal r.toNNReal
+```
+
+### D065: `HDiv.hDiv`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `4`
+- Semantic SHA-256: `10d75d9f08ad8c923109392866fba5fb3645de144bc824cefdd353658fe9f06b`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HDiv α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HDiv.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HDiv α β γ] => self.1
+```
+
+### D066: `InfSet.sInf`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Order.SetNotation`
@@ -2112,215 +1839,140 @@ Definition body (one-level semantic boundary):
 fun α [self : InfSet α] => self.1
 ```
 
-### D077: `Nat.cast`
-
-- Role: `external-frontier`
-- Owner module: `Init.Data.Cast`
-- Declaration kind: `def`
-- Distance from target type: `4`
-- Semantic SHA-256: `6e24327ea908b1837083bb15aef27d593e950a2ff8ade81d8aa94bfe33b64450`
-
-Type:
-
-```lean
-{R : Type u} → [NatCast R] → Nat → R
-```
-
-Fully explicit type:
-
-```lean
-{R : Type u} → [NatCast.{u} R] → Nat → R
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {R} [inst : NatCast R] => inst.natCast
-```
-
-### D078: `One.toOfNat1`
-
-- Role: `external-frontier`
-- Owner module: `Init.Data.Zero`
-- Declaration kind: `def`
-- Distance from target type: `4`
-- Semantic SHA-256: `cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5`
-
-Type:
-
-```lean
-{α : Type u_1} → [One α] → OfNat α 1
-```
-
-Fully explicit type:
-
-```lean
-{α : Type u_1} → [One.{u_1} α] → OfNat.{u_1} α (nat_lit 1)
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun {α} [inst : One α] => { ofNat := inst.one }
-```
-
-### D079: `Real.instAdd`
+### D067: `Real.instAddGroup`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
 - Declaration kind: `def`
 - Distance from target type: `4`
-- Semantic SHA-256: `f99208c181266311bec9c890b688378f329076f9e6be38fe93d9cedf4d7f50ce`
+- Semantic SHA-256: `f0de8cbc2c873a19be749cd9b2d3cc9a6edb9ebc92020a1877714a50c23d9dc0`
 
 Type:
 
 ```lean
-Add Real
+AddGroup Real
 ```
 
 Fully explicit type:
 
 ```lean
-Add.{0} Real
+AddGroup.{0} Real
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-{ add := Real.add✝ }
+inferInstance
 ```
 
-### D080: `Real.instNatCast`
+### D068: `Real.instDivInvMonoid`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
 - Declaration kind: `def`
 - Distance from target type: `4`
-- Semantic SHA-256: `5fc7a7becbc71d472fa1a28bd92d79b4c6ea4fdc643db7380031a2b890ca7e15`
+- Semantic SHA-256: `166f2abb65bf1271e5e8d70fdb78c55672c7e366b30439e83b517f803cdefac3`
 
 Type:
 
 ```lean
-NatCast Real
+DivInvMonoid Real
 ```
 
 Fully explicit type:
 
 ```lean
-NatCast.{0} Real
+DivInvMonoid.{0} Real
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-{ natCast := fun n => { cauchy := n.cast } }
+{ toMonoid := Real.instMonoid, toInv := Real.instInv, div := DivInvMonoid.div',
+  div_eq_mul_inv := Real.instDivInvMonoid._proof_1, zpow := zpowRec, zpow_zero' := Real.instDivInvMonoid._proof_2,
+  zpow_succ' := Real.instDivInvMonoid._proof_3, zpow_neg' := Real.instDivInvMonoid._proof_4 }
 ```
 
-### D081: `Real.instOne`
+### D069: `Real.lattice`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
 - Declaration kind: `def`
 - Distance from target type: `4`
-- Semantic SHA-256: `b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81`
+- Semantic SHA-256: `5bccf78d647cf08233ff548c19523f80b1d1bf11b5a76aa50396199e2c0c7510`
 
 Type:
 
 ```lean
-One Real
+Lattice Real
 ```
 
 Fully explicit type:
 
 ```lean
-One.{0} Real
+Lattice.{0} Real
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-{ one := Real.one✝ }
+inferInstance
 ```
 
-### D082: `Real.log`
+### D070: `abs`
 
 - Role: `external-frontier`
-- Owner module: `Mathlib.Analysis.SpecialFunctions.Log.Basic`
+- Owner module: `Mathlib.Algebra.Order.Group.Unbundled.Abs`
 - Declaration kind: `def`
 - Distance from target type: `4`
-- Semantic SHA-256: `0fc1548c4e035ffc98e6286d9013e4f3ecf2a9759ac9b01e450f593e258ae39a`
+- Semantic SHA-256: `8ec55bade8dee4d49822a9bdbd84db24c019b8d568452329d9766390229a9c1b`
 
 Type:
 
 ```lean
-Real → Real
+{α : Type u_1} → [Lattice α] → [AddGroup α] → α → α
 ```
 
 Fully explicit type:
 
 ```lean
-(x : Real) → Real
+{α : Type u_1} → [Lattice.{u_1} α] → [AddGroup.{u_1} α] → (a : α) → α
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-fun x => if hx : Eq x 0 then 0 else (instFunLikeOrderIso (Set.Ioi 0).Elem Real).coe Real.expOrderIso.symm ⟨abs x, ⋯⟩
+fun {α} [Lattice α] [AddGroup α] a =>
+  SemilatticeSup.toMax.max a (SubtractionMonoid.toSubNegZeroMonoid.toNegZeroClass.neg a)
 ```
 
-### D083: `Real.sqrt`
-
-- Role: `external-frontier`
-- Owner module: `Mathlib.Data.Real.Sqrt`
-- Declaration kind: `def`
-- Distance from target type: `4`
-- Semantic SHA-256: `67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553`
-
-Type:
-
-```lean
-Real → Real
-```
-
-Fully explicit type:
-
-```lean
-(x : Real) → Real
-```
-
-Definition body (one-level semantic boundary):
-
-```lean
-fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal
-```
-
-### D084: `instHAdd`
+### D071: `instHDiv`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
 - Declaration kind: `def`
 - Distance from target type: `4`
-- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+- Semantic SHA-256: `ea3478ce3daf37e2cbdcd4bfaf7b5142fd7d274b56d75d2fae007c15e1b89871`
 
 Type:
 
 ```lean
-{α : Type u_1} → [Add α] → HAdd α α α
+{α : Type u_1} → [Div α] → HDiv α α α
 ```
 
 Fully explicit type:
 
 ```lean
-{α : Type u_1} → [Add.{u_1} α] → HAdd.{u_1, u_1, u_1} α α α
+{α : Type u_1} → [Div.{u_1} α] → HDiv.{u_1, u_1, u_1} α α α
 ```
 
 Definition body (one-level semantic boundary):
 
 ```lean
-fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
+fun {α} [inst : Div α] => { hDiv := fun a b => inst.div a b }
 ```
 
-### D085: `setOf`
+### D072: `setOf`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Set.Defs`
@@ -2346,7 +1998,33 @@ Definition body (one-level semantic boundary):
 fun {α} p => p
 ```
 
-### D086: `HPow.hPow`
+### D073: `HAdd.hAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `abbrev`
+- Distance from target type: `5`
+- Semantic SHA-256: `e0bf2a92addd6ea713343e4ef69f67e4e1155781d08f46957b9f71412d865f59`
+
+Type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam (Type w)} → [self : HAdd α β γ] → α → β → γ
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u} → {β : Type v} → {γ : outParam.{w + 2} (Type w)} → [self : HAdd.{u, v, w} α β γ] → α → β → γ
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun α β {γ} [self : HAdd α β γ] => self.1
+```
+
+### D074: `HPow.hPow`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -2372,7 +2050,7 @@ Definition body (one-level semantic boundary):
 fun α β {γ} [self : HPow α β γ] => self.1
 ```
 
-### D087: `Monoid.toNatPow`
+### D075: `Monoid.toNatPow`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Algebra.Group.Defs`
@@ -2398,7 +2076,33 @@ Definition body (one-level semantic boundary):
 fun {M} [inst : Monoid M] => { pow := fun x n => inst.npow n x }
 ```
 
-### D088: `Ne`
+### D076: `Nat.cast`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Cast`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `6e24327ea908b1837083bb15aef27d593e950a2ff8ade81d8aa94bfe33b64450`
+
+Type:
+
+```lean
+{R : Type u} → [NatCast R] → Nat → R
+```
+
+Fully explicit type:
+
+```lean
+{R : Type u} → [NatCast.{u} R] → Nat → R
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {R} [inst : NatCast R] => inst.natCast
+```
+
+### D077: `Ne`
 
 - Role: `external-frontier`
 - Owner module: `Init.Core`
@@ -2424,7 +2128,33 @@ Definition body (one-level semantic boundary):
 fun {α} a b => Not (Eq a b)
 ```
 
-### D089: `Real.exp`
+### D078: `One.toOfNat1`
+
+- Role: `external-frontier`
+- Owner module: `Init.Data.Zero`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `cc544b5b2a2aabc84389a9fe2f052127dc6dae9964782b117b9b19b773e542d5`
+
+Type:
+
+```lean
+{α : Type u_1} → [One α] → OfNat α 1
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [One.{u_1} α] → OfNat.{u_1} α (nat_lit 1)
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : One α] => { ofNat := inst.one }
+```
+
+### D079: `Real.exp`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Analysis.Complex.Exponential`
@@ -2450,7 +2180,33 @@ Definition body (one-level semantic boundary):
 fun x => (Complex.exp (Complex.ofReal x)).re
 ```
 
-### D090: `Real.instMonoid`
+### D080: `Real.instAdd`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `f99208c181266311bec9c890b688378f329076f9e6be38fe93d9cedf4d7f50ce`
+
+Type:
+
+```lean
+Add Real
+```
+
+Fully explicit type:
+
+```lean
+Add.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ add := Real.add✝ }
+```
+
+### D081: `Real.instMonoid`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Real.Basic`
@@ -2476,7 +2232,137 @@ Definition body (one-level semantic boundary):
 inferInstance
 ```
 
-### D091: `instHPow`
+### D082: `Real.instNatCast`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `5fc7a7becbc71d472fa1a28bd92d79b4c6ea4fdc643db7380031a2b890ca7e15`
+
+Type:
+
+```lean
+NatCast Real
+```
+
+Fully explicit type:
+
+```lean
+NatCast.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ natCast := fun n => { cauchy := n.cast } }
+```
+
+### D083: `Real.instOne`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Basic`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `b4e24b050b7fb50c4c115c51d5cd4c1b180cae53633f58a38c7d5ce3ccf86c81`
+
+Type:
+
+```lean
+One Real
+```
+
+Fully explicit type:
+
+```lean
+One.{0} Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+{ one := Real.one✝ }
+```
+
+### D084: `Real.log`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Analysis.SpecialFunctions.Log.Basic`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `0fc1548c4e035ffc98e6286d9013e4f3ecf2a9759ac9b01e450f593e258ae39a`
+
+Type:
+
+```lean
+Real → Real
+```
+
+Fully explicit type:
+
+```lean
+(x : Real) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun x => if hx : Eq x 0 then 0 else (instFunLikeOrderIso (Set.Ioi 0).Elem Real).coe Real.expOrderIso.symm ⟨abs x, ⋯⟩
+```
+
+### D085: `Real.sqrt`
+
+- Role: `external-frontier`
+- Owner module: `Mathlib.Data.Real.Sqrt`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `67f9248ae1acb851b5392be301057ebb8b8ef2fb20f76d2d53a2d07ec8f30553`
+
+Type:
+
+```lean
+Real → Real
+```
+
+Fully explicit type:
+
+```lean
+(x : Real) → Real
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun x => ((instFunLikeOrderIso NNReal NNReal).coe NNReal.sqrt x.toNNReal).toReal
+```
+
+### D086: `instHAdd`
+
+- Role: `external-frontier`
+- Owner module: `Init.Prelude`
+- Declaration kind: `def`
+- Distance from target type: `5`
+- Semantic SHA-256: `38066efd17aeeca52ec2890d9aafca2fa3cce8fda7f5843c1b8e5da130d93981`
+
+Type:
+
+```lean
+{α : Type u_1} → [Add α] → HAdd α α α
+```
+
+Fully explicit type:
+
+```lean
+{α : Type u_1} → [Add.{u_1} α] → HAdd.{u_1, u_1, u_1} α α α
+```
+
+Definition body (one-level semantic boundary):
+
+```lean
+fun {α} [inst : Add α] => { hAdd := fun a b => inst.add a b }
+```
+
+### D087: `instHPow`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -2502,7 +2388,7 @@ Definition body (one-level semantic boundary):
 fun {α} {β} [inst : Pow α β] => { hPow := fun a b => inst.pow a b }
 ```
 
-### D092: `instOfNatAtLeastTwo`
+### D088: `instOfNatAtLeastTwo`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Cast.Defs`
@@ -2528,7 +2414,7 @@ Definition body (one-level semantic boundary):
 fun {R} {n} [NatCast R] [n.AtLeastTwo] => { ofNat := n.cast }
 ```
 
-### D093: `instOfNatNat`
+### D089: `instOfNatNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -2554,7 +2440,7 @@ Definition body (one-level semantic boundary):
 fun n => { ofNat := n }
 ```
 
-### D094: `instZeroENNReal`
+### D090: `instZeroENNReal`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.ENNReal.Basic`
@@ -2580,7 +2466,7 @@ Definition body (one-level semantic boundary):
 WithTop.zero
 ```
 
-### D095: `Nat.AtLeastTwo`
+### D091: `Nat.AtLeastTwo`
 
 - Role: `external-frontier`
 - Owner module: `Mathlib.Data.Nat.Init`
@@ -2600,7 +2486,7 @@ Fully explicit type:
 (n : Nat) → Prop
 ```
 
-### D096: `instAddNat`
+### D092: `instAddNat`
 
 - Role: `external-frontier`
 - Owner module: `Init.Prelude`
@@ -11413,7 +11299,7 @@ end NumStability.HDP.Contract
 ### `ComputationalMathematics.HDP.Scalar.SubGaussianMaxima`
 
 Path: `lean-computational-mathematics/ComputationalMathematics/HDP/Scalar/SubGaussianMaxima.lean`
-SHA-256: `eb53ee9554748f3b109afe9ebaa0a9db2f63abc09aee0ceb0e7fa5716660de22`
+SHA-256: `efc892807ee693e048a32f7a44db45f85a594059b8b3477be1cf6a237b1b291e`
 
 ```lean
 import ComputationalMathematics.HDP.Scalar.SubGaussian
@@ -12088,30 +11974,6 @@ lemma ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero
   filter_upwards [hAll] with ω hω
   simp [logWeightedAbsSup, hω]
 
-/-- The actual sequence-gauge hypothesis makes the extended countable weighted
-supremum finite almost everywhere.  This is the semantic bridge required before
-using its real representative. -/
-theorem ae_logWeightedAbsSup_lt_top_of_sequencePsiTwoGauge
-    {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : ℕ → Ω → ℝ}
-    (hX : ∀ i, Measurable (X i))
-    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal)) :
-    ∀ᵐ ω ∂μ, logWeightedAbsSup X ω < (⊤ : ENNReal) := by
-  by_cases hGaugeZero : sequencePsiTwoGauge μ X = 0
-  · have hEachZero : ∀ i, PsiTwoGauge μ (X i) = 0 := by
-      intro i
-      exact nonpos_iff_eq_zero.mp
-        ((psiTwoGauge_le_sequencePsiTwoGauge μ X i).trans_eq hGaugeZero)
-    filter_upwards [ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero
-      hX hEachZero] with ω hω
-    simp [hω]
-  · apply ae_logWeightedAbsSup_lt_top_of_psiTwoGauge_le hX
-      (ENNReal.toReal_pos hGaugeZero hFinite.ne)
-    intro i
-    rw [ENNReal.ofReal_toReal hFinite.ne]
-    exact psiTwoGauge_le_sequencePsiTwoGauge μ X i
-
 /-- Common-gauge-bound form including the zero-scale endpoint. -/
 theorem expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le_of_nonneg
     {Ω : Type*} [MeasurableSpace Ω]
@@ -12164,7 +12026,7 @@ end NumStability.HDP.Scalar.SubGaussian
 ### `ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise10A.Signature`
 
 Path: `lean-computational-mathematics/ComputationalMathematics/Source/Vershynin/Chapter02/Section05/Exercise10A/Signature.lean`
-SHA-256: `9e2a6c5b08b6e2223ce395ed71f61463625f9876dc73f66d755f8e105e37328a`
+SHA-256: `9b2508b037270f6a12cad53124292b96a0305595042dd68774e1d603d9dabf93`
 
 ```lean
 import ComputationalMathematics.HDP.Scalar.SubGaussianMaxima
@@ -12193,8 +12055,7 @@ def hdp_02_hex_h2_d5_d10a__contract_type : Prop :=
       (X : ℕ → Ω → ℝ),
       (∀ i, Measurable (X i)) →
       sequencePsiTwoGauge μ X < (⊤ : ENNReal) →
-      (∀ᵐ ω ∂μ, logWeightedAbsSup X ω < (⊤ : ENNReal)) ∧
-        Integrable (logWeightedAbsSupReal X) μ ∧
+      Integrable (logWeightedAbsSupReal X) μ ∧
         NumStability.HDP.Scalar.Preliminaries.expectation μ
             (logWeightedAbsSupReal X) ≤
           C * (sequencePsiTwoGauge μ X).toReal

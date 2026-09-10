@@ -1,1 +1,108 @@
-{"schema_version":"formalization-faithfulness-1","role":"roundtrip-judge","task_id":"HDP-02-EX-2.5.10A","source_sha256":"ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a","blind_translation_sha256":"1b5f96e16b18fe7032bfe49fba5ebbfbbbaf9419b7e3bf9ac218484475d1d427","semantic_checklist":[{"id":"C01","status":"pass","source_evidence":"The contract selects Exercise 2.5.10's first displayed claim, together with the preceding sub-gaussian definitions, the statement that independence is unnecessary, and the hint.","translation_evidence":"The translation represents only the universal normalized-maximal estimate and does not include the exercise's subsequent finite-N deduction.","reasoning":"The selected result and relevant inherited context match."},{"id":"C02","status":"pass","source_evidence":"The source has a countably infinite sequence of real random variables on one probability space, indexed by positive integers.","translation_evidence":"The translation quantifies over a probability space and a sequence Nat → Ω → Real, with source index i≥1 represented by target index i≥0 and i+1 in the weight.","reasoning":"The zero-based reindexing is a bijective relabeling and preserves the sequence, value type, common probability space, and dimensions."},{"id":"C03","status":"pass","source_evidence":"One absolute constant C is uniform over every admissible sequence and joint distribution.","translation_evidence":"C is existentially quantified before Ω, μ, and X, which are universally quantified afterward.","reasoning":"The universal dependence and quantifier order are preserved."},{"id":"C04","status":"unclear","source_evidence":"Each X_i is sub-gaussian; measurability is implicit in the term random variable, but the source does not separately assume that K=max_i ‖X_i‖_{ψ₂} is finite.","translation_evidence":"Each X_i is explicitly measurable, and the uniform ENNReal supremum K is explicitly required to satisfy K<∞.","reasoning":"Explicit measurability is faithful, and finite K ensures each coordinate has an admissible exponential-square scale. The additional uniform-finiteness premise is faithful if finiteness was tacit in the source's real-valued bound, but restricts applicability if the source intended an extended or otherwise broader reading."},{"id":"C05","status":"unclear","source_evidence":"The sole selected conclusion is E[max_i |X_i|/sqrt(1+log i)] ≤ C K; integrability is not a separate conjunct.","translation_evidence":"The translation separately concludes that Z is Bochner integrable and that its integral is at most C·K.toReal.","reasoning":"With finite K and Z equal almost everywhere to the intended nonnegative supremum, the finite bound entails integrability, so the conjunct is a clarification. Without the unstated finite-K reading, it adds substantive strength."},{"id":"C06","status":"fail","source_evidence":"The source applies expectation to the countable maximum, conventionally read at least as the ordinary nonnegative supremum when literal attainment is not intended.","translation_evidence":"The translation first takes an ENNReal pointwise supremum and then applies ENNReal.toReal, which maps ∞ to 0.","reasoning":"At any point where the normalized values are unbounded, the translated Z is 0 rather than the ordinary extended supremum ∞. This is a genuine pointwise operator mismatch, although the finite uniform scale should confine such points to a null set."},{"id":"C07","status":"unclear","source_evidence":"The source states one non-strict upper bound by C K.","translation_evidence":"The translation states the same non-strict integral bound on its Z and additionally asserts integrability, under K<∞.","reasoning":"The inequality direction and linear dependence agree, but the added premise and conclusion make overall strength dependent on how the source's unstated finiteness convention is resolved."},{"id":"C08","status":"fail","source_evidence":"The source's left-hand object is the maximum or conventional supremum of the normalized magnitudes themselves.","translation_evidence":"The translated object is the real conversion of an ENNReal supremum and therefore replaces an infinite pointwise value by zero.","reasoning":"The finite values agree, but the source maximal object and translated Z are not pointwise identical in the unbounded case."},{"id":"C09","status":"pass","source_evidence":"The denominator is sqrt(1+log i), K is the maximum of the ψ₂ norms, the moment threshold is 2, and the bound is C K.","translation_evidence":"At target index i∈Nat the denominator is sqrt(1+log(i+1)); K is the supremum of the exponential-square scales, the threshold is 2, and the bound is C·K.toReal.","reasoning":"After the exact one-step index relabeling, all coefficients, exponents, weights, thresholds, and parameter dependencies agree."},{"id":"C10","status":"unclear","source_evidence":"The source uses a countably infinite family and does not explicitly impose uniform finiteness or specify whether each infinite max denotes an attained maximum or a supremum.","translation_evidence":"The translation uses countable ENNReal suprema, requires the scale supremum to be finite, and does not require attainment.","reasoning":"The supremum interpretation is plausible, but it generalizes beyond literal attained maxima while the finite-supremum premise specializes the family. The source expressly leaves both matters ambiguous."},{"id":"C11","status":"fail","source_evidence":"For an unbounded normalized family, an ordinary extended supremum is ∞, while a literal real maximum is undefined or unattained; the source gives no convention that turns it into zero.","translation_evidence":"An infinite pointwise ENNReal supremum is converted by ENNReal.toReal to 0.","reasoning":"The translated boundary behavior is inconsistent with either ordinary supremum behavior or literal maximum behavior. Its effect on the expectation may disappear when the exceptional set is null, but the pointwise semantics still differ."},{"id":"C12","status":"pass","source_evidence":"The intended hypotheses admit ordinary examples such as the identically zero sequence, and the asserted estimate is nontrivial for general uniformly sub-gaussian sequences.","translation_evidence":"The translated hypotheses are satisfiable, for example by X_i=0 for every i; the theorem is not made globally vacuous by an impossible premise.","reasoning":"The proposition has intended nonempty models. The ∞-to-0 conversion creates an exceptional-point loophole, but does not make the entire conclusion true only for a trivial reason."}],"implications":{"translation_implies_source":{"verdict":"unclear","reasoning":"If both infinite maxima are read as suprema, finite K is taken as tacit, and random variables are identified up to null sets for expectation, the translated estimate recovers the source estimate because uniform sub-gaussian control makes the pointwise supremum finite almost everywhere. Under a literal attained-maximum reading, the translation supplies no attainment; moreover its Z differs pointwise from the source supremum wherever the ENNReal supremum is ∞. The source ambiguities prevent a definitive implication."},"source_implies_translation":{"verdict":"unclear","reasoning":"Under the conventional finite-supremum reading, the source's finite nonnegative expectation bound supplies the translated integrability and inequality. Under a literal maximum reading, the source does not cover finite suprema that are not attained, while if uniform finiteness was not tacit the relationship between its conclusion and the translated K<∞ restriction is not fixed. Thus this implication also depends on unresolved source conventions."}},"classification":"undetermined","accepted":false,"requires_adjudication":true,"findings":[{"severity":"major","category":"pointwise-supremum-conversion","source_evidence":"The source takes the maximum or conventional supremum of |X_i|/sqrt(1+log i) before expectation.","translation_evidence":"The translated Z applies ENNReal.toReal after the pointwise ENNReal supremum, so ∞ becomes 0.","impact":"The translated integrand is not pointwise the source maximal object on unbounded sample points. Uniform scale control plausibly makes those points null, but exact object identity and literal maximum semantics are not preserved."},{"severity":"major","category":"uniform-finiteness-premise","source_evidence":"The source defines K=max_i ‖X_i‖_{ψ₂} but does not explicitly state K<∞; individual sub-gaussianity does not ensure a finite uniform bound.","translation_evidence":"The translated universal claim applies only when the ENNReal supremum K is strictly below ∞.","impact":"This is a faithful well-formedness clarification if the source tacitly intends finite K, but otherwise it restricts applicability. The source contract does not resolve that choice."},{"severity":"minor","category":"explicit-integrability-conclusion","source_evidence":"Integrability of the maximal function is not stated as a separate conclusion.","translation_evidence":"The translated conclusion explicitly conjoins Bochner integrability of Z with the integral inequality.","impact":"For finite K and the intended supremum up to almost-everywhere equality, this is entailed by the finite expectation bound; under a broader infinite-K reading it may add strength."},{"severity":"note","category":"maximum-versus-supremum","source_evidence":"Both source occurrences use max over all positive integers without stating attainment.","translation_evidence":"Both corresponding translated constructions are ENNReal indexed suprema with no attainment requirement.","impact":"The translation adopts the plausible conventional supremum reading, but it is not equivalent to a literal attained maximum and therefore requires adjudication."}],"rationale":"The translation preserves the sequence, probability-space setting, lack of independence or centering, index shift, logarithmic weights, ψ₂ scale, universal constant, and inequality. Acceptance cannot be established because the source leaves infinite maximum and uniform-finitess conventions unresolved, while the translation commits to finite ENNReal scale supremum and uses a pointwise ENNReal supremum followed by toReal, sending ∞ to 0. Those choices make both implication directions convention-dependent."}
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "roundtrip-judge",
+  "task_id": "HDP-02-EX-2.5.10A",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "blind_translation_sha256": "e634873ff4bd17e6b09afc70be0c31f3576178411a277ce6ff30ea131d6574b0",
+  "semantic_checklist": [
+    {
+      "id": "C01",
+      "status": "pass",
+      "source_evidence": "[E1–E4,E7] The selected source is Exercise 2.5.10's first countable-sequence estimate, together with its definition of K and hint, excluding the later finite-N deduction.",
+      "translation_evidence": "The translation states a countably indexed weighted-supremum estimate and contains no finite-N corollary.",
+      "reasoning": "The translation targets exactly the selected first displayed claim and its operative definitions."
+    },
+    {
+      "id": "C02",
+      "status": "pass",
+      "source_evidence": "[E1,E2] The source has a sequence of real-valued random variables indexed by positive integers on an implicit common probability space.",
+      "translation_evidence": "The translation universally quantifies a probability space and X : ℕ → Ω → ℝ, with the source index i≥1 represented by the translated index i-1≥0.",
+      "reasoning": "The common probability space is implicit in the source's joint maximum and union event, while the zero-based natural indexing is an exact reindexing."
+    },
+    {
+      "id": "C03",
+      "status": "pass",
+      "source_evidence": "[E1–E4] One absolute positive constant C works for every sequence, while K is determined from that sequence.",
+      "translation_evidence": "The translation places the existential C before the universal probability-space and sequence quantifiers and defines M from X.",
+      "reasoning": "Constant scope and witness dependence agree: C is universal, whereas the uniform scale depends on the sequence."
+    },
+    {
+      "id": "C04",
+      "status": "pass",
+      "source_evidence": "[E1,E3,E5] Every coordinate is sub-gaussian, independence and centering are not required, and the usable real quantity K is the uniform ψ₂ scale.",
+      "translation_evidence": "The hypotheses require coordinate measurability and finite M, the supremum of the translated exponential-square scales, without independence or centering.",
+      "reasoning": "Measurability is inherent in being a random variable. Under the finite uniform-K interpretation needed for the real bound CK and the hint's normalization, M<∞ expresses the source's uniform ψ₂-scale condition rather than an unrelated restriction."
+    },
+    {
+      "id": "C05",
+      "status": "pass",
+      "source_evidence": "[E2,E3] The conclusion is the finite-uniform-K expectation bound for the countable weighted maximum.",
+      "translation_evidence": "The conclusions give almost-everywhere finiteness of the extended supremum, integrability of its real-valued version, and the same integral bound.",
+      "reasoning": "The explicit almost-everywhere finiteness and integrability are exactly the consequences needed to realize a finite expectation of the nonnegative countable supremum. They prevent ENNReal.toReal from concealing infinity and do not omit any source conclusion."
+    },
+    {
+      "id": "C06",
+      "status": "pass",
+      "source_evidence": "[E5] The ψ₂ norm is inf {t>0 : E exp(X²/t²)≤2}.",
+      "translation_evidence": "LocalDef006 is the ENNReal infimum of finite nonzero scales satisfying measurability, integrability of exp(X²/t²), and integral at most 2.",
+      "reasoning": "Finite nonzero ENNReal scales correspond to positive real scales. For measurable nonnegative exp(X²/t²), an expectation bounded by 2 entails integrability, so the formal integrability guard preserves the source definition and avoids totalized-integral artifacts."
+    },
+    {
+      "id": "C07",
+      "status": "pass",
+      "source_evidence": "[E2] The relation is E[max_i |X_i|/sqrt(1+log i)] ≤ C K.",
+      "translation_evidence": "The translated integral is bounded above by C multiplied by the real value of the finite uniform scale M.",
+      "reasoning": "The inequality direction, nonnegative supremum, and multiplicative right-hand side agree."
+    },
+    {
+      "id": "C08",
+      "status": "pass",
+      "source_evidence": "[E1–E3] The same sequence X_i determines both the pointwise weighted maximum and K=max_i ||X_i||ψ₂.",
+      "translation_evidence": "The same X supplies LocalDef003's pointwise supremum and LocalDef005's supremum of coordinate scales.",
+      "reasoning": "No coordinate sequence, normalization scale, or transformed value is conflated with a distinct object."
+    },
+    {
+      "id": "C09",
+      "status": "pass",
+      "source_evidence": "[E2–E6] The weight is sqrt(1+log i), the moment threshold is 2, squares occur in exp(X²/t²), and C is absolute.",
+      "translation_evidence": "The weight is sqrt(1+log(i+1)), the scale predicate uses exp(X²/t²) with threshold 2, and one C is uniform.",
+      "reasoning": "The i+1 shift exactly converts zero-based ℕ to the source's positive indices; coefficients, powers, thresholds, and constant dependence are preserved."
+    },
+    {
+      "id": "C10",
+      "status": "pass",
+      "source_evidence": "[E1–E3] The source uses an unbounded positive-integer sequence and writes max_i for both countable quantities.",
+      "translation_evidence": "The translation uses indexed suprema over all i∈ℕ and assumes the global scale supremum is finite.",
+      "reasoning": "For the source's meaningful finite-uniform-K reading, countable supremum is the appropriate formal meaning of its unbounded max notation. There is no finite-family specialization."
+    },
+    {
+      "id": "C11",
+      "status": "pass",
+      "source_evidence": "[E3,E4] The statement does not assume K>0, while the hint's division by K leaves the zero case to separate treatment.",
+      "translation_evidence": "The proposition permits M=0, excludes only M=∞, and explicitly asserts that the pointwise extended supremum is finite almost everywhere before applying ENNReal.toReal.",
+      "reasoning": "The zero-scale case remains covered, and the repaired almost-everywhere finiteness conjunct removes the exceptional-value defect caused by ENNReal.toReal(∞)=0."
+    },
+    {
+      "id": "C12",
+      "status": "pass",
+      "source_evidence": "[E1,E5] Ordinary sub-gaussian sequences, including the identically zero sequence, satisfy the source hypotheses.",
+      "translation_evidence": "For X_i=0, admissible positive scales exist, M=0, the pointwise supremum is zero, and all three conclusions hold.",
+      "reasoning": "The translated hypotheses are satisfiable and the bound is not obtained through an unintended infinity-to-zero conversion."
+    }
+  ],
+  "implications": {
+    "translation_implies_source": {
+      "verdict": "yes",
+      "reasoning": "Finite M makes every coordinate scale finite and supplies the source's finite uniform ψ₂ bound. After reindexing ℕ by i↦i+1, the translated integral inequality is the source inequality; the translation assumes neither independence nor centering. Its explicit almost-everywhere finiteness and integrability conjuncts only ensure that the real integral genuinely represents the countable supremum."
+    },
+    "source_implies_translation": {
+      "verdict": "yes",
+      "reasoning": "Under the source's finite uniform-K interpretation, its ψ₂ definition yields the translated coordinate scales and finite M. The finite upper bound on the expectation of the nonnegative measurable countable supremum implies that supremum is finite almost everywhere and that its real-valued representative is integrable, giving all three translated conclusions."
+    }
+  },
+  "classification": "faithful-equivalent",
+  "accepted": true,
+  "requires_adjudication": false,
+  "findings": [],
+  "rationale": "The blind translation preserves the universal constant, countable indexing, lack of independence and centering assumptions, logarithmic weight, exact exponential-square ψ₂ scale, and the finite uniform K bound. Interpreting the source's unbounded max notation as the finite countable supremum used by its normalization, the two propositions imply each other. The repaired explicit almost-everywhere finiteness conclusion is semantically important: together with integrability it prevents ENNReal.toReal from turning an infinite pointwise supremum into zero, while adding only consequences already forced by the source's finite expectation bound."
+}
