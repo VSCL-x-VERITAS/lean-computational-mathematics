@@ -286,6 +286,73 @@ lemma graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow
     (mul_le_mul_of_nonneg_right hchoose (pow_nonneg hp0 k))
     (pow_nonneg hq0 (S.card - k))
 
+/-- On the interval `[0, 1/2]`, the logarithm of a Bernoulli failure
+probability is bounded below by the first-order estimate `-2p`. -/
+lemma log_one_sub_ge_neg_two_mul {p : ℝ} (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2) :
+    -(2 * p) ≤ Real.log (1 - p) := by
+  have h1p : 0 < 1 - p := by linarith
+  have h := Real.log_le_sub_one_of_pos (inv_pos.mpr h1p)
+  rw [Real.log_inv] at h
+  have hinv : (1 - p)⁻¹ - 1 = p / (1 - p) := by
+    field_simp
+    ring
+  rw [hinv] at h
+  have hfrac : p / (1 - p) ≤ 2 * p := by
+    rw [div_le_iff₀ h1p]
+    nlinarith
+  linarith
+
+/-- The Bernoulli failure power is bounded below by an exponential when the
+success probability is at most one half. -/
+lemma exp_neg_two_mul_le_one_sub_pow {p : ℝ} (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2)
+    (m : ℕ) :
+    Real.exp (-(2 * (m : ℝ) * p)) ≤ (1 - p) ^ m := by
+  have h1p : 0 < 1 - p := by linarith
+  have hlog : -(2 * p) ≤ Real.log (1 - p) :=
+    log_one_sub_ge_neg_two_mul hp0 hp
+  calc
+    Real.exp (-(2 * (m : ℝ) * p)) =
+        Real.exp ((m : ℝ) * (-(2 * p))) := by ring_nf
+    _ ≤ Real.exp ((m : ℝ) * Real.log (1 - p)) := by
+      apply Real.exp_le_exp.mpr
+      exact mul_le_mul_of_nonneg_left hlog (by positivity)
+    _ = Real.exp (Real.log ((1 - p) ^ m)) := by rw [Real.log_pow]
+    _ = (1 - p) ^ m := Real.exp_log (pow_pos h1p m)
+
+/-- An explicit exponential lower bound for a restricted binomial point mass.
+This is the finite analytic estimate used by the sparse-graph specialization. -/
+lemma graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp
+    (S : Finset V) (p : Set.Icc (0 : ℝ) 1) (k : ℕ) (hk : k ≤ S.card)
+    (hp : (p : ℝ) ≤ 1 / 2) :
+    ((((S.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * (S.card : ℝ) * (p : ℝ))) ≤
+      (graphRestrictedBinomialLaw S p).real {k} := by
+  let x : ℝ := unitInterval.toNNReal p
+  have hx : x = (p : ℝ) := rfl
+  have hx0 : 0 ≤ x := by positivity
+  have hpow : Real.exp (-(2 * ((S.card - k : ℕ) : ℝ) * x)) ≤
+      (1 - x) ^ (S.card - k) := by
+    exact exp_neg_two_mul_le_one_sub_pow hx0 (by simpa [hx] using hp) _
+  have hexp : Real.exp (-(2 * (S.card : ℝ) * (p : ℝ))) ≤
+      Real.exp (-(2 * ((S.card - k : ℕ) : ℝ) * x)) := by
+    apply Real.exp_le_exp.mpr
+    rw [hx]
+    have hcast : ((S.card - k : ℕ) : ℝ) ≤ (S.card : ℝ) := by
+      exact_mod_cast Nat.sub_le S.card k
+    nlinarith [p.1]
+  calc
+    ((((S.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * (S.card : ℝ) * (p : ℝ))) ≤
+        ((((S.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+            (1 - (unitInterval.toNNReal p : ℝ)) ^ (S.card - k) := by
+      apply mul_le_mul_of_nonneg_left (hexp.trans (by simpa [x] using hpow))
+      positivity
+    _ ≤ (graphRestrictedBinomialLaw S p).real {k} :=
+      graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow S p k hk
+
 lemma graphRestrictedDegree_map_apply
     {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
     [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
@@ -473,5 +540,25 @@ theorem binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths
   rw [binomialRandom_exists_restrictedDegree_ge_probability p hAB k]
   change (9 : ℝ) / 10 ≤ 1 - q ^ A.card
   linarith
+
+/-- A fully explicit finite criterion for the decoupled maximum to reach `k`
+with probability at least `0.9`. -/
+theorem binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths_of_ratio_pow
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ) (hk : k ≤ B.card)
+    (hp : (p : ℝ) ≤ 1 / 2)
+    (hmass : Real.log 10 ≤ (A.card : ℝ) *
+      (((((B.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        Real.exp (-(2 * (B.card : ℝ) * (p : ℝ))))) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ a : ↑A, k ≤ graphRestrictedDegree a.1 B G} ≥
+      (9 : ℝ) / 10 := by
+  apply binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths
+    p hAB k
+  exact hmass.trans (mul_le_mul_of_nonneg_left
+    (graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow_mul_exp B p k hk hp)
+    (by positivity))
 
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
