@@ -740,4 +740,205 @@ theorem expectation_logWeightedAbsSupReal_le_sequencePsiTwoGauge
   rw [ENNReal.ofReal_toReal hFinite.ne]
   exact psiTwoGauge_le_sequencePsiTwoGauge μ X i
 
+/-- The maximum of the first `N` absolute values, represented in `ℝ≥0∞`.
+The `Fin N` index is the zero-based encoding of the source indices `1, …, N`. -/
+def prefixAbsSup {Ω : Type*} (X : ℕ → Ω → ℝ) (N : ℕ) (ω : Ω) : ENNReal :=
+  ⨆ i : Fin N, ENNReal.ofReal |X i ω|
+
+/-- Real representative of `prefixAbsSup`. -/
+def prefixAbsSupReal {Ω : Type*} (X : ℕ → Ω → ℝ) (N : ℕ) (ω : Ω) : ℝ :=
+  (prefixAbsSup X N ω).toReal
+
+/-- The largest logarithmic weight needed for the first `N` coordinates. -/
+def prefixLogWeight (N : ℕ) : ℝ :=
+  Real.sqrt (1 + Real.log (N : ℝ))
+
+lemma prefixLogWeight_nonneg (N : ℕ) : 0 ≤ prefixLogWeight N :=
+  Real.sqrt_nonneg _
+
+lemma logIndexWeight_le_prefixLogWeight {N : ℕ} (i : Fin N) :
+    logIndexWeight i ≤ prefixLogWeight N := by
+  apply Real.sqrt_le_sqrt
+  exact add_le_add_right
+    (Real.log_le_log (by positivity)
+      (by exact_mod_cast (Nat.succ_le_iff.mpr i.isLt))) 1
+
+lemma measurable_prefixAbsSup
+    {Ω : Type*} [MeasurableSpace Ω]
+    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) (N : ℕ) :
+    Measurable (prefixAbsSup X N) := by
+  unfold prefixAbsSup
+  fun_prop
+
+lemma measurable_prefixAbsSupReal
+    {Ω : Type*} [MeasurableSpace Ω]
+    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) (N : ℕ) :
+    Measurable (prefixAbsSupReal X N) :=
+  (measurable_prefixAbsSup hX N).ennreal_toReal
+
+/-- The first-`N` maximum is bounded pointwise by the logarithmically weighted
+countable supremum times the largest prefix weight. -/
+lemma prefixAbsSup_le_prefixLogWeight_mul_logWeightedAbsSup
+    {Ω : Type*} (X : ℕ → Ω → ℝ) (N : ℕ) (ω : Ω) :
+    prefixAbsSup X N ω ≤
+      ENNReal.ofReal (prefixLogWeight N) * logWeightedAbsSup X ω := by
+  unfold prefixAbsSup
+  apply iSup_le
+  intro i
+  have hWeightPos : 0 < logIndexWeight i := logIndexWeight_pos i
+  have hWeightLe : logIndexWeight i ≤ prefixLogWeight N :=
+    logIndexWeight_le_prefixLogWeight i
+  calc
+    ENNReal.ofReal |X i ω| =
+        ENNReal.ofReal (logIndexWeight i * (|X i ω| / logIndexWeight i)) := by
+      congr 1
+      field_simp
+    _ = ENNReal.ofReal (logIndexWeight i) *
+        ENNReal.ofReal (|X i ω| / logIndexWeight i) := by
+      rw [ENNReal.ofReal_mul hWeightPos.le]
+    _ ≤ ENNReal.ofReal (prefixLogWeight N) *
+        ENNReal.ofReal (|X i ω| / logIndexWeight i) := by
+      gcongr
+    _ ≤ ENNReal.ofReal (prefixLogWeight N) * logWeightedAbsSup X ω := by
+      gcongr
+      exact le_iSup (fun j => ENNReal.ofReal
+        (|X j ω| / logIndexWeight j)) i
+
+/-- Real-valued domination of the finite prefix maximum, after the countable
+supremum is known to be finite almost everywhere. -/
+lemma ae_prefixAbsSupReal_le_prefixLogWeight_mul_logWeightedAbsSupReal
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal)) (N : ℕ) :
+    ∀ᵐ ω ∂μ, prefixAbsSupReal X N ω ≤
+      prefixLogWeight N * logWeightedAbsSupReal X ω := by
+  filter_upwards [ae_logWeightedAbsSup_lt_top_of_sequencePsiTwoGauge
+    hX hFinite] with ω hω
+  have hRightFinite :
+      ENNReal.ofReal (prefixLogWeight N) * logWeightedAbsSup X ω <
+        (⊤ : ENNReal) :=
+    ENNReal.mul_lt_top ENNReal.ofReal_lt_top hω
+  have h := ENNReal.toReal_mono hRightFinite.ne
+    (prefixAbsSup_le_prefixLogWeight_mul_logWeightedAbsSup X N ω)
+  simpa [prefixAbsSupReal, logWeightedAbsSupReal, ENNReal.toReal_mul,
+    ENNReal.toReal_ofReal (prefixLogWeight_nonneg N)] using h
+
+/-- Finite-prefix consequence of the weighted countable maximum theorem, with
+the still-unabsorbed factor `sqrt (1 + log N)`. -/
+theorem expectation_prefixAbsSupReal_le_sequencePsiTwoGauge
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal)) (N : ℕ) :
+    Integrable (prefixAbsSupReal X N) μ ∧
+      NumStability.HDP.Scalar.Preliminaries.expectation μ
+          (prefixAbsSupReal X N) ≤
+        logWeightedMaxConstant * prefixLogWeight N *
+          (sequencePsiTwoGauge μ X).toReal := by
+  have hWeighted :=
+    expectation_logWeightedAbsSupReal_le_sequencePsiTwoGauge hX hFinite
+  have hDom :=
+    ae_prefixAbsSupReal_le_prefixLogWeight_mul_logWeightedAbsSupReal
+      hX hFinite N
+  have hMajor : Integrable
+      (fun ω => prefixLogWeight N * logWeightedAbsSupReal X ω) μ :=
+    hWeighted.1.const_mul _
+  have hPrefix : Integrable (prefixAbsSupReal X N) μ := by
+    apply hMajor.mono' (measurable_prefixAbsSupReal hX N).aestronglyMeasurable
+    filter_upwards [hDom] with ω hω
+    have hPrefixNonneg : 0 ≤ prefixAbsSupReal X N ω :=
+      ENNReal.toReal_nonneg
+    rw [Real.norm_eq_abs, abs_of_nonneg hPrefixNonneg]
+    exact hω
+  refine ⟨hPrefix, ?_⟩
+  calc
+    NumStability.HDP.Scalar.Preliminaries.expectation μ
+        (prefixAbsSupReal X N) ≤
+        NumStability.HDP.Scalar.Preliminaries.expectation μ
+          (fun ω => prefixLogWeight N * logWeightedAbsSupReal X ω) := by
+      exact integral_mono_ae hPrefix hMajor hDom
+    _ = prefixLogWeight N *
+        NumStability.HDP.Scalar.Preliminaries.expectation μ
+          (logWeightedAbsSupReal X) := by
+      unfold NumStability.HDP.Scalar.Preliminaries.expectation
+      rw [MeasureTheory.integral_const_mul]
+    _ ≤ prefixLogWeight N *
+        (logWeightedMaxConstant * (sequencePsiTwoGauge μ X).toReal) :=
+      mul_le_mul_of_nonneg_left hWeighted.2 (prefixLogWeight_nonneg N)
+    _ = logWeightedMaxConstant * prefixLogWeight N *
+        (sequencePsiTwoGauge μ X).toReal := by ring
+
+/-- Universal constant used after replacing `sqrt (1 + log N)` by a constant
+multiple of `sqrt (log N)` for `N ≥ 2`. -/
+def finiteMaxLogConstant : ℝ :=
+  logWeightedMaxConstant * Real.sqrt (1 + 1 / Real.log 2)
+
+lemma finiteMaxLogConstant_pos : 0 < finiteMaxLogConstant := by
+  unfold finiteMaxLogConstant
+  have hLog : 0 < Real.log 2 := by positivity
+  have hFactor : 0 < 1 + 1 / Real.log 2 := by
+    have hInv : 0 < 1 / Real.log 2 := div_pos zero_lt_one hLog
+    linarith
+  exact mul_pos logWeightedMaxConstant_pos (Real.sqrt_pos.2 hFactor)
+
+lemma prefixLogWeight_le_sqrt_log_mul {N : ℕ} (hN : 2 ≤ N) :
+    prefixLogWeight N ≤
+      Real.sqrt (1 + 1 / Real.log 2) * Real.sqrt (Real.log (N : ℝ)) := by
+  have hLogTwo : 0 < Real.log 2 := by positivity
+  have hCast : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
+  have hLogLe : Real.log 2 ≤ Real.log (N : ℝ) :=
+    Real.log_le_log (by norm_num) hCast
+  have hRatio : 1 ≤ Real.log (N : ℝ) / Real.log 2 :=
+    (le_div_iff₀ hLogTwo).2 (by simpa using hLogLe)
+  have hArg :
+      1 + Real.log (N : ℝ) ≤
+        (1 + 1 / Real.log 2) * Real.log (N : ℝ) := by
+    calc
+      1 + Real.log (N : ℝ) ≤
+          Real.log (N : ℝ) / Real.log 2 + Real.log (N : ℝ) :=
+        add_le_add_left hRatio _
+      _ = (1 + 1 / Real.log 2) * Real.log (N : ℝ) := by ring
+  calc
+    prefixLogWeight N = Real.sqrt (1 + Real.log (N : ℝ)) := rfl
+    _ ≤ Real.sqrt ((1 + 1 / Real.log 2) * Real.log (N : ℝ)) :=
+      Real.sqrt_le_sqrt hArg
+    _ = Real.sqrt (1 + 1 / Real.log 2) * Real.sqrt (Real.log (N : ℝ)) :=
+      Real.sqrt_mul (by positivity) _
+
+/-- Exercise 2.5.10's finite-prefix consequence in its `sqrt (log N)` form.
+No independence assumption is used. -/
+theorem expectation_prefixAbsSupReal_le_sequencePsiTwoGauge_sqrt_log
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal))
+    {N : ℕ} (hN : 2 ≤ N) :
+    Integrable (prefixAbsSupReal X N) μ ∧
+      NumStability.HDP.Scalar.Preliminaries.expectation μ
+          (prefixAbsSupReal X N) ≤
+        finiteMaxLogConstant * (sequencePsiTwoGauge μ X).toReal *
+          Real.sqrt (Real.log (N : ℝ)) := by
+  have hPrefix :=
+    expectation_prefixAbsSupReal_le_sequencePsiTwoGauge hX hFinite N
+  refine ⟨hPrefix.1, hPrefix.2.trans ?_⟩
+  calc
+    logWeightedMaxConstant * prefixLogWeight N *
+        (sequencePsiTwoGauge μ X).toReal ≤
+      logWeightedMaxConstant *
+          (Real.sqrt (1 + 1 / Real.log 2) * Real.sqrt (Real.log (N : ℝ))) *
+        (sequencePsiTwoGauge μ X).toReal := by
+      exact mul_le_mul_of_nonneg_right
+        (mul_le_mul_of_nonneg_left
+          (prefixLogWeight_le_sqrt_log_mul hN)
+          logWeightedMaxConstant_pos.le)
+        ENNReal.toReal_nonneg
+    _ = finiteMaxLogConstant * (sequencePsiTwoGauge μ X).toReal *
+        Real.sqrt (Real.log (N : ℝ)) := by
+      unfold finiteMaxLogConstant
+      ring
+
 end NumStability.HDP.Scalar.SubGaussian
