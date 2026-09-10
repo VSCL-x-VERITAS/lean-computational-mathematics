@@ -315,8 +315,9 @@ when all of the following hold:
 
 - [`docs/architecture/MIGRATION.md`](docs/architecture/MIGRATION.md) defines
   the ordered evidence gates.
-- [`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md)
-  records forwarding paths and their removal policy.
+- [`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
+  records the forwarding paths of the 0.1.x series and the policy under which
+  release 0.2.0 removed them.
 - [`docs/architecture/TIERS.md`](docs/architecture/TIERS.md) explains the
   executable tier inventory, now complete over every production module, and
   the forbidden-edge gate.

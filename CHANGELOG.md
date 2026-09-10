@@ -5,34 +5,12 @@ follows semantic versioning for its public module paths and declaration API.
 
 ## [Unreleased]
 
-### Removed
+Nothing yet.
 
-- The working record of completed campaigns, keeping their outcomes: the 254
-  faithfulness audit packages and their chapter gate documents (7,140 files,
-  215.2 MB), the machine data of the finished reorganization campaign (713
-  files, 118.7 MB of TSV, JSON, patches and one-off tools), and the 2,401
-  rename import witnesses. Gate verdicts are preserved in
-  `docs/architecture/reviews/2026-09-faithfulness-outcomes.md`, the 259
-  narrative documents of the campaign are kept so every documentation link
-  still resolves, and the whole pass is recorded in
-  `docs/architecture/reviews/2026-09-working-record-retirement.md`. No Lean
-  module, build target or diagnostic baseline changed.
-- Four phase checkers and thirteen one-off campaign tools, which had nothing
-  left to validate: `tools/architecture/` goes from 30 scripts to 13 and CI
-  from 21 Python invocations to 15.
+## [0.2.0] - 2026-09-10
 
-### Removed
-
-- 18,205 files (1.30 GB) of audit working artifacts that no gate document,
-  tool, document or CI step referenced: the unreferenced part of the
-  2026-09-08 formalization session, 370 superseded faithfulness reruns across
-  121 packages, the checkpoint-archive fragments already present in git
-  history, and `examples/LibraryLookup.lean`, which no Lake target built. The
-  retained evidence, the rules that computed it and the recovery commands are
-  recorded in `docs/architecture/reviews/2026-09-evidence-retirement.md`. No
-  Lean module, build target or diagnostic baseline changed.
-- The tracked copy of the LeVeque source book and its 11 rendered page images,
-  on rights grounds. Audit manifests keep their sha256 records.
+Breaking release. The historical `NumStability` import paths are removed.
+`import ComputationalMathematics...` is the only supported form.
 
 ### Added
 
@@ -60,6 +38,11 @@ follows semantic versioning for its public module paths and declaration API.
   attribution, citation metadata, and a provenance CI check.
 
 ### Changed
+
+- `lake build` and CI build `ComputationalMathematics` and `NumStabilityTest`.
+- The architecture tooling has a single production root. `tiers.json` no longer
+  carries 3,334 `compatibility` rules.
+
 
 - The project display name is now Lean Computational Mathematics, reflecting
   its multiple source developments. Mathematical stability terminology and
@@ -113,21 +96,12 @@ follows semantic versioning for its public module paths and declaration API.
 
 ### Deprecated
 
-- Historical source, triangular-system, and root Higham import paths remain
-  supported compatibility paths. Their mappings and removal policy are listed
-  in [`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md);
-  removal requires a declared breaking release.
-
-### Removed
-
-- A tracked Python bytecode artifact from the experiments tree.
-- The stale generated benchmarking PDF; its TeX source and rebuild command
-  remain tracked.
-
-## [0.2.0] - 2026-09-10
-
-Breaking release. The historical `NumStability` import paths are removed.
-`import ComputationalMathematics...` is the only supported form.
+- Historical source, triangular-system and root Higham import paths were
+  deprecated through the 0.1.x series and are removed in this release, under
+  the removal policy they carried. The mapping each one resolved to is retained
+  in [`docs/architecture/migrations/COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
+  and, machine-readable, in
+  [`docs/architecture/migrations/2026-09-forwarder-map.json`](docs/architecture/migrations/2026-09-forwarder-map.json).
 
 ### Removed
 
@@ -145,11 +119,37 @@ Breaking release. The historical `NumStability` import paths are removed.
 - The `NumStability` Lake library and default build target, and the
   `compatibility` tier and its manifest.
 
-### Changed
 
-- `lake build` and CI build `ComputationalMathematics` and `NumStabilityTest`.
-- The architecture tooling has a single production root. `tiers.json` no longer
-  carries 3,334 `compatibility` rules.
+- The working record of completed campaigns, keeping their outcomes: the 254
+  faithfulness audit packages and their chapter gate documents (7,140 files,
+  215.2 MB), the machine data of the finished reorganization campaign (713
+  files, 118.7 MB of TSV, JSON, patches and one-off tools), and the 2,401
+  rename import witnesses. Gate verdicts are preserved in
+  `docs/architecture/reviews/2026-09-faithfulness-outcomes.md`, the 259
+  narrative documents of the campaign are kept so every documentation link
+  still resolves, and the whole pass is recorded in
+  `docs/architecture/reviews/2026-09-working-record-retirement.md`. No Lean
+  module, build target or diagnostic baseline changed.
+- Four phase checkers and thirteen one-off campaign tools, which had nothing
+  left to validate: `tools/architecture/` goes from 30 scripts to 13 and CI
+  from 21 Python invocations to 15.
+
+
+- 18,205 files (1.30 GB) of audit working artifacts that no gate document,
+  tool, document or CI step referenced: the unreferenced part of the
+  2026-09-08 formalization session, 370 superseded faithfulness reruns across
+  121 packages, the checkpoint-archive fragments already present in git
+  history, and `examples/LibraryLookup.lean`, which no Lake target built. The
+  retained evidence, the rules that computed it and the recovery commands are
+  recorded in `docs/architecture/reviews/2026-09-evidence-retirement.md`. No
+  Lean module, build target or diagnostic baseline changed.
+- The tracked copy of the LeVeque source book and its 11 rendered page images,
+  on rights grounds. Audit manifests keep their sha256 records.
+
+
+- A tracked Python bytecode artifact from the experiments tree.
+- The stale generated benchmarking PDF; its TeX source and rebuild command
+  remain tracked.
 
 ### Migration
 

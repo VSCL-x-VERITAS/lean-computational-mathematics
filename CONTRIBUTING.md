@@ -12,8 +12,8 @@ Read:
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) for API tiers and dependency direction;
 - [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) for canonical
   paths and filenames;
-- [`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md)
-  before changing a historical import path;
+- [`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
+  for what the removed historical import paths resolved to;
 - [`docs/architecture/MIGRATION.md`](docs/architecture/MIGRATION.md) for the
   evidence required by an architecture change.
 

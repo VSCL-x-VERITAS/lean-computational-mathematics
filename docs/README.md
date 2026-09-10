@@ -63,9 +63,9 @@ remains a separate later control.
 2. [`architecture/NAMING.md`](architecture/NAMING.md) defines module placement
    and naming.
 3. [`../CONTRIBUTING.md`](../CONTRIBUTING.md) defines required checks.
-4. [`architecture/TIERS.md`](architecture/TIERS.md) and
-   [`architecture/COMPATIBILITY.md`](architecture/COMPATIBILITY.md) define the
-   reviewed tier and forwarding-path contracts.
+4. [`architecture/TIERS.md`](architecture/TIERS.md) defines the reviewed tier
+   contract; [`architecture/migrations/COMPATIBILITY-0.1.x.md`](architecture/migrations/COMPATIBILITY-0.1.x.md)
+   records the forwarding-path contract release 0.2.0 retired.
 5. [`architecture/PROVENANCE.md`](architecture/PROVENANCE.md) defines the
    per-file licensing and upstream-attribution policy.
 6. [`architecture/phases/2026-08-repository-reorganization-completion/`](architecture/phases/2026-08-repository-reorganization-completion/README.md)

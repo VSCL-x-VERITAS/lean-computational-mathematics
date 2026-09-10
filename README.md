@@ -90,7 +90,7 @@ removed the historical `NumStability` import paths; the namespace is unaffected.
 records passing source, clean build/test/diagnostic, downstream and strict
 compiled-comparison checks for the validated source revision. The
 [live tier manifest](docs/architecture/tiers.json) and
-[compatibility map](docs/architecture/COMPATIBILITY.md) describe the mapped tree.
+[historical compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md) describe the mapped tree.
 
 The bounded 2026-08 repository-reorganization phase is accepted at checkpoint
 [`C0008`](docs/architecture/phases/2026-08-repository-reorganization-completion/checkpoints/C0008-gates.md),
@@ -287,8 +287,10 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for API tiers and dependency rules.
-Historical imports and their canonical destinations are documented in
-[`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md).
+Historical imports and the canonical destinations they resolved to before
+release 0.2.0 removed them are documented in
+[`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md) and, machine-readable, in
+[`2026-09-forwarder-map.json`](docs/architecture/migrations/2026-09-forwarder-map.json).
 
 ## Use as a dependency
 
@@ -399,8 +401,8 @@ follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
   and supported entry points.
 - [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) defines canonical
   module names and placement.
-- [`docs/architecture/COMPATIBILITY.md`](docs/architecture/COMPATIBILITY.md)
-  records every supported historical import path.
+- [`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
+  records every historical import path the 0.1.x series supported.
 - [`docs/source_coverage/`](docs/source_coverage/) contains Higham's concise
   chapter ledgers and PDF-first audits.
 - [`CHANGELOG.md`](CHANGELOG.md) records release-facing changes.
