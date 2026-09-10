@@ -50,4 +50,25 @@ def hdp_02_heq_h2_d24__contract_type : Prop :=
                 Real.exp
                   (C * lam ^ 2 * (PsiOneGauge μ (X i)).toReal ^ 2)
 
+/-- Effective-domain form of Equation (2.24).  Clearing the nonnegative
+maximum gauge removes the source's undefined `c / 0` boundary; when the
+maximum gauge is zero, the window is correctly unbounded. -/
+def hdp_02_heq_h2_d24_effectiveWindow__contract_type : Prop :=
+  ∃ c C : ℝ, 0 < c ∧ 0 < C ∧
+    ∀ {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
+      {μ : Measure Ω} [IsProbabilityMeasure μ]
+      {X : ι → Ω → ℝ} (hne : (Finset.univ : Finset ι).Nonempty),
+      (∀ i, Measurable (X i)) →
+        (∀ i, Integrable (X i) μ ∧ (∫ ω, X i ω ∂μ) = 0) →
+        (∀ i, PsiOneGauge μ (X i) < ∞) →
+        iIndepFun X μ →
+        ∀ {lam : ℝ},
+          let K := Finset.univ.sup' hne
+            (fun i => (PsiOneGauge μ (X i)).toReal)
+          |lam| * K ≤ c →
+            ∀ i, Integrable (fun ω ↦ Real.exp (lam * X i ω)) μ ∧
+              (∫ ω, Real.exp (lam * X i ω) ∂μ) ≤
+                Real.exp
+                  (C * lam ^ 2 * (PsiOneGauge μ (X i)).toReal ^ 2)
+
 end NumStability.HDP.Contract
