@@ -1,4 +1,0 @@
-import ComputationalMathematics.Source.LeVeque.Chapter01.Equation04AcousticModel
-
-#check NumStability.leveque01_equation04_acousticOneWayModel
-#print axioms NumStability.leveque01_equation04_acousticOneWayModel

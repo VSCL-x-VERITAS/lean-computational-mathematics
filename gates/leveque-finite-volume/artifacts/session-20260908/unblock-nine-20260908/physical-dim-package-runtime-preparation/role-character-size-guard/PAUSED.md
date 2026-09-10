@@ -1,3 +1,0 @@
-UNADOPTED / UNEXECUTED partial copies. Preparation paused before tests, independent review, adoption, or any operational plan.
-
-The actual completed direct input is 1,971,309 UTF-8 bytes and 1,945,080 Unicode code points. It exceeds both the original byte guard and the native character limit, so metric correction is insufficient for this actual input. The parent instructed this preparation to pause and redirected the bounded task to lossless-transport readiness. These additive files are unfinished historical proposals only. No helper adoption occurred. The original guard and all source/blind plans and executions remain unchanged.
