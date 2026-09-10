@@ -230,6 +230,28 @@ noncomputable def graphRestrictedBinomialLaw
   (LimitTheorems.binomialNatPMF (unitInterval.toNNReal p)
       (by change (p : ℝ) ≤ 1; exact p.2.2) S.card).toMeasure
 
+lemma graphRestrictedBinomialLaw_eq_graphBinomialLaw
+    (S : Finset V) (p : Set.Icc (0 : ℝ) 1) :
+    graphRestrictedBinomialLaw S p = graphBinomialLaw (S.card + 1) p := by
+  simp [graphRestrictedBinomialLaw, graphBinomialLaw,
+    LimitTheorems.binomialNatPMF]
+
+lemma graphRestrictedBinomialLaw_real_singleton_of_le
+    (S : Finset V) (p : Set.Icc (0 : ℝ) 1) (k : ℕ) (hk : k ≤ S.card) :
+    (graphRestrictedBinomialLaw S p).real {k} =
+      (Nat.choose S.card k : ℝ) * (unitInterval.toNNReal p : ℝ) ^ k *
+        (1 - (unitInterval.toNNReal p : ℝ)) ^ (S.card - k) := by
+  rw [graphRestrictedBinomialLaw_eq_graphBinomialLaw, Measure.real_def,
+    graphBinomialLaw_apply_of_lt]
+  · have hp1 : (unitInterval.toNNReal p : ℝ≥0∞) ≤ 1 := by
+      exact_mod_cast p.2.2
+    rw [ENNReal.toReal_mul, ENNReal.toReal_mul, ENNReal.toReal_pow,
+      ENNReal.toReal_pow, ENNReal.toReal_sub_of_le hp1 (by simp),
+      ENNReal.toReal_natCast]
+    simp
+    ring
+  · omega
+
 lemma graphRestrictedDegree_map_apply
     {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
     [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
