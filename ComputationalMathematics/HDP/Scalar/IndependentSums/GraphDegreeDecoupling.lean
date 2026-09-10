@@ -1,5 +1,6 @@
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw
 import ComputationalMathematics.HDP.Scalar.LimitTheorems.Basic
+import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Probability.Independence.InfinitePi
 
 /-!
@@ -251,6 +252,39 @@ lemma graphRestrictedBinomialLaw_real_singleton_of_le
     simp
     ring
   · omega
+
+/-- A convenient lower bound for a binomial coefficient.  The ratio form is
+chosen so it combines directly with the success-probability power in a
+binomial point mass. -/
+lemma choose_cast_ge_sub_ratio_pow (m k : ℕ) :
+    (((m + 1 - k : ℕ) : ℝ) / (k : ℝ)) ^ k ≤ (Nat.choose m k : ℝ) := by
+  rw [div_pow]
+  calc
+    ((m + 1 - k : ℕ) : ℝ) ^ k / (k : ℝ) ^ k ≤
+        ((m + 1 - k : ℕ) : ℝ) ^ k / (k.factorial : ℝ) := by
+      apply div_le_div_of_nonneg_left (by positivity) (by positivity)
+      exact_mod_cast Nat.factorial_le_pow k
+    _ ≤ (Nat.choose m k : ℝ) := Nat.pow_le_choose k m
+
+/-- Lower-bound a restricted-degree point mass by replacing the binomial
+coefficient with its elementary ratio bound. -/
+lemma graphRestrictedBinomialLaw_real_singleton_ge_ratio_pow
+    (S : Finset V) (p : Set.Icc (0 : ℝ) 1) (k : ℕ) (hk : k ≤ S.card) :
+    ((((S.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) *
+          (unitInterval.toNNReal p : ℝ)) ^ k *
+        (1 - (unitInterval.toNNReal p : ℝ)) ^ (S.card - k) ≤
+      (graphRestrictedBinomialLaw S p).real {k} := by
+  rw [graphRestrictedBinomialLaw_real_singleton_of_le S p k hk]
+  have hchoose : (((S.card + 1 - k : ℕ) : ℝ) / (k : ℝ)) ^ k ≤
+      (Nat.choose S.card k : ℝ) := choose_cast_ge_sub_ratio_pow S.card k
+  have hp0 : 0 ≤ (unitInterval.toNNReal p : ℝ) := by positivity
+  have hq0 : 0 ≤ 1 - (unitInterval.toNNReal p : ℝ) := by
+    change 0 ≤ 1 - (p : ℝ)
+    linarith [p.2.2]
+  rw [mul_pow]
+  exact mul_le_mul_of_nonneg_right
+    (mul_le_mul_of_nonneg_right hchoose (pow_nonneg hp0 k))
+    (pow_nonneg hq0 (S.card - k))
 
 lemma graphRestrictedDegree_map_apply
     {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
