@@ -15,7 +15,7 @@ trial per vertex in that set.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
-open scoped BigOperators ENNReal NNReal
+open scoped BigOperators ENNReal NNReal Topology
 
 namespace NumStability.HDP.Scalar.IndependentSums.Chernoff
 
@@ -356,6 +356,77 @@ lemma exp_neg_two_mul_le_one_sub_pow {p : ℝ} (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2
       exact mul_le_mul_of_nonneg_left hlog (by positivity)
     _ = Real.exp (Real.log ((1 - p) ^ m)) := by rw [Real.log_pow]
     _ = (1 - p) ^ m := Real.exp_log (pow_pos h1p m)
+
+/-- If an integer scale is little-oh of `log n`, then a fixed exponential
+penalty in that scale is eventually dominated by the size of half of `Fin n`.
+The numerical constants are tailored to the sparse-graph point-mass bound. -/
+lemma eventually_log_ten_le_half_card_mul_exp_of_log_ratio_tendsto_zero
+    (k : ℕ → ℕ)
+    (hsmall : Filter.Tendsto
+      (fun n => (k n : ℝ) / Real.log (n : ℝ)) Filter.atTop (nhds 0)) :
+    ∀ᶠ n in Filter.atTop,
+      Real.log 10 ≤ ((n / 2 : ℕ) : ℝ) *
+        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by
+  let C : ℝ := Real.log 40 + 1 / 4
+  have hlog40 : 0 < Real.log 40 := Real.log_pos (by norm_num)
+  have hC : 0 < C := by dsimp [C]; positivity
+  let ε : ℝ := 1 / (2 * C)
+  have hε : 0 < ε := by dsimp [ε]; positivity
+  rcases (Metric.tendsto_atTop.mp hsmall) ε hε with ⟨N, hN⟩
+  refine Filter.eventually_atTop.2 ⟨max N 400, ?_⟩
+  intro n hn
+  have hnN : N ≤ n := (le_max_left N 400).trans hn
+  have hn400 : 400 ≤ n := (le_max_right N 400).trans hn
+  have hnpos : 0 < (n : ℝ) := by positivity
+  have hn1 : 1 < (n : ℝ) := by exact_mod_cast (show 1 < n by omega)
+  have hlogn : 0 < Real.log (n : ℝ) := Real.log_pos hn1
+  have hratio0 : 0 ≤ (k n : ℝ) / Real.log (n : ℝ) :=
+    div_nonneg (by positivity) hlogn.le
+  have hdist := hN n hnN
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hratio0] at hdist
+  rw [div_lt_iff₀ hlogn] at hdist
+  have hscaled := mul_lt_mul_of_pos_right hdist hC
+  have heq : ε * Real.log (n : ℝ) * C = Real.log (n : ℝ) / 2 := by
+    dsimp [ε]
+    field_simp
+  rw [heq] at hscaled
+  have hlog400 : Real.log ((20 : ℝ) ^ 2) ≤ Real.log (n : ℝ) := by
+    apply Real.strictMonoOn_log.monotoneOn
+    · norm_num
+    · exact hnpos
+    · norm_num at hn400 ⊢
+      exact hn400
+  have hlog20 : Real.log 20 ≤ Real.log (n : ℝ) / 2 := by
+    rw [Real.log_pow] at hlog400
+    norm_num at hlog400 ⊢
+    linarith
+  have hbudget : (k n : ℝ) * C ≤ Real.log (n : ℝ) - Real.log 20 := by
+    linarith
+  have hexp : 20 / (n : ℝ) ≤ Real.exp (-((k n : ℝ) * C)) := by
+    calc
+      20 / (n : ℝ) = Real.exp (Real.log 20) / Real.exp (Real.log (n : ℝ)) := by
+        rw [Real.exp_log (by norm_num), Real.exp_log hnpos]
+      _ = Real.exp (Real.log 20 - Real.log (n : ℝ)) := (Real.exp_sub _ _).symm
+      _ ≤ Real.exp (-((k n : ℝ) * C)) := by
+        apply Real.exp_le_exp.mpr
+        linarith
+  have hhalf : (n : ℝ) - 1 ≤ 2 * ((n / 2 : ℕ) : ℝ) := by
+    rw [← Nat.cast_one, ← Nat.cast_sub (show 1 ≤ n by omega)]
+    exact_mod_cast (show n - 1 ≤ 2 * (n / 2) by omega)
+  have hfactor : (9 : ℝ) ≤ ((n / 2 : ℕ) : ℝ) * (20 / (n : ℝ)) := by
+    have hn10 : (10 : ℝ) ≤ (n : ℝ) := by exact_mod_cast (show 10 ≤ n by omega)
+    rw [show ((n / 2 : ℕ) : ℝ) * (20 / (n : ℝ)) =
+      (((n / 2 : ℕ) : ℝ) * 20) / (n : ℝ) by ring, le_div_iff₀ hnpos]
+    nlinarith
+  have hlog10 : Real.log (10 : ℝ) ≤ 9 := by
+    nlinarith [Real.log_le_sub_one_of_pos (show (0 : ℝ) < 10 by norm_num)]
+  calc
+    Real.log 10 ≤ 9 := hlog10
+    _ ≤ ((n / 2 : ℕ) : ℝ) * (20 / (n : ℝ)) := hfactor
+    _ ≤ ((n / 2 : ℕ) : ℝ) * Real.exp (-((k n : ℝ) * C)) :=
+      mul_le_mul_of_nonneg_left hexp (by positivity)
+    _ = ((n / 2 : ℕ) : ℝ) *
+        Real.exp (-((k n : ℝ) * (Real.log 40 + 1 / 4))) := by rfl
 
 /-- An explicit exponential lower bound for a restricted binomial point mass.
 This is the finite analytic estimate used by the sparse-graph specialization. -/
