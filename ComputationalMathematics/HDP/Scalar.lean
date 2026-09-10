@@ -9,6 +9,7 @@ import ComputationalMathematics.HDP.Scalar.LimitTheorems
 import ComputationalMathematics.HDP.Scalar.MGFLocalTaylor
 import ComputationalMathematics.HDP.Scalar.NonSubGaussian
 import ComputationalMathematics.HDP.Scalar.PoissonLimit
+import ComputationalMathematics.HDP.Scalar.PoissonNormal
 import ComputationalMathematics.HDP.Scalar.Preliminaries
 import ComputationalMathematics.HDP.Scalar.SubExponential
 import ComputationalMathematics.HDP.Scalar.SubExponentialCharacterization

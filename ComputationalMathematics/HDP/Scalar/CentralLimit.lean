@@ -649,7 +649,7 @@ theorem charFun_probabilityLaw_normalizedCenteredIidSum
 /-- Probability laws whose identity random variables are centered and have
 variance uniformly bounded by one form a tight family. -/
 theorem isTight_probabilityMeasure_range_of_variance_le_one
-    (P : ℕ → ProbabilityMeasure ℝ)
+    {ι : Type*} (P : ι → ProbabilityMeasure ℝ)
     (hLp : ∀ n, MemLp (fun x : ℝ => x) 2 (P n : Measure ℝ))
     (hMean : ∀ n, ∫ x : ℝ, x ∂(P n : Measure ℝ) = 0)
     (hVar : ∀ n,
@@ -745,7 +745,8 @@ characteristic functions converge pointwise to the characteristic function of
 the proposed limit law. This is the tightness-assisted form of Lévy's
 continuity theorem needed by the finite-variance CLT. -/
 theorem tendsto_probabilityMeasure_of_charFun_tendsto_of_tight
-    (P : ℕ → ProbabilityMeasure ℝ) (Q : ProbabilityMeasure ℝ)
+    {ι : Type*} [Preorder ι] [IsDirectedOrder ι] [Nonempty ι]
+    (P : ι → ProbabilityMeasure ℝ) (Q : ProbabilityMeasure ℝ)
     (hTight : IsTightMeasureSet
       {((p : ProbabilityMeasure ℝ) : Measure ℝ) | p ∈ Set.range P})
     (hchar : ∀ t : ℝ, Tendsto
