@@ -199,6 +199,73 @@ lemma graphRestrictedDegree_le_graphDegreeSum
   rw [graphRestrictedDegree, graphDegreeSum]
   exact Finset.sum_le_sum_of_subset (Finset.subset_univ S)
 
+/-- If `v` lies in `A` and there are no edges from `v` to another member of
+`A`, then counting neighbors in the complement of `A` gives its full degree. -/
+lemma graphRestrictedDegree_compl_eq_graphDegreeSum_of_no_internal
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (G : SimpleGraph V) {A : Finset V} {v : V}
+    (hno : ∀ w ∈ A, ¬ G.Adj v w) :
+    graphRestrictedDegree v (Finset.univ \ A) G = graphDegreeSum v G := by
+  classical
+  unfold graphRestrictedDegree graphDegreeSum
+  rw [Finset.sum_subset (Finset.sdiff_subset)]
+  intro w hwU hwNot
+  have hwA : w ∈ A := by
+    by_contra hwA
+    exact hwNot (by simp [hwA])
+  simp [hno w hwA]
+
+/-- A single adjacency event has probability at most the edge parameter.  The
+diagonal case is empty; off the diagonal its probability is exactly `p`. -/
+lemma binomialRandom_graphAdjEvent_real_le
+    {V : Type*} [Countable V] [DecidableEq V] [DecidableEq (Sym2 V)]
+    (p : Set.Icc (0 : ℝ) 1) (v w : V) :
+    (SimpleGraph.binomialRandom V p).real {G | G.Adj v w} ≤ (p : ℝ) := by
+  classical
+  by_cases hvw : v = w
+  · subst w
+    simp
+    exact p.2.1
+  · have hevent : {G : SimpleGraph V | G.Adj v w} =
+        graphStarExactEvent v {w} {w} := by
+      ext G
+      simp [graphStarExactEvent]
+    rw [hevent, Measure.real_def,
+      binomialRandom_graphStarExactEvent_probability p (by simp [hvw]) (by simp)]
+    simp
+
+/-- A union bound for the event that the induced graph on `A` contains an
+edge.  Ordered pairs deliberately overcount, which keeps the bound elementary. -/
+theorem binomialRandom_exists_internalAdj_probability_le
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1) (A : Finset V) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ a : ↑A, ∃ b : ↑A, G.Adj a.1 b.1} ≤
+      (A.card : ℝ) ^ 2 * (p : ℝ) := by
+  classical
+  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
+  let Bad : ↑A → ↑A → Set (SimpleGraph V) :=
+    fun a b ↦ {G | G.Adj a.1 b.1}
+  have hevent : {G : SimpleGraph V | ∃ a : ↑A, ∃ b : ↑A,
+      G.Adj a.1 b.1} = ⋃ a, ⋃ b, Bad a b := by
+    ext G
+    simp [Bad]
+  rw [hevent]
+  calc
+    P.real (⋃ a, ⋃ b, Bad a b) ≤
+        ∑ a, P.real (⋃ b, Bad a b) :=
+      measureReal_iUnion_fintype_le (fun a ↦ ⋃ b, Bad a b)
+    _ ≤ ∑ a, ∑ b, P.real (Bad a b) := by
+      exact Finset.sum_le_sum fun a _ha ↦
+        measureReal_iUnion_fintype_le (Bad a)
+    _ ≤ ∑ _a : ↑A, ∑ _b : ↑A, (p : ℝ) := by
+      exact Finset.sum_le_sum fun a _ha ↦
+        Finset.sum_le_sum fun b _hb ↦ by
+          simpa [P, Bad] using binomialRandom_graphAdjEvent_real_le p a.1 b.1
+    _ = (A.card : ℝ) ^ 2 * (p : ℝ) := by
+      simp
+      ring
+
 lemma measurable_graphRestrictedDegree {V : Type*} (v : V) (S : Finset V) :
     Measurable (graphRestrictedDegree v S) := by
   unfold graphRestrictedDegree
@@ -821,6 +888,54 @@ theorem binomialRandom_exists_restrictedDegree_eq_probability_ge_nineteen_twenti
         norm_num
   rw [binomialRandom_exists_restrictedDegree_eq_probability p hAB k]
   change (19 : ℝ) / 20 ≤ 1 - (1 - r) ^ A.card
+  linarith
+
+/-- Exact restricted-degree occurrence transfers to exact full degree when
+internal edges among the test centers have probability at most `0.05`. -/
+theorem binomialRandom_exists_degree_eq_probability_ge_nine_tenths
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    (A : Finset V) (k : ℕ)
+    (hmass : Real.log 20 ≤ (A.card : ℝ) *
+      (graphRestrictedBinomialLaw (Finset.univ \ A) p).real {k})
+    (hinternal : (A.card : ℝ) ^ 2 * (p : ℝ) ≤ (1 : ℝ) / 20) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ v : V, graphDegreeSum v G = k} ≥ (9 : ℝ) / 10 := by
+  classical
+  let P : Measure (SimpleGraph V) := SimpleGraph.binomialRandom V p
+  let B : Finset V := Finset.univ \ A
+  let Hit : Set (SimpleGraph V) :=
+    {G | ∃ a : ↑A, graphRestrictedDegree a.1 B G = k}
+  let Bad : Set (SimpleGraph V) :=
+    {G | ∃ a : ↑A, ∃ b : ↑A, G.Adj a.1 b.1}
+  let Full : Set (SimpleGraph V) := {G | ∃ v : V, graphDegreeSum v G = k}
+  have hAB : Disjoint A B := by
+    rw [Finset.disjoint_left]
+    simp [B]
+  have hHit : (19 : ℝ) / 20 ≤ P.real Hit := by
+    simpa [P, B, Hit] using
+      binomialRandom_exists_restrictedDegree_eq_probability_ge_nineteen_twentieths
+        p hAB k hmass
+  have hBad : P.real Bad ≤ (1 : ℝ) / 20 := by
+    have hBad' : P.real Bad ≤ (A.card : ℝ) ^ 2 * (p : ℝ) := by
+      simpa [P, Bad] using
+        (binomialRandom_exists_internalAdj_probability_le p A)
+    exact hBad'.trans hinternal
+  have hsubset : Hit \ Bad ⊆ Full := by
+    intro G hG
+    rcases hG.1 with ⟨a, ha⟩
+    refine ⟨a.1, ?_⟩
+    have hno : ∀ w ∈ A, ¬ G.Adj a.1 w := by
+      intro w hw hadj
+      exact hG.2 ⟨a, ⟨w, hw⟩, hadj⟩
+    have heq := graphRestrictedDegree_compl_eq_graphDegreeSum_of_no_internal
+      G (A := A) (v := a.1) hno
+    exact heq.symm.trans ha
+  have hdiff : P.real Hit - P.real Bad ≤ P.real (Hit \ Bad) :=
+    le_measureReal_diff
+  have hmono : P.real (Hit \ Bad) ≤ P.real Full :=
+    measureReal_mono hsubset
+  change (9 : ℝ) / 10 ≤ P.real Full
   linarith
 
 /-- A finite point-mass criterion ensuring that one of the independent
