@@ -3,7 +3,7 @@
   "chapter_gate": "ACTIVE",
   "mode": "default",
   "plan_epoch": "replace-with-certified-plan-epoch",
-  "updated_utc": "2026-09-10T12:10:27Z",
+  "updated_utc": "2026-09-10T12:26:43Z",
   "source": {
     "unit_source": "collab:books/vershynin-hdp/source/Chapter02_Concentration of sums of independent random variables.pdf",
     "unit_source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
@@ -4196,13 +4196,17 @@
       "source_page": 28,
       "source_statement": "X_1, ..., X_N independent N(0,1): E max_{i <= N} X_i >= c sqrt(log N), showing Exercise 2.5.10 is sharp.",
       "source_proof": "none",
-      "next_foundation": "Prove `E max_{i <= N} g_i >= c sqrt(log N)` for i.i.d. standard Gaussians. The standard route needs a Gaussian tail LOWER bound (the left half of Proposition 2.1.2) plus independence: `P{max < t} = P{g < t}^N`. The smallest missing foundation is HDP-02-PROP-2.1.2's lower bound.",
-      "attempted_routes": "(1) Repository searched for an existing declaration covering this row: No Gaussian maximum lower bound exists; `SubGaussian.independentGaussianSumLaw` handles sums, not maxima. (2) Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+      "next_foundation": "Use the exact product formula `GaussianMaxima.measure_finiteMaximum_lt_of_standardNormal` together with the proved lower half of Proposition 2.1.2 to obtain a quantitative positive-tail contribution to the expectation, while separately bounding the signed maximum's negative-tail contribution. Then choose a threshold comparable to `sqrt (log N)` and absorb the finite small-`N` range.",
+      "attempted_routes": "The current project and pinned Mathlib were searched for Gaussian/normal maximum lower bounds, `iIndepFun.meas_iInter`, product laws, finite `Finset.sup'` maxima, `HasLaw` measure transport, and Gaussian negation/symmetry. No existing maximum lower bound matches the row. The prior prerequisite was stale: the Mills-ratio lower bound is already proved as `GaussianTails.standardNormalTail_bounds`. Selected Mathlib's `Finset.sup'`, `Finset.measurable_sup'`, `Integrable.sup`, `iIndepFun.meas_iInter`, and `Measure.map_apply_of_aemeasurable` to add a reusable finite signed maximum API and the exact independent standard-normal lower-tail product formula. Rejected `independentGaussianSumLaw` because it concerns sums, and rejected a pointwise absolute-to-signed-maximum reduction because it is false for constant sample vectors.",
       "attempted_routes_list": [
         "Repository searched for an existing declaration covering this row: No Gaussian maximum lower bound exists; `SubGaussian.independentGaussianSumLaw` handles sums, not maxima.",
-        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work."
+        "Pinned Mathlib (`e8ea1afc32790ce1d4e1a4e45cc412ba9388716b`) searched for a reusable result before planning new work.",
+        "Confirmed from the immutable source that the printed maximum is signed (`E max_{i <= N} X_i`), not an absolute maximum. Searched the current tree for `gaussian maximum`, `normal maximum`, tail products, `standardNormalTail_bounds`, Gaussian symmetry, and `HasLaw`; searched pinned Mathlib for `Finset.sup'`, `iIndepFun.meas_iInter`, finite product laws, `Measure.pi`, and map/measure transport.",
+        "Selected the already-proved `NumStability.HDP.Scalar.GaussianTails.standardNormalTail_bounds` as the exact Proposition 2.1.2 producer. Selected Mathlib `Finset.sup'`, `Finset.measurable_sup'`, `Integrable.sup`, `iIndepFun.meas_iInter`, and `Measure.map_apply_of_aemeasurable`; rejected `SubGaussian.independentGaussianSumLaw` because it only transports sums.",
+        "Added `GaussianMaxima.finiteMaximum` with coordinate domination, upper-bound, measurability, integrability, and absolute-integrability estimates. Added `finiteMaximum_lt_iff`, the general independent product event theorem, and `measure_finiteMaximum_lt_of_standardNormal`, which states the exact lower-tail probability as the `Fintype.card`-th power of the one-coordinate standard-normal probability.",
+        "Tested and rejected the tempting pointwise inequality `max_i |X_i| <= max_i X_i + max_i (-X_i)`: constant positive sample vectors make its right-hand side zero. No invalid reduction was retained. `lake env lean ComputationalMathematics/HDP/Scalar/GaussianMaxima.lean` passes."
       ],
-      "open_reason": "No Lean declaration covers this printed row. No Gaussian maximum lower bound exists; `SubGaussian.independentGaussianSumLaw` handles sums, not maxima."
+      "open_reason": "No Lean declaration yet proves the printed expectation lower bound. The exact independent lower-tail product foundation now compiles, and the remaining local work is the quantitative positive-tail/negative-tail expectation estimate followed by the universal `sqrt (log N)` choice."
     },
     {
       "id": "HDP-02-EQ-2.18",
