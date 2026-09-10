@@ -3221,11 +3221,19 @@ all other surfaces retain the declaration-bearing test requirement.
 
 ## Removal rule
 
-No forwarding module is removed in this migration. A future removal requires a
-declared breaking release, release-note and migration-guide entries, a search
-showing production consumers use canonical paths, and an explicit update to
-the old-path smoke tests. Until then, CI compiles both curated entry points and
-representative historical imports.
+Exercised in release 0.2.0 (2026-09-10): every forwarding module below was
+removed. This document is retained as the historical mapping for `v0.1.x`
+consumers, alongside the machine-readable
+`migrations/2026-09-forwarder-map.json`.
+
+The rule this release satisfied: a removal requires a declared breaking
+release, release-note and migration-guide entries, a search showing production
+consumers use canonical paths, and an explicit update to the old-path smoke
+tests. The declaration is `CHANGELOG.md` 0.2.0 with the version bump in
+`lakefile.toml` and `CITATION.cff`; the migration-guide entry is step 12 of
+`MIGRATION.md`; the consumer search found no import of a historical path in
+`ComputationalMathematics/` and no fork or dependent of the repository; the
+old-path smoke tests were removed with the forwarders they tested.
 
 ## Additional checkpoint forwarding paths
 

@@ -108,6 +108,41 @@ follows semantic versioning for its public module paths and declaration API.
 - The stale generated benchmarking PDF; its TeX source and rebuild command
   remain tracked.
 
+## [0.2.0] - 2026-09-10
+
+Breaking release. The historical `NumStability` import paths are removed.
+`import ComputationalMathematics...` is the only supported form.
+
+### Removed
+
+- The 3,334 `NumStability` import-path forwarders. Every one was import-only:
+  no declaration, proof or definition existed anywhere under `NumStability/`,
+  and all 14,688 forwarding edges resolved into `ComputationalMathematics`.
+  The old-path to canonical-path table is preserved at
+  `docs/architecture/migrations/2026-09-forwarder-map.json`; 2,429 of the 3,334
+  paths map to the same relative path, and 383 fan out to more than one
+  canonical module, so a mechanical prefix rewrite is correct only for the
+  former and the table is authoritative for the rest.
+- 6,366 old-path smoke tests, which existed to prove that those forwarders kept
+  resolving. The 2,551 canonical import tests are retained and still run under
+  `lake test`.
+- The `NumStability` Lake library and default build target, and the
+  `compatibility` tier and its manifest.
+
+### Changed
+
+- `lake build` and CI build `ComputationalMathematics` and `NumStabilityTest`.
+- The architecture tooling has a single production root. `tiers.json` no longer
+  carries 3,334 `compatibility` rules.
+
+### Migration
+
+Rewrite `import NumStability.X` as the canonical import named for `NumStability.X`
+in `docs/architecture/migrations/2026-09-forwarder-map.json`. Declaration names
+are unchanged: the `NumStability` namespace and every authored declaration name
+inside it are untouched by this release. Consumers pinning `v0.1.0` keep the
+forwarders.
+
 ## [0.1.0] - 2026-07-21
 
 - Initial tagged NumStability release.

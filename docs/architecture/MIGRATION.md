@@ -175,6 +175,13 @@ aggregate-completeness tests under `NumStabilityTest.Reorganization.R08`.
     evidence gates in `ARCHITECTURE.md` justify it; otherwise record the decision.
 12. **Compatibility release.** Remove forwarding paths only in a planned
     breaking release, then rerun every baseline, build, test, lint, and API gate.
+    Executed for the `NumStability` paths in release 0.2.0 (2026-09-10). The
+    old-path to canonical-path table is
+    `migrations/2026-09-forwarder-map.json`; `COMPATIBILITY.md` is retained as
+    the historical mapping for `v0.1.x` consumers. A prefix rewrite of
+    `import NumStability.` to `import ComputationalMathematics.` is correct for
+    the 2,429 same-path modules only; the 383 multi-target paths must be read
+    from the table.
 
 The migration is incremental.  Do not combine mass file moves, declaration
 renames, visibility changes, and compatibility removal in one change.
