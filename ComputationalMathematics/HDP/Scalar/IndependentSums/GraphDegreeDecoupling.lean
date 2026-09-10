@@ -355,4 +355,67 @@ theorem binomialRandom_exists_restrictedDegree_ge_probability
   rw [hHighEq, measureReal_compl hLowMeas, hLowReal]
   simp
 
+lemma one_sub_pow_le_exp_neg_nat_mul {r : ℝ} (hr1 : r ≤ 1)
+    (m : ℕ) :
+    (1 - r) ^ m ≤ Real.exp (-((m : ℝ) * r)) := by
+  calc
+    (1 - r) ^ m ≤ Real.exp (-r) ^ m :=
+      pow_le_pow_left₀ (sub_nonneg.mpr hr1) (Real.one_sub_le_exp_neg r) m
+    _ = Real.exp ((m : ℝ) * (-r)) := (Real.exp_nat_mul (-r) m).symm
+    _ = Real.exp (-((m : ℝ) * r)) := by ring_nf
+
+/-- A finite point-mass criterion ensuring that one of the independent
+restricted degrees reaches `k` with probability at least `0.9`. -/
+theorem binomialRandom_exists_restrictedDegree_ge_probability_ge_nine_tenths
+    {V : Type*} [Fintype V] [Countable V] [DecidableEq V]
+    [DecidableEq (Sym2 V)] (p : Set.Icc (0 : ℝ) 1)
+    {A B : Finset V} (hAB : Disjoint A B) (k : ℕ)
+    (hmass : Real.log 10 ≤ (A.card : ℝ) *
+      (graphRestrictedBinomialLaw B p).real {k}) :
+    (SimpleGraph.binomialRandom V p).real
+        {G | ∃ a : ↑A, k ≤ graphRestrictedDegree a.1 B G} ≥
+      (9 : ℝ) / 10 := by
+  let ν : Measure ℕ := graphRestrictedBinomialLaw B p
+  let q : ℝ := ν.real {j | j < k}
+  let r : ℝ := ν.real {k}
+  haveI : IsProbabilityMeasure ν := by
+    dsimp [ν, graphRestrictedBinomialLaw]
+    infer_instance
+  have hdisj : Disjoint ({j : ℕ | j < k} : Set ℕ) {k} := by
+    rw [Set.disjoint_left]
+    intro j hj hk
+    simp only [Set.mem_setOf_eq] at hj
+    simp only [Set.mem_singleton_iff] at hk
+    omega
+  have hadd :
+      ν.real (({j : ℕ | j < k} : Set ℕ) ∪ {k}) = q + r := by
+    simpa [q, r] using
+      (measureReal_union (μ := ν) hdisj (measurableSet_singleton k)
+        (measure_ne_top _ _) (measure_ne_top _ _))
+  have hunion : ν.real (({j : ℕ | j < k} : Set ℕ) ∪ {k}) ≤ 1 := by
+    calc
+      ν.real (({j : ℕ | j < k} : Set ℕ) ∪ {k}) ≤ ν.real Set.univ :=
+        measureReal_mono (by intro j hj; trivial)
+      _ = 1 := by simp
+  have hq_le : q ≤ 1 - r := by linarith [hadd.symm.trans_le hunion]
+  have hq0 : 0 ≤ q := measureReal_nonneg
+  have hr1 : r ≤ 1 := by
+    have := measureReal_le_one (μ := ν) (s := ({k} : Set ℕ))
+    simpa [r] using this
+  have hpow : q ^ A.card ≤ (1 : ℝ) / 10 := by
+    calc
+      q ^ A.card ≤ (1 - r) ^ A.card :=
+        pow_le_pow_left₀ hq0 hq_le A.card
+      _ ≤ Real.exp (-((A.card : ℝ) * r)) :=
+        one_sub_pow_le_exp_neg_nat_mul hr1 A.card
+      _ ≤ Real.exp (-Real.log 10) := by
+        apply Real.exp_le_exp.mpr
+        exact neg_le_neg (by simpa [r, ν] using hmass)
+      _ = (1 : ℝ) / 10 := by
+        rw [Real.exp_neg, Real.exp_log (by norm_num : (0 : ℝ) < 10)]
+        norm_num
+  rw [binomialRandom_exists_restrictedDegree_ge_probability p hAB k]
+  change (9 : ℝ) / 10 ≤ 1 - q ^ A.card
+  linarith
+
 end NumStability.HDP.Scalar.IndependentSums.Chernoff
