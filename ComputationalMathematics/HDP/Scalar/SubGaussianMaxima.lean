@@ -43,6 +43,103 @@ weighted threshold. -/
 def logWeightedAbsTailEvent {Ω : Type*} (X : ℕ → Ω → ℝ) (t : ℝ) : Set Ω :=
   {ω | ∃ i, t < |X i ω| / logIndexWeight i}
 
+/-- The pointwise logarithmically weighted supremum, represented in
+`ℝ≥0∞` so that genuinely unbounded sample paths are not silently totalized. -/
+def logWeightedAbsSup {Ω : Type*} (X : ℕ → Ω → ℝ) (ω : Ω) : ENNReal :=
+  ⨆ i, ENNReal.ofReal (|X i ω| / logIndexWeight i)
+
+lemma measurable_logWeightedAbsSup
+    {Ω : Type*} [MeasurableSpace Ω]
+    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i)) :
+    Measurable (logWeightedAbsSup X) := by
+  unfold logWeightedAbsSup
+  fun_prop
+
+lemma logWeightedAbsSup_tailEvent
+    {Ω : Type*} (X : ℕ → Ω → ℝ) {t : ℝ} (ht : 0 ≤ t) :
+    {ω | ENNReal.ofReal t < logWeightedAbsSup X ω} =
+      logWeightedAbsTailEvent X t := by
+  ext ω
+  simp only [logWeightedAbsSup, logWeightedAbsTailEvent, Set.mem_setOf_eq,
+    lt_iSup_iff]
+  constructor
+  · rintro ⟨i, hi⟩
+    exact ⟨i, (ENNReal.ofReal_lt_ofReal_iff_of_nonneg ht).mp hi⟩
+  · rintro ⟨i, hi⟩
+    exact ⟨i, (ENNReal.ofReal_lt_ofReal_iff_of_nonneg ht).mpr hi⟩
+
+/-- Pointwise layer-cake identity for an extended nonnegative value. -/
+lemma layerCakePointwiseENNReal (z : ENNReal) :
+    z = ∫⁻ t in Set.Ioi (0 : ℝ),
+      ({s : ℝ | ENNReal.ofReal s < z}).indicator
+        (fun _ => (1 : ENNReal)) t ∂volume := by
+  by_cases hz : z = (⊤ : ENNReal)
+  · subst z
+    simp [Real.volume_Ioi]
+  · calc
+      z = ENNReal.ofReal z.toReal := (ENNReal.ofReal_toReal hz).symm
+      _ = ∫⁻ t in Set.Ioi (0 : ℝ),
+          (Set.Iio z.toReal).indicator (fun _ => (1 : ENNReal)) t ∂volume :=
+        (NumStability.HDP.Scalar.Preliminaries.layerCakePointwise
+          ENNReal.toReal_nonneg).2
+      _ = ∫⁻ t in Set.Ioi (0 : ℝ),
+          ({s : ℝ | ENNReal.ofReal s < z}).indicator
+            (fun _ => (1 : ENNReal)) t ∂volume := by
+        apply MeasureTheory.setLIntegral_congr_fun measurableSet_Ioi
+        intro t ht
+        have ht0 : 0 ≤ t := ht.le
+        rw [← ENNReal.ofReal_toReal hz]
+        by_cases hlt : t < z.toReal <;>
+          simp [Set.indicator, hlt,
+            ENNReal.ofReal_lt_ofReal_iff_of_nonneg ht0]
+
+/-- Extended layer-cake formula for a measurable `ℝ≥0∞`-valued function. -/
+theorem layerCakeLIntegralENNReal
+    {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) [SFinite μ]
+    {f : Ω → ENNReal} (hf : Measurable f) :
+    (∫⁻ ω, f ω ∂μ) =
+      ∫⁻ t in Set.Ioi (0 : ℝ), μ {ω | ENNReal.ofReal t < f ω} := by
+  let A : Set (Ω × ℝ) :=
+    {p | p.2 ∈ Set.Ioi (0 : ℝ) ∧ ENNReal.ofReal p.2 < f p.1}
+  let g : Ω → ℝ → ENNReal := fun ω t =>
+    A.indicator (fun _ => (1 : ENNReal)) (ω, t)
+  have hA : MeasurableSet A := by
+    exact (measurableSet_lt measurable_const measurable_snd).inter
+      (measurableSet_lt measurable_snd.ennreal_ofReal
+        (hf.comp measurable_fst))
+  have hg : Measurable (Function.uncurry g) := by
+    exact measurable_const.indicator hA
+  calc
+    (∫⁻ ω, f ω ∂μ) = ∫⁻ ω, ∫⁻ t, g ω t ∂volume ∂μ := by
+      apply lintegral_congr
+      intro ω
+      rw [layerCakePointwiseENNReal (f ω)]
+      rw [← lintegral_indicator measurableSet_Ioi]
+      apply lintegral_congr
+      intro t
+      by_cases ht : t ∈ Set.Ioi (0 : ℝ)
+      · have ht' : 0 < t := ht
+        by_cases hfω : ENNReal.ofReal t < f ω <;>
+          simp [g, A, Set.indicator, ht', hfω]
+      · have ht' : ¬0 < t := by simpa only [Set.mem_Ioi] using ht
+        by_cases hfω : ENNReal.ofReal t < f ω <;>
+          simp [g, A, Set.indicator, ht', hfω]
+    _ = ∫⁻ t, ∫⁻ ω, g ω t ∂μ ∂volume :=
+      lintegral_lintegral_swap hg.aemeasurable
+    _ = ∫⁻ t in Set.Ioi (0 : ℝ), μ {ω | ENNReal.ofReal t < f ω} := by
+      rw [← lintegral_indicator measurableSet_Ioi]
+      apply lintegral_congr
+      intro t
+      by_cases ht : t ∈ Set.Ioi (0 : ℝ)
+      · have hEvent : MeasurableSet {ω | ENNReal.ofReal t < f ω} := by
+          exact measurableSet_lt measurable_const hf
+        have ht' : 0 < t := ht
+        simpa [g, A, Set.indicator, ht'] using
+          (lintegral_indicator_one (μ := μ) hEvent)
+      · have ht' : ¬0 < t := by simpa only [Set.mem_Ioi] using ht
+        simp [g, A, Set.indicator, ht']
+
 lemma logWeightedAbsTailEvent_eq_iUnion
     {Ω : Type*} (X : ℕ → Ω → ℝ) (t : ℝ) :
     logWeightedAbsTailEvent X t =
