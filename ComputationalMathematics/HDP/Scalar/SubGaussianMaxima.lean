@@ -670,6 +670,30 @@ lemma ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero
   filter_upwards [hAll] with ω hω
   simp [logWeightedAbsSup, hω]
 
+/-- The actual sequence-gauge hypothesis makes the extended countable weighted
+supremum finite almost everywhere.  This is the semantic bridge required before
+using its real representative. -/
+theorem ae_logWeightedAbsSup_lt_top_of_sequencePsiTwoGauge
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {X : ℕ → Ω → ℝ}
+    (hX : ∀ i, Measurable (X i))
+    (hFinite : sequencePsiTwoGauge μ X < (⊤ : ENNReal)) :
+    ∀ᵐ ω ∂μ, logWeightedAbsSup X ω < (⊤ : ENNReal) := by
+  by_cases hGaugeZero : sequencePsiTwoGauge μ X = 0
+  · have hEachZero : ∀ i, PsiTwoGauge μ (X i) = 0 := by
+      intro i
+      exact nonpos_iff_eq_zero.mp
+        ((psiTwoGauge_le_sequencePsiTwoGauge μ X i).trans_eq hGaugeZero)
+    filter_upwards [ae_logWeightedAbsSup_eq_zero_of_psiTwoGauge_eq_zero
+      hX hEachZero] with ω hω
+    simp [hω]
+  · apply ae_logWeightedAbsSup_lt_top_of_psiTwoGauge_le hX
+      (ENNReal.toReal_pos hGaugeZero hFinite.ne)
+    intro i
+    rw [ENNReal.ofReal_toReal hFinite.ne]
+    exact psiTwoGauge_le_sequencePsiTwoGauge μ X i
+
 /-- Common-gauge-bound form including the zero-scale endpoint. -/
 theorem expectation_logWeightedAbsSupReal_le_of_psiTwoGauge_le_of_nonneg
     {Ω : Type*} [MeasurableSpace Ω]

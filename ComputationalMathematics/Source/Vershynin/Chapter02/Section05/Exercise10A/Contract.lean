@@ -16,7 +16,8 @@ theorem hdp_02_hex_h2_d5_d10a :
     hdp_02_hex_h2_d5_d10a__contract_type := by
   refine ⟨logWeightedMaxConstant, logWeightedMaxConstant_pos, ?_⟩
   intro Ω _ μ _ X hX hFinite
-  exact expectation_logWeightedAbsSupReal_le_sequencePsiTwoGauge hX hFinite
+  exact ⟨ae_logWeightedAbsSup_lt_top_of_sequencePsiTwoGauge hX hFinite,
+    expectation_logWeightedAbsSupReal_le_sequencePsiTwoGauge hX hFinite⟩
 
 /-- Mechanical receipt that the checked wrapper inhabits the frozen target. -/
 theorem hdp_02_hex_h2_d5_d10a__contract :

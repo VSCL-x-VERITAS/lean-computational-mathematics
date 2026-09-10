@@ -24,7 +24,8 @@ def hdp_02_hex_h2_d5_d10a__contract_type : Prop :=
       (X : ℕ → Ω → ℝ),
       (∀ i, Measurable (X i)) →
       sequencePsiTwoGauge μ X < (⊤ : ENNReal) →
-      Integrable (logWeightedAbsSupReal X) μ ∧
+      (∀ᵐ ω ∂μ, logWeightedAbsSup X ω < (⊤ : ENNReal)) ∧
+        Integrable (logWeightedAbsSupReal X) μ ∧
         NumStability.HDP.Scalar.Preliminaries.expectation μ
             (logWeightedAbsSupReal X) ≤
           C * (sequencePsiTwoGauge μ X).toReal
