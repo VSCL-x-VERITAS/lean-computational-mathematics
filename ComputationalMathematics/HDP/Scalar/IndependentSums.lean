@@ -5,6 +5,7 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinChebyshev
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinMoments
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinNormalization
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw
+import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeMean
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Hoeffding
 import ComputationalMathematics.HDP.Scalar.IndependentSums.HoeffdingNormalization
