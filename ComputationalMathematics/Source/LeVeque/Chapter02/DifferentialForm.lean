@@ -24,16 +24,20 @@ The printed step rewrites `f(q(x₁,t)) - f(q(x₂,t))` as minus the integral of
 `x`-derivative of the composed flux across the section. It is the fundamental
 theorem of calculus, and it needs the derivative to exist across the whole
 section and to be integrable there — neither of which the source states. The
-second conjunct shows that the first hypothesis cannot be dropped: a step
-function with a constant candidate derivative has an endpoint difference that no
-such integral reproduces. -/
+second conjunct shows how little slack the first hypothesis has: a function that
+is differentiable with the stated derivative at every point of the section bar
+one, and integrable throughout, can still have an endpoint difference the
+integral does not reproduce. So the hypothesis cannot be relaxed to
+differentiability off a single point. -/
 theorem leveque02_equation08_fluxDifferenceAsIntegral
     {F F' : ℝ → ℝ} {x₁ x₂ : ℝ}
     (hderiv : ∀ x ∈ Set.uIcc x₁ x₂, HasDerivAt F (F' x) x)
     (hint : IntervalIntegrable F' MeasureTheory.volume x₁ x₂) :
     F x₁ - F x₂ = -∫ x in x₁..x₂, F' x ∧
-      (∃ (G G' : ℝ → ℝ) (y₁ y₂ : ℝ),
-        IntervalIntegrable G' MeasureTheory.volume y₁ y₂ ∧
+      (∃ (G G' : ℝ → ℝ) (y₁ y₂ z : ℝ),
+        z ∈ Set.uIcc y₁ y₂ ∧
+          IntervalIntegrable G' MeasureTheory.volume y₁ y₂ ∧
+          (∀ y ∈ Set.uIcc y₁ y₂, y ≠ z → HasDerivAt G (G' y) y) ∧
           G y₁ - G y₂ ≠ -∫ x in y₁..y₂, G' x) :=
   ⟨fluxDifference_eq_neg_integral hderiv hint, fluxDifference_needs_hasDerivAt⟩
 

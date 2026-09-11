@@ -48,17 +48,34 @@ theorem fluxDifference_eq_neg_integral {F F' : ℝ → ℝ} {x₁ x₂ : ℝ}
   rw [intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv hint]
   ring
 
-/-- The differentiability hypothesis is load-bearing: a function that is not
-differentiable across the section can have an endpoint difference unrelated to
-the integral of any candidate derivative. -/
+/-- The differentiability hypothesis is load-bearing, and failing at a single
+interior point is enough to break the identity.
+
+The witness is differentiable with the stated derivative at every point of the
+section except one, and is interval-integrable throughout, yet its endpoint
+difference is not the integral of that derivative. So the hypothesis cannot be
+weakened to differentiability off a single point, which is the weakening the
+source's silence would most naturally invite. -/
 theorem fluxDifference_needs_hasDerivAt :
-    ∃ (F F' : ℝ → ℝ) (x₁ x₂ : ℝ),
-      IntervalIntegrable F' MeasureTheory.volume x₁ x₂ ∧
+    ∃ (F F' : ℝ → ℝ) (x₁ x₂ z : ℝ),
+      z ∈ Set.uIcc x₁ x₂ ∧
+        IntervalIntegrable F' MeasureTheory.volume x₁ x₂ ∧
+        (∀ x ∈ Set.uIcc x₁ x₂, x ≠ z → HasDerivAt F (F' x) x) ∧
         F x₁ - F x₂ ≠ -∫ x in x₁..x₂, F' x := by
-  refine ⟨fun x => if x < 0 then 0 else 1, fun _ => 0, -1, 1,
-    intervalIntegrable_const, ?_⟩
-  intro hcon
-  simp at hcon
+  refine ⟨fun x => if x < 0 then 0 else 1, fun _ => 0, -1, 1, 0, ?_,
+    intervalIntegrable_const, ?_, ?_⟩
+  · rw [Set.uIcc_of_le (by norm_num : (-1 : ℝ) ≤ 1)]
+    constructor <;> norm_num
+  · intro x _ hne
+    rcases lt_or_gt_of_ne hne with h | h
+    · refine (hasDerivAt_const x (0 : ℝ)).congr_of_eventuallyEq ?_
+      filter_upwards [isOpen_Iio.mem_nhds h] with y hy
+      simp [Set.mem_Iio.1 hy]
+    · refine (hasDerivAt_const x (1 : ℝ)).congr_of_eventuallyEq ?_
+      filter_upwards [isOpen_Ioi.mem_nhds h] with y hy
+      simp [not_lt.2 (le_of_lt (Set.mem_Ioi.1 hy))]
+  · intro hcon
+    simp at hcon
 
 /-! ### From every section to the integrand -/
 
