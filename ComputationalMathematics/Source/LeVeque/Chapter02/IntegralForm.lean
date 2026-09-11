@@ -81,6 +81,31 @@ theorem leveque02_equation02_iff (q : ℝ → ℝ → ℝ) (F : ℝ → ℝ → 
           (F x₁ t - F x₂ t) t :=
   Iff.rfl
 
+/-- What equation (2.2) asserts, stated so that it carries content rather than
+unfolding a name.
+
+The printed equation is a modelling posit, so a Lean rendering of it alone is a
+definition and an equivalence with that definition is reflexive. The three
+clauses here are the facts that make the posit worth asserting, and each can
+fail for a weaker predicate. The balance is satisfiable by a density that
+genuinely varies, so the notion is not empty. It determines the endpoint flux
+difference uniquely, so the fluxes are not free once the density is fixed. And
+when no net flux crosses either end, the mass of the section never changes,
+which is what the source names as the basis of conservation. -/
+theorem leveque02_equation02_content :
+    leveque02Equation02IntegralForm (fun _ t => t) (fun x _ => -x) ∧
+      (∀ (q F G : ℝ → ℝ → ℝ), leveque02Equation02IntegralForm q F →
+        leveque02Equation02IntegralForm q G →
+        ∀ x₁ x₂ t, F x₁ t - F x₂ t = G x₁ t - G x₂ t) ∧
+      (∀ (q F : ℝ → ℝ → ℝ), leveque02Equation02IntegralForm q F →
+        ∀ x₁ x₂ : ℝ, (∀ t, F x₁ t = F x₂ t) →
+          ∀ s t : ℝ,
+            sectionMass (fun x => q x s) x₁ x₂
+              = sectionMass (fun x => q x t) x₁ x₂) :=
+  ⟨sectionBalance_nonvacuous,
+   fun _ _ _ hF hG => sectionBalance_unique_difference hF hG,
+   fun _ _ h _ _ hF => sectionMass_const_of_balanced h hF⟩
+
 /-- Both endpoint terms of (2.2) are fluxes *into* the section: the signed flux
 at the left endpoint and its negative at the right endpoint sum to the printed
 right-hand side. -/

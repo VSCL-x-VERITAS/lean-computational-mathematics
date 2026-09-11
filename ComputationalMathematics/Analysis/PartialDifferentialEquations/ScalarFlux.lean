@@ -2,6 +2,7 @@
 SPDX-License-Identifier: MIT
 -/
 
+import Mathlib.Analysis.Calculus.MeanValue
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.SectionMass
 
 /-!
@@ -86,6 +87,45 @@ balance, which is what the source means by calling both terms fluxes *into* the
 section. -/
 theorem inward_flux_sum (F : ℝ → ℝ → ℝ) (x₁ x₂ t : ℝ) :
     F x₁ t + -F x₂ t = F x₁ t - F x₂ t := by ring
+
+/-- The balance pins the endpoint flux difference: a density cannot satisfy the
+balance against two flux fields whose endpoint differences disagree anywhere,
+because a derivative is unique where it exists. -/
+theorem sectionBalance_unique_difference {q : ℝ → ℝ → ℝ} {F G : ℝ → ℝ → ℝ}
+    (hF : IsSectionBalance q F) (hG : IsSectionBalance q G) (x₁ x₂ t : ℝ) :
+    F x₁ t - F x₂ t = G x₁ t - G x₂ t :=
+  (hF x₁ x₂ t).unique (hG x₁ x₂ t)
+
+/-- The conservation consequence the source names as the basis of conservation:
+if no net flux crosses either end of a section, the mass in that section never
+changes. -/
+theorem sectionMass_const_of_balanced {q : ℝ → ℝ → ℝ} {F : ℝ → ℝ → ℝ}
+    (h : IsSectionBalance q F) {x₁ x₂ : ℝ} (hF : ∀ t, F x₁ t = F x₂ t)
+    (s t : ℝ) :
+    sectionMass (fun x => q x s) x₁ x₂ = sectionMass (fun x => q x t) x₁ x₂ := by
+  have hderiv : ∀ τ : ℝ,
+      HasDerivAt (fun σ => sectionMass (fun x => q x σ) x₁ x₂) 0 τ := by
+    intro τ
+    have hbal := h x₁ x₂ τ
+    rwa [hF τ, sub_self] at hbal
+  exact is_const_of_deriv_eq_zero (fun τ => (hderiv τ).differentiableAt)
+    (fun τ => (hderiv τ).deriv) s t
+
+/-- The balance is satisfiable, and not only by the zero density: a density
+growing linearly in time at unit rate is balanced by the flux field `-x`.  The
+predicate is therefore not vacuous. -/
+theorem sectionBalance_nonvacuous :
+    IsSectionBalance (fun _ t => t) (fun x _ => -x) := by
+  intro x₁ x₂ t
+  have hfun : (fun τ : ℝ => sectionMass (fun x => (fun _ t => t) x τ) x₁ x₂)
+      = fun τ : ℝ => (x₂ - x₁) * τ := by
+    funext τ
+    simp [sectionMass, mul_comm]
+  rw [hfun]
+  have hlinear : HasDerivAt (fun τ : ℝ => (x₂ - x₁) * τ) (x₂ - x₁) t := by
+    simpa using HasDerivAt.const_mul (x₂ - x₁) (hasDerivAt_id t)
+  convert hlinear using 1
+  ring
 
 /-- Under a balance, the rate of change of the section mass is exactly the total
 inward flux. -/
