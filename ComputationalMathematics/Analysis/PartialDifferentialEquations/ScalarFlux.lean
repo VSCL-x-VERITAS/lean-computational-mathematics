@@ -592,4 +592,158 @@ theorem exists_state_dependent_velocity_not_linear :
   · norm_num [advectiveFlux]
 
 
+/-! ### Transport direction as an object
+
+The printed convention reads the sign of a station rate as a direction of
+transport.  Encoding that as an inductive rather than leaving it to the name of
+a definition is what lets "rightward", "leftward" and "into" appear in
+propositions. -/
+
+/-- The direction in which a signed station rate transports the quantity. -/
+inductive TransportDirection where
+  | rightward
+  | leftward
+  | still
+  deriving DecidableEq, Repr
+
+/-- The printed convention: a positive rate is transport to the right, a
+negative rate transport to the left, and a vanishing rate no transport. -/
+noncomputable def transportDirection (rate : ℝ) : TransportDirection :=
+  if 0 < rate then .rightward else if rate < 0 then .leftward else .still
+
+@[simp] theorem transportDirection_of_pos {r : ℝ} (h : 0 < r) :
+    transportDirection r = .rightward := by
+  simp [transportDirection, h]
+
+@[simp] theorem transportDirection_of_neg {r : ℝ} (h : r < 0) :
+    transportDirection r = .leftward := by
+  simp [transportDirection, h, asymm h]
+
+@[simp] theorem transportDirection_zero : transportDirection 0 = .still := by
+  simp [transportDirection]
+
+theorem transportDirection_eq_rightward {r : ℝ} :
+    transportDirection r = .rightward ↔ 0 < r := by
+  unfold transportDirection
+  split_ifs with h1 h2 <;> simp_all
+
+theorem transportDirection_eq_leftward {r : ℝ} :
+    transportDirection r = .leftward ↔ r < 0 := by
+  unfold transportDirection
+  split_ifs with h1 h2 <;> simp_all
+  linarith
+
+/-- Direction is not blind to sign: reversing a nonzero rate reverses it. -/
+theorem transportDirection_neg_ne {r : ℝ} (h : r ≠ 0) :
+    transportDirection r ≠ transportDirection (-r) := by
+  rcases lt_or_gt_of_ne h with hneg | hpos
+  · rw [transportDirection_of_neg hneg, transportDirection_of_pos (by linarith)]
+    simp
+  · rw [transportDirection_of_pos hpos, transportDirection_of_neg (by linarith)]
+    simp
+
+/-! ### The station flux is a primitive, and (2.3) is a claim about it -/
+
+/-- The constitutive relation of equation (2.3): the rate at which the tracer
+passes each station is the product of the velocity and the density *there*.
+
+The flux is a parameter, not a definition, which is what makes this an assertion
+the model could have failed to satisfy rather than an unfolding. -/
+def IsAdvectiveFluxOf (F u q : ℝ → ℝ → ℝ) : Prop :=
+  ∀ x t, F x t = u x t * q x t
+
+/-- The relation is a genuine restriction on a station flux. -/
+theorem exists_not_isAdvectiveFluxOf (u q : ℝ → ℝ → ℝ) :
+    ∃ G : ℝ → ℝ → ℝ, ¬ IsAdvectiveFluxOf G u q := by
+  refine ⟨fun x t => u x t * q x t + 1, fun h => ?_⟩
+  have h0 := h 0 0
+  linarith
+
+/-- Under the relation the station rate is computed from the velocity and the
+density at that same station, with no freedom to take them from different
+points. -/
+theorem isAdvectiveFluxOf_apply {F u q : ℝ → ℝ → ℝ} (h : IsAdvectiveFluxOf F u q)
+    (x t : ℝ) : F x t = advectiveFlux u (q x t) x t := h x t
+
+/-- For a positive density the station rate transports in the direction of the
+velocity, which is how the page-15 convention reaches the advective model. -/
+theorem transportDirection_of_isAdvectiveFluxOf {F u q : ℝ → ℝ → ℝ}
+    (h : IsAdvectiveFluxOf F u q) {x t : ℝ} (hq : 0 < q x t) :
+    transportDirection (F x t) = transportDirection (u x t) := by
+  rw [h x t]
+  rcases lt_trichotomy (u x t) 0 with hu | hu | hu
+  · rw [transportDirection_of_neg (mul_neg_of_neg_of_pos hu hq),
+      transportDirection_of_neg hu]
+  · simp [hu]
+  · rw [transportDirection_of_pos (mul_pos hu hq), transportDirection_of_pos hu]
+
+/-! ### Entering a section is a proposition about direction -/
+
+/-- Transport at a station of the section `[x₁, x₂]` is directed *into* the
+section: rightward at the left station, leftward at the right one.  This is the
+printed remark that both `+F₁` and `-F₂` are fluxes into the section, stated so
+that the orientation of the section is what decides it. -/
+def EntersSection (x₁ x₂ station rate : ℝ) : Prop :=
+  (station = x₁ ∧ transportDirection rate = .rightward) ∨
+  (station = x₂ ∧ transportDirection rate = .leftward)
+
+theorem entersSection_left {x₁ x₂ r : ℝ} (h : 0 < r) :
+    EntersSection x₁ x₂ x₁ r :=
+  Or.inl ⟨rfl, transportDirection_of_pos h⟩
+
+theorem entersSection_right {x₁ x₂ r : ℝ} (h : r < 0) :
+    EntersSection x₁ x₂ x₂ r :=
+  Or.inr ⟨rfl, transportDirection_of_neg h⟩
+
+/-- The section's orientation decides inwardness: rightward transport at the
+left station enters, and the very same transport at what is now the right
+station does not.  This is why `x₁ < x₂` cannot be dropped. -/
+theorem not_entersSection_of_reversed {x₁ x₂ r : ℝ} (hsec : x₁ < x₂) (h : 0 < r) :
+    ¬ EntersSection x₂ x₁ x₁ r := by
+  rintro (⟨hst, _⟩ | ⟨_, hdir⟩)
+  · exact absurd hst (ne_of_lt hsec)
+  · rw [transportDirection_of_pos h] at hdir
+    exact TransportDirection.noConfusion hdir
+
+/-! ### The linear density over a pipe whose section may vary -/
+
+/-- The one-dimensional density obtained from a volumetric density and a
+cross-sectional area.  The area is a function of position: the source neither
+assumes the pipe uniform nor excludes a varying one. -/
+noncomputable def linearDensityOf (volumetric : ℝ → ℝ → ℝ) (area : ℝ → ℝ) :
+    ℝ → ℝ → ℝ := fun x t => area x * volumetric x t
+
+@[simp] theorem linearDensityOf_apply (volumetric : ℝ → ℝ → ℝ) (area : ℝ → ℝ)
+    (x t : ℝ) : linearDensityOf volumetric area x t = area x * volumetric x t := rfl
+
+theorem linearDensityOf_nonneg_iff {volumetric : ℝ → ℝ → ℝ} {area : ℝ → ℝ}
+    {x : ℝ} (harea : 0 < area x) (t : ℝ) :
+    0 ≤ linearDensityOf volumetric area x t ↔ 0 ≤ volumetric x t := by
+  rw [linearDensityOf_apply]
+  exact mul_nonneg_iff_of_pos_left harea
+
+/-- The area at a station is recovered from the density it produces there. -/
+theorem linearDensityOf_area_unique {volumetric : ℝ → ℝ → ℝ} {a b : ℝ → ℝ}
+    {x t : ℝ} (hv : volumetric x t ≠ 0)
+    (h : linearDensityOf volumetric a x t = linearDensityOf volumetric b x t) :
+    a x = b x := by
+  simp only [linearDensityOf_apply] at h
+  exact mul_right_cancel₀ hv h
+
+/-- A uniform pipe is the special case, and there the section mass scales. -/
+theorem sectionMass_linearDensityOf_const (volumetric : ℝ → ℝ → ℝ) (c : ℝ)
+    (x₁ x₂ t : ℝ) :
+    sectionMass (fun x => linearDensityOf volumetric (fun _ => c) x t) x₁ x₂ =
+      c * sectionMass (fun x => volumetric x t) x₁ x₂ := by
+  simp [sectionMass, linearDensityOf, intervalIntegral.integral_const_mul]
+
+/-- Tracer independence is exactly the existence of one velocity field. -/
+theorem isTracerVelocity_iff {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} :
+    IsTracerVelocity velocity ↔ ∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u := by
+  constructor
+  · exact fun h => ⟨velocity fun _ _ => 0, fun q => h q _⟩
+  · rintro ⟨u, hu⟩ q r
+    rw [hu q, hu r]
+
+
 end NumStability

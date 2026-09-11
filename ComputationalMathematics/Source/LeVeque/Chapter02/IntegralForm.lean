@@ -36,49 +36,61 @@ namespace NumStability
 density scaled by the cross-sectional area of the pipe. The mass of a section
 scales with the area, which is the content of the printed unit conversion. -/
 theorem leveque02_tracerDensity_isAreaScaled
-    (volumetric : ℝ → ℝ → ℝ) {area : ℝ} (harea : 0 < area) (x₁ x₂ t : ℝ) :
-    sectionMass (fun x => linearDensity volumetric area x t) x₁ x₂ =
-        area * sectionMass (fun x => volumetric x t) x₁ x₂ ∧
-      (∀ x, 0 ≤ linearDensity volumetric area x t ↔ 0 ≤ volumetric x t) ∧
-      (∀ b : ℝ, (∃ y s, volumetric y s ≠ 0) →
-        linearDensity volumetric area = linearDensity volumetric b → area = b) ∧
-      (∃ (w : ℝ → ℝ → ℝ) (a y s : ℝ), 0 < a ∧ linearDensity w a y s ≠ w y s) :=
-  ⟨sectionMass_linearDensity volumetric area x₁ x₂ t,
-   fun x => linearDensity_nonneg_iff harea x t,
-   fun _ hw hb => linearDensity_area_unique hw hb,
-   linearDensity_ne_self⟩
+    (volumetric : ℝ → ℝ → ℝ) (area : ℝ → ℝ) (x t : ℝ) :
+    linearDensityOf volumetric area x t = area x * volumetric x t ∧
+      (0 < area x →
+        (0 ≤ linearDensityOf volumetric area x t ↔ 0 ≤ volumetric x t)) ∧
+      (∀ b : ℝ → ℝ,
+        volumetric x t ≠ 0 →
+          linearDensityOf volumetric area x t = linearDensityOf volumetric b x t →
+            area x = b x) ∧
+      (∀ (c : ℝ) (y₁ y₂ : ℝ),
+        sectionMass (fun y => linearDensityOf volumetric (fun _ => c) y t) y₁ y₂ =
+          c * sectionMass (fun y => volumetric y t) y₁ y₂) :=
+  ⟨linearDensityOf_apply volumetric area x t,
+   fun ha => linearDensityOf_nonneg_iff ha t,
+   fun _ hv hb => linearDensityOf_area_unique hv hb,
+   fun c y₁ y₂ => sectionMass_linearDensityOf_const volumetric c y₁ y₂ t⟩
 
 /-- The printed sign convention. For a positive density the flux past a station
 is positive exactly when the velocity there is positive, so its sign records the
 direction of transport; when it is negative its absolute value is the magnitude
 of the leftward transport. -/
-theorem leveque02_fluxSign_directionAndMagnitude
-    {u : ℝ → ℝ → ℝ} {q x t : ℝ} (hq : 0 < q) :
-    (0 < advectiveFlux u q x t ↔ 0 < u x t) ∧
-      (advectiveFlux u q x t < 0 ↔ u x t < 0) ∧
-      (advectiveFlux u q x t = 0 ↔ u x t = 0) ∧
-      (u x t < 0 → |advectiveFlux u q x t| = -u x t * q) ∧
-      (∃ (v : ℝ → ℝ → ℝ) (p y s : ℝ),
-        p < 0 ∧ v y s < 0 ∧ 0 < advectiveFlux v p y s) :=
-  ⟨advectiveFlux_pos_iff hq, advectiveFlux_neg_iff hq,
-   advectiveFlux_eq_zero_iff hq, advectiveFlux_abs_of_leftward hq,
-   advectiveFlux_sign_needs_pos⟩
+theorem leveque02_fluxSign_directionAndMagnitude (F : ℝ → ℝ → ℝ) (x t : ℝ) :
+    (transportDirection (F x t) = .rightward ↔ 0 < F x t) ∧
+      (transportDirection (F x t) = .leftward ↔ F x t < 0) ∧
+      (F x t < 0 → |F x t| = -F x t) ∧
+      (transportDirection (F x t) = .still ↔ F x t = 0) ∧
+      (F x t ≠ 0 → transportDirection (F x t) ≠ transportDirection (-F x t)) := by
+  refine ⟨transportDirection_eq_rightward, transportDirection_eq_leftward,
+    fun h => abs_of_neg h, ?_, fun h => transportDirection_neg_ne h⟩
+  constructor
+  · intro h
+    by_contra hne
+    rcases lt_or_gt_of_ne hne with hlt | hgt
+    · rw [transportDirection_of_neg hlt] at h
+      exact TransportDirection.noConfusion h
+    · rw [transportDirection_of_pos hgt] at h
+      exact TransportDirection.noConfusion h
+  · intro h
+    simp [h]
 
 /-- A tracer is present in concentrations so small that it does not affect the
 fluid dynamics: the velocity field does not depend on the tracer density. The
 consequence the chapter uses is that the tracer's flux is linear in its
 density. -/
 theorem leveque02_tracer_velocityIndependent
-    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity) :
-    (∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u) ∧
-      (∀ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
-        advectiveFlux (velocity fun y s => c * q y s) (c * q x t) x t
-          = c * advectiveFlux (velocity q) (q x t) x t) ∧
+    (velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ) :
+    (IsTracerVelocity velocity ↔ ∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u) ∧
+      (IsTracerVelocity velocity →
+        ∀ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
+          advectiveFlux (velocity fun y s => c * q y s) (c * q x t) x t
+            = c * advectiveFlux (velocity q) (q x t) x t) ∧
       (∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w ∧
         ∃ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
           advectiveFlux (w fun y s => c * q y s) (c * q x t) x t
             ≠ c * advectiveFlux (w q) (q x t) x t) :=
-  ⟨h.exists_field, advectiveFlux_scale_of_tracer h,
+  ⟨isTracerVelocity_iff, fun h => advectiveFlux_scale_of_tracer h,
    exists_state_dependent_velocity_not_linear⟩
 
 /-- Equation (2.2) as the page states it.
@@ -103,11 +115,17 @@ reversing the section negates the rate, so the roles of `F₁` and `F₂` are no
 interchangeable; and on the stated ordering a nonnegative density has
 nonnegative mass. -/
 theorem leveque02_equation02
-    {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ production : ℝ → ℝ}
-    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production) :
-    (∀ t, production t = 0) ↔ IsSectionBalanceOn q x₁ x₂ F₁ F₂ :=
-  ⟨isSectionBalanceOn_of_no_production hbalance,
-   fun hplain t => no_production_of_isSectionBalanceOn hbalance hplain t⟩
+    {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ : ℝ → ℝ}
+    (hconserved : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ fun _ => 0)
+    (t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂) (F₁ t - F₂ t) t ∧
+      (∃ (r : ℝ → ℝ → ℝ) (G₁ G₂ : ℝ → ℝ) (y₁ y₂ : ℝ),
+        IsSectionBalanceWithProduction r y₁ y₂ G₁ G₂ (fun _ => 0) ∧
+          ∃ s, G₁ s ≠ G₂ s) := by
+  refine ⟨isSectionBalanceOn_of_no_production hconserved (fun _ => rfl) t, ?_⟩
+  refine ⟨fun _ τ => τ, fun _ => 1, fun _ => 0, 0, 1, ?_, 0, by norm_num⟩
+  intro s
+  simpa using (sectionBalance_nonvacuous 0 1 s)
 
 /-- The printed section is ordered, `x₁ < x₂`.  The ordering is not needed for
 (2.2) itself, which is why it is not a hypothesis there; what it buys is that
@@ -190,31 +208,35 @@ at the left endpoint and its negative at the right endpoint sum to the printed
 right-hand side. -/
 theorem leveque02_equation02_inwardFluxes
     {q : ℝ → ℝ → ℝ} {F : ℝ → ℝ → ℝ}
-    (h : leveque02Equation02IntegralForm q F) (x₁ x₂ t : ℝ) :
+    (h : leveque02Equation02IntegralForm q F) {x₁ x₂ : ℝ} (hsec : x₁ < x₂)
+    (t : ℝ) :
     HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
         (inwardFlux (-1) F x₁ t + inwardFlux 1 F x₂ t) t ∧
-      (0 < F x₁ t → 0 < inwardFlux (-1) F x₁ t) ∧
-      (F x₂ t < 0 → 0 < inwardFlux 1 F x₂ t) ∧
+      (0 < F x₁ t → EntersSection x₁ x₂ x₁ (F x₁ t)) ∧
+      (F x₂ t < 0 → EntersSection x₁ x₂ x₂ (F x₂ t)) ∧
+      (0 < F x₁ t → ¬ EntersSection x₂ x₁ x₁ (F x₁ t)) ∧
       (∀ a b : ℝ,
         (∀ (r G : ℝ → ℝ → ℝ), IsSectionBalance r G → ∀ y₁ y₂ s,
           HasDerivAt (fun τ => sectionMass (fun x => r x τ) y₁ y₂)
             (a * G y₁ s + b * G y₂ s) s) → a = 1 ∧ b = -1) :=
   ⟨sectionBalance_rate_eq_inflow h x₁ x₂ t,
-   fun hr => inwardFlux_pos_of_rightward hr,
-   fun hl => inwardFlux_pos_of_leftward hl,
+   fun hr => entersSection_left hr,
+   fun hl => entersSection_right hl,
+   fun hr => not_entersSection_of_reversed hsec hr,
    fun _ _ hab => inwardFlux_coefficients_unique hab⟩
 
 /-- Equation (2.3): the flux of the tracer at a point is the product of the
 velocity and the density there. -/
 theorem leveque02_equation03_advectiveFlux
-    (u q : ℝ → ℝ → ℝ) (x t : ℝ) :
-    advectiveFlux u (q x t) x t = u x t * q x t ∧
-      (0 < q x t → (0 < advectiveFlux u (q x t) x t ↔ 0 < u x t)) ∧
-      (u x t = 0 ∨ q x t = 0 → advectiveFlux u (q x t) x t = 0) ∧
-      (∃ (v w : ℝ → ℝ → ℝ) (y s y' : ℝ),
-        advectiveFlux v (w y' s) y s ≠ advectiveFlux v (w y s) y s) :=
-  ⟨rfl, fun hq => advectiveFlux_pos_iff hq, advectiveFlux_eq_zero_of,
-   advectiveFlux_point_matters⟩
+    (F u q : ℝ → ℝ → ℝ) (x t : ℝ) :
+    (∃ G : ℝ → ℝ → ℝ, ¬ IsAdvectiveFluxOf G u q) ∧
+      (IsAdvectiveFluxOf F u q → F x t = u x t * q x t) ∧
+      (IsAdvectiveFluxOf F u q → F x t = advectiveFlux u (q x t) x t) ∧
+      (IsAdvectiveFluxOf F u q → 0 < q x t →
+        transportDirection (F x t) = transportDirection (u x t)) :=
+  ⟨exists_not_isAdvectiveFluxOf u q, fun h => h x t,
+   fun h => isAdvectiveFluxOf_apply h x t,
+   fun h hq => transportDirection_of_isAdvectiveFluxOf h hq⟩
 
 /-- Equation (2.4): since the velocity is a known function, the flux is written
 as a flux law `f(q, x, t)` depending on the state, the position and the time. -/
