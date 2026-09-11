@@ -3,6 +3,7 @@ SPDX-License-Identifier: MIT
 -/
 
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionEquation
+import ComputationalMathematics.Source.LeVeque.Chapter02.Characteristics
 import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialForm
 import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialFormNotation
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
