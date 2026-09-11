@@ -9,6 +9,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialFormNotatio
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.InflowBoundary
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralForm
+import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableCoefficient
 
 /-!
