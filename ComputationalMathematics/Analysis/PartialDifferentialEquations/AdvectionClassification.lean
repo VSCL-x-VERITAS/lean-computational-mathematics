@@ -211,17 +211,22 @@ to equal one; its translate by one unit does not solve it at the corresponding
 station `x = 0`, where the coefficient is zero. So "constant-coefficient" is a
 restriction on the equation and not a description of how it is written. -/
 theorem variableCoefficient_not_translationInvariant :
-    ∃ (q : ℝ → ℝ → ℝ) (c : ℝ → ℝ → ℝ) (a : ℝ),
-      IsAdvectionSolutionWithCoefficientAt q c 1 0 ∧
+    ∃ (q c : ℝ → ℝ → ℝ) (x t a b : ℝ),
+      IsAdvectionSolutionWithCoefficientAt q c (x + a) (t + b) ∧
         ¬ IsAdvectionSolutionWithCoefficientAt
-            (fun ξ τ => q (ξ + a) τ) c 0 0 := by
-  refine ⟨fun x t => x - t, fun x _ => x, 1, ⟨-1, 1, ?_, ?_, by norm_num⟩, ?_⟩
-  · simpa using (hasDerivAt_id (0 : ℝ)).const_sub (1 : ℝ)
-  · simpa using (hasDerivAt_id (1 : ℝ)).sub_const (0 : ℝ)
-  · rintro ⟨a, b, ha, _, hres⟩
-    have hqt : HasDerivAt (fun τ : ℝ => (0 + 1 : ℝ) - τ) (-1) 0 := by
-      simpa using (hasDerivAt_id (0 : ℝ)).const_sub ((0 : ℝ) + 1)
-    have heq : a = -1 := ha.unique hqt
+            (fun ξ τ => q (ξ + a) (τ + b)) c x t := by
+  refine ⟨fun y s => y - s, fun y _ => y, 0, 0, 1, 0,
+    ⟨-1, 1, ?_, ?_, by norm_num⟩, ?_⟩
+  · show HasDerivAt (fun τ : ℝ => (0 + 1 : ℝ) - τ) (-1) (0 + 0)
+    simpa using (hasDerivAt_id ((0 : ℝ) + 0)).const_sub ((0 : ℝ) + 1)
+  · show HasDerivAt (fun ξ : ℝ => ξ - ((0 : ℝ) + 0)) 1 (0 + 1)
+    simpa using (hasDerivAt_id ((0 : ℝ) + 1)).sub_const ((0 : ℝ) + 0)
+  · rintro ⟨u, v, hu, _, hres⟩
+    have hqt : HasDerivAt (fun τ : ℝ => ((0 : ℝ) + 1) - (τ + 0)) (-1) 0 := by
+      have h : HasDerivAt (fun τ : ℝ => τ + (0 : ℝ)) 1 0 := by
+        simpa using (hasDerivAt_id (0 : ℝ)).add_const (0 : ℝ)
+      simpa using h.const_sub ((0 : ℝ) + 1)
+    have heq : u = -1 := hu.unique hqt
     rw [heq] at hres
     norm_num at hres
 

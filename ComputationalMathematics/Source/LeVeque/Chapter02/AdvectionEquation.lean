@@ -82,8 +82,11 @@ carried by a name. The equation is the constant case of the general advection
 equation with a coefficient that may vary in space and time; its solution set is
 invariant under translation in space and in time; and the last witness shows that
 invariance is a restriction and not a triviality, by exhibiting a
-variable-coefficient advection equation whose solutions are *not* translation
-invariant.
+variable-coefficient advection equation together with a shift and a point at
+which the shifted solution fails the equation although the unshifted one
+satisfies it at the shifted point. Tying the two points to the shift is what
+makes the witness the negation of the invariance clause above it rather than an
+unrelated pair of evaluations.
 
 *Hyperbolic type* is the last, reused from Chapter 1. For one component this is
 the weakest of the four claims: a one-by-one real matrix always has a real
@@ -129,10 +132,10 @@ theorem leveque02_advection_isScalarLinearConstantCoefficientHyperbolic
           leveque01_equation02_scalarAdvectionAt q speed (x + a) (t + b) →
             leveque01_equation02_scalarAdvectionAt
               (fun ξ τ => q (ξ + a) (τ + b)) speed x t) ∧
-        (∃ (q : ℝ → ℝ → ℝ) (c : ℝ → ℝ → ℝ) (a : ℝ),
-          IsAdvectionSolutionWithCoefficientAt q c 1 0 ∧
+        (∃ (q c : ℝ → ℝ → ℝ) (x t a b : ℝ),
+          IsAdvectionSolutionWithCoefficientAt q c (x + a) (t + b) ∧
             ¬ IsAdvectionSolutionWithCoefficientAt
-                (fun ξ τ => q (ξ + a) τ) c 0 0)) ∧
+                (fun ξ τ => q (ξ + a) (τ + b)) c x t)) ∧
       leveque01IsHyperbolicMatrix (constantCoefficientScalarMatrix speed) := by
   refine ⟨fun _ _ _ x t hqt hqx => advectionSolution_iff_residual hqt hqx x t,
     fun q x t => leveque01_equation02_isOneDimensionalSpecialization q speed x t,
