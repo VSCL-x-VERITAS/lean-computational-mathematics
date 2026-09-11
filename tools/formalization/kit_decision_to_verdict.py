@@ -142,15 +142,29 @@ def build(audit_dir: Path) -> dict:
         verdict["adjudication_analysis"] = adjudicator.get("rationale", "")
 
     if classification == "faithful-stronger":
-        verdict["applicability_audit"] = (
-            "Recorded by the adjudicator or judges as genuine strength rather "
-            "than reduced applicability; see the sealed analyses."
-        )
-        verdict["nonvacuity_witness"] = next(
+        # The gate requires a real applicability audit here, and the honest
+        # source for it is the deciding role's own account of the direction that
+        # failed: source_implies_lean = no *is* the statement of what the Lean
+        # asserts beyond the printed claim. Boilerplate would misrepresent a
+        # judgment nobody made.
+        audit = (implications.get("source_implies_lean") or {}).get("reasoning", "")
+        witness = next(
             (f.get("impact", "") for f in decision.get("findings", [])
              if "vacu" in str(f.get("category", "")).lower()),
             "",
         )
+        for name, text in (("applicability_audit", audit),
+                           ("nonvacuity_witness", witness)):
+            if len(str(text).strip()) < 80:
+                raise SystemExit(
+                    f"{decision['task_id']}: faithful-stronger closure needs a "
+                    f"substantive {name}, and the kit outputs do not supply one "
+                    f"(found {len(str(text).strip())} characters). Refusing to "
+                    f"fabricate it; obtain the missing analysis from the "
+                    f"deciding role instead."
+                )
+        verdict["applicability_audit"] = audit
+        verdict["nonvacuity_witness"] = witness
     return verdict
 
 
