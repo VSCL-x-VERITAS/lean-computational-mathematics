@@ -32,8 +32,9 @@ The first conjunct is the printed step. It is stated as an equivalence because
 says more than the other, and a one-way implication would silently record the
 specialisation as a weakening. The second writes the right-hand side in the
 subscript notation of (2.11), which is the form the source actually prints:
-`q_t + ū q_x = 0`. The third supplies a nonzero solution, so the equation is not
-satisfied only by the zero density. -/
+`q_t + ū q_x = 0`. The third supplies, as one existential outside every binder, a
+solution whose spatial derivative vanishes nowhere and which is therefore not
+constant, so the equation is not satisfied only by densities that do not move. -/
 theorem leveque02_equation12_advectionEquation
     {q qt qx : ℝ → ℝ → ℝ} {speed : ℝ}
     (hqt : ∀ x t, HasDerivAt (fun τ => q x τ) (qt x t) t)
@@ -44,13 +45,17 @@ theorem leveque02_equation12_advectionEquation
           ↔ leveque01_equation02_scalarAdvectionAt q speed x t) ∧
       (∀ x t, leveque01_equation02_scalarAdvectionAt q speed x t ↔
           qt x t + speed * qx x t = 0) ∧
-      (∀ x t : ℝ, ∃ r : ℝ → ℝ → ℝ,
-        leveque01_equation02_scalarAdvectionAt r speed x t ∧ ∃ y s, r y s ≠ 0) :=
+      (∃ r rt rx : ℝ → ℝ → ℝ,
+        (∀ y s, HasDerivAt (fun τ => r y τ) (rt y s) s) ∧
+          (∀ y s, HasDerivAt (fun ξ => r ξ s) (rx y s) y) ∧
+          (∀ y s, leveque01_equation02_scalarAdvectionAt r speed y s) ∧
+          (∀ y s, rx y s ≠ 0) ∧
+          ¬ ∃ c : ℝ, ∀ y s, r y s = c) :=
   ⟨fun x t => by
      rw [(hqt x t).deriv]
      exact advectionEquation_iff_uniformFluxLaw hqt hqx x t,
    fun x t => advectionSolution_iff_residual hqt hqx x t,
-   fun x t => exists_nonzero_isLinearAdvectionSolutionAt speed x t⟩
+   exists_isLinearAdvectionSolution_nonconstant speed⟩
 
 /-- Equation (2.12) is a scalar, linear, constant-coefficient partial
 differential equation of hyperbolic type.
@@ -65,9 +70,12 @@ statement holds exactly when `q_t + ū q_x = 0`.
 constant-coefficient linear system of Chapter 1, with the one-by-one coefficient
 matrix `[ū]`.
 
-*Linear* is the second group: solutions at a point are closed under addition and
-under scaling, and the class is not the zero function alone, so the closure is a
-statement about a nontrivial subspace.
+*Linear* is the next group: solutions at a point are closed under addition and
+under scaling, and the class contains a solution whose spatial derivative
+vanishes nowhere, so the closure is a statement about a subspace that is not
+exhausted by the constants. A witness that is merely somewhere nonzero would be
+satisfied by a nonzero constant, which solves the equation for every speed and
+so certifies nothing.
 
 *Constant-coefficient* is the third group, and it is the one that cannot be
 carried by a name. The equation is the constant case of the general advection
@@ -108,9 +116,12 @@ theorem leveque02_advection_isScalarLinearConstantCoefficientHyperbolic
           leveque01_equation02_scalarAdvectionAt q speed x t →
             leveque01_equation02_scalarAdvectionAt
               (fun ξ τ => c * q ξ τ) speed x t) ∧
-        (∀ x t : ℝ, ∃ q : ℝ → ℝ → ℝ,
-          leveque01_equation02_scalarAdvectionAt q speed x t ∧
-            ∃ y s, q y s ≠ 0)) ∧
+        (∃ r rt rx : ℝ → ℝ → ℝ,
+          (∀ y s, HasDerivAt (fun τ => r y τ) (rt y s) s) ∧
+            (∀ y s, HasDerivAt (fun ξ => r ξ s) (rx y s) y) ∧
+            (∀ y s, leveque01_equation02_scalarAdvectionAt r speed y s) ∧
+            (∀ y s, rx y s ≠ 0) ∧
+            ¬ ∃ c : ℝ, ∀ y s, r y s = c)) ∧
       ((∀ (q : ℝ → ℝ → ℝ) (x t : ℝ),
           leveque01_equation02_scalarAdvectionAt q speed x t ↔
             IsAdvectionSolutionWithCoefficientAt q (fun _ _ => speed) x t) ∧
@@ -127,7 +138,7 @@ theorem leveque02_advection_isScalarLinearConstantCoefficientHyperbolic
     fun q x t => leveque01_equation02_isOneDimensionalSpecialization q speed x t,
     ⟨fun _ _ _ _ hq hr => isLinearAdvectionSolutionAt_add hq hr,
       fun _ c _ _ hq => ?_,
-      fun x t => exists_nonzero_isLinearAdvectionSolutionAt speed x t⟩,
+      exists_isLinearAdvectionSolution_nonconstant speed⟩,
     ⟨fun q x t => isLinearAdvectionSolutionAt_iff_constantCoefficient q speed x t,
       fun _ _ _ _ _ h => isLinearAdvectionSolutionAt_translate h,
       variableCoefficient_not_translationInvariant⟩,

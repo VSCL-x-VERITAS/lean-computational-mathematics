@@ -135,15 +135,36 @@ theorem isLinearAdvectionSolutionAt_zero (speed x t : ℝ) :
 
 end Linearity
 
-/-- Linearity is not the observation that the zero function solves the
-equation: a nonzero solution exists, so the subspace is not trivial. -/
-theorem exists_nonzero_isLinearAdvectionSolutionAt (speed x t : ℝ) :
-    ∃ q : ℝ → ℝ → ℝ, IsLinearAdvectionSolutionAt q speed x t ∧
-      ∃ y s : ℝ, q y s ≠ 0 := by
-  refine ⟨travelingWave id speed, ?_, 1, 0, ?_⟩
-  · exact travelingWave_isLinearAdvectionSolutionAt speed x t
-      (by simpa using (hasDerivAt_id (x - speed * t)))
-  · simp [travelingWave]
+/-- The solution class contains a profile whose spatial derivative vanishes
+nowhere, so the linear subspace of solutions is not exhausted by the constants.
+
+The data are exhibited as one existential outside every binder, and the guard is
+that the spatial derivative is nonzero at *every* point rather than merely
+somewhere. A guard of the weaker kind is satisfied by any nonzero constant,
+which solves the equation for every speed and certifies nothing about
+propagation; this one forces a genuinely non-constant solution. -/
+theorem exists_isLinearAdvectionSolution_nonconstant (speed : ℝ) :
+    ∃ q qt qx : ℝ → ℝ → ℝ,
+      (∀ x t, HasDerivAt (fun τ => q x τ) (qt x t) t) ∧
+        (∀ x t, HasDerivAt (fun y => q y t) (qx x t) x) ∧
+        (∀ x t, IsLinearAdvectionSolutionAt q speed x t) ∧
+        (∀ x t, qx x t ≠ 0) ∧
+        ¬ ∃ c : ℝ, ∀ x t, q x t = c := by
+  refine ⟨fun x t => x - speed * t, fun _ _ => -speed, fun _ _ => 1, ?_, ?_, ?_,
+    fun _ _ => one_ne_zero, ?_⟩
+  · intro x t
+    simpa using ((hasDerivAt_id t).const_mul speed).const_sub x
+  · intro x t
+    simpa using (hasDerivAt_id x).sub_const (speed * t)
+  · intro x t
+    refine ⟨-speed, 1, ?_, ?_, by simp⟩
+    · simpa using ((hasDerivAt_id t).const_mul speed).const_sub x
+    · simpa using (hasDerivAt_id x).sub_const (speed * t)
+  · rintro ⟨c, hc⟩
+    have h0 : (0 : ℝ) - speed * 0 = c := hc 0 0
+    have h1 : (1 : ℝ) - speed * 0 = c := hc 1 0
+    rw [← h0] at h1
+    norm_num at h1
 
 /-! ### Constant-coefficient -/
 
