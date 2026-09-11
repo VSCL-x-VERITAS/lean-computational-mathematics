@@ -16,6 +16,13 @@ follows semantic versioning for its public module paths and declaration API.
 
 ### Removed
 
+- `ledgers/` (44 files, 429 KB), the last campaign working record tracked in the
+  repository. The gates, issue ledgers, audit evidence and formalization runtime
+  state are now local files by policy: the book-formalization workflow reads and
+  writes them inside a checkout, and `.gitignore` plus
+  `tools/architecture/check_layout.py` keep them out of `main` and out of every
+  work lane.
+
 - The vendored faithfulness audit kit at `.faithfulness-audit/` (45 files,
   204 KB) and `RENAME_LEDGER.md`. The kit survived the working-record
   retirement because 252 audit manifests hashed its files; none remain, so it

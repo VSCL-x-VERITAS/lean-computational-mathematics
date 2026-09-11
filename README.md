@@ -395,7 +395,6 @@ NumStabilityTest/
 │   └── ProjectIdentity/Canonical/       identity fixtures the clean-project consumer builds
 └── Reorganization/                      private-name placement checks
 
-ledgers/                                  source/workflow issues, limitations, and inconsistencies
 docs/                                     architecture, source coverage, and benchmarks
 tools/                                    architecture checks and benchmark tooling
 experiments/                              C/Python reproductions of selected source examples

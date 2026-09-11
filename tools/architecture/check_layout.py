@@ -66,6 +66,11 @@ GENERATED_SUFFIXES = {".olean", ".ilean", ".pyc", ".pyo", ".aux", ".log", ".out"
 FORBIDDEN_TRACKED_PREFIXES = (
     ".agents/",
     ".codex/",
+    ".faithfulness-audit/",
+    ".formalization/",
+    "audits/",
+    "gates/",
+    "ledgers/",
     ".lake/",
     ".venv/",
     "References/",
