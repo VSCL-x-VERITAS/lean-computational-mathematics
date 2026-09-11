@@ -37,16 +37,15 @@ density scaled by the cross-sectional area of the pipe. The mass of a section
 scales with the area, which is the content of the printed unit conversion. -/
 theorem leveque02_tracerDensity_isAreaScaled
     (volumetric : ℝ → ℝ → ℝ) {area : ℝ} (harea : 0 < area) (x₁ x₂ t : ℝ) :
-    (∀ x, linearDensity volumetric area x t = area * volumetric x t) ∧
-      sectionMass (fun x => linearDensity volumetric area x t) x₁ x₂ =
+    sectionMass (fun x => linearDensity volumetric area x t) x₁ x₂ =
         area * sectionMass (fun x => volumetric x t) x₁ x₂ ∧
       (∀ x, 0 ≤ linearDensity volumetric area x t ↔ 0 ≤ volumetric x t) ∧
-      (∀ x, volumetric x t = linearDensity volumetric area x t / area) ∧
+      (∀ b : ℝ, (∃ y s, volumetric y s ≠ 0) →
+        linearDensity volumetric area = linearDensity volumetric b → area = b) ∧
       (∃ (w : ℝ → ℝ → ℝ) (a y s : ℝ), 0 < a ∧ linearDensity w a y s ≠ w y s) :=
-  ⟨fun x => linearDensity_apply volumetric area x t,
-   sectionMass_linearDensity volumetric area x₁ x₂ t,
+  ⟨sectionMass_linearDensity volumetric area x₁ x₂ t,
    fun x => linearDensity_nonneg_iff harea x t,
-   fun x => volumetric_of_linearDensity (ne_of_gt harea) x t,
+   fun _ hw hb => linearDensity_area_unique hw hb,
    linearDensity_ne_self⟩
 
 /-- The printed sign convention. For a positive density the flux past a station
@@ -71,17 +70,16 @@ consequence the chapter uses is that the tracer's flux is linear in its
 density. -/
 theorem leveque02_tracer_velocityIndependent
     {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity) :
-    (∀ q r : ℝ → ℝ → ℝ, velocity q = velocity r) ∧
-      (∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u) ∧
-      (∀ (q r : ℝ → ℝ → ℝ) (x t : ℝ),
-        advectiveFlux (velocity q) (q x t) x t = velocity r x t * q x t) ∧
-      (∀ (q r : ℝ → ℝ → ℝ) (c s x t : ℝ),
-        advectiveFlux (velocity q) (c * s) x t =
-          c * advectiveFlux (velocity r) s x t) ∧
-      (∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w) :=
-  ⟨h, h.exists_field, advectiveFlux_tracer_eval h,
-   fun q r c s x t => advectiveFlux_isLinear_of_tracer h q r c s x t,
-   exists_not_isTracerVelocity⟩
+    (∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u) ∧
+      (∀ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
+        advectiveFlux (velocity fun y s => c * q y s) (c * q x t) x t
+          = c * advectiveFlux (velocity q) (q x t) x t) ∧
+      (∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w ∧
+        ∃ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
+          advectiveFlux (w fun y s => c * q y s) (c * q x t) x t
+            ≠ c * advectiveFlux (w q) (q x t) x t) :=
+  ⟨h.exists_field, advectiveFlux_scale_of_tracer h,
+   exists_state_dependent_velocity_not_linear⟩
 
 /-- Equation (2.2) as the page states it.
 
@@ -195,17 +193,16 @@ theorem leveque02_equation02_inwardFluxes
     (h : leveque02Equation02IntegralForm q F) (x₁ x₂ t : ℝ) :
     HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
         (inwardFlux (-1) F x₁ t + inwardFlux 1 F x₂ t) t ∧
-      inwardFlux (-1) F x₁ t = F x₁ t ∧
-      inwardFlux 1 F x₂ t = -F x₂ t ∧
       (0 < F x₁ t → 0 < inwardFlux (-1) F x₁ t) ∧
       (F x₂ t < 0 → 0 < inwardFlux 1 F x₂ t) ∧
-      (∃ (G : ℝ → ℝ → ℝ) (y s : ℝ),
-        inwardFlux (-1) G y s ≠ inwardFlux 1 G y s) :=
+      (∀ a b : ℝ,
+        (∀ (r G : ℝ → ℝ → ℝ), IsSectionBalance r G → ∀ y₁ y₂ s,
+          HasDerivAt (fun τ => sectionMass (fun x => r x τ) y₁ y₂)
+            (a * G y₁ s + b * G y₂ s) s) → a = 1 ∧ b = -1) :=
   ⟨sectionBalance_rate_eq_inflow h x₁ x₂ t,
-   inwardFlux_left F x₁ t, inwardFlux_right F x₂ t,
    fun hr => inwardFlux_pos_of_rightward hr,
    fun hl => inwardFlux_pos_of_leftward hl,
-   inwardFlux_orientation_ne⟩
+   fun _ _ hab => inwardFlux_coefficients_unique hab⟩
 
 /-- Equation (2.3): the flux of the tracer at a point is the product of the
 velocity and the density there. -/

@@ -539,4 +539,57 @@ theorem evalBetween_ne_neg_evalBetween :
   norm_num [evalBetween]
 
 
+/-! ### What the three modelling conventions actually pin down -/
+
+/-- The inward sign assignment is forced, not chosen.  If some pair of
+coefficients makes the rate of change of every balanced section read as a
+combination of the two endpoint fluxes, those coefficients are `+1` at the left
+station and `-1` at the right one.  This is the content of the printed remark
+that both terms represent fluxes *into* the section: the minus sign on the
+right-hand station is the only one that works. -/
+theorem inwardFlux_coefficients_unique {a b : ℝ}
+    (h : ∀ (q F : ℝ → ℝ → ℝ), IsSectionBalance q F → ∀ x₁ x₂ t,
+      HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+        (a * F x₁ t + b * F x₂ t) t) :
+    a = 1 ∧ b = -1 := by
+  have key : ∀ x₁ x₂ : ℝ, a * -x₁ + b * -x₂ = -x₁ - -x₂ := fun x₁ x₂ =>
+    (h _ _ sectionBalance_nonvacuous x₁ x₂ 0).unique
+      (sectionBalance_nonvacuous x₁ x₂ 0)
+  constructor <;> linarith [key 1 0, key 0 1]
+
+/-- The cross-sectional area is determined by the linear density it produces, so
+it is genuine data rather than a factor that washes out. -/
+theorem linearDensity_area_unique {w : ℝ → ℝ → ℝ} {a b : ℝ}
+    (hw : ∃ y s, w y s ≠ 0) (h : linearDensity w a = linearDensity w b) :
+    a = b := by
+  obtain ⟨y, s, hys⟩ := hw
+  have hys' := congrFun (congrFun h y) s
+  simp only [linearDensity] at hys'
+  exact mul_right_cancel₀ hys hys'
+
+/-- For a tracer the flux scales with the density: rescaling the transported
+field rescales its flux by the same factor.  This is the linearity the chapter
+relies on, and it needs the velocity to ignore the field it carries. -/
+theorem advectiveFlux_scale_of_tracer
+    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity)
+    (q : ℝ → ℝ → ℝ) (c x t : ℝ) :
+    advectiveFlux (velocity fun y s => c * q y s) (c * q x t) x t
+      = c * advectiveFlux (velocity q) (q x t) x t := by
+  rw [h (fun y s => c * q y s) q]
+  simp only [advectiveFlux]
+  ring
+
+/-- Without tracer independence that scaling fails, so the hypothesis is exactly
+what buys the linearity rather than decorating it. -/
+theorem exists_state_dependent_velocity_not_linear :
+    ∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w ∧
+      ∃ (q : ℝ → ℝ → ℝ) (c x t : ℝ),
+        advectiveFlux (w fun y s => c * q y s) (c * q x t) x t
+          ≠ c * advectiveFlux (w q) (q x t) x t := by
+  refine ⟨fun q => q, fun hcon => ?_, fun _ _ => 1, 2, 0, 0, ?_⟩
+  · have hzo := congrFun (congrFun (hcon (fun _ _ => 0) fun _ _ => 1) 0) 0
+    norm_num at hzo
+  · norm_num [advectiveFlux]
+
+
 end NumStability
