@@ -148,7 +148,17 @@ def build(audit_dir: Path) -> dict:
         # asserts beyond the printed claim. Boilerplate would misrepresent a
         # judgment nobody made.
         audit = (implications.get("source_implies_lean") or {}).get("reasoning", "")
+        # C12 is the configured nonvacuity check, so the deciding role's own
+        # reasoning on it is the witness the gate is asking for. Findings are
+        # the wrong place to look: a finding is raised when something is wrong,
+        # so a row that passes nonvacuity cleanly has none, and reading only
+        # findings made a clean pass indistinguishable from missing evidence.
         witness = next(
+            (c.get("reasoning", "") for src in (direct, roundtrip)
+             for c in src.get("semantic_checklist", [])
+             if c.get("id") == "C12" and str(c.get("reasoning", "")).strip()),
+            "",
+        ) or next(
             (f.get("impact", "") for f in decision.get("findings", [])
              if "vacu" in str(f.get("category", "")).lower()),
             "",

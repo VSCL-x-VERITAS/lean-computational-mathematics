@@ -128,6 +128,132 @@ def CommutesWithSectionIntegral (q qt : ℝ → ℝ → ℝ) : Prop :=
   ∀ x₁ x₂ t, HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
     (sectionMass (fun x => qt x t) x₁ x₂) t
 
+/-- Equation (2.9): the two integrals of the printed derivation combined under
+one sign.
+
+The source reaches it from (2.6) by moving `d/dt` inside the integral and
+substituting (2.8) for the endpoint difference. Both moves are hypotheses here:
+the interchange, and the differentiability and integrability that (2.8) needs.
+Note what is *not* needed yet -- continuity. Equation (2.9) is a statement about
+one integral over one section, and integrability of the two terms is enough to
+split it; continuity is spent only at the next step, where an arbitrary section
+becomes a point. Keeping the two apart is what makes the printed derivation's
+cost visible step by step rather than in one lump. -/
+theorem sectionIntegral_residual_eq_zero
+    {q qt F Fx : ℝ → ℝ → ℝ}
+    (hcomm : CommutesWithSectionIntegral q qt)
+    (hbalance : IsSectionBalance q F)
+    (hflux : ∀ t x₁ x₂, ∀ x ∈ Set.uIcc x₁ x₂,
+      HasDerivAt (fun y => F y t) (Fx x t) x)
+    (hfluxint : ∀ t x₁ x₂,
+      IntervalIntegrable (fun x => Fx x t) MeasureTheory.volume x₁ x₂)
+    (hqtint : ∀ t x₁ x₂,
+      IntervalIntegrable (fun x => qt x t) MeasureTheory.volume x₁ x₂)
+    (x₁ x₂ t : ℝ) :
+    ∫ x in x₁..x₂, (qt x t + Fx x t) = 0 := by
+  have hq : sectionMass (fun y => qt y t) x₁ x₂ = F x₁ t - F x₂ t :=
+    (hcomm x₁ x₂ t).unique (hbalance x₁ x₂ t)
+  have hF : F x₁ t - F x₂ t = -∫ y in x₁..x₂, Fx y t :=
+    fluxDifference_eq_neg_integral (hflux t x₁ x₂) (hfluxint t x₁ x₂)
+  rw [intervalIntegral.integral_add (hqtint t x₁ x₂) (hfluxint t x₁ x₂)]
+  have hmass : (∫ y in x₁..x₂, qt y t) = F x₁ t - F x₂ t := hq
+  rw [hmass, hF]
+  ring
+
+/-- The interchange is what carries (2.9); the balance alone does not.
+
+The witness is a density constant in time, so its section balance holds with a
+zero flux and every integrability hypothesis is satisfied, paired with a
+candidate time derivative identically one. Everything the printed derivation
+cites except the interchange is present, and the section integral of the
+residual is the length of the section rather than zero. So the step from (2.6)
+to (2.9) is not bookkeeping: it is exactly where "sufficiently smooth" is
+spent. -/
+theorem sectionIntegral_residual_needs_interchange :
+    ∃ q qt F Fx : ℝ → ℝ → ℝ,
+      IsSectionBalance q F ∧
+        (∀ t x₁ x₂, ∀ x ∈ Set.uIcc x₁ x₂,
+          HasDerivAt (fun y => F y t) (Fx x t) x) ∧
+        (∀ t x₁ x₂,
+          IntervalIntegrable (fun x => Fx x t) MeasureTheory.volume x₁ x₂) ∧
+        (∀ t x₁ x₂,
+          IntervalIntegrable (fun x => qt x t) MeasureTheory.volume x₁ x₂) ∧
+        ¬ CommutesWithSectionIntegral q qt ∧
+        (∫ x in (0 : ℝ)..1, (qt x 0 + Fx x 0)) ≠ 0 := by
+  refine ⟨fun _ _ => 0, fun _ _ => 1, fun _ _ => 0, fun _ _ => 0, ?_,
+    fun _ _ _ x _ => ?_, fun _ _ _ => intervalIntegrable_const,
+    fun _ _ _ => intervalIntegrable_const, ?_, ?_⟩
+  · intro x₁ x₂ t
+    simpa [sectionMass] using (hasDerivAt_const t (0 : ℝ))
+  · simpa using (hasDerivAt_const x (0 : ℝ))
+  · intro hcon
+    have h := hcon 0 1 0
+    have hzero :
+        HasDerivAt (fun _ : ℝ => sectionMass (fun _ : ℝ => (0 : ℝ)) 0 1) 0 0 := by
+      simpa [sectionMass] using (hasDerivAt_const (0 : ℝ) (0 : ℝ))
+    have huniq := hzero.unique (by simpa [sectionMass] using h)
+    simp at huniq
+  · simp
+
+/-! ### Subscript notation -/
+
+/-- A family written `q_t` is determined by the function it differentiates.
+Uniqueness of derivatives is what makes the subscript a notation rather than an
+extra piece of data carried alongside `q`. -/
+theorem timePartial_unique {q a b : ℝ → ℝ → ℝ}
+    (ha : ∀ x t, HasDerivAt (fun τ => q x τ) (a x t) t)
+    (hb : ∀ x t, HasDerivAt (fun τ => q x τ) (b x t) t) : a = b := by
+  funext x t
+  exact (ha x t).unique (hb x t)
+
+/-- The same for a family written with an `x` subscript. -/
+theorem spacePartial_unique {F a b : ℝ → ℝ → ℝ}
+    (ha : ∀ x t, HasDerivAt (fun y => F y t) (a x t) x)
+    (hb : ∀ x t, HasDerivAt (fun y => F y t) (b x t) x) : a = b := by
+  funext x t
+  exact (ha x t).unique (hb x t)
+
+/-- `q_t` names the partial derivative operator applied to `q`. -/
+theorem timePartial_eq_deriv {q a : ℝ → ℝ → ℝ}
+    (ha : ∀ x t, HasDerivAt (fun τ => q x τ) (a x t) t) (x t : ℝ) :
+    a x t = deriv (fun τ => q x τ) t := ((ha x t).deriv).symm
+
+/-- `F_x` names the partial derivative operator applied to `F`. -/
+theorem spacePartial_eq_deriv {F a : ℝ → ℝ → ℝ}
+    (ha : ∀ x t, HasDerivAt (fun y => F y t) (a x t) x) (x t : ℝ) :
+    a x t = deriv (fun y => F y t) x := ((ha x t).deriv).symm
+
+/-- Equation (2.11): the subscript form and the operator form of the
+differential conservation law are the same statement.
+
+The two sides are different objects in the formal language -- the left is built
+from families supplied as data and constrained to be derivatives, the right from
+the derivative operator itself -- so the equivalence is a theorem about what the
+notation denotes, not an unfolding of a definition. -/
+theorem subscriptForm_iff_operatorForm {q F qt Fx : ℝ → ℝ → ℝ}
+    (hq : ∀ x t, HasDerivAt (fun τ => q x τ) (qt x t) t)
+    (hF : ∀ x t, HasDerivAt (fun y => F y t) (Fx x t) x) :
+    (∀ x t, qt x t + Fx x t = 0) ↔
+      (∀ x t, deriv (fun τ => q x τ) t + deriv (fun y => F y t) x = 0) := by
+  constructor <;> intro h x t
+  · rw [← timePartial_eq_deriv hq x t, ← spacePartial_eq_deriv hF x t]
+    exact h x t
+  · rw [timePartial_eq_deriv hq x t, spacePartial_eq_deriv hF x t]
+    exact h x t
+
+/-- The notation has a model in which both subscripted quantities are nonzero,
+so the equivalence above is not read off a class in which every term is `0`. -/
+theorem subscriptForm_nonvacuous :
+    (∀ x t : ℝ, HasDerivAt (fun τ => (fun _ t => t : ℝ → ℝ → ℝ) x τ)
+        ((fun _ _ => (1 : ℝ)) x t) t) ∧
+      (∀ x t : ℝ, HasDerivAt (fun y => (fun x _ => -x : ℝ → ℝ → ℝ) y t)
+        ((fun _ _ => (-1 : ℝ)) x t) x) ∧
+      (∀ x t : ℝ, (fun _ _ => (1 : ℝ)) x t + (fun _ _ => (-1 : ℝ)) x t = 0) ∧
+      (fun _ _ => (1 : ℝ)) 0 0 ≠ 0 ∧ (fun _ _ => (-1 : ℝ)) 0 0 ≠ 0 := by
+  refine ⟨fun x t => ?_, fun x t => ?_, by norm_num, by norm_num, by norm_num⟩
+  · simpa using (hasDerivAt_id t)
+  · simpa using (hasDerivAt_neg x)
+
 /-- Equations (2.9) and (2.10): once the flux difference is an integral and the
 time derivative passes inside, the balance says that a single integral vanishes
 over every section, and therefore that its integrand vanishes pointwise.
@@ -147,18 +273,8 @@ theorem differentialForm_of_sectionBalance
     qt x t + Fx x t = 0 := by
   have hcsum : Continuous fun y => qt y t + Fx y t := (hcontq t).add (hcontF t)
   refine eq_zero_of_forall_intervalIntegral_eq_zero hcsum (fun a b => ?_) x
-  have hq : sectionMass (fun y => qt y t) a b = F a t - F b t :=
-    (hcomm a b t).unique (hbalance a b t)
-  have hF : F a t - F b t = -∫ y in a..b, Fx y t :=
-    fluxDifference_eq_neg_integral (hflux t a b) (hfluxint t a b)
-  have hsplit : ∫ y in a..b, (qt y t + Fx y t)
-      = (∫ y in a..b, qt y t) + ∫ y in a..b, Fx y t :=
-    intervalIntegral.integral_add ((hcontq t).intervalIntegrable a b)
-      ((hcontF t).intervalIntegrable a b)
-  rw [hsplit]
-  have hmass : (∫ y in a..b, qt y t) = F a t - F b t := hq
-  rw [hmass, hF]
-  ring
+  exact sectionIntegral_residual_eq_zero hcomm hbalance hflux hfluxint
+    (fun τ c d => (hcontq τ).intervalIntegrable c d) a b t
 
 /-- The interchange has a non-degenerate model: a density rising uniformly in
 time, with the balance carried by a flux linear in position.
@@ -179,5 +295,22 @@ theorem differentialForm_hypotheses_satisfiable :
       (hasDerivAt_id t).mul_const (x₂ - x₁)
   · simpa using (hasDerivAt_neg x)
 
+
+/-- Equation (2.9) has a model in which neither term of the integrand vanishes.
+
+A density rising uniformly in time, balanced by a flux linear in position, makes
+the section integral of the residual zero by cancellation rather than because
+there is nothing there: the two halves of the integrand have section integrals
+`1` and `-1` over the unit section. Without this, the vanishing integral of
+(2.9) would be equally consistent with the whole hypothesis class being the zero
+model. -/
+theorem sectionIntegral_residual_nonvacuous :
+    CommutesWithSectionIntegral (fun _ t => t) (fun _ _ => 1) ∧
+      IsSectionBalance (fun _ t => t) (fun x _ => -x) ∧
+      (∫ _x in (0 : ℝ)..1, ((1 : ℝ) + (-1 : ℝ))) = 0 ∧
+      (∫ _x in (0 : ℝ)..1, (1 : ℝ)) ≠ 0 ∧
+      (∫ _x in (0 : ℝ)..1, (-1 : ℝ)) ≠ 0 := by
+  refine ⟨differentialForm_hypotheses_satisfiable.1, sectionBalance_nonvacuous,
+    ?_, ?_, ?_⟩ <;> simp
 
 end NumStability
