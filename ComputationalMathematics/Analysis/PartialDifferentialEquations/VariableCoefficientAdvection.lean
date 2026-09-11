@@ -113,6 +113,20 @@ theorem isCharacteristicCurve_unique {u : ℝ → ℝ} {K : NNReal}
     (fun _ => hu.lipschitzOnWith) (fun t => ⟨hX t, trivial⟩)
     (fun t => ⟨hY t, trivial⟩) h
 
+/-- Distinct material particles never meet.
+
+Two characteristic curves that are apart at one time are apart at every time,
+because meeting once would force them equal everywhere by uniqueness. This is
+the content of the source's remark that the curves track the motion of
+*particular* material particles: a particle has a trajectory of its own, and the
+trajectories partition space-time rather than crossing. -/
+theorem isCharacteristicCurve_ne_of_ne {u : ℝ → ℝ} {K : NNReal}
+    (hu : LipschitzWith K u) {X Y : ℝ → ℝ} {t₀ : ℝ}
+    (hX : IsCharacteristicCurve u X) (hY : IsCharacteristicCurve u Y)
+    (h : X t₀ ≠ Y t₀) : ∀ t, X t ≠ Y t := by
+  intro t hmeet
+  exact h (congrFun (isCharacteristicCurve_unique hu hX hY hmeet) t₀)
+
 /-- A curve whose velocity at some time is not the fluid velocity at the point
 it has reached is not a characteristic curve. The condition is about the
 relation between two quantities, not about how the curve is written. -/

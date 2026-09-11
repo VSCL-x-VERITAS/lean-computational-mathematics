@@ -8,6 +8,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialForm
 import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialFormNotation
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralForm
+import ComputationalMathematics.Source.LeVeque.Chapter02.VariableCoefficient
 
 /-!
 # LeVeque Chapter 2 source-local results
