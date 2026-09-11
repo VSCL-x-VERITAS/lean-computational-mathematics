@@ -30971,4 +30971,118 @@ theorem measureReal_Ici_normalizedIidSum_gap_le_berryEsseenConstant
   rw [hLaw, hThirdY] at htail
   exact htail
 
+/-- Mean/variance-standardized closed-upper-tail Berry--Esseen estimate using
+the maximal sharp Prawitz constant.  This is the source-normalization bridge
+for the best completely certified Prawitz route currently available in the
+library. -/
+theorem measureReal_Ici_normalizedIidSum_gap_le_prawitzMaximalSharpBerryEsseenConstant
+    {Omega : Type*} [MeasurableSpace Omega]
+    {mu : Measure Omega} [IsProbabilityMeasure mu]
+    (X : ℕ → Omega → ℝ) (m sigma : ℝ) (hsigma : 0 < sigma)
+    (hX : ∀ i, MemLp (X i) 3 mu)
+    (hIndep : ProbabilityTheory.iIndepFun X mu)
+    (hIdent : ∀ i, ProbabilityTheory.IdentDistrib (X i) (X 0) mu mu)
+    (hMean : ∫ omega, X 0 omega ∂mu = m)
+    (hVariance : ProbabilityTheory.variance (X 0) mu = sigma ^ 2)
+    {N : ℕ} (hN : 1 ≤ N) (t : ℝ) :
+    |(NumStability.HDP.Scalar.LimitTheorems.probabilityLaw
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum X m sigma N)
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum_memLp
+            X m sigma (fun i => (hX i).mono_exponent (by norm_num)) N).aemeasurable :
+        Measure ℝ).real (Ici t) -
+      NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw.real (Ici t)| ≤
+      prawitzMaximalSharpBerryEsseenConstant *
+        ((∫ omega, |X 0 omega - m| ^ 3 ∂mu) / sigma ^ 3) /
+          Real.sqrt (N + 1 : ℝ) := by
+  let Y : ℕ → Omega → ℝ := fun i omega => sigma⁻¹ * (X i omega - m)
+  have hY : ∀ i, MemLp (Y i) 3 mu := by
+    intro i
+    exact ((hX i).sub (memLp_const m)).const_mul sigma⁻¹
+  have hIndepY : ProbabilityTheory.iIndepFun Y mu := by
+    have h := hIndep.comp
+      (fun _ (x : ℝ) => sigma⁻¹ * (x - m)) (fun _ => by fun_prop)
+    simpa [Y, Function.comp_def] using h
+  have hIdentY : ∀ i, ProbabilityTheory.IdentDistrib (Y i) (Y 0) mu mu := by
+    intro i
+    have h := (hIdent i).comp
+      (by fun_prop : Measurable fun x : ℝ => sigma⁻¹ * (x - m))
+    simpa [Y, Function.comp_def] using h
+  have hMeanY : ∫ omega, Y 0 omega ∂mu = 0 := by
+    dsimp [Y]
+    rw [integral_const_mul,
+      integral_sub ((hX 0).integrable (by norm_num)) (integrable_const m), hMean]
+    simp
+  have hSecondY : ∫ omega, (Y 0 omega) ^ 2 ∂mu = 1 := by
+    have hX2 : MemLp (X 0) 2 mu := (hX 0).mono_exponent (by norm_num)
+    have hc : (∫ omega, (X 0 omega - m) ^ 2 ∂mu) = sigma ^ 2 := by
+      calc
+        (∫ omega, (X 0 omega - m) ^ 2 ∂mu) =
+            ProbabilityTheory.variance (X 0) mu := by
+          rw [ProbabilityTheory.variance_eq_integral hX2.aemeasurable, hMean]
+        _ = sigma ^ 2 := hVariance
+    dsimp [Y]
+    calc
+      (∫ omega, (sigma⁻¹ * (X 0 omega - m)) ^ 2 ∂mu) =
+          ∫ omega, sigma⁻¹ ^ 2 * (X 0 omega - m) ^ 2 ∂mu := by
+        congr 1
+        funext omega
+        ring
+      _ = sigma⁻¹ ^ 2 * ∫ omega, (X 0 omega - m) ^ 2 ∂mu :=
+        integral_const_mul _ _
+      _ = 1 := by
+        rw [hc]
+        field_simp [hsigma.ne']
+  have hEq :
+      NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum Y N =
+        NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum X m sigma N := by
+    funext omega
+    simp only [NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum,
+      NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum, Y]
+    rw [← Finset.mul_sum Finset.univ
+      (fun i : Fin (N + 1) => X i.1 omega - m) sigma⁻¹]
+    rw [← mul_assoc]
+    apply congrArg
+      (fun c : ℝ => c * ∑ i : Fin (N + 1), (X i.1 omega - m))
+    rw [mul_inv_rev]
+  have hThirdY :
+      (∫ omega, |Y 0 omega| ^ 3 ∂mu) =
+        (∫ omega, |X 0 omega - m| ^ 3 ∂mu) / sigma ^ 3 := by
+    have hfun : (fun omega => |Y 0 omega| ^ 3) =
+        fun omega => sigma⁻¹ ^ 3 * |X 0 omega - m| ^ 3 := by
+      funext omega
+      dsimp [Y]
+      rw [abs_mul, abs_of_pos (inv_pos.mpr hsigma)]
+      ring
+    rw [hfun, integral_const_mul]
+    field_simp [hsigma.ne']
+  have hkolmogorov :=
+    kolmogorovDistance_normalizedCenteredIidSum_le_prawitzMaximalSharpBerryEsseenConstant
+      Y hY hIndepY hIdentY hMeanY hSecondY hN
+  have htail :=
+    (measureReal_Ici_gap_le_kolmogorovDistance
+      (NumStability.HDP.Scalar.LimitTheorems.probabilityLaw
+        (NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum Y N)
+        (NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum_memLp
+          Y (fun i => (hY i).mono_exponent (by norm_num)) N).aemeasurable :
+        Measure ℝ)
+      NumStability.HDP.Scalar.LimitTheorems.standardNormalLaw t).trans hkolmogorov
+  have hLaw :
+      (NumStability.HDP.Scalar.LimitTheorems.probabilityLaw
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum Y N)
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum_memLp
+            Y (fun i => (hY i).mono_exponent (by norm_num)) N).aemeasurable :
+        Measure ℝ) =
+      (NumStability.HDP.Scalar.LimitTheorems.probabilityLaw
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum X m sigma N)
+          (NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum_memLp
+            X m sigma (fun i => (hX i).mono_exponent (by norm_num)) N).aemeasurable :
+        Measure ℝ) := by
+    change Measure.map
+        (NumStability.HDP.Scalar.LimitTheorems.normalizedCenteredIidSum Y N) mu =
+      Measure.map
+        (NumStability.HDP.Scalar.LimitTheorems.normalizedIidSum X m sigma N) mu
+    rw [hEq]
+  rw [hLaw, hThirdY] at htail
+  exact htail
+
 end NumStability.HDP.Scalar.BerryEsseen
