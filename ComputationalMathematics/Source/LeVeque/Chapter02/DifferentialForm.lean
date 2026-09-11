@@ -61,15 +61,21 @@ LeVeque writes that the derivation of the differential form assumes `q` and
 `f(q)` are sufficiently smooth. The one place that assumption is irreducible is
 the interchange of `d/dt` with the spatial integral, which is carried here as a
 hypothesis rather than proved, because the chapter gives no argument for it. The
-statement records that the interchange is a genuine restriction: a density whose
-section mass is constant in time while the candidate time-derivative is not
-identically zero fails it. -/
+statement records three things about it that are not restatements: the
+interchange determines the time-derivative's section integrals uniquely, by
+uniqueness of derivatives; it is satisfiable, witnessed by a density rising
+uniformly in time; and it is a genuine restriction, since a density whose
+section mass is constant while the candidate derivative is not fails it. -/
 theorem leveque02_integralToDifferential_smoothness :
-    (∀ q qt : ℝ → ℝ → ℝ, CommutesWithSectionIntegral q qt →
-      ∀ x₁ x₂ t, HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
-        (sectionMass (fun x => qt x t) x₁ x₂) t) ∧
+    (∀ q qt qt' : ℝ → ℝ → ℝ, CommutesWithSectionIntegral q qt →
+      CommutesWithSectionIntegral q qt' →
+        ∀ x₁ x₂ t, sectionMass (fun x => qt x t) x₁ x₂
+          = sectionMass (fun x => qt' x t) x₁ x₂) ∧
+      CommutesWithSectionIntegral (fun _ t => t) (fun _ _ => 1) ∧
       (∃ q qt : ℝ → ℝ → ℝ, ¬ CommutesWithSectionIntegral q qt) := by
-  refine ⟨fun _ _ h => h, ⟨fun _ _ => 0, fun _ _ => 1, fun hcon => ?_⟩⟩
+  refine ⟨fun _ _ _ h h' x₁ x₂ t => (h x₁ x₂ t).unique (h' x₁ x₂ t),
+    differentialForm_hypotheses_satisfiable.1,
+    ⟨fun _ _ => 0, fun _ _ => 1, fun hcon => ?_⟩⟩
   have h := hcon 0 1 0
   have hzero : HasDerivAt (fun _ : ℝ => sectionMass (fun _ : ℝ => (0 : ℝ)) 0 1) 0 0 := by
     simpa [sectionMass] using (hasDerivAt_const (0 : ℝ) (0 : ℝ))
@@ -82,7 +88,8 @@ Given the balance on every section, the interchange, differentiability of the
 composed flux in `x`, and continuity of both terms, the sum of the time
 derivative of the density and the space derivative of the flux vanishes at every
 point. This is the printed conclusion, with each of the four costs named rather
-than absorbed. -/
+than absorbed, and with a witness that the hypothesis class is inhabited by
+something other than the all-zero model, so the conclusion is not vacuous. -/
 theorem leveque02_equation10_differentialConservationLaw
     {q qt F Fx : ℝ → ℝ → ℝ}
     (hcomm : CommutesWithSectionIntegral q qt)
@@ -93,8 +100,14 @@ theorem leveque02_equation10_differentialConservationLaw
       IntervalIntegrable (fun x => Fx x t) MeasureTheory.volume x₁ x₂)
     (hcontq : ∀ t, Continuous fun x => qt x t)
     (hcontF : ∀ t, Continuous fun x => Fx x t) :
-    ∀ x t, qt x t + Fx x t = 0 :=
-  fun x t => differentialForm_of_sectionBalance hcomm hbalance hflux hfluxint
-    hcontq hcontF x t
+    (∀ x t, qt x t + Fx x t = 0) ∧
+      (CommutesWithSectionIntegral (fun _ t => t) (fun _ _ => 1) ∧
+        IsSectionBalance (fun _ t => t) (fun x _ => -x) ∧
+        ∃ x t : ℝ, (fun _ _ => (1 : ℝ)) x t ≠ 0) :=
+  ⟨fun x t => differentialForm_of_sectionBalance hcomm hbalance hflux hfluxint
+     hcontq hcontF x t,
+   differentialForm_hypotheses_satisfiable.1,
+   differentialForm_hypotheses_satisfiable.2.1,
+   differentialForm_hypotheses_satisfiable.2.2.2⟩
 
 end NumStability

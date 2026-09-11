@@ -160,4 +160,24 @@ theorem differentialForm_of_sectionBalance
   rw [hmass, hF]
   ring
 
+/-- The interchange has a non-degenerate model: a density rising uniformly in
+time, with the balance carried by a flux linear in position.
+
+This is the satisfiability witness the derivation needs. Without it every
+statement guarded by the four hypotheses of the differential form could be
+vacuous, and the cheapest member of the hypothesis class — everything zero — is
+no evidence that the class contains anything of interest. -/
+theorem differentialForm_hypotheses_satisfiable :
+    CommutesWithSectionIntegral (fun _ t => t) (fun _ _ => 1) ∧
+      IsSectionBalance (fun _ t => t) (fun x _ => -x) ∧
+      (∀ t x₁ x₂, ∀ x ∈ Set.uIcc x₁ x₂,
+        HasDerivAt (fun y => (fun x _ => -x : ℝ → ℝ → ℝ) y t) (-1 : ℝ) x) ∧
+      (∃ x t : ℝ, (fun _ _ => (1 : ℝ)) x t ≠ 0) := by
+  refine ⟨fun x₁ x₂ t => ?_, sectionBalance_nonvacuous, fun _ _ _ x _ => ?_,
+    0, 0, one_ne_zero⟩
+  · simpa [sectionMass, mul_comm] using
+      (hasDerivAt_id t).mul_const (x₂ - x₁)
+  · simpa using (hasDerivAt_neg x)
+
+
 end NumStability
