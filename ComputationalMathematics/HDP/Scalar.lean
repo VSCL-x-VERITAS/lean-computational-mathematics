@@ -9,12 +9,20 @@ import ComputationalMathematics.HDP.Scalar.LimitTheorems
 import ComputationalMathematics.HDP.Scalar.MGFLocalTaylor
 import ComputationalMathematics.HDP.Scalar.NonSubGaussian
 import ComputationalMathematics.HDP.Scalar.PoissonLimit
+import ComputationalMathematics.HDP.Scalar.PoissonNormal
 import ComputationalMathematics.HDP.Scalar.Preliminaries
 import ComputationalMathematics.HDP.Scalar.SubExponential
+import ComputationalMathematics.HDP.Scalar.SubExponentialCentering
 import ComputationalMathematics.HDP.Scalar.SubExponentialCharacterization
+import ComputationalMathematics.HDP.Scalar.SubExponentialExamples
+import ComputationalMathematics.HDP.Scalar.SubExponentialOrliczComplete
+import ComputationalMathematics.HDP.Scalar.SubExponentialOrliczDefinitions
+import ComputationalMathematics.HDP.Scalar.SubExponentialOrliczNorm
+import ComputationalMathematics.HDP.Scalar.SubExponentialPowerOrlicz
 import ComputationalMathematics.HDP.Scalar.SubExponentialPropertyThreeGauge
 import ComputationalMathematics.HDP.Scalar.SubGaussian
 import ComputationalMathematics.HDP.Scalar.SubGaussianCentering
+import ComputationalMathematics.HDP.Scalar.SubGaussianMaxima
 import ComputationalMathematics.HDP.Scalar.SubGaussianMinimality
 import ComputationalMathematics.HDP.Scalar.SubGaussianToSubExponential
 
