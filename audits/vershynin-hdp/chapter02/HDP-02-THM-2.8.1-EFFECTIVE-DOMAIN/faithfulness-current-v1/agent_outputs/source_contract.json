@@ -1,0 +1,133 @@
+{
+  "schema_version": "formalization-faithfulness-1",
+  "role": "source-contract",
+  "task_id": "HDP-02-THM-2.8.1-EFFECTIVE-DOMAIN",
+  "source_sha256": "ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a",
+  "source_evidence": [
+    {
+      "location": "PDF page 25; printed page 36; Theorem 2.8.1",
+      "anchor": "Opening sentence of Theorem 2.8.1",
+      "observation": "The theorem assumes that X1,...,XN are independent, mean-zero, sub-exponential real random variables."
+    },
+    {
+      "location": "PDF page 25; printed page 36; displayed conclusion of Theorem 2.8.1",
+      "anchor": "Displayed Bernstein tail inequality",
+      "observation": "For every t>=0, the two-sided event |sum_{i=1}^N X_i|>=t has probability at most 2 exp[-c min(t^2/(sum_i ||X_i||_psi1^2), t/(max_i ||X_i||_psi1))]."
+    },
+    {
+      "location": "PDF page 25; printed page 36; sentence immediately after the theorem display",
+      "anchor": "Absolute-constant sentence",
+      "observation": "The source explicitly states that c>0 is an absolute constant."
+    },
+    {
+      "location": "PDF page 25; printed page 36; proof of Theorem 2.8.1",
+      "anchor": "Definition of sigma squared in the proof",
+      "observation": "The proof abbreviates sigma^2=sum_i ||X_i||_psi1^2 and optimizes the exponential estimate subject to the MGF window controlled by max_i ||X_i||_psi1."
+    },
+    {
+      "location": "PDF page 25; printed page 36; theorem statement and displayed denominators",
+      "anchor": "Sum-of-squares and maximum denominators",
+      "observation": "No hypothesis asserts that either sum_i ||X_i||_psi1^2 or max_i ||X_i||_psi1 is positive, and no exceptional all-zero case is stated."
+    }
+  ],
+  "statement": {
+    "binders": [
+      "A positive integer N.",
+      "Real-valued random variables X1,...,XN on a common probability space.",
+      "A real threshold t with t>=0.",
+      "A positive absolute constant c, uniform over N, the probability space, the family, and t."
+    ],
+    "hypotheses": [
+      "The random variables X1,...,XN are mutually independent.",
+      "Each X_i has mean zero.",
+      "Each X_i is sub-exponential."
+    ],
+    "conclusions": [
+      "For every t>=0, P{|sum_{i=1}^N X_i|>=t} <= 2 exp[-c min(t^2/(sum_{i=1}^N ||X_i||_psi1^2), t/(max_{1<=i<=N} ||X_i||_psi1))]."
+    ],
+    "definitions_and_conventions": [
+      "The summed random variable is S=sum_{i=1}^N X_i.",
+      "The quadratic scale is V=sum_{i=1}^N ||X_i||_psi1^2.",
+      "The linear scale is K=max_{1<=i<=N} ||X_i||_psi1.",
+      "The event is two-sided because it uses |S|>=t.",
+      "The minimum selects the quadratic regime t^2/V or the linear regime t/K.",
+      "The probability-bound prefactor is exactly 2.",
+      "The symbol ||X_i||_psi1 denotes the established sub-exponential norm from the preceding section."
+    ],
+    "implicit_context": [
+      "N is nonzero because the source lists X1,...,XN and takes a maximum over their indices.",
+      "All variables are the same probability space; otherwise their sum and mutual independence would not have the displayed meaning.",
+      "The word absolute means that c does not depend on N, the variables, their distribution, or t.",
+      "The psi-one norms are nonnegative, so V and K are nonnegative and K>0 is equivalent to at least one component having positive psi-one norm.",
+      "When K>0, V>0 as well, and both displayed quotients have their ordinary real meanings."
+    ],
+    "semantic_facets": [
+      {
+        "topic": "quantifier scope",
+        "details": [
+          "There is a universal positive constant c for the theorem.",
+          "After a qualifying finite family is fixed, the inequality holds for every real t>=0."
+        ]
+      },
+      {
+        "topic": "tail event",
+        "details": [
+          "The random quantity is the unweighted sum of all X_i.",
+          "The absolute value makes the conclusion a two-sided tail estimate."
+        ]
+      },
+      {
+        "topic": "quadratic regime",
+        "details": [
+          "Its numerator is exactly t^2.",
+          "Its denominator is exactly the sum of the squared individual psi-one norms."
+        ]
+      },
+      {
+        "topic": "linear regime",
+        "details": [
+          "Its numerator is exactly t.",
+          "Its denominator is exactly the maximum individual psi-one norm."
+        ]
+      },
+      {
+        "topic": "effective domain",
+        "details": [
+          "The printed real quotients are unambiguously defined when K>0.",
+          "The theorem does not state how to interpret either quotient when every psi-one norm is zero."
+        ]
+      }
+    ]
+  },
+  "undebatable_constraints": [
+    "The family is finite and nonempty in the source's X1,...,XN indexing convention.",
+    "The variables are independent, mean zero, and sub-exponential.",
+    "The threshold range is every t>=0.",
+    "The tail event is |sum_i X_i|>=t, not merely sum_i X_i>=t.",
+    "The prefactor is exactly 2.",
+    "The exponent is -c times the minimum of two terms.",
+    "The first term is exactly t^2 divided by sum_i ||X_i||_psi1^2.",
+    "The second term is exactly t divided by max_i ||X_i||_psi1.",
+    "The constant c is strictly positive and absolute.",
+    "No positivity assumption on max_i ||X_i||_psi1 or sum_i ||X_i||_psi1^2 is printed.",
+    "No separate all-zero or zero-scale conclusion is printed."
+  ],
+  "ambiguities": [
+    {
+      "issue": "Both denominators vanish when every psi-one norm is zero.",
+      "evidence": "The theorem permits mean-zero sub-exponential variables with zero psi-one norm, but its displayed terms are t^2/(sum_i ||X_i||_psi1^2) and t/(max_i ||X_i||_psi1), with no positive-scale hypothesis.",
+      "impact": "In ordinary real arithmetic the printed formula is undefined for an all-zero-scale family. A formalization must not silently choose between restricting the effective domain to K>0, using extended-real infinite quotients, adopting totalized real division, or adding a separate degenerate branch."
+    },
+    {
+      "issue": "The value at t=0 is especially sensitive to a zero-denominator convention.",
+      "evidence": "For an all-zero-scale family and t=0, both displayed ratios have the form 0/0, while the source explicitly includes t=0.",
+      "impact": "Extended-infinity, limiting, and totalized-real interpretations need not assign the same intermediate values, even though some resulting inequalities may still be true. The source supplies no convention."
+    },
+    {
+      "issue": "The exact numerical value of the absolute constant c is unspecified.",
+      "evidence": "The statement gives only c>0 and calls it absolute.",
+      "impact": "A faithful formal statement may existentially quantify a uniform positive constant or instantiate one proved elsewhere, but the source does not justify a particular numerical value."
+    }
+  ],
+  "contract_plain_english": "There is a positive universal constant c such that every finite nonempty family of independent, mean-zero, sub-exponential real random variables satisfies a two-sided Bernstein bound: for every t>=0, the probability that the absolute value of their sum is at least t is at most 2 times the exponential of -c multiplied by the smaller of t^2 divided by the sum of squared psi-one norms and t divided by the largest psi-one norm. The printed formula has an unresolved effective-domain defect when all component norms are zero, because both denominators then vanish and the source provides neither a positive-maximum assumption nor a separate degenerate interpretation. This source contract was extracted under strict target blindness from only the authorized locator, source prompt, schema, and hash-verified PDF page."
+}
