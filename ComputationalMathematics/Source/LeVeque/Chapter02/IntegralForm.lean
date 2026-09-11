@@ -70,6 +70,17 @@ abbrev leveque02Equation02IntegralForm
     (q : ℝ → ℝ → ℝ) (F : ℝ → ℝ → ℝ) : Prop :=
   IsSectionBalance q F
 
+/-- The content of (2.2) written out: for every section and every time, the time
+derivative of the mass between the two stations is the flux past the first minus
+the flux past the second.  Stating it as an equivalence makes the abbreviation
+auditable against the printed equation rather than merely asserted. -/
+theorem leveque02_equation02_iff (q : ℝ → ℝ → ℝ) (F : ℝ → ℝ → ℝ) :
+    leveque02Equation02IntegralForm q F ↔
+      ∀ x₁ x₂ t,
+        HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+          (F x₁ t - F x₂ t) t :=
+  Iff.rfl
+
 /-- Both endpoint terms of (2.2) are fluxes *into* the section: the signed flux
 at the left endpoint and its negative at the right endpoint sum to the printed
 right-hand side. -/
