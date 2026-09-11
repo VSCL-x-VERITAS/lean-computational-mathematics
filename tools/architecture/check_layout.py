@@ -67,6 +67,7 @@ FORBIDDEN_TRACKED_PREFIXES = (
     ".agents/",
     ".codex/",
     ".faithfulness-audit/",
+    ".faithfulness-audit-v2/",
     ".formalization/",
     "audits/",
     "gates/",

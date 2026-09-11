@@ -31,6 +31,21 @@ follows semantic versioning for its public module paths and declaration API.
   are recorded in
   `docs/architecture/reviews/2026-09-working-record-retirement.md`.
 
+## [0.3.0] - 2026-09-11
+
+Breaking release. The unfinished Vershynin Chapter 5 experiment is removed so
+the supported HDP source surface contains the completed Chapter 1 work and the
+Chapter 2 work selected for clean migration. This removes the Chapter 5 source
+wrappers, their chapter-specific metric-measure provider, and the
+`ComputationalMathematics.HDP.Concentration` front door. No Chapter 1 or
+Chapter 2 import or declaration is removed. See
+[`HDP-CHAPTER05-REMOVAL-0.3.0.md`](docs/architecture/migrations/HDP-CHAPTER05-REMOVAL-0.3.0.md)
+for the complete API list and recovery instructions.
+
+Repository agent instructions now match formalization-workflow v5.1.1: gates,
+ledgers, audits, faithfulness workspaces, topology and coordinator state remain
+checkout-local and outside Lean Git history.
+
 
 ## [0.2.0] - 2026-09-10
 

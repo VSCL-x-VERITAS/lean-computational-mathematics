@@ -31,7 +31,7 @@ The principal source developments currently cover:
   Algorithms* (2nd ed.), within a selected audited scope;
 - Chapter 1 of Randall J. LeVeque's *Finite Volume Methods for Hyperbolic
   Problems*, backed by reusable PDE and finite-volume foundations;
-- Chapters 1, 2, and 5 of Roman Vershynin's *High-Dimensional Probability*,
+- Chapters 1 and 2 of Roman Vershynin's *High-Dimensional Probability*,
   backed by reusable scalar-probability and concentration modules; and
 - a randomized numerical linear algebra case study based on work by Petros
   Drineas and Michael W. Mahoney.
@@ -47,18 +47,18 @@ Figures below are measured at the current `main`.
 
 | Metric | Value |
 |---|---:|
-| Production Lean modules | 2,691 |
-| Declaration-bearing / import-only | 2,087 / 604 |
-| Reusable / source / aggregate / internal / upstream | 706 / 1,526 / 449 / 5 / 5 |
-| Classified modules | 2,691 / 2,691 (100%) |
+| Production Lean modules | 2,679 |
+| Declaration-bearing / import-only | 2,081 / 598 |
+| Reusable / source / aggregate / internal / upstream | 706 / 1,516 / 447 / 5 / 5 |
+| Classified modules | 2,679 / 2,679 (100%) |
 | Mixed or unclassified modules | 0 |
-| Nonblank Lean source lines | 1,520,612 |
-| Direct imports | 29,817 |
+| Nonblank Lean source lines | 1,518,729 |
+| Direct imports | 29,771 |
 | Import cycles / unresolved project imports | 0 / 0 |
 | Forbidden reusable-to-source import paths | 0 |
 | Test Lean modules | 151 |
-| Reviewed lint baseline | 3,698 findings |
-| Tracked files / size | 3,419 / 100.1 MB |
+| Reviewed lint baseline | 3,690 findings |
+| Tracked files / size | 3,365 / 99.6 MB |
 
 The checks find no `sorry` or `admit`, no unreviewed project axiom
 declaration, and no canonical production import of a historical path. Five
@@ -249,12 +249,12 @@ are working files kept inside a checkout rather than committed.
 [`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
 probability entry point. Its semantic layer covers probability preliminaries,
 limit theorems, independent sums, Hoeffding and Chernoff bounds, random-graph
-degree laws, sub-Gaussian and sub-exponential variables, and metric-measure
-concentration.
+degree laws, and sub-Gaussian and sub-exponential variables used by the retained
+Chapter 1–2 source development.
 
 [`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
 checked source contracts and frozen signatures for selected material in
-Chapters 1, 2, and 5 of *High-Dimensional Probability*. Historical
+Chapters 1 and 2 of *High-Dimensional Probability*. Historical
 `NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` paths
 remain supported through the compatibility map.
 
@@ -277,7 +277,7 @@ active repository. Check out the release tag for a reproducible tree:
 ```bash
 git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
 cd lean-computational-mathematics
-git checkout v0.2.0
+git checkout v0.3.0
 lake exe cache get
 lake build ComputationalMathematics NumStabilityTest
 lake test
@@ -312,7 +312,7 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
 | `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 correspondence |
-| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1, 2, and 5 source contracts |
+| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1 and 2 source contracts |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
@@ -331,7 +331,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "v0.2.0"
+rev = "v0.3.0"
 ```
 
 Pin a reviewed commit when reproducibility is required. The inherited
@@ -384,7 +384,7 @@ ComputationalMathematics/
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
 │   ├── LeVeque/                          finite-volume methods, Chapter 1
-│   ├── Vershynin/                        high-dimensional probability, Chapters 1, 2, and 5
+│   ├── Vershynin/                        high-dimensional probability, Chapters 1 and 2
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 

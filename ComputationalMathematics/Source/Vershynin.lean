@@ -1,6 +1,5 @@
 import ComputationalMathematics.Source.Vershynin.Chapter01
 import ComputationalMathematics.Source.Vershynin.Chapter02
-import ComputationalMathematics.Source.Vershynin.Chapter05
 
 /-!
 # Vershynin source correspondence

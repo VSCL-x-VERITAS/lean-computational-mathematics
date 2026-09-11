@@ -25,12 +25,15 @@ Use the verified cutover state and interface decisions in the
 for operational URLs and public import guidance. Preserve the repository's
 current checks and the pinned Lean/Mathlib versions during identity changes.
 
-## Evidence, not working trees
+## Product code, not campaign state
 
-Commit the audit package files a gate binds: `audit-task.json`, the current
-`faithfulness/` decision, manifest, report, inputs and agent outputs, and the
-gate bindings. Do not commit the working tree that produced them - session
-scratch directories, superseded fingerprint or tiers generations, raw `git`
-command dumps, captured stdout and stderr, agent transcripts under
-`faithfulness/orchestration/`, `faithfulness/history/` reruns, or rendered
-pages of a source book. `tools/architecture/check_layout.py` rejects them.
+Commit only reviewed product files. Formalization gates, ledgers, audits,
+faithfulness workspaces and coordinator state are checkout-local runtime data;
+preserve them through a separate outside-Git backup when recovery is needed.
+In particular, never stage, commit or push anything below `gates/`, `ledgers/`,
+`audits/`, `.faithfulness-audit/`, `.faithfulness-audit-v2/` or
+`.formalization/`. Before formalization work, product commits and
+reconciliation, install and check the checkout-local exclusions required by
+the active book-formalization workflow. A tracked ignore rule or layout check
+is only defense in depth and does not make campaign-state files part of the
+Lean product.

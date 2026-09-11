@@ -833,11 +833,6 @@ _FROZEN_VERSHYNIN_NAMECHECK_PATHS = (
     "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example12/Contract.lean",
     "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Example13/Signature.lean",
     "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
-    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Contract.lean",
-    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
-    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Contract.lean",
-    "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
-    "ComputationalMathematics/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
 )
 
 _FROZEN_VERSHYNIN_UNUSED_PATHS = (
@@ -873,10 +868,6 @@ _FROZEN_VERSHYNIN_WARNING_KEYS = frozenset(
 
 _RETAINED_HDP_WARNING_KEYS = frozenset(
     {
-        (
-            "ComputationalMathematics/HDP/Concentration/MetricMeasure.lean",
-            "linter.unusedVariables",
-        ),
         (
             "ComputationalMathematics/HDP/Scalar/IndependentSums/Chernoff.lean",
             "linter.unusedVariables",
