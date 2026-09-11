@@ -25,12 +25,13 @@ Use the verified cutover state and interface decisions in the
 for operational URLs and public import guidance. Preserve the repository's
 current checks and the pinned Lean/Mathlib versions during identity changes.
 
-## Evidence, not working trees
+## Product code, not campaign working state
 
-Commit the audit package files a gate binds: `audit-task.json`, the current
-`faithfulness/` decision, manifest, report, inputs and agent outputs, and the
-gate bindings. Do not commit the working tree that produced them - session
-scratch directories, superseded fingerprint or tiers generations, raw `git`
-command dumps, captured stdout and stderr, agent transcripts under
-`faithfulness/orchestration/`, `faithfulness/history/` reruns, or rendered
-pages of a source book. `tools/architecture/check_layout.py` rejects them.
+Commit reviewed Lean source, tests, reusable tooling, and curated documentation.
+Keep all formalization campaign state local to the checkout, including `gates/`,
+`ledgers/`, `audits/`, `.faithfulness-audit/`, `.faithfulness-audit-v2/`, and
+`.formalization/`. This includes gate bindings, audit tasks, decisions,
+manifests, reports, inputs, agent outputs, claim/target packets, reconciliation
+requests, raw command output, transcripts, rerun histories, and rendered source
+pages. Local backups may preserve this state outside Git. Never force-add it to
+`main` or a work lane; `tools/architecture/check_layout.py` rejects it.

@@ -7,6 +7,10 @@ follows semantic versioning for its public module paths and declaration API.
 
 ### Added
 
+- Complete local-state backstops for the v2 faithfulness audit workspace:
+  `/.faithfulness-audit-v2/` is ignored alongside the other campaign roots and
+  rejected by the tracked-layout check if force-added to any commit.
+
 - A link contract: `tools/architecture/check_links.py` fails CI on any relative
   link or image in tracked Markdown whose target does not exist. Every removal
   in the 0.2.0 work left such assertions behind, and grepping for a deleted
