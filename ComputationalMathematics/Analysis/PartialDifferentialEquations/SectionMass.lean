@@ -20,6 +20,14 @@ determined by the masses it assigns.  Together these say that the interval
 integral and the density carry exactly the same information, which is what
 licenses reading one as the other.
 
+The six properties are necessary conditions on a mass, not a characterisation
+of this functional.  No result here shows the interval integral is the only
+assignment satisfying them, and none is claimed.  Two of them also hold outside
+the regime where the quantity is a mass at all: `sectionMass_symm` makes it
+signed, so it measures mass only on a positively oriented section, and
+`sectionMass_self` and `sectionMass_nonneg` hold even for a density that is not
+integrable, because Mathlib's interval integral takes the value zero there.
+
 Every statement carries its integrability hypotheses explicitly rather than
 assuming a global regularity class.
 -/

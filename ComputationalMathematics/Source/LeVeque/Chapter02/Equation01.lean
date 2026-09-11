@@ -42,8 +42,17 @@ theorem leveque02_equation01_eq_intervalIntegral
     (q : ℝ → ℝ → ℝ) (x₁ x₂ t : ℝ) :
     leveque02Equation01SectionMass q x₁ x₂ t = ∫ x in x₁..x₂, q x t := rfl
 
-/-- The printed reading of (2.1): the integral of the density over a section
-behaves in every respect as the mass contained in that section. -/
+/-- The printed reading of (2.1). Each clause is a property the mass of a
+section must have, and the oriented interval integral has all of them, which is
+what licenses reading the one as the other.
+
+These are necessary conditions, not a characterisation. Nothing here shows the
+interval integral is the only functional with these properties, and no such
+uniqueness result is claimed. Two regimes also fall outside the printed text's
+intent and are covered here without comment: the orientation clause makes the
+quantity signed, so it is a mass only on a positively oriented section, and on a
+density that is not integrable Mathlib's interval integral takes the value zero,
+which is a junk value rather than a mass. -/
 theorem leveque02_equation01_totalMass (q : ℝ → ℝ → ℝ) (t : ℝ) :
     (∀ x₁ : ℝ, leveque02Equation01SectionMass q x₁ x₁ t = 0)
       ∧ (∀ x₁ x₂ : ℝ, leveque02Equation01SectionMass q x₁ x₂ t
