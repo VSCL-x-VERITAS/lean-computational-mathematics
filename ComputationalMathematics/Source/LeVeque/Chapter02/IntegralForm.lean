@@ -63,9 +63,49 @@ theorem leveque02_tracer_velocityIndependent
       c * advectiveFlux (velocity r) s x t :=
   advectiveFlux_isLinear_of_tracer h q r c s x t
 
-/-- Equation (2.2), the basic integral form of a conservation law: the rate of
-change of the total mass in a section is the flux in at one end minus the flux
-out at the other. -/
+/-- Equation (2.2) as the page states it.
+
+The printed claim is about one section `x₁ < x₂` of the pipe, with `F₁` and `F₂`
+the rates at which the tracer flows past the two fixed stations, each a function
+of time alone. Its stated hypothesis is that the substance is neither created
+nor destroyed within the section, which the source uses as the premise of a
+`Since ... we have`. The conclusion is the displayed equation.
+
+This states that inference: from the balance carrying an interior production
+term, together with the premise that the production vanishes, the time
+derivative of the section mass is the flux at the left station minus the flux at
+the right one. The premise is a hypothesis here rather than something absorbed
+into a definition, so it can be discharged, and the companion theorem below
+shows it is necessary as well as sufficient.
+
+The ordering `x₁ < x₂` is the source's own, and it is what makes the left and
+right stations distinguishable and the integral a mass rather than a signed
+quantity. The second clause records that: on the stated ordering a nonnegative
+density has nonnegative mass, which fails without it. -/
+theorem leveque02_equation02
+    {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ production : ℝ → ℝ}
+    (hsection : x₁ < x₂)
+    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production)
+    (hconserved : ∀ t, production t = 0) (t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+        (F₁ t - F₂ t) t ∧
+      ∀ τ : ℝ, (∀ x ∈ Set.Icc x₁ x₂, 0 ≤ q x τ) →
+        0 ≤ sectionMass (fun x => q x τ) x₁ x₂ :=
+  ⟨isSectionBalanceOn_of_no_production hbalance hconserved t,
+   fun _ hq => sectionMass_nonneg hsection.le hq⟩
+
+/-- The premise of (2.2) is exactly what the equation costs: a section obeying
+the endpoint balance is one in which nothing is created or destroyed. Without
+this the premise would be unfalsifiable decoration. -/
+theorem leveque02_equation02_premise_necessary
+    {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ production : ℝ → ℝ}
+    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production)
+    (hplain : IsSectionBalanceOn q x₁ x₂ F₁ F₂) (t : ℝ) :
+    production t = 0 :=
+  no_production_of_isSectionBalanceOn hbalance hplain t
+
+/-- The global flux-field form of the balance, which the chapter reaches only
+after tying the flux to the state. It is kept distinct from (2.2). -/
 abbrev leveque02Equation02IntegralForm
     (q : ℝ → ℝ → ℝ) (F : ℝ → ℝ → ℝ) : Prop :=
   IsSectionBalance q F
@@ -91,7 +131,14 @@ fail for a weaker predicate. The balance is satisfiable by a density that
 genuinely varies, so the notion is not empty. It determines the endpoint flux
 difference uniquely, so the fluxes are not free once the density is fixed. And
 when no net flux crosses either end, the mass of the section never changes,
-which is what the source names as the basis of conservation. -/
+which is what the source names as the basis of conservation.
+
+The fourth clause exists because the first three do not certify the third one
+non-degenerately: under the linear witness the equal-flux hypothesis forces the
+two stations to coincide, and a degenerate section carries no mass. A travelling
+sine wave observed over one full period supplies a section with distinct
+endpoints, a density varying in both space and time, and endpoint fluxes that
+agree at every instant. -/
 theorem leveque02_equation02_content :
     leveque02Equation02IntegralForm (fun _ t => t) (fun x _ => -x) ∧
       (∀ (q F G : ℝ → ℝ → ℝ), leveque02Equation02IntegralForm q F →
@@ -101,10 +148,16 @@ theorem leveque02_equation02_content :
         ∀ x₁ x₂ : ℝ, (∀ t, F x₁ t = F x₂ t) →
           ∀ s t : ℝ,
             sectionMass (fun x => q x s) x₁ x₂
-              = sectionMass (fun x => q x t) x₁ x₂) :=
+              = sectionMass (fun x => q x t) x₁ x₂) ∧
+      (∀ x₁ : ℝ,
+        leveque02Equation02IntegralForm
+            (fun x t => Real.sin (x - t)) (fun x t => Real.sin (x - t)) ∧
+          (∀ t : ℝ, Real.sin (x₁ - t) = Real.sin (x₁ + 2 * Real.pi - t)) ∧
+          x₁ ≠ x₁ + 2 * Real.pi) :=
   ⟨sectionBalance_nonvacuous,
    fun _ _ _ hF hG => sectionBalance_unique_difference hF hG,
-   fun _ _ h _ _ hF => sectionMass_const_of_balanced h hF⟩
+   fun _ _ h _ _ hF => sectionMass_const_of_balanced h hF,
+   sectionBalance_periodicWitness⟩
 
 /-- Both endpoint terms of (2.2) are fluxes *into* the section: the signed flux
 at the left endpoint and its negative at the right endpoint sum to the printed

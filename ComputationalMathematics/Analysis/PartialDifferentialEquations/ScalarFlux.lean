@@ -3,6 +3,7 @@ SPDX-License-Identifier: MIT
 -/
 
 import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.SectionMass
 
 /-!
@@ -74,12 +75,64 @@ theorem IsAutonomousFlux.exists_state_function {f : ScalarFluxLaw}
     ∃ g : ℝ → ℝ, ∀ q x t, f q x t = g q :=
   ⟨fun q => f q 0 0, fun q x t => h q x t 0 0⟩
 
-/-- The integral balance of a section: the mass between two stations changes at
-the rate of the inward flux at the two endpoints.  `F x t` is the signed flux
-past the station `x` at time `t`, positive for transport to the right. -/
+/-- The balance of one fixed section, with an interior production term.
+
+This is the shape of the printed derivation before its hypothesis is imposed.
+The section is a single one delimited by two stations; the two endpoint fluxes
+are functions of time alone, indexed by their endpoint, as the source
+introduces them; and `production t` is the net rate at which the substance is
+created inside the section at time `t`.  Equation (2.2) is the case where that
+term vanishes, and the later source-term equation of the chapter is the case
+where it does not. -/
+def IsSectionBalanceWithProduction (q : ℝ → ℝ → ℝ) (x₁ x₂ : ℝ)
+    (F₁ F₂ production : ℝ → ℝ) : Prop :=
+  ∀ t, HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+    (F₁ t - F₂ t + production t) t
+
+/-- The balance of one fixed section with nothing created or destroyed inside
+it: the mass between the two stations changes at exactly the rate of the inward
+flux at the two endpoints. -/
+def IsSectionBalanceOn (q : ℝ → ℝ → ℝ) (x₁ x₂ : ℝ) (F₁ F₂ : ℝ → ℝ) : Prop :=
+  ∀ t, HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂) (F₁ t - F₂ t) t
+
+/-- The printed inference: if nothing is created or destroyed within the
+section, the balance reduces to the endpoint fluxes alone.  Stating the
+production term explicitly is what makes the source's premise a hypothesis that
+can be discharged rather than an assumption absorbed into a definition. -/
+theorem isSectionBalanceOn_of_no_production {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ}
+    {F₁ F₂ production : ℝ → ℝ}
+    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production)
+    (hno : ∀ t, production t = 0) :
+    IsSectionBalanceOn q x₁ x₂ F₁ F₂ := by
+  intro t
+  have h := hbalance t
+  rwa [hno t, add_zero] at h
+
+/-- Conversely the premise is necessary as well as sufficient: a section whose
+mass obeys the endpoint balance has vanishing net production. -/
+theorem no_production_of_isSectionBalanceOn {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ}
+    {F₁ F₂ production : ℝ → ℝ}
+    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production)
+    (hplain : IsSectionBalanceOn q x₁ x₂ F₁ F₂) (t : ℝ) :
+    production t = 0 := by
+  have := (hbalance t).unique (hplain t)
+  linarith
+
+/-- The balance holding on every section at once, with a flux field defined at
+every station.  This is the later, stronger form the chapter reaches once the
+flux has been tied to the state; it is kept separate from the one-section
+balance of (2.2). -/
 def IsSectionBalance (q : ℝ → ℝ → ℝ) (F : ℝ → ℝ → ℝ) : Prop :=
   ∀ x₁ x₂ t,
     HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂) (F x₁ t - F x₂ t) t
+
+/-- The global form restricts to the one-section form at any pair of stations,
+so the two are related in the expected direction and the stronger one is never
+mistaken for the printed claim. -/
+theorem IsSectionBalance.on {q : ℝ → ℝ → ℝ} {F : ℝ → ℝ → ℝ}
+    (h : IsSectionBalance q F) (x₁ x₂ : ℝ) :
+    IsSectionBalanceOn q x₁ x₂ (fun t => F x₁ t) (fun t => F x₂ t) :=
+  fun t => h x₁ x₂ t
 
 /-- The inward flux at the left endpoint of a section is the signed flux, and at
 the right endpoint it is its negative.  Their sum is the right-hand side of the
@@ -126,6 +179,47 @@ theorem sectionBalance_nonvacuous :
     simpa using HasDerivAt.const_mul (x₂ - x₁) (hasDerivAt_id t)
   convert hlinear using 1
   ring
+
+/-- A travelling wave is balanced by its own profile: for `q x t = h (x - t)` the
+flux field `F x t = h (x - t)` satisfies the balance, provided `h` has the
+antiderivative `H`.  This is the unit-speed advective balance written out. -/
+theorem sectionBalance_travellingWave {h H : ℝ → ℝ}
+    (hH : ∀ y : ℝ, HasDerivAt H (h y) y) (hc : Continuous h) :
+    IsSectionBalance (fun x t => h (x - t)) (fun x t => h (x - t)) := by
+  intro x₁ x₂ t
+  have hmass : ∀ τ : ℝ,
+      sectionMass (fun x => h (x - τ)) x₁ x₂ = H (x₂ - τ) - H (x₁ - τ) := by
+    intro τ
+    rw [sectionMass, intervalIntegral.integral_comp_sub_right (fun y => h y) τ]
+    exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun y _ => hH y) (hc.intervalIntegrable _ _)
+  have hfun : (fun τ : ℝ => sectionMass (fun x => h (x - τ)) x₁ x₂)
+      = fun τ : ℝ => H (x₂ - τ) - H (x₁ - τ) := funext hmass
+  rw [hfun]
+  have hleft : HasDerivAt (fun τ : ℝ => H (x₁ - τ)) (-h (x₁ - t)) t := by
+    simpa using (hH (x₁ - t)).comp t ((hasDerivAt_id t).const_sub x₁)
+  have hright : HasDerivAt (fun τ : ℝ => H (x₂ - τ)) (-h (x₂ - t)) t := by
+    simpa using (hH (x₂ - t)).comp t ((hasDerivAt_id t).const_sub x₂)
+  have := hright.sub hleft
+  convert this using 1
+  ring
+
+/-- The conservation clause has a genuinely non-degenerate witness: a travelling
+sine wave over one full period.  The density varies in both space and time, the
+two endpoints are distinct, the endpoint fluxes agree at every time, and the mass
+of the section is a nonzero constant.  Without this the conservation clause would
+be certified only where its hypothesis forces the section to be degenerate. -/
+theorem sectionBalance_periodicWitness (x₁ : ℝ) :
+    IsSectionBalance (fun x t => Real.sin (x - t)) (fun x t => Real.sin (x - t)) ∧
+      (∀ t : ℝ, Real.sin (x₁ - t) = Real.sin (x₁ + 2 * Real.pi - t)) ∧
+      x₁ ≠ x₁ + 2 * Real.pi := by
+  refine ⟨sectionBalance_travellingWave (H := fun y => -Real.cos y)
+      (fun y => ?_) Real.continuous_sin, fun t => ?_, ?_⟩
+  · simpa using (Real.hasDerivAt_cos y).neg
+  · rw [show x₁ + 2 * Real.pi - t = x₁ - t + 2 * Real.pi by ring, Real.sin_add_two_pi]
+  · have := Real.pi_pos
+    intro hcontra
+    nlinarith [hcontra]
 
 /-- Under a balance, the rate of change of the section mass is exactly the total
 inward flux. -/
