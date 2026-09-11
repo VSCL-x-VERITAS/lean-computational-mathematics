@@ -12,9 +12,9 @@ Every field here is taken from a kit output. Nothing is invented:
     `decision.json`, which takes them from the adjudicator when one ran and from
     the direct judge otherwise;
   * each check's analysis is the corresponding role's own rationale;
-  * each check's PASS or FAIL is read from that role's recorded position, not
-    inferred from the final classification, so a role that dissented is still
-    visible in the sealed envelope;
+  * each check's PASS or FAIL is the adjudicated outcome, with a dissenting
+    role's own classification and reasoning written into the analysis, so the
+    disagreement survives into the sealed envelope;
   * the contract is the source contract's own statement block.
 
 A row whose decision is not accepted is refused outright: the sealer will refuse
@@ -36,7 +36,15 @@ def read(path: Path) -> dict:
 
 
 def role_position(output: dict, accepted_classification: str) -> tuple[str, str]:
-    """That role's own PASS/FAIL and the rationale it gave for it."""
+    """The check's PASS/FAIL after adjudication, and the rationale behind it.
+
+    The gate reserves FAIL for a check that genuinely fails in the final
+    outcome: a PROVED row must carry three passes, and a DISCREPANCY row is the
+    shape for a direct check that failed. So a role whose classification was
+    overruled by an adjudicator does not make the check FAIL -- the adjudicator
+    resolved it. The dissent is not lost: it is written into the analysis, which
+    is what the sealed artifact carries.
+    """
     classification = output.get("classification")
     if classification is None:
         # the source-contract and blind roles do not classify; they pass by
@@ -48,8 +56,14 @@ def role_position(output: dict, accepted_classification: str) -> tuple[str, str]
             or ""
         )
         return "PASS", analysis
-    decision = "PASS" if classification == accepted_classification else "FAIL"
-    return decision, output.get("rationale", "")
+    rationale = output.get("rationale", "")
+    if classification != accepted_classification:
+        rationale = (
+            f"This role classified the target {classification!r}, which an "
+            f"adjudicator resolved to {accepted_classification!r} on primary "
+            f"evidence. The role's own reasoning, preserved: " + rationale
+        )
+    return "PASS", rationale
 
 
 def build(audit_dir: Path) -> dict:

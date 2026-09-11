@@ -227,16 +227,17 @@ theorem leveque02_equation02_inwardFluxes
 
 /-- Equation (2.3): the flux of the tracer at a point is the product of the
 velocity and the density there. -/
-theorem leveque02_equation03_advectiveFlux
-    (F u q : ℝ → ℝ → ℝ) (x t : ℝ) :
-    (∃ G : ℝ → ℝ → ℝ, ¬ IsAdvectiveFluxOf G u q) ∧
-      (IsAdvectiveFluxOf F u q → F x t = u x t * q x t) ∧
-      (IsAdvectiveFluxOf F u q → F x t = advectiveFlux u (q x t) x t) ∧
-      (IsAdvectiveFluxOf F u q → 0 < q x t →
+theorem leveque02_equation03_advectiveFlux (u q : ℝ → ℝ → ℝ) :
+    (∃ F : ℝ → ℝ → ℝ, IsAdvectiveFluxOf F u q) ∧
+      (∃ G : ℝ → ℝ → ℝ, ¬ IsAdvectiveFluxOf G u q) ∧
+      (∀ F G : ℝ → ℝ → ℝ,
+        IsAdvectiveFluxOf F u q → IsAdvectiveFluxOf G u q → F = G) ∧
+      (∀ (F : ℝ → ℝ → ℝ) (x t : ℝ), IsAdvectiveFluxOf F u q → 0 < q x t →
         transportDirection (F x t) = transportDirection (u x t)) :=
-  ⟨exists_not_isAdvectiveFluxOf u q, fun h => h x t,
-   fun h => isAdvectiveFluxOf_apply h x t,
-   fun h hq => transportDirection_of_isAdvectiveFluxOf h hq⟩
+  ⟨⟨fun x t => u x t * q x t, fun _ _ => rfl⟩,
+   exists_not_isAdvectiveFluxOf u q,
+   fun _ _ hF hG => funext fun x => funext fun t => by rw [hF x t, hG x t],
+   fun _ _ _ h hq => transportDirection_of_isAdvectiveFluxOf h hq⟩
 
 /-- Equation (2.4): since the velocity is a known function, the flux is written
 as a flux law `f(q, x, t)` depending on the state, the position and the time. -/
