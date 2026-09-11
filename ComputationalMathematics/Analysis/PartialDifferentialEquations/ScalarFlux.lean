@@ -101,12 +101,43 @@ is what makes the autonomous case solvable for the state where the general case
 is not. -/
 theorem sectionBalance_of_autonomous {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw}
     (hf : IsAutonomousFlux f)
-    (h : IsSectionBalance q (fun x t => f (q x t) x t)) (x₁ x₂ t : ℝ) :
-    ∃ g : ℝ → ℝ,
+    (h : IsSectionBalance q (fun x t => f (q x t) x t)) :
+    ∃ g : ℝ → ℝ, ∀ x₁ x₂ t,
       HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
         (g (q x₁ t) - g (q x₂ t)) t := by
   obtain ⟨g, hg⟩ := hf.exists_state_function
-  exact ⟨g, by simpa [hg] using h x₁ x₂ t⟩
+  exact ⟨g, fun x₁ x₂ t => by simpa [hg] using h x₁ x₂ t⟩
+
+/-- The same balance stated with the given flux law rather than an extracted
+one.  This keeps the hypothesis's own `f` in the conclusion, so nothing the
+caller supplied is discarded. -/
+theorem sectionBalance_endpoints_of_autonomous {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw}
+    (h : IsSectionBalance q (fun x t => f (q x t) x t)) (x₁ x₂ t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+      (f (q x₁ t) x₁ t - f (q x₂ t) x₂ t) t :=
+  h x₁ x₂ t
+
+/-- The balance induced by a velocity field: the flux past each station is the
+advective flux there.  This is what ties the modelling definitions of (2.3) and
+(2.4) to the balance of (2.2), rather than leaving them beside it. -/
+def IsAdvectiveBalance (q : ℝ → ℝ → ℝ) (u : ℝ → ℝ → ℝ) : Prop :=
+  IsSectionBalance q (fun x t => advectiveFlux u (q x t) x t)
+
+theorem isAdvectiveBalance_iff (q : ℝ → ℝ → ℝ) (u : ℝ → ℝ → ℝ) :
+    IsAdvectiveBalance q u ↔
+      ∀ x₁ x₂ t,
+        HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+          (u x₁ t * q x₁ t - u x₂ t * q x₂ t) t :=
+  Iff.rfl
+
+/-- A uniform velocity makes the advective balance autonomous, with the single
+state function of (2.5) serving every section and time. -/
+theorem isAdvectiveBalance_uniform {q : ℝ → ℝ → ℝ} {speed : ℝ}
+    (h : IsSectionBalance q (fun x t => uniformAdvectiveFlux speed (q x t) x t)) :
+    ∃ g : ℝ → ℝ, ∀ x₁ x₂ t,
+      HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+        (g (q x₁ t) - g (q x₂ t)) t :=
+  sectionBalance_of_autonomous (uniformAdvectiveFlux_isAutonomous speed) h
 
 /-- Evaluation between limits, the notation of the source's shorthand: the value
 at the upper limit minus the value at the lower limit. -/

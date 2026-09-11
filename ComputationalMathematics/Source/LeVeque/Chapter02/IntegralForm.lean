@@ -133,12 +133,33 @@ state alone. -/
 theorem leveque02_equation06_autonomousBalance
     {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw}
     (hf : IsAutonomousFlux f)
-    (h : leveque02Equation02IntegralForm q (fun x t => f (q x t) x t))
-    (x₁ x₂ t : ℝ) :
-    ∃ g : ℝ → ℝ,
+    (h : leveque02Equation02IntegralForm q (fun x t => f (q x t) x t)) :
+    ∃ g : ℝ → ℝ, ∀ x₁ x₂ t,
       HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
         (g (q x₁ t) - g (q x₂ t)) t :=
-  sectionBalance_of_autonomous hf h x₁ x₂ t
+  sectionBalance_of_autonomous hf h
+
+/-- The same equation keeping the caller's own flux law in the conclusion, which
+is the printed form of (2.6) literally: the endpoint terms are the flux function
+applied to the state at the two stations. -/
+theorem leveque02_equation06_endpoints
+    {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw}
+    (h : leveque02Equation02IntegralForm q (fun x t => f (q x t) x t))
+    (x₁ x₂ t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+      (f (q x₁ t) x₁ t - f (q x₂ t) x₂ t) t :=
+  sectionBalance_endpoints_of_autonomous h x₁ x₂ t
+
+/-- The identification the chapter makes between (2.2) and (2.3): the balance
+whose station flux is the advective flux is exactly the balance with endpoint
+terms u q. This connects the modelling definitions to the conservation law
+rather than leaving them beside it. -/
+theorem leveque02_advectiveBalance_iff (q : ℝ → ℝ → ℝ) (u : ℝ → ℝ → ℝ) :
+    IsAdvectiveBalance q u ↔
+      ∀ x₁ x₂ t,
+        HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+          (u x₁ t * q x₁ t - u x₂ t * q x₂ t) t :=
+  isAdvectiveBalance_iff q u
 
 /-- Equation (2.7): the shorthand of evaluating the composed flux between the
 limits denotes exactly the endpoint difference of (2.6). -/
