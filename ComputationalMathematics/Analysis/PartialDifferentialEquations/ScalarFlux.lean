@@ -333,4 +333,149 @@ theorem advectiveFlux_abs_of_neg {u : ℝ → ℝ → ℝ} {q x t : ℝ}
     |advectiveFlux u q x t| = -advectiveFlux u q x t :=
   abs_of_neg h
 
+/-! ### Orientation of the endpoint fluxes
+
+The printed sign convention makes a positive flux rightward transport, so
+whether a station's flux adds to or subtracts from the mass of a section depends
+on which end of the section that station is.  Carrying the outward direction as
+data keeps the dependence inside the statement instead of leaving it to the
+reader. -/
+
+/-- The rate at which the conserved quantity enters a section across one of its
+endpoints.  `normal` is the outward direction there: `-1` at the left end of a
+section and `1` at the right end. -/
+def inwardFlux (normal : ℝ) (F : ℝ → ℝ → ℝ) (x t : ℝ) : ℝ := -normal * F x t
+
+@[simp] theorem inwardFlux_left (F : ℝ → ℝ → ℝ) (x t : ℝ) :
+    inwardFlux (-1) F x t = F x t := by simp [inwardFlux]
+
+@[simp] theorem inwardFlux_right (F : ℝ → ℝ → ℝ) (x t : ℝ) :
+    inwardFlux 1 F x t = -F x t := by simp [inwardFlux]
+
+/-- Rightward transport past the left station carries the quantity into the
+section. -/
+theorem inwardFlux_pos_of_rightward {F : ℝ → ℝ → ℝ} {x t : ℝ} (h : 0 < F x t) :
+    0 < inwardFlux (-1) F x t := by simpa using h
+
+/-- Leftward transport past the right station also carries it in. -/
+theorem inwardFlux_pos_of_leftward {F : ℝ → ℝ → ℝ} {x t : ℝ} (h : F x t < 0) :
+    0 < inwardFlux 1 F x t := by simpa using h
+
+/-- The two orientations differ, so the sign flip at the right station carries
+information rather than restating the left one. -/
+theorem inwardFlux_orientation_ne :
+    ∃ (F : ℝ → ℝ → ℝ) (x t : ℝ), inwardFlux (-1) F x t ≠ inwardFlux 1 F x t :=
+  ⟨fun _ _ => 1, 0, 0, by norm_num⟩
+
+/-- The right-hand side of the balance is the sum of the two inward fluxes. -/
+theorem sectionBalance_rate_eq_inflow {q : ℝ → ℝ → ℝ} {F : ℝ → ℝ → ℝ}
+    (h : IsSectionBalance q F) (x₁ x₂ t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+      (inwardFlux (-1) F x₁ t + inwardFlux 1 F x₂ t) t := by
+  simpa [inward_flux_sum] using h x₁ x₂ t
+
+/-- Reversing the section exchanges the roles of the two stations and negates
+the rate, so the source's ordering `x₁ < x₂` is load-bearing for the sign. -/
+theorem isSectionBalanceWithProduction_reverse {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ}
+    {F₁ F₂ production : ℝ → ℝ}
+    (h : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production) (t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₂ x₁)
+      (-(F₁ t - F₂ t + production t)) t := by
+  have hfun : (fun τ => sectionMass (fun x => q x τ) x₂ x₁)
+      = fun τ => -sectionMass (fun x => q x τ) x₁ x₂ := by
+    funext τ
+    exact sectionMass_symm _ _ _
+  rw [hfun]
+  exact (h t).neg
+
+/-! ### The linear density carries the cross-sectional area -/
+
+@[simp] theorem linearDensity_apply (volumetric : ℝ → ℝ → ℝ) (area x t : ℝ) :
+    linearDensity volumetric area x t = area * volumetric x t := rfl
+
+/-- A positive cross-section preserves the sign of the density, which is what
+makes the rescaled quantity a density at all. -/
+theorem linearDensity_nonneg_iff {volumetric : ℝ → ℝ → ℝ} {area : ℝ}
+    (harea : 0 < area) (x t : ℝ) :
+    0 ≤ linearDensity volumetric area x t ↔ 0 ≤ volumetric x t := by
+  rw [linearDensity_apply]
+  exact mul_nonneg_iff_of_pos_left harea
+
+/-- The volumetric density is recoverable from the linear one, so the area
+factor is genuine data rather than a lost constant. -/
+theorem volumetric_of_linearDensity {volumetric : ℝ → ℝ → ℝ} {area : ℝ}
+    (harea : area ≠ 0) (x t : ℝ) :
+    volumetric x t = linearDensity volumetric area x t / area := by
+  rw [linearDensity_apply]
+  field_simp
+
+/-- The rescaling is not the identity, so the area factor is not vacuous. -/
+theorem linearDensity_ne_self :
+    ∃ (w : ℝ → ℝ → ℝ) (a x t : ℝ), 0 < a ∧ linearDensity w a x t ≠ w x t :=
+  ⟨fun _ _ => 1, 2, 0, 0, by norm_num, by norm_num⟩
+
+/-! ### A tracer's velocity is fixed data -/
+
+/-- Independence of the tracer means there is a single velocity field, the same
+for every density. -/
+theorem IsTracerVelocity.exists_field
+    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity) :
+    ∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u :=
+  ⟨velocity fun _ _ => 0, fun q => h q _⟩
+
+/-- The flux of the tracer at its own value is computed from that one common
+field, which is the whole content of the one-way coupling. -/
+theorem advectiveFlux_tracer_eval
+    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity)
+    (q r : ℝ → ℝ → ℝ) (x t : ℝ) :
+    advectiveFlux (velocity q) (q x t) x t = velocity r x t * q x t := by
+  rw [h q r]
+  rfl
+
+/-- Tracer independence is a real restriction: a velocity that responds to the
+density fails it. -/
+theorem exists_not_isTracerVelocity :
+    ∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w := by
+  refine ⟨fun q => q, fun h => ?_⟩
+  have := congrFun (congrFun (h (fun _ _ => 0) fun _ _ => 1) 0) 0
+  norm_num at this
+
+/-! ### The sign convention in full -/
+
+/-- For a positive density the flux is negative exactly where the velocity is,
+so a negative flux records leftward transport. -/
+theorem advectiveFlux_neg_iff {u : ℝ → ℝ → ℝ} {q x t : ℝ} (hq : 0 < q) :
+    advectiveFlux u q x t < 0 ↔ u x t < 0 := by
+  rw [advectiveFlux_apply]
+  constructor
+  · intro h
+    by_contra hu
+    push_neg at hu
+    nlinarith
+  · intro h
+    exact mul_neg_of_neg_of_pos h hq
+
+/-- The remaining case of the trichotomy: no transport exactly where the
+velocity vanishes. -/
+theorem advectiveFlux_eq_zero_iff {u : ℝ → ℝ → ℝ} {q x t : ℝ} (hq : 0 < q) :
+    advectiveFlux u q x t = 0 ↔ u x t = 0 := by
+  rw [advectiveFlux_apply, mul_eq_zero]
+  exact ⟨fun h => h.resolve_right (ne_of_gt hq), Or.inl⟩
+
+/-- The magnitude of a leftward flux is the leftward speed times the density,
+which is the source's `|F_i(t)|`. -/
+theorem advectiveFlux_abs_of_leftward {u : ℝ → ℝ → ℝ} {q x t : ℝ} (hq : 0 < q)
+    (hu : u x t < 0) : |advectiveFlux u q x t| = -u x t * q := by
+  rw [advectiveFlux_apply, abs_of_neg (mul_neg_of_neg_of_pos hu hq), neg_mul]
+
+/-- Positivity of the density is load-bearing: for a negative density the sign
+of the flux no longer records the direction of the velocity. -/
+theorem advectiveFlux_sign_needs_pos :
+    ∃ (v : ℝ → ℝ → ℝ) (p x t : ℝ),
+      p < 0 ∧ v x t < 0 ∧ 0 < advectiveFlux v p x t := by
+  refine ⟨fun _ _ => -1, -1, 0, 0, by norm_num, by norm_num, ?_⟩
+  rw [advectiveFlux_apply]
+  norm_num
+
+
 end NumStability

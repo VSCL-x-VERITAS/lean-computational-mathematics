@@ -36,10 +36,18 @@ namespace NumStability
 density scaled by the cross-sectional area of the pipe. The mass of a section
 scales with the area, which is the content of the printed unit conversion. -/
 theorem leveque02_tracerDensity_isAreaScaled
-    (volumetric : ℝ → ℝ → ℝ) (area x₁ x₂ t : ℝ) :
-    sectionMass (fun x => linearDensity volumetric area x t) x₁ x₂ =
-      area * sectionMass (fun x => volumetric x t) x₁ x₂ :=
-  sectionMass_linearDensity volumetric area x₁ x₂ t
+    (volumetric : ℝ → ℝ → ℝ) {area : ℝ} (harea : 0 < area) (x₁ x₂ t : ℝ) :
+    (∀ x, linearDensity volumetric area x t = area * volumetric x t) ∧
+      sectionMass (fun x => linearDensity volumetric area x t) x₁ x₂ =
+        area * sectionMass (fun x => volumetric x t) x₁ x₂ ∧
+      (∀ x, 0 ≤ linearDensity volumetric area x t ↔ 0 ≤ volumetric x t) ∧
+      (∀ x, volumetric x t = linearDensity volumetric area x t / area) ∧
+      (∃ (w : ℝ → ℝ → ℝ) (a y s : ℝ), 0 < a ∧ linearDensity w a y s ≠ w y s) :=
+  ⟨fun x => linearDensity_apply volumetric area x t,
+   sectionMass_linearDensity volumetric area x₁ x₂ t,
+   fun x => linearDensity_nonneg_iff harea x t,
+   fun x => volumetric_of_linearDensity (ne_of_gt harea) x t,
+   linearDensity_ne_self⟩
 
 /-- The printed sign convention. For a positive density the flux past a station
 is positive exactly when the velocity there is positive, so its sign records the
@@ -48,20 +56,32 @@ of the leftward transport. -/
 theorem leveque02_fluxSign_directionAndMagnitude
     {u : ℝ → ℝ → ℝ} {q x t : ℝ} (hq : 0 < q) :
     (0 < advectiveFlux u q x t ↔ 0 < u x t) ∧
-      (advectiveFlux u q x t < 0 →
-        |advectiveFlux u q x t| = -advectiveFlux u q x t) :=
-  ⟨advectiveFlux_pos_iff hq, advectiveFlux_abs_of_neg⟩
+      (advectiveFlux u q x t < 0 ↔ u x t < 0) ∧
+      (advectiveFlux u q x t = 0 ↔ u x t = 0) ∧
+      (u x t < 0 → |advectiveFlux u q x t| = -u x t * q) ∧
+      (∃ (v : ℝ → ℝ → ℝ) (p y s : ℝ),
+        p < 0 ∧ v y s < 0 ∧ 0 < advectiveFlux v p y s) :=
+  ⟨advectiveFlux_pos_iff hq, advectiveFlux_neg_iff hq,
+   advectiveFlux_eq_zero_iff hq, advectiveFlux_abs_of_leftward hq,
+   advectiveFlux_sign_needs_pos⟩
 
 /-- A tracer is present in concentrations so small that it does not affect the
 fluid dynamics: the velocity field does not depend on the tracer density. The
 consequence the chapter uses is that the tracer's flux is linear in its
 density. -/
 theorem leveque02_tracer_velocityIndependent
-    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity)
-    (q r : ℝ → ℝ → ℝ) (c s x t : ℝ) :
-    advectiveFlux (velocity q) (c * s) x t =
-      c * advectiveFlux (velocity r) s x t :=
-  advectiveFlux_isLinear_of_tracer h q r c s x t
+    {velocity : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ} (h : IsTracerVelocity velocity) :
+    (∀ q r : ℝ → ℝ → ℝ, velocity q = velocity r) ∧
+      (∃ u : ℝ → ℝ → ℝ, ∀ q, velocity q = u) ∧
+      (∀ (q r : ℝ → ℝ → ℝ) (x t : ℝ),
+        advectiveFlux (velocity q) (q x t) x t = velocity r x t * q x t) ∧
+      (∀ (q r : ℝ → ℝ → ℝ) (c s x t : ℝ),
+        advectiveFlux (velocity q) (c * s) x t =
+          c * advectiveFlux (velocity r) s x t) ∧
+      (∃ w : (ℝ → ℝ → ℝ) → ℝ → ℝ → ℝ, ¬ IsTracerVelocity w) :=
+  ⟨h, h.exists_field, advectiveFlux_tracer_eval h,
+   fun q r c s x t => advectiveFlux_isLinear_of_tracer h q r c s x t,
+   exists_not_isTracerVelocity⟩
 
 /-- Equation (2.2) as the page states it.
 
@@ -80,8 +100,10 @@ shows it is necessary as well as sufficient.
 
 The ordering `x₁ < x₂` is the source's own, and it is what makes the left and
 right stations distinguishable and the integral a mass rather than a signed
-quantity. The second clause records that: on the stated ordering a nonnegative
-density has nonnegative mass, which fails without it. -/
+quantity. The remaining clauses record that: the two stations are distinct;
+reversing the section negates the rate, so the roles of `F₁` and `F₂` are not
+interchangeable; and on the stated ordering a nonnegative density has
+nonnegative mass. -/
 theorem leveque02_equation02
     {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ production : ℝ → ℝ}
     (hsection : x₁ < x₂)
@@ -89,10 +111,15 @@ theorem leveque02_equation02
     (hconserved : ∀ t, production t = 0) (t : ℝ) :
     HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
         (F₁ t - F₂ t) t ∧
+      x₁ ≠ x₂ ∧
+      HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₂ x₁)
+        (-(F₁ t - F₂ t)) t ∧
       ∀ τ : ℝ, (∀ x ∈ Set.Icc x₁ x₂, 0 ≤ q x τ) →
-        0 ≤ sectionMass (fun x => q x τ) x₁ x₂ :=
-  ⟨isSectionBalanceOn_of_no_production hbalance hconserved t,
-   fun _ hq => sectionMass_nonneg hsection.le hq⟩
+        0 ≤ sectionMass (fun x => q x τ) x₁ x₂ := by
+  refine ⟨isSectionBalanceOn_of_no_production hbalance hconserved t,
+    ne_of_lt hsection, ?_, fun _ hq => sectionMass_nonneg hsection.le hq⟩
+  have h := isSectionBalanceWithProduction_reverse hbalance t
+  rwa [hconserved t, add_zero] at h
 
 /-- The premise of (2.2) is exactly what the equation costs: a section obeying
 the endpoint balance is one in which nothing is created or destroyed. Without
@@ -166,8 +193,18 @@ theorem leveque02_equation02_inwardFluxes
     {q : ℝ → ℝ → ℝ} {F : ℝ → ℝ → ℝ}
     (h : leveque02Equation02IntegralForm q F) (x₁ x₂ t : ℝ) :
     HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
-      (F x₁ t + -F x₂ t) t :=
-  sectionBalance_rate_eq_inward h x₁ x₂ t
+        (inwardFlux (-1) F x₁ t + inwardFlux 1 F x₂ t) t ∧
+      inwardFlux (-1) F x₁ t = F x₁ t ∧
+      inwardFlux 1 F x₂ t = -F x₂ t ∧
+      (0 < F x₁ t → 0 < inwardFlux (-1) F x₁ t) ∧
+      (F x₂ t < 0 → 0 < inwardFlux 1 F x₂ t) ∧
+      (∃ (G : ℝ → ℝ → ℝ) (y s : ℝ),
+        inwardFlux (-1) G y s ≠ inwardFlux 1 G y s) :=
+  ⟨sectionBalance_rate_eq_inflow h x₁ x₂ t,
+   inwardFlux_left F x₁ t, inwardFlux_right F x₂ t,
+   fun hr => inwardFlux_pos_of_rightward hr,
+   fun hl => inwardFlux_pos_of_leftward hl,
+   inwardFlux_orientation_ne⟩
 
 /-- Equation (2.3): the flux of the tracer at a point is the product of the
 velocity and the density there. -/
