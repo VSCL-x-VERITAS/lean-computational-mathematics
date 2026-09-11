@@ -7,6 +7,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.Characteristics
 import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialForm
 import ComputationalMathematics.Source.LeVeque.Chapter02.DifferentialFormNotation
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
+import ComputationalMathematics.Source.LeVeque.Chapter02.InflowBoundary
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralForm
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableCoefficient
 
