@@ -19,6 +19,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCou
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.GaussianAtoms.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Theorem03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Definition01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise07.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise09A.Contract
@@ -35,9 +36,12 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise02.
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise05
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise08.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.OnePlusBound.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Remark04.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Theorem01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise05.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.ExpectedGraphDegree.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeChernoff.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeUnionBound.Contract
@@ -47,9 +51,16 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise05A.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise09.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise10A.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise10B.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise11.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Proposition02
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Remark03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.ConstantPsiTwoNorm.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise05.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise07.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Exercise09.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Lemma08
@@ -57,14 +68,20 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Proposition
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Definition05.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example08.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example12.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise02.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise10.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Exercise11.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.GaussianSquareTail.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma06.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Lemma07.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczBanach.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczFunction.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.OrliczNormSpace.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Proposition01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature
@@ -73,6 +90,16 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussian
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequality.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Corollary03.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Corollary03.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.NormalizedRegimes.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.NormalizedRegimes.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Signature
 
 /-!
 # Vershynin Chapter 02 source contracts

@@ -22,9 +22,11 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCou
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.GaussianAtoms.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Theorem03.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise10B.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Theorem06.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise05.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise08.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08B.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Example08C.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section05.Exercise01.Signature
