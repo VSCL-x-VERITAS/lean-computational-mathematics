@@ -241,8 +241,8 @@ per-claim faithfulness decisions are summarised in
 [`docs/architecture/reviews/2026-09-faithfulness-outcomes.md`](docs/architecture/reviews/2026-09-faithfulness-outcomes.md);
 the audit packages themselves were the working record of that campaign and were
 retired from the tree on 2026-09-10, recoverable at `afb25bab1`. Book and
-workflow limitations are kept under
-[`ledgers/leveque-finite-volume/`](ledgers/leveque-finite-volume/).
+workflow limitations are recorded in the campaign's local issue ledgers, which
+are working files kept inside a checkout rather than committed.
 
 ### Vershynin: high-dimensional probability
 
