@@ -68,4 +68,36 @@ theorem leveque02_initialBoundaryAdvectionSolution
   · simp [inflowProfile, hx]
   · simp [inflowProfile, not_lt.2 (le_of_lt hx)]
 
+
+/-- No boundary condition may be imposed at the outflow end.
+
+The source says we do not need to specify a condition at `x = b`, "and in fact
+cannot, since the density there is entirely determined by the data given
+already". That is the claim here, and it is a uniqueness statement rather than a
+remark about convenience: two solutions of the advection equation along the
+backward characteristic from the outflow station, carrying the same initial
+profile across the pipe and the same inflow datum, take the same value at the
+outflow station. There is therefore nothing left to prescribe there.
+
+The hypotheses are confined to the backward ray from `(b,t)` down to the time at
+which it leaves the pipe, which is all a pipe of finite length can supply. The
+ray leaves through the initial line when it has not had time to reach the inflow
+station, and through the inflow station otherwise; the proof splits on exactly
+that, which is the content of the source's figure. -/
+theorem leveque02_outflowBoundaryDetermined
+    {q r : ℝ → ℝ → ℝ} {speed a b t₀ t : ℝ}
+    (hspeed : 0 < speed) (hab : a ≤ b) (ht : t₀ ≤ t)
+    (hqdiff : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      DifferentiableAt ℝ (Function.uncurry q) (b - speed * (t - s), s))
+    (hqpde : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      leveque01_equation02_scalarAdvectionAt q speed (b - speed * (t - s)) s)
+    (hrdiff : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      DifferentiableAt ℝ (Function.uncurry r) (b - speed * (t - s), s))
+    (hrpde : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      leveque01_equation02_scalarAdvectionAt r speed (b - speed * (t - s)) s)
+    (hinit : ∀ x, a ≤ x → x ≤ b → q x t₀ = r x t₀)
+    (hinflow : ∀ s, t₀ ≤ s → q a s = r a s) :
+    q b t = r b t :=
+  outflow_value_determined hspeed hab ht hqdiff hqpde hrdiff hrpde hinit hinflow
+
 end NumStability

@@ -151,4 +151,88 @@ theorem inflowProfile_isLinearAdvectionSolutionAt_interior
     simpa [Function.comp_def] using hi.comp x hshift
   · simp
 
+
+/-! ### The value at the outflow end is not free -/
+
+/-- A solution keeps its value along a characteristic segment, given the
+equation and joint differentiability only on that segment.
+
+The library's global result needs the equation everywhere. Here the hypotheses
+are confined to the backward ray from `(x, s₁)` down to time `s₀`, which is what a
+pipe of finite length can supply. -/
+theorem eq_endpoint_of_characteristic
+    {q : ℝ → ℝ → ℝ} {speed x s₀ s₁ : ℝ} (hs : s₀ ≤ s₁)
+    (hdiff : ∀ s ∈ Set.Icc s₀ s₁,
+      DifferentiableAt ℝ (Function.uncurry q) (x - speed * (s₁ - s), s))
+    (hpde : ∀ s ∈ Set.Icc s₀ s₁,
+      IsLinearAdvectionSolutionAt q speed (x - speed * (s₁ - s)) s) :
+    q x s₁ = q (x - speed * (s₁ - s₀)) s₀ := by
+  set x₀ : ℝ := x - speed * s₁ with hx₀
+  have hpt : ∀ s : ℝ, x₀ + speed * s = x - speed * (s₁ - s) := by
+    intro s; rw [hx₀]; ring
+  have hd : ∀ s ∈ Set.Icc s₀ s₁,
+      HasDerivAt (fun τ => q (x₀ + speed * τ) τ) 0 s := by
+    intro s hs'
+    refine linearAdvection_hasDerivAt_characteristic ?_ ?_
+    · rw [hpt s]; exact hdiff s hs'
+    · rw [hpt s]; exact hpde s hs'
+  have hcont : ContinuousOn (fun τ => q (x₀ + speed * τ) τ) (Set.Icc s₀ s₁) :=
+    fun s hs' => ((hd s hs').continuousAt).continuousWithinAt
+  have key := constant_of_has_deriv_right_zero hcont
+    (fun s hs' => (hd s ⟨hs'.1, le_of_lt hs'.2⟩).hasDerivWithinAt) s₁
+    (Set.right_mem_Icc.2 hs)
+  have hend : x₀ + speed * s₁ = x := by rw [hx₀]; ring
+  have hstart : x₀ + speed * s₀ = x - speed * (s₁ - s₀) := by rw [hx₀]; ring
+  rw [hend, hstart] at key
+  exact key
+
+/-- The density at the outflow end is determined by the data already given.
+
+For a positive velocity the characteristic through a point of the outflow
+station runs backwards and leaves the pipe either through the initial line or
+through the inflow station, whichever it meets first. Its value there is fixed
+by the initial profile or by the inflow datum, so two solutions carrying the
+same data agree at the outflow end. That is why no boundary condition may be
+imposed there: the value is not free to be prescribed. -/
+theorem outflow_value_determined
+    {q r : ℝ → ℝ → ℝ} {speed a b t₀ t : ℝ}
+    (hspeed : 0 < speed) (hab : a ≤ b) (ht : t₀ ≤ t)
+    (hqdiff : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      DifferentiableAt ℝ (Function.uncurry q) (b - speed * (t - s), s))
+    (hqpde : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      IsLinearAdvectionSolutionAt q speed (b - speed * (t - s)) s)
+    (hrdiff : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      DifferentiableAt ℝ (Function.uncurry r) (b - speed * (t - s), s))
+    (hrpde : ∀ s ∈ Set.Icc (max t₀ (t - (b - a) / speed)) t,
+      IsLinearAdvectionSolutionAt r speed (b - speed * (t - s)) s)
+    (hinit : ∀ x, a ≤ x → x ≤ b → q x t₀ = r x t₀)
+    (hinflow : ∀ s, t₀ ≤ s → q a s = r a s) :
+    q b t = r b t := by
+  set s₀ : ℝ := max t₀ (t - (b - a) / speed) with hs₀
+  have hwidth : 0 ≤ (b - a) / speed := div_nonneg (by linarith) (le_of_lt hspeed)
+  have hle : s₀ ≤ t := max_le ht (by linarith)
+  have hq := eq_endpoint_of_characteristic hle hqdiff hqpde
+  have hr := eq_endpoint_of_characteristic hle hrdiff hrpde
+  have hmid : q (b - speed * (t - s₀)) s₀ = r (b - speed * (t - s₀)) s₀ := by
+    rcases max_cases t₀ (t - (b - a) / speed) with ⟨heq, hcmp⟩ | ⟨heq, hcmp⟩
+    · have hs : s₀ = t₀ := by rw [hs₀, heq]
+      have hlow : a ≤ b - speed * (t - t₀) := by
+        have h1 : t - t₀ ≤ (b - a) / speed := by linarith
+        have h2 : (t - t₀) * speed ≤ b - a := (le_div_iff₀ hspeed).1 h1
+        nlinarith [h2]
+      have hhigh : b - speed * (t - t₀) ≤ b := by
+        have : 0 ≤ speed * (t - t₀) := mul_nonneg (le_of_lt hspeed) (by linarith)
+        linarith
+      rw [hs]
+      exact hinit _ hlow hhigh
+    · have hs : s₀ = t - (b - a) / speed := by rw [hs₀, heq]
+      have hpos : b - speed * (t - s₀) = a := by
+        have hne : speed ≠ 0 := ne_of_gt hspeed
+        rw [hs]
+        field_simp
+        ring
+      rw [hpos]
+      exact hinflow s₀ (le_max_left _ _)
+  rw [hq, hr, hmid]
+
 end NumStability
