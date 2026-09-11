@@ -478,4 +478,65 @@ theorem advectiveFlux_sign_needs_pos :
   norm_num
 
 
+/-! ### The flux law carries the velocity that produced it -/
+
+/-- Evaluating the density at a different station changes the flux, so the
+source's insistence that both factors are taken *at the same point* is content
+rather than notation. -/
+theorem advectiveFlux_point_matters :
+    ∃ (v w : ℝ → ℝ → ℝ) (y s y' : ℝ),
+      advectiveFlux v (w y' s) y s ≠ advectiveFlux v (w y s) y s := by
+  refine ⟨fun _ _ => 1, fun a _ => a, 0, 0, 1, ?_⟩
+  simp [advectiveFlux]
+
+/-- The flux vanishes where either factor does. -/
+theorem advectiveFlux_eq_zero_of {u : ℝ → ℝ → ℝ} {q x t : ℝ}
+    (h : u x t = 0 ∨ q = 0) : advectiveFlux u q x t = 0 := by
+  rcases h with h | h <;> simp [advectiveFlux, h]
+
+/-- The flux law determines the velocity field that produced it.  This is what
+makes "since the velocity is a known function we can write the flux as a flux
+law" a lossless rewriting rather than a discarding of data. -/
+theorem advectiveFlux_inj {u v : ℝ → ℝ → ℝ} :
+    advectiveFlux u = advectiveFlux v ↔ u = v := by
+  constructor
+  · intro h
+    funext x t
+    have hxt := congrFun (congrFun (congrFun h 1) x) t
+    simpa [advectiveFlux] using hxt
+  · rintro rfl
+    rfl
+
+/-- The constant-velocity flux law is the advective law of the constant field,
+which is the sense in which the source's "in particular" specialises the general
+flux law. -/
+theorem uniformAdvectiveFlux_eq_advectiveFlux (speed : ℝ) :
+    uniformAdvectiveFlux speed = advectiveFlux fun _ _ => speed := rfl
+
+/-- The constant speed is recoverable from the law it induces. -/
+theorem uniformAdvectiveFlux_inj {a b : ℝ} :
+    uniformAdvectiveFlux a = uniformAdvectiveFlux b ↔ a = b := by
+  constructor
+  · intro h
+    have h0 := congrFun (congrFun (congrFun h 1) 0) 0
+    simpa using h0
+  · rintro rfl
+    rfl
+
+/-- Constancy of the velocity is load-bearing: a velocity that varies in space
+gives a law that is not autonomous. -/
+theorem exists_not_isAutonomousFlux :
+    ∃ v : ℝ → ℝ → ℝ, ¬ IsAutonomousFlux (advectiveFlux v) := by
+  refine ⟨fun x _ => x, fun h => ?_⟩
+  have h1 := h 1 0 0 1 0
+  simp [advectiveFlux] at h1
+
+/-- The evaluation shorthand is not its own negation, so the minus sign the
+source writes in front of it carries information. -/
+theorem evalBetween_ne_neg_evalBetween :
+    ∃ (h : ℝ → ℝ) (a b : ℝ), evalBetween h a b ≠ -evalBetween h a b := by
+  refine ⟨id, 0, 1, ?_⟩
+  norm_num [evalBetween]
+
+
 end NumStability

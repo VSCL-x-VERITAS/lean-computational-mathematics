@@ -106,20 +106,21 @@ interchangeable; and on the stated ordering a nonnegative density has
 nonnegative mass. -/
 theorem leveque02_equation02
     {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} {F₁ F₂ production : ℝ → ℝ}
-    (hsection : x₁ < x₂)
-    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production)
-    (hconserved : ∀ t, production t = 0) (t : ℝ) :
-    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
-        (F₁ t - F₂ t) t ∧
-      x₁ ≠ x₂ ∧
-      HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₂ x₁)
-        (-(F₁ t - F₂ t)) t ∧
-      ∀ τ : ℝ, (∀ x ∈ Set.Icc x₁ x₂, 0 ≤ q x τ) →
-        0 ≤ sectionMass (fun x => q x τ) x₁ x₂ := by
-  refine ⟨isSectionBalanceOn_of_no_production hbalance hconserved t,
-    ne_of_lt hsection, ?_, fun _ hq => sectionMass_nonneg hsection.le hq⟩
-  have h := isSectionBalanceWithProduction_reverse hbalance t
-  rwa [hconserved t, add_zero] at h
+    (hbalance : IsSectionBalanceWithProduction q x₁ x₂ F₁ F₂ production) :
+    (∀ t, production t = 0) ↔ IsSectionBalanceOn q x₁ x₂ F₁ F₂ :=
+  ⟨isSectionBalanceOn_of_no_production hbalance,
+   fun hplain t => no_production_of_isSectionBalanceOn hbalance hplain t⟩
+
+/-- The printed section is ordered, `x₁ < x₂`.  The ordering is not needed for
+(2.2) itself, which is why it is not a hypothesis there; what it buys is that
+the integral (2.1) is a mass rather than a signed quantity.  Recording it here
+keeps that separation visible instead of padding the equation with a clause its
+own hypotheses do not reach. -/
+theorem leveque02_equation02_orderedSection
+    {q : ℝ → ℝ → ℝ} {x₁ x₂ : ℝ} (hsection : x₁ < x₂) (τ : ℝ)
+    (hq : ∀ x ∈ Set.Icc x₁ x₂, 0 ≤ q x τ) :
+    0 ≤ sectionMass (fun x => q x τ) x₁ x₂ :=
+  sectionMass_nonneg hsection.le hq
 
 /-- The premise of (2.2) is exactly what the equation costs: a section obeying
 the endpoint balance is one in which nothing is created or destroyed. Without
@@ -209,21 +210,40 @@ theorem leveque02_equation02_inwardFluxes
 /-- Equation (2.3): the flux of the tracer at a point is the product of the
 velocity and the density there. -/
 theorem leveque02_equation03_advectiveFlux
-    (u : ℝ → ℝ → ℝ) (q x t : ℝ) :
-    advectiveFlux u q x t = u x t * q := rfl
+    (u q : ℝ → ℝ → ℝ) (x t : ℝ) :
+    advectiveFlux u (q x t) x t = u x t * q x t ∧
+      (0 < q x t → (0 < advectiveFlux u (q x t) x t ↔ 0 < u x t)) ∧
+      (u x t = 0 ∨ q x t = 0 → advectiveFlux u (q x t) x t = 0) ∧
+      (∃ (v w : ℝ → ℝ → ℝ) (y s y' : ℝ),
+        advectiveFlux v (w y' s) y s ≠ advectiveFlux v (w y s) y s) :=
+  ⟨rfl, fun hq => advectiveFlux_pos_iff hq, advectiveFlux_eq_zero_of,
+   advectiveFlux_point_matters⟩
 
 /-- Equation (2.4): since the velocity is a known function, the flux is written
 as a flux law `f(q, x, t)` depending on the state, the position and the time. -/
 theorem leveque02_equation04_fluxLaw
     (u : ℝ → ℝ → ℝ) :
-    (advectiveFlux u : ScalarFluxLaw) = fun q x t => u x t * q := rfl
+    (advectiveFlux u : ScalarFluxLaw) = (fun q x t => u x t * q) ∧
+      (∀ (q : ℝ → ℝ → ℝ) (x t : ℝ),
+        advectiveFlux u (q x t) x t = u x t * q x t) ∧
+      (∀ v : ℝ → ℝ → ℝ, advectiveFlux u = advectiveFlux v ↔ u = v) ∧
+      (∀ c q x t : ℝ,
+        advectiveFlux u (c * q) x t = c * advectiveFlux u q x t) :=
+  ⟨rfl, fun _ _ _ => rfl, fun _ => advectiveFlux_inj, fun c q x t => by
+    simp only [advectiveFlux]
+    ring⟩
 
 /-- Equation (2.5): when the velocity is a constant the flux law depends on the
 state alone. -/
 theorem leveque02_equation05_autonomousFlux (speed : ℝ) :
     (∀ q x t, uniformAdvectiveFlux speed q x t = speed * q) ∧
-      IsAutonomousFlux (uniformAdvectiveFlux speed) :=
-  ⟨fun _ _ _ => rfl, uniformAdvectiveFlux_isAutonomous speed⟩
+      uniformAdvectiveFlux speed = advectiveFlux (fun _ _ => speed) ∧
+      IsAutonomousFlux (uniformAdvectiveFlux speed) ∧
+      (∀ s : ℝ, uniformAdvectiveFlux speed = uniformAdvectiveFlux s ↔ speed = s) ∧
+      (∃ v : ℝ → ℝ → ℝ, ¬ IsAutonomousFlux (advectiveFlux v)) :=
+  ⟨fun _ _ _ => rfl, uniformAdvectiveFlux_eq_advectiveFlux speed,
+   uniformAdvectiveFlux_isAutonomous speed, fun _ => uniformAdvectiveFlux_inj,
+   exists_not_isAutonomousFlux⟩
 
 /-- The constant-speed flux law of (2.5) is the one-component case of the
 integrated Chapter 1 linear flux, so the two chapters name the same object. -/
@@ -258,12 +278,20 @@ theorem leveque02_equation06_autonomousBalance
 is the printed form of (2.6) literally: the endpoint terms are the flux function
 applied to the state at the two stations. -/
 theorem leveque02_equation06_endpoints
-    {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw}
+    {q : ℝ → ℝ → ℝ} {f : ScalarFluxLaw} (hf : IsAutonomousFlux f)
     (h : leveque02Equation02IntegralForm q (fun x t => f (q x t) x t))
     (x₁ x₂ t : ℝ) :
-    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
-      (f (q x₁ t) x₁ t - f (q x₂ t) x₂ t) t :=
-  sectionBalance_endpoints_of_autonomous h x₁ x₂ t
+    (∃ g : ℝ → ℝ, (∀ u y s, f u y s = g u) ∧
+        HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+          (g (q x₁ t) - g (q x₂ t)) t) ∧
+      HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+        (f (q x₁ t) x₁ t - f (q x₂ t) x₂ t) t ∧
+      (∃ v : ℝ → ℝ → ℝ, ¬ IsAutonomousFlux (advectiveFlux v)) := by
+  refine ⟨?_, sectionBalance_endpoints_of_autonomous h x₁ x₂ t,
+    exists_not_isAutonomousFlux⟩
+  obtain ⟨g, hg⟩ := hf.exists_state_function
+  refine ⟨g, hg, ?_⟩
+  simpa [hg] using h x₁ x₂ t
 
 /-- The identification the chapter makes between (2.2) and (2.3): the balance
 whose station flux is the advective flux is exactly the balance with endpoint
@@ -278,8 +306,16 @@ theorem leveque02_advectiveBalance_iff (q : ℝ → ℝ → ℝ) (u : ℝ → �
 
 /-- Equation (2.7): the shorthand of evaluating the composed flux between the
 limits denotes exactly the endpoint difference of (2.6). -/
-theorem leveque02_equation07_evaluationNotation (g : ℝ → ℝ) (x₁ x₂ : ℝ) :
-    -evalBetween g x₁ x₂ = g x₁ - g x₂ :=
-  neg_evalBetween_eq_flux_difference g x₁ x₂
+theorem leveque02_equation07_evaluationNotation
+    {q : ℝ → ℝ → ℝ} {g : ℝ → ℝ}
+    (h : ∀ y₁ y₂ s, HasDerivAt (fun τ => sectionMass (fun x => q x τ) y₁ y₂)
+        (g (q y₁ s) - g (q y₂ s)) s)
+    (x₁ x₂ t : ℝ) :
+    HasDerivAt (fun τ => sectionMass (fun x => q x τ) x₁ x₂)
+        (-evalBetween (fun x => g (q x t)) x₁ x₂) t ∧
+      (∀ (r : ℝ → ℝ) (a b : ℝ), -evalBetween r a b = r a - r b) ∧
+      (∃ (r : ℝ → ℝ) (a b : ℝ), evalBetween r a b ≠ -evalBetween r a b) := by
+  refine ⟨?_, neg_evalBetween_eq_flux_difference, evalBetween_ne_neg_evalBetween⟩
+  simpa [evalBetween] using h x₁ x₂ t
 
 end NumStability
