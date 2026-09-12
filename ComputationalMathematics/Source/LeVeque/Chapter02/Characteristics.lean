@@ -33,8 +33,11 @@ namespace NumStability
 The source claims both directions and both are here: every differentiable
 profile translated at the advection speed solves the equation, and every
 differentiable solution is such a translate. The third conjunct exhibits, outside
-every binder, a solution whose spatial derivative vanishes nowhere, so the
-general form describes a class that is not exhausted by the constants.
+every binder, a solution stated through its own two derivative families, which
+satisfy the advection equation and whose spatial derivative vanishes nowhere. The
+equation is written in those named families rather than left to a predicate, so
+both families are constrained by the clause that exhibits them, and the class the
+general form describes is visibly not exhausted by the constants.
 
 The source says "smooth" where this row asks only for differentiability, once of
 the profile in the forward direction and jointly in the converse. That is a
@@ -51,19 +54,21 @@ theorem leveque02_equation13_translatingProfile (speed : ℝ) :
       (∃ r rt rx : ℝ → ℝ → ℝ,
         (∀ y s, HasDerivAt (fun τ => r y τ) (rt y s) s) ∧
           (∀ y s, HasDerivAt (fun ξ => r ξ s) (rx y s) y) ∧
-          (∀ y s, leveque01_equation02_scalarAdvectionAt r speed y s) ∧
-          (∀ y s, rx y s ≠ 0) ∧
-          ¬ ∃ c : ℝ, ∀ y s, r y s = c) := by
+          (∀ y s, rt y s + speed * rx y s = 0) ∧
+          (∀ y s, rx y s ≠ 0)) := by
   refine ⟨fun profile hprofile x t =>
       travelingWave_isLinearAdvectionSolution speed hprofile x t,
-    fun q hq hpde => ⟨fun y => q y 0, ?_, ?_⟩,
-    exists_isLinearAdvectionSolution_nonconstant speed⟩
+    fun q hq hpde => ⟨fun y => q y 0, ?_, ?_⟩, ?_⟩
   · have hcomp : Differentiable ℝ fun y : ℝ => (y, (0 : ℝ)) :=
       differentiable_id.prodMk (differentiable_const 0)
     simpa [Function.comp_def] using hq.comp hcomp
   · intro x t
     have heq := linearAdvection_eq_travelingWave_of_differentiable hq hpde
     simpa [travelingWave] using congrFun (congrFun heq x) t
+  · obtain ⟨r, rt, rx, hrt, hrx, hsol, hne, _⟩ :=
+      exists_isLinearAdvectionSolution_nonconstant speed
+    exact ⟨r, rt, rx, hrt, hrx,
+      fun y s => (advectionSolution_iff_residual hrt hrx y s).mp (hsol y s), hne⟩
 
 /-- Equation (2.14): the derivative of the density along a characteristic ray.
 
