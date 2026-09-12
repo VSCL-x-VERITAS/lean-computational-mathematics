@@ -11,6 +11,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEquation
 import ComputationalMathematics.Source.LeVeque.Chapter02.InflowBoundary
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralForm
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
+import ComputationalMathematics.Source.LeVeque.Chapter02.SourceTerms
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableCoefficient
 
 /-!
