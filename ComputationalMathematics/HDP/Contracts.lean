@@ -64,6 +64,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinCou
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.FairCoinNormalization.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.GaussianAtoms.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Proposition02.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section01.Theorem03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Definition01.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise07.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section02.Exercise09A.Contract
@@ -80,9 +81,12 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise02.
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise03.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise05.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise06.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Exercise08.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.OnePlusBound.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Remark04.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section03.Theorem01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise04.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.Exercise05.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.ExpectedGraphDegree.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeChernoff.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section04.GraphDegreeUnionBound.Contract
