@@ -1517,8 +1517,6 @@ all other surfaces retain the declaration-bearing test requirement.
 | `NumStability.FloatingPoint.Model` | `ComputationalMathematics.FloatingPoint.Model` |
 | `NumStability.FloatingPoint.OperationLaws` | `ComputationalMathematics.FloatingPoint.OperationLaws` |
 | `NumStability.HDP` | `ComputationalMathematics.HDP` |
-| `NumStability.HDP.Concentration` | `ComputationalMathematics.HDP.Concentration` |
-| `NumStability.HDP.Concentration.MetricMeasure` | `ComputationalMathematics.HDP.Concentration.MetricMeasure` |
 | `NumStability.HDP.ContractSignatures` | `ComputationalMathematics.HDP.ContractSignatures` |
 | `NumStability.HDP.ContractSignatures.C_01_hcor_h1_d2_d5` | `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05.Signature` |
 | `NumStability.HDP.ContractSignatures.C_01_hex_h1_d2_d2` | `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Exercise02.Signature` |
@@ -1547,9 +1545,6 @@ all other surfaces retain the declaration-bearing test requirement.
 | `NumStability.HDP.ContractSignatures.C_02_hthm_h2_d6_d2` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02.Signature` |
 | `NumStability.HDP.ContractSignatures.C_02_hthm_h2_d6_d3` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03.Signature` |
 | `NumStability.HDP.ContractSignatures.C_02_hthm_hpsi2_hnorm_hcharacterizations` | `ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Signature` |
-| `NumStability.HDP.ContractSignatures.C_05_hex_h5_d1_d13` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13.Signature` |
-| `NumStability.HDP.ContractSignatures.C_05_hex_h5_d1_d14` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14.Signature` |
-| `NumStability.HDP.ContractSignatures.C_05_hex_h5_d2_d11` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Signature` |
 | `NumStability.HDP.Contracts` | `ComputationalMathematics.HDP.Contracts` |
 | `NumStability.HDP.Contracts.C_01_hcor_h1_d2_d5` | `ComputationalMathematics.Source.Vershynin.Chapter01.Section02.Corollary05.Contract` |
 | `NumStability.HDP.Contracts.C_01_hdef_hbernoulli_hbinomial` | `ComputationalMathematics.Source.Vershynin.Chapter01.BernoulliAndBinomial.Contract` |
@@ -1587,9 +1582,6 @@ all other surfaces retain the declaration-bearing test requirement.
 | `NumStability.HDP.Contracts.C_02_hthm_h2_d6_d2` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem02.Contract` |
 | `NumStability.HDP.Contracts.C_02_hthm_h2_d6_d3` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section06.Theorem03.Contract` |
 | `NumStability.HDP.Contracts.C_02_hthm_hpsi2_hnorm_hcharacterizations` | `ComputationalMathematics.Source.Vershynin.Chapter02.PsiTwoNormCharacterizations.Contract` |
-| `NumStability.HDP.Contracts.C_05_hex_h5_d1_d13` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13.Contract` |
-| `NumStability.HDP.Contracts.C_05_hex_h5_d1_d14` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14.Contract` |
-| `NumStability.HDP.Contracts.C_05_hex_h5_d2_d11` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Contract` |
 | `NumStability.HDP.Scalar` | `ComputationalMathematics.HDP.Scalar` |
 | `NumStability.HDP.Scalar.IndependentSums` | `ComputationalMathematics.HDP.Scalar.IndependentSums` |
 | `NumStability.HDP.Scalar.IndependentSums.Chernoff` | `ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff` |
@@ -3209,16 +3201,6 @@ all other surfaces retain the declaration-bearing test requirement.
 | `NumStability.Source.Vershynin.Chapter02.Section07.Example13.Contract` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13.Contract` |
 | `NumStability.Source.Vershynin.Chapter02.Section07.Example13.Signature` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Example13.Signature` |
 | `NumStability.Source.Vershynin.Chapter02.Section07.Remark09.Signature` | `ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark09.Signature` |
-| `NumStability.Source.Vershynin.Chapter05` | `ComputationalMathematics.Source.Vershynin.Chapter05` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise13` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise13.Contract` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13.Contract` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise13.Signature` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise13.Signature` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise14` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise14.Contract` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14.Contract` |
-| `NumStability.Source.Vershynin.Chapter05.Section01.Exercise14.Signature` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section01.Exercise14.Signature` |
-| `NumStability.Source.Vershynin.Chapter05.Section02.Exercise11` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11` |
-| `NumStability.Source.Vershynin.Chapter05.Section02.Exercise11.Contract` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Contract` |
-| `NumStability.Source.Vershynin.Chapter05.Section02.Exercise11.Signature` | `ComputationalMathematics.Source.Vershynin.Chapter05.Section02.Exercise11.Signature` |
 | `NumStability.Upstream.Lindemann.AlgebraicPart` | `ComputationalMathematics.Upstream.Lindemann.AlgebraicPart` |
 | `NumStability.Upstream.Lindemann.Basic` | `ComputationalMathematics.Upstream.Lindemann.Basic` |
 | `NumStability.Upstream.Lindemann.FinsuppQuotient` | `ComputationalMathematics.Upstream.Lindemann.FinsuppQuotient` |

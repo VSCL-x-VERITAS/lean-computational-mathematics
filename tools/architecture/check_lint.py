@@ -374,11 +374,6 @@ _BY_DECL_CONCLUSION = [
 ]
 
 _HDP_UNUSED_ARGUMENT_DECLARATIONS = (
-    "NumStability.HDP.Concentration.MetricMeasure.hdp_05_hex_h5_d1_d14",
-    "NumStability.HDP.Concentration.MetricMeasure.integral_abs_le_two_mul_of_psiTwoAdmissible",
-    "NumStability.HDP.Concentration.MetricMeasure.normalizedHammingDistance",
-    "NumStability.HDP.Concentration.MetricMeasure.riemannian_distance_self",
-    "NumStability.HDP.Concentration.MetricMeasure.twoPointLaw_median_interval",
     "NumStability.HDP.Scalar.IndependentSums.Chernoff.erdosRenyiSparseMaxDegreeLogBound",
     "NumStability.HDP.Scalar.IndependentSums.Chernoff.incidentEdgeCount",
     "NumStability.HDP.Scalar.IndependentSums.Chernoff.poissonAddLaw",
@@ -651,18 +646,6 @@ _FROZEN_VERSHYNIN_LINT_KEYS = frozenset(
         (
             "docBlame",
             "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
-        ),
-        (
-            "docBlame",
-            "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise13/Signature.lean",
-        ),
-        (
-            "docBlame",
-            "ComputationalMathematics/Source/Vershynin/Chapter05/Section01/Exercise14/Signature.lean",
-        ),
-        (
-            "docBlame",
-            "ComputationalMathematics/Source/Vershynin/Chapter05/Section02/Exercise11/Signature.lean",
         ),
     }
 )
