@@ -128,4 +128,93 @@ theorem fourierFlux_eq_fickFlux_iff_capacity_one
       exact (hcap x).unique hc
     simp [diffusiveFlux, hconst, hone x]
 
+
+/-! ### The equations a gradient flux produces -/
+
+/-- Equation (2.22): a diffusion coefficient varying in space gives
+`q_t = (β(x) q_x)_x`.
+
+The coefficient no longer passes through the outer derivative, so the
+right-hand side is the derivative of the product rather than a multiple of a
+second derivative. -/
+theorem variableDiffusion_of_conservationLaw
+    {q qt qx Fx : ℝ → ℝ → ℝ} {beta : ℝ → ℝ}
+    (hqx : ∀ x t, HasDerivAt (fun y => q y t) (qx x t) x)
+    (hFx : ∀ x t, HasDerivAt (fun y => diffusiveFlux (beta y) (qx y t)) (Fx x t) x)
+    (hlaw : ∀ x t, qt x t + Fx x t = 0) (x t : ℝ) :
+    qt x t = deriv (fun y => beta y * qx y t) x ∧
+      qx x t = deriv (fun y => q y t) x := by
+  refine ⟨?_, ((hqx x t).deriv).symm⟩
+  have hfun : (fun y : ℝ => -diffusiveFlux (beta y) (qx y t))
+      = fun y => beta y * qx y t := by
+    funext y
+    simp [diffusiveFlux]
+  have hneg : HasDerivAt (fun y => beta y * qx y t) (-(Fx x t)) x := by
+    simpa only [Pi.neg_def, hfun] using (hFx x t).neg
+  have hzero := hlaw x t
+  rw [hneg.deriv]
+  linarith
+
+/-- Equation (2.23): with advection and diffusion together the flux is
+`ū q - β q_x` and the equation is `q_t + ū q_x = β q_xx`. -/
+theorem advectionDiffusion_of_conservationLaw
+    {q qt qx qxx : ℝ → ℝ → ℝ} {speed beta : ℝ}
+    (hqx : ∀ x t, HasDerivAt (fun y => q y t) (qx x t) x)
+    (hqxx : ∀ x t, HasDerivAt (fun y => qx y t) (qxx x t) x)
+    (hlaw : ∀ x t, qt x t
+      + deriv (fun y => speed * q y t + diffusiveFlux beta (qx y t)) x = 0)
+    (x t : ℝ) :
+    qt x t + speed * qx x t = beta * qxx x t := by
+  have hflux : HasDerivAt (fun y => speed * q y t + diffusiveFlux beta (qx y t))
+      (speed * qx x t + -beta * qxx x t) x := by
+    have h1 : HasDerivAt (fun y => speed * q y t) (speed * qx x t) x :=
+      (hqx x t).const_mul speed
+    have h2 : HasDerivAt (fun y => diffusiveFlux beta (qx y t))
+        (-beta * qxx x t) x := by
+      simpa [diffusiveFlux] using (hqxx x t).const_mul (-beta)
+    exact h1.add h2
+  have hzero := hlaw x t
+  rw [hflux.deriv] at hzero
+  linarith
+
+/-- Equation (2.25): the differential form of the heat equation, with the
+conserved density the internal energy rather than the temperature. -/
+theorem heatDifferentialForm
+    {q qx Et Fx : ℝ → ℝ → ℝ} {capacity beta : ℝ → ℝ}
+    (hEt : ∀ x t, HasDerivAt (fun τ => capacity x * q x τ) (Et x t) t)
+    (hFx : ∀ x t, HasDerivAt (fun y => diffusiveFlux (beta y) (qx y t)) (Fx x t) x)
+    (hlaw : ∀ x t, Et x t + Fx x t = 0) (x t : ℝ) :
+    Et x t = deriv (fun y => beta y * qx y t) x ∧
+      Et x t = deriv (fun τ => capacity x * q x τ) t := by
+  refine ⟨?_, ((hEt x t).deriv).symm⟩
+  have hfun : (fun y : ℝ => -diffusiveFlux (beta y) (qx y t))
+      = fun y => beta y * qx y t := by
+    funext y
+    simp [diffusiveFlux]
+  have hneg : HasDerivAt (fun y => beta y * qx y t) (-(Fx x t)) x := by
+    simpa only [Pi.neg_def, hfun] using (hFx x t).neg
+  have hzero := hlaw x t
+  rw [hneg.deriv]
+  linarith
+
+/-- Equation (2.26): a heat capacity that does not vary with time passes
+through the time derivative, so `(κ q)_t` is `κ q_t`. -/
+theorem hasDerivAt_energy_of_timeIndependent_capacity
+    {q qt : ℝ → ℝ → ℝ} {capacity : ℝ → ℝ}
+    (hqt : ∀ x t, HasDerivAt (fun τ => q x τ) (qt x t) t) (x t : ℝ) :
+    HasDerivAt (fun τ => capacity x * q x τ) (capacity x * qt x t) t :=
+  (hqt x t).const_mul (capacity x)
+
+/-- A capacity that does vary with time does not pass through, so the step from
+(2.25) to (2.26) is a real use of the hypothesis rather than a rearrangement. -/
+theorem energy_timeDerivative_needs_timeIndependent_capacity :
+    ∃ (kappa q : ℝ → ℝ → ℝ) (x t : ℝ),
+      deriv (fun τ => kappa x τ * q x τ) t
+        ≠ kappa x t * deriv (fun τ => q x τ) t := by
+  refine ⟨fun _ τ => τ, fun _ _ => 1, 0, 0, ?_⟩
+  have h : HasDerivAt (fun τ : ℝ => τ * (1 : ℝ)) 1 0 := by
+    simpa using (hasDerivAt_id (0 : ℝ)).mul_const (1 : ℝ)
+  rw [h.deriv]
+  norm_num
+
 end NumStability
