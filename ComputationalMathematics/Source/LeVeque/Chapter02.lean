@@ -41,6 +41,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
+import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicPressureTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumFlux
