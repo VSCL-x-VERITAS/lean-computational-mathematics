@@ -2,6 +2,7 @@
 SPDX-License-Identifier: MIT
 -/
 
+import ComputationalMathematics.Source.LeVeque.Chapter02.ActualPressureSlopeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionDiffusion
@@ -21,10 +22,12 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityRealizationTarg
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalExternalHeat
+import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalFluidCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluidDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.DomainPressureTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
