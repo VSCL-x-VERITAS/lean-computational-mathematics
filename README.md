@@ -44,9 +44,8 @@ faithfully.
 
 ## Current repository status
 
-The Chapter 2 checkpoint published on 2026-09-13,
-[`4dfd80dea`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/4dfd80deaffaab9a670841881d5fcf3e202fc697),
-contains 2,815 classified production Lean modules: 712 reusable, 1,645 source,
+The current Chapter 2 development checkpoint contains 2,827 classified
+production Lean modules: 712 reusable, 1,657 source,
 448 aggregate, 5 internal and 5 upstream. These counts are recorded in the
 [tier manifest](docs/architecture/tiers.json). Chapter 2 remains in progress;
 its accepted source coverage is described below.
@@ -258,8 +257,8 @@ are working files kept inside a checkout rather than committed.
 The ongoing [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
 is available through
 [`ComputationalMathematics.Source.LeVeque.Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean).
-At the current 2026-09-13 checkpoint, the chapter gate records **39 of 243
-source objects complete (16.05%)**, with **204 remaining**, zero skipped and
+At the current 2026-09-13 checkpoint, the chapter gate records **40 of 243
+source objects complete (16.46%)**, with **203 remaining**, zero skipped and
 zero deferred. Each completed object has an accepted independent statement
 faithfulness audit and a validated Lean proof receipt. Proof-free targets
 for pending claims are also present; their presence does not count as completion.
@@ -270,7 +269,9 @@ component and matrix conservation systems, mass continuity, fluid-flux
 coordinates, and the decomposition into a constant background and perturbation.
 It also covers the repeated-eigenvalue reaction matrix, species-dependent
 reaction-diffusion balance, and the conserved acoustics components. The latest
-published checkpoint passed the full library build and source hygiene/layout
+accepted result proves the conservative variable-velocity advection equation
+and its classical product-rule expansion. The latest published checkpoint
+passed the full library build and source hygiene/layout
 checks; those checks are rerun whenever the product tree advances.
 Audit packages and the active chapter gate remain checkout-local; this is
 partial chapter coverage, not a completed Chapter 2 formalization.
