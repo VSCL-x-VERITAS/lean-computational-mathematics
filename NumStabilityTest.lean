@@ -146,5 +146,6 @@ import NumStabilityTest.Import.ProjectIdentity.Canonical.LeVeque
 import NumStabilityTest.Import.ProjectIdentity.Canonical.MatrixNotation
 import NumStabilityTest.Import.ProjectIdentity.Canonical.Stability
 import NumStabilityTest.Import.ProjectIdentity.Canonical.Vershynin
+import NumStabilityTest.LeVequeChapter02Equation01Target
 import NumStabilityTest.Reorganization.ProjectIdentityPrivateNames
 import NumStabilityTest.Reorganization.ProjectIdentityPrivateNamesTest
