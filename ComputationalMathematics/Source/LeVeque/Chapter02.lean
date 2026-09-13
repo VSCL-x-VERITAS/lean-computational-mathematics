@@ -29,11 +29,13 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantSystem
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.DomainPressure
+import ComputationalMathematics.Source.LeVeque.Chapter02.DomainStateFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidContinuityTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.FluidPerturbationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidStateFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
@@ -45,7 +47,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
 import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicPressureTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.MassFluxContinuityTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.MassFluxContinuity
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumFlux
