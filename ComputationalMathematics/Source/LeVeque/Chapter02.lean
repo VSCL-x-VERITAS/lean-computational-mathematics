@@ -4,6 +4,7 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionDiffusionTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionLocalProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionRectangleConverseTarget
@@ -30,7 +31,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerMass
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerStateFlux
-import ComputationalMathematics.Source.LeVeque.Chapter02.VariableDiffusionTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.VariableDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristic
 
 /-!
