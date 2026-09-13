@@ -11,7 +11,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionRectangleConve
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionWithinProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxLocalTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityBalanceTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityBalance
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityConservationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityCoordinatesTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityRealizationTarget
@@ -22,6 +22,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
+import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
