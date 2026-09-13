@@ -29,8 +29,9 @@ The principal source developments currently cover:
 
 - all 28 chapters of Nicholas J. Higham's *Accuracy and Stability of Numerical
   Algorithms* (2nd ed.), within a selected audited scope;
-- Chapter 1 of Randall J. LeVeque's *Finite Volume Methods for Hyperbolic
-  Problems*, backed by reusable PDE and finite-volume foundations;
+- Chapter 1 and an ongoing Chapter 2 formalization of Randall J. LeVeque's
+  *Finite Volume Methods for Hyperbolic Problems*, backed by reusable PDE and
+  finite-volume foundations;
 - Chapters 1 and 2 of Roman Vershynin's *High-Dimensional Probability*,
   backed by reusable scalar-probability and concentration modules; and
 - a randomized numerical linear algebra case study based on work by Petros
@@ -43,7 +44,17 @@ faithfully.
 
 ## Current repository status
 
-Figures below are measured at the current `main`.
+The Chapter 2 checkpoint published on 2026-09-13,
+[`4dfd80dea`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/4dfd80deaffaab9a670841881d5fcf3e202fc697),
+contains 2,815 classified production Lean modules: 712 reusable, 1,645 source,
+448 aggregate, 5 internal and 5 upstream. These counts are recorded in the
+[tier manifest](docs/architecture/tiers.json). Chapter 2 remains in progress;
+its accepted source coverage is described below.
+
+### Historical: baseline before LeVeque Chapter 2
+
+The following statistics describe the pre–Chapter 2 baseline `0777b2802`.
+They are retained as historical measurements, not current-tree counts.
 
 | Metric | Value |
 |---|---:|
@@ -60,14 +71,14 @@ Figures below are measured at the current `main`.
 | Reviewed lint baseline | 3,690 findings |
 | Tracked files / size | 3,365 / 99.6 MB |
 
-The checks find no `sorry` or `admit`, no unreviewed project axiom
+The baseline checks found no `sorry` or `admit`, no unreviewed project axiom
 declaration, and no canonical production import of a historical path. Five
 attributed upstream modules and 127 Apache-2.0-marked production files are
 covered by the provenance gate.
 
 Release 0.2.0 (2026-09-10) removed the 3,334 historical `NumStability` import
 forwarders and the working record of the completed audit and reorganization
-campaigns. The tracked tree went from 41,651 files and 1,764 MB to its present
+campaigns. The tracked tree went from 41,651 files and 1,764 MB to the baseline
 size, and the Lean library from 17% of the tree to 74%. No Lean statement,
 proof, import or build target changed in that work, and the reviewed lint
 baseline is unchanged. See
@@ -226,14 +237,14 @@ than a Lean proof hole. Detailed evidence lives in the
 
 ### LeVeque: hyperbolic PDEs and finite-volume methods
 
-Fifteen reusable modules under
+Reusable modules under
 [`ComputationalMathematics/Analysis/PartialDifferentialEquations/`](ComputationalMathematics/Analysis/PartialDifferentialEquations/)
 provide conservation-law residuals, constant-coefficient systems,
 hyperbolicity, eigenmode waves, scalar advection, linear acoustics, integral
 conservation, finite-volume cell averages and flux differences, Riemann data,
 Riemann-interface adapters, and operator splitting.
 
-The 30-module LeVeque source surface begins at
+The LeVeque source surface begins at
 [`ComputationalMathematics.Source.LeVeque`](ComputationalMathematics/Source/LeVeque.lean); its
 [`Chapter01` subtree](ComputationalMathematics/Source/LeVeque/Chapter01/) connects those foundations
 to Chapter 1 equations and constructions. The chapter gate outcomes and the
@@ -243,6 +254,23 @@ the audit packages themselves were the working record of that campaign and were
 retired from the tree on 2026-09-10, recoverable at `afb25bab1`. Book and
 workflow limitations are recorded in the campaign's local issue ledgers, which
 are working files kept inside a checkout rather than committed.
+
+The ongoing [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
+is available through
+[`ComputationalMathematics.Source.LeVeque.Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean).
+At checkpoint `4dfd80dea` (2026-09-13), the chapter gate records **36 of 243
+source objects complete (14.81%)**, with **207 remaining**, zero skipped and
+zero deferred. Each completed object has an accepted independent statement
+faithfulness audit and a validated Lean proof receipt. Proof-free targets
+for pending claims are also present; their presence does not count as completion.
+
+Accepted results cover tracer density and flux, characteristic transport,
+diffusion and heat-source identities, reacting-flow balance, momentum flux,
+component and matrix conservation systems, mass continuity, fluid-flux
+coordinates, and the decomposition into a constant background and perturbation.
+The checkpoint passed the full library build and source hygiene/layout checks.
+Audit packages and the active chapter gate remain checkout-local; this is
+partial chapter coverage, not a completed Chapter 2 formalization.
 
 ### Vershynin: high-dimensional probability
 
@@ -311,7 +339,8 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 correspondence |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 and ongoing Chapter 2 correspondence |
+| `ComputationalMathematics.Source.LeVeque.Chapter02` | Chapter 2 proofs, models, and pending proof-free targets |
 | `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1 and 2 source contracts |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
@@ -383,7 +412,7 @@ ComputationalMathematics/
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          finite-volume methods, Chapter 1
+│   ├── LeVeque/                          finite-volume methods, Chapter 1 and ongoing Chapter 2
 │   ├── Vershynin/                        high-dimensional probability, Chapters 1 and 2
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
