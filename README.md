@@ -44,8 +44,8 @@ faithfully.
 
 ## Current repository status
 
-The current Chapter 2 development checkpoint contains 2,827 classified
-production Lean modules: 712 reusable, 1,657 source,
+The current Chapter 2 development checkpoint contains 2,829 classified
+production Lean modules: 712 reusable, 1,659 source,
 448 aggregate, 5 internal and 5 upstream. These counts are recorded in the
 [tier manifest](docs/architecture/tiers.json). Chapter 2 remains in progress;
 its accepted source coverage is described below.

@@ -81,6 +81,8 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.TracerStateFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.UnitHeatCapacityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristic
+import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristicEquationTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristicExistenceTarget
 
 /-!
 # LeVeque Chapter 2: Conservation Laws and Differential Equations
