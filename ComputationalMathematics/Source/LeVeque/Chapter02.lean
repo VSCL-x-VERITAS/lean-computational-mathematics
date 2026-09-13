@@ -19,9 +19,10 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
 import ComputationalMathematics.Source.LeVeque.Chapter02.HeatCapacity
-import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEnergyTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEnergy
 import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
@@ -35,6 +36,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerMass
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerStateFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.UnitHeatCapacityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristic
 
