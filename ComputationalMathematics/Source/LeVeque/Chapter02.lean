@@ -26,7 +26,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalFluidCauchyTar
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluidDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
-import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantSystemTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantSystem
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.DomainPressure
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
@@ -45,6 +45,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
 import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicPressureTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.MassFluxContinuityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MomentumFlux
@@ -52,10 +53,12 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.NonconservativeCharacte
 import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
 import ComputationalMathematics.Source.LeVeque.Chapter02.PressureSlopeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.PrintedHeatBalanceTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.QuasilinearMatrix
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactingFlow
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionDiffusionTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionMatrix
 import ComputationalMathematics.Source.LeVeque.Chapter02.ScalarAdvectionCauchyTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.SystemComponents
 import ComputationalMathematics.Source.LeVeque.Chapter02.ThermalDiffusionComparison
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerConstantFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
