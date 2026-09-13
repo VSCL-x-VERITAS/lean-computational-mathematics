@@ -3,6 +3,8 @@ SPDX-License-Identifier: MIT
 -/
 
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
+import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
+import ComputationalMathematics.Source.LeVeque.Chapter02.TracerMass
 
 /-!
 # LeVeque Chapter 2: Conservation Laws and Differential Equations
