@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionDiffusionTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionLocalProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionRectangleConverseTarget
@@ -18,7 +18,9 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
+import ComputationalMathematics.Source.LeVeque.Chapter02.FickFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
+import ComputationalMathematics.Source.LeVeque.Chapter02.HeatCapacityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
