@@ -19,10 +19,11 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
-import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFluxTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
 import ComputationalMathematics.Source.LeVeque.Chapter02.HeatCapacity
 import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEnergy
+import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEquationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
