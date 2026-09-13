@@ -2,12 +2,13 @@
 SPDX-License-Identifier: MIT
 -/
 
+import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionLocalProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionWithinProfile
-import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivativeTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvectionTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
