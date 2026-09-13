@@ -21,7 +21,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
-import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservationTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerConstantFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerFlux
