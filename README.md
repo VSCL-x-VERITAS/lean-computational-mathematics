@@ -258,8 +258,8 @@ are working files kept inside a checkout rather than committed.
 The ongoing [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
 is available through
 [`ComputationalMathematics.Source.LeVeque.Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean).
-At checkpoint `4dfd80dea` (2026-09-13), the chapter gate records **36 of 243
-source objects complete (14.81%)**, with **207 remaining**, zero skipped and
+At the current 2026-09-13 checkpoint, the chapter gate records **39 of 243
+source objects complete (16.05%)**, with **204 remaining**, zero skipped and
 zero deferred. Each completed object has an accepted independent statement
 faithfulness audit and a validated Lean proof receipt. Proof-free targets
 for pending claims are also present; their presence does not count as completion.
@@ -268,7 +268,10 @@ Accepted results cover tracer density and flux, characteristic transport,
 diffusion and heat-source identities, reacting-flow balance, momentum flux,
 component and matrix conservation systems, mass continuity, fluid-flux
 coordinates, and the decomposition into a constant background and perturbation.
-The checkpoint passed the full library build and source hygiene/layout checks.
+It also covers the repeated-eigenvalue reaction matrix, species-dependent
+reaction-diffusion balance, and the conserved acoustics components. The latest
+published checkpoint passed the full library build and source hygiene/layout
+checks; those checks are rerun whenever the product tree advances.
 Audit packages and the active chapter gate remain checkout-local; this is
 partial chapter coverage, not a completed Chapter 2 formalization.
 
@@ -450,6 +453,13 @@ baselines are review records and must not be regenerated merely to silence new
 findings. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains placement,
 compatibility, testing, and licensing requirements. Architecture changes
 follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
+
+The lint driver's [declaration-specific exceptions](scripts/nolints.json)
+retain the intentional admissibility argument of `physicalSectionMass`: it
+restricts the physical domain although the integral value does not depend on
+the proof. Keeping this exception outside the model preserves the exact source
+bytes used by its audited consumers. Other declarations and linters remain
+subject to the reviewed baseline.
 
 ## Documentation
 

@@ -24,7 +24,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivativ
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalExternalHeat
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalFluidCauchyTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.ConservedAcousticsComponentsTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConservedAcousticsComponents
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluidDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
@@ -38,6 +38,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.FirstVariationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidContinuityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidJacobianTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidPerturbationTarget
@@ -50,6 +51,9 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.HeatEquationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceCumulativeTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceProductionTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
 import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicPressureTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MassFluxContinuity
@@ -62,7 +66,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.PressureSlopeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.PrintedHeatBalanceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.QuasilinearMatrix
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactingFlow
-import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionDiffusionTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionMatrix
 import ComputationalMathematics.Source.LeVeque.Chapter02.ScalarAdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.SystemComponents

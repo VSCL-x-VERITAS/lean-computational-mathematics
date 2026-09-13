@@ -42,10 +42,7 @@ def AdmissibleSegment
 
 /-- Instantaneous tracer mass for admissible data in the one-dimensional pipe
 model. The argument restricts the physical interpretation of the existing
-oriented integral notation to ordered, nonnegative, integrable data.
-The admissibility proof is intentionally required by the interface even though
-the integral's value does not depend on that proof. -/
-@[nolint unusedArguments]
+oriented integral notation to ordered, nonnegative, integrable data. -/
 noncomputable def physicalSectionMass
     (volumetricDensity : ℝ → ℝ → ℝ) (area : ℝ → ℝ) (a b t : ℝ)
     (_admissible : AdmissibleSegment volumetricDensity area a b t) : ℝ :=
