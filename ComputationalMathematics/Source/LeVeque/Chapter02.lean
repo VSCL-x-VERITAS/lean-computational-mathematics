@@ -41,6 +41,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.NonconservativeCharacte
 import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
 import ComputationalMathematics.Source.LeVeque.Chapter02.PrintedHeatBalanceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactingFlow
+import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionDiffusionTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionMatrixTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ScalarAdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ThermalDiffusionComparison
