@@ -21,12 +21,14 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
+import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerConstantFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerMass
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerStateFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.VariableVelocityCharacteristicTarget
 
 /-!
 # LeVeque Chapter 2: Conservation Laws and Differential Equations
