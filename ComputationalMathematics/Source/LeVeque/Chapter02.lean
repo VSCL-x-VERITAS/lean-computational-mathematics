@@ -12,6 +12,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxL
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusionTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
@@ -22,6 +23,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralFluxDerivativeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
+import ComputationalMathematics.Source.LeVeque.Chapter02.NonconservativeCharacteristicTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerConstantFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
