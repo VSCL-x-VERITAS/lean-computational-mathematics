@@ -32,6 +32,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
+import ComputationalMathematics.Source.LeVeque.Chapter02.FluidContinuityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FourierFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
 import ComputationalMathematics.Source.LeVeque.Chapter02.HeatCapacity
