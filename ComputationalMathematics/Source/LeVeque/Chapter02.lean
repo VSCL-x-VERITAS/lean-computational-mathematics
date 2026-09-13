@@ -18,7 +18,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
-import ComputationalMathematics.Source.LeVeque.Chapter02.FickFluxTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.GenericCharacteristic
 import ComputationalMathematics.Source.LeVeque.Chapter02.HeatCapacityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.InitialProfile
@@ -28,6 +28,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
 import ComputationalMathematics.Source.LeVeque.Chapter02.NonconservativeCharacteristic
 import ComputationalMathematics.Source.LeVeque.Chapter02.PointwiseConservation
+import ComputationalMathematics.Source.LeVeque.Chapter02.ScalarAdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerConstantFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerDensity
 import ComputationalMathematics.Source.LeVeque.Chapter02.TracerFlux
