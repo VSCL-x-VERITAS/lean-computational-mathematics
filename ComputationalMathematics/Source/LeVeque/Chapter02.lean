@@ -11,6 +11,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionRectangleConve
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionWithinProfile
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxLocalTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.BarotropicPressureTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.BathHeat
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityBalance
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityConservationTarget
@@ -21,6 +22,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivativ
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalExternalHeat
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusion
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluidDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
