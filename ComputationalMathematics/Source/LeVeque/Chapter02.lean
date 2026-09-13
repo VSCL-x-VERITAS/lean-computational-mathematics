@@ -2,6 +2,7 @@
 SPDX-License-Identifier: MIT
 -/
 
+import ComputationalMathematics.Source.LeVeque.Chapter02.AcousticsMatrixTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ActualPressureSlopeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
@@ -23,12 +24,14 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicDerivativ
 import ComputationalMathematics.Source.LeVeque.Chapter02.CharacteristicTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalExternalHeat
 import ComputationalMathematics.Source.LeVeque.Chapter02.ClassicalFluidCauchyTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.ConservedAcousticsComponentsTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluidDensityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantFluxAdvection
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantSystem
 import ComputationalMathematics.Source.LeVeque.Chapter02.ConstantTracerFlux
-import ComputationalMathematics.Source.LeVeque.Chapter02.DomainFluidPerturbationTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.DomainFluidJacobianTarget
+import ComputationalMathematics.Source.LeVeque.Chapter02.DomainFluidPerturbation
 import ComputationalMathematics.Source.LeVeque.Chapter02.DomainPressure
 import ComputationalMathematics.Source.LeVeque.Chapter02.DomainStateFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
