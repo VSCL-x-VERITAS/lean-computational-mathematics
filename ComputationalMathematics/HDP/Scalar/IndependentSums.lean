@@ -11,6 +11,8 @@ import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeMean
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Hoeffding
 import ComputationalMathematics.HDP.Scalar.IndependentSums.HoeffdingNormalization
 import ComputationalMathematics.HDP.Scalar.IndependentSums.LowerChernoffBoundary
+import ComputationalMathematics.HDP.Scalar.IndependentSums.McDiarmid
+import ComputationalMathematics.HDP.Scalar.IndependentSums.McDiarmidProduct
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeans
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansProbability
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansSample

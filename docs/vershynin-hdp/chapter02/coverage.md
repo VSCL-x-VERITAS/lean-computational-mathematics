@@ -4,15 +4,15 @@ Authoritative source: `collab:books/vershynin-hdp/source/Chapter02_Concentration
 `ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a`, printed pages 12-40 (29 rendered PDF pages).
 Unit audit epoch: `hdp-unit-source-2026-08-26-v1`.
 Book profile SHA-256: `149d6296e0b689d1302576850ec92668845ab257ab802d7b491881357d9abc50`.
-Module audit epoch `hdp-module-audit-2026-09-08-workflow-v5.1.0-windows-r9-codex-only`, SHA-256
-`8ec39961f05b90e014294a915f24fae4d28d7d3c26bb17f9a9ba7188b097e147`.
-Preparation session: `codex-continue-2`.
+Module audit epoch `hdp-module-audit-2026-09-11-workflow-v5.1.1-local-state-r2-codex-only`, SHA-256
+`c551a54530456cd1c32ac2153bedb8db3b1043d7a3865226dbc65a5175da6778`.
+Preparation session: `codex-hdp-ch02-next`.
 
 The exhaustive machine-readable denominator is kept locally in the ignored
 `gates/ch02.json` runtime file; tracked faithfulness outcomes are summarized in
 [the September 2026 review](../../architecture/reviews/2026-09-faithfulness-outcomes.md).
-This report was generated from gate SHA-256 `275e708571923b9e03cad535ddb3f7a976760fcc8259ad4cdbfe0395f0db8e20`
-and covers all 130 source rows under gate schema 2.
+This report was generated from gate SHA-256 `b67caf4181c13bfe94042d446d289035d26b082d5276eb681dd90a75f2b8b385`
+and covers all 131 source rows under gate schema 2.
 The gate, audit packages, and working ledgers are deliberately not tracked.
 
 ## Status legend
@@ -30,18 +30,18 @@ The gate, audit packages, and working ledgers are deliberately not tracked.
 
 ## Gate-derived progress
 
-- Chapter verdict: **ACTIVE** (not `PASS`).
-- Formalized objects: **113**.
-- Remaining objects: **6**.
-- Denominator: **119**. Percentage: **94.96%**.
-- Reported separately and excluded from the denominator: **11** skipped, **0** deferred.
-- Status counts: `DISCREPANCY`=2, `HARD_BLOCKED`=3, `PROVED`=110, `READY`=3, `SKIPPED`=11, `WEAKENED`=1.
-- Semantic loop: 113 required, 113 direct, 113 blind, and 113 round-trip records; 0 unresolved adjudications.
+- Chapter verdict: **PASS**.
+- Formalized objects: **119**.
+- Remaining objects: **0**.
+- Denominator: **119**. Percentage: **100.00%**.
+- Reported separately and excluded from the denominator: **12** skipped, **0** deferred.
+- Status counts: `DISCREPANCY`=2, `PROVED`=116, `SKIPPED`=12, `WEAKENED`=1.
+- Semantic loop: 119 required, 119 direct, 119 blind, and 119 round-trip records; 0 unresolved adjudications.
 - Organization loop: canonical_placement_pending=0, duplicate_wrappers=0, placeholder_findings=0, unclassified_modules=0.
 
 Compilation alone does not count as coverage. A row becomes formalized only after its Lean declaration and source-faithfulness evidence satisfy the gate.
 
-## Formalized rows (113)
+## Formalized rows (119)
 
 | Row | Printed label | Kind | Status | Primary Lean declaration |
 |---|---|---|---|---|
@@ -77,6 +77,7 @@ Compilation alone does not count as coverage. A row becomes formalized only afte
 | `HDP-02-EQ-2.7` | (2.7) | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_heq_h2_d7` |
 | `HDP-02-BODY-2.3-BERNOULLI-MGF` | Section 2.3 body: Bernoulli MGF bound | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_hlem_hbernoulli_hmgf_hbound_scalar` |
 | `HDP-02-BODY-2.3-ONE-PLUS-X` | Section 2.3 body: 1 + x <= e^x | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_hbody_h2_d3_hone_hplus_hx` |
+| `HDP-02-EX-2.3.2` | Exercise 2.3.2 | exercise | `PROVED` | `NumStability.HDP.Contract.hdp_02_hex_h2_d3_d2_effectiveDomain` |
 | `HDP-02-EX-2.3.3` | Exercise 2.3.3 | exercise | `PROVED` | `NumStability.HDP.Contract.hdp_02_hex_h2_d3_d3` |
 | `HDP-02-EQ-2.8` | (2.8) | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_heq_h2_d8` |
 | `HDP-02-REM-2.3.4` | Remark 2.3.4 | remark | `PROVED` | `NumStability.HDP.Contract.hdp_02_hrem_h2_d3_d4` |
@@ -106,7 +107,9 @@ Compilation alone does not count as coverage. A row becomes formalized only afte
 | `HDP-02-EX-2.5.7` | Exercise 2.5.7 | exercise | `PROVED` | `NumStability.HDP.Contract.hdp_02_hex_h2_d5_d7` |
 | `HDP-02-EQ-2.14` | (2.14) | equation | `PROVED` | `NumStability.HDP.Scalar.SubGaussian.psiTwoGaugeToTail` |
 | `HDP-02-EQ-2.15` | (2.15) | equation | `PROVED` | `NumStability.HDP.Scalar.SubGaussian.psiTwoGaugeToLpMomentGrowth` |
+| `HDP-02-BODY-2.5-PSI2-SQUARE-POINT` | Section 2.5 body display: E exp(X^2/\|\|X\|\|_{psi_2}^2) <= 2 | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_hbody_h2_d5_hpsi2_hsquare_hpoint_effectiveDomain` |
 | `HDP-02-EQ-2.16` | (2.16) | equation | `PROVED` | `NumStability.HDP.Scalar.SubGaussian.psiTwoGaugeToMGF` |
+| `HDP-02-BODY-2.5-PSI2-MINIMALITY` | Section 2.5 body: psi_2 norm is the smallest such number | equation | `PROVED` | `NumStability.HDP.Contract.hdp_02_hbody_h2_d5_hpsi2_hminimality_effectiveDomain` |
 | `HDP-02-EXAMPLE-2.5.8A` | Example 2.5.8(a) | example | `PROVED` | `NumStability.HDP.Contract.hdp_02_hexample_h2_d5_d8a` |
 | `HDP-02-EXAMPLE-2.5.8B` | Example 2.5.8(b) | example | `PROVED` | `NumStability.HDP.Contract.hdp_02_hexample_h2_d5_d8b` |
 | `HDP-02-EXAMPLE-2.5.8C` | Example 2.5.8(c) | example | `PROVED` | `NumStability.HDP.Contract.hdp_02_hexample_h2_d5_d8c` |
@@ -156,21 +159,17 @@ Compilation alone does not count as coverage. A row becomes formalized only afte
 | `HDP-02-THM-2.8.2` | Theorem 2.8.2 | theorem | `PROVED` | `NumStability.HDP.Contract.hdp_02_hthm_h2_d8_d2_effectiveDomain` |
 | `HDP-02-COR-2.8.3` | Corollary 2.8.3 | corollary | `PROVED` | `NumStability.HDP.Contract.hdp_02_hcor_h2_d8_d3_effectiveDomain` |
 | `HDP-02-BODY-2.8-NORMALIZED-REGIMES` | Section 2.8 body: normalized two-regime bound | equation | `DISCREPANCY` | `NumStability.HDP.Scalar.IndependentSums.Bernstein.bernsteinNormalizedTailPsiOne` |
+| `HDP-02-THM-2.8.4` | Theorem 2.8.4 | theorem | `PROVED` | `NumStability.HDP.Contract.hdp_02_hthm_h2_d8_d4_effectiveDomain` |
 | `HDP-02-EX-2.8.5` | Exercise 2.8.5 | exercise | `PROVED` | `NumStability.HDP.Contract.hdp_02_hex_h2_d8_d5` |
+| `HDP-02-EX-2.8.6` | Exercise 2.8.6 | exercise | `PROVED` | `NumStability.HDP.Contract.hdp_02_hex_h2_d8_d6_effectiveDomain` |
+| `HDP-02-THM-2.9.1` | Theorem 2.9.1 | theorem | `PROVED` | `NumStability.HDP.Contract.hdp_02_hthm_h2_d9_d1_exact` |
 | `HDP-02-THM-2.9.2` | Theorem 2.9.2 | theorem | `PROVED` | `NumStability.HDP.Contract.hdp_02_hthm_h2_d9_d2_exact` |
 
-## Remaining rows (6)
+## Remaining rows (0)
 
-| Row | Printed label | Kind | Status | Next foundation or obstruction |
-|---|---|---|---|---|
-| `HDP-02-EX-2.3.2` | Exercise 2.3.2 | exercise | `HARD_BLOCKED` | The immutable first-edition exercise quantifies only `t < mu`, but its displayed real quotient and real power have no source-stated meaning for negative `t`; selecting a totalized or corrected domain is a module-level source-policy choice, not a theorem proof. |
-| `HDP-02-BODY-2.5-PSI2-SQUARE-POINT` | Section 2.5 body display: E exp(X^2/\|\|X\|\|_{psi_2}^2) <= 2 | equation | `HARD_BLOCKED` | The immutable source universally displays `E exp(X^2 / \|\|X\|\|_{psi_2}^2) <= 2`, yet the zero random variable has gauge zero and the book specifies no meaning for its `0/0` quotient. Lean's total real division gives the constant-one integrand, but selecting that convention as the book policy is not a theorem proof. |
-| `HDP-02-BODY-2.5-PSI2-MINIMALITY` | Section 2.5 body: psi_2 norm is the smallest such number | equation | `HARD_BLOCKED` | The source's minimality sentence incorporates quotient-bearing displays at `\|\|X\|\|_{psi_2} = 0` without defining their `0/0` meaning. The Lean wrapper admits zero gauge and totalizes real division, so certifying the global Lean-to-source implication requires an authoritative convention that cannot be proved locally. |
-| `HDP-02-THM-2.8.4` | Theorem 2.8.4 | theorem | `READY` | The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Keep this row READY until that source ambiguity is resolved under certified policy. |
-| `HDP-02-EX-2.8.6` | Exercise 2.8.6 | exercise | `READY` | The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Do not reintroduce the source-absent positive-variance premise into the printed a... |
-| `HDP-02-THM-2.9.1` | Theorem 2.9.1 | theorem | `READY` | Reuse Mathlib's existing conditional-MGF Azuma-Hoeffding theorem `ProbabilityTheory.measure_sum_ge_le_of_hasCondSubgaussianMGF`. The smallest missing foundation is now only the Doob exposure martingale for a measurable function of finitely many independent coordinates, together with the lemma that its i-th differenc... |
+None.
 
-## Skipped rows (11)
+## Skipped rows (12)
 
 | Row | Printed label | Reason code | Reason |
 |---|---|---|---|
@@ -183,5 +182,6 @@ Compilation alone does not count as coverage. A row becomes formalized only afte
 | `HDP-02-FIG-2.1` | Figure 2.1 | `narrative` | Figure 2.1 on printed p. 20 is a plot of the Pois(10) probability mass function with an explanatory caption; it contains no proposition. |
 | `HDP-02-FIG-2.2` | Figure 2.2 | `narrative` | Figure 2.2 on printed p. 21 depicts one sample from G(200, 1/40) with an explanatory caption; it contains no proposition. |
 | `HDP-02-FIG-2.3` | Figure 2.3 | `narrative` | Figure 2.3 on printed p. 38 is a schematic of the two tail regimes in Bernstein's inequality with an explanatory caption; the quantitative content is Theorem 2.8.1 and HDP-02-BODY-2.8-NORMALIZED-REGIMES. |
+| `HDP-02-THM-2.9.1-FOOTNOTE-10` | Theorem 2.9.1, footnote 10 | `underspecified` | The footnote literally types `f : X -> R` although the adjacent coordinate-replacement condition evaluates `f` on an N-coordinate tuple; it does not determine a well-typed abstract-domain proposition. The numbered Euclidean theorem is audited separately. |
 | `HDP-02-BODY-2.9-BENNETT-REGIMES` | Section 2.9 body: asymptotics of Bennett's bound | `underspecified` | The commentary after Theorem 2.9.2 on printed p. 39 is asymptotic: it uses '~~' for h(u) ~~ u^2 and '<<' / '>>' regime markers with no stated thresholds, and its large-deviation condition is printed as 'u >> K t / sigma^2 >= 2' although u is defined as K t / sigma^2 (recorded as VHDP-C02-N004). No quantitative claim... |
 | `HDP-02-NOTES-2.9-BIBLIOGRAPHY` | Section 2.9 Notes bibliography | `narrative` | The Notes bibliography on printed pp. 39-40 attributes results to the literature and points to further reading; it states no mathematics of its own. |
