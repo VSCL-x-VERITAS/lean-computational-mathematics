@@ -55,6 +55,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark14.Si
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussianImpliesSubExponential.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequality.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Exercise06.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem01.Signature
 /-!
 # HDP source-contract signatures
