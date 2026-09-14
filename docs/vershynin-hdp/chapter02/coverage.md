@@ -4,14 +4,14 @@ Authoritative source: `collab:books/vershynin-hdp/source/Chapter02_Concentration
 `ecc53be86c091b5df118c4464b6d81672e0261df960a3f32ceea4900107d090a`, printed pages 12-40 (29 rendered PDF pages).
 Unit audit epoch: `hdp-unit-source-2026-08-26-v1`.
 Book profile SHA-256: `149d6296e0b689d1302576850ec92668845ab257ab802d7b491881357d9abc50`.
-Module audit epoch `hdp-module-audit-2026-09-08-workflow-v5.1.0-windows-r9-codex-only`, SHA-256
-`8ec39961f05b90e014294a915f24fae4d28d7d3c26bb17f9a9ba7188b097e147`.
-Preparation session: `codex-continue-2`.
+Module audit epoch `hdp-module-audit-2026-09-11-workflow-v5.1.1-local-state-r2-codex-only`, SHA-256
+`c551a54530456cd1c32ac2153bedb8db3b1043d7a3865226dbc65a5175da6778`.
+Preparation session: `codex-hdp-ch02-next`.
 
 The exhaustive machine-readable denominator is kept locally in the ignored
 `gates/ch02.json` runtime file; tracked faithfulness outcomes are summarized in
 [the September 2026 review](../../architecture/reviews/2026-09-faithfulness-outcomes.md).
-This report was generated from gate SHA-256 `275e708571923b9e03cad535ddb3f7a976760fcc8259ad4cdbfe0395f0db8e20`
+This report was generated from gate SHA-256 `07f0f14e92aa9f3d8882fca01775a32a3b0e62564b707aa33be48256b64f95d0`
 and covers all 130 source rows under gate schema 2.
 The gate, audit packages, and working ledgers are deliberately not tracked.
 
@@ -30,12 +30,12 @@ The gate, audit packages, and working ledgers are deliberately not tracked.
 
 ## Gate-derived progress
 
-- Chapter verdict: **ACTIVE** (not `PASS`).
+- Chapter verdict: **BLOCKED** (not `PASS`).
 - Formalized objects: **113**.
 - Remaining objects: **6**.
 - Denominator: **119**. Percentage: **94.96%**.
 - Reported separately and excluded from the denominator: **11** skipped, **0** deferred.
-- Status counts: `DISCREPANCY`=2, `HARD_BLOCKED`=3, `PROVED`=110, `READY`=3, `SKIPPED`=11, `WEAKENED`=1.
+- Status counts: `DISCREPANCY`=2, `HARD_BLOCKED`=6, `PROVED`=110, `SKIPPED`=11, `WEAKENED`=1.
 - Semantic loop: 113 required, 113 direct, 113 blind, and 113 round-trip records; 0 unresolved adjudications.
 - Organization loop: canonical_placement_pending=0, duplicate_wrappers=0, placeholder_findings=0, unclassified_modules=0.
 
@@ -166,9 +166,9 @@ Compilation alone does not count as coverage. A row becomes formalized only afte
 | `HDP-02-EX-2.3.2` | Exercise 2.3.2 | exercise | `HARD_BLOCKED` | The immutable first-edition exercise quantifies only `t < mu`, but its displayed real quotient and real power have no source-stated meaning for negative `t`; selecting a totalized or corrected domain is a module-level source-policy choice, not a theorem proof. |
 | `HDP-02-BODY-2.5-PSI2-SQUARE-POINT` | Section 2.5 body display: E exp(X^2/\|\|X\|\|_{psi_2}^2) <= 2 | equation | `HARD_BLOCKED` | The immutable source universally displays `E exp(X^2 / \|\|X\|\|_{psi_2}^2) <= 2`, yet the zero random variable has gauge zero and the book specifies no meaning for its `0/0` quotient. Lean's total real division gives the constant-one integrand, but selecting that convention as the book policy is not a theorem proof. |
 | `HDP-02-BODY-2.5-PSI2-MINIMALITY` | Section 2.5 body: psi_2 norm is the smallest such number | equation | `HARD_BLOCKED` | The source's minimality sentence incorporates quotient-bearing displays at `\|\|X\|\|_{psi_2} = 0` without defining their `0/0` meaning. The Lean wrapper admits zero gauge and totalizes real division, so certifying the global Lean-to-source implication requires an authoritative convention that cannot be proved locally. |
-| `HDP-02-THM-2.8.4` | Theorem 2.8.4 | theorem | `READY` | The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Keep this row READY until that source ambiguity is resolved under certified policy. |
-| `HDP-02-EX-2.8.6` | Exercise 2.8.6 | exercise | `READY` | The proof and complete audit are finished. The smallest remaining foundation is a module-level source policy or separately audited corrected/nondegenerate contract for the printed `0/0` boundary at `t = 0` and zero total second moment. Do not reintroduce the source-absent positive-variance premise into the printed a... |
-| `HDP-02-THM-2.9.1` | Theorem 2.9.1 | theorem | `READY` | Reuse Mathlib's existing conditional-MGF Azuma-Hoeffding theorem `ProbabilityTheory.measure_sum_ge_le_of_hasCondSubgaussianMGF`. The smallest missing foundation is now only the Doob exposure martingale for a measurable function of finitely many independent coordinates, together with the lemma that its i-th differenc... |
+| `HDP-02-THM-2.8.4` | Theorem 2.8.4 | theorem | `HARD_BLOCKED` | Proof and audit complete; operator policy is required for the source-silent `0/0` boundary at `t = 0` and zero total second moment. |
+| `HDP-02-EX-2.8.6` | Exercise 2.8.6 | exercise | `HARD_BLOCKED` | Deduction and audit complete; it inherits Theorem 2.8.4's source-silent degenerate quotient and requires the same operator policy. |
+| `HDP-02-THM-2.9.1` | Theorem 2.9.1 | theorem | `HARD_BLOCKED` | Exact McDiarmid proof and full audit complete; operator policy must resolve footnote 10's malformed abstract-product domain and the intended treatment of the current Standard-Borel specialization. |
 
 ## Skipped rows (11)
 

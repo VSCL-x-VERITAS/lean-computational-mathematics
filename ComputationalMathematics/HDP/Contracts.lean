@@ -118,6 +118,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.Remark14.Co
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.SubGaussianImpliesSubExponential.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequality.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem01.Contract
 /-!
 # HDP source contracts
 

@@ -100,6 +100,8 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem02.C
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem02.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem04.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Theorem04.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem01.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem01.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem02.Signature
 
