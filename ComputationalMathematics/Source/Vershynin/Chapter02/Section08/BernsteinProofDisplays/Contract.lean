@@ -1,4 +1,5 @@
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Bernstein
+import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
 
 /-! Source-facing forms of equations (2.23) and (2.24) in Bernstein's proof. -/
 
@@ -185,5 +186,49 @@ theorem hdp_02_heq_h2_d24 :
     congr 1
     dsimp [A, κ]
     ring
+
+/-- Equation (2.24) with its nonnegative denominator cleared.  This is
+equivalent to the printed window when the maximum `ψ₁` gauge is positive and
+also expresses the correct unbounded window for the all-zero family. -/
+theorem hdp_02_heq_h2_d24_effectiveWindow :
+    hdp_02_heq_h2_d24_effectiveWindow__contract_type := by
+  obtain ⟨c, C, hc, hC, hbound⟩ := hdp_02_heq_h2_d24
+  refine ⟨c, C, hc, hC, ?_⟩
+  intro ι Ω _ _ μ _ X hne hMeas hCenter hSubExp hIndep lam
+  dsimp only
+  set K : ℝ := Finset.univ.sup' hne
+    (fun i => (PsiOneGauge μ (X i)).toReal) with hKdef
+  intro hlam i
+  have hκle : (PsiOneGauge μ (X i)).toReal ≤ K := by
+    rw [hKdef]
+    exact Finset.le_sup'
+      (fun j => (PsiOneGauge μ (X j)).toReal) (Finset.mem_univ i)
+  by_cases hK0 : K = 0
+  · have hκ0 : (PsiOneGauge μ (X i)).toReal = 0 := by
+      apply le_antisymm
+      · simpa [hK0] using hκle
+      · exact ENNReal.toReal_nonneg
+    have hGaugeZero : PsiOneGauge μ (X i) = 0 := by
+      rw [← ENNReal.ofReal_toReal (hSubExp i).ne, hκ0]
+      simp
+    have hZero : X i =ᵐ[μ] (fun _ : Ω => (0 : ℝ)) :=
+      (psiOneGauge_eq_zero_iff_ae_eq_zero (hMeas i)).mp hGaugeZero
+    have hExpAE : (fun ω ↦ Real.exp (lam * X i ω)) =ᵐ[μ]
+        (fun _ : Ω => (1 : ℝ)) := by
+      filter_upwards [hZero] with ω hω
+      simp [hω]
+    have hInt : Integrable (fun ω ↦ Real.exp (lam * X i ω)) μ :=
+      (integrable_const (1 : ℝ)).congr hExpAE.symm
+    refine ⟨hInt, ?_⟩
+    calc
+      (∫ ω, Real.exp (lam * X i ω) ∂μ) = 1 := by
+        rw [integral_congr_ae hExpAE]
+        simp
+      _ ≤ Real.exp (C * lam ^ 2 * (PsiOneGauge μ (X i)).toReal ^ 2) := by
+        simp [hκ0]
+  · have hKpos : 0 < K :=
+      lt_of_le_of_ne (ENNReal.toReal_nonneg.trans hκle) (Ne.symm hK0)
+    exact hbound hne hMeas hCenter hSubExp hIndep hKpos
+      ((le_div_iff₀ hKpos).2 hlam) i
 
 end NumStability.HDP.Contract

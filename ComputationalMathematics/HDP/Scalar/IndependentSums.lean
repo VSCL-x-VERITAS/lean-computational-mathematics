@@ -1,20 +1,26 @@
+import ComputationalMathematics.HDP.Scalar.IndependentSums.Bennett
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Bernstein
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Chernoff
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinCentralMass
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinChebyshev
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinMoments
 import ComputationalMathematics.HDP.Scalar.IndependentSums.FairCoinNormalization
+import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeDecoupling
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeLaw
 import ComputationalMathematics.HDP.Scalar.IndependentSums.GraphDegreeMean
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Hoeffding
 import ComputationalMathematics.HDP.Scalar.IndependentSums.HoeffdingNormalization
 import ComputationalMathematics.HDP.Scalar.IndependentSums.LowerChernoffBoundary
+import ComputationalMathematics.HDP.Scalar.IndependentSums.McDiarmid
+import ComputationalMathematics.HDP.Scalar.IndependentSums.McDiarmidProduct
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeans
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansProbability
 import ComputationalMathematics.HDP.Scalar.IndependentSums.MedianOfMeansSample
+import ComputationalMathematics.HDP.Scalar.IndependentSums.NormalizedRegimesDiscrepancy
 import ComputationalMathematics.HDP.Scalar.IndependentSums.PoissonChernoff
 import ComputationalMathematics.HDP.Scalar.IndependentSums.SampleMeanChebyshev
 import ComputationalMathematics.HDP.Scalar.IndependentSums.TwoSidedTail
+import ComputationalMathematics.HDP.Scalar.IndependentSums.VerySparseDegreeLower
 
 /-!
 # Independent scalar sums
