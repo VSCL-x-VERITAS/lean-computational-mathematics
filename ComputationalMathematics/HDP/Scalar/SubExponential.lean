@@ -1877,6 +1877,117 @@ theorem psiOneGauge_finite_iff
       (show ENNReal.ofReal K < ∞ from ENNReal.ofReal_lt_top)
     exact (psiOneAdmissible_ofReal_iff hK).2 hPoint
 
+/-- Positive scalar multiplication rescales admissible `ψ₁` parameters exactly. -/
+theorem psiOneAdmissible_smul_iff
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} {X : Ω → ℝ} {c : ℝ} (hc : 0 < c) (t : ℝ≥0∞) :
+    PsiOneAdmissible μ X t ↔
+      PsiOneAdmissible μ (fun ω ↦ c * X ω) (ENNReal.ofReal c * t) := by
+  have hc0 : ENNReal.ofReal c ≠ 0 := (ENNReal.ofReal_ne_zero_iff).2 hc
+  have hcTop : ENNReal.ofReal c ≠ ∞ := ENNReal.ofReal_ne_top
+  constructor
+  · rintro ⟨hX, ht0, htTop, hInt, hBound⟩
+    have htReal : t.toReal ≠ 0 := (ENNReal.toReal_ne_zero).2 ⟨ht0, htTop⟩
+    have hfun :
+        (fun ω ↦ Real.exp (|c * X ω| / (ENNReal.ofReal c * t).toReal)) =
+          (fun ω ↦ Real.exp (|X ω| / t.toReal)) := by
+      funext ω
+      rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal hc.le, abs_mul, abs_of_pos hc]
+      congr 1
+      field_simp
+    refine ⟨hX.const_mul c, mul_ne_zero hc0 ht0,
+      ENNReal.mul_ne_top hcTop htTop, ?_, ?_⟩
+    · simpa only [hfun] using hInt
+    · simpa only [hfun] using hBound
+  · rintro ⟨hcX, hct0, hctTop, hInt, hBound⟩
+    have ht0 : t ≠ 0 := fun h ↦ hct0 (by rw [h]; simp)
+    have htTop : t ≠ ∞ := fun h ↦ hctTop (by rw [h]; simp [hc0])
+    have htReal : t.toReal ≠ 0 := (ENNReal.toReal_ne_zero).2 ⟨ht0, htTop⟩
+    have hX : Measurable X := by
+      have hscaled : Measurable (fun ω ↦ c⁻¹ * (c * X ω)) := hcX.const_mul c⁻¹
+      convert hscaled using 1
+      funext ω
+      field_simp [hc.ne']
+    have hfun :
+        (fun ω ↦ Real.exp (|c * X ω| / (ENNReal.ofReal c * t).toReal)) =
+          (fun ω ↦ Real.exp (|X ω| / t.toReal)) := by
+      funext ω
+      rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal hc.le, abs_mul, abs_of_pos hc]
+      congr 1
+      field_simp
+    refine ⟨hX, ht0, htTop, ?_, ?_⟩
+    · simpa only [hfun] using hInt
+    · simpa only [hfun] using hBound
+
+/-- The `ψ₁` gauge is exactly homogeneous under multiplication by a positive real
+scalar.  This is the reusable scaling fact behind the exponential-law example. -/
+theorem psiOneGauge_smul_of_pos
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} {X : Ω → ℝ} {c : ℝ} (hc : 0 < c) :
+    PsiOneGauge μ (fun ω ↦ c * X ω) =
+      ENNReal.ofReal c * PsiOneGauge μ X := by
+  let a : ℝ≥0∞ := ENNReal.ofReal c
+  have ha0 : a ≠ 0 := (ENNReal.ofReal_ne_zero_iff).2 hc
+  have haTop : a ≠ ∞ := ENNReal.ofReal_ne_top
+  let e : ℝ≥0∞ ≃o ℝ≥0∞ :=
+    ENNReal.mulLeftOrderIso a (ENNReal.isUnit_iff.2 ⟨ha0, haTop⟩)
+  have he (t : ℝ≥0∞) : e t = a * t := by
+    rfl
+  have hset :
+      {u : ℝ≥0∞ | PsiOneAdmissible μ (fun ω ↦ c * X ω) u} =
+        e '' {t : ℝ≥0∞ | PsiOneAdmissible μ X t} := by
+    ext u
+    constructor
+    · intro hu
+      refine ⟨e.symm u, ?_, e.apply_symm_apply u⟩
+      apply (psiOneAdmissible_smul_iff hc (e.symm u)).2
+      rw [← he, e.apply_symm_apply]
+      exact hu
+    · rintro ⟨t, ht, rfl⟩
+      rw [he]
+      exact (psiOneAdmissible_smul_iff hc t).1 ht
+  unfold PsiOneGauge
+  rw [hset, ← he]
+  rw [OrderIso.map_sInf e, sInf_image]
+
+/-- Computing a `ψ₁` gauge after pushing a measure forward is the same as
+computing the gauge of the pushed-forward random variable. -/
+theorem psiOneGauge_map
+    {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} {f : Ω → ℝ} (hf : Measurable f) :
+    PsiOneGauge (Measure.map f μ) (fun y : ℝ ↦ y) = PsiOneGauge μ f := by
+  have hadmissible (t : ℝ≥0∞) :
+      PsiOneAdmissible (Measure.map f μ) (fun y : ℝ ↦ y) t ↔
+        PsiOneAdmissible μ f t := by
+    let g : ℝ → ℝ := fun y ↦ Real.exp (|y| / t.toReal)
+    have hg : Measurable g := by
+      dsimp [g]
+      fun_prop
+    have hInt : Integrable g (Measure.map f μ) ↔ Integrable (g ∘ f) μ :=
+      integrable_map_measure hg.aestronglyMeasurable hf.aemeasurable
+    have hIntegral : (∫ y, g y ∂Measure.map f μ) = ∫ ω, g (f ω) ∂μ :=
+      integral_map hf.aemeasurable hg.aestronglyMeasurable
+    unfold PsiOneAdmissible
+    constructor
+    · rintro ⟨_, ht0, htTop, hMapInt, hMapBound⟩
+      refine ⟨hf, ht0, htTop, ?_, ?_⟩
+      · have : Integrable (g ∘ f) μ := hInt.1 (by simpa [g] using hMapInt)
+        simpa [g, Function.comp_apply] using this
+      · have : (∫ ω, g (f ω) ∂μ) ≤ 2 := by
+          rw [← hIntegral]
+          simpa [g] using hMapBound
+        simpa [g] using this
+    · rintro ⟨_, ht0, htTop, hCompInt, hCompBound⟩
+      refine ⟨measurable_id, ht0, htTop, ?_, ?_⟩
+      · apply hInt.2
+        simpa [g, Function.comp_apply] using hCompInt
+      · rw [hIntegral]
+        simpa [g] using hCompBound
+  unfold PsiOneGauge
+  congr 1
+  ext t
+  exact hadmissible t
+
 /-- Example 2.7.13's companion for `ψ₁`: the Orlicz function `exp x - 1`. -/
 noncomputable def psiOneOrliczFunction : OrliczFunction :=
   { toFun := fun x => Real.exp x - 1
