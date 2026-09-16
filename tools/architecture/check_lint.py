@@ -386,6 +386,10 @@ _HDP_UNUSED_ARGUMENT_DECLARATIONS = (
     "NumStability.HDP.Scalar.IndependentSums.Hoeffding.mgfIndependentSum",
     "NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherHoeffdingZero",
     "NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherWeightedMGFLe",
+    "NumStability.HDP.Contract.PsiTwoSquareMomentEffectiveDomain",
+    "NumStability.HDP.Scalar.IndependentSums.McDiarmid.doobM_shifted_ae_eq_traj_integral",
+    "NumStability.HDP.Scalar.IndependentSums.McDiarmid.exists_Icc_length_of_pairwise_abs_sub_le",
+    "NumStability.HDP.Scalar.IndependentSums.McDiarmid.hasCondSubgaussianMGF_of_cond_exists_mem_Icc_length_of_cond_integral_eq_zero",
     "NumStability.HDP.Scalar.LimitTheorems.independentVarianceSum",
     "NumStability.HDP.Scalar.Preliminaries.chebyshevEventBound",
     "NumStability.HDP.Scalar.Preliminaries.exercise122CorrectedSignedTailFormula",
@@ -444,6 +448,7 @@ _PRESERVED_PUBLIC_ARGUMENT_DECLARATIONS = (
 _PUBLIC_REDUCIBLE_DEF_DECLARATIONS = (
     "NumStability.HDP.Scalar.Preliminaries.holderModel",
     "NumStability.HDP.Contract.hdp_01_hdef_hindicator",
+    "NumStability.HDP.Scalar.IndependentSums.McDiarmid.measurableEqOfStandardBorel",
     "NumStability.HDP.Scalar.SubGaussian.subGaussianTailThreshold_rescale",
     "NumStability.HDP.Scalar.SubGaussian.subGaussianSquarePointThreshold_rescale",
 )
@@ -646,6 +651,14 @@ _FROZEN_VERSHYNIN_LINT_KEYS = frozenset(
         (
             "docBlame",
             "ComputationalMathematics/Source/Vershynin/Chapter02/Section07/Remark09/Signature.lean",
+        ),
+        (
+            "docBlame",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section08/Exercise06/Signature.lean",
+        ),
+        (
+            "docBlame",
+            "ComputationalMathematics/Source/Vershynin/Chapter02/Section09/Theorem01/Signature.lean",
         ),
     }
 )
