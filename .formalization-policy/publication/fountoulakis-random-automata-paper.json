@@ -1,0 +1,87 @@
+{
+  "automatic_enabled": true,
+  "backend": "github-merge-queue",
+  "book_id": "fountoulakis-random-automata-paper",
+  "candidate_ref_template": "candidate/{book}/{unit}/{request}",
+  "checkpoint_ref_template": "checkpoint/{book}/{unit}/{session}-{utc}",
+  "local_validations": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "name": "git-diff-check"
+    },
+    {
+      "command": [
+        "lake",
+        "build",
+        "ComputationalMathematics",
+        "NumStability",
+        "NumStabilityTest"
+      ],
+      "name": "lake-build-library"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/architecture/check_layout.py"
+      ],
+      "name": "python-layout"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/architecture/check_tiers.py"
+      ],
+      "name": "python-tiers"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/architecture/check_placeholders.py"
+      ],
+      "name": "python-placeholders"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/architecture/check_compatibility.py"
+      ],
+      "name": "python-compatibility"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/architecture/check_provenance.py"
+      ],
+      "name": "python-provenance"
+    }
+  ],
+  "poll_seconds": 15,
+  "post_merge_workflows": [
+    {
+      "check": "build",
+      "events": [
+        "push"
+      ],
+      "path": ".github/workflows/lean_action_ci.yml"
+    }
+  ],
+  "pre_merge_workflows": [
+    {
+      "check": "build",
+      "events": [
+        "merge_group"
+      ],
+      "path": ".github/workflows/lean_action_ci.yml"
+    }
+  ],
+  "remote": "origin",
+  "repository": "VSCL-x-VERITAS/lean-computational-mathematics",
+  "schema_version": 1,
+  "stable_branch": "main",
+  "timeout_seconds": 21600,
+  "unit_kind": "section"
+}
