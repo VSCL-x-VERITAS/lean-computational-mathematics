@@ -42,7 +42,8 @@ private theorem fluidStateFlux_hasFDerivAt
     ext v
     simp [state, fluidFluxJacobian, fluidConservedState, Matrix.toLin'_apply,
       Matrix.vecHead, Matrix.vecTail, div_eq_mul_inv]
-    field_simp [hdensity] <;> ring
+    field_simp [hdensity]
+    ring
 
 /-- Differentiating the gas flux gives equation (2.45). -/
 theorem fluidJacobian : fluidJacobianTarget := by
@@ -51,8 +52,9 @@ theorem fluidJacobian : fluidJacobianTarget := by
   constructor
   · ext i j
     fin_cases i <;> fin_cases j <;>
-      simp [fluidFluxJacobian, fluidConservedState, Matrix.vecHead, Matrix.vecTail]
-    all_goals field_simp [hdensity_ne] <;> ring
+      simp [fluidFluxJacobian, fluidConservedState]
+    all_goals
+      field_simp [hdensity_ne]
   · let derivative : (Fin 2 → ℝ) →L[ℝ] (Fin 2 → ℝ) :=
       LinearMap.toContinuousLinearMap
         (Matrix.toLin' (fluidFluxJacobian (fluidConservedState density velocity) pressureSlope))

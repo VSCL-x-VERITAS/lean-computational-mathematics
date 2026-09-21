@@ -18,6 +18,7 @@ namespace NumStability.Leveque02Tracer
 /-- A signed local source density depending on tracer density, position, and
 time. -/
 structure SignedSourceDensity where
+  /-- Evaluate the signed source density at a tracer state, position, and time. -/
   value : LinearMassDensity → ℝ → ℝ → ℝ
 
 /-- The source's convention that a negative local source-density value denotes

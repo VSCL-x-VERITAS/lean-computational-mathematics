@@ -16,8 +16,7 @@ namespace NumStability.Leveque02Tracer
 /-- The signed local source-density model has the evaluation and sink semantics
 specified in Section 2.5. -/
 theorem signedSourceDensityDefinition : signedSourceDensityTarget := by
-  intro sourceDensity state position time
-  intro hnegative
+  intro sourceDensity state position time hnegative
   exact hnegative
 
 end NumStability.Leveque02Tracer
