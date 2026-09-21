@@ -15,7 +15,7 @@ namespace NumStability.Leveque02Tracer
 
 /-- Equation (2.45) identifies the actual derivative and its physical-coordinate matrix. -/
 def fluidJacobianTarget : Prop :=
-  ∀ (pressureLaw : ℝ → ℝ) (density velocity pressureSlope : ℝ), density ≠ 0 →
+  ∀ (pressureLaw : ℝ → ℝ) (density velocity pressureSlope : ℝ), 0 < density →
     HasDerivAt pressureLaw pressureSlope density →
     fluidFluxJacobian (fluidConservedState density velocity) pressureSlope =
       !![0, 1; -velocity ^ 2 + pressureSlope, 2 * velocity] ∧

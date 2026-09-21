@@ -22,18 +22,14 @@ namespace NumStability.Leveque02Tracer
 /-- Fourier energy conservation has the displayed differential heat-equation form. -/
 def heatEquationTarget : Prop :=
   ∀ (temperature : ℝ → ℝ → ℝ) (capacity conductivity gradient : ℝ → ℝ)
-    (energyRate x t : ℝ) (spaceDomain timeDomain : Set ℝ),
-    x ∈ spaceDomain → t ∈ timeDomain →
-    (∀ ξ ∈ spaceDomain, UniqueDiffWithinAt ℝ spaceDomain ξ) →
-    UniqueDiffWithinAt ℝ timeDomain t →
-    HasDerivWithinAt (fun τ => thermalEnergyDensity capacity temperature x τ)
-      energyRate timeDomain t →
-    (∀ ξ ∈ spaceDomain,
-      HasDerivWithinAt (fun z => temperature z t) (gradient ξ) spaceDomain ξ) →
-    ((∃ fluxDerivative : ℝ,
-      HasDerivWithinAt (fun ξ => fourierHeatFlux (conductivity ξ) (gradient ξ))
-        fluxDerivative spaceDomain x ∧ energyRate + fluxDerivative = 0) ↔
-      HasDerivWithinAt (fun ξ => conductivity ξ * gradient ξ)
-        energyRate spaceDomain x)
+    (energyRate fluxDerivative productDerivative x t : ℝ),
+    HasDerivAt (fun τ => thermalEnergyDensity capacity temperature x τ)
+      energyRate t →
+    (∀ᶠ ξ in nhds x, HasDerivAt (fun z => temperature z t) (gradient ξ) ξ) →
+    HasDerivAt (fun ξ => fourierHeatFlux (conductivity ξ) (gradient ξ))
+      fluxDerivative x →
+    energyRate + fluxDerivative = 0 →
+    HasDerivAt (fun ξ => conductivity ξ * gradient ξ) productDerivative x →
+    energyRate = productDerivative
 
 end NumStability.Leveque02Tracer
