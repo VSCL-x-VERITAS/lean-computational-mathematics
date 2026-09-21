@@ -2,8 +2,8 @@
 SPDX-License-Identifier: MIT
 -/
 
-import ComputationalMathematics.Source.LeVeque.Chapter02.AcousticsMatrixTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AcousticsMatrix
+import ComputationalMathematics.Source.LeVeque.Chapter02.AcousticsMatrixTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.ActualPressureSlopeTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionConverseTarget
@@ -12,13 +12,13 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionLocalProfileTa
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionProfileTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionRectangleConverseTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AdvectionWithinProfile
+import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxLocalTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousIntegralFluxTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousMassBalanceRewrite
-import ComputationalMathematics.Source.LeVeque.Chapter02.AutonomousFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.BarotropicPressureTarget
-import ComputationalMathematics.Source.LeVeque.Chapter02.BulkModulus
 import ComputationalMathematics.Source.LeVeque.Chapter02.BathHeat
+import ComputationalMathematics.Source.LeVeque.Chapter02.BulkModulus
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityBalance
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityConservationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.CapacityCoordinatesTarget
@@ -45,8 +45,8 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.EndpointFlux
 import ComputationalMathematics.Source.LeVeque.Chapter02.Equation01
 import ComputationalMathematics.Source.LeVeque.Chapter02.ExternalHeatSourceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FickFlux
-import ComputationalMathematics.Source.LeVeque.Chapter02.FirstVariationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FirstVariation
+import ComputationalMathematics.Source.LeVeque.Chapter02.FirstVariationTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidContinuityTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidFirstVariation
 import ComputationalMathematics.Source.LeVeque.Chapter02.FluidJacobian
@@ -67,6 +67,7 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceCumu
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceProductionTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralMassBalanceTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.IntegralResidual
+import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicFlow
 import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicPressureTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.MassFluxContinuity
 import ComputationalMathematics.Source.LeVeque.Chapter02.MaterialDerivative
@@ -85,7 +86,6 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ReactingFlow
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionDiffusion
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReactionMatrix
 import ComputationalMathematics.Source.LeVeque.Chapter02.ReferenceLocation
-import ComputationalMathematics.Source.LeVeque.Chapter02.IsentropicFlow
 import ComputationalMathematics.Source.LeVeque.Chapter02.ScalarAdvectionCauchyTarget
 import ComputationalMathematics.Source.LeVeque.Chapter02.SectionMassUnits
 import ComputationalMathematics.Source.LeVeque.Chapter02.SignedSourceDensity
