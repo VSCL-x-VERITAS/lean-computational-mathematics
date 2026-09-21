@@ -18,7 +18,7 @@ namespace NumStability.Leveque02Tracer
 /-- Equation (2.47) expands the actual constant-matrix system in density/momentum coordinates. -/
 def conservedAcousticsComponentsTarget : Prop :=
   ∀ (pressureLaw : ℝ → ℝ) (densityBackground backgroundVelocity pressureSlope : ℝ),
-    densityBackground ≠ 0 → HasDerivAt pressureLaw pressureSlope densityBackground →
+    0 < densityBackground → HasDerivAt pressureLaw pressureSlope densityBackground →
     ∀ (densityPerturbation momentumPerturbation : ℝ → ℝ → ℝ) (x t : ℝ),
     IsConstantCoefficientLinearSystemSolutionAt
       (fun ξ τ => ![densityPerturbation ξ τ, momentumPerturbation ξ τ])
