@@ -5,6 +5,10 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.LinearAcoustics
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.EigenmodeWaves
 
+/-!
+# Target for the general form of a pure left-going acoustic wave
+-/
+
 namespace NumStability.Leveque02Tracer
 
 /-- Equation (2.60): pure left-going sound waves are exactly translated scalar
