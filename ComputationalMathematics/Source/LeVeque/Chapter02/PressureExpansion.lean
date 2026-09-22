@@ -24,6 +24,6 @@ theorem pressureExpansion : pressureExpansionTarget := by
   have hpressureAt : HasDerivAt pressureLaw pressureSlope
       (densityBackground + (0 : ℝ) * densityPerturbation) := by
     simpa using hpressure
-  convert hpressureAt.comp 0 hline using 1 <;> simp
+  exact hpressureAt.comp 0 hline
 
 end NumStability.Leveque02Tracer

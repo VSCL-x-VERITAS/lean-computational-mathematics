@@ -26,6 +26,7 @@ theorem momentumLinearization : momentumLinearizationTarget := by
     simpa only [one_smul] using
       ((hasDerivAt_id (x := (0 : ℝ))).smul_const velocityPerturbation).const_add
         velocityBackground
-  convert hdensity.mul hvelocity using 1 <;> ring
+  convert hdensity.mul hvelocity using 1
+  all_goals ring
 
 end NumStability.Leveque02Tracer
