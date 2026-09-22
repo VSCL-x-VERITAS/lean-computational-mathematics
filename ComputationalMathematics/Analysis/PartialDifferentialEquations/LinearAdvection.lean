@@ -43,14 +43,14 @@ def IsLinearAdvectionSolutionAt
       HasDerivAt (fun ξ => q ξ t) qx x ∧
         qt + speed • qx = 0
 
-/-- Every differentiable translated profile solves linear advection at the
-corresponding point. -/
-theorem travelingWave_isLinearAdvectionSolutionAt
+/-- The time and space derivatives of a translated profile are respectively
+`(-speed) • profile'` and `profile'`. -/
+theorem travelingWave_hasDerivAt_time_and_space
     {profile : ℝ → E} {profile' : E} (speed x t : ℝ)
     (hprofile : HasDerivAt profile profile' (x - speed * t)) :
-    IsLinearAdvectionSolutionAt
-      (travelingWave profile speed) speed x t := by
-  refine ⟨(-speed) • profile', profile', ?_, ?_, ?_⟩
+    HasDerivAt (fun τ => travelingWave profile speed x τ) ((-speed) • profile') t ∧
+      HasDerivAt (fun ξ => travelingWave profile speed ξ t) profile' x := by
+  constructor
   · have ht : HasDerivAt (fun τ : ℝ => x - speed * τ) (-speed) t := by
       simpa using
         (hasDerivAt_const t x).sub ((hasDerivAt_id t).const_mul speed)
@@ -58,6 +58,17 @@ theorem travelingWave_isLinearAdvectionSolutionAt
   · have hx : HasDerivAt (fun ξ : ℝ => ξ - speed * t) 1 x := by
       simpa using (hasDerivAt_id x).sub_const (speed * t)
     simpa [travelingWave, Function.comp_def] using hprofile.scomp x hx
+
+/-- Every differentiable translated profile solves linear advection at the
+corresponding point. -/
+theorem travelingWave_isLinearAdvectionSolutionAt
+    {profile : ℝ → E} {profile' : E} (speed x t : ℝ)
+    (hprofile : HasDerivAt profile profile' (x - speed * t)) :
+    IsLinearAdvectionSolutionAt
+      (travelingWave profile speed) speed x t := by
+  rcases travelingWave_hasDerivAt_time_and_space speed x t hprofile with
+    ⟨htime, hspace⟩
+  refine ⟨(-speed) • profile', profile', htime, hspace, ?_⟩
   · simp
 
 end LinearAdvection
