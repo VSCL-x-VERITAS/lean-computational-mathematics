@@ -11,14 +11,10 @@ book-formalization migration. The generator has two layers:
   project declarations reachable through them. Authored private declarations
   remain in the graph; unstable `_proof_*`, `_simp_*`, `match_*`, flat
   constructors, unfold helpers, and similar implementation details do not.
-- `check_compatibility.py` verifies that every old path documented in the
-  compatibility table is an import-only wrapper around exactly its stated
-  canonical targets, that the table agrees exactly with the `compatibility`
-  tier in `docs/architecture/tiers.json`, that every historical path and
-  every canonical target carries a direct test import, and that production
-  code contains zero imports of historical paths outright. The former
-  retained-boundary exception mechanism was retired with R0015; the checker
-  carries no exception list.
+- The legacy compatibility-forwarder checker was retired with the old paths
+  and their smoke tests. The current tree intentionally has no
+  `check_compatibility.py`; canonical imports are enforced by the remaining
+  layout and tier checks.
 - `check_layout.py` enforces the naming, classification, aggregate, generated-
   artifact, and documentation ratchet recorded in
   `docs/architecture/layout-exceptions.json`.
@@ -101,12 +97,6 @@ Run the complete capture from the repository root:
 
 ```text
 python tools/architecture/generate_baseline.py --name YYYY-MM-DD
-```
-
-Check the compatibility contract independently:
-
-```text
-python tools/architecture/check_compatibility.py
 ```
 
 Check a retained dependency stream against the frozen Phase 11B1 ownership
