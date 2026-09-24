@@ -57,6 +57,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter02.Section07.YoungInequa
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.BernsteinProofDisplays.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section08.Exercise06.Signature
 import ComputationalMathematics.Source.Vershynin.Chapter02.Section09.Theorem01.Signature
+import ComputationalMathematics.Source.Vershynin.Chapter03.Section04.BorellMarginalWeakened.Signature
 /-!
 # HDP source-contract signatures
 

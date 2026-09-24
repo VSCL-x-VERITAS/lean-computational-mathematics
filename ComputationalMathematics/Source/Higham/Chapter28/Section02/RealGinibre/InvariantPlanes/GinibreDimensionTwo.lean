@@ -31,6 +31,7 @@ import ComputationalMathematics.Algorithms.LinearSystems.QR.HouseholderReflector
 import ComputationalMathematics.Algorithms.LinearSystems.QR.Householder.TrailingPanels
 import ComputationalMathematics.Analysis.Conditioning.LinearSystems.PerronFrobenius
 import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.Probability.Gaussian.Planar
 import ComputationalMathematics.Analysis.TestMatrices.Gaussian.GaussianOrthogonal
 import ComputationalMathematics.Source.Higham.Chapter28.Section02.RealGinibre.ProbabilityLaw.Probability
 
@@ -175,58 +176,14 @@ theorem gaussianReal_prod_real_apply (s : Set (ℝ × ℝ))
     (hs : MeasurableSet s) :
     ((gaussianReal 0 1).prod (gaussianReal 0 1)).real s =
       ∫ p in s,
-        gaussianPDFReal 0 1 p.1 * gaussianPDFReal 0 1 p.2 := by
-  rw [gaussianReal_of_var_ne_zero 0 (by norm_num)]
-  rw [prod_withDensity
-    (measurable_gaussianPDF 0 1) (measurable_gaussianPDF 0 1)]
-  rw [measureReal_def, withDensity_apply _ hs]
-  rw [← integral_toReal (f := fun p : ℝ × ℝ =>
-      gaussianPDF 0 1 p.1 * gaussianPDF 0 1 p.2)
-    (μ := (volume.prod volume).restrict s)
-    (((measurable_gaussianPDF 0 1).comp measurable_fst).mul
-      ((measurable_gaussianPDF 0 1).comp measurable_snd) |>.aemeasurable)
-    (ae_of_all _ fun p => ENNReal.mul_lt_top gaussianPDF_lt_top gaussianPDF_lt_top)]
-  apply integral_congr_ae
-  filter_upwards with p
-  simp [toReal_gaussianPDF]
+        gaussianPDFReal 0 1 p.1 * gaussianPDFReal 0 1 p.2 :=
+  NumStability.Analysis.Probability.Gaussian.gaussianRealProd_real_apply s hs
 
 theorem gaussianPDFReal_zero_one_prod_polar (r theta : ℝ) :
     r * (gaussianPDFReal 0 1 (r * Real.cos theta) *
       gaussianPDFReal 0 1 (r * Real.sin theta)) =
-      r / (2 * Real.pi) * Real.exp (-(r ^ 2) / 2) := by
-  simp only [gaussianPDFReal, NNReal.coe_one, mul_one, sub_zero]
-  rw [show r *
-      ((Real.sqrt (2 * Real.pi))⁻¹ *
-          Real.exp (-(r * Real.cos theta) ^ 2 / 2) *
-        ((Real.sqrt (2 * Real.pi))⁻¹ *
-          Real.exp (-(r * Real.sin theta) ^ 2 / 2))) =
-      r * (Real.sqrt (2 * Real.pi))⁻¹ *
-        (Real.sqrt (2 * Real.pi))⁻¹ *
-        (Real.exp (-(r * Real.cos theta) ^ 2 / 2) *
-          Real.exp (-(r * Real.sin theta) ^ 2 / 2)) by ring]
-  rw [← Real.exp_add]
-  have harg :
-      (-(r * Real.cos theta) ^ 2 / 2 +
-        -(r * Real.sin theta) ^ 2 / 2) = -(r ^ 2) / 2 := by
-    calc
-      _ = -(r ^ 2) * (Real.cos theta ^ 2 + Real.sin theta ^ 2) / 2 := by
-        ring
-      _ = _ := by rw [Real.cos_sq_add_sin_sq]; ring
-  rw [harg]
-  have hsqrt : Real.sqrt (2 * Real.pi) ^ 2 = 2 * Real.pi := by
-    rw [Real.sq_sqrt]
-    positivity
-  have hsqrt_ne : Real.sqrt (2 * Real.pi) ≠ 0 := by positivity
-  have hcoeff : (Real.sqrt (2 * Real.pi))⁻¹ *
-      (Real.sqrt (2 * Real.pi))⁻¹ = (2 * Real.pi)⁻¹ := by
-    rw [← mul_inv, ← pow_two, hsqrt]
-  rw [show r * (Real.sqrt (2 * Real.pi))⁻¹ *
-      (Real.sqrt (2 * Real.pi))⁻¹ * Real.exp (-(r ^ 2) / 2) =
-      r * ((Real.sqrt (2 * Real.pi))⁻¹ *
-        (Real.sqrt (2 * Real.pi))⁻¹) *
-          Real.exp (-(r ^ 2) / 2) by ring]
-  rw [hcoeff]
-  rfl
+      r / (2 * Real.pi) * Real.exp (-(r ^ 2) / 2) :=
+  NumStability.Analysis.Probability.Gaussian.standardGaussianPairPDF_polar r theta
 
 theorem integral_gaussianPDFReal_prod_radialTail
     (a : ℝ) (ha : 0 ≤ a) :

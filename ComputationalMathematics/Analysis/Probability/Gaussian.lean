@@ -1,4 +1,5 @@
 import ComputationalMathematics.Analysis.Probability.Gaussian.AbsoluteMoment
+import ComputationalMathematics.Analysis.Probability.Gaussian.Planar
 
 /-!
 # Gaussian probability analysis

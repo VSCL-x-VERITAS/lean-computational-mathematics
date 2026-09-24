@@ -1,3 +1,4 @@
+import ComputationalMathematics.Analysis.Probability.Haar.HomogeneousSpaceIndependence
 import ComputationalMathematics.Analysis.Probability.Haar.HomogeneousSpaceUniqueness
 import ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMatrixLaw
 
