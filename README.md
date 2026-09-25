@@ -29,7 +29,7 @@ The principal source developments currently cover:
 
 - all 28 chapters of Nicholas J. Higham's *Accuracy and Stability of Numerical
   Algorithms* (2nd ed.), within a selected audited scope;
-- Chapter 1 and an ongoing Chapter 2 formalization of Randall J. LeVeque's
+- Chapters 1 and 2 of Randall J. LeVeque's
   *Finite Volume Methods for Hyperbolic Problems*, backed by reusable PDE and
   finite-volume foundations;
 - Chapters 1 and 2 of Roman Vershynin's *High-Dimensional Probability*,
@@ -44,11 +44,10 @@ faithfully.
 
 ## Current repository status
 
-The current Chapter 2 development checkpoint contains 2,829 classified
-production Lean modules: 712 reusable, 1,659 source,
-448 aggregate, 5 internal and 5 upstream. These counts are recorded in the
-[tier manifest](docs/architecture/tiers.json). Chapter 2 remains in progress;
-its accepted source coverage is described below.
+Current `main` contains 3,723 classified production Lean modules: 828 reusable,
+2,430 source, 455 aggregate, 5 internal and 5 upstream. These counts are
+recorded in the [tier manifest](docs/architecture/tiers.json). LeVeque Chapter 2's
+audited formalization scope is complete; its coverage is described below.
 
 ### Historical: baseline before LeVeque Chapter 2
 
@@ -138,6 +137,13 @@ The badge tracks `main`. Release 0.2.0 and the retirements that followed it were
 each verified green before the next landed; the run on the tagged commit
 `e93dd14c1` passed every step, including the library build, the `lake test`
 driver and both reviewed diagnostic baselines.
+
+The LeVeque Chapter 2 publication merged as
+[`708e788771965cde4c42f2d5bc83ec9751e5ed41`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/708e788771965cde4c42f2d5bc83ec9751e5ed41)
+through [PR #17](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/17).
+Its [post-merge CI run](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36122945465)
+passed the library build, `lake test`, and warning and lint enforcement on that
+exact `main` commit.
 
 The remainder of this subsection records the earlier validated source revision,
 whose evidence the migration reports are stated against.
@@ -254,27 +260,23 @@ retired from the tree on 2026-09-10, recoverable at `afb25bab1`. Book and
 workflow limitations are recorded in the campaign's local issue ledgers, which
 are working files kept inside a checkout rather than committed.
 
-The ongoing [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
+The [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
 is available through
 [`ComputationalMathematics.Source.LeVeque.Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean).
-At the current 2026-09-13 checkpoint, the chapter gate records **40 of 243
-source objects complete (16.46%)**, with **203 remaining**, zero skipped and
-zero deferred. Each completed object has an accepted independent statement
-faithfulness audit and a validated Lean proof receipt. Proof-free targets
-for pending claims are also present; their presence does not count as completion.
+The independently reviewed, PDF-pinned Chapter 2 inventory contains **209
+formalization rows**. The certified gate records **209/209 complete (100%)**:
+179 reused from integrated mathematics, 20 proved for this chapter, and 10
+discrepancy rows with separately recorded corrections. There are zero remaining,
+skipped, or deferred rows. Every row has accepted statement-faithfulness and
+proof evidence; proof-free targets are retained as audit contracts.
 
-Accepted results cover tracer density and flux, characteristic transport,
-diffusion and heat-source identities, reacting-flow balance, momentum flux,
-component and matrix conservation systems, mass continuity, fluid-flux
-coordinates, and the decomposition into a constant background and perturbation.
-It also covers the repeated-eigenvalue reaction matrix, species-dependent
-reaction-diffusion balance, and the conserved acoustics components. The latest
-accepted result proves the conservative variable-velocity advection equation
-and its classical product-rule expansion. The latest published checkpoint
-passed the full library build and source hygiene/layout
-checks; those checks are rerun whenever the product tree advances.
-Audit packages and the active chapter gate remain checkout-local; this is
-partial chapter coverage, not a completed Chapter 2 formalization.
+The formalization covers the chapter's selected tracer, advection, diffusion,
+reaction, acoustics, elasticity, and Eulerian/Lagrangian coordinate claims.
+The focused and full Lean builds, declaration/axiom checks, source hygiene,
+organization and semantic checks passed before publication. This is completion
+of the audited Chapter 2 scope, not a claim that the whole book is formalized.
+Inventory, audit packages, and the gate remain checkout-local rather than
+tracked in this repository.
 
 ### Vershynin: high-dimensional probability
 
@@ -343,8 +345,8 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapter 1 and ongoing Chapter 2 correspondence |
-| `ComputationalMathematics.Source.LeVeque.Chapter02` | Chapter 2 proofs, models, and pending proof-free targets |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1 and 2 correspondence |
+| `ComputationalMathematics.Source.LeVeque.Chapter02` | Audited Chapter 2 proofs, models, and proof-free target contracts |
 | `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1 and 2 source contracts |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
@@ -416,7 +418,7 @@ ComputationalMathematics/
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          finite-volume methods, Chapter 1 and ongoing Chapter 2
+│   ├── LeVeque/                          finite-volume methods, Chapters 1 and 2
 │   ├── Vershynin/                        high-dimensional probability, Chapters 1 and 2
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
