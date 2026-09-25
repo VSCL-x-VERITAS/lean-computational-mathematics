@@ -19,6 +19,6 @@ theorem acousticInitialAmplitudes : acousticInitialAmplitudesTarget := by
   fin_cases i <;>
     simp [linearAcousticsEigenvectorMatrix, linearAcousticsLeftEigenvector,
       linearAcousticsRightEigenvector, Matrix.mulVec, dotProduct,
-      Fin.sum_univ_two] <;> ring
+      Fin.sum_univ_two]; ring
 
 end NumStability.Leveque02Tracer

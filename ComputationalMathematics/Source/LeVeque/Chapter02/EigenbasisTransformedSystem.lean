@@ -18,13 +18,9 @@ theorem eigenbasisTransformedSystem : eigenbasisTransformedSystemTarget := by
   let R : Matrix ι ι ℝ := (Pi.basisFun ℝ ι).toMatrix eigenbasis
   let S : Matrix ι ι ℝ := eigenbasis.toMatrix (Pi.basisFun ℝ ι)
   have hSR : S * R = 1 := by
-    simpa [S, R] using
-      (Module.Basis.toMatrix_mul_toMatrix_flip
-        eigenbasis (Pi.basisFun ℝ ι))
+    simp [S, R]
   have hRS : R * S = 1 := by
-    simpa [S, R] using
-      (Module.Basis.toMatrix_mul_toMatrix_flip
-        (Pi.basisFun ℝ ι) eigenbasis)
+    simp [S, R]
   have hInv : R⁻¹ = S := Matrix.inv_eq_left_inv hSR
   have hRR : R * R⁻¹ = 1 := by rw [hInv]; exact hRS
   have hcomp : (R⁻¹ * coefficient * R) * R⁻¹ = R⁻¹ * coefficient := by

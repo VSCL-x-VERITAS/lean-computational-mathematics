@@ -15,6 +15,7 @@ direction `n`, `maxwellCrossMatrix n` represents `v ↦ n × v`.
 
 namespace NumStability.Leveque02Tracer
 
+/-- Index for the three electric and three magnetic state coordinates. -/
 abbrev MaxwellStateIndex := Fin 3 ⊕ Fin 3
 
 /-- Matrix of the cross product with a fixed spatial direction. -/

@@ -19,8 +19,7 @@ theorem characteristicCurvePropagation : characteristicCurvePropagationTarget :=
   let S : Matrix (Fin m) (Fin m) ℝ :=
     eigenbasis.toMatrix (Pi.basisFun ℝ (Fin m))
   have hSR : S * R = 1 := by
-    simpa [S, R] using Module.Basis.toMatrix_mul_toMatrix_flip
-      eigenbasis (Pi.basisFun ℝ (Fin m))
+    simp [S, R]
   have hInv : R⁻¹ = S := Matrix.inv_eq_left_inv hSR
   have hcoord (v : Fin m → ℝ) : (R⁻¹).mulVec v = eigenbasis.equivFun v := by
     have hrepr : R.mulVec (eigenbasis.equivFun v) = v := by

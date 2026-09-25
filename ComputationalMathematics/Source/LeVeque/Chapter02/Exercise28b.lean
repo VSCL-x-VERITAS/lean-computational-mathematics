@@ -59,8 +59,8 @@ private theorem reciprocalPressureResidual_firstVariation
           a ^ 2 / (volumeBackground + amplitude * volumeVariation ξ))
         (amplitude * slope amplitude) label := by
       have hinv := hspaceAmplitude.inv (by simpa [state] using hnonzero)
-      convert hinv.const_mul (a ^ 2) using 1 <;>
-        simp [slope, state, div_eq_mul_inv] <;> ring
+      convert hinv.const_mul (a ^ 2) using 1;
+        simp [slope, state, div_eq_mul_inv]; ring
     exact hpressureAmplitude.deriv
   have hresult := hproduct.congr_of_eventuallyEq hevent
   simpa [slope, state] using hresult
@@ -76,8 +76,8 @@ theorem exercise28b : exercise28bTarget := by
   have hpressure : HasDerivAt pressureLaw pressureSlope volumeBackground := by
     have hinv := (hasDerivAt_id (x := volumeBackground)).inv
       (ne_of_gt hvolume)
-    convert hinv.const_mul (a ^ 2) using 1 <;>
-      simp [pressureLaw, pressureSlope, div_eq_mul_inv] <;> ring
+    convert hinv.const_mul (a ^ 2) using 1;
+      simp [pressureSlope, div_eq_mul_inv]
   refine ⟨hpressure, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro volumeVariation velocityVariation
     have hvolumeAmplitude : HasDerivAt
@@ -92,13 +92,12 @@ theorem exercise28b : exercise28bTarget := by
           velocityVariation 0 := by
         simpa using ((hasDerivAt_id (x := (0 : ℝ))).mul_const
           velocityVariation).const_add velocityBackground
-      convert hvelocityAmplitude.neg using 1 <;> simp
+      convert hvelocityAmplitude.neg using 1
     · have hpressureAt :
           HasDerivAt pressureLaw pressureSlope
             (volumeBackground + 0 * volumeVariation) := by
         simpa using hpressure
-      convert hpressureAt.comp 0 hvolumeAmplitude using 1 <;>
-        simp [pressureLaw, pressureSlope]
+      convert hpressureAt.comp 0 hvolumeAmplitude using 1
   · intro volumeVariation velocityVariation label time
       volumeTime volumeSpace velocityTime velocitySpace
       hvolumeTime hvolumeSpace hvelocityTime hvelocitySpace
@@ -151,14 +150,12 @@ theorem exercise28b : exercise28bTarget := by
     · intro hmatrix
       have hfirst := congrFun hmatrix (0 : Fin 2)
       have hsecond := congrFun hmatrix (1 : Fin 2)
-      simp [coefficient, Matrix.mulVec, dotProduct, Fin.sum_univ_two,
-        pressureSlope] at hfirst hsecond
+      simp [dotProduct, Fin.sum_univ_two] at hfirst hsecond
       constructor <;> linarith
     · rintro ⟨hfirst, hsecond⟩
       funext i
       fin_cases i <;>
-        simp [coefficient, Matrix.mulVec, dotProduct, Fin.sum_univ_two,
-          pressureSlope] <;> linarith
+        simp [dotProduct, Fin.sum_univ_two] <;> linarith
   · intro eigenvalue
     have hdet :
         Matrix.det (coefficient - eigenvalue •
@@ -204,7 +201,7 @@ theorem exercise28b : exercise28bTarget := by
     rw [hfun]
     convert ((hasDerivAt_id (x := (0 : ℝ))).const_mul
       (volumeBackground * labelSpeed + velocityBackground)).add_const
-      (referenceLocation + volumeBackground * label) using 1 <;> ring
-  · constructor <;> field_simp [ne_of_gt hvolume] <;> ring
+      (referenceLocation + volumeBackground * label) using 1; ring
+  · constructor <;> field_simp [ne_of_gt hvolume]; ring
 
 end NumStability.Leveque02Tracer

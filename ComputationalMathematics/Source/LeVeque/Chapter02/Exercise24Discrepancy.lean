@@ -74,12 +74,12 @@ theorem exercise24Corrected : exercise24CorrectionTarget := by
     ext i j
     fin_cases i <;> fin_cases j <;>
       simp [T, TInv, Matrix.mul_apply, Fin.sum_univ_two,
-        hslopeNe, hdensityNe] <;> field_simp [hslopeNe, hdensityNe] <;> ring
+        hslopeNe, hdensityNe]; field_simp [hslopeNe, hdensityNe]; ring
   have hTright : TInv * T = 1 := by
     ext i j
     fin_cases i <;> fin_cases j <;>
       simp [T, TInv, Matrix.mul_apply, Fin.sum_univ_two,
-        hslopeNe, hdensityNe] <;> field_simp [hslopeNe, hdensityNe] <;> ring
+        hslopeNe, hdensityNe]; field_simp [hslopeNe, hdensityNe]; ring
   have hshifted :
       gas = T * (stationary + velocity • (1 : Matrix (Fin 2) (Fin 2) ℝ)) * TInv := by
     rw [hgas]

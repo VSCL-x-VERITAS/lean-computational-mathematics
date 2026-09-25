@@ -19,13 +19,9 @@ theorem realEigenbasisDiagonalization :
   let S : Matrix ι ι ℝ := eigenbasis.toMatrix (Pi.basisFun ℝ ι)
   let Λ : Matrix ι ι ℝ := Matrix.diagonal eigenvalues
   have hSR : S * R = 1 := by
-    simpa [S, R] using
-      (Module.Basis.toMatrix_mul_toMatrix_flip
-        eigenbasis (Pi.basisFun ℝ ι))
+    simp [S, R]
   have hRS : R * S = 1 := by
-    simpa [S, R] using
-      (Module.Basis.toMatrix_mul_toMatrix_flip
-        (Pi.basisFun ℝ ι) eigenbasis)
+    simp [S, R]
   have hInv : R⁻¹ = S := Matrix.inv_eq_left_inv hSR
   have hAR : coefficient * R = R * Λ := by
     ext i p
