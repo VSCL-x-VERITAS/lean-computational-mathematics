@@ -29,11 +29,12 @@ The principal source developments currently cover:
 
 - all 28 chapters of Nicholas J. Higham's *Accuracy and Stability of Numerical
   Algorithms* (2nd ed.), within a selected audited scope;
-- Chapters 1 and 2 of Randall J. LeVeque's
+- Chapters 1–3 of Randall J. LeVeque's
   *Finite Volume Methods for Hyperbolic Problems*, backed by reusable PDE and
   finite-volume foundations;
 - Chapters 1 and 2 of Roman Vershynin's *High-Dimensional Probability*,
-  backed by reusable scalar-probability and concentration modules; and
+  with additional Chapter 3 source contracts, backed by reusable
+  scalar-probability and concentration modules; and
 - a randomized numerical linear algebra case study based on work by Petros
   Drineas and Michael W. Mahoney.
 
@@ -44,10 +45,26 @@ faithfully.
 
 ## Current repository status
 
-Current `main` contains 3,723 classified production Lean modules: 828 reusable,
-2,430 source, 455 aggregate, 5 internal and 5 upstream. These counts are
-recorded in the [tier manifest](docs/architecture/tiers.json). LeVeque Chapter 2's
-audited formalization scope is complete; its coverage is described below.
+At published commit [`f8ce76ee7`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/f8ce76ee791152180d5386598800878d2e090fda),
+`main` contains 3,785 classified production Lean modules. The source and import
+measurements below come from a strict source scan of that commit; the role counts
+come from the [tier manifest](docs/architecture/tiers.json). LeVeque Chapters 2
+and 3 have complete audited scopes, described below.
+
+| Current-tree metric | Value |
+|---|---:|
+| Production Lean modules | 3,785 |
+| Reusable / source / aggregate / internal / upstream | 831 / 2,489 / 455 / 5 / 5 |
+| Classified modules | 3,785 / 3,785 (100%) |
+| Mixed or unclassified modules | 0 |
+| Nonblank Lean source lines | 1,576,743 |
+| Direct imports | 32,456 |
+| Import cycles / unresolved project imports | 0 / 0 |
+| Forbidden reusable-to-source import paths | 0 |
+| Test Lean modules | 151 |
+| Reviewed warning baseline | 227 diagnostics |
+| Reviewed lint baseline | 3,903 findings |
+| Tracked files / size | 4,479 / 107.9 MB |
 
 ### Historical: baseline before LeVeque Chapter 2
 
@@ -144,6 +161,14 @@ through [PR #17](https://github.com/VSCL-x-VERITAS/lean-computational-mathematic
 Its [post-merge CI run](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36122945465)
 passed the library build, `lake test`, and warning and lint enforcement on that
 exact `main` commit.
+
+The LeVeque Chapter 3 publication merged as
+[`f8ce76ee791152180d5386598800878d2e090fda`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/f8ce76ee791152180d5386598800878d2e090fda)
+through [PR #20](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/20).
+Its [merge-queue CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36292408422)
+and [post-merge CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36293199109)
+passed the library build, `lake test`, and warning and lint enforcement on the
+exact merged commit.
 
 The remainder of this subsection records the earlier validated source revision,
 whose evidence the migration reports are stated against.
@@ -252,31 +277,43 @@ Riemann-interface adapters, and operator splitting.
 The LeVeque source surface begins at
 [`ComputationalMathematics.Source.LeVeque`](ComputationalMathematics/Source/LeVeque.lean); its
 [`Chapter01` subtree](ComputationalMathematics/Source/LeVeque/Chapter01/) connects those foundations
-to Chapter 1 equations and constructions. The chapter gate outcomes and the
+to Chapter 1 equations and constructions. Chapter 1 gate outcomes and
 per-claim faithfulness decisions are summarised in
 [`docs/architecture/reviews/2026-09-faithfulness-outcomes.md`](docs/architecture/reviews/2026-09-faithfulness-outcomes.md);
-the audit packages themselves were the working record of that campaign and were
+its audit packages were the working record of that campaign and were
 retired from the tree on 2026-09-10, recoverable at `afb25bab1`. Book and
 workflow limitations are recorded in the campaign's local issue ledgers, which
 are working files kept inside a checkout rather than committed.
 
 The [Chapter 2 development](ComputationalMathematics/Source/LeVeque/Chapter02/)
-is available through
-[`ComputationalMathematics.Source.LeVeque.Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean).
-The independently reviewed, PDF-pinned Chapter 2 inventory contains **209
-formalization rows**. The certified gate records **209/209 complete (100%)**:
-179 reused from integrated mathematics, 20 proved for this chapter, and 10
-discrepancy rows with separately recorded corrections. There are zero remaining,
-skipped, or deferred rows. Every row has accepted statement-faithfulness and
-proof evidence; proof-free targets are retained as audit contracts.
+and [Chapter 3 development](ComputationalMathematics/Source/LeVeque/Chapter03/)
+are available through their
+[`Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean) and
+[`Chapter03`](ComputationalMathematics/Source/LeVeque/Chapter03.lean) imports.
+Both independently reviewed, PDF-pinned inventories have certified PASS gates:
 
-The formalization covers the chapter's selected tracer, advection, diffusion,
-reaction, acoustics, elasticity, and Eulerian/Lagrangian coordinate claims.
-The focused and full Lean builds, declaration/axiom checks, source hygiene,
-organization and semantic checks passed before publication. This is completion
-of the audited Chapter 2 scope, not a claim that the whole book is formalized.
-Inventory, audit packages, and the gate remain checkout-local rather than
-tracked in this repository.
+| Audited scope | Inventory rows | Proved | Reused | Printed-source discrepancies | Complete | Remaining / skipped / deferred |
+|---|---:|---:|---:|---:|---:|---:|
+| Chapter 2 | 209 | 20 | 179 | 10 | 209/209 (100%) | 0 / 0 / 0 |
+| Chapter 3 | 110 | 97 | 11 | 2 | 110/110 (100%) | 0 / 0 / 0 |
+
+Chapter 3 binds 296 distinct compiled Lean declarations across its 110 rows.
+All 110 rows passed blind and round-trip statement checks; 108 passed direct
+source comparison and the two printed-source discrepancies correctly failed
+that comparison. The printed third `r¹` in equation (3.35) and the printed
+`B₁ = 1` sign in Exercise 3.2 have formal witnesses and separately named
+corrections. The chapter's declaration, axiom, organization, focused-build and
+full-build gates passed. Its periodic initial-boundary-value equivalence uses
+an explicit compatible classical solution model; a weak-solution trace
+interpretation is outside that theorem.
+
+Chapter 2 covers selected tracer, advection, diffusion, reaction, acoustics,
+elasticity, and Eulerian/Lagrangian coordinate claims. Chapter 3 covers
+characteristics, eigenmode waves, Riemann problems, acoustic waves, boundary
+conditions, and selected exercises.
+These are completions of the audited chapter scopes, not a claim that the whole
+book is formalized. Inventories, audit packages, and gates remain checkout-local
+rather than tracked in this repository.
 
 ### Vershynin: high-dimensional probability
 
@@ -288,9 +325,12 @@ Chapter 1–2 source development.
 
 [`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
 checked source contracts and frozen signatures for selected material in
-Chapters 1 and 2 of *High-Dimensional Probability*. Historical
-`NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` paths
-remain supported through the compatibility map.
+Chapters 1–3 of *High-Dimensional Probability*. Chapter 3's presence here is
+source-contract coverage, not a completed chapter gate. Historical
+`NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` import
+paths were removed in release 0.2.0; the
+[compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
+records their canonical destinations.
 
 ### Drineas–Mahoney: randomized numerical linear algebra
 
@@ -300,18 +340,20 @@ from source correspondence under
 [`ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/`](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/).
 It covers sampling, matrix concentration, low-rank approximation,
 least-squares sketching, and randomized preconditioning. Historical
-`NumStability.Algorithms.RandNLA` imports remain available as compatibility
-paths.
+`NumStability.Algorithms.RandNLA` imports were removed in release 0.2.0; their
+canonical destinations are recorded in the
+[compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md).
 
 ## Building
 
 Install Git and [elan](https://github.com/leanprover/elan), then clone the
-active repository. Check out the release tag for a reproducible tree:
+active repository. Check out the published Chapter 3 commit for a reproducible
+tree:
 
 ```bash
 git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
 cd lean-computational-mathematics
-git checkout v0.3.0
+git checkout f8ce76ee791152180d5386598800878d2e090fda
 lake exe cache get
 lake build ComputationalMathematics NumStabilityTest
 lake test
@@ -345,9 +387,10 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1 and 2 correspondence |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1–3 correspondence |
 | `ComputationalMathematics.Source.LeVeque.Chapter02` | Audited Chapter 2 proofs, models, and proof-free target contracts |
-| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1 and 2 source contracts |
+| `ComputationalMathematics.Source.LeVeque.Chapter03` | Audited Chapter 3 characteristics, Riemann problems, and boundary results |
+| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–3 source contracts; Chapter 3 gate not claimed complete |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
@@ -366,10 +409,10 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "v0.3.0"
+rev = "f8ce76ee791152180d5386598800878d2e090fda"
 ```
 
-Pin a reviewed commit when reproducibility is required. The inherited
+Update the revision deliberately when consuming newer results. The inherited
 `v0.1.0` tag predates the current LeVeque/HDP work and the new module root;
 consumers of that tag use its original `NumStability` imports, which release
 0.2.0 removed from the current tree.
@@ -418,8 +461,8 @@ ComputationalMathematics/
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          finite-volume methods, Chapters 1 and 2
-│   ├── Vershynin/                        high-dimensional probability, Chapters 1 and 2
+│   ├── LeVeque/                          finite-volume methods, Chapters 1–3
+│   ├── Vershynin/                        high-dimensional probability, Chapters 1–3 contracts
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 
