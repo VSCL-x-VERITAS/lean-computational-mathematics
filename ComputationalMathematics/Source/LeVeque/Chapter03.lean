@@ -1,0 +1,69 @@
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Source.LeVeque.Chapter03.Hyperbolicity
+import ComputationalMathematics.Source.LeVeque.Chapter03.CharacteristicCoordinates
+import ComputationalMathematics.Source.LeVeque.Chapter03.WaveSuperposition
+import ComputationalMathematics.Source.LeVeque.Chapter03.CharacteristicCurves
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticCharacteristics
+import ComputationalMathematics.Source.LeVeque.Chapter03.LeftEigenvectors
+import ComputationalMathematics.Source.LeVeque.Chapter03.CauchySolution
+import ComputationalMathematics.Source.LeVeque.Chapter03.SimpleWaves
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticDecomposition
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticAdvection
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticInitialData
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticSimpleWave
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticExample
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticFigure31
+import ComputationalMathematics.Source.LeVeque.Chapter03.DomainOfDependence
+import ComputationalMathematics.Source.LeVeque.Chapter03.RangeOfInfluence
+import ComputationalMathematics.Source.LeVeque.Chapter03.InitialSingularity
+import ComputationalMathematics.Source.LeVeque.Chapter03.InitialDataRegularity
+import ComputationalMathematics.Source.LeVeque.Chapter03.SingularityPropagation
+import ComputationalMathematics.Source.LeVeque.Chapter03.ScalarRiemann
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannCoordinates
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannSolution
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannThreeFamily
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannWedges
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannWaveJump
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannWaveStrength
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannWaveSums
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannFigure33
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannHeaviside
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannTwoFamily
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannTwoFamilyIntermediate
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannGeneralPath
+import ComputationalMathematics.Source.LeVeque.Chapter03.RiemannAcoustics
+import ComputationalMathematics.Source.LeVeque.Chapter03.CoupledAcoustics
+import ComputationalMathematics.Source.LeVeque.Chapter03.CoupledAcousticsSpectrum
+import ComputationalMathematics.Source.LeVeque.Chapter03.MachBoundary
+import ComputationalMathematics.Source.LeVeque.Chapter03.BoundaryPartition
+import ComputationalMathematics.Source.LeVeque.Chapter03.AcousticBoundary
+import ComputationalMathematics.Source.LeVeque.Chapter03.PeriodicBoundary
+import ComputationalMathematics.Source.LeVeque.Chapter03.PeriodicCauchy
+import ComputationalMathematics.Source.LeVeque.Chapter03.PeriodicSeam
+import ComputationalMathematics.Source.LeVeque.Chapter03.PeriodicIntervalCorrespondence
+import ComputationalMathematics.Source.LeVeque.Chapter03.ZeroSpeedBoundary
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise31E
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise31D
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise31AB
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise31C
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise31F
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise33B
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise33A
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise34
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise32
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise35
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise36
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise37Boundary
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise37Average
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise37Wave
+import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise37Averaging
+
+/-!
+# LeVeque Chapter 3
+
+Source correspondence for *Characteristics and Riemann Problems for Linear
+Hyperbolic Equations*.
+-/

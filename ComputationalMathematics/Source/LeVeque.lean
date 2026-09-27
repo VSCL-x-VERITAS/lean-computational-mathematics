@@ -4,6 +4,7 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Source.LeVeque.Chapter01
 import ComputationalMathematics.Source.LeVeque.Chapter02
+import ComputationalMathematics.Source.LeVeque.Chapter03
 
 /-!
 # LeVeque source-local results
