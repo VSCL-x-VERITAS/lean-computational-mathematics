@@ -10,6 +10,7 @@ import ComputationalMathematics.HDP.Vector.FrameIsotropy
 import ComputationalMathematics.HDP.Vector.Gaussian
 import ComputationalMathematics.HDP.Vector.GaussianAffine
 import ComputationalMathematics.HDP.Vector.GaussianIndependence
+import ComputationalMathematics.HDP.Vector.GaussianMixtureNoise
 import ComputationalMathematics.HDP.Vector.GaussianNormConcentration
 import ComputationalMathematics.HDP.Vector.GaussianPolar
 import ComputationalMathematics.HDP.Vector.IndependentCoordinates

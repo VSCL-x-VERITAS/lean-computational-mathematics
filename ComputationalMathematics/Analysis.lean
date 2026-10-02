@@ -22,6 +22,7 @@ import ComputationalMathematics.Analysis.ComplexSqrt
 import ComputationalMathematics.Analysis.ConditionEstimatorLowerBound
 import ComputationalMathematics.Analysis.Conditioning
 import ComputationalMathematics.Analysis.CStarMatrices
+import ComputationalMathematics.Analysis.Eigenvalues
 import ComputationalMathematics.Analysis.Equidistribution
 import ComputationalMathematics.Analysis.Error.MatrixProducts
 import ComputationalMathematics.Analysis.Error.Measures.All

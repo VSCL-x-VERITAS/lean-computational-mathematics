@@ -3,6 +3,7 @@ import ComputationalMathematics.HDP.ContractSignatures
 import ComputationalMathematics.HDP.Convex
 import ComputationalMathematics.HDP.Graph
 import ComputationalMathematics.HDP.Kernel
+import ComputationalMathematics.HDP.Metric.CardinalCovering
 import ComputationalMathematics.HDP.Optimization
 import ComputationalMathematics.HDP.Scalar
 import ComputationalMathematics.HDP.Tensor

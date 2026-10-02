@@ -2,7 +2,7 @@
 --
 -- Unitarily invariant norms on finite complex matrices.
 
-import ComputationalMathematics.Analysis.SingularValues.Basic
+import ComputationalMathematics.Analysis.SingularValues.Realification
 
 /-!
 # Unitarily invariant matrix norms
@@ -16,6 +16,40 @@ namespace NumStability
 open scoped BigOperators
 open scoped ComplexOrder
 open ENNReal
+
+/-- A finite-dimensional symmetric gauge norm in an API that exposes its
+standard absolute coordinate monotonicity law.  Symmetric gauge norms are
+exactly the vector norms which represent unitarily (orthogonally, over `ℝ`)
+invariant matrix norms through the singular-value sequence. -/
+structure RealSymmetricGaugeNorm (n : ℕ) where
+  norm : (Fin n → ℝ) → ℝ
+  norm_nonneg : ∀ x, 0 ≤ norm x
+  eq_zero_iff : ∀ x, norm x = 0 ↔ x = 0
+  smul : ∀ (a : ℝ) x, norm (fun i => a * x i) = |a| * norm x
+  add_le : ∀ x y, norm (fun i => x i + y i) ≤ norm x + norm y
+  absolute : ∀ x, norm (fun i => |x i|) = norm x
+  perm : ∀ (π : Equiv.Perm (Fin n)) x, norm (fun i => x (π i)) = norm x
+  mono_nonnegative : ∀ {x y : Fin n → ℝ},
+    (∀ i, 0 ≤ x i) → (∀ i, x i ≤ y i) → norm x ≤ norm y
+
+/-- A real fixed-shape unitarily invariant norm in its standard symmetric-
+gauge representation.  Using the canonical, zero-extended singular-value
+sequence makes this representation valid uniformly for rectangular and
+rank-deficient matrices. -/
+structure RealRectUnitarilyInvariantNorm (m n : ℕ) where
+  gauge : RealSymmetricGaugeNorm n
+
+/-- Evaluation of a represented real rectangular unitarily invariant norm. -/
+noncomputable def RealRectUnitarilyInvariantNorm.norm {m n : ℕ}
+    (N : RealRectUnitarilyInvariantNorm m n)
+    (A : Matrix (Fin m) (Fin n) ℝ) : ℝ :=
+  N.gauge.norm (fun i =>
+    complexMatrixSingularValue (realRectToCMatrix A) i)
+
+theorem RealRectUnitarilyInvariantNorm.norm_nonneg {m n : ℕ}
+    (N : RealRectUnitarilyInvariantNorm m n)
+    (A : Matrix (Fin m) (Fin n) ℝ) : 0 ≤ N.norm A :=
+  N.gauge.norm_nonneg _
 
 
 /-- Source-facing fixed rectangular matrix norm axioms plus left/right unitary
