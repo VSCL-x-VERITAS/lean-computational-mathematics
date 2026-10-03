@@ -53,4 +53,30 @@ theorem hdp_04_equation_4_5 {m n r : ℕ}
   · intro x
     simpa only [haction, hnorm] using hl (WithLp.ofLp x)
 
+/-- Equation (4.5) with the complete coordinate SVD conditions as its
+decomposition premise. Both optimality directions are retained. -/
+theorem hdp_04_equation_4_5_explicit_svd {m n r : ℕ}
+    (A : Matrix (Fin m) (Fin (n + 1)) ℝ)
+    (s : Fin (n + 1) → ℝ)
+    (u : Fin r → EuclideanSpace ℝ (Fin m))
+    (v : Fin r → EuclideanSpace ℝ (Fin (n + 1)))
+    (hSVD : NumStability.RealMatrixSVDExplicitFields A r s u v) :
+    (∀ x : Fin (n + 1) → ℝ,
+      s (Fin.last n) * Real.sqrt (∑ j, x j ^ 2) ≤
+          Real.sqrt (∑ i, (∑ j, A i j * x j) ^ 2) ∧
+        Real.sqrt (∑ i, (∑ j, A i j * x j) ^ 2) ≤
+          s ⟨0, Nat.succ_pos n⟩ * Real.sqrt (∑ j, x j ^ 2)) ∧
+    (∀ upper : ℝ,
+      (∀ x : Fin (n + 1) → ℝ,
+        Real.sqrt (∑ i, (∑ j, A i j * x j) ^ 2) ≤
+          upper * Real.sqrt (∑ j, x j ^ 2)) →
+      s ⟨0, Nat.succ_pos n⟩ ≤ upper) ∧
+    (∀ lower : ℝ,
+      (∀ x : Fin (n + 1) → ℝ,
+        lower * Real.sqrt (∑ j, x j ^ 2) ≤
+          Real.sqrt (∑ i, (∑ j, A i j * x j) ^ 2)) →
+      lower ≤ s (Fin.last n)) := by
+  exact hdp_04_equation_4_5 A s u v
+    (NumStability.isRealMatrixSVD_iff_explicit_fields.mpr hSVD)
+
 end NumStability.HDP.Contract

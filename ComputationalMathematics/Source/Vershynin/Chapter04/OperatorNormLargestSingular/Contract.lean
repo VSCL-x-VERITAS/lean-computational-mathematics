@@ -26,4 +26,20 @@ theorem hdp_04_operator_norm_eq_largest_singular_value {m n : ℕ}
   intro i
   exact h.singularValues_antitone (Fin.zero_le i)
 
+/-- Every matrix admits the exhaustive coordinate SVD data whose leading
+coefficient dominates all coefficients and equals its Euclidean operator norm.
+No decomposition is assumed to exist as an additional hypothesis. -/
+theorem hdp_04_operator_norm_eq_largest_singular_value_explicit_svd {m n : ℕ}
+    (A : Matrix (Fin m) (Fin (n + 1)) ℝ) :
+    ∃ (r : ℕ) (s : Fin (n + 1) → ℝ)
+      (u : Fin r → EuclideanSpace ℝ (Fin m))
+      (v : Fin r → EuclideanSpace ℝ (Fin (n + 1))),
+      NumStability.RealMatrixSVDExplicitFields A r s u v ∧
+        (∀ i : Fin (n + 1), s i ≤ s (0 : Fin (n + 1))) ∧
+        s (0 : Fin (n + 1)) = NumStability.realMatrixOperatorNorm A := by
+  obtain ⟨r, s, u, v, h, htop, hnorm⟩ :=
+    hdp_04_operator_norm_eq_largest_singular_value A
+  exact ⟨r, s, u, v, NumStability.isRealMatrixSVD_iff_explicit_fields.mp h,
+    htop, hnorm⟩
+
 end NumStability.HDP.Contract

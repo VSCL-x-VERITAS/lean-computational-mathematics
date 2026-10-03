@@ -36,6 +36,47 @@ structure IsRealMatrixSVD {m n : ℕ}
     A i j = ∑ k : Fin r,
       s (Fin.castLE rank_le_width k) * u k i * v k j
 
+/-- Coordinate spelling of all eight conditions in a real rectangular SVD.
+The rank-width witness supplies the indices in the reconstruction; the two
+orthonormality conditions use ordinary coordinate dot products. -/
+def RealMatrixSVDExplicitFields {m n : ℕ}
+    (A : Matrix (Fin m) (Fin n) ℝ)
+    (r : ℕ) (s : Fin n → ℝ)
+    (u : Fin r → EuclideanSpace ℝ (Fin m))
+    (v : Fin r → EuclideanSpace ℝ (Fin n)) : Prop :=
+  ∃ hwidth : r ≤ n,
+    r = A.rank ∧
+    (∀ i, 0 ≤ s i) ∧
+    (∀ i j, i.val ≤ j.val → s j ≤ s i) ∧
+    (∀ i, r ≤ i.val → s i = 0) ∧
+    (∀ k l, (∑ a, u k a * u l a) = if k = l then 1 else 0) ∧
+    (∀ k l, (∑ a, v k a * v l a) = if k = l then 1 else 0) ∧
+    (∀ a b, A a b = ∑ k : Fin r,
+      s (Fin.castLE hwidth k) * u k a * v k b)
+
+/-- The coordinate conditions are necessary and sufficient for the existing
+SVD certificate, with no additional rank or matrix-shape restriction. -/
+theorem isRealMatrixSVD_iff_explicit_fields {m n r : ℕ}
+    {A : Matrix (Fin m) (Fin n) ℝ} {s : Fin n → ℝ}
+    {u : Fin r → EuclideanSpace ℝ (Fin m)}
+    {v : Fin r → EuclideanSpace ℝ (Fin n)} :
+    IsRealMatrixSVD A r s u v ↔ RealMatrixSVDExplicitFields A r s u v := by
+  have horth {d : ℕ} (w : Fin r → EuclideanSpace ℝ (Fin d)) :
+      Orthonormal ℝ w ↔
+        ∀ k l, (∑ a, w k a * w l a) = if k = l then 1 else 0 := by
+    simp [orthonormal_iff_ite, PiLp.inner_apply, real_inner_eq_re_inner,
+      RCLike.inner_apply, mul_comm]
+  constructor
+  · intro h
+    exact ⟨h.rank_le_width, h.rank_eq, h.singularValues_nonnegative,
+      fun i j hij ↦ h.singularValues_antitone hij,
+      h.singularValues_zero_of_rank_le,
+      (horth u).mp h.leftSingularVectors_orthonormal,
+      (horth v).mp h.rightSingularVectors_orthonormal, h.reconstruction⟩
+  · rintro ⟨hwidth, hrank, hnonneg, horder, hzero, hu, hv, hrec⟩
+    exact ⟨hrank, hwidth, hnonneg, fun i j hij ↦ horder i j hij,
+      hzero, (horth u).mpr hu, (horth v).mpr hv, hrec⟩
+
 /-- A real rectangular SVD certificate together with the left- and right-Gram
 eigenvector equations.  The corresponding Gram eigenvalue is the square of the
 nonnegative singular value, so this packages the usual square-root relation

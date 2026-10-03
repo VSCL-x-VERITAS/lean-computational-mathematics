@@ -13,6 +13,17 @@ repository's equivalent right-Gram implementations.
 
 namespace NumStability
 
+/-- Every real finite matrix admits the complete coordinate SVD conditions.
+This reuses the existing SVD construction, including its zero padding. -/
+theorem exists_realMatrixSVD_explicit_fields {m n : ℕ}
+    (A : Matrix (Fin m) (Fin n) ℝ) :
+    ∃ (r : ℕ) (s : Fin n → ℝ)
+      (u : Fin r → EuclideanSpace ℝ (Fin m))
+      (v : Fin r → EuclideanSpace ℝ (Fin n)),
+      RealMatrixSVDExplicitFields A r s u v := by
+  obtain ⟨r, s, u, v, h⟩ := exists_isRealMatrixSVD A
+  exact ⟨r, s, u, v, isRealMatrixSVD_iff_explicit_fields.mp h⟩
+
 /-- The leading coefficient of a nonempty ordered real SVD is the Euclidean
 operator norm of the represented matrix. -/
 theorem IsRealMatrixSVD.leadingSingularValue_eq_operatorNorm

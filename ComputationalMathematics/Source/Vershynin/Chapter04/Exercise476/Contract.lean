@@ -261,4 +261,54 @@ theorem hdp_04_exercise_4_7_6 :
   intro n mean
   exact hdp_04_exercise_4_7_6_population_signal mean
 
+/-- All five genuine stages of Exercise 4.7.6, assembled with epsilon-level
+recovery under the explicit sufficient thresholds and the actual algorithm
+output. The corrected applicability policy is separate from the printed claim. -/
+theorem hdp_04_exercise_4_7_6_corrected_thresholds :
+    (∀ {n : ℕ} (mean : Fin n → ℝ),
+      NumStability.HDP.Vector.Covariance.secondMomentMatrix
+          (NumStability.HDP.Vector.GaussianMixture.gaussianMixtureMeasure mean)
+          (fun j x ↦ x j) =
+            NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean ∧
+        NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean =
+            (fun i j ↦ (if i = j then 1 else 0) + mean i * mean j) ∧
+          (NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean).mulVec
+              mean = (1 + NumStability.vecNorm2 mean ^ 2) • mean) ∧
+    HDP04Exercise476CovarianceEstimationStage ∧
+    HDP04Exercise476DavisKahanStage ∧
+    HDP04Exercise476IdealClassificationStage ∧
+    HDP04Exercise476EmpiricalTransferStage ∧
+    HDP04Theorem475CorrectedThresholds := by
+  exact ⟨hdp_04_exercise_4_7_6_population_signal,
+    hdp_04_exercise_4_7_6_covariance_estimation,
+    hdp_04_exercise_4_7_6_davis_kahan,
+    hdp_04_exercise_4_7_6_ideal_classification,
+    hdp_04_exercise_4_7_6_empirical_transfer,
+    hdp_04_theorem_4_7_5_corrected_thresholds⟩
+
+/-- The five proved exercise stages and an original-space measurable success
+certificate for epsilon-level recovery under the three sufficient thresholds.
+The certificate uses the same actual selected empirical leading direction. -/
+theorem hdp_04_exercise_4_7_6_corrected_thresholds_measurable_success :
+    (∀ {n : ℕ} (mean : Fin n → ℝ),
+      NumStability.HDP.Vector.Covariance.secondMomentMatrix
+          (NumStability.HDP.Vector.GaussianMixture.gaussianMixtureMeasure mean)
+          (fun j x ↦ x j) =
+            NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean ∧
+        NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean =
+            (fun i j ↦ (if i = j then 1 else 0) + mean i * mean j) ∧
+          (NumStability.HDP.Vector.GaussianMixture.populationSecondMoment mean).mulVec
+              mean = (1 + NumStability.vecNorm2 mean ^ 2) • mean) ∧
+    HDP04Exercise476CovarianceEstimationStage ∧
+    HDP04Exercise476DavisKahanStage ∧
+    HDP04Exercise476IdealClassificationStage ∧
+    HDP04Exercise476EmpiricalTransferStage ∧
+    HDP04Theorem475MeasurableCorrectedThresholds := by
+  exact ⟨hdp_04_exercise_4_7_6_population_signal,
+    hdp_04_exercise_4_7_6_covariance_estimation,
+    hdp_04_exercise_4_7_6_davis_kahan,
+    hdp_04_exercise_4_7_6_ideal_classification,
+    hdp_04_exercise_4_7_6_empirical_transfer,
+    hdp_04_theorem_4_7_5_corrected_thresholds_measurable_success⟩
+
 end NumStability.HDP.Contract

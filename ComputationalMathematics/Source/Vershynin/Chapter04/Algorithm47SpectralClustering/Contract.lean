@@ -70,4 +70,26 @@ theorem hdp_04_algorithm_4_7_spectral_clustering {m n : ℕ}
       NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment,
       NumStability.HDP.Vector.Covariance.sampleCovariance] using h
 
+/-- The printed nonempty point-sample algorithm admits a unit leading
+eigenvector and the exact positive/nonpositive clusters. The existential
+output permits all eigenvalue ties and either sign orientation. -/
+theorem hdp_04_algorithm_4_7_spectral_clustering_exists_output {m n : ℕ}
+    (X : Fin (m + 1) → Fin (n + 1) → ℝ) :
+    let M : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ :=
+      fun a b ↦ ((m + 1 : ℕ) : ℝ)⁻¹ * ∑ i, X i a * X i b
+    ∃ (v : Fin (n + 1) → ℝ) (eigenvalue : ℝ)
+      (first second : Set (Fin (m + 1))),
+      (∑ j, v j ^ 2) = 1 ∧
+      (∀ a, (∑ b, M a b * v b) = eigenvalue * v a) ∧
+      (∀ w : Fin (n + 1) → ℝ, (∑ j, w j ^ 2) = 1 →
+        (∑ a, w a * ∑ b, M a b * w b) ≤ eigenvalue) ∧
+      (∀ i, i ∈ first ↔ 0 < ∑ j, v j * X i j) ∧
+      (∀ i, i ∈ second ↔ (∑ j, v j * X i j) ≤ 0) := by
+  obtain ⟨hunit, ⟨eigenvalue, heigen, htop⟩, ⟨first, second, hfirst, hsecond⟩⟩ :=
+    hdp_04_algorithm_4_7_spectral_clustering (Nat.succ_pos n) X
+  exact ⟨fun j ↦
+      NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+        (Nat.succ_pos n) X j,
+    eigenvalue, first, second, hunit, heigen, htop, hfirst, hsecond⟩
+
 end NumStability.HDP.Contract
