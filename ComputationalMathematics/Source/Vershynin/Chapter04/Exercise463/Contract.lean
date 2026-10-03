@@ -170,4 +170,41 @@ theorem hdp_04_exercise_4_6_3 :
     NumStability.rectCourantFischerSingularValue_antitone (A ω)
       (Fin.zero_le i)⟩
 
+/-- Exercise 4.6.3 with the subgaussian bound stated pointwise for every
+unit scalar marginal. The spectrum is the canonical column-padded spectrum;
+all three ordinary expectation inequalities are retained. -/
+theorem hdp_04_exercise_4_6_3_unit_marginals :
+    ∃ D : ℝ, 0 < D ∧
+      ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
+        [IsProbabilityMeasure μ] {m n : ℕ}
+        (_hm : 0 < m)
+        (A : Ω → Matrix (Fin m) (Fin (n + 1)) ℝ) {K : ℝ},
+        1 ≤ K →
+        (∀ i j, Measurable (fun ω ↦ A ω i j)) →
+        (∀ i j, MemLp (fun ω ↦ A ω i j) 2 μ) →
+        (∀ i j, ∫ ω, A ω i j ∂μ = 0) →
+        (∀ i, NumStability.HDP.Vector.Isotropy.IsIsotropic μ
+          (fun j ω ↦ A ω i j)) →
+        (∀ i (z : Fin (n + 1) → ℝ), (∑ j, z j ^ 2) = 1 →
+          NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+            (fun ω ↦ ∑ j, A ω i j * z j) ≤ ENNReal.ofReal K) →
+        iIndepFun (fun i ω ↦ fun j ↦ A ω i j) μ →
+        (∀ ω i,
+            NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ≤
+              NumStability.rectCourantFischerSingularValue (A ω) i ∧
+            NumStability.rectCourantFischerSingularValue (A ω) i ≤
+              NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1))) ∧
+          Real.sqrt (m : ℝ) - D * K ^ 2 * Real.sqrt (n + 1 : ℝ) ≤
+            (∫ ω, NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ∂μ) ∧
+          (∫ ω, NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ∂μ) ≤
+            (∫ ω, NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1)) ∂μ) ∧
+          (∫ ω, NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1)) ∂μ) ≤
+            Real.sqrt (m : ℝ) + D * K ^ 2 * Real.sqrt (n + 1 : ℝ) := by
+  obtain ⟨D, hD, hbound⟩ := hdp_04_exercise_4_6_3
+  refine ⟨D, hD, ?_⟩
+  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hMarginal hIndep
+  exact hbound hm A hK hMeas hLp hMean hIso
+    (fun i ↦ NumStability.HDP.Vector.SubGaussian.psiTwoNorm_le_iff_unit_marginals.mpr
+      (hMarginal i)) hIndep
+
 end NumStability.HDP.Contract

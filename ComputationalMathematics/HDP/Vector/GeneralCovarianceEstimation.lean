@@ -901,4 +901,89 @@ theorem exists_expected_sampleCovariance_error_bound_of_iid :
         rw [mul_pow, Real.sq_sqrt hs0]
         ring
 
+/-- Finite population coordinate second moments and identical full-vector
+laws give a finite ordinary expectation of the actual sample error norm. -/
+theorem integrable_sampleCovariance_error_of_iid
+    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsFiniteMeasure μ]
+    {m n : ℕ} (Z : Ω → Fin n → ℝ) (X : Fin m → Ω → Fin n → ℝ)
+    (hZLp : ∀ j, MemLp (fun ω ↦ Z ω j) 2 μ)
+    (hIdent : ∀ i, IdentDistrib (X i) Z μ μ) :
+    Integrable (fun ω ↦ NumStability.realMatrixOperatorNorm
+      (randomSampleCovariance X ω -
+        secondMomentMatrix μ (fun j ω ↦ Z ω j))) μ := by
+  have hXLp : ∀ i j, MemLp (fun ω ↦ X i ω j) 2 μ := by
+    intro i j
+    exact ((hIdent i).comp (measurable_pi_apply j)).symm.memLp_snd (hZLp j)
+  apply NumStability.HDP.Matrix.integrable_realMatrixOperatorNorm_of_entries
+  intro ij
+  have hsum : Integrable (fun ω ↦ ∑ i, X i ω ij.1 * X i ω ij.2) μ :=
+    integrable_finset_sum _ (fun i _ ↦ (hXLp i ij.1).integrable_mul (hXLp i ij.2))
+  simpa only [randomSampleCovariance, sampleCovariance, Matrix.sub_apply] using
+    (hsum.const_mul (m : ℝ)⁻¹).sub
+      (integrable_const (secondMomentMatrix μ (fun j ω ↦ Z ω j) ij.1 ij.2))
+
+/-- In dimension zero, both covariance matrices and their actual norm error
+vanish; the zero error is integrable under every measure. -/
+theorem sampleCovariance_error_zero_dimension
+    {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) {m : ℕ}
+    (Z : Ω → Fin 0 → ℝ) (X : Fin m → Ω → Fin 0 → ℝ) :
+    secondMomentMatrix μ (fun j ω ↦ Z ω j) = 0 ∧
+      (∀ ω, randomSampleCovariance X ω = 0) ∧
+      NumStability.realMatrixOperatorNorm
+        (secondMomentMatrix μ (fun j ω ↦ Z ω j)) = 0 ∧
+      (∀ ω, NumStability.realMatrixOperatorNorm
+        (randomSampleCovariance X ω -
+          secondMomentMatrix μ (fun j ω ↦ Z ω j)) = 0) ∧
+      Integrable (fun ω ↦ NumStability.realMatrixOperatorNorm
+        (randomSampleCovariance X ω -
+          secondMomentMatrix μ (fun j ω ↦ Z ω j))) μ ∧
+      (∫ ω, NumStability.realMatrixOperatorNorm
+        (randomSampleCovariance X ω -
+          secondMomentMatrix μ (fun j ω ↦ Z ω j)) ∂μ) = 0 := by
+  have hSigma : secondMomentMatrix μ (fun j ω ↦ Z ω j) = 0 :=
+    Subsingleton.elim _ _
+  have hSample (ω : Ω) : randomSampleCovariance X ω = 0 :=
+    Subsingleton.elim _ _
+  have hNorm (A : Matrix (Fin 0) (Fin 0) ℝ) :
+      NumStability.realMatrixOperatorNorm A = 0 :=
+    ContinuousLinearMap.opNorm_subsingleton _
+  exact ⟨hSigma, hSample, hNorm _, fun _ ↦ hNorm _,
+    by simpa only [hNorm] using (integrable_zero Ω ℝ μ),
+    by simp only [hNorm, integral_zero]⟩
+
+/-- The iid covariance estimate in every dimension, with the same uniform
+constant as the positive-dimensional producer. -/
+theorem exists_expected_sampleCovariance_error_bound_of_iid_all_dimensions :
+    ∃ D : ℝ, 0 < D ∧
+      ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
+        [IsProbabilityMeasure μ] {m n : ℕ},
+        0 < m →
+        ∀ (Z : Ω → Fin n → ℝ) (X : Fin m → Ω → Fin n → ℝ)
+          (K : ℝ≥0),
+        1 ≤ K →
+        (∀ j, Measurable (fun ω ↦ Z ω j)) →
+        (∀ j, MemLp (fun ω ↦ Z ω j) 2 μ) →
+        (∀ i j, Measurable (fun ω ↦ X i ω j)) →
+        (∀ i, IdentDistrib (X i) Z μ μ) →
+        iIndepFun X μ →
+        NumStability.HDP.Vector.SubGaussian.SatisfiesPsiTwoL2Bound μ
+          (fun j ω ↦ Z ω j) K →
+        (∫ ω, NumStability.realMatrixOperatorNorm
+          (randomSampleCovariance X ω -
+            secondMomentMatrix μ (fun j ω ↦ Z ω j)) ∂μ) ≤
+          D * (K : ℝ) ^ 2 *
+            (Real.sqrt ((n : ℝ) / (m : ℝ)) + (n : ℝ) / (m : ℝ)) *
+            NumStability.realMatrixOperatorNorm
+              (secondMomentMatrix μ (fun j ω ↦ Z ω j)) := by
+  obtain ⟨D, hD, hbound⟩ := exists_expected_sampleCovariance_error_bound_of_iid
+  refine ⟨D, hD, ?_⟩
+  intro Ω instΩ μ instμ m n hm Z X K hK hZMeas hZLp hXMeas hIdent hIndep hRel
+  cases n with
+  | zero =>
+      obtain ⟨_, _, hSigmaNorm, _, _, hError⟩ :=
+        sampleCovariance_error_zero_dimension μ Z X
+      simp only [hError, hSigmaNorm, mul_zero, le_refl]
+  | succ n =>
+      exact hbound hm (Nat.succ_pos n) Z X K hK hZMeas hZLp hXMeas hIdent hIndep hRel
+
 end NumStability.HDP.Vector.Covariance

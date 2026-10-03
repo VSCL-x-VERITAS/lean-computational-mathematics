@@ -34,6 +34,29 @@ theorem satisfiesPsiTwoL2Bound_iff {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
           (K : ℝ≥0∞) * eLpNorm (NumStability.HDP.Vector.linearMarginal X x) 2 μ := by
   rfl
 
+/-- For measurable coordinates with finite second moments, the relative
+`ψ₂`/`L²` condition is exactly its scalar ordinary-second-moment form. -/
+theorem satisfiesPsiTwoL2Bound_iff_secondMoment
+    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    {μ : Measure Ω} {X : Fin n → Ω → ℝ} {K : ℝ≥0}
+    (hMeas : ∀ j, Measurable (X j))
+    (hSq : ∀ j, Integrable (fun ω ↦ X j ω ^ 2) μ) :
+    SatisfiesPsiTwoL2Bound μ X K ↔
+      ∀ x : Fin n → ℝ,
+        NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+          (fun ω ↦ ∑ j, X j ω * x j) ≤
+          (K : ℝ≥0∞) * ENNReal.ofReal
+            (Real.sqrt (∫ ω, (∑ j, X j ω * x j) ^ 2 ∂μ)) := by
+  have hLp : ∀ j, MemLp (X j) 2 μ := fun j ↦
+    (memLp_two_iff_integrable_sq (hMeas j).aestronglyMeasurable).mpr (hSq j)
+  have hMarginal (x : Fin n → ℝ) :
+      MemLp (NumStability.HDP.Vector.linearMarginal X x) 2 μ :=
+    memLp_finset_sum Finset.univ (fun j _ ↦ (hLp j).mul_const (x j))
+  unfold SatisfiesPsiTwoL2Bound
+  simp only [NumStability.HDP.Scalar.Preliminaries.eLpNorm_two_eq_ofReal_sqrt_integral_sq
+    (hMarginal _), NumStability.HDP.Vector.linearMarginal]
+  rfl
+
 /-- Under unit `L²` norms for all unit marginals, the relative marginal bound
 controls the vector `ψ₂` norm by `K`. -/
 theorem psiTwoNorm_le_of_unit_marginal_l2

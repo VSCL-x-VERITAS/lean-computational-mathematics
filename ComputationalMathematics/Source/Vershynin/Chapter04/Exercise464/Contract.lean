@@ -51,4 +51,41 @@ theorem hdp_04_exercise_4_6_4 :
               2 * Real.exp (-(t ^ 2)) := by
   exact hdp_04_equation_4_21
 
+/-- Exercise 4.6.4 with exhaustive coordinate SVD data and unit scalar
+marginals. This proves the complete statement through Equation (4.21);
+it makes no separate claim about realizing the suggested alternative proof. -/
+theorem hdp_04_exercise_4_6_4_explicit_svd :
+    ∃ C : ℝ, 0 < C ∧
+      ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
+        [IsProbabilityMeasure μ] {m n : ℕ}
+        (_hm : 0 < m)
+        (A : Ω → Matrix (Fin m) (Fin (n + 1)) ℝ) {K : ℝ},
+        1 ≤ K →
+        (∀ i j, Measurable (fun ω ↦ A ω i j)) →
+        (∀ i j, MemLp (fun ω ↦ A ω i j) 2 μ) →
+        (∀ i j, ∫ ω, A ω i j ∂μ = 0) →
+        (∀ i, NumStability.HDP.Vector.Isotropy.IsIsotropic μ
+          (fun j ω ↦ A ω i j)) →
+        (∀ i (z : Fin (n + 1) → ℝ), (∑ j, z j ^ 2) = 1 →
+          NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+            (fun ω ↦ ∑ j, A ω i j * z j) ≤ ENNReal.ofReal K) →
+        iIndepFun (fun i ω ↦ fun j ↦ A ω i j) μ →
+        ∀ {t : ℝ}, 0 ≤ t →
+          ∀ (r : Ω → ℕ) (s : Ω → Fin (n + 1) → ℝ)
+            (u : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin m))
+            (v : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin (n + 1))),
+            (∀ ω, NumStability.RealMatrixSVDExplicitFields
+              (A ω) (r ω) (s ω) (u ω) (v ω)) →
+          (∀ ω i, s ω (Fin.last n) ≤ s ω i ∧
+              s ω i ≤ s ω ⟨0, Nat.succ_pos n⟩) ∧
+            μ.real {ω |
+              Real.sqrt (m : ℝ) -
+                    C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+                  s ω (Fin.last n) ∨
+                s ω ⟨0, Nat.succ_pos n⟩ >
+                  Real.sqrt (m : ℝ) +
+                    C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
+              2 * Real.exp (-(t ^ 2)) := by
+  exact hdp_04_equation_4_21_explicit_svd
+
 end NumStability.HDP.Contract

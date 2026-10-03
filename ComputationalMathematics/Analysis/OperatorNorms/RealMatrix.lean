@@ -134,6 +134,50 @@ theorem realMatrixOperatorNorm_characterization {m n : ℕ} (hn : 0 < n)
       simpa [realMatrixOperatorNorm, realMatrixContinuousLinearMap] using
         (ContinuousLinearMap.le_opNorm (realMatrixContinuousLinearMap A) y)
 
+/-- The Euclidean operator norm equals its literal coordinate supremum,
+including the empty unit sphere in a zero-dimensional domain. -/
+theorem realMatrixOperatorNorm_eq_coordinate_sSup {m n : ℕ}
+    (A : Matrix (Fin m) (Fin n) ℝ) :
+    realMatrixOperatorNorm A =
+      sSup {q : ℝ | ∃ x : Fin n → ℝ, (∑ j, x j ^ 2) = 1 ∧
+        q = Real.sqrt (∑ a, (∑ b, A a b * x b) ^ 2)} := by
+  have hnorm (x : EuclideanSpace ℝ (Fin n)) :
+      ‖Matrix.toEuclideanLin A x‖ =
+        Real.sqrt (∑ a, (∑ b, A a b * x b) ^ 2) := by
+    rw [EuclideanSpace.norm_eq]
+    simp only [Real.norm_eq_abs, sq_abs]
+    rfl
+  by_cases hn : 0 < n
+  · obtain ⟨_, ⟨x, hx, hAx, hmax⟩, _⟩ :=
+      realMatrixOperatorNorm_characterization hn A
+    have hxSq : (∑ j, x j ^ 2) = 1 := by
+      simpa only [hx, one_pow, Real.norm_eq_abs, sq_abs] using
+        (EuclideanSpace.norm_sq_eq x).symm
+    have hmem : realMatrixOperatorNorm A ∈
+        {q : ℝ | ∃ y : Fin n → ℝ, (∑ j, y j ^ 2) = 1 ∧
+          q = Real.sqrt (∑ a, (∑ b, A a b * y b) ^ 2)} :=
+      ⟨fun j ↦ x j, hxSq, hAx.symm.trans (hnorm x)⟩
+    have hupper : ∀ q ∈
+        {q : ℝ | ∃ y : Fin n → ℝ, (∑ j, y j ^ 2) = 1 ∧
+          q = Real.sqrt (∑ a, (∑ b, A a b * y b) ^ 2)},
+        q ≤ realMatrixOperatorNorm A := by
+      rintro q ⟨y, hy, rfl⟩
+      have hunit : ‖(WithLp.toLp 2 y : EuclideanSpace ℝ (Fin n))‖ = 1 := by
+        rw [EuclideanSpace.norm_eq]
+        simp only [Real.norm_eq_abs, sq_abs, hy, Real.sqrt_one]
+      simpa only [hnorm] using hmax (WithLp.toLp 2 y) hunit
+    exact le_antisymm (le_csSup ⟨_, hupper⟩ hmem)
+      (csSup_le ⟨_, hmem⟩ hupper)
+  · have hn0 : n = 0 := Nat.eq_zero_of_not_pos hn
+    subst n
+    have hempty :
+        {q : ℝ | ∃ x : Fin 0 → ℝ, (∑ j, x j ^ 2) = 1 ∧
+          q = Real.sqrt (∑ a, (∑ b, A a b * x b) ^ 2)} = ∅ := by
+      ext q
+      simp
+    rw [hempty, Real.sSup_empty, realMatrixOperatorNorm]
+    exact ContinuousLinearMap.opNorm_subsingleton _
+
 /-- A real rectangular matrix with nonzero domain and codomain dimensions
 attains its operator norm as a bilinear form on the product of the two unit
 spheres. -/
