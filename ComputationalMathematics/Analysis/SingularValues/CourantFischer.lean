@@ -86,7 +86,7 @@ theorem finiteQuadraticForm_rectCourantFischerRightGram_eq_sum_sq
       ring
 
 /-- The exact right Gram matrix is Hermitian over `ℝ`. -/
-def rectCourantFischerRightGram_isHermitian {m n : ℕ}
+theorem rectCourantFischerRightGram_isHermitian {m n : ℕ}
     (A : Fin m → Fin n → ℝ) :
     Matrix.IsHermitian (rectCourantFischerRightGram A) :=
   (rectCourantFischerRightGram_symmetric A).to_matrix_isHermitian

@@ -27,7 +27,7 @@ theorem euclideanCoveringNumber_eq_coveringNumber {n : ℕ}
 /-- A closed unit ball has internal covering number one at every radius
 strictly larger than one. -/
 theorem coveringNumber_unitClosedBall_eq_one
-    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    {E : Type*} [NormedAddCommGroup E]
     (ε : ℝ≥0) (hε : 1 < ε) :
     _root_.Metric.coveringNumber ε (Metric.closedBall (0 : E) 1) = 1 := by
   have hcover :
@@ -38,6 +38,6 @@ theorem coveringNumber_unitClosedBall_eq_one
     exact (Metric.mem_closedBall.1 hx).trans (by exact_mod_cast hε.le)
   apply le_antisymm
   · exact (hcover.coveringNumber_le_encard (by simp)).trans (by simp)
-  · simpa [Order.one_le_iff_pos]
+  · simp [Order.one_le_iff_pos]
 
 end NumStability.HDP.Metric

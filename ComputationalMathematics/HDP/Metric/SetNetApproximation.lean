@@ -87,7 +87,7 @@ of its sampled inner products. -/
 theorem sSup_inner_bounds_of_isUnitSphereNet
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (x : E) (ε : ℝ) (N : Set E)
-    (_hε0 : 0 ≤ ε) (hε1 : ε < 1) (hN : IsUnitSphereNet ε N)
+    (hε1 : ε < 1) (hN : IsUnitSphereNet ε N)
     (hNnonempty : N.Nonempty) :
     sSup {a : ℝ | ∃ y ∈ N, a = inner ℝ x y} ≤ ‖x‖ ∧
       ‖x‖ ≤ (1 - ε)⁻¹ * sSup {a : ℝ | ∃ y ∈ N, a = inner ℝ x y} := by

@@ -12,10 +12,13 @@ namespace NumStability.HDP.Contract
 
 /-- The entrywise law-of-large-numbers statement in Section 4.7: the sample
 covariance matrices converge almost surely to the population second-moment
-matrix. -/
+matrix. The source uses a probability space. The integrability, independence
+and identical-distribution hypotheses already suffice for the underlying
+strong law under an arbitrary measure, so this statement includes that
+broader measure domain. -/
 theorem hdp_04_sample_covariance_almost_sure
     {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ] {n : ℕ}
+    {n : ℕ}
     (X : ℕ → Ω → Fin n → ℝ)
     (hInt : ∀ a b, Integrable (fun ω ↦ X 0 ω a * X 0 ω b) μ)
     (hIndep : Pairwise (fun i j ↦ IndepFun (X i) (X j) μ))

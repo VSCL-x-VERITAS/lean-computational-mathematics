@@ -17,19 +17,25 @@ open Matrix
 
 namespace NumStability.HDP.Contract.BalancedFinSBM
 
+/-- Balanced-community vertices, indexed by a community and an offset. -/
 abbrev Vertex (k : ℕ) := NumStability.HDP.Graph.StochasticBlock.Vertex k
 
+/-- Identify balanced-community vertices with the flattened finite index. -/
 def indexEquiv (k : ℕ) : Vertex k ≃ Fin (2 * k) := finProdFinEquiv
 
+/-- The community label of a flattened vertex. -/
 def community (k : ℕ) (i : Fin (2 * k)) : Fin 2 :=
   ((indexEquiv k).symm i).1
 
+/-- The all-ones signal direction on flattened vertices. -/
 def allOnes (k : ℕ) : Fin (2 * k) → ℝ :=
   NumStability.HDP.Graph.StochasticBlock.allOnes k ∘ (indexEquiv k).symm
 
+/-- The signed community direction on flattened vertices. -/
 def communitySign (k : ℕ) : Fin (2 * k) → ℝ :=
   NumStability.HDP.Graph.StochasticBlock.communitySign k ∘ (indexEquiv k).symm
 
+/-- The loopless expected adjacency matrix on flattened vertices. -/
 def population (k : ℕ) (p q : ℝ) : Matrix (Fin (2 * k)) (Fin (2 * k)) ℝ :=
   Matrix.reindex (indexEquiv k) (indexEquiv k) (looplessExpectedAdjacency k p q)
 
@@ -46,7 +52,7 @@ theorem expectedAdjacency_eq_population (k : ℕ) (p q : ℝ) :
   by_cases hij : i = j
   · subst j
     simp [NumStability.HDP.Graph.FinStochasticBlock.expectedAdjacency,
-      population, Matrix.reindex_apply, looplessExpectedAdjacency, community,
+      population, Matrix.reindex_apply, looplessExpectedAdjacency,
       indexEquiv]
   · have hpre : (indexEquiv k).symm i ≠ (indexEquiv k).symm j := by
       intro h
@@ -124,7 +130,7 @@ theorem population_eigenvalue_cases {k : ℕ} (hk : 0 < k)
   simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul,
     Finset.sum_add_distrib, ← Finset.mul_sum, hy 0, hy 1, mul_zero,
     allOnes, communitySign, Function.comp_apply, Equiv.symm_apply_apply,
-    NumStability.HDP.Graph.StochasticBlock.allOnes,
+    NumStability.HDP.Graph.StochasticBlock.allOnes, Function.const_apply,
     NumStability.HDP.Graph.StochasticBlock.communitySign,
     Fin.isValue, if_pos, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
     nsmul_eq_mul] at hsum0 hsum1
@@ -205,7 +211,7 @@ theorem population_second_eigenvector_eq_smul {k : ℕ} (hk : 0 < k)
   simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul,
     Finset.sum_add_distrib, ← Finset.mul_sum, hy 0, hy 1, mul_zero,
     allOnes, communitySign, Function.comp_apply, Equiv.symm_apply_apply,
-    NumStability.HDP.Graph.StochasticBlock.allOnes,
+    NumStability.HDP.Graph.StochasticBlock.allOnes, Function.const_apply,
     NumStability.HDP.Graph.StochasticBlock.communitySign,
     Fin.isValue, if_pos, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
     nsmul_eq_mul] at hsum0 hsum1
@@ -273,7 +279,7 @@ theorem population_top_eigenvector_eq_smul {k : ℕ} (hk : 0 < k)
   simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul,
     Finset.sum_add_distrib, ← Finset.mul_sum, hy 0, hy 1, mul_zero,
     allOnes, communitySign, Function.comp_apply, Equiv.symm_apply_apply,
-    NumStability.HDP.Graph.StochasticBlock.allOnes,
+    NumStability.HDP.Graph.StochasticBlock.allOnes, Function.const_apply,
     NumStability.HDP.Graph.StochasticBlock.communitySign,
     Fin.isValue, if_pos, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
     nsmul_eq_mul] at hsum0 hsum1
@@ -619,8 +625,8 @@ theorem population_second_eigengap {k : ℕ} (hk : 0 < k)
     rw [abs_of_nonpos]
     · push_cast at hmul ⊢
       nlinarith
-    · push_cast
-      nlinarith [mul_pos hkR hqR]
+    · nlinarith [mul_pos hkR hqR]
+
   · exact (hj ((orderedEigenvalue_eq_second_iff hk θ hq hpq j).mp hjSecond)).elim
   · rw [hone, hjBottom]
     have hmin : min (((θ.p : ℝ) - θ.q) / 2) θ.q ≤
@@ -629,8 +635,8 @@ theorem population_second_eigengap {k : ℕ} (hk : 0 < k)
     rw [abs_of_nonneg]
     · push_cast at hmul ⊢
       nlinarith
-    · push_cast
-      nlinarith [mul_pos hkR (sub_pos.mpr hpqR)]
+    · nlinarith [mul_pos hkR (sub_pos.mpr hpqR)]
+
 
 theorem population_second_eigenbasis_scaled_abs {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hq : 0 < θ.q)

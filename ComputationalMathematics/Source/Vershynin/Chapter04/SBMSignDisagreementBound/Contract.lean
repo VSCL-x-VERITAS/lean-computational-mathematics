@@ -9,20 +9,17 @@ import ComputationalMathematics.Source.Vershynin.Chapter04.Equation420.Contract
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, Section 4.5.4: for the true loopless population matrix, once
-the squared coefficient error between its signed community eigenvector and an
-oriented observed second eigenvector is at most `C/μ²`, at most `C/μ²`
-vertices can have the wrong sign. -/
+/-- The deterministic sign-counting implication in Vershynin, Section 4.5.4:
+once the population eigenvector has the displayed community signs and the
+squared coefficient error is at most `C/μ²`, at most `C/μ²` vertices
+can have the wrong sign. The source obtains these premises from its loopless
+block law. This implication only needs the sign certificate and squared-error
+bound; it also allows an arbitrary scalar orientation `θ`. -/
 theorem hdp_04_sbm_sign_disagreement_bound_of_squared_error
     {n : ℕ} (hn2 : 2 ≤ n)
     (D A : Matrix (Fin n) (Fin n) ℝ)
     (hD : D.IsHermitian) (hA : A.IsHermitian)
-    (community : Fin n → Fin 2) (p q : ℝ)
-    (_hq : 0 ≤ q) (_hpq : q < p)
-    (_hLooplessExpectation : ∀ i j, D i j =
-      if i = j then 0
-      else if community i = community j then p else q)
-    (θ C μ : ℝ) (_hθ : θ = -1 ∨ θ = 1)
+    (community : Fin n → Fin 2) (θ C μ : ℝ)
     (hsignal : ∀ i,
       (Real.sqrt n • NumStability.hermitianOrderedEigenbasis hD ⟨1, hn2⟩) i =
         if community i = 0 then 1 else -1)

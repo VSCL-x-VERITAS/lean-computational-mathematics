@@ -48,7 +48,7 @@ theorem realRectToCMatrix_last_singularValue_eq_rectCourantFischer
   have haction (x : Fin (k + 1) → ℝ) :
       ‖Matrix.toEuclideanLin A (WithLp.toLp 2 x)‖ =
         vecNorm2 (rectMatMulVec A x) := by
-    rw [Matrix.toEuclideanLin_apply, hnorm]
+    rw [Matrix.toLpLin_apply, hnorm]
     rfl
   have hcLower : ∀ x : EuclideanSpace ℝ (Fin (k + 1)),
       σc * ‖x‖ ≤ ‖Matrix.toEuclideanLin A x‖ := by
@@ -92,7 +92,7 @@ theorem realRectToCMatrix_last_singularValue_eq_rectCourantFischer
     have h :=
       (rectCourantFischer_extremeSingularValues_areOptimalBounds A).1
         (WithLp.toLp 2 x)
-    rw [Matrix.toEuclideanLin_apply, hnorm, hnorm] at h
+    rw [Matrix.toLpLin_apply, hnorm, hnorm] at h
     simpa [σr, rectMatMulVec, Matrix.mulVec, dotProduct] using h.1
   have hr_le_hc : σr ≤ σc := by
     rw [hnormEq] at hrLower

@@ -37,7 +37,9 @@ abbrev Edge (k : ℕ) :=
 
 /-- Admissible within- and cross-community edge probabilities. -/
 structure Parameters where
+  /-- The within-community edge probability. -/
   p : ℝ≥0
+  /-- The cross-community edge probability. -/
   q : ℝ≥0
   hp : p ≤ 1
   hq : q ≤ 1
@@ -72,7 +74,7 @@ def expectedAdjacency (k : ℕ) (p q : ℝ) : Matrix (Vertex k) (Vertex k) ℝ :
   fun i j ↦ if i.1 = j.1 then p else q
 
 /-- The all-ones signal direction. -/
-def allOnes (k : ℕ) : Vertex k → ℝ := fun _ ↦ 1
+def allOnes (k : ℕ) : Vertex k → ℝ := Function.const (Vertex k) 1
 
 /-- The signed community direction, positive on community zero and negative
 on community one. -/
@@ -89,8 +91,8 @@ theorem expectedAdjacency_mulVec_allOnes (k : ℕ) (p q : ℝ) :
     (expectedAdjacency k p q).mulVec (allOnes k) =
       (k * (p + q)) • allOnes k := by
   funext i
-  simp only [Matrix.mulVec, dotProduct, expectedAdjacency, allOnes, mul_one,
-    Pi.smul_apply, smul_eq_mul, mul_one]
+  simp only [Matrix.mulVec, dotProduct, expectedAdjacency, allOnes,
+    Function.const_apply, mul_one, Pi.smul_apply, smul_eq_mul]
   rw [Fintype.sum_prod_type, Fin.sum_univ_two]
   rcases finTwo_eq_zero_or_one i.1 with hi | hi
   · simp [hi, mul_add]

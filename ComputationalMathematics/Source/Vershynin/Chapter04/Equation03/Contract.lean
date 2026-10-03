@@ -12,8 +12,9 @@ namespace NumStability.HDP.Contract
 open scoped BigOperators
 
 /-- Vershynin, Equation (4.3): the canonical matrix inner product is both the
-trace of `AᵀB` and the sum of the entrywise products. -/
-theorem hdp_04_eq_4_3 {m n : ℕ} (_hm : 0 < m) (_hn : 0 < n)
+trace of `AᵀB` and the sum of the entrywise products. The identity also
+includes matrices with an empty row or column index set. -/
+theorem hdp_04_eq_4_3 {m n : ℕ}
     (A B : Matrix (Fin m) (Fin n) ℝ) :
     NumStability.HDP.Tensor.inner
           (NumStability.HDP.Tensor.matrixTensor A)

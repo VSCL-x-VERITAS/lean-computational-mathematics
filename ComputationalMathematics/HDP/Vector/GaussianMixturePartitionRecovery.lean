@@ -68,7 +68,7 @@ theorem makesAtMostErrorsUpToSign_implies_partitionErrorsUpToSwap
       by_cases hscore : 0 < dotProduct v (X i)
       · exfalso
         apply hi
-        simp [hscore, hlabel] <;> norm_num
+        simp [hscore, hlabel]
       · have hscore' := le_of_not_gt hscore
         nlinarith
     · rw [hlabel]
@@ -78,7 +78,7 @@ theorem makesAtMostErrorsUpToSign_implies_partitionErrorsUpToSwap
       · nlinarith
       · exfalso
         apply hi
-        simp [hscore, hlabel] <;> norm_num
+        simp [hscore, hlabel] ; norm_num
   · refine ⟨1, Or.inr rfl, ?_⟩
     apply le_trans (Nat.cast_le.mpr (Set.ncard_mono ?_)) hcount
     intro i hi
@@ -91,13 +91,13 @@ theorem makesAtMostErrorsUpToSign_implies_partitionErrorsUpToSwap
       · nlinarith
       · exfalso
         apply hi
-        simp [hscore, hlabel] <;> norm_num
+        simp [hscore, hlabel] ; norm_num
     · rw [hlabel]
       simp only [one_smul]
       by_cases hscore : 0 < dotProduct v (X i)
       · exfalso
         apply hi
-        simp [hscore, hlabel] <;> norm_num
+        simp [hscore, hlabel]
       · have hscore' := le_of_not_gt hscore
         nlinarith
 

@@ -36,8 +36,8 @@ private theorem rayleigh_sub
     NumStability.matrixRayleighForm S x =
       NumStability.matrixRayleighForm T x +
         NumStability.matrixRayleighForm (S - T) x := by
-  simp [NumStability.matrixRayleighForm, Matrix.toEuclideanLin_apply,
-    Matrix.sub_mulVec, inner_sub_right]
+  simp [NumStability.matrixRayleighForm, Matrix.toLpLin_apply,
+    inner_sub_right]
 
 /-- One-sided Weyl inequality for decreasingly ordered eigenvalues of real
 Hermitian matrices. -/
@@ -66,13 +66,13 @@ private theorem realMatrixOperatorNorm_sub_comm
         NumStability.realMatrixContinuousLinearMap S := by
     ext x i
     simp [NumStability.realMatrixContinuousLinearMap,
-      Matrix.toEuclideanLin_apply, Matrix.sub_mulVec]
+      Matrix.toLpLin_apply]
   have hST : NumStability.realMatrixContinuousLinearMap (S - T) =
       NumStability.realMatrixContinuousLinearMap S -
         NumStability.realMatrixContinuousLinearMap T := by
     ext x i
     simp [NumStability.realMatrixContinuousLinearMap,
-      Matrix.toEuclideanLin_apply, Matrix.sub_mulVec]
+      Matrix.toLpLin_apply]
   rw [NumStability.realMatrixOperatorNorm, NumStability.realMatrixOperatorNorm,
     hTS, hST]
   exact norm_sub_rev _ _

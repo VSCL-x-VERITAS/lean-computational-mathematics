@@ -90,10 +90,10 @@ theorem realRectMatrixRank_one (r : Nat) :
     ext i j
     by_cases hij : i = j
     · simp [realRectToCMatrix, Matrix.one_apply, hij]
-    · simp [realRectToCMatrix, Matrix.one_apply, hij]
+    · simp [realRectToCMatrix, hij]
   rw [realRectMatrixRank, hcomplex]
   unfold complexMatrixRank
-  simpa using (Matrix.rank_one (R := Complex) (n := Fin r))
+  simp
 
 /-- The Frobenius norm of the `r`-dimensional real identity is `sqrt r`. -/
 theorem frobNormRect_one (r : Nat) :

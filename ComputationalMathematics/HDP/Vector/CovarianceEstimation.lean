@@ -25,7 +25,7 @@ theorem sampleCovariance_apply {m n : ℕ} (X : Fin m → Fin n → ℝ)
 
 /-- A sample of random vectors, evaluated pointwise and converted to its
 empirical second-moment matrix. -/
-noncomputable def randomSampleCovariance {Ω : Type*} [MeasurableSpace Ω]
+noncomputable def randomSampleCovariance {Ω : Type*}
     {m n : ℕ} (X : Fin m → Ω → Fin n → ℝ) (ω : Ω) :
     Matrix (Fin n) (Fin n) ℝ :=
   sampleCovariance fun i ↦ X i ω
@@ -57,7 +57,7 @@ theorem integral_randomSampleCovariance_eq_secondMomentMatrix
 /-- The empirical second-moment matrix formed from the first `m` vectors of
 an infinite sample. -/
 noncomputable def sequenceSampleCovariance
-    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    {Ω : Type*} {n : ℕ}
     (X : ℕ → Ω → Fin n → ℝ) (m : ℕ) (ω : Ω) :
     Matrix (Fin n) (Fin n) ℝ := fun a b ↦
   (m : ℝ)⁻¹ * ∑ i ∈ Finset.range m, X i ω a * X i ω b
@@ -66,7 +66,7 @@ noncomputable def sequenceSampleCovariance
 converge entrywise almost surely to the population second-moment matrix. -/
 theorem sequenceSampleCovariance_tendsto_secondMomentMatrix_ae
     {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ] {n : ℕ}
+    {n : ℕ}
     (X : ℕ → Ω → Fin n → ℝ)
     (hInt : ∀ a b, Integrable (fun ω ↦ X 0 ω a * X 0 ω b) μ)
     (hIndep : Pairwise (fun i j ↦ IndepFun (X i) (X j) μ))

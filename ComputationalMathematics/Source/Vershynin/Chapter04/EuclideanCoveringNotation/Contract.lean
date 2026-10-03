@@ -15,9 +15,10 @@ namespace NumStability.HDP.Contract
 /-- Vershynin, Section 4.2.1: in `ℝⁿ`, suppressing the understood
 Euclidean metric does not change the admissible internal covers.  Thus the
 abbreviation `N(K, ε)` and the metric notation `N(K, d, ε)` minimize over
-the same center sets with the same cardinalities. -/
+the same center sets with the same cardinalities. The source's positive-radius
+notation extends to radius zero without changing this identity. -/
 theorem hdp_04_euclidean_covering_notation {n : ℕ}
-    (K : Set (EuclideanSpace ℝ (Fin n))) (ε : ℝ≥0) (_hε : 0 < ε) :
+    (K : Set (EuclideanSpace ℝ (Fin n))) (ε : ℝ≥0) :
     NumStability.HDP.Metric.euclideanCoveringNumber K ε =
         (⨅ C : Set (EuclideanSpace ℝ (Fin n)),
           ⨅ (_hCK : C ⊆ K), ⨅ (_hCcover : _root_.Metric.IsCover ε K C), C.encard) ∧

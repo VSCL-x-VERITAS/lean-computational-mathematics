@@ -16,6 +16,7 @@ namespace NumStability.HDP.Probability
 
 open ProbabilityTheory
 
+/-- The constant-density measure on `[-1, 1]` used for Gaussian overlap. -/
 noncomputable def intervalCommon (a : ℝ≥0∞) : Measure ℝ :=
   volume.withDensity ((Set.Icc (-1 : ℝ) 1).indicator (fun _ ↦ a))
 
@@ -62,6 +63,7 @@ theorem intervalCommon_prod_le_gaussianReal
   rw [Measure.prod_apply MeasurableSet.univ]
   simp
 
+/-- A real lower bound for the common density of two shifted standard Gaussians. -/
 noncomputable def gaussianIntervalFloorReal (r : ℝ) : ℝ :=
   (√π)⁻¹ * (√(2 : ℝ))⁻¹ * Real.exp (-((r + 1) ^ 2) / 2)
 
@@ -89,6 +91,7 @@ theorem gaussianIntervalFloorReal_le_pdf_neg
     (show 0 ≤ (√π)⁻¹ * (√(2 : ℝ))⁻¹ by positivity)
   simpa [gaussianIntervalFloorReal, gaussianPDFReal] using hm
 
+/-- The Gaussian common-density lower bound as an extended nonnegative real. -/
 noncomputable def gaussianIntervalFloor (r : ℝ) : ℝ≥0∞ :=
   ENNReal.ofReal (gaussianIntervalFloorReal r)
 

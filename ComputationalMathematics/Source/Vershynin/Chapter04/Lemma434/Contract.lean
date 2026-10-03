@@ -13,9 +13,10 @@ namespace NumStability.HDP.Contract
 
 /-- Vershynin, Lemma 4.3.4: if the base-two logarithm of the packing number
 of the binary Hamming cube at separation `2r` is at least `k`, then there is
-an `n`-bit encoding of `k`-bit strings which corrects `r` errors. -/
+an `n`-bit encoding of `k`-bit strings which corrects `r` errors. The
+source uses positive integer parameters; natural lengths and error counts
+also allow the valid zero boundary cases. -/
 theorem hdp_04_lemma_4_3_4 (k n r : ℕ)
-    (_hk : 0 < k) (_hn : 0 < n) (_hr : 0 < r)
     (hlog : (k : ℝ) ≤ Real.logb 2
       (NumStability.HDP.Coding.binaryHammingPackingNumber n r).toNat) :
     Nonempty (NumStability.HDP.Coding.ErrorCorrectingCode k n r) := by
@@ -28,7 +29,7 @@ theorem hdp_04_lemma_4_3_4 (k n r : ℕ)
   have hPzero : P ≠ 0 := by
     exact ne_of_gt (Metric.packingNumber_pos_iff.mpr Set.univ_nonempty)
   have hPnat_pos : 0 < P.toNat := by
-    exact Nat.pos_of_ne_zero (by simpa [ENat.toNat_eq_zero, hPzero, hPtop])
+    exact Nat.pos_of_ne_zero (by simp [ENat.toNat_eq_zero, hPzero, hPtop])
   have hrpow : (2 : ℝ) ^ (k : ℝ) ≤ (P.toNat : ℝ) :=
     (Real.le_logb_iff_rpow_le (by norm_num) (by exact_mod_cast hPnat_pos)).mp hlog
   rw [Real.rpow_natCast] at hrpow

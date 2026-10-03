@@ -27,7 +27,7 @@ theorem pow_div_pow_le_choose {n r : ℕ} (hr : 0 < r) (hrn : r ≤ n) :
     have hin : i ≤ n := hir.trans hrn
     rw [Nat.cast_sub hir, Nat.cast_sub hin]
     rw [div_mul_eq_mul_div, div_le_iff₀ hrR]
-    push_cast
+
     nlinarith [show (i : ℝ) ≥ 0 by positivity,
       show (r : ℝ) ≤ n by exact_mod_cast hrn]
   have hprod :
@@ -113,7 +113,7 @@ theorem ErrorCorrectingCode.messageBits_add_errorTerm_le
   rw [Real.logb_mul (by positivity) (by positivity), Real.logb_pow,
     Real.logb_pow] at hlog
   norm_num at hlog
-  convert hlog using 1 <;> norm_num [Real.logb_pow]
+  convert hlog using 1 ; norm_num [Real.logb_pow]
 
 /-- Rate form of the Hamming converse: every binary code correcting an
 `r/n` fraction of errors loses at least

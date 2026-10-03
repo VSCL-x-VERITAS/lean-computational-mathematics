@@ -18,7 +18,7 @@ namespace NumStability.HDP.Probability
 /-- Extending an independent real-valued family from a decidable subtype by
 zero preserves independence. -/
 theorem iIndepFun_subtype_zeroExtend
-    {ι Ω : Type*} [Fintype ι] [MeasurableSpace Ω]
+    {ι Ω : Type*} [MeasurableSpace Ω]
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (p : ι → Prop) [DecidablePred p]
     (X : {i // p i} → Ω → ℝ)

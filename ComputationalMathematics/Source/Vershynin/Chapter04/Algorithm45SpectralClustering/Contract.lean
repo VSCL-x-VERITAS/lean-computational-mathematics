@@ -18,7 +18,7 @@ select a nonzero eigenvector at its second ordered eigenvalue, and partition
 vertices by positive versus nonpositive coefficients. -/
 theorem hdp_04_algorithm_4_5_spectral_clustering {n : ℕ}
     (G : SimpleGraph (Fin n)) [DecidableRel G.Adj] (hn : 1 < n) :
-    ∃ (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsHermitian)
+    ∃ (A : Matrix (Fin n) (Fin n) ℝ) (_hA : A.IsHermitian)
       (v : EuclideanSpace ℝ (Fin n))
       (first second : Set (Fin n)),
       A = G.adjMatrix ℝ ∧

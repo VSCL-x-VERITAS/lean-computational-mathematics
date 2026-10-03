@@ -138,7 +138,7 @@ private theorem eigenvector_residual_le_two_operatorNorm
     have hST : Matrix.toEuclideanLin (S - T) v =
         Matrix.toEuclideanLin S v - Matrix.toEuclideanLin T v := by
       ext j
-      simp [Matrix.toEuclideanLin_apply]
+      simp [Matrix.toLpLin_apply]
     rw [hST, hTv]
     module
   have hmatrix :

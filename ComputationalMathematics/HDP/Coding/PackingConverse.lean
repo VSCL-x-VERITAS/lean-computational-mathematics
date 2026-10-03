@@ -123,7 +123,7 @@ theorem ErrorCorrectingCode.messageBits_le_logb_packingNumber
   have hPzero : P ≠ 0 := by
     exact ne_of_gt (Metric.packingNumber_pos_iff.mpr Set.univ_nonempty)
   have hPnat_pos : 0 < P.toNat := by
-    exact Nat.pos_of_ne_zero (by simpa [ENat.toNat_eq_zero, hPzero, hPtop])
+    exact Nat.pos_of_ne_zero (by simp [ENat.toNat_eq_zero, hPzero, hPtop])
   have hcard := C.card_messages_le_packingNumber
   have hnat : 2 ^ k ≤ P.toNat := by
     rw [ENat.card_eq_coe_fintype_card, Fintype.card_fun, Fintype.card_fin,

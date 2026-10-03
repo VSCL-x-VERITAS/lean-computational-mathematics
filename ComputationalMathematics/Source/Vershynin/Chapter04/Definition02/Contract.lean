@@ -15,9 +15,10 @@ namespace NumStability.HDP.Contract
 /-- Vershynin, *High-Dimensional Probability*, Definition 4.2.2: the covering
 number is the least cardinality of an internal epsilon-net, equivalently the
 least cardinality of a family of closed epsilon-balls centered in the set and
-covering it. -/
+covering it. The source uses positive radii; the same exact-cardinal
+definition and characterization also apply at radius zero. -/
 theorem hdp_04_hdef_h4_d2_d2 {T : Type*} [MetricSpace T]
-    {K : Set T} {ε : ℝ≥0} (_hε : 0 < ε) :
+    {K : Set T} {ε : ℝ≥0} :
     (NumStability.HDP.Metric.internalCoveringCardinal ε K =
       sInf {c : Cardinal | ∃ N : Set T, N ⊆ K ∧
         (∀ x ∈ K, ∃ x₀ ∈ N, dist x x₀ ≤ (ε : ℝ)) ∧

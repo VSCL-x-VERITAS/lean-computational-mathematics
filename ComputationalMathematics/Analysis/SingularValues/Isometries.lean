@@ -116,12 +116,12 @@ theorem projection_rank_implies_transpose_mul_self_eq_one {m n : ℕ}
   have hRangeLe : LinearMap.range P.mulVecLin ≤
       LinearMap.range A.mulVecLin := by
     rw [show P.mulVecLin = A.mulVecLin.comp A.transpose.mulVecLin by
-      simpa [P] using Matrix.mulVecLin_mul A A.transpose]
+      simp [P, Matrix.mulVecLin_mul]]
     exact LinearMap.range_comp_le_range _ _
   have hRangeFinrank : Module.finrank ℝ (LinearMap.range P.mulVecLin) =
       Module.finrank ℝ (LinearMap.range A.mulVecLin) := by
     change P.rank = A.rank
-    simpa [P] using hPrank.trans hArank.symm
+    simp [P, hPrank, hArank]
   have hRange : LinearMap.range P.mulVecLin =
       LinearMap.range A.mulVecLin :=
     Submodule.eq_of_le_of_finrank_eq hRangeLe hRangeFinrank
@@ -174,9 +174,9 @@ theorem realMatrix_isometry_characterizations {m n : ℕ}
   · intro hIso i
     have hBounds := rectCourantFischer_extremeSingularValues_areOptimalBounds A
     have hsmax : rectCourantFischerSingularValue A (0 : Fin (n + 1)) ≤ 1 :=
-      hBounds.2.1 1 (by intro x; simpa [hIso x])
+      hBounds.2.1 1 (by intro x; simp [hIso x])
     have hsmin : 1 ≤ rectCourantFischerSingularValue A (Fin.last n) :=
-      hBounds.2.2 1 (by intro x; simpa [hIso x])
+      hBounds.2.2 1 (by intro x; simp [hIso x])
     have hmaxi := rectCourantFischerSingularValue_antitone A (Fin.zero_le i)
     have himin := rectCourantFischerSingularValue_antitone A (Fin.le_last i)
     linarith

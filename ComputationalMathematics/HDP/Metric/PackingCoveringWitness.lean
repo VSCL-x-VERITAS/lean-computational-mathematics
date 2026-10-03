@@ -21,7 +21,7 @@ namespace NumStability.HDP.Metric
 theorem cardinalMk_le_of_isSeparated_two_mul_of_isCover
     {T : Type*} [MetricSpace T] {ε : ℝ≥0} {K P N : Set T}
     (hPK : P ⊆ K) (hPsep : Metric.IsSeparated (2 * ε) P)
-    (_hNK : N ⊆ K) (hNcover : Metric.IsCover ε K N) :
+    (hNcover : Metric.IsCover ε K N) :
     Cardinal.mk P ≤ Cardinal.mk N := by
   let f : P → N := fun x ↦
     ⟨(hNcover (hPK x.2)).choose,

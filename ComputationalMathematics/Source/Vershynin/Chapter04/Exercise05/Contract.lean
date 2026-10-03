@@ -14,10 +14,11 @@ namespace NumStability.HDP.Contract
 
 /-- Vershynin, *High-Dimensional Probability*, Exercise 4.2.5(a): among
 subsets of `K`, `ε`-separated center sets are exactly the center sets whose
-closed `ε / 2`-balls are pairwise disjoint. -/
+closed `ε / 2`-balls are pairwise disjoint. In addition to the source's
+positive-radius setting, this normed-space equivalence holds at radius zero. -/
 theorem hdp_04_hex_h4_d2_d5_a
     {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E]
-    {K N : Set E} {ε : ℝ≥0} (_hε : 0 < ε) :
+    {K N : Set E} {ε : ℝ≥0} :
     (N ⊆ K ∧ Metric.IsSeparated ε N) ↔
       N ⊆ K ∧
         N.Pairwise fun x y ↦
@@ -73,10 +74,12 @@ theorem hdp_04_hex_h4_d2_d5_b :
   · simp [Metric.IsSeparated, Set.Pairwise, exercise425Left, exercise425Right,
       edist_dist, Subtype.dist_eq, Real.dist_eq]
 
-/-- Combined source contract for both parts of Vershynin Exercise 4.2.5. -/
+/-- Combined source contract for both parts of Vershynin Exercise 4.2.5.
+Part (a) also includes the zero-radius extension; the metric counterexample
+in part (b) retains its concrete positive radius. -/
 theorem hdp_04_hex_h4_d2_d5
     {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E]
-    {K N : Set E} {ε : ℝ≥0} (hε : 0 < ε) :
+    {K N : Set E} {ε : ℝ≥0} :
     ((N ⊆ K ∧ Metric.IsSeparated ε N) ↔
       N ⊆ K ∧
         N.Pairwise fun x y ↦
@@ -86,6 +89,6 @@ theorem hdp_04_hex_h4_d2_d5
         (Metric.closedBall exercise425Right (1 / 2 : ℝ)) ∧
       ¬ Metric.IsSeparated (1 : ℝ≥0)
         ({exercise425Left, exercise425Right} : Set HDPExercise425TwoPoint)) :=
-  ⟨hdp_04_hex_h4_d2_d5_a hε, hdp_04_hex_h4_d2_d5_b⟩
+  ⟨hdp_04_hex_h4_d2_d5_a, hdp_04_hex_h4_d2_d5_b⟩
 
 end NumStability.HDP.Contract

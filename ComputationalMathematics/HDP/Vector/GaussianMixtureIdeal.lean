@@ -144,7 +144,7 @@ theorem canonicalNoise_projection_psiTwoNorm_le {m n : ℕ}
             (latentNoiseSampleMeasure m n)
             (fun ω ↦ ∑ j, u.1 j * canonicalNoise ω i j) ≤
           ENNReal.ofReal |r| * ENNReal.ofReal 2 :=
-        mul_le_mul_left' hUnitPsi _
+        mul_le_mul_right hUnitPsi _
       _ = ENNReal.ofReal (2 * NumStability.vecNorm2 mean) := by
         rw [← ENNReal.ofReal_mul (abs_nonneg r)]
         congr 1
@@ -482,7 +482,7 @@ theorem sum_canonicalIdealMarginErrorIndicator_eq_ncard {m n : ℕ}
   unfold canonicalIdealMarginErrorIndicator idealMarginErrorIndicator
   rw [Set.ncard_eq_toFinset_card']
   simp only [idealMarginErrors, canonicalLabel, canonicalPoint,
-    Set.mem_setOf_eq, Set.toFinset_setOf]
+    Set.toFinset_setOf]
   calc
     (∑ i, if (ω i).1 * dotProduct mean (mixtureMap mean (ω i)) ≤
           NumStability.vecNorm2 mean ^ 2 / 2 then (1 : ℝ) else 0) =

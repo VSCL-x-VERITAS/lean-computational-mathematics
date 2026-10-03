@@ -21,6 +21,7 @@ namespace NumStability.HDP.Vector.GaussianMixture
 open NumStability.HDP.Scalar.IndependentSums.Hoeffding
 open NumStability.HDP.Probability
 
+/-- A signal supported on one coordinate. -/
 def coordinateMean (r : ℝ) (j : Fin n) : Fin n → ℝ :=
   Pi.single j r
 
@@ -30,9 +31,10 @@ def coordinateMean (r : ℝ) (j : Fin n) : Fin n → ℝ :=
   rw [Finset.sum_eq_single j]
   · simp [Real.sqrt_sq_eq_abs]
   · intro i _ hi
-    simp [Pi.single_apply, hi]
+    simp [hi]
   · simp
 
+/-- Reassemble the latent sample after separating its selected label and noise coordinate. -/
 def pairedLift (m n : ℕ) (r : ℝ) (theta : Bool)
     (z : ℝ × ((Fin n → ℝ) ×
       (Fin (m + 1) → ℝ × (Fin (n + 1) → ℝ)))) :
@@ -92,7 +94,7 @@ theorem pairedLift_eq_split_symm (m n : ℕ) (r : ℝ) (theta : Bool)
     change ((pairedLift m n r theta z) (Fin.last (m + 1))).2 j.succ = z.2.1 j
     simp
   · funext i
-    simp [latentNoiseCoordinateSplitEquiv, pairedLift, Fin.init]
+    simp [latentNoiseCoordinateSplitEquiv, pairedLift]
     change Fin.init (pairedLift m n r theta z) i = z.2.2 i
     exact pairedLift_castSucc_row m n r theta z i
 
@@ -111,25 +113,26 @@ theorem pairedLift_canonicalPoint_eq (m n : ℕ) (r : ℝ)
       | zero =>
           cases theta <;> cases theta' <;>
             simp [canonicalPoint, mixtureMap, coordinateMean, pairedLift,
-              latentNoiseCoordinateSplitEquiv, rademacherValue]
+              rademacherValue]
       | succ j =>
-          simp [canonicalPoint, mixtureMap, coordinateMean, pairedLift,
-            latentNoiseCoordinateSplitEquiv]
+          simp [canonicalPoint, mixtureMap, coordinateMean, pairedLift]
   | cast i =>
-      simp [canonicalPoint, mixtureMap, coordinateMean, pairedLift,
-        latentNoiseCoordinateSplitEquiv]
+      simp [canonicalPoint, mixtureMap, coordinateMean, pairedLift]
 
-theorem coordinateMean_balanced_spectral_partitionFailure_lower
-    (m n : ℕ) {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
+/-- A data-only direction rule cannot distinguish the paired hidden-bit worlds
+with failure below their Gaussian overlap. No eigenvector or measurability
+assumption is imposed on the rule. -/
+theorem coordinateMean_balanced_partitionFailure_lower
+    (m n : ℕ)
+    (directionRule : (Fin (m + 2) → Fin (n + 1) → ℝ) → Fin (n + 1) → ℝ)
+    {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
     gaussianIntervalFloor r ≤
       balancedGaussianBitOuter (latentNoiseCoordinateSideMeasure (m + 1) n) r
         {p | let omega := pairedLift m n r p.1 p.2
           let X := fun i ↦ canonicalPoint
             (coordinateMean r (0 : Fin (n + 1)))
               (pairedLift m n r true p.2) i
-          let direction := fun j ↦
-            NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
-              (Nat.succ_pos n) X j
+          let direction := directionRule X
           ¬ MakesAtMostPartitionErrorsUpToSwap
               (fun i ↦ canonicalLabel omega i) direction X budget ∨
             ¬ ∀ i, canonicalLabel omega i = -1 ∨ canonicalLabel omega i = 1} := by
@@ -147,9 +150,7 @@ theorem coordinateMean_balanced_spectral_partitionFailure_lower
     fun z i ↦ canonicalPoint mean (omega true z) i
   let direction : ℝ × ((Fin n → ℝ) ×
       (Fin (m + 1) → ℝ × (Fin (n + 1) → ℝ))) → Fin (n + 1) → ℝ :=
-    fun z j ↦
-      NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
-        (Nat.succ_pos n) (X z) j
+    fun z ↦ directionRule (X z)
   let oracle : ((Fin n → ℝ) ×
       (Fin (m + 1) → ℝ × (Fin (n + 1) → ℝ))) → Bool :=
     fun s ↦ decide ((s.2 (0 : Fin (m + 1))).1 = 1)
@@ -206,19 +207,18 @@ theorem coordinateMean_balanced_spectral_partitionFailure_lower
     exact htest
   simpa [bad, side, omega, X, direction, mean] using hbad
 
-/-- The balanced two-point obstruction transported back to the canonical
+/-- The data-only balanced obstruction transported back to the canonical
 latent sample law.  This successor-indexed form is the exact transport core. -/
-theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
-    (m n : ℕ) {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
+theorem coordinateMean_canonical_partitionFailure_lower_succ
+    (m n : ℕ)
+    (directionRule : (Fin (m + 2) → Fin (n + 1) → ℝ) → Fin (n + 1) → ℝ)
+    {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
     gaussianIntervalFloor r ≤
       latentNoiseSampleMeasure (m + 2) (n + 1)
         {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
           (fun i ↦ canonicalLabel ω i)
-          (fun j ↦
-            NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
-              (Nat.succ_pos n)
-              (fun i ↦ canonicalPoint
-                (coordinateMean r (0 : Fin (n + 1))) ω i) j)
+          (directionRule (fun i ↦ canonicalPoint
+            (coordinateMean r (0 : Fin (n + 1))) ω i))
           (fun i ↦ canonicalPoint
             (coordinateMean r (0 : Fin (n + 1))) ω i)
           budget} := by
@@ -237,18 +237,14 @@ theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
       (Fin (m + 1) → ℝ × (Fin (n + 1) → ℝ))))) :=
     {p | let ω := pairedLift m n r p.1 p.2
       let X := fun i ↦ canonicalPoint mean (pairedLift m n r true p.2) i
-      let direction := fun j ↦
-        NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
-          (Nat.succ_pos n) X j
+      let direction := directionRule X
       ¬ MakesAtMostPartitionErrorsUpToSwap
           (fun i ↦ canonicalLabel ω i) direction X budget ∨
         ¬ ∀ i, canonicalLabel ω i = -1 ∨ canonicalLabel ω i = 1}
   let sourceBad : Set (Fin (m + 2) → ℝ × (Fin (n + 1) → ℝ)) :=
     {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
       (fun i ↦ canonicalLabel ω i)
-      (fun j ↦
-        NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
-          (Nat.succ_pos n) (fun i ↦ canonicalPoint mean ω i) j)
+      (directionRule (fun i ↦ canonicalPoint mean ω i))
       (fun i ↦ canonicalPoint mean ω i) budget}
   let labelBad : Set (Fin (m + 2) → ℝ × (Fin (n + 1) → ℝ)) :=
     {ω | ¬ ∀ i, canonicalLabel ω i = -1 ∨ canonicalLabel ω i = 1}
@@ -257,7 +253,7 @@ theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
   have hbalanced : gaussianIntervalFloor r ≤
       balancedGaussianBitOuter side r A := by
     simpa [A, side, mean] using
-      coordinateMean_balanced_spectral_partitionFailure_lower m n hr hbudget
+      coordinateMean_balanced_partitionFailure_lower m n directionRule hr hbudget
   have hraw : gaussianIntervalFloor r ≤ raw P := by
     calc
       gaussianIntervalFloor r ≤ balancedGaussianBitOuter side r A := hbalanced
@@ -307,8 +303,8 @@ theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
     rw [rademacher_prod_toOuterMeasure]
     simp only [OuterMeasure.add_apply, OuterMeasure.smul_apply,
       OuterMeasure.map_apply]
-    exact add_le_add (mul_le_mul_left' (measure_mono hpos) _)
-      (mul_le_mul_left' (measure_mono hneg) _)
+    exact add_le_add (mul_le_mul_right (measure_mono hpos) _)
+      (mul_le_mul_right (measure_mono hneg) _)
   have hsplit : μ (sourceBad ∪ labelBad) = raw Q := by
     simpa [μ, raw, Q, e, side, latentNoiseCoordinateSplitEquiv',
       latentNoiseCoordinateResidualMeasure] using
@@ -330,7 +326,139 @@ theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
       _ ≤ μ sourceBad := hunion_le
   simpa [μ, sourceBad, mean] using hsource
 
-/-- Real-valued probability form of the successor-indexed transport core. -/
+/-- Real-valued outer-measure evaluation of the successor-indexed transport
+core. Measurability is not required for this failure-set lower bound. -/
+theorem coordinateMean_canonical_partitionFailure_real_lower_succ
+    (m n : ℕ)
+    (directionRule : (Fin (m + 2) → Fin (n + 1) → ℝ) → Fin (n + 1) → ℝ)
+    {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
+    gaussianIntervalFloorReal r ≤
+      (latentNoiseSampleMeasure (m + 2) (n + 1)).real
+        {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
+          (fun i ↦ canonicalLabel ω i)
+          (directionRule (fun i ↦ canonicalPoint
+            (coordinateMean r (0 : Fin (n + 1))) ω i))
+          (fun i ↦ canonicalPoint
+            (coordinateMean r (0 : Fin (n + 1))) ω i)
+          budget} := by
+  letI : IsProbabilityMeasure (latentNoiseSampleMeasure (m + 2) (n + 1)) :=
+    ⟨by simp [latentNoiseSampleMeasure]⟩
+  rw [← gaussianIntervalFloor_toReal, Measure.real_def]
+  exact ENNReal.toReal_mono (measure_ne_top _ _)
+    (coordinateMean_canonical_partitionFailure_lower_succ
+      m n directionRule hr hbudget)
+
+/-- The data-only coordinate-signal lower bound at arbitrary sample and
+ambient dimensions satisfying the natural nondegeneracy hypotheses. -/
+theorem coordinateMean_canonical_partitionFailure_real_lower
+    {m n : ℕ} (hm2 : 2 ≤ m) (hn : 0 < n) (r budget : ℝ)
+    (directionRule : (Fin m → Fin n → ℝ) → Fin n → ℝ)
+    (hr : 0 ≤ r) (hbudget : budget < 1) :
+    gaussianIntervalFloorReal r ≤
+      (latentNoiseSampleMeasure m n).real
+        {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
+          (fun i ↦ canonicalLabel ω i)
+          (directionRule (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i))
+          (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i)
+          budget} := by
+  obtain ⟨m', rfl⟩ := Nat.exists_eq_add_of_le' hm2
+  obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le'
+    (show 1 ≤ n from hn)
+  simpa using coordinateMean_canonical_partitionFailure_real_lower_succ
+    m' n' directionRule hr hbudget
+
+/-- Every null-measurable event certifying successful recovery has probability
+at most one minus the Gaussian overlap. The recovery set itself and the
+direction selector need not be measurable: its complement contains the
+failure set, so the arbitrary-set lower bound still applies. -/
+theorem coordinateMean_canonical_partitionCertificate_real_upper
+    {m n : ℕ} (hm2 : 2 ≤ m) (hn : 0 < n) (r budget : ℝ)
+    (directionRule : (Fin m → Fin n → ℝ) → Fin n → ℝ)
+    (hr : 0 ≤ r) (hbudget : budget < 1)
+    (good : Set (Fin m → ℝ × (Fin n → ℝ)))
+    (hgood : NullMeasurableSet good (latentNoiseSampleMeasure m n))
+    (hcertificate : ∀ ω ∈ good, MakesAtMostPartitionErrorsUpToSwap
+      (fun i ↦ canonicalLabel ω i)
+      (directionRule (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i))
+      (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i) budget) :
+    (latentNoiseSampleMeasure m n).real good ≤
+      1 - gaussianIntervalFloorReal r := by
+  letI : IsProbabilityMeasure (latentNoiseSampleMeasure m n) :=
+    ⟨by simp [latentNoiseSampleMeasure]⟩
+  have hlower := coordinateMean_canonical_partitionFailure_real_lower
+    hm2 hn r budget directionRule hr hbudget
+  have hsubset :
+      {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
+        (fun i ↦ canonicalLabel ω i)
+        (directionRule (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i))
+        (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i) budget} ⊆ goodᶜ := by
+    intro ω hfailure hmem
+    exact hfailure (hcertificate ω hmem)
+  have hbound := hlower.trans (measureReal_mono hsubset (measure_ne_top _ _))
+  rw [probReal_compl_eq_one_sub₀ hgood] at hbound
+  linarith
+
+/-- For a null-measurable success event, the outer failure lower bound gives
+a genuine success-probability upper bound by complementation. This applies
+to every direction rule depending only on the observed point array. -/
+theorem coordinateMean_canonical_partitionSuccess_real_upper
+    {m n : ℕ} (hm2 : 2 ≤ m) (hn : 0 < n) (r budget : ℝ)
+    (directionRule : (Fin m → Fin n → ℝ) → Fin n → ℝ)
+    (hr : 0 ≤ r) (hbudget : budget < 1)
+    (hSuccess : NullMeasurableSet
+      {ω | MakesAtMostPartitionErrorsUpToSwap
+        (fun i ↦ canonicalLabel ω i)
+        (directionRule (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i))
+        (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i) budget}
+      (latentNoiseSampleMeasure m n)) :
+    (latentNoiseSampleMeasure m n).real
+      {ω | MakesAtMostPartitionErrorsUpToSwap
+        (fun i ↦ canonicalLabel ω i)
+        (directionRule (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i))
+        (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i) budget} ≤
+      1 - gaussianIntervalFloorReal r := by
+  exact coordinateMean_canonical_partitionCertificate_real_upper
+    hm2 hn r budget directionRule hr hbudget _ hSuccess (fun _ hω ↦ hω)
+
+/-- Leading-eigenvector specialization of the data-only Gaussian testing bound. -/
+theorem coordinateMean_balanced_spectral_partitionFailure_lower
+    (m n : ℕ) {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
+    gaussianIntervalFloor r ≤
+      balancedGaussianBitOuter (latentNoiseCoordinateSideMeasure (m + 1) n) r
+        {p | let omega := pairedLift m n r p.1 p.2
+          let X := fun i ↦ canonicalPoint
+            (coordinateMean r (0 : Fin (n + 1)))
+              (pairedLift m n r true p.2) i
+          let direction := fun j ↦
+            NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+              (Nat.succ_pos n) X j
+          ¬ MakesAtMostPartitionErrorsUpToSwap
+              (fun i ↦ canonicalLabel omega i) direction X budget ∨
+            ¬ ∀ i, canonicalLabel omega i = -1 ∨ canonicalLabel omega i = 1} := by
+  exact coordinateMean_balanced_partitionFailure_lower m n
+    (fun X j ↦ NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+      (Nat.succ_pos n) X j) hr hbudget
+
+/-- Leading-eigenvector specialization of the data-only Gaussian testing bound. -/
+theorem coordinateMean_canonical_spectral_partitionFailure_lower_succ
+    (m n : ℕ) {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
+    gaussianIntervalFloor r ≤
+      latentNoiseSampleMeasure (m + 2) (n + 1)
+        {ω | ¬ MakesAtMostPartitionErrorsUpToSwap
+          (fun i ↦ canonicalLabel ω i)
+          (fun j ↦
+            NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+              (Nat.succ_pos n)
+              (fun i ↦ canonicalPoint
+                (coordinateMean r (0 : Fin (n + 1))) ω i) j)
+          (fun i ↦ canonicalPoint
+            (coordinateMean r (0 : Fin (n + 1))) ω i)
+          budget} := by
+  exact coordinateMean_canonical_partitionFailure_lower_succ m n
+    (fun X j ↦ NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+      (Nat.succ_pos n) X j) hr hbudget
+
+/-- Leading-eigenvector specialization of the data-only Gaussian testing bound. -/
 theorem coordinateMean_canonical_spectral_partitionFailure_real_lower_succ
     (m n : ℕ) {r budget : ℝ} (hr : 0 ≤ r) (hbudget : budget < 1) :
     gaussianIntervalFloorReal r ≤
@@ -345,15 +473,11 @@ theorem coordinateMean_canonical_spectral_partitionFailure_real_lower_succ
           (fun i ↦ canonicalPoint
             (coordinateMean r (0 : Fin (n + 1))) ω i)
           budget} := by
-  letI : IsProbabilityMeasure (latentNoiseSampleMeasure (m + 2) (n + 1)) :=
-    ⟨by simp [latentNoiseSampleMeasure]⟩
-  rw [← gaussianIntervalFloor_toReal, Measure.real_def]
-  exact ENNReal.toReal_mono (measure_ne_top _ _)
-    (coordinateMean_canonical_spectral_partitionFailure_lower_succ
-      m n hr hbudget)
+  exact coordinateMean_canonical_partitionFailure_real_lower_succ m n
+    (fun X j ↦ NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+      (Nat.succ_pos n) X j) hr hbudget
 
-/-- The canonical coordinate-signal lower bound at arbitrary sample and
-ambient dimensions satisfying the natural nondegeneracy hypotheses. -/
+/-- Leading-eigenvector specialization of the data-only Gaussian testing bound. -/
 theorem coordinateMean_canonical_spectral_partitionFailure_real_lower
     {m n : ℕ} (hm2 : 2 ≤ m) (hn : 0 < n) (r budget : ℝ)
     (hr : 0 ≤ r) (hbudget : budget < 1) :
@@ -368,10 +492,8 @@ theorem coordinateMean_canonical_spectral_partitionFailure_real_lower
                 (coordinateMean r ⟨0, hn⟩) ω i) j)
           (fun i ↦ canonicalPoint (coordinateMean r ⟨0, hn⟩) ω i)
           budget} := by
-  obtain ⟨m', rfl⟩ := Nat.exists_eq_add_of_le' hm2
-  obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le'
-    (show 1 ≤ n from hn)
-  simpa using coordinateMean_canonical_spectral_partitionFailure_real_lower_succ
-    m' n' hr hbudget
+  exact coordinateMean_canonical_partitionFailure_real_lower hm2 hn r budget
+    (fun X j ↦ NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector
+      hn X j) hr hbudget
 
 end NumStability.HDP.Vector.GaussianMixture

@@ -78,20 +78,16 @@ probability the second unit eigenvectors of the signal and observed adjacency
 matrices are sign-aligned within `2√2 C/(μ√n)`. After the source's `√n`
 rescaling, the corresponding unnormalized vectors are within `2√2 C/μ`.
 
-The noise-event probability is an explicit premise so this contract composes
+The noise-event mass is an explicit premise, so this implication composes
 the separately inventoried Equation (4.18) with the deterministic
-Davis--Kahan consequence, exactly as the source paragraph does. -/
+Davis--Kahan consequence. The source applies it to its probability law;
+the implication itself holds for any measure and Hermitian matrices with
+the displayed eigengap and noise bound, independently of a block model. -/
 theorem hdp_04_sbm_eigenvector_perturbation_of_structural_hypotheses
     {Ω : Type*} [MeasurableSpace Ω] (P : MeasureTheory.Measure Ω)
-    [IsProbabilityMeasure P]
     {n : ℕ} (hn2 : 2 ≤ n) (D : Matrix (Fin n) (Fin n) ℝ)
     (A : Ω → Matrix (Fin n) (Fin n) ℝ)
     (hD : D.IsHermitian) (hA : ∀ ω, (A ω).IsHermitian)
-    (community : Fin n → Fin 2) (p q : ℝ)
-    (_hq : 0 ≤ q) (_hpq : q < p)
-    (_hLooplessExpectation : ∀ i j, D i j =
-      if i = j then 0
-      else if community i = community j then p else q)
     (C μ : ℝ) (hC : 0 ≤ C) (hμ : 0 < μ)
     (hgap : ∀ j : Fin n, j ≠ ⟨1, hn2⟩ →
       μ * (n : ℝ) ≤

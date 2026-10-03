@@ -130,7 +130,7 @@ theorem exists_isSymmetricRealMatrixSVD {n : ℕ}
       by_cases hb : hA.eigenvalues b < 0
     · by_cases hab : a = b
       · subst b
-        simpa [ha] using hq
+        simp [ha]
       · have hq0 := hq
         rw [if_neg hab] at hq0
         simp only [ha, hb, hab, if_true, if_false]
@@ -153,10 +153,10 @@ theorem exists_isSymmetricRealMatrixSVD {n : ℕ}
       simpa [hq0]
     · by_cases hab : a = b
       · subst b
-        simpa [ha] using hq
+        simp [ha]
       · have hq0 := hq
         rw [if_neg hab] at hq0
-        simp only [ha, hb, hab, if_true, if_false]
+        simp only [ha, hb, hab, if_false]
         simpa [hq0]
   · exact hA.eigenvectorBasis.orthonormal
   · intro a i

@@ -112,9 +112,8 @@ enough to make the perturbation unstable. -/
 theorem misclassifiedIndices_subset_idealMarginErrors_union_unstable
     {m n : ℕ} (labels : Fin m → ℝ)
     (u v : Fin n → ℝ) (X : Fin m → Fin n → ℝ)
-    (s η τ : ℝ) (_hs : s = -1 ∨ s = 1)
+    (s η τ : ℝ)
     (hlabels : ∀ i, labels i = -1 ∨ labels i = 1)
-    (_hη : 0 ≤ η)
     (hdist : NumStability.vecNorm2 (u - s • v) ≤ η) :
     misclassifiedIndices labels (s • v) X ⊆
       idealMarginErrors labels u X τ ∪ directionUnstableIndices X η τ := by
@@ -154,9 +153,8 @@ theorem misclassifiedIndices_subset_idealMarginErrors_union_unstable
 theorem ncard_misclassified_le_ideal_add_unstable
     {m n : ℕ} (labels : Fin m → ℝ)
     (u v : Fin n → ℝ) (X : Fin m → Fin n → ℝ)
-    (s η τ : ℝ) (hs : s = -1 ∨ s = 1)
+    (s η τ : ℝ)
     (hlabels : ∀ i, labels i = -1 ∨ labels i = 1)
-    (hη : 0 ≤ η)
     (hdist : NumStability.vecNorm2 (u - s • v) ≤ η) :
     Set.ncard (misclassifiedIndices labels (s • v) X) ≤
       Set.ncard (idealMarginErrors labels u X τ) +
@@ -167,7 +165,7 @@ theorem ncard_misclassified_le_ideal_add_unstable
           directionUnstableIndices X η τ) :=
       Set.ncard_le_ncard
         (misclassifiedIndices_subset_idealMarginErrors_union_unstable
-          labels u v X s η τ hs hlabels hη hdist)
+          labels u v X s η τ hlabels hdist)
     _ ≤ Set.ncard (idealMarginErrors labels u X τ) +
         Set.ncard (directionUnstableIndices X η τ) := Set.ncard_union_le _ _
 
@@ -177,7 +175,6 @@ theorem makesAtMostErrorsUpToSign_of_margin_and_direction
     (u v : Fin n → ℝ) (X : Fin m → Fin n → ℝ)
     (s η τ ε : ℝ) (hs : s = -1 ∨ s = 1)
     (hlabels : ∀ i, labels i = -1 ∨ labels i = 1)
-    (hη : 0 ≤ η)
     (hdist : NumStability.vecNorm2 (u - s • v) ≤ η)
     (hideal : (Set.ncard (idealMarginErrors labels u X τ) : ℝ) ≤ ε * m / 2)
     (hunstable : (Set.ncard (directionUnstableIndices X η τ) : ℝ) ≤
@@ -185,7 +182,7 @@ theorem makesAtMostErrorsUpToSign_of_margin_and_direction
     MakesAtMostErrorsUpToSign labels v X (ε * m) := by
   refine ⟨s, hs, ?_⟩
   have hcard := ncard_misclassified_le_ideal_add_unstable
-    labels u v X s η τ hs hlabels hη hdist
+    labels u v X s η τ hlabels hdist
   have hcardR : (Set.ncard (misclassifiedIndices labels (s • v) X) : ℝ) ≤
       (Set.ncard (idealMarginErrors labels u X τ) : ℝ) +
         (Set.ncard (directionUnstableIndices X η τ) : ℝ) := by
@@ -274,7 +271,7 @@ theorem exists_spectral_clustering_guarantee_of_covariance_and_margin_steps :
   intro ω hωcov hωideal
   obtain ⟨s, hs, hdist, hunstable⟩ := hdirection ω hωcov
   exact makesAtMostErrorsUpToSign_of_margin_and_direction
-    (labels ω) mean (v ω) (X ω) s η τ ε hs (hlabels ω) hη hdist
+    (labels ω) mean (v ω) (X ω) s η τ ε hs (hlabels ω) hdist
       (hidealCount ω hωideal) hunstable
 
 end NumStability.HDP.Vector.GaussianMixture

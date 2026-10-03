@@ -82,7 +82,7 @@ theorem adjacency_symmetric {n : ℕ} (ω : UpperPair n → Bool) (i j : Fin n) 
 theorem adjacency_hermitian {n : ℕ} (ω : UpperPair n → Bool) :
     (adjacency ω).IsHermitian := by
   ext i j
-  simp only [Matrix.conjTranspose_apply, starRingEnd_apply, star_trivial]
+  simp only [Matrix.conjTranspose_apply, star_trivial]
   exact adjacency_symmetric ω j i
 
 theorem adjacency_zero_or_one {n : ℕ} (ω : UpperPair n → Bool)

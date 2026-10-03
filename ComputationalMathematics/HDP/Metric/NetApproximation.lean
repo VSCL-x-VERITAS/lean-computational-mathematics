@@ -88,7 +88,7 @@ theorem exists_net_action_max_bounds
 theorem exists_net_inner_max_bounds
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (x : E) (ε : ℝ) (N : Finset E)
-    (hε0 : 0 ≤ ε) (hε1 : ε < 1) (hN : IsFiniteUnitSphereNet ε N)
+    (hε1 : ε < 1) (hN : IsFiniteUnitSphereNet ε N)
     (hNnonempty : N.Nonempty) :
     ∃ y ∈ N,
       (∀ z ∈ N, inner ℝ x z ≤ inner ℝ x y) ∧
@@ -153,7 +153,7 @@ theorem exists_quarter_net_bilinear_max_bound
       exists_net_action_max_bounds T (1 / 4 : ℝ) N (by norm_num) (by norm_num)
         hN hNnonempty
     obtain ⟨y₀, hy₀M, _hy₀max, _hy₀lower, hy₀upper⟩ :=
-      exists_net_inner_max_bounds (T x₀) (1 / 4 : ℝ) M (by norm_num) (by norm_num)
+      exists_net_inner_max_bounds (T x₀) (1 / 4 : ℝ) M (by norm_num)
         hM hMnonempty
     have hsample : inner ℝ (T x₀) y₀ ≤ inner ℝ (T p.1) p.2 :=
       hpmax (x₀, y₀) (Finset.mem_product.mpr ⟨hx₀N, hy₀M⟩)
@@ -192,7 +192,7 @@ theorem exists_net_bilinear_max_bounds
   have hε1 : ε < 1 := hεhalf.trans (by norm_num)
   obtain ⟨x₀, hx₀N⟩ := hNnonempty
   obtain ⟨y₀, hy₀M, _hy₀max, _hy₀lower, hy₀upper⟩ :=
-    exists_net_inner_max_bounds (T x₀) ε M hε0 hε1 hM hMnonempty
+    exists_net_inner_max_bounds (T x₀) ε M hε1 hM hMnonempty
   have hinvpos : 0 < (1 - ε)⁻¹ := inv_pos.mpr (sub_pos.mpr hε1)
   have hy₀prodnonneg : 0 ≤ (1 - ε)⁻¹ * inner ℝ (T x₀) y₀ :=
     (norm_nonneg (T x₀)).trans hy₀upper

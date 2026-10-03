@@ -87,7 +87,7 @@ theorem exists_quarterNet_card_le_nine_pow (n : ℕ) (hn : 0 < n) :
       Metric.packingNumber (1 / 4 : ℝ≥0) S ≤
           Metric.externalCoveringNumber (1 / 8 : ℝ≥0) S := by
         convert Metric.packingNumber_two_mul_le_externalCoveringNumber
-            (1 / 8 : ℝ≥0) S using 1 <;> norm_num [div_eq_mul_inv]
+            (1 / 8 : ℝ≥0) S using 1 ; norm_num [div_eq_mul_inv]
       _ ≤ C.encard := hCcover.externalCoveringNumber_le_encard
       _ < ⊤ := Set.encard_lt_top_iff.mpr hCfinite
   let P : Set E := Metric.maximalSeparatedSet (1 / 4 : ℝ≥0) S
@@ -117,7 +117,7 @@ theorem exists_quarterNet_card_le_nine_pow (n : ℕ) (hn : 0 < n) :
     let i : Fin n := ⟨0, hn⟩
     let e : E := EuclideanSpace.single i 1
     have he : ‖e‖ = 1 := by
-      simpa [e, E] using EuclideanSpace.norm_single i (1 : ℝ)
+      simp [e, E]
     obtain ⟨y, hy, _⟩ := hnet.2 e he
     exact ⟨y, hy⟩
   have hcard : N.card ≤ 9 ^ n := by

@@ -118,7 +118,7 @@ theorem exists_eigenvector_perturbation_tail :
       _ = C / (μ * Real.sqrt n) := by
         dsimp [C]
         field_simp [hμ.ne', hsqrt.ne']
-        <;> ring
+        ring
   have hscaled :
       ‖Real.sqrt n •
             NumStability.hermitianOrderedEigenbasis hD ⟨1, hn2⟩ -

@@ -31,6 +31,6 @@ theorem hdp_04_equation_4_15
       _ = 9 ^ (hn + hm) := by rw [pow_add]
   exact (NumStability.HDP.Probability.measure_biUnion_product_le
     μ N M (fun x y ↦ {ω | u ≤ Z x y ω}) _ hpair).trans
-      (mul_le_mul_right' (by exact_mod_cast hcard) _)
+      (mul_le_mul_left (by exact_mod_cast hcard) _)
 
 end NumStability.HDP.Contract

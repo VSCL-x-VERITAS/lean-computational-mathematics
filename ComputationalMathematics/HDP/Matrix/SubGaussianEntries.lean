@@ -23,7 +23,7 @@ theorem realMatrix_bilinear_eq_weighted_entry_sum {m n : ℕ}
     inner ℝ (Matrix.toEuclideanLin A x) y =
       ∑ ij : Fin m × Fin n, (x ij.2 * y ij.1) * A ij.1 ij.2 := by
   rw [Fintype.sum_prod_type]
-  simp only [Matrix.toEuclideanLin_apply, PiLp.inner_apply, Matrix.mulVec,
+  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, Matrix.mulVec,
     dotProduct]
   apply Finset.sum_congr rfl
   intro i _hi

@@ -791,7 +791,7 @@ theorem exists_expected_sampleCovariance_error_bound_of_iid :
             (NumStability.HDP.Vector.linearMarginal
               (fun j ω => Z ω j) v.1) 2 μ := hbase
       _ ≤ (K : ℝ≥0∞) * ENNReal.ofReal (Real.sqrt s) := by
-        apply mul_le_mul_left'
+        apply mul_le_mul_right
         simpa [x, Sigma, s] using hL2
       _ = ENNReal.ofReal ((K : ℝ) * Real.sqrt s) := by
         rw [ENNReal.ofReal_mul (by positivity : 0 ≤ (K : ℝ))]
@@ -874,7 +874,7 @@ theorem exists_expected_sampleCovariance_error_bound_of_iid :
       rw [show NumStability.realMatrixContinuousLinearMap
           (0 : Matrix (Fin n) (Fin n) ℝ) = 0 by
         ext x i
-        simp [NumStability.realMatrixContinuousLinearMap, Matrix.mulVec, dotProduct]]
+        simp [NumStability.realMatrixContinuousLinearMap]]
       exact norm_zero
     rw [show (∫ ω, NumStability.realMatrixOperatorNorm
         (randomSampleCovariance X ω - Sigma) ∂μ) = 0 by

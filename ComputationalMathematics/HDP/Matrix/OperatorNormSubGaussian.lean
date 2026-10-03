@@ -42,9 +42,9 @@ lemma nine_pow_mul_subGaussian_exp_le
   have hm0 : 0 ≤ (m : ℝ) := by positivity
   have hnm0 : 0 ≤ (n + m : ℝ) := by positivity
   have hsqrtn : (Real.sqrt n) ^ 2 = (n : ℝ) := by
-    simpa using Real.sq_sqrt hn0
+    exact Real.sq_sqrt hn0
   have hsqrtm : (Real.sqrt m) ^ 2 = (m : ℝ) := by
-    simpa using Real.sq_sqrt hm0
+    exact Real.sq_sqrt hm0
   have hS : (n + m : ℝ) + t ^ 2 ≤ S ^ 2 := by
     dsimp [S]
     nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg (m : ℝ)]

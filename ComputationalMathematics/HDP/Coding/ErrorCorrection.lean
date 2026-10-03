@@ -26,7 +26,9 @@ private theorem finTwo_eq_one_iff_ne_zero (b : Fin 2) : b = 1 ↔ b ≠ 0 := by
 /-- An encoder/decoder pair which corrects every pattern of at most `r`
 Hamming errors. -/
 structure ErrorCorrectingCode (k n r : ℕ) where
+  /-- Encode a message as a binary codeword. -/
   encode : BinaryWord k → BinaryWord n
+  /-- Decode a received binary word to a message. -/
   decode : BinaryWord n → BinaryWord k
   corrects : ∀ (x : BinaryWord k) (y : BinaryWord n),
     hammingDist y (encode x) ≤ r → decode y = x

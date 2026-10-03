@@ -41,8 +41,8 @@ theorem realMatrixOperatorNorm_mul_transpose_self {m n : ℕ}
     intro x
     change Matrix.toEuclideanLin (B * B.transpose) x =
       Matrix.toEuclideanLin B (Matrix.toEuclideanLin B.transpose x)
-    rw [Matrix.toEuclideanLin_apply, Matrix.toEuclideanLin_apply,
-      Matrix.toEuclideanLin_apply, Matrix.mulVec_mulVec]
+    rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply,
+      Matrix.toLpLin_apply, Matrix.mulVec_mulVec]
   have hCstar := ContinuousLinearMap.norm_adjoint_comp_self T.adjoint
   unfold NumStability.realMatrixOperatorNorm
   rw [hmul, hadj]

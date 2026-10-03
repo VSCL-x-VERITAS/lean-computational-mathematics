@@ -96,7 +96,7 @@ theorem hdp_04_squared_subgaussian_check :
   refine ⟨hCenteredIndep, ?_⟩
   intro i
   have hi := NumStability.HDP.Scalar.centeredSquare_psiOneGauge_le
-    (hXMeas i) (hXLp i).integrable_sq (hXSecond i) hK0
+    (hXMeas i) (hXLp i).integrable_sq (hXSecond i)
     ((hScalarLe i).trans (hPsi i))
   simpa [C] using hi
 

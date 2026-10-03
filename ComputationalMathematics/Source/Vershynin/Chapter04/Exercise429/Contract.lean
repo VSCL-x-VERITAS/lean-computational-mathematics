@@ -20,10 +20,11 @@ private theorem isCover_iff_pointwise_dist
 
 /-- Vershynin, Exercise 4.2.9, in a cardinal-exact witness form.  Every
 internal cover is an exterior cover, while an exterior half-radius cover can
-be moved into `K` without increasing its cardinality. -/
+be moved into `K` without increasing its cardinality. This also holds at
+radius zero, beyond the source's positive-radius context. -/
 theorem hdp_04_exercise_4_2_9
     {T : Type*} [MetricSpace T] (K : Set T) (ε : ℝ≥0)
-    (_hε : 0 < ε) :
+    :
     (∀ N : Set T, N ⊆ K →
       (∀ ⦃x⦄, x ∈ K → ∃ y ∈ N, dist x y ≤ (ε : ℝ)) →
       ∃ C : Set T,

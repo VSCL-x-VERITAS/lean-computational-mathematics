@@ -206,7 +206,7 @@ private theorem looplessExpectedAdjacency_entry_nonneg
     · simp [looplessExpectedAdjacency, hij, hcomm, hq]
 
 private theorem normalizedLooplessExpectedAdjacency_mem_doublyStochastic
-    {k : ℕ} (hk : 0 < k) {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q)
+    {k : ℕ} {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q)
     (hlam : 0 < (k : ℝ) * (p + q) - p) :
     (((((k : ℝ) * (p + q) - p)⁻¹) • looplessExpectedAdjacency k p q :
       Matrix (SBMVertex k) (SBMVertex k) ℝ) ∈
@@ -281,7 +281,7 @@ theorem norm_looplessExpectedAdjacency {k : ℕ} (hk : 0 < k)
     letI : Nonempty (SBMVertex k) := ⟨i₀⟩
     have hN : N ∈ doublyStochastic ℝ (SBMVertex k) := by
       simpa [N, lam] using
-        normalizedLooplessExpectedAdjacency_mem_doublyStochastic hk hp hq hlampos
+        normalizedLooplessExpectedAdjacency_mem_doublyStochastic hp hq hlampos
     have hNnorm : ‖N‖ = 1 :=
       NumStability.HDP.Graph.StochasticBlock.l2_opNorm_eq_one_of_mem_doublyStochastic
         N hN

@@ -47,7 +47,7 @@ theorem vecNorm2_column_le_realMatrixOperatorNorm
   rw [he, mul_one] at h
   have happly : Matrix.toEuclideanLin A e =
       WithLp.toLp 2 (fun i ↦ A i j) := by
-    rw [Matrix.toEuclideanLin_apply]
+    rw [Matrix.toLpLin_apply]
     change WithLp.toLp 2 (A.mulVec (Pi.single j 1)) =
       WithLp.toLp 2 (fun i ↦ A i j)
     rw [Matrix.mulVec_single_one]

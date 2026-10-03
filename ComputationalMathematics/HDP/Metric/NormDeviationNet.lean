@@ -202,7 +202,7 @@ theorem norm_deviation_le_three_mul_inv_mul_sSup_net
   obtain ⟨hop, ⟨v, hv, hAv, hAbound⟩, _⟩ :=
     NumStability.realMatrixOperatorNorm_characterization hn A
   have hTnorm : ‖T‖ = L := by
-    simpa [T, L, NumStability.realMatrixOperatorNorm] using hop.symm
+    simp [T, L, NumStability.realMatrixOperatorNorm]
   obtain ⟨y₀, hy₀N, _hy₀⟩ := hN.2 e he
   have hSnonempty : S.Nonempty := ⟨dev y₀, y₀, hy₀N, rfl⟩
   have hSbdd : BddAbove S := by

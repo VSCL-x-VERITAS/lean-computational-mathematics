@@ -153,12 +153,15 @@ theorem coveringNumber_real_three_point_counterexample :
   dsimp only
   have hKcover : _root_.Metric.IsCover 1 ({-1, 0, 1} : Set ℝ) {0} := by
     simp [Metric.IsCover, SetRel.IsCover, edist_dist]
-    constructor <;> norm_num [Real.dist_eq] <;> exact le_rfl
+    constructor
+    · norm_num [Real.dist_eq]
+    · norm_num [Real.dist_eq]
+      exact le_rfl
   have hKnumber :
       _root_.Metric.coveringNumber 1 ({-1, 0, 1} : Set ℝ) = 1 := by
     apply le_antisymm
     · exact (hKcover.coveringNumber_le_encard (by simp)).trans (by simp)
-    · simpa [Order.one_le_iff_pos]
+    · simp [Order.one_le_iff_pos]
   have hLnumber :
       _root_.Metric.coveringNumber 1 ({-1, 1} : Set ℝ) = 2 := by
     apply le_antisymm

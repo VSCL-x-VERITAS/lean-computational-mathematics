@@ -12,19 +12,16 @@ open MeasureTheory ProbabilityTheory
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, Equation (4.20): for the true loopless population matrix `D`,
-the `ℓ₂` perturbation bound between its unnormalized second eigenvector
-and a signed observed second eigenvector gives the displayed sum of squared
-coefficient errors. -/
+/-- The deterministic implication used in Vershynin, Equation (4.20):
+an `ℓ₂` bound between rescaled second eigenvectors gives the displayed sum
+of squared coefficient errors. The source applies it to the loopless
+stochastic-block model and a global sign. This implication only requires
+Hermitian matrices, the norm bound, and the stated scalar inequalities;
+neither the block law nor a restriction of `θ` to signs is needed here. -/
 theorem hdp_04_equation_4_20_of_perturbation {n : ℕ} (hn2 : 2 ≤ n)
     (D A : Matrix (Fin n) (Fin n) ℝ)
     (hD : D.IsHermitian) (hA : A.IsHermitian)
-    (community : Fin n → Fin 2) (p q : ℝ)
-    (_hq : 0 ≤ q) (_hpq : q < p)
-    (_hLooplessExpectation : ∀ i j, D i j =
-      if i = j then 0
-      else if community i = community j then p else q)
-    (θ C μ : ℝ) (_hθ : θ = -1 ∨ θ = 1)
+    (θ C μ : ℝ)
     (hC : 0 ≤ C) (hμ : 0 < μ)
     (hperturb :
       NumStability.vecNorm2

@@ -13,9 +13,10 @@ namespace NumStability.HDP.Contract
 
 /-- Vershynin, *High-Dimensional Probability*, the footnote following
 Lemma 4.2.6: an `ε`-separated subset of `K` is maximal precisely when adding
-any new point of `K` destroys the separation property. -/
+any new point of `K` destroys the separation property. The characterization
+also holds at zero radius, beyond the source's positive-radius context. -/
 theorem hdp_04_maximal_separated_definition {T : Type*} [MetricSpace T]
-    {K N : Set T} {ε : ℝ≥0} (_hε : 0 < ε) :
+    {K N : Set T} {ε : ℝ≥0} :
     Maximal (fun M : Set T ↦ M ⊆ K ∧ Metric.IsSeparated ε M) N ↔
       (N ⊆ K ∧ Metric.IsSeparated ε N) ∧
         ∀ x ∈ K, x ∉ N → ¬ Metric.IsSeparated ε (insert x N) := by

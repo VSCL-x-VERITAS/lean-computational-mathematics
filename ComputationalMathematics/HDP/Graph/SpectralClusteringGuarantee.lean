@@ -25,7 +25,7 @@ theorem exists_spectral_sign_recovery_tail_of_symmetric_centered_bounded_noise :
         (D : Matrix (Fin n) (Fin n) ℝ)
         (A : Ω → Matrix (Fin n) (Fin n) ℝ)
         (hD : D.IsHermitian) (hA : ∀ ω, (A ω).IsHermitian)
-        (μ : ℝ) (hμ : 0 < μ),
+        (μ : ℝ) (_hμ : 0 < μ),
         (∀ j : Fin n, j ≠ ⟨1, hn2⟩ →
           μ * (n : ℝ) ≤
             |NumStability.hermitianOrderedEigenvalue hD ⟨1, hn2⟩ -
@@ -136,7 +136,7 @@ theorem exists_spectral_sign_recovery_tail_of_stochastic_block_gap :
         (D : Matrix (Fin n) (Fin n) ℝ)
         (A : Ω → Matrix (Fin n) (Fin n) ℝ)
         (hD : D.IsHermitian) (hA : ∀ ω, (A ω).IsHermitian)
-        (p q : ℝ) (hq : 0 < q) (hpq : q < p),
+        (p q : ℝ) (_hq : 0 < q) (_hpq : q < p),
         (∀ j : Fin n, j ≠ ⟨1, hn2⟩ →
           min ((p - q) / 2) q * (n : ℝ) ≤
             |NumStability.hermitianOrderedEigenvalue hD ⟨1, hn2⟩ -

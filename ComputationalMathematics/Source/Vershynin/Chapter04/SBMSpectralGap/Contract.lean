@@ -179,7 +179,7 @@ theorem hdp_04_sbm_spectral_gap :
         nlinarith [mul_pos hkR (sub_pos.mpr hpqR)]
     · have hqle : (θ.q : ℝ) ≤ ((θ.p : ℝ) - θ.q) / 2 :=
         le_of_not_ge hbranch
-      refine ⟨e0, by simp [e0, e1], ?_⟩
+      refine ⟨e0, by simp [e0], ?_⟩
       rw [hone, hzero, min_eq_right hqle, abs_of_nonpos]
       · push_cast
         ring

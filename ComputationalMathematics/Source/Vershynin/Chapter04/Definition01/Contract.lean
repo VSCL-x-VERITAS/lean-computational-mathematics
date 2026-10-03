@@ -14,11 +14,13 @@ open scoped NNReal
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, *High-Dimensional Probability*, Definition 4.2.1: a positive-
-radius epsilon-net lies in the covered set, covers every point within epsilon,
-and equivalently covers the set by closed epsilon-balls centered in the net. -/
+/-- Vershynin, *High-Dimensional Probability*, Definition 4.2.1: an
+epsilon-net lies in the covered set, covers every point within epsilon, and
+equivalently covers the set by closed epsilon-balls centered in the net.
+The source assumes a positive radius; this characterization also holds at
+radius zero. -/
 theorem hdp_04_hdef_h4_d2_d1 {T : Type*} [MetricSpace T]
-    {K N : Set T} {ε : ℝ≥0} (_hε : 0 < ε) :
+    {K N : Set T} {ε : ℝ≥0} :
     (N ⊆ K ∧ ∀ x ∈ K, ∃ x₀ ∈ N, dist x x₀ ≤ ε) ↔
       (N ⊆ K ∧ K ⊆ ⋃ y ∈ N, Metric.closedBall y ε) := by
   rw [← Metric.isCover_iff_subset_iUnion_closedBall]

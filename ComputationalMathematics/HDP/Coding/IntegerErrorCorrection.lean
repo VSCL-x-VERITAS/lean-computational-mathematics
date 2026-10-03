@@ -39,7 +39,9 @@ def IntegerIsCodeword {k n : ℤ}
 
 /-- An encoder/decoder pair at an integer error threshold. -/
 structure IntegerErrorCorrectingCode (k n r : ℤ) where
+  /-- Encode a message as a binary codeword. -/
   encode : BinaryWord k.toNat → BinaryWord n.toNat
+  /-- Decode a received binary word to a message. -/
   decode : BinaryWord n.toNat → BinaryWord k.toNat
   corrects : ∀ (x : BinaryWord k.toNat) (y : BinaryWord n.toNat),
     (hammingDist y (encode x) : ℤ) ≤ r → decode y = x

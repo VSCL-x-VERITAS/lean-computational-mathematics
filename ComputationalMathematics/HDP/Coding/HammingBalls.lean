@@ -115,9 +115,8 @@ theorem hammingDist_flipCoordinates {n : ℕ} (x : BinaryWord n)
   exact congrArg Finset.card ((binaryWordEquivFinset x).right_inv S)
 
 /-- The binary Hamming cube has cardinality `2^n`. -/
-@[simp]
 theorem card_binaryWord (n : ℕ) : Fintype.card (BinaryWord n) = 2 ^ n := by
-  simpa [BinaryWord] using Fintype.card_fun (Fin n) (Fin 2)
+  simp [BinaryWord]
 
 /-- Every binary Hamming ball is nonempty. -/
 theorem hammingBallVolume_pos (n m : ℕ) : 0 < hammingBallVolume n m := by

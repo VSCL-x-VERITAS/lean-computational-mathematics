@@ -12,24 +12,20 @@ open scoped ENNReal NNReal
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, inline check in the proof of Theorem 4.7.1.  The original
-population vector and its sample copies are represented through the same
-whitening factor.  Surjectivity on scalar marginals is the precise consequence
-of invertibility used to transport (4.24) from `X` to `Z`; isotropy then
-normalizes every unit marginal.  Identical distribution gives the same vector
-`ψ₂` bound for every *vector-valued sample* `Zᵢ` (not merely every
-coordinate of one vector). -/
+/-- The marginal transfer used in Vershynin's proof of Theorem 4.7.1.
+The source constructs `Z` and its copies through an invertible whitening
+factor on a probability space. This statement assumes the precise marginal
+surjectivity consequence directly, together with the relative `ψ₂` bound,
+unit-marginal `L²` normalization, measurability, and identical distribution.
+It needs no explicit whitening matrix, original sample family, probability
+normalization, positive dimensions, or lower bound `K ≥ 1`. Identical
+distribution gives the same vector `ψ₂` bound for every vector-valued
+sample `Zᵢ`, rather than merely for the coordinates of one vector. -/
 theorem hdp_04_whitened_psi2_check
     {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ] {m n : ℕ}
-    (hm : 0 < m) (hn : 0 < n)
+    {m n : ℕ}
     (X Z : Ω → Fin n → ℝ)
-    (Xsample Zsample : Fin m → Ω → Fin n → ℝ)
-    (B Sigma : Matrix (Fin n) (Fin n) ℝ) (K : ℝ≥0)
-    (hK : 1 ≤ K)
-    (hSigma : Sigma = B * B.transpose)
-    (hXwhiten : ∀ ω, X ω = B.mulVec (Z ω))
-    (hXsampleWhiten : ∀ i ω, Xsample i ω = B.mulVec (Zsample i ω))
+    (Zsample : Fin m → Ω → Fin n → ℝ) (K : ℝ≥0)
     (hMarginalSurjective : ∀ u : Fin n → ℝ, ∃ x : Fin n → ℝ,
       NumStability.HDP.Vector.linearMarginal (fun j ω ↦ Z ω j) u =
         NumStability.HDP.Vector.linearMarginal (fun j ω ↦ X ω j) x)

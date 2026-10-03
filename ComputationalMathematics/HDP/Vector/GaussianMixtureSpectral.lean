@@ -55,7 +55,7 @@ theorem populationSecondMoment_rayleigh {n : ℕ} (mean : Fin n → ℝ)
       inner ℝ x (WithLp.toLp 2 mean : EuclideanSpace ℝ (Fin n)) =
         dotProduct mean x := by
     simp [PiLp.inner_apply, real_inner_eq_re_inner, RCLike.inner_apply,
-      dotProduct, mul_comm]
+      dotProduct]
   rw [real_inner_smul_right, hinner]
   ring
 
@@ -73,8 +73,8 @@ theorem norm_populationDirection {n : ℕ} (mean : Fin n → ℝ)
     simpa [populationDirection] using
       (NumStability.HDP.Vector.Spherical.norm_toLp_eq_vecNorm2
         (fun i ↦ (NumStability.vecNorm2 mean)⁻¹ * mean i))]
-  change NumStability.vecNorm2
-      (fun i ↦ (NumStability.vecNorm2 mean)⁻¹ * mean i) = 1
+
+
   rw [NumStability.vecNorm2_smul, abs_inv,
     abs_of_pos hmean, inv_mul_cancel₀ hmean.ne']
 
@@ -87,7 +87,7 @@ theorem mean_eq_norm_smul_populationDirection {n : ℕ}
 
 /-- The population direction attains the spike eigenvalue. -/
 theorem populationSecondMoment_apply_populationDirection {n : ℕ}
-    (mean : Fin n → ℝ) (hmean : 0 < NumStability.vecNorm2 mean) :
+    (mean : Fin n → ℝ) :
     (populationSecondMoment mean).toEuclideanLin (populationDirection mean) =
       (1 + NumStability.vecNorm2 mean ^ 2) • populationDirection mean := by
   have hmul := populationSecondMoment_mulVec_mean mean
@@ -145,8 +145,8 @@ private theorem abs_rayleigh_sub_le_operatorNorm {n : ℕ}
   have heq : NumStability.matrixRayleighForm T x -
       NumStability.matrixRayleighForm S x =
         NumStability.matrixRayleighForm (T - S) x := by
-    simp [NumStability.matrixRayleighForm, Matrix.toEuclideanLin_apply,
-      Matrix.sub_mulVec, inner_sub_right]
+    simp [NumStability.matrixRayleighForm, Matrix.toLpLin_apply,
+      inner_sub_right]
   rw [heq]
   exact abs_matrixRayleighForm_le_operatorNorm (T - S) x hx
 
@@ -269,11 +269,11 @@ theorem misclassifiedIndices_pos_smul {m n : ℕ}
   rw [hsum]
   constructor <;> intro h
   · have : r * (labels i * ∑ x, v x * X i x) ≤ 0 := by
-      convert h using 1 <;> ring
+      convert h using 1 ; ring
     nlinarith
   · have : r * (labels i * ∑ x, v x * X i x) ≤ 0 :=
       mul_nonpos_of_nonneg_of_nonpos hr.le h
-    convert this using 1 <;> ring
+    convert this using 1 ; ring
 
 /-- The up-to-sign clustering guarantee is invariant under positive scaling
 of the selected direction. -/
@@ -306,7 +306,7 @@ theorem makesAtMostErrorsUpToSign_pos_smul_iff {m n : ℕ}
 large enough to consume a direction-perturbation margin. -/
 theorem ncard_directionUnstable_mul_margin_sq_le {m n : ℕ}
     (X : Fin m → Fin n → ℝ) (η τ : ℝ)
-    (hη : 0 ≤ η) (hτ : 0 ≤ τ) :
+    (hτ : 0 ≤ τ) :
     (Set.ncard (directionUnstableIndices X η τ) : ℝ) * τ ^ 2 ≤
       η ^ 2 * ∑ i, NumStability.vecNorm2 (X i) ^ 2 := by
   classical
@@ -364,12 +364,12 @@ theorem diagonal_le_add_operatorNorm_sub {n : ℕ}
   have he : ‖e‖ = 1 := by simp [e]
   have h := abs_rayleigh_sub_le_operatorNorm T S e he
   have hT : NumStability.matrixRayleighForm T e = T j j := by
-    simp [NumStability.matrixRayleighForm, Matrix.toEuclideanLin_apply,
-      Matrix.mulVec, e, PiLp.inner_apply, real_inner_eq_re_inner,
+    simp [NumStability.matrixRayleighForm, Matrix.toLpLin_apply,
+      e, PiLp.inner_apply, real_inner_eq_re_inner,
       RCLike.inner_apply]
   have hS : NumStability.matrixRayleighForm S e = S j j := by
-    simp [NumStability.matrixRayleighForm, Matrix.toEuclideanLin_apply,
-      Matrix.mulVec, e, PiLp.inner_apply, real_inner_eq_re_inner,
+    simp [NumStability.matrixRayleighForm, Matrix.toLpLin_apply,
+      e, PiLp.inner_apply, real_inner_eq_re_inner,
       RCLike.inner_apply]
   rw [hT, hS] at h
   linarith [le_abs_self (T j j - S j j)]
@@ -410,13 +410,13 @@ theorem sum_vecNorm2_sq_le_of_sampleSecondMoment_deviation {m n : ℕ}
       exact diagonal_le_add_operatorNorm_sub T S j
     _ = (n : ℝ) + NumStability.vecNorm2 mean ^ 2 + (n : ℝ) * e := by
       rw [Finset.sum_add_distrib, sum_populationSecondMoment_diagonal]
-      simp [S]
+      simp
 
 /-- A convenient deterministic half-budget criterion for the indices whose
 classification margin can be consumed by a direction perturbation. -/
 theorem ncard_directionUnstable_le_half_budget_of_sampleSecondMoment_deviation
     {m n : ℕ} (hm : 0 < m) (X : Fin m → Fin n → ℝ)
-    (mean : Fin n → ℝ) (η τ ε : ℝ) (hη : 0 ≤ η) (hτ : 0 < τ)
+    (mean : Fin n → ℝ) (η τ ε : ℝ) (hτ : 0 < τ)
     (hbudget :
       η ^ 2 * ((n : ℝ) + NumStability.vecNorm2 mean ^ 2 +
         (n : ℝ) * NumStability.realMatrixOperatorNorm
@@ -425,7 +425,7 @@ theorem ncard_directionUnstable_le_half_budget_of_sampleSecondMoment_deviation
         ε / 2 * τ ^ 2) :
     (Set.ncard (directionUnstableIndices X η τ) : ℝ) ≤ ε * m / 2 := by
   have hcard := ncard_directionUnstable_mul_margin_sq_le
-    X η τ hη hτ.le
+    X η τ hτ.le
   have henergy :=
     sum_vecNorm2_sq_le_of_sampleSecondMoment_deviation hm X mean
   have hscaledEnergy := mul_le_mul_of_nonneg_left henergy (sq_nonneg η)
@@ -465,8 +465,6 @@ theorem makesAtMostErrorsUpToSign_leadingEigenvector_of_deviation
   let r : ℝ := NumStability.vecNorm2 mean
   let v : Fin n → ℝ := fun j ↦
     NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector hn X j
-  have he : 0 ≤ e := norm_nonneg _
-  have hη : 0 ≤ η := by dsimp [η]; positivity
   obtain ⟨s, hs, hdist⟩ :=
     exists_sign_mean_sub_scaledLeadingEigenvector_le hn mean hmean X
   have hvec :
@@ -484,11 +482,11 @@ theorem makesAtMostErrorsUpToSign_leadingEigenvector_of_deviation
   have hunstable :
       (Set.ncard (directionUnstableIndices X η τ) : ℝ) ≤ ε * m / 2 := by
     apply ncard_directionUnstable_le_half_budget_of_sampleSecondMoment_deviation
-      hm X mean η τ ε hη hτ
+      hm X mean η τ ε hτ
     simpa [e, η] using hbudget
   have hscaled : MakesAtMostErrorsUpToSign labels (r • v) X (ε * m) :=
     makesAtMostErrorsUpToSign_of_margin_and_direction
-      labels mean (r • v) X s η τ ε hs hlabels hη hdistRaw hideal hunstable
+      labels mean (r • v) X s η τ ε hs hlabels hdistRaw hideal hunstable
   exact (makesAtMostErrorsUpToSign_pos_smul_iff labels v X (ε * m) r
     (by simpa [r] using hmean)).1 hscaled
 

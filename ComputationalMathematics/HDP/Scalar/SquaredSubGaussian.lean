@@ -20,7 +20,7 @@ theorem centeredSquare_psiOneGauge_le
     {X : Ω → ℝ} (hX : Measurable X)
     (hXsq : Integrable (fun ω ↦ X ω ^ 2) μ)
     (hsecond : (∫ ω, X ω ^ 2 ∂μ) = 1)
-    {K : ℝ} (hK0 : 0 ≤ K)
+    {K : ℝ}
     (hK : SubGaussian.PsiTwoNorm μ X ≤ ENNReal.ofReal K) :
     (∫ ω, (X ω ^ 2 - 1) ∂μ) = 0 ∧
       SubExponential.PsiOneGauge μ (fun ω ↦ X ω ^ 2 - 1) ≤

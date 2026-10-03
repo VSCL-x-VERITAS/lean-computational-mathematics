@@ -83,7 +83,7 @@ theorem approximateIsometryBounds_iff_unit {m n : ℕ}
     simpa [ApproximateIsometryBounds, hx] using h x
   · intro h x
     by_cases hx : x = 0
-    · simp [ApproximateIsometryBounds, hx]
+    · simp [hx]
     · let a : ℝ := ‖x‖
       have haPos : 0 < a := norm_pos_iff.mpr hx
       let y : EuclideanSpace ℝ (Fin n) := a⁻¹ • x

@@ -19,9 +19,11 @@ linear marginal by the `L²` norm of that same marginal.
 
 This is deliberately a proposition-valued definition rather than a theorem
 asserting that every random vector has the property: in the source, (4.24) is
-a hypothesis. -/
+a hypothesis. The definition is meaningful for an arbitrary measure; the
+source uses it on a probability space. No probability assumption is needed
+to identify the condition with its expanded marginal quantifiers. -/
 def Equation424Condition {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ] {n : ℕ}
+    {μ : Measure Ω} {n : ℕ}
     (X : Fin n → Ω → ℝ) : Prop :=
   (∀ j, Measurable (X j)) ∧
     ∃ K : ℝ≥0, 1 ≤ K ∧
@@ -38,7 +40,7 @@ def Equation424Condition {Ω : Type*} [MeasurableSpace Ω]
 selected audit scope is this condition-definition, not an assertion that every
 random vector satisfies it and not the conclusion of Theorem 4.7.1. -/
 theorem hdp_04_equation_4_24 {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} [IsProbabilityMeasure μ] {n : ℕ}
+    {μ : Measure Ω} {n : ℕ}
     (X : Fin n → Ω → ℝ) :
     Equation424Condition (μ := μ) X ↔
       (∀ j, Measurable (X j)) ∧

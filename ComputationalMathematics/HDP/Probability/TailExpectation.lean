@@ -17,7 +17,7 @@ namespace NumStability.HDP.Probability
 `2 exp (-t²)` has expectation at most `sqrt π`. -/
 theorem expectation_le_sqrt_pi_of_gaussian_upper_tail
     {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ] {Z : Ω → ℝ}
+    {Z : Ω → ℝ}
     (hZ0 : ∀ ω, 0 ≤ Z ω) (hZInt : Integrable Z μ)
     (htail : ∀ {t : ℝ}, 0 < t →
       μ.real {ω | t < Z ω} ≤ 2 * Real.exp (-t ^ 2)) :
@@ -110,7 +110,7 @@ theorem expectation_le_add_mul_sqrt_pi_of_gaussian_upper_tail
 `2 exp (-t)` has expectation at most `2`. -/
 theorem expectation_le_two_of_exponential_upper_tail
     {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ] {Z : Ω → ℝ}
+    {Z : Ω → ℝ}
     (hZ0 : ∀ ω, 0 ≤ Z ω) (hZInt : Integrable Z μ)
     (htail : ∀ {t : ℝ}, 0 < t →
       μ.real {ω | t < Z ω} ≤ 2 * Real.exp (-t)) :

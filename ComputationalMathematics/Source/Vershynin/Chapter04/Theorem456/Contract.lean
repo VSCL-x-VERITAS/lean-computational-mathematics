@@ -349,7 +349,7 @@ theorem hdp_04_theorem_4_5_6 :
       rcases hρ with hρ | hρ <;> rcases hα with hα | hα <;>
         subst ρ <;> subst α <;>
         simp [β, NumStability.HDP.Vector.SignRecovery.signDisagreements,
-          Finset.ext_iff, mul_assoc]
+          Finset.ext_iff]
     rcases hβ with hβ | hβ
     · have hsubset :
           sbmSpectralMisclassifications

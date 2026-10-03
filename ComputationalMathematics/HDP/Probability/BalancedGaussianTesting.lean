@@ -28,7 +28,7 @@ noncomputable def balancedGaussianBitOuter
         ((gaussianReal (-r) 1).prod nu).toOuterMeasure)
 
 @[simp] theorem balancedGaussianBitOuter_apply_univ
-    {S : Type*} [MeasurableSpace S] (nu : Measure S) [SFinite nu]
+    {S : Type*} [MeasurableSpace S] (nu : Measure S)
     [IsProbabilityMeasure nu] (r : ℝ) :
     balancedGaussianBitOuter nu r Set.univ = 1 := by
   simp [balancedGaussianBitOuter, OuterMeasure.map_apply]
