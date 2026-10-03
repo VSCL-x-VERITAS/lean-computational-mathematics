@@ -11,10 +11,9 @@ open scoped ENNReal
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, Equation (4.21), exposed separately from its enclosing
-Theorem 4.6.1 for source-level traceability.  The first conjunct records the
-endpoint-order semantics used by the source notation: index `0` is the largest
-singular value and `Fin.last n` is the smallest. -/
+/-- Vershynin, Equation (4.21): the ordered SVD coefficients lie between
+its extreme coefficients, and the simultaneous endpoint failure probability
+has the printed constant, scale and exponent. -/
 theorem hdp_04_equation_4_21 :
     ∃ C : ℝ, 0 < C ∧
       ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
@@ -31,32 +30,30 @@ theorem hdp_04_equation_4_21 :
           (fun j ω => A ω i j) ≤ ENNReal.ofReal K) →
         iIndepFun (fun i ω => fun j => A ω i j) μ →
         ∀ {t : ℝ}, 0 ≤ t →
+          ∀ (r : Ω → ℕ) (s : Ω → Fin (n + 1) → ℝ)
+            (u : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin m))
+            (v : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin (n + 1))),
+            (∀ ω, NumStability.IsRealMatrixSVD (A ω) (r ω) (s ω) (u ω) (v ω)) →
           (∀ ω i,
-              NumStability.rectCourantFischerSingularValue
-                  (A ω) (Fin.last n) ≤
-                NumStability.rectCourantFischerSingularValue (A ω) i ∧
-              NumStability.rectCourantFischerSingularValue (A ω) i ≤
-                NumStability.rectCourantFischerSingularValue
-                  (A ω) (0 : Fin (n + 1))) ∧
+              s ω (Fin.last n) ≤
+                s ω i ∧
+              s ω i ≤
+                s ω ⟨0, Nat.succ_pos n⟩) ∧
             μ.real {ω |
               Real.sqrt (m : ℝ) -
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
-                  NumStability.rectCourantFischerSingularValue
-                    (A ω) (Fin.last n) ∨
-                NumStability.rectCourantFischerSingularValue
-                    (A ω) (0 : Fin (n + 1)) >
+                  s ω (Fin.last n) ∨
+                s ω ⟨0, Nat.succ_pos n⟩ >
                   Real.sqrt (m : ℝ) +
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
               2 * Real.exp (-(t ^ 2)) := by
   rcases hdp_04_theorem_4_6_1 with ⟨C, hC, htail⟩
   refine ⟨C, hC, ?_⟩
   intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hPsi hIndep t ht
-  refine ⟨?_, htail hm A hK hMeas hLp hMean hIso hPsi hIndep ht⟩
+    r s u v hSVD
+  refine ⟨?_, htail hm A hK hMeas hLp hMean hIso hPsi hIndep ht r s u v hSVD⟩
   intro ω i
-  exact ⟨
-    NumStability.rectCourantFischerSingularValue_antitone (A ω)
-      (Fin.le_last i),
-    NumStability.rectCourantFischerSingularValue_antitone (A ω)
-      (Fin.zero_le i)⟩
+  exact ⟨(hSVD ω).singularValues_antitone (Fin.le_last i),
+    (hSVD ω).singularValues_antitone (Fin.zero_le i)⟩
 
 end NumStability.HDP.Contract

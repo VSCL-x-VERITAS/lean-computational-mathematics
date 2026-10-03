@@ -97,4 +97,28 @@ theorem canonicalPoints_iIndep (m n : ℕ) (mean : Fin n → ℝ) :
     (fun _i z ↦ mixtureMap mean z) (fun _i ↦ measurable_mixtureMap mean)
   simpa [canonicalPoint, Function.comp_def] using h
 
+/-- Finite joint label/noise rectangle probabilities expose the independence
+within each row and between rows of the canonical Gaussian-mixture model. -/
+theorem latentNoiseSampleMeasure_finite_rectangle (m n : ℕ) (S : Finset (Fin m))
+    (L : Fin m → Set ℝ) (B : Fin m → Set (Fin n → ℝ))
+    (hL : ∀ i ∈ S, MeasurableSet (L i)) (hB : ∀ i ∈ S, MeasurableSet (B i)) :
+    latentNoiseSampleMeasure m n {ω | ∀ i ∈ S, (ω i).1 ∈ L i ∧ (ω i).2 ∈ B i} =
+      ∏ i ∈ S, rademacherPMF.toMeasure (L i) *
+        NumStability.standardGaussianVectorMeasure n (B i) := by
+  have hsingle (i : Fin m) (hi : i ∈ S) :
+      latentNoiseSampleMeasure m n ((fun ω ↦ ω i) ⁻¹' (L i ×ˢ B i)) =
+        rademacherPMF.toMeasure (L i) *
+          NumStability.standardGaussianVectorMeasure n (B i) := by
+    rw [← Measure.map_apply (measurable_pi_apply i) ((hL i hi).prod (hB i hi)),
+      (canonicalRow_hasLaw m n i).map_eq, latentNoiseObservationMeasure, Measure.prod_prod]
+  have h := (canonicalRows_iIndep m n).measure_inter_preimage_eq_mul S
+    (sets := fun i ↦ L i ×ˢ B i) (fun i hi ↦ (hL i hi).prod (hB i hi))
+  calc
+    _ = latentNoiseSampleMeasure m n (⋂ i ∈ S, (fun ω ↦ ω i) ⁻¹' (L i ×ˢ B i)) := by
+      congr 1
+      ext ω
+      simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_preimage, Set.mem_prod]
+    _ = _ := h
+    _ = _ := Finset.prod_congr rfl hsingle
+
 end NumStability.HDP.Vector.GaussianMixture

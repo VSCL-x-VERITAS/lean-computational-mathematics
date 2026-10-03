@@ -18,7 +18,7 @@ decomposition of an observed matrix.
 noncomputable section
 
 open Matrix
-open scoped NNReal
+open scoped NNReal ENNReal
 open scoped Matrix.Norms.L2Operator
 
 namespace NumStability.HDP.Graph.StochasticBlock
@@ -57,6 +57,38 @@ outcomes for every unordered pair of distinct vertices. -/
 def graphMeasure (k : ℕ) (θ : Parameters) : Measure (Edge k → Bool) :=
   Measure.pi fun e : Edge k ↦
     (PMF.bernoulli (edgeProbability θ e) (edgeProbability_le_one θ e)).toMeasure
+
+/-- Exact probabilities of finite edge configurations. This states the joint
+Bernoulli law directly, including the probability-one empty configuration. -/
+theorem graphMeasure_finite_configuration (k : ℕ) (θ : Parameters)
+    (S : Finset (Edge k)) (v : Edge k → Bool) :
+    graphMeasure k θ {x | ∀ e ∈ S, x e = v e} =
+      ∏ e ∈ S, if v e then (edgeProbability θ e : ℝ≥0∞)
+        else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞) := by
+  classical
+  have hset : {x : Edge k → Bool | ∀ e ∈ S, x e = v e} =
+      Set.pi Set.univ (fun e ↦ if e ∈ S then {v e} else Set.univ) := by
+    ext x
+    constructor
+    · intro hx e _
+      by_cases he : e ∈ S
+      · simpa only [if_pos he, Set.mem_singleton_iff] using hx e he
+      · simp only [if_neg he, Set.mem_univ]
+    · intro hx e he
+      have h := hx e (Set.mem_univ e)
+      simpa only [if_pos he, Set.mem_singleton_iff] using h
+  have hmass (e : Edge k) :
+      (PMF.bernoulli (edgeProbability θ e) (edgeProbability_le_one θ e)).toMeasure
+          {v e} =
+        if v e then (edgeProbability θ e : ℝ≥0∞)
+          else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞) := by
+    rw [PMF.toMeasure_apply_singleton _ _ (measurableSet_singleton _)]
+    cases v e <;> simp [PMF.bernoulli_apply]
+  rw [hset, graphMeasure, Measure.pi_pi]
+  simpa only [apply_ite, hmass, measure_univ] using
+    (Finset.prod_ite_mem_eq S fun e ↦
+      if v e then (edgeProbability θ e : ℝ≥0∞)
+        else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞))
 
 /-- When the two probabilities agree, every edge-coordinate law is the same
 Bernoulli law, i.e. the Erdős--Rényi special case. -/

@@ -1,4 +1,5 @@
 import ComputationalMathematics.HDP.Matrix.IsotropicRows
+import ComputationalMathematics.Analysis.SingularValues.ExtremeValues
 
 /-!
 # Vershynin Chapter 4, Theorem 4.6.1
@@ -11,11 +12,12 @@ open scoped ENNReal
 
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, Theorem 4.6.1 / Equation (4.21): the extreme singular values
-of a matrix with independent, mean-zero, isotropic sub-Gaussian rows lie
-within `C K² (√n+t)` of `√m`, except on an event of probability at most
-`2 exp (-t²)`.  The column count is written as `n+1` so both extreme singular
-values are defined without an external positive-dimension hypothesis. -/
+/-- Vershynin, Theorem 4.6.1: the extreme coefficients of any certified
+ordered SVD of a random matrix with independent mean-zero isotropic
+sub-Gaussian rows satisfy the two-sided estimate at scale `C K² (√n+t)`
+with simultaneous failure probability at most `2 exp (-t²)`.
+Each matrix admits a certificate and every certificate has the same endpoint
+coefficients, so no measurability premise on certificate choices is required. -/
 theorem hdp_04_theorem_4_6_1 :
     ∃ C : ℝ, 0 < C ∧
       ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
@@ -32,72 +34,38 @@ theorem hdp_04_theorem_4_6_1 :
           (fun j ω => A ω i j) ≤ ENNReal.ofReal K) →
         iIndepFun (fun i ω => fun j => A ω i j) μ →
         ∀ {t : ℝ}, 0 ≤ t →
+          ∀ (r : Ω → ℕ) (s : Ω → Fin (n + 1) → ℝ)
+            (u : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin m))
+            (v : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin (n + 1))),
+            (∀ ω, NumStability.IsRealMatrixSVD (A ω) (r ω) (s ω) (u ω) (v ω)) →
           μ.real {ω |
             Real.sqrt (m : ℝ) -
                   C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
-                NumStability.rectCourantFischerSingularValue
-                  (A ω) (Fin.last n) ∨
-              NumStability.rectCourantFischerSingularValue
-                  (A ω) (0 : Fin (n + 1)) >
+                s ω (Fin.last n) ∨
+              s ω ⟨0, Nat.succ_pos n⟩ >
                 Real.sqrt (m : ℝ) +
                   C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
             2 * Real.exp (-(t ^ 2)) := by
   rcases
-      NumStability.HDP.Matrix.exists_normalizedGramDeviation_tail_of_independent_isotropic_subGaussian_rows with
+      NumStability.HDP.Matrix.exists_extremeSingularValue_tail_of_independent_isotropic_subGaussian_rows with
     ⟨C, hC, htail⟩
   refine ⟨C, hC, ?_⟩
-  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp _hMean hIso hPsi hIndep t ht
-  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK
-  let δ : ℝ := C *
-    (Real.sqrt (((n + 1 : ℕ) : ℝ) / (m : ℝ)) +
-      t / Real.sqrt (m : ℝ))
-  have hδ : 0 < δ := by
-    dsimp [δ]
-    have : 0 < Real.sqrt (((n + 1 : ℕ) : ℝ) / (m : ℝ)) := by
-      positivity
-    positivity
-  have htail' := htail hm (Nat.succ_pos n) A hKpos hMeas hLp hIso hPsi hIndep ht
-  have hmreal : 0 < (m : ℝ) := by exact_mod_cast hm
-  have hsqrtm : 0 < Real.sqrt (m : ℝ) := Real.sqrt_pos.2 hmreal
-  have hscale :
-      Real.sqrt (m : ℝ) * (K ^ 2 * δ) =
-        C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) := by
-    dsimp [δ]
-    rw [Real.sqrt_div (by positivity : (0 : ℝ) ≤ (n + 1 : ℕ))]
-    field_simp
-    norm_num [Nat.cast_add, Nat.cast_one]
-  have hsubset :
-      {ω |
-        Real.sqrt (m : ℝ) -
-              C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
-            NumStability.rectCourantFischerSingularValue
-              (A ω) (Fin.last n) ∨
-          NumStability.rectCourantFischerSingularValue
-              (A ω) (0 : Fin (n + 1)) >
-            Real.sqrt (m : ℝ) +
-              C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ⊆
-      {ω |
-        K ^ 2 * max δ (δ ^ 2) <
-          NumStability.realMatrixOperatorNorm
-            (((m : ℝ)⁻¹) • ((A ω).transpose * A ω) -
-              (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ))} := by
-    intro ω hbad
-    by_contra hnot
-    have hGram :
-        NumStability.realMatrixOperatorNorm
-            (((m : ℝ)⁻¹) • ((A ω).transpose * A ω) -
-              (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ)) ≤
-          K ^ 2 * max δ (δ ^ 2) := le_of_not_gt hnot
-    have hs :=
-      NumStability.HDP.Matrix.extremeSingularValueBounds_of_normalizedGramDeviation
-        hm (A ω) hK hδ hGram
-    rw [hscale] at hs
-    rcases hbad with hbad | hbad
-    · exact (not_lt_of_ge hs.1) hbad
-    · exact (not_lt_of_ge hs.2.2) hbad
-  exact (measureReal_mono hsubset (by
-    exact ne_top_of_le_ne_top
-      (show μ Set.univ ≠ (⊤ : ℝ≥0∞) by simp)
-      (measure_mono (Set.subset_univ _)))).trans htail'
+  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hPsi hIndep t ht
+    r s u v hSVD
+  have hevent :
+      {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+          s ω (Fin.last n) ∨
+        s ω ⟨0, Nat.succ_pos n⟩ >
+          Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} =
+      {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+          NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ∨
+        NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1)) >
+          Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} := by
+    ext ω
+    simp only [Set.mem_setOf_eq]
+    rw [(hSVD ω).extremeSingularValues_eq_rectCourantFischer.1,
+      (hSVD ω).extremeSingularValues_eq_rectCourantFischer.2]
+  rw [hevent]
+  exact htail hm A hK hMeas hLp hMean hIso hPsi hIndep ht
 
 end NumStability.HDP.Contract

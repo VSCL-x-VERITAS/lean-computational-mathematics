@@ -32,20 +32,20 @@ theorem hdp_04_exercise_4_6_4 :
           (fun j ω => A ω i j) ≤ ENNReal.ofReal K) →
         iIndepFun (fun i ω => fun j => A ω i j) μ →
         ∀ {t : ℝ}, 0 ≤ t →
+          ∀ (r : Ω → ℕ) (s : Ω → Fin (n + 1) → ℝ)
+            (u : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin m))
+            (v : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin (n + 1))),
+            (∀ ω, NumStability.IsRealMatrixSVD (A ω) (r ω) (s ω) (u ω) (v ω)) →
           (∀ ω i,
-              NumStability.rectCourantFischerSingularValue
-                  (A ω) (Fin.last n) ≤
-                NumStability.rectCourantFischerSingularValue (A ω) i ∧
-              NumStability.rectCourantFischerSingularValue (A ω) i ≤
-                NumStability.rectCourantFischerSingularValue
-                  (A ω) (0 : Fin (n + 1))) ∧
+              s ω (Fin.last n) ≤
+                s ω i ∧
+              s ω i ≤
+                s ω ⟨0, Nat.succ_pos n⟩) ∧
             μ.real {ω |
               Real.sqrt (m : ℝ) -
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
-                  NumStability.rectCourantFischerSingularValue
-                    (A ω) (Fin.last n) ∨
-                NumStability.rectCourantFischerSingularValue
-                    (A ω) (0 : Fin (n + 1)) >
+                  s ω (Fin.last n) ∨
+                s ω ⟨0, Nat.succ_pos n⟩ >
                   Real.sqrt (m : ℝ) +
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
               2 * Real.exp (-(t ^ 2)) := by

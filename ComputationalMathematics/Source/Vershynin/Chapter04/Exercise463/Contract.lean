@@ -1,4 +1,4 @@
-import ComputationalMathematics.Source.Vershynin.Chapter04.Theorem461.Contract
+import ComputationalMathematics.HDP.Matrix.IsotropicRows
 import ComputationalMathematics.HDP.Matrix.SingularValueIntegrability
 import ComputationalMathematics.HDP.Probability.TailExpectation
 
@@ -49,7 +49,7 @@ theorem hdp_04_exercise_4_6_3 :
           (∫ ω, NumStability.rectCourantFischerSingularValue
               (A ω) (0 : Fin (n + 1)) ∂μ) ≤
             Real.sqrt (m : ℝ) + D * K ^ 2 * Real.sqrt (n + 1 : ℝ) := by
-  rcases hdp_04_theorem_4_6_1 with ⟨C, hC, htail⟩
+  rcases NumStability.HDP.Matrix.exists_extremeSingularValue_tail_of_independent_isotropic_subGaussian_rows with ⟨C, hC, htail⟩
   let D : ℝ := 3 * C
   have hD : 0 < D := by dsimp [D]; positivity
   refine ⟨D, hD, ?_⟩

@@ -1,64 +1,60 @@
 import ComputationalMathematics.HDP.Graph.SpectralClustering
-import ComputationalMathematics.Analysis.Eigenvalues.OrderedSpectrum
 import Mathlib.Combinatorics.SimpleGraph.AdjMatrix
 
 /-!
 # Vershynin Chapter 4, graph spectral clustering algorithm
+
+An undirected loopless adjacency relation describes exactly a simple graph.
+The full decreasing eigenbasis and the sign outputs are stated in coordinates.
 -/
 
 noncomputable section
 
-open Matrix Set
-
 namespace NumStability.HDP.Contract
 
-/-- Vershynin's graph spectral-clustering algorithm, with all three printed
-steps visible in the contract: form the adjacency matrix of the input graph,
-select a nonzero eigenvector at its second ordered eigenvalue, and partition
-vertices by positive versus nonpositive coefficients. -/
+/-- Vershynin's graph spectral-clustering algorithm: construct the adjacency
+matrix, select the second vector in a complete decreasing eigenbasis, and put
+strictly positive coordinates in the first community and all others in the
+second. Symmetry and looplessness express the input graph domain; every
+`SimpleGraph` supplies these fields, and conversely they construct one.
+No eigengap or nonempty-community hypothesis is imposed. -/
 theorem hdp_04_algorithm_4_5_spectral_clustering {n : ℕ}
-    (G : SimpleGraph (Fin n)) [DecidableRel G.Adj] (hn : 1 < n) :
-    ∃ (A : Matrix (Fin n) (Fin n) ℝ) (_hA : A.IsHermitian)
-      (v : EuclideanSpace ℝ (Fin n))
+    (adj : Fin n → Fin n → Prop) [DecidableRel adj]
+    (hsym : ∀ i j, adj i j → adj j i) (hloop : ∀ i, ¬adj i i)
+    (hn : 1 < n) :
+    let A : Matrix (Fin n) (Fin n) ℝ := fun i j ↦ if adj i j then 1 else 0
+    ∃ (eigenvalue : Fin n → ℝ) (b : Fin n → Fin n → ℝ)
       (first second : Set (Fin n)),
-      A = G.adjMatrix ℝ ∧
-      (∀ i j : Fin n, A i j = if G.Adj i j then 1 else 0) ∧
-      (∀ i : Fin n, A i i = 0) ∧
-      NumStability.HDP.Graph.SpectralClustering.IsSecondOrderedEigenvector
-        A hn v ∧
-      v ≠ 0 ∧
-      first = {j | 0 < v j} ∧
-      second = {j | v j ≤ 0} ∧
-      first ∪ second = Set.univ ∧ Disjoint first second := by
+      (∀ i j, i.val ≤ j.val → eigenvalue j ≤ eigenvalue i) ∧
+      (∀ i j, (∑ k, b i k * b j k) = if i = j then 1 else 0) ∧
+      (∀ x : Fin n → ℝ, ∀ j, (∑ i, (∑ k, b i k * x k) * b i j) = x j) ∧
+      (∀ i j, (∑ k, A j k * b i k) = eigenvalue i * b i j) ∧
+      (∀ j, j ∈ first ↔ 0 < b ⟨1, hn⟩ j) ∧
+      (∀ j, j ∈ second ↔ b ⟨1, hn⟩ j ≤ 0) := by
+  let G : SimpleGraph (Fin n) :=
+    { Adj := adj, symm := hsym, loopless := ⟨hloop⟩ }
   let A : Matrix (Fin n) (Fin n) ℝ := G.adjMatrix ℝ
   have hA : A.IsHermitian := by
     ext i j
     simp [A, Matrix.conjTranspose]
-  let v := NumStability.HDP.Graph.SpectralClustering.secondEigenvector A hA hn
-  let first : Set (Fin n) := {j | 0 < v j}
-  let second : Set (Fin n) := {j | v j ≤ 0}
-  refine ⟨A, hA, v, first, second, rfl, ?_, ?_,
-    NumStability.HDP.Graph.SpectralClustering.secondEigenvector_completeOrderedCertificate
-      A hA hn,
-    ?_, rfl, rfl, ?_, ?_⟩
+  let eigenvalue := NumStability.hermitianOrderedEigenvalue hA
+  let B := NumStability.hermitianOrderedEigenbasis hA
+  let b : Fin n → Fin n → ℝ := fun i ↦ WithLp.ofLp (B i)
+  refine ⟨eigenvalue, b, {j | 0 < b ⟨1, hn⟩ j}, {j | b ⟨1, hn⟩ j ≤ 0},
+    ?_, ?_, ?_, ?_, fun _ ↦ Iff.rfl, fun _ ↦ Iff.rfl⟩
+  · intro i j hij
+    exact NumStability.hermitianOrderedEigenvalue_antitone hA hij
   · intro i j
-    simp [A, SimpleGraph.adjMatrix_apply]
-  · intro i
-    simp [A]
-  · intro hv
-    have hvnorm :=
-      (NumStability.HDP.Graph.SpectralClustering.secondEigenvector_spec A hA hn).1
-    change ‖v‖ = 1 at hvnorm
-    rw [hv, norm_zero] at hvnorm
-    norm_num at hvnorm
-  · ext j
-    simp only [first, second, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ,
-      iff_true]
-    exact lt_or_ge 0 (v j)
-  · rw [Set.disjoint_left]
-    intro j hjpos hjnonpos
-    change 0 < v j at hjpos
-    change v j ≤ 0 at hjnonpos
-    exact (not_le_of_gt hjpos) hjnonpos
+    have h := (orthonormal_iff_ite.mp B.orthonormal) i j
+    simpa [b, PiLp.inner_apply, real_inner_eq_re_inner, RCLike.inner_apply, mul_comm] using h
+  · intro x j
+    have h := congrArg (fun y : EuclideanSpace ℝ (Fin n) ↦ y j)
+      (B.sum_repr' (WithLp.toLp 2 x))
+    simpa [b, PiLp.inner_apply, real_inner_eq_re_inner, RCLike.inner_apply, mul_comm] using h
+  · intro i j
+    have h := congrArg (fun y : EuclideanSpace ℝ (Fin n) ↦ y j)
+      (NumStability.hermitianOrderedEigenbasis_apply hA i)
+    simpa [A, G, B, b, eigenvalue, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct,
+      SimpleGraph.adjMatrix_apply] using h
 
 end NumStability.HDP.Contract

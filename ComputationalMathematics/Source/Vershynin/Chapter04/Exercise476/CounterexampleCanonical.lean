@@ -1,5 +1,6 @@
 import ComputationalMathematics.Source.Vershynin.Chapter04.Exercise476.CounterexampleScalar
 import ComputationalMathematics.HDP.Vector.GaussianMixtureCounterexample
+import ComputationalMathematics.Source.Vershynin.Chapter04.Algorithm47SpectralClustering.Contract
 
 /-!
 # Canonical Gaussian-mixture counterexample for Chapter 4
@@ -12,6 +13,7 @@ guarantee; the corrected source result remains separately named and audited.
 noncomputable section
 
 open Filter MeasureTheory ProbabilityTheory Set
+open scoped ENNReal
 
 namespace NumStability.HDP.Contract.Theorem475Counterexample
 
@@ -118,8 +120,10 @@ theorem eventually_coordinate_counterexample
 Gaussian-mixture family eventually satisfies both printed hypotheses while
 every null-measurable event certifying recovery for any data-only direction
 rule has probability strictly below `1 - 4 exp (-n)`. This information-theoretic
-obstruction exposes the probability normalization and common independent
-point laws. A normalized top-eigenvector selector is also constructed, so
+obstruction exposes probability normalization, finite joint label/noise
+rectangle probabilities, fair-label marginals and the common point pushforward
+law. Completed events are expressed by ordinary measurable representatives
+agreeing almost everywhere, without strengthening the event hypothesis. A normalized top-eigenvector selector is also constructed, so
 the spectral subclass is nonempty. The obstruction applies to its coordinate
 directions without requiring measurability of that basis choice or of the
 whole recovery set. A probability guarantee would have to supply a measurable
@@ -132,36 +136,43 @@ theorem eventually_dataOnly_counterexample
           coordinateMean hn (radius A k)
         let μ := NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure
           k (dimension A c k)
-        let points := fun i ω ↦
-          NumStability.HDP.Vector.GaussianMixture.canonicalPoint mean ω i
+        let points := fun i ω j ↦ (ω i).1 * mean j + (ω i).2 j
         0 < epsilon k ∧
         A * Real.sqrt (Real.log (1 / epsilon k)) ≤ NumStability.vecNorm2 mean ∧
         Real.rpow (((dimension A c k : ℕ) : ℝ) /
           NumStability.vecNorm2 mean) c ≤ (k : ℝ) ∧
         μ Set.univ = 1 ∧
-        iIndepFun points μ ∧
-        (∀ i, HasLaw (points i)
-          (NumStability.HDP.Vector.GaussianMixture.gaussianMixtureMeasure mean) μ) ∧
-        (∀ᵐ ω ∂μ, ∀ i,
-          NumStability.HDP.Vector.GaussianMixture.canonicalLabel ω i = -1 ∨
-            NumStability.HDP.Vector.GaussianMixture.canonicalLabel ω i = 1) ∧
+        (∀ (S : Finset (Fin k)) (L : Fin k → Set ℝ)
+          (B : Fin k → Set (Fin (dimension A c k) → ℝ)),
+          (∀ i ∈ S, MeasurableSet (L i)) →
+          (∀ i ∈ S, MeasurableSet (B i)) →
+          μ {ω | ∀ i ∈ S, (ω i).1 ∈ L i ∧ (ω i).2 ∈ B i} =
+            ∏ i ∈ S,
+              NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherPMF.toMeasure (L i) *
+                NumStability.standardGaussianVectorMeasure (dimension A c k) (B i)) ∧
+        (∀ i, Measurable (points i) ∧
+          μ.map (points i) =
+            Measure.map (fun z : ℝ × (Fin (dimension A c k) → ℝ) ↦
+              fun j ↦ z.1 * mean j + z.2 j)
+              (NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherPMF.toMeasure.prod
+                (NumStability.standardGaussianVectorMeasure (dimension A c k)))) ∧
+        (∀ i, μ {ω | (ω i).1 = -1} = 1 / 2 ∧
+          μ {ω | (ω i).1 = 1} = 1 / 2) ∧
         (∃ spectralRule :
-            (Fin k → Fin (dimension A c k) → ℝ) →
-              EuclideanSpace ℝ (Fin (dimension A c k)),
-          ∀ X, ‖spectralRule X‖ = 1 ∧
-            ∃ eigenvalue : ℝ,
-              (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment X).toEuclideanLin
-                  (spectralRule X) = eigenvalue • spectralRule X ∧
-              ∀ w : EuclideanSpace ℝ (Fin (dimension A c k)), ‖w‖ = 1 →
-                NumStability.matrixRayleighForm
-                    (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment X) w ≤
-                  NumStability.matrixRayleighForm
-                    (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment X)
-                    (spectralRule X)) ∧
+            (Fin k → Fin (dimension A c k) → ℝ) → Fin (dimension A c k) → ℝ,
+          ∀ X,
+            let M : Matrix (Fin (dimension A c k)) (Fin (dimension A c k)) ℝ :=
+              fun a b ↦ (k : ℝ)⁻¹ * ∑ i, X i a * X i b
+            (∑ j, spectralRule X j ^ 2) = 1 ∧
+              ∃ eigenvalue : ℝ,
+                (∀ a, (∑ b, M a b * spectralRule X b) = eigenvalue * spectralRule X a) ∧
+                ∀ w : Fin (dimension A c k) → ℝ, (∑ j, w j ^ 2) = 1 →
+                  (∑ a, w a * ∑ b, M a b * w b) ≤ eigenvalue) ∧
         ∀ directionRule :
             (Fin k → Fin (dimension A c k) → ℝ) → Fin (dimension A c k) → ℝ,
           ∀ good : Set (Fin k → ℝ × (Fin (dimension A c k) → ℝ)),
-            NullMeasurableSet good μ →
+            (∃ measurable : Set (Fin k → ℝ × (Fin (dimension A c k) → ℝ)),
+              MeasurableSet measurable ∧ good =ᵐ[μ] measurable) →
             (∀ ω ∈ good,
             NumStability.HDP.Vector.GaussianMixture.MakesAtMostPartitionErrorsUpToSwap
               (fun i ↦ NumStability.HDP.Vector.GaussianMixture.canonicalLabel ω i)
@@ -179,28 +190,45 @@ theorem eventually_dataOnly_counterexample
   dsimp only at hbase ⊢
   refine ⟨hk, hn, hbase.1, hbase.2.1, hbase.2.2.1, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · simp [NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure]
-  · exact NumStability.HDP.Vector.GaussianMixture.canonicalPoints_iIndep
-      k (dimension A c k) mean
-  · exact NumStability.HDP.Vector.GaussianMixture.canonicalPoint_hasLaw
-      k (dimension A c k) mean
-  · exact NumStability.HDP.Vector.GaussianMixture.canonicalLabels_ae_eq_neg_one_or_one
-      k (dimension A c k)
-  · refine ⟨NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector hn,
+  · intro S L B hL hB
+    exact NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure_finite_rectangle
+      k (dimension A c k) S L B hL hB
+  · intro i
+    exact ⟨NumStability.HDP.Vector.GaussianMixture.measurable_canonicalPoint mean i,
+      (NumStability.HDP.Vector.GaussianMixture.canonicalPoint_hasLaw
+        k (dimension A c k) mean i).map_eq⟩
+  · intro i
+    have hmass (a : ℝ) :
+        (NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure
+          k (dimension A c k)) {ω | (ω i).1 = a} =
+            NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherPMF a := by
+      change (NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure
+        k (dimension A c k))
+          ((fun ω ↦ NumStability.HDP.Vector.GaussianMixture.canonicalLabel ω i) ⁻¹' {a}) = _
+      rw [← Measure.map_apply (by
+          unfold NumStability.HDP.Vector.GaussianMixture.canonicalLabel
+          fun_prop) (measurableSet_singleton a),
+        (NumStability.HDP.Vector.GaussianMixture.canonicalLabel_hasLaw
+          k (dimension A c k) i).map_eq,
+        PMF.toMeasure_apply_singleton _ _ (measurableSet_singleton _)]
+    exact ⟨(hmass (-1)).trans
+        NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherPMF_mass_neg_one,
+      (hmass 1).trans NumStability.HDP.Scalar.IndependentSums.Hoeffding.rademacherPMF_mass_one⟩
+  · refine ⟨fun X ↦ WithLp.ofLp
+      (NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector hn X),
       fun X ↦ ?_⟩
-    have htop :=
-      NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector_isTopRayleigh hn X
-    refine ⟨htop.1,
-      NumStability.hermitianOrderedEigenvalue
-        (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment_isHermitian X)
-        ⟨0, hn⟩, ?_, htop.2⟩
-    exact NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment_apply_leadingEigenvector
-      hn X
+    have hspec := hdp_04_algorithm_4_7_spectral_clustering hn X
+    exact ⟨hspec.1, hspec.2.1⟩
   · intro directionRule good hgood hcertificate
+    rcases hgood with ⟨measurable, hmeasurable, hae⟩
+    have hnull : NullMeasurableSet good
+        (NumStability.HDP.Vector.GaussianMixture.latentNoiseSampleMeasure
+          k (dimension A c k)) := ⟨measurable, hmeasurable, hae⟩
     have hupper :=
       NumStability.HDP.Vector.GaussianMixture.coordinateMean_canonical_partitionCertificate_real_upper
         hk2 hn (radius A k) (epsilon k * k) directionRule
         (radius_pos hA (by omega)).le (epsilon_mul_sampleSize_lt_one hk)
-        good hgood hcertificate
+        good hnull hcertificate
     exact hupper.trans_lt (by linarith)
 
 /-- The literal printed finite-sample claim, with its original `epsilon * m`

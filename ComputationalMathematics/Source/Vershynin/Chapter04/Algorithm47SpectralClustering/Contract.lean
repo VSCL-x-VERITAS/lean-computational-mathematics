@@ -1,42 +1,73 @@
 import ComputationalMathematics.HDP.Vector.EuclideanSpectralClustering
-import ComputationalMathematics.HDP.Vector.SpectralClustering
 
 /-!
 # Vershynin Chapter 4, spectral clustering algorithm for point sets
+
+The actual selected direction is characterized by coordinate eigen-equations
+and maximality on the Euclidean unit sphere, followed by the printed sign rule.
 -/
 
 noncomputable section
 
-open Matrix Set
-
 namespace NumStability.HDP.Contract
 
-/-- Vershynin, Section 4.7.1: form the uncentered sample second moment, select
-a Euclidean unit eigenvector for its largest eigenvalue, and partition the
-input points by projection sign.  The nonpositive side implements the
-source's specified tie convention. -/
+/-- Vershynin, Section 4.7.1: form the uncentered empirical second moment,
+choose a unit leading eigenvector, and split the sample by projection sign.
+Unit normalization is a compatible algorithm choice. The case `m=0` is a
+nonvacuous totalization beyond the printed averaging domain. -/
 theorem hdp_04_algorithm_4_7_spectral_clustering {m n : ℕ}
     (hn : 0 < n) (X : Fin m → Fin n → ℝ) :
+    let M : Matrix (Fin n) (Fin n) ℝ :=
+      fun a b ↦ (m : ℝ)⁻¹ * ∑ i, X i a * X i b
     let v := NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector hn X
-    NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment X =
-        NumStability.HDP.Vector.Covariance.sampleCovariance X ∧
-      ‖v‖ = 1 ∧
-      (∀ w : EuclideanSpace ℝ (Fin n), ‖w‖ = 1 →
-        NumStability.matrixRayleighForm
-            (NumStability.HDP.Vector.Covariance.sampleCovariance X) w ≤
-          NumStability.matrixRayleighForm
-            (NumStability.HDP.Vector.Covariance.sampleCovariance X) v) ∧
-      (NumStability.HDP.Vector.SpectralClustering.positiveCluster v X ∪
-          NumStability.HDP.Vector.SpectralClustering.nonpositiveCluster v X = Set.univ) ∧
-      Disjoint
-        (NumStability.HDP.Vector.SpectralClustering.positiveCluster v X)
-        (NumStability.HDP.Vector.SpectralClustering.nonpositiveCluster v X) := by
+    (∑ j, v j ^ 2) = 1 ∧
+      (∃ eigenvalue : ℝ,
+        (∀ a, (∑ b, M a b * v b) = eigenvalue * v a) ∧
+        (∀ w : Fin n → ℝ, (∑ j, w j ^ 2) = 1 →
+          (∑ a, w a * ∑ b, M a b * w b) ≤ eigenvalue)) ∧
+      (∃ first second : Set (Fin m),
+        (∀ i, i ∈ first ↔ 0 < ∑ j, v j * X i j) ∧
+        (∀ i, i ∈ second ↔ (∑ j, v j * X i j) ≤ 0)) := by
   dsimp only
-  refine ⟨rfl, ?_, ?_, ?_⟩
-  · exact NumStability.HDP.Vector.EuclideanSpectralClustering.norm_leadingEigenvector hn X
-  · exact
-      (NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector_isTopRayleigh
-        hn X).2
-  · exact NumStability.HDP.Vector.SpectralClustering.signClusters_partition _ X
+  let v := NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector hn X
+  let M := NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment X
+  let eigenvalue := NumStability.hermitianOrderedEigenvalue
+    (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment_isHermitian X)
+    ⟨0, hn⟩
+  have hvnorm : ‖v‖ = 1 :=
+    NumStability.HDP.Vector.EuclideanSpectralClustering.norm_leadingEigenvector hn X
+  have hnormsq (w : EuclideanSpace ℝ (Fin n)) : ‖w‖ ^ 2 = ∑ j, w j ^ 2 := by
+    simpa only [Real.norm_eq_abs, sq_abs] using PiLp.norm_sq_eq_of_L2 (fun _ ↦ ℝ) w
+  have hvunit : (∑ j, v j ^ 2) = 1 := by rw [← hnormsq, hvnorm]; norm_num
+  have heigen :=
+    NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment_apply_leadingEigenvector
+      hn X
+  have hmax :=
+    NumStability.HDP.Vector.EuclideanSpectralClustering.leadingEigenvector_isTopRayleigh hn X
+  have hray (w : EuclideanSpace ℝ (Fin n)) :
+      NumStability.matrixRayleighForm M w = ∑ a, w a * ∑ b, M a b * w b := by
+    simp [NumStability.matrixRayleighForm, PiLp.inner_apply, real_inner_eq_re_inner,
+      RCLike.inner_apply, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct, mul_comm]
+  have hattain : NumStability.matrixRayleighForm M v = eigenvalue :=
+    NumStability.matrixRayleighForm_hermitianOrderedEigenbasis
+      (NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment_isHermitian X)
+      ⟨0, hn⟩
+  refine ⟨hvunit, ⟨eigenvalue, ?_, ?_⟩,
+    ⟨{i | 0 < ∑ j, v j * X i j}, {i | (∑ j, v j * X i j) ≤ 0},
+      fun _ ↦ Iff.rfl, fun _ ↦ Iff.rfl⟩⟩
+  · intro a
+    have h := congrArg (fun w : EuclideanSpace ℝ (Fin n) ↦ w a) heigen
+    simpa [M, v, eigenvalue, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct,
+      NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment,
+      NumStability.HDP.Vector.Covariance.sampleCovariance] using h
+  · intro w hw
+    have hwunit : ‖WithLp.toLp 2 w‖ = 1 := by
+      have hsq : ‖WithLp.toLp 2 w‖ ^ 2 = 1 := (hnormsq _).trans hw
+      nlinarith [norm_nonneg (WithLp.toLp 2 w)]
+    have h := (hmax.2 (WithLp.toLp 2 w) hwunit).trans_eq hattain
+    rw [hray] at h
+    simpa [M,
+      NumStability.HDP.Vector.EuclideanSpectralClustering.sampleSecondMoment,
+      NumStability.HDP.Vector.Covariance.sampleCovariance] using h
 
 end NumStability.HDP.Contract

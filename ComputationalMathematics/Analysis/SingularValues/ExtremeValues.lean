@@ -99,4 +99,42 @@ theorem realRectToCMatrix_last_singularValue_eq_rectCourantFischer
     nlinarith
   exact le_antisymm hc_le_hr hr_le_hc
 
+/-- The extreme coefficients of every real SVD agree with the explicit real
+Courant--Fischer endpoints, including rank-deficient and wide matrices. -/
+theorem IsRealMatrixSVD.extremeSingularValues_eq_rectCourantFischer
+    {m n r : ℕ}
+    {A : Matrix (Fin m) (Fin (n + 1)) ℝ}
+    {s : Fin (n + 1) → ℝ}
+    {u : Fin r → EuclideanSpace ℝ (Fin m)}
+    {v : Fin r → EuclideanSpace ℝ (Fin (n + 1))}
+    (h : IsRealMatrixSVD A r s u v) :
+    s (Fin.last n) = rectCourantFischerSingularValue A (Fin.last n) ∧
+      s ⟨0, Nat.succ_pos n⟩ = rectCourantFischerSingularValue A (0 : Fin (n + 1)) := by
+  have hlast : s (Fin.last n) =
+      rectCourantFischerSingularValue A (Fin.last n) :=
+    (h.singularValue_eq_canonical (Fin.last n)).trans
+      (realRectToCMatrix_last_singularValue_eq_rectCourantFischer A)
+  have hfirst : s ⟨0, Nat.succ_pos n⟩ =
+      rectCourantFischerSingularValue A (0 : Fin (n + 1)) :=
+    h.leadingSingularValue_eq_operatorNorm.trans
+      (rectCourantFischerSingularValue_zero_eq_operatorNorm
+        (Nat.succ_pos n) A).symm
+  exact ⟨hlast, hfirst⟩
+
+/-- The first and last coefficients of any ordered real SVD are the sharp
+Euclidean expansion constants. This transports the existing canonical
+endpoint bounds and does not depend on the choice of SVD certificate. -/
+theorem IsRealMatrixSVD.extremeSingularValues_areOptimalBounds
+    {m n r : ℕ}
+    {A : Matrix (Fin m) (Fin (n + 1)) ℝ}
+    {s : Fin (n + 1) → ℝ}
+    {u : Fin r → EuclideanSpace ℝ (Fin m)}
+    {v : Fin r → EuclideanSpace ℝ (Fin (n + 1))}
+    (h : IsRealMatrixSVD A r s u v) :
+    AreOptimalExtremeSingularValueBounds A
+      (s (Fin.last n)) (s ⟨0, Nat.succ_pos n⟩) := by
+  rw [h.extremeSingularValues_eq_rectCourantFischer.1,
+    h.extremeSingularValues_eq_rectCourantFischer.2]
+  exact rectCourantFischer_extremeSingularValues_areOptimalBounds A
+
 end NumStability
