@@ -1,4 +1,5 @@
 import ComputationalMathematics.HDP.Vector.SubGaussianL2
+import ComputationalMathematics.HDP.Vector.SubGaussianDomination
 
 /-!
 # Vershynin Chapter 4, Equation (4.24)
@@ -54,5 +55,44 @@ theorem hdp_04_equation_4_24 {Ω : Type*} [MeasurableSpace Ω]
                 (K : ℝ≥0∞) *
                   eLpNorm (NumStability.HDP.Vector.linearMarginal X x) 2 μ := by
   rfl
+
+/-- The Equation (4.24) condition with its finite `L²` norm written as the
+square root of the ordinary second moment, as in the source's footnote.
+The same uniform finite `K ≥ 1` controls all scalar marginals, whose
+sub-Gaussian membership and square-integrability remain explicit. -/
+theorem equation424Condition_iff_ordinary_second_moment
+    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} {n : ℕ}
+    (X : Fin n → Ω → ℝ) :
+    Equation424Condition (μ := μ) X ↔
+      (∀ j, Measurable (X j)) ∧
+        ∃ K : ℝ≥0, 1 ≤ K ∧
+          ∀ x : Fin n → ℝ,
+            NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ
+                (NumStability.HDP.Vector.linearMarginal X x) ∧
+              MemLp (NumStability.HDP.Vector.linearMarginal X x) 2 μ ∧
+              NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+                  (NumStability.HDP.Vector.linearMarginal X x) ≤
+                (K : ℝ≥0∞) * ENNReal.ofReal
+                  (Real.sqrt (∫ ω,
+                    (NumStability.HDP.Vector.linearMarginal X x ω) ^ 2 ∂μ)) := by
+  constructor
+  · rintro ⟨hMeas, K, hK, hMarginal⟩
+    refine ⟨hMeas, K, hK, ?_⟩
+    intro x
+    obtain ⟨hSG, hFinite, hBound⟩ := hMarginal x
+    have hMarginalMeas :=
+      NumStability.HDP.Vector.SubGaussian.measurable_linearMarginal hMeas x
+    have hLp : MemLp (NumStability.HDP.Vector.linearMarginal X x) 2 μ :=
+      ⟨hMarginalMeas.aestronglyMeasurable, hFinite⟩
+    refine ⟨hSG, hLp, ?_⟩
+    rwa [NumStability.HDP.Scalar.Preliminaries.eLpNorm_two_eq_ofReal_sqrt_integral_sq
+      hLp] at hBound
+  · rintro ⟨hMeas, K, hK, hMarginal⟩
+    refine ⟨hMeas, K, hK, ?_⟩
+    intro x
+    obtain ⟨hSG, hLp, hBound⟩ := hMarginal x
+    refine ⟨hSG, hLp.eLpNorm_lt_top, ?_⟩
+    rwa [NumStability.HDP.Scalar.Preliminaries.eLpNorm_two_eq_ofReal_sqrt_integral_sq
+      hLp]
 
 end NumStability.HDP.Contract

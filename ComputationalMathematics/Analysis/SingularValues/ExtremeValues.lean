@@ -148,4 +148,39 @@ theorem IsRealMatrixSVD.extremeSingularValues_areOptimalBounds
     h.extremeSingularValues_eq_rectCourantFischer.2]
   exact rectCourantFischer_extremeSingularValues_areOptimalBounds A
 
+/-- Convert a uniform unsquared action-norm bound into any optimal endpoints. -/
+theorem optimalExtremeSingularValueBounds_of_unit_normDeviation_le
+    {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ)
+    {lower upper b L : ℝ}
+    (hopt : NumStability.AreOptimalExtremeSingularValueBounds A lower upper)
+    (hunit : ∀ x : EuclideanSpace ℝ (Fin n), ‖x‖ = 1 →
+      |‖Matrix.toEuclideanLin A x‖ - b| ≤ L) :
+    b - L ≤ lower ∧ upper ≤ b + L := by
+  have hall : ∀ x : EuclideanSpace ℝ (Fin n),
+      (b - L) * ‖x‖ ≤ ‖Matrix.toEuclideanLin A x‖ ∧
+        ‖Matrix.toEuclideanLin A x‖ ≤ (b + L) * ‖x‖ := by
+    intro x
+    by_cases hx : x = 0
+    · simp [hx]
+    · let a : ℝ := ‖x‖
+      have ha : 0 < a := norm_pos_iff.mpr hx
+      let y : EuclideanSpace ℝ (Fin n) := a⁻¹ • x
+      have hy : ‖y‖ = 1 := by simp [y, a, norm_smul, ha.ne']
+      have hdev := abs_le.mp (hunit y hy)
+      have hxy : x = a • y := by simp [y, a, ha.ne']
+      have hnorm : ‖Matrix.toEuclideanLin A x‖ =
+          a * ‖Matrix.toEuclideanLin A y‖ := by
+        rw [hxy, map_smul, norm_smul]
+        simp [a]
+      rw [hnorm]
+      change (b - L) * a ≤ a * ‖Matrix.toEuclideanLin A y‖ ∧
+        a * ‖Matrix.toEuclideanLin A y‖ ≤ (b + L) * a
+      constructor
+      · nlinarith [mul_le_mul_of_nonneg_left
+          (show b - L ≤ ‖Matrix.toEuclideanLin A y‖ by linarith) ha.le]
+      · nlinarith [mul_le_mul_of_nonneg_left
+          (show ‖Matrix.toEuclideanLin A y‖ ≤ b + L by linarith) ha.le]
+  exact ⟨hopt.2.2 (b - L) (fun x => (hall x).1),
+    hopt.2.1 (b + L) (fun x => (hall x).2)⟩
+
 end NumStability

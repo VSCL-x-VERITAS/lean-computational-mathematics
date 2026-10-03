@@ -1,4 +1,4 @@
-import ComputationalMathematics.Source.Vershynin.Chapter04.Equation421.Contract
+import ComputationalMathematics.HDP.Matrix.NormConcentration
 
 /-!
 # Vershynin Chapter 4, Exercise 4.6.4
@@ -12,10 +12,9 @@ open scoped ENNReal
 namespace NumStability.HDP.Contract
 
 /-- Vershynin, Exercise 4.6.4: the conclusion of Theorem 4.6.1, whose
-suggested alternative proof combines the norm concentration theorem with a
-finite-net union bound.  A proof method does not alter the proposition being
-proved, so this source-facing contract repeats the complete theorem statement
-as a separately tracked exercise result. -/
+alternative proof combines Theorem 3.1.1 norm concentration with the
+unsquared net estimate from Exercise 4.4.4 and a finite union bound.
+The complete endpoint statement is preserved. -/
 theorem hdp_04_exercise_4_6_4 :
     ∃ C : ℝ, 0 < C ∧
       ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
@@ -49,11 +48,35 @@ theorem hdp_04_exercise_4_6_4 :
                   Real.sqrt (m : ℝ) +
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
               2 * Real.exp (-(t ^ 2)) := by
-  exact hdp_04_equation_4_21
+  classical
+  obtain ⟨C, hC, htail⟩ := NumStability.HDP.Matrix.exists_extremeSingularValue_tail_via_normConcentration
+  refine ⟨C, hC, ?_⟩
+  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hPsi hIndep t ht
+    r s u v hSVD
+  constructor
+  · intro ω i
+    exact ⟨(hSVD ω).singularValues_antitone (Fin.le_last i),
+      (hSVD ω).singularValues_antitone (Fin.zero_le i)⟩
+  · have hevent :
+        {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+              s ω (Fin.last n) ∨
+            s ω ⟨0, Nat.succ_pos n⟩ >
+              Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} =
+        {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+              NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ∨
+            NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1)) >
+              Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} := by
+          ext ω
+          simp only [Set.mem_setOf_eq]
+          rw [(hSVD ω).extremeSingularValues_eq_rectCourantFischer.1,
+            (hSVD ω).extremeSingularValues_eq_rectCourantFischer.2]
+    rw [hevent]
+    exact htail hm A hK hMeas hLp hMean hIso
+      hPsi hIndep ht
 
 /-- Exercise 4.6.4 with exhaustive coordinate SVD data and unit scalar
-marginals. This proves the complete statement through Equation (4.21);
-it makes no separate claim about realizing the suggested alternative proof. -/
+marginals, proved by the same norm-concentration and net-union route.
+Both public formulations use one reusable endpoint-tail producer. -/
 theorem hdp_04_exercise_4_6_4_explicit_svd :
     ∃ C : ℝ, 0 < C ∧
       ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
@@ -86,6 +109,34 @@ theorem hdp_04_exercise_4_6_4_explicit_svd :
                   Real.sqrt (m : ℝ) +
                     C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
               2 * Real.exp (-(t ^ 2)) := by
-  exact hdp_04_equation_4_21_explicit_svd
+  classical
+  obtain ⟨C, hC, htail⟩ := NumStability.HDP.Matrix.exists_extremeSingularValue_tail_via_normConcentration
+  refine ⟨C, hC, ?_⟩
+  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hMarginal hIndep t ht
+    r s u v hFields
+  have hSVD : ∀ ω, NumStability.IsRealMatrixSVD
+      (A ω) (r ω) (s ω) (u ω) (v ω) :=
+    fun ω ↦ NumStability.isRealMatrixSVD_iff_explicit_fields.mpr (hFields ω)
+  constructor
+  · intro ω i
+    exact ⟨(hSVD ω).singularValues_antitone (Fin.le_last i),
+      (hSVD ω).singularValues_antitone (Fin.zero_le i)⟩
+  · have hevent :
+        {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+              s ω (Fin.last n) ∨
+            s ω ⟨0, Nat.succ_pos n⟩ >
+              Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} =
+        {ω | Real.sqrt (m : ℝ) - C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
+              NumStability.rectCourantFischerSingularValue (A ω) (Fin.last n) ∨
+            NumStability.rectCourantFischerSingularValue (A ω) (0 : Fin (n + 1)) >
+              Real.sqrt (m : ℝ) + C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} := by
+          ext ω
+          simp only [Set.mem_setOf_eq]
+          rw [(hSVD ω).extremeSingularValues_eq_rectCourantFischer.1,
+            (hSVD ω).extremeSingularValues_eq_rectCourantFischer.2]
+    rw [hevent]
+    exact htail hm A hK hMeas hLp hMean hIso
+      (fun i ↦ NumStability.HDP.Vector.SubGaussian.psiTwoNorm_le_iff_unit_marginals.mpr
+        (hMarginal i)) hIndep ht
 
 end NumStability.HDP.Contract

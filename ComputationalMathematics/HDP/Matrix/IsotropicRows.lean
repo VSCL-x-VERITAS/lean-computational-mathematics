@@ -6,6 +6,7 @@ import ComputationalMathematics.HDP.Metric.NormDeviationNet
 import ComputationalMathematics.HDP.Metric.EuclideanSphereCovering
 import ComputationalMathematics.HDP.Probability.FiniteUnion
 import ComputationalMathematics.Analysis.SingularValues.ApproximateIsometries
+import ComputationalMathematics.HDP.Matrix.NormConcentration
 
 /-!
 # Fixed-direction concentration for matrices with isotropic sub-Gaussian rows
@@ -783,7 +784,8 @@ theorem exists_normalizedGramDeviation_tail_of_independent_isotropic_subGaussian
 
 /-- Extreme singular-value deviation for independent mean-zero isotropic
 sub-Gaussian rows, with a universal constant and the simultaneous Gaussian
-tail. This is the endpoint-event consequence of normalized Gram deviation. -/
+tail. This compatibility endpoint forwards to the canonical unsquared
+norm-concentration producer; both public names and import paths are retained. -/
 theorem exists_extremeSingularValue_tail_of_independent_isotropic_subGaussian_rows :
     ∃ C : ℝ, 0 < C ∧
       ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
@@ -810,63 +812,7 @@ theorem exists_extremeSingularValue_tail_of_independent_isotropic_subGaussian_ro
                 Real.sqrt (m : ℝ) +
                   C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ≤
             2 * Real.exp (-(t ^ 2)) := by
-  rcases
-      NumStability.HDP.Matrix.exists_normalizedGramDeviation_tail_of_independent_isotropic_subGaussian_rows with
-    ⟨C, hC, htail⟩
-  refine ⟨C, hC, ?_⟩
-  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp _hMean hIso hPsi hIndep t ht
-  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK
-  let δ : ℝ := C *
-    (Real.sqrt (((n + 1 : ℕ) : ℝ) / (m : ℝ)) +
-      t / Real.sqrt (m : ℝ))
-  have hδ : 0 < δ := by
-    dsimp [δ]
-    have : 0 < Real.sqrt (((n + 1 : ℕ) : ℝ) / (m : ℝ)) := by
-      positivity
-    positivity
-  have htail' := htail hm (Nat.succ_pos n) A hKpos hMeas hLp hIso hPsi hIndep ht
-  have hmreal : 0 < (m : ℝ) := by exact_mod_cast hm
-  have hsqrtm : 0 < Real.sqrt (m : ℝ) := Real.sqrt_pos.2 hmreal
-  have hscale :
-      Real.sqrt (m : ℝ) * (K ^ 2 * δ) =
-        C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) := by
-    dsimp [δ]
-    rw [Real.sqrt_div (by positivity : (0 : ℝ) ≤ (n + 1 : ℕ))]
-    field_simp
-    norm_num [Nat.cast_add, Nat.cast_one]
-  have hsubset :
-      {ω |
-        Real.sqrt (m : ℝ) -
-              C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t) >
-            NumStability.rectCourantFischerSingularValue
-              (A ω) (Fin.last n) ∨
-          NumStability.rectCourantFischerSingularValue
-              (A ω) (0 : Fin (n + 1)) >
-            Real.sqrt (m : ℝ) +
-              C * K ^ 2 * (Real.sqrt (n + 1 : ℝ) + t)} ⊆
-      {ω |
-        K ^ 2 * max δ (δ ^ 2) <
-          NumStability.realMatrixOperatorNorm
-            (((m : ℝ)⁻¹) • ((A ω).transpose * A ω) -
-              (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ))} := by
-    intro ω hbad
-    by_contra hnot
-    have hGram :
-        NumStability.realMatrixOperatorNorm
-            (((m : ℝ)⁻¹) • ((A ω).transpose * A ω) -
-              (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ)) ≤
-          K ^ 2 * max δ (δ ^ 2) := le_of_not_gt hnot
-    have hs :=
-      NumStability.HDP.Matrix.extremeSingularValueBounds_of_normalizedGramDeviation
-        hm (A ω) hK hδ hGram
-    rw [hscale] at hs
-    rcases hbad with hbad | hbad
-    · exact (not_lt_of_ge hs.1) hbad
-    · exact (not_lt_of_ge hs.2.2) hbad
-  exact (measureReal_mono hsubset (by
-    exact ne_top_of_le_ne_top
-      (show μ Set.univ ≠ (⊤ : ℝ≥0∞) by simp)
-      (measure_mono (Set.subset_univ _)))).trans htail'
+  exact exists_extremeSingularValue_tail_via_normConcentration
 
 
 end NumStability.HDP.Matrix
