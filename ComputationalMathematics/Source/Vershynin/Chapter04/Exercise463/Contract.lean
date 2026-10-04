@@ -1,6 +1,7 @@
 import ComputationalMathematics.HDP.Matrix.IsotropicRows
 import ComputationalMathematics.HDP.Matrix.SingularValueIntegrability
 import ComputationalMathematics.HDP.Probability.TailExpectation
+import ComputationalMathematics.Analysis.SingularValues.ExtremeValues
 
 /-!
 # Vershynin Chapter 4, Exercise 4.6.3
@@ -206,5 +207,76 @@ theorem hdp_04_exercise_4_6_3_unit_marginals :
   exact hbound hm A hK hMeas hLp hMean hIso
     (fun i ↦ NumStability.HDP.Vector.SubGaussian.psiTwoNorm_le_iff_unit_marginals.mpr
       (hMarginal i)) hIndep
+
+/-- Exercise 4.6.3 for the actual coefficients of any pointwise SVD satisfying
+all coordinate decomposition conditions. The endpoint identities transport the
+existing expectation bounds and derive integrability from the entry `L²`
+bounds, without a measurability assumption on the supplied SVD fields. -/
+theorem hdp_04_exercise_4_6_3_explicit_svd :
+    ∃ D : ℝ, 0 < D ∧
+      ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
+        [IsProbabilityMeasure μ] {m n : ℕ}
+        (_hm : 0 < m)
+        (A : Ω → Matrix (Fin m) (Fin (n + 1)) ℝ) {K : ℝ},
+        1 ≤ K →
+        (∀ i j, Measurable (fun ω ↦ A ω i j)) →
+        (∀ i j, MemLp (fun ω ↦ A ω i j) 2 μ) →
+        (∀ i j, ∫ ω, A ω i j ∂μ = 0) →
+        (∀ i, NumStability.HDP.Vector.Isotropy.IsIsotropic μ
+          (fun j ω ↦ A ω i j)) →
+        (∀ i (z : Fin (n + 1) → ℝ), (∑ j, z j ^ 2) = 1 →
+          NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+            (fun ω ↦ ∑ j, A ω i j * z j) ≤ ENNReal.ofReal K) →
+        iIndepFun (fun i ω ↦ fun j ↦ A ω i j) μ →
+        ∀ (r : Ω → ℕ) (s : Ω → Fin (n + 1) → ℝ)
+          (u : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin m))
+          (v : ∀ ω, Fin (r ω) → EuclideanSpace ℝ (Fin (n + 1))),
+          (∀ ω, NumStability.RealMatrixSVDExplicitFields
+            (A ω) (r ω) (s ω) (u ω) (v ω)) →
+          (∀ ω i, s ω (Fin.last n) ≤ s ω i ∧
+            s ω i ≤ s ω (0 : Fin (n + 1))) ∧
+          Integrable (fun ω ↦ s ω (Fin.last n)) μ ∧
+          Integrable (fun ω ↦ s ω (0 : Fin (n + 1))) μ ∧
+          Real.sqrt (m : ℝ) - D * K ^ 2 * Real.sqrt (n + 1 : ℝ) ≤
+            (∫ ω, s ω (Fin.last n) ∂μ) ∧
+          (∫ ω, s ω (Fin.last n) ∂μ) ≤
+            (∫ ω, s ω (0 : Fin (n + 1)) ∂μ) ∧
+          (∫ ω, s ω (0 : Fin (n + 1)) ∂μ) ≤
+            Real.sqrt (m : ℝ) + D * K ^ 2 * Real.sqrt (n + 1 : ℝ) := by
+  obtain ⟨D, hD, hbound⟩ := hdp_04_exercise_4_6_3_unit_marginals
+  refine ⟨D, hD, ?_⟩
+  intro Ω instΩ μ instμ m n hm A K hK hMeas hLp hMean hIso hMarginal hIndep
+    r s u v hFields
+  have hSVD : ∀ ω, NumStability.IsRealMatrixSVD
+      (A ω) (r ω) (s ω) (u ω) (v ω) :=
+    fun ω ↦ NumStability.isRealMatrixSVD_iff_explicit_fields.mpr (hFields ω)
+  have hMin : (fun ω ↦ s ω (Fin.last n)) =
+      (fun ω ↦ NumStability.rectCourantFischerSingularValue
+        (A ω) (Fin.last n)) := by
+    funext ω
+    exact (hSVD ω).extremeSingularValues_eq_rectCourantFischer.1
+  have hMax : (fun ω ↦ s ω (0 : Fin (n + 1))) =
+      (fun ω ↦ NumStability.rectCourantFischerSingularValue
+        (A ω) (0 : Fin (n + 1))) := by
+    funext ω
+    exact (hSVD ω).extremeSingularValues_eq_rectCourantFischer.2
+  have hEntryInt : ∀ ij : Fin m × Fin (n + 1),
+      Integrable (fun ω ↦ A ω ij.1 ij.2) μ :=
+    fun ij ↦ (hLp ij.1 ij.2).integrable (by norm_num)
+  have hMinInt : Integrable (fun ω ↦ s ω (Fin.last n)) μ := by
+    rw [hMin]
+    exact NumStability.HDP.Matrix.integrable_rectCourantFischerSingularValue_of_entries
+      A hEntryInt (Fin.last n)
+  have hMaxInt : Integrable (fun ω ↦ s ω (0 : Fin (n + 1))) μ := by
+    rw [hMax]
+    exact NumStability.HDP.Matrix.integrable_rectCourantFischerSingularValue_of_entries
+      A hEntryInt (0 : Fin (n + 1))
+  obtain ⟨_, hLower, hMiddle, hUpper⟩ :=
+    hbound hm A hK hMeas hLp hMean hIso hMarginal hIndep
+  refine ⟨?_, hMinInt, hMaxInt, ?_⟩
+  · intro ω i
+    exact ⟨(hSVD ω).singularValues_antitone (Fin.le_last i),
+      (hSVD ω).singularValues_antitone (Fin.zero_le i)⟩
+  · simpa only [hMin, hMax] using And.intro hLower (And.intro hMiddle hUpper)
 
 end NumStability.HDP.Contract
