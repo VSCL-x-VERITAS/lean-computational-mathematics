@@ -13,12 +13,6 @@ open Matrix Set
 
 namespace NumStability.HDP.Graph.SpectralClustering
 
-/-- The normalized eigenvector corresponding to the second largest ordered
-eigenvalue of a symmetric adjacency matrix. -/
-def secondEigenvector {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
-    (hA : A.IsHermitian) (hn : 1 < n) : EuclideanSpace ℝ (Fin n) :=
-  NumStability.hermitianOrderedEigenbasis hA ⟨1, hn⟩
-
 /-- Proof-transparent semantic certificate for a vector in the second slot of
 a complete decreasing eigendecomposition.  Quantifying the ordered
 eigenvalues together with their orthonormal eigenbasis makes both spectral
@@ -34,17 +28,38 @@ def IsSecondOrderedEigenvector {n : ℕ}
         A.toEuclideanLin (eigenbasis i) = eigenvalue i • eigenbasis i) ∧
       v = eigenbasis ⟨1, hn⟩
 
-/-- The selected graph-clustering vector carries the complete decreasing
-eigendecomposition certificate used to interpret "second largest" with
-multiplicity. -/
-theorem secondEigenvector_completeOrderedCertificate {n : ℕ}
+/-- The selected second eigenvector with its complete decreasing
+eigendecomposition certificate. Its value uses the original ordered basis,
+including its choices of signs and vectors in repeated eigenspaces. -/
+def certifiedSecondEigenvector {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsHermitian) (hn : 1 < n) :
-    IsSecondOrderedEigenvector A hn (secondEigenvector A hA hn) := by
+    {v : EuclideanSpace ℝ (Fin n) // IsSecondOrderedEigenvector A hn v} := by
+  refine ⟨NumStability.hermitianOrderedEigenbasis hA ⟨1, hn⟩, ?_⟩
   refine ⟨NumStability.hermitianOrderedEigenvalue hA,
     NumStability.hermitianOrderedEigenbasis hA,
     NumStability.hermitianOrderedEigenvalue_antitone hA, ?_, rfl⟩
   intro i
   exact NumStability.hermitianOrderedEigenbasis_apply hA i
+
+/-- The normalized eigenvector corresponding to the second largest ordered
+eigenvalue of a symmetric adjacency matrix. -/
+def secondEigenvector {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
+    (hA : A.IsHermitian) (hn : 1 < n) : EuclideanSpace ℝ (Fin n) :=
+  (certifiedSecondEigenvector A hA hn).val
+
+/-- The public eigenvector retains its original ordered-basis value
+definitionally. -/
+theorem secondEigenvector_eq_orderedEigenbasis {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsHermitian) (hn : 1 < n) :
+    secondEigenvector A hA hn = NumStability.hermitianOrderedEigenbasis hA ⟨1, hn⟩ := rfl
+
+/-- The selected graph-clustering vector carries the complete decreasing
+eigendecomposition certificate used to interpret "second largest" with
+multiplicity. -/
+theorem secondEigenvector_completeOrderedCertificate {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsHermitian) (hn : 1 < n) :
+    IsSecondOrderedEigenvector A hn (secondEigenvector A hA hn) :=
+  (certifiedSecondEigenvector A hA hn).property
 
 /-- Vertices whose coefficient in the second eigenvector is positive. -/
 def positiveCommunity {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)

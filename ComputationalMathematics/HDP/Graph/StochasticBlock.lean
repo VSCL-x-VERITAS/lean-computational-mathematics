@@ -52,19 +52,26 @@ theorem edgeProbability_le_one {k : ℕ} (θ : Parameters) (e : Edge k) :
     edgeProbability θ e ≤ 1 := by
   by_cases h : e.1.1.1 = e.1.2.1 <;> simp [edgeProbability, h, θ.hp, θ.hq]
 
-/-- The balanced two-community stochastic block law: independent Bernoulli
-outcomes for every unordered pair of distinct vertices. -/
-def graphMeasure (k : ℕ) (θ : Parameters) : Measure (Edge k → Bool) :=
-  Measure.pi fun e : Edge k ↦
-    (PMF.bernoulli (edgeProbability θ e) (edgeProbability_le_one θ e)).toMeasure
+/-- Probability normalization and the exact joint Bernoulli law for every
+finite edge configuration, including the empty configuration. -/
+def HasBernoulliConfigurationLaw (k : ℕ) (θ : Parameters)
+    (μ : Measure (Edge k → Bool)) : Prop :=
+  IsProbabilityMeasure μ ∧
+    ∀ (S : Finset (Edge k)) (v : Edge k → Bool),
+      μ {x | ∀ e ∈ S, x e = v e} =
+        ∏ e ∈ S, if v e then (edgeProbability θ e : ℝ≥0∞)
+          else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞)
 
-/-- Exact probabilities of finite edge configurations. This states the joint
-Bernoulli law directly, including the probability-one empty configuration. -/
-theorem graphMeasure_finite_configuration (k : ℕ) (θ : Parameters)
-    (S : Finset (Edge k)) (v : Edge k → Bool) :
-    graphMeasure k θ {x | ∀ e ∈ S, x e = v e} =
-      ∏ e ∈ S, if v e then (edgeProbability θ e : ℝ≥0∞)
-        else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞) := by
+/-- The balanced two-community stochastic block measure, carrying its
+normalization and complete finite-configuration law. Its value is the product
+of the original Bernoulli coordinate measures. -/
+def certifiedGraphMeasure (k : ℕ) (θ : Parameters) :
+    {μ : Measure (Edge k → Bool) // HasBernoulliConfigurationLaw k θ μ} := by
+  refine ⟨Measure.pi (fun e : Edge k ↦
+    (PMF.bernoulli (edgeProbability θ e) (edgeProbability_le_one θ e)).toMeasure), ?_⟩
+  constructor
+  · infer_instance
+  intro S v
   classical
   have hset : {x : Edge k → Bool | ∀ e ∈ S, x e = v e} =
       Set.pi Set.univ (fun e ↦ if e ∈ S then {v e} else Set.univ) := by
@@ -84,11 +91,55 @@ theorem graphMeasure_finite_configuration (k : ℕ) (θ : Parameters)
           else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞) := by
     rw [PMF.toMeasure_apply_singleton _ _ (measurableSet_singleton _)]
     cases v e <;> simp [PMF.bernoulli_apply]
-  rw [hset, graphMeasure, Measure.pi_pi]
+  rw [hset, Measure.pi_pi]
   simpa only [apply_ite, hmass, measure_univ] using
     (Finset.prod_ite_mem_eq S fun e ↦
       if v e then (edgeProbability θ e : ℝ≥0∞)
         else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞))
+
+/-- Probability normalization is available to clients that unfold the public
+measure to its certified projection. -/
+instance certifiedGraphMeasure_isProbabilityMeasure (k : ℕ) (θ : Parameters) :
+    IsProbabilityMeasure (certifiedGraphMeasure k θ).val :=
+  (certifiedGraphMeasure k θ).property.1
+
+/-- The balanced two-community stochastic block law: independent Bernoulli
+outcomes for every unordered pair of distinct vertices. -/
+def graphMeasure (k : ℕ) (θ : Parameters) : Measure (Edge k → Bool) :=
+  (certifiedGraphMeasure k θ).val
+
+/-- The public measure retains the original product-measure value
+definitionally. -/
+theorem graphMeasure_eq_pi (k : ℕ) (θ : Parameters) :
+    graphMeasure k θ = Measure.pi (fun e : Edge k ↦
+      (PMF.bernoulli (edgeProbability θ e) (edgeProbability_le_one θ e)).toMeasure) :=
+  graphMeasure.eq_1 k θ
+
+/-- The public measure exposes the primary laws carried by its producer. -/
+theorem graphMeasure_primary_laws (k : ℕ) (θ : Parameters) :
+    HasBernoulliConfigurationLaw k θ (graphMeasure k θ) :=
+  (certifiedGraphMeasure k θ).property
+
+/-- Exact probabilities of finite edge configurations. This states the joint
+Bernoulli law directly, including the probability-one empty configuration. -/
+theorem graphMeasure_finite_configuration (k : ℕ) (θ : Parameters)
+    (S : Finset (Edge k)) (v : Edge k → Bool) :
+    graphMeasure k θ {x | ∀ e ∈ S, x e = v e} =
+      ∏ e ∈ S, if v e then (edgeProbability θ e : ℝ≥0∞)
+        else ((1 - edgeProbability θ e : ℝ≥0) : ℝ≥0∞) :=
+  (graphMeasure_primary_laws k θ).2 S v
+
+/-- Retained name of the singleton simplification used in the original
+finite-configuration derivation. -/
+theorem graphMeasure_finite_configuration._simp_1_1 {α : Type*} {a b : α} :
+    (a ∈ ({b} : Set α)) = (a = b) :=
+  certifiedGraphMeasure._simp_1
+
+/-- Retained name of the universal-set simplification used in the original
+finite-configuration derivation. -/
+theorem graphMeasure_finite_configuration._simp_1_2 {α : Type*} (x : α) :
+    (x ∈ (Set.univ : Set α)) = True :=
+  certifiedGraphMeasure._simp_2 x
 
 /-- When the two probabilities agree, every edge-coordinate law is the same
 Bernoulli law, i.e. the Erdős--Rényi special case. -/
@@ -96,7 +147,8 @@ theorem graphMeasure_eq_erdosRenyi_of_p_eq_q (k : ℕ) (θ : Parameters)
     (hpq : θ.p = θ.q) :
     graphMeasure k θ = Measure.pi (fun _ : Edge k ↦
       (PMF.bernoulli θ.p θ.hp).toMeasure) := by
-  unfold graphMeasure edgeProbability
+  rw [graphMeasure_eq_pi]
+  unfold edgeProbability
   congr 2
   funext e
   by_cases h : e.1.1.1 = e.1.2.1 <;> simp [h, hpq]
