@@ -63,7 +63,8 @@ def stochasticBlockAdjacency {k : ℕ}
 adjacency matrix. It differs on the diagonal from the `p`-filled matrix printed
 in Section 4.5.2. -/
 def looplessExpectedAdjacency (k : ℕ) (p q : ℝ) :
-    Matrix (SBMVertex k) (SBMVertex k) ℝ :=
+    Matrix (NumStability.HDP.Graph.StochasticBlock.Vertex k)
+      (NumStability.HDP.Graph.StochasticBlock.Vertex k) ℝ :=
   fun i j ↦ if i = j then 0 else if i.1 = j.1 then p else q
 
 /-- Residual from the actual loopless expectation. -/
