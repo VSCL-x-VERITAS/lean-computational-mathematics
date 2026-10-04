@@ -82,6 +82,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter04.Exercise454.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Theorem455.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Theorem456.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.SBMDenseRegimeConstantError.Contract
+import ComputationalMathematics.Source.Vershynin.Chapter04.SBMDenseRegimeConstantError.ExplicitContract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Theorem461.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.SBMSignDisagreementBound.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation423.Contract
