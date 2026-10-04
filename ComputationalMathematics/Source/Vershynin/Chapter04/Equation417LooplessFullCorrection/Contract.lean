@@ -46,7 +46,7 @@ the remaining `-p` eigenspace.  The first conjunct records that this matrix is
 the entrywise expectation of the loopless random adjacency matrix. -/
 theorem hdp_04_equation_4_17_loopless_full_corrected {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    (∀ i j : SBMVertex k,
+    (∀ i j : NumStability.HDP.Graph.StochasticBlock.Vertex k,
       ∫ ω, stochasticBlockAdjacency ω i j
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ =
         looplessExpectedAdjacency k θ.p θ.q i j) ∧
@@ -58,7 +58,7 @@ theorem hdp_04_equation_4_17_loopless_full_corrected {k : ℕ} (hk : 0 < k)
         (NumStability.HDP.Graph.StochasticBlock.communitySign k) =
       (((k : ℝ) * ((θ.p : ℝ) - θ.q) - θ.p) •
         NumStability.HDP.Graph.StochasticBlock.communitySign k) ∧
-    (∀ x : SBMVertex k → ℝ,
+    (∀ x : NumStability.HDP.Graph.StochasticBlock.Vertex k → ℝ,
       (∀ c : Fin 2, ∑ a : Fin k, x (c, a) = 0) →
       (looplessExpectedAdjacency k θ.p θ.q).mulVec x =
         (-(θ.p : ℝ)) • x) := by

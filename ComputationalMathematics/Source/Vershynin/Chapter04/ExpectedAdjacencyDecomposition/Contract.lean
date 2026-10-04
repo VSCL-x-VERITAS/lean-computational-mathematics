@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Graph.StochasticBlock
+import ComputationalMathematics.HDP.Graph.StochasticBlockEdges
 import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.ProbabilityMassFunction.Integrals
 
@@ -18,46 +18,28 @@ private abbrev SBMEdge (k : ℕ) :=
 
 /-- The canonical unordered edge associated to two distinct vertices. -/
 private def sbmEdgeOfNe {k : ℕ} (i j : SBMVertex k) (hij : i ≠ j) : SBMEdge k :=
-  if h : toLex i < toLex j then
-    ⟨(i, j), h⟩
-  else
-    ⟨(j, i), by
-      have hle : toLex j ≤ toLex i := le_of_not_gt h
-      have hne : toLex j ≠ toLex i := by
-        intro hEq
-        apply hij
-        exact toLex.injective hEq.symm
-      exact lt_of_le_of_ne hle hne⟩
+  NumStability.HDP.Graph.StochasticBlock.edgeOfNe i j hij
 
 private theorem sbmEdgeOfNe_sameCommunity {k : ℕ}
     (i j : SBMVertex k) (hij : i ≠ j) :
     (sbmEdgeOfNe i j hij).1.1.1 = (sbmEdgeOfNe i j hij).1.2.1 ↔
       i.1 = j.1 := by
-  simp only [sbmEdgeOfNe]
-  split <;> simp [eq_comm]
+  exact NumStability.HDP.Graph.StochasticBlock.edgeOfNe_sameCommunity i j hij
 
 private theorem sbmEdgeOfNe_swap {k : ℕ}
     (i j : SBMVertex k) (hij : i ≠ j) (hji : j ≠ i) :
     sbmEdgeOfNe i j hij = sbmEdgeOfNe j i hji := by
-  apply Subtype.ext
-  simp only [sbmEdgeOfNe]
-  by_cases hlt : toLex i < toLex j
-  · have hnlt : ¬ toLex j < toLex i := not_lt_of_ge hlt.le
-    simp [hlt, hnlt]
-  · have hne : toLex j ≠ toLex i := by
-      intro hEq
-      apply hij
-      exact toLex.injective hEq.symm
-    have hgt : toLex j < toLex i := lt_of_le_of_ne (le_of_not_gt hlt) hne
-    simp [hlt, hgt]
+  exact NumStability.HDP.Graph.StochasticBlock.edgeOfNe_swap i j hij hji
 
 /-- The loopless random adjacency matrix imported by Section 4.5.2 from
 Definition 3.6.2. Off-diagonal entries are the sampled Bernoulli edge
 indicators and every diagonal entry is zero. -/
 def stochasticBlockAdjacency {k : ℕ}
-    (ω : SBMEdge k → Bool) : Matrix (SBMVertex k) (SBMVertex k) ℝ :=
+    (ω : NumStability.HDP.Graph.StochasticBlock.Edge k → Bool) :
+    Matrix (NumStability.HDP.Graph.StochasticBlock.Vertex k)
+      (NumStability.HDP.Graph.StochasticBlock.Vertex k) ℝ :=
   fun i j ↦ if hij : i = j then 0 else
-    cond (ω (sbmEdgeOfNe i j hij)) 1 0
+    cond (ω (NumStability.HDP.Graph.StochasticBlock.edgeOfNe i j hij)) 1 0
 
 /-- The actual entrywise expectation of the loopless stochastic-block
 adjacency matrix. It differs on the diagonal from the `p`-filled matrix printed
@@ -68,8 +50,11 @@ def looplessExpectedAdjacency (k : ℕ) (p q : ℝ) :
   fun i j ↦ if i = j then 0 else if i.1 = j.1 then p else q
 
 /-- Residual from the actual loopless expectation. -/
-def looplessResidual {k : ℕ} (A : Matrix (SBMVertex k) (SBMVertex k) ℝ)
-    (p q : ℝ) : Matrix (SBMVertex k) (SBMVertex k) ℝ :=
+def looplessResidual {k : ℕ}
+    (A : Matrix (NumStability.HDP.Graph.StochasticBlock.Vertex k)
+      (NumStability.HDP.Graph.StochasticBlock.Vertex k) ℝ)
+    (p q : ℝ) : Matrix (NumStability.HDP.Graph.StochasticBlock.Vertex k)
+      (NumStability.HDP.Graph.StochasticBlock.Vertex k) ℝ :=
   A - looplessExpectedAdjacency k p q
 
 private theorem stochasticBlockAdjacency_symmetric {k : ℕ}
@@ -80,6 +65,8 @@ private theorem stochasticBlockAdjacency_symmetric {k : ℕ}
     rfl
   · have hji : j ≠ i := Ne.symm hij
     simp only [stochasticBlockAdjacency, hij, hji, dite_false]
+    change cond (ω (sbmEdgeOfNe i j hij)) (1 : ℝ) 0 =
+      cond (ω (sbmEdgeOfNe j i hji)) (1 : ℝ) 0
     rw [sbmEdgeOfNe_swap i j hij hji]
 
 private theorem stochasticBlockEdgeExpectation {k : ℕ}
@@ -120,7 +107,7 @@ private theorem stochasticBlockAdjacency_expectation {k : ℕ}
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ) =
         ∫ ω, cond (ω (sbmEdgeOfNe i j hij)) (1 : ℝ) 0
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ by
-        simp [stochasticBlockAdjacency, hij]]
+        simp [stochasticBlockAdjacency, hij, sbmEdgeOfNe]]
     rw [stochasticBlockEdgeExpectation]
     by_cases hcomm : i.1 = j.1 <;>
       simp [NumStability.HDP.Graph.StochasticBlock.edgeProbability,
@@ -141,7 +128,8 @@ theorem hdp_04_expected_adjacency_decomposition {k : ℕ} (hk : 0 < k)
         ∫ ω, stochasticBlockAdjacency ω i j
             ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ =
           looplessExpectedAdjacency k θ.p θ.q i j) ∧
-      (∀ (ω : SBMEdge k → Bool) (i j : SBMVertex k),
+      (∀ (ω : NumStability.HDP.Graph.StochasticBlock.Edge k → Bool)
+        (i j : NumStability.HDP.Graph.StochasticBlock.Vertex k),
         stochasticBlockAdjacency ω i j =
         stochasticBlockAdjacency ω j i) ∧
       (∀ i,
@@ -152,7 +140,7 @@ theorem hdp_04_expected_adjacency_decomposition {k : ℕ} (hk : 0 < k)
         looplessExpectedAdjacency k θ.p θ.q i i ≠
           NumStability.HDP.Graph.StochasticBlock.expectedAdjacency
             k θ.p θ.q i i) ∧
-      (∀ ω : SBMEdge k → Bool,
+      (∀ ω : NumStability.HDP.Graph.StochasticBlock.Edge k → Bool,
         looplessExpectedAdjacency k θ.p θ.q +
           looplessResidual
             (stochasticBlockAdjacency ω) θ.p θ.q =

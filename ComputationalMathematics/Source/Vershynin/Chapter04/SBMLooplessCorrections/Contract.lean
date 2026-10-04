@@ -24,11 +24,11 @@ private abbrev SBMEdge (k : ℕ) :=
 entrywise expectation, and every sample is that signal plus its residual. -/
 theorem hdp_04_expected_adjacency_decomposition_corrected {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    (∀ i j : SBMVertex k,
+    (∀ i j : NumStability.HDP.Graph.StochasticBlock.Vertex k,
       ∫ ω, stochasticBlockAdjacency ω i j
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ =
         looplessExpectedAdjacency k θ.p θ.q i j) ∧
-      (∀ ω : SBMEdge k → Bool,
+      (∀ ω : NumStability.HDP.Graph.StochasticBlock.Edge k → Bool,
         looplessExpectedAdjacency k θ.p θ.q +
             looplessResidual (stochasticBlockAdjacency ω) θ.p θ.q =
           stochasticBlockAdjacency ω) := by
@@ -40,7 +40,7 @@ the imported loopless expectation has diagonal zero, while the displayed block
 matrix has the strictly positive diagonal `p`. -/
 theorem hdp_04_expected_adjacency_decomposition_counterexample {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    ∀ i : SBMVertex k,
+    ∀ i : NumStability.HDP.Graph.StochasticBlock.Vertex k,
       looplessExpectedAdjacency k θ.p θ.q i i = 0 ∧
       NumStability.HDP.Graph.StochasticBlock.expectedAdjacency
         k θ.p θ.q i i = θ.p ∧
@@ -55,7 +55,7 @@ theorem hdp_04_expected_adjacency_decomposition_counterexample {k : ℕ} (hk : 0
 within-community entries are `p`, and its cross-community entries are `q`. -/
 theorem hdp_04_expected_adjacency_n4_corrected
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    (∀ i j : SBMVertex 2,
+    (∀ i j : NumStability.HDP.Graph.StochasticBlock.Vertex 2,
       ∫ ω, stochasticBlockAdjacency ω i j
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure 2 θ =
         looplessExpectedAdjacency 2 θ.p θ.q i j) ∧
@@ -80,7 +80,7 @@ diagonal entries are `p`, whereas the true loopless expectation has diagonal
 zero. -/
 theorem hdp_04_expected_adjacency_n4_counterexample
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    ∀ i : SBMVertex 2,
+    ∀ i : NumStability.HDP.Graph.StochasticBlock.Vertex 2,
       looplessExpectedAdjacency 2 θ.p θ.q i i = 0 ∧
       NumStability.HDP.Graph.StochasticBlock.expectedAdjacency
         2 θ.p θ.q i i = θ.p ∧
@@ -93,7 +93,8 @@ theorem looplessExpectedAdjacency_eq_displayed_sub_diagonal
     (k : ℕ) (p q : ℝ) :
     looplessExpectedAdjacency k p q =
       NumStability.HDP.Graph.StochasticBlock.expectedAdjacency k p q -
-        p • (1 : Matrix (SBMVertex k) (SBMVertex k) ℝ) := by
+        p • (1 : Matrix (NumStability.HDP.Graph.StochasticBlock.Vertex k)
+          (NumStability.HDP.Graph.StochasticBlock.Vertex k) ℝ) := by
   ext i j
   by_cases hij : i = j
   · subst j
@@ -133,7 +134,7 @@ eigenvalue statement about `E A`: its matrix differs from the true loopless
 expectation on every diagonal entry. -/
 theorem hdp_04_equation_4_17_counterexample {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    ∀ i : SBMVertex k,
+    ∀ i : NumStability.HDP.Graph.StochasticBlock.Vertex k,
       looplessExpectedAdjacency k θ.p θ.q i i ≠
         NumStability.HDP.Graph.StochasticBlock.expectedAdjacency
           k θ.p θ.q i i := by
@@ -146,7 +147,7 @@ by `-p`.  In particular, the displayed rank-two conclusion cannot be retained
 without additional parameter restrictions. -/
 theorem hdp_04_exercise_4_5_2_corrected {k : ℕ} (hk : 0 < k)
     (θ : NumStability.HDP.Graph.StochasticBlock.Parameters) (hpq : θ.q < θ.p) :
-    (∀ i j : SBMVertex k,
+    (∀ i j : NumStability.HDP.Graph.StochasticBlock.Vertex k,
       ∫ ω, stochasticBlockAdjacency ω i j
           ∂NumStability.HDP.Graph.StochasticBlock.graphMeasure k θ =
         looplessExpectedAdjacency k θ.p θ.q i j) ∧
@@ -302,7 +303,7 @@ theorem hdp_04_sbm_signal_norm_corrected {k : ℕ} (hk : 0 < k)
       ‖looplessExpectedAdjacency k θ.p θ.q‖ /
           ((2 * k : ℕ) : ℝ) =
         ((θ.p : ℝ) + θ.q) / 2 - θ.p / ((2 * k : ℕ) : ℝ) ∧
-      (∀ i : SBMVertex k,
+      (∀ i : NumStability.HDP.Graph.StochasticBlock.Vertex k,
         (0 < NumStability.HDP.Graph.StochasticBlock.communitySign k i ↔ i.1 = 0) ∧
         |NumStability.HDP.Graph.StochasticBlock.communitySign k i| = 1) := by
   have hnorm :
