@@ -12,7 +12,9 @@ import ComputationalMathematics.Analysis.SingularValues.OrderedDecay
 import ComputationalMathematics.Analysis.SingularValues.Projections
 import ComputationalMathematics.Analysis.SingularValues.Realification
 import ComputationalMathematics.Analysis.SingularValues.RealSVD
+import ComputationalMathematics.Analysis.SingularValues.RealSVDTranspose
 import ComputationalMathematics.Analysis.SingularValues.Symmetric
+import ComputationalMathematics.Analysis.SingularValues.Transpose
 import ComputationalMathematics.Analysis.SingularValues.WeylMirsky
 
 /-!

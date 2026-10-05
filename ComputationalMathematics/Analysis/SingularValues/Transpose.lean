@@ -143,4 +143,29 @@ theorem rectSingularValue_eq_sqrt_both_gramEigenvalues {m n : ℕ}
       (i.isLt.trans_le (Nat.min_le_right m n))).symm
   · rfl
 
+/-- Every real rectangular matrix has one rank-length SVD witness whose
+singular values are the square roots of the actual ordered right-Gram
+eigenvalues at all `n` indices and of the actual ordered left-Gram eigenvalues
+at all `min m n` common indices. Both dimension-indexed eigenvalue lists are
+explicit, including their common zero tail after the rank. -/
+theorem exists_isRealMatrixSVDWithOrderedGramEigenvalues {m n : ℕ}
+    (A : Matrix (Fin m) (Fin n) ℝ) :
+    ∃ (r : ℕ) (s : Fin n → ℝ)
+      (u : Fin r → EuclideanSpace ℝ (Fin m))
+      (v : Fin r → EuclideanSpace ℝ (Fin n)),
+      IsRealMatrixSVDWithGramEigenrelations A r s u v ∧
+      (∀ i : Fin n, s i =
+        Real.sqrt ((rectRightGram_matrix_posSemidef A).1.eigenvalues₀
+          (finCardIndex n i))) ∧
+      (∀ i : Fin (min m n), s (Fin.castLE (Nat.min_le_right m n) i) =
+        Real.sqrt ((rectRightGram_matrix_posSemidef A.transpose).1.eigenvalues₀
+          (finCardIndex m (Fin.castLE (Nat.min_le_left m n) i)))) := by
+  obtain ⟨r, s, u, v, h⟩ := exists_isRealMatrixSVDWithGramEigenrelations A
+  refine ⟨r, s, u, v, h, ?_, ?_⟩
+  · intro i
+    exact h.toIsRealMatrixSVD.singularValue_eq_rectSingularValue i
+  · intro i
+    exact (h.toIsRealMatrixSVD.singularValue_eq_rectSingularValue _).trans
+      (rectSingularValue_eq_sqrt_both_gramEigenvalues A i).1
+
 end NumStability
