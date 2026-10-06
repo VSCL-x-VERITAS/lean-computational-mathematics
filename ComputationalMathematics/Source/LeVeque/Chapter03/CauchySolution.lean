@@ -80,4 +80,5 @@ theorem leveque03_initialDataSolution_formula
       intro p _
       congr 1
 
+
 end NumStability

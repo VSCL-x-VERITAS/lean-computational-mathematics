@@ -81,4 +81,5 @@ theorem varianceEuclideanNorm_le :
     dsimp [C]
     nlinarith [hD0, pow_nonneg hK0 4]))
 
+
 end NumStability.HDP.Vector.NormVariance

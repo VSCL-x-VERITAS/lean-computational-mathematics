@@ -29,4 +29,5 @@ def hdp_03_body_3_3_independent_coordinates_isotropic__contract_type : Prop :=
             (∀ i, NumStability.HDP.Scalar.Preliminaries.variance μ (X i) = 1) →
               NumStability.HDP.Vector.Isotropy.IsIsotropic μ X
 
+
 end NumStability.HDP.Contract

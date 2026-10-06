@@ -95,4 +95,5 @@ theorem positivePressureSlopeNecessary : positivePressureSlopeNecessaryTarget :=
     subst pressureSlope
     exact gas_zero_slope_not_hyperbolic density velocity hdensity
 
+
 end NumStability.Leveque02Tracer

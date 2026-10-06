@@ -64,4 +64,5 @@ import ComputationalMathematics.Source.Vershynin.Chapter03.Section04.BorellMargi
 Stable historical family entry point for the proof-free contract signatures.
 Its imports now target the canonical Vershynin source hierarchy directly;
 individual historical locator paths remain compatibility wrappers.
+
 -/

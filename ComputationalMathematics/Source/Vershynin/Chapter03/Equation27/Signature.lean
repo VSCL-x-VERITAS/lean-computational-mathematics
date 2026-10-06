@@ -10,4 +10,5 @@ def hdp_03_eq_3_27__contract_type : Prop :=
     (1 - 2 / Real.pi * Real.arcsin t = 2 / Real.pi * Real.arccos t) ∧
       (0.878 : ℝ) * (1 - t) ≤ 2 / Real.pi * Real.arccos t
 
+
 end NumStability.HDP.Contract

@@ -19,4 +19,5 @@ theorem hdp_03_body_3_3_spherical_law__contract :
     hdp_03_body_3_3_spherical_law__contract_type :=
   hdp_03_body_3_3_spherical_law
 
+
 end NumStability.HDP.Contract

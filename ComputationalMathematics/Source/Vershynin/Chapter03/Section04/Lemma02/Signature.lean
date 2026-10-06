@@ -22,4 +22,5 @@ def hdp_03_lem_3_4_2__contract_type : Prop :=
             ENNReal.ofReal
               (C * NumStability.HDP.Scalar.SubGaussian.psiTwoNormMax μ X)
 
+
 end NumStability.HDP.Contract

@@ -99,4 +99,5 @@ theorem discreteCube_isSubGaussian_psiTwoNorm_le :
   apply ENNReal.ofReal_le_ofReal
   rw [hMax]
 
+
 end NumStability.HDP.Vector.Bernoulli

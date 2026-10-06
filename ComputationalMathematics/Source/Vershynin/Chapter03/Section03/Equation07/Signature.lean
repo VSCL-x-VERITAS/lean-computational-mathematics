@@ -23,4 +23,5 @@ def hdp_03_eq_3_7__contract_type : Prop :=
                   Real.sqrt (n : ℝ)| ≥ t} ≤
               2 * Real.exp (-(c * t ^ 2))
 
+
 end NumStability.HDP.Contract

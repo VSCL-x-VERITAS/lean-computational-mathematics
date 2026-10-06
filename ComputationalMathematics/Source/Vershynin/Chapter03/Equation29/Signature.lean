@@ -13,4 +13,5 @@ def hdp_03_eq_3_29__contract_type : Prop :=
     NumStability.HDP.Tensor.GloballyConvergentPowerSeries f a →
     ∀ x : ℝ, f x = ∑' k : ℕ, a k * x ^ k
 
+
 end NumStability.HDP.Contract

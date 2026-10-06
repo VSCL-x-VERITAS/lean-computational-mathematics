@@ -167,4 +167,5 @@ theorem independentCenteredCoordinates_vectorSubGaussian :
     nlinarith
   exact (sq_le_sq₀ ENNReal.toReal_nonneg hCK).mp (hSq.trans hScaleSq)
 
+
 end NumStability.HDP.Vector.SubGaussian

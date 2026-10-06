@@ -19,4 +19,5 @@ def hdp_03_eq_3_31__contract_type : Prop :=
         (NumStability.HDP.Tensor.krivineBeta * Real.pi / 2 *
           (∑ i, u i * v i))
 
+
 end NumStability.HDP.Contract

@@ -824,4 +824,5 @@ theorem isGrothendieckConstant_288 : IsGrothendieckConstant.{u} 288 := by
   exact (innerBilinearValue_le_bipartiteUnitMaximum A X Y hX hY).trans
     (bipartiteUnitMaximum_le_288_of_sign A hsign)
 
+
 end NumStability.HDP.Optimization

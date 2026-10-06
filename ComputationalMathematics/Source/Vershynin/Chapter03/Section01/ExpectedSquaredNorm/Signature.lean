@@ -21,4 +21,5 @@ def hdp_03_body_3_1_norm_square_mean__contract_type : Prop :=
             NumStability.HDP.Scalar.Preliminaries.expectation μ
               (fun ω => NumStability.vecNorm2Sq (fun i => X i ω)) = n
 
+
 end NumStability.HDP.Contract

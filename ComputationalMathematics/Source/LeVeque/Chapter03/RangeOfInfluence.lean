@@ -75,4 +75,5 @@ theorem leveque03_figure32_orderedRays
   dsimp [leveque03_characteristicCurve]
   refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> nlinarith
 
+
 end NumStability

@@ -19,4 +19,5 @@ def hdp_03_example_3_7_3__contract_type : Prop :=
     NumStability.HDP.Tensor.power u 2 i =
       NumStability.HDP.Tensor.outer u u (i 0) (i 1))
 
+
 end NumStability.HDP.Contract

@@ -24,4 +24,5 @@ def hdp_03_body_3_3_general_normal_def__contract_type : Prop :=
           NumStability.HDP.Vector.Covariance.meanVector μ X = m ∧
           NumStability.HDP.Vector.Covariance.covarianceMatrix μ X = S))
 
+
 end NumStability.HDP.Contract

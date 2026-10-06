@@ -242,4 +242,5 @@ theorem grothendieck_relaxation_guarantee {n : ℕ} [Nonempty (Fin n)]
     vectorQuadraticMaximum_le_two_mul_grothendieck_mul_signQuadraticMaximum
       K hGroth A hA⟩
 
+
 end NumStability.HDP.Optimization

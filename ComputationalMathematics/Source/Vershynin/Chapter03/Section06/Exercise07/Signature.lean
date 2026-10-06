@@ -15,4 +15,5 @@ def hdp_03_ex_3_6_7__contract_type : Prop :=
       NumStability.HDP.Graph.gaussianHyperplaneOppositeProbability u v =
         Real.arccos ⟪u, v⟫_ℝ / Real.pi
 
+
 end NumStability.HDP.Contract

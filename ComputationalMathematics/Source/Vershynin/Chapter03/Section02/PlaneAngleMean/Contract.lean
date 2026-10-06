@@ -19,4 +19,5 @@ theorem hdp_03_body_3_2_plane_angle_mean__contract :
     hdp_03_body_3_2_plane_angle_mean__contract_type :=
   hdp_03_body_3_2_plane_angle_mean
 
+
 end NumStability.HDP.Contract

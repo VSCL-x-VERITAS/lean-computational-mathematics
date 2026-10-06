@@ -15,4 +15,5 @@ def hdp_03_eq_3_19__contract_type : Prop :=
       NumStability.HDP.Optimization.matrixInner A X =
         ∑ i, ∑ j, A i j * X i j
 
+
 end NumStability.HDP.Contract

@@ -51,4 +51,5 @@ def acousticEigenvectorScalingTarget : Prop :=
         Module.End.HasEigenvector (Matrix.toLin' A)
           (backgroundVelocity + soundSpeed) (scalar • right))
 
+
 end NumStability.Leveque02Tracer

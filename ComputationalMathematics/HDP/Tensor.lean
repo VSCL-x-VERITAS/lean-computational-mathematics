@@ -13,4 +13,5 @@ import ComputationalMathematics.HDP.Tensor.Specializations
 # Finite tensor foundations
 
 Entry point for reusable finite tensor definitions and identities.
+
 -/

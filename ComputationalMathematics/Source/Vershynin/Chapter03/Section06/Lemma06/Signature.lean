@@ -15,4 +15,5 @@ def hdp_03_lem_3_6_6__contract_type : Prop :=
       NumStability.HDP.Graph.gaussianHyperplaneSignCorrelation u v =
         2 / Real.pi * Real.arcsin ⟪u, v⟫_ℝ
 
+
 end NumStability.HDP.Contract

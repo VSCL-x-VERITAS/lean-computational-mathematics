@@ -131,4 +131,5 @@ theorem diffusionAndAdvectionDiffusionParabolic :
   exact ⟨diffusion_isForwardParabolic β hβ,
     advectionDiffusion_isForwardParabolic u β hβ⟩
 
+
 end NumStability.Leveque02Tracer

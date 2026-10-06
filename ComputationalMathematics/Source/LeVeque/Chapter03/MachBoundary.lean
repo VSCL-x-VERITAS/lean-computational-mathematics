@@ -71,4 +71,5 @@ theorem leveque03_boundaryConditionCount_split
   have hsum := leveque03_boundaryConditionCount speeds hnonchar
   omega
 
+
 end NumStability

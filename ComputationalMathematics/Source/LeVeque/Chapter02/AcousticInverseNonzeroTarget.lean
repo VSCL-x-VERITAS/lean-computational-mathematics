@@ -19,4 +19,5 @@ def acousticInverseNonzeroTarget : Prop :=
       (linearAcousticsEigenvectorMatrix density soundSpeed)⁻¹ =
         linearAcousticsEigenvectorMatrixInverse density soundSpeed
 
+
 end NumStability.Leveque02Tracer

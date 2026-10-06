@@ -351,4 +351,5 @@ theorem geometricExpectedAttempts_uniformBoolCut_le (G : SimpleGraph V)
     _ = (1 + 2 * ε) / (2 * ε) := by
       field_simp
 
+
 end NumStability.HDP.Graph

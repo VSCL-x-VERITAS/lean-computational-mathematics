@@ -19,4 +19,5 @@ def hdp_03_ex_3_3_3b__contract_type : Prop :=
         HasLaw (fun omega => ∑ i, X i omega)
           (gaussianReal 0 (∑ i, variance i)) mu
 
+
 end NumStability.HDP.Contract

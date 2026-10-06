@@ -143,4 +143,5 @@ theorem hdp_02_hex_h2_d2_d10a {f : ℝ → ℝ}
     ∫ x, Real.exp (-t * x) * f x ∂(volume : Measure ℝ) ≤ 1 / t :=
   NumStability.HDP.Scalar.IndependentSums.Hoeffding.laplaceTransformLeInv hf ht
 
+
 end NumStability.HDP.Contract

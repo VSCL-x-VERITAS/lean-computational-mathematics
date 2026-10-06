@@ -483,4 +483,5 @@ theorem reproducingKernelPresentation_unique
 
 end Uniqueness
 
+
 end NumStability.HDP.Kernel

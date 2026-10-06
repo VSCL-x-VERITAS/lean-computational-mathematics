@@ -35,4 +35,5 @@ theorem GloballyConvergentPowerSeries.summable {f : ℝ → ℝ} {a : ℕ → �
     Summable (fun k : ℕ => a k * x ^ k) :=
   (h x).summable
 
+
 end NumStability.HDP.Tensor

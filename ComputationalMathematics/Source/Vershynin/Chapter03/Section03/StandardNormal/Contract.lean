@@ -20,4 +20,5 @@ theorem hdp_03_body_3_3_standard_normal_def__contract :
     hdp_03_body_3_3_standard_normal_def__contract_type :=
   hdp_03_body_3_3_standard_normal_def
 
+
 end NumStability.HDP.Contract

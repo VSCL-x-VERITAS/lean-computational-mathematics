@@ -14,4 +14,5 @@ def hdp_03_body_3_7_psd_kernel_def__contract_type : Prop :=
       ∀ (N : ℕ) (u : Fin N → X),
         Matrix.PosSemidef (fun i j ↦ K (u i) (u j))
 
+
 end NumStability.HDP.Contract

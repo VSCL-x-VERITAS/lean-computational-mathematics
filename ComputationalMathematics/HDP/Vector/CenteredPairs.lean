@@ -93,4 +93,5 @@ theorem integral_vecNorm2Sq_sub_eq_two_mul_card
       rw [hXnorm', hYnorm', hCross]
       ring
 
+
 end NumStability.HDP.Vector.Isotropy

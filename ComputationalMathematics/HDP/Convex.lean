@@ -8,4 +8,5 @@ import ComputationalMathematics.HDP.Convex.Uniform
 # Convex-geometric high-dimensional probability
 
 Entry point for reusable convex-geometric foundations used by HDP results.
+
 -/

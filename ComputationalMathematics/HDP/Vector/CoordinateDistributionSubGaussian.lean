@@ -312,4 +312,5 @@ lemma coordinatePsiTwoScale_comparable {n : ℕ} (hn : 2 ≤ n) :
   · apply Real.sqrt_le_sqrt
     exact (div_le_div_iff_of_pos_left hn0 hlognp1 hlogn).2 hlog_le
 
+
 end NumStability.HDP.Vector.CoordinateDistribution

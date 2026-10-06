@@ -52,4 +52,5 @@ theorem variance_standardScore
   field_simp
   exact hsqrt_sq.symm
 
+
 end NumStability.HDP.Scalar.Standardization

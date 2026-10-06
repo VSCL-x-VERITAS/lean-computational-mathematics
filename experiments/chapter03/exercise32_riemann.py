@@ -150,5 +150,6 @@ def main() -> None:
         args.output.write_text(svg_plot(solve(problem), args.input.stem), encoding="utf-8")
 
 
+
 if __name__ == "__main__":
     main()

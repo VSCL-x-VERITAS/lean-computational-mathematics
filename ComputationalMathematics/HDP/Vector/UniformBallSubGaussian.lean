@@ -71,4 +71,5 @@ theorem uniformSqrtDimensionBall_isSubGaussian_psiTwoNorm_le :
   exact ⟨NumStability.HDP.Vector.SubGaussian.isSubGaussian_of_psiTwoNorm_lt_top
       (hTarget.trans_lt ENNReal.ofReal_lt_top), hTarget⟩
 
+
 end NumStability.HDP.Vector.UniformBall

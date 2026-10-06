@@ -52,4 +52,5 @@ def pSWaveAcousticsStructureTarget : Prop :=
         IsLinearAcousticsSolutionAt pressureAnalogue velocity
           shearModulus density x t))
 
+
 end NumStability.Leveque02Tracer

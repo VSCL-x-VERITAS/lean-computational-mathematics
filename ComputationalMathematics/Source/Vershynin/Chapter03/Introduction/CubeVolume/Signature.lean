@@ -13,4 +13,5 @@ def hdp_03_intro_cube_volume__contract_type : Prop :=
     volume (Icc (0 : Fin n → ℝ) (fun _ ↦ 2)) =
       (2 : ENNReal) ^ n * volume (Icc (0 : Fin n → ℝ) (fun _ ↦ 1))
 
+
 end NumStability.HDP.Contract

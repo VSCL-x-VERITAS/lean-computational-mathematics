@@ -20,4 +20,5 @@ theorem hdp_03_body_3_1_square_centering__contract :
     hdp_03_body_3_1_square_centering__contract_type :=
   hdp_03_body_3_1_square_centering
 
+
 end NumStability.HDP.Contract

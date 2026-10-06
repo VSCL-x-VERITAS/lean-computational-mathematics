@@ -68,4 +68,5 @@ def fourierFickCarrierTarget : Prop :=
     (tracerCarrierAt m x t).flux =
         -(m.diffusivity x * concentrationGradient)
 
+
 end NumStability.Leveque02Tracer

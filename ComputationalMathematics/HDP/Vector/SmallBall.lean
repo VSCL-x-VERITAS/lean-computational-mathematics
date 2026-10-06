@@ -192,4 +192,5 @@ theorem euclideanNorm_smallBall :
   rw [hEvent]
   simpa [C, q, mul_assoc] using hBound
 
+
 end NumStability.HDP.Vector.SmallBall

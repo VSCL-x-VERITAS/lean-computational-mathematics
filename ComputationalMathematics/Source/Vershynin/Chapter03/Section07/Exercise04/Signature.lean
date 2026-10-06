@@ -16,4 +16,5 @@ def hdp_03_ex_3_7_4__contract_type : Prop :=
         (NumStability.HDP.Tensor.power v k) =
       (∑ i, u i * v i) ^ k
 
+
 end NumStability.HDP.Contract

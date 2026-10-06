@@ -16,4 +16,5 @@ theorem hdp_03_body_3_3_coordinate_isotropic__contract :
     hdp_03_body_3_3_coordinate_isotropic__contract_type :=
   hdp_03_body_3_3_coordinate_isotropic
 
+
 end NumStability.HDP.Contract

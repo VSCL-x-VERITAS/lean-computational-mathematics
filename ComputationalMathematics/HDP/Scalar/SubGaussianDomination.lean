@@ -220,4 +220,5 @@ theorem psiTwoNorm_eq_of_sameLaw
     PsiTwoNorm mu X = PsiTwoNorm mu' Y := by
   rw [psiTwoNorm_eq_of_hasLaw hX hXLaw, psiTwoNorm_eq_of_hasLaw hY hYLaw]
 
+
 end NumStability.HDP.Scalar.SubGaussian

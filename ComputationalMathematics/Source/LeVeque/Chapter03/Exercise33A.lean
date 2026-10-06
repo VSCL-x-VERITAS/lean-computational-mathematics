@@ -183,4 +183,5 @@ theorem leveque03_exercise33aSolution_right (valueAtJump : Fin 3 → ℝ)
       hone, hx, hnotOne, hnotTwo]
       <;> norm_num
 
+
 end NumStability

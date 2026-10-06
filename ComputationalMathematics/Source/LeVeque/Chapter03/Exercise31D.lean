@@ -124,4 +124,5 @@ theorem leveque03_exercise31dSolution_right (valueAtJump : Fin 2 → ℝ)
       eigenmodeTravelingWave, travelingWave, riemannData,
       Fin.sum_univ_succ, hnotLeft, hx0, hnotMid, hx]
 
+
 end NumStability

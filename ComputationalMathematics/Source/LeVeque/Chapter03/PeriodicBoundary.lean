@@ -80,4 +80,5 @@ theorem leveque03_periodicBoundary_characteristicSplit
             (leveque03_characteristicVariables eigenbasis (q a t))) :=
   leveque03_periodicBoundary_characteristic eigenbasis q a b
 
+
 end NumStability

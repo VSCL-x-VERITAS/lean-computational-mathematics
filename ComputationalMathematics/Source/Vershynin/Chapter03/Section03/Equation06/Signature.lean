@@ -20,4 +20,5 @@ def hdp_03_eq_3_6__contract_type : Prop :=
           NumStability.HDP.Vector.linearMarginal X v ω ∂μ) =
         ∑ i, u i * v i
 
+
 end NumStability.HDP.Contract

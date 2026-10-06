@@ -29,4 +29,5 @@ theorem expectation_vecNorm2Sq_eq_card
   · intro i _hi
     exact hX i
 
+
 end NumStability.HDP.Vector.Moments

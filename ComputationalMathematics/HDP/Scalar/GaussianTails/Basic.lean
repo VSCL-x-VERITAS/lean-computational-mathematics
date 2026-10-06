@@ -568,4 +568,5 @@ theorem standardNormal_absTail_secondMoment_lt_four_div_sq
     _ = (R + 1 / R) * Real.exp (-(R ^ 2) / 2) := by ring
     _ < 4 / R ^ 2 := hscale
 
+
 end NumStability.HDP.Scalar.GaussianTails

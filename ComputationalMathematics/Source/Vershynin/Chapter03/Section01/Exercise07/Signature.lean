@@ -25,4 +25,5 @@ def hdp_03_hex_h3_d1_d7__contract_type : Prop :=
                     ε * Real.sqrt (n : ℝ)} ≤
                 (C * ε) ^ n
 
+
 end NumStability.HDP.Contract

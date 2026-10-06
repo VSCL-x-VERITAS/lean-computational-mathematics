@@ -17,4 +17,5 @@ def hdp_03_lem_3_2_3__contract_type : Prop :=
         ∀ x : Fin n → ℝ,
           (∫ ω, (∑ i, X i ω * x i) ^ 2 ∂μ) = ∑ i, (x i) ^ 2)
 
+
 end NumStability.HDP.Contract

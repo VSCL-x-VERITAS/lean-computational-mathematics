@@ -17,4 +17,5 @@ theorem hdp_03_heq_h3_d2__contract : hdp_03_heq_h3_d2__contract_type := by
   intro z δ hz hδ h
   exact hdp_03_heq_h3_d2 hz hδ h
 
+
 end NumStability.HDP.Contract

@@ -211,4 +211,5 @@ theorem leveque03_periodicCauchyConstruction
       initialState x
     exact hsys.2 x
 
+
 end NumStability

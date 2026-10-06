@@ -87,4 +87,5 @@ theorem standardGaussianVector_isSubGaussian_psiTwoNorm_le_two (n : ℕ) :
   exact ⟨Vector.SubGaussian.isSubGaussian_of_psiTwoNorm_lt_top
       (hle.trans_lt ENNReal.ofReal_lt_top), hle⟩
 
+
 end NumStability.HDP.Vector.Gaussian

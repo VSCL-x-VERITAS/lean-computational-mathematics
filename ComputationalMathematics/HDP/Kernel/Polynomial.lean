@@ -45,4 +45,5 @@ theorem polynomialKernel_isPositiveSemidefinite {n : ℕ} (r : ℝ) (hr : 0 ≤ 
   intro u v
   exact polynomialKernelFeature_inner r hr k u v
 
+
 end NumStability.HDP.Kernel

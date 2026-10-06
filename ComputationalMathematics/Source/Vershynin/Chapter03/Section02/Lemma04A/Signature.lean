@@ -16,4 +16,5 @@ def hdp_03_lem_3_2_4a__contract_type : Prop :=
       NumStability.HDP.Vector.Isotropy.IsIsotropic μ X →
         (∫ ω, NumStability.vecNorm2Sq (fun i => X i ω) ∂μ) = n
 
+
 end NumStability.HDP.Contract

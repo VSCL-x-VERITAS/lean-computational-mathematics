@@ -106,4 +106,5 @@ theorem isSubGaussian_of_psiTwoNorm_lt_top
     exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top (by
       simpa [NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm] using hvfinite)
 
+
 end NumStability.HDP.Vector.SubGaussian

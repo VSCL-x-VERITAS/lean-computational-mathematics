@@ -31,4 +31,5 @@ theorem powerFeature_inner {n : ℕ} (k : ℕ) (u v : Fin n → ℝ) :
   simp only [PiLp.inner_apply, powerFeature]
   exact inner_power_power u v k
 
+
 end NumStability.HDP.Tensor

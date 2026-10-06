@@ -193,4 +193,5 @@ theorem standardGaussianEuclideanNorm_lowerHalf_tail :
       rw [show (s / 2) ^ 2 = s ^ 2 / 4 by ring, hsSq]
       ring
 
+
 end NumStability.HDP.Vector.Gaussian

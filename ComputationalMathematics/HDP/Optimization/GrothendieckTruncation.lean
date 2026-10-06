@@ -62,4 +62,5 @@ theorem integral_bilinear_sum_eq_sum_l2_inner
         simpa only [inner_real_eq_mul] using h
       simpa only [mul_assoc] using hmul.const_mul (A i j)
 
+
 end NumStability.HDP.Optimization

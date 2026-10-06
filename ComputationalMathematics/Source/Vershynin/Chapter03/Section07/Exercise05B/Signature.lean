@@ -17,4 +17,5 @@ def hdp_03_ex_3_7_5b__contract_type : Prop :=
         NumStability.HDP.Tensor.polynomialFeature a v⟫_ℝ =
         ∑ k, a k * (∑ i, u i * v i) ^ k.1
 
+
 end NumStability.HDP.Contract

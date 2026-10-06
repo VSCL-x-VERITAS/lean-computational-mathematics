@@ -694,4 +694,5 @@ theorem goemansWilliamson_approximation
 
 end
 
+
 end NumStability.HDP.Graph

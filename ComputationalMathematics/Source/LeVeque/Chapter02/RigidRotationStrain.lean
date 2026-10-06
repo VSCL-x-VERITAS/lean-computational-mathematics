@@ -35,4 +35,5 @@ theorem rigidRotationStrain : rigidRotationStrainTarget := by
               Matrix.sub_apply, Matrix.add_apply, Matrix.transpose_apply,
               Matrix.smul_apply, Matrix.one_apply] <;> rfl
 
+
 end NumStability.Leveque02Tracer

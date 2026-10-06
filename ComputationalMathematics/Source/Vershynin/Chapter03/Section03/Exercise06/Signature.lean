@@ -27,4 +27,5 @@ def hdp_03_ex_3_3_6__contract_type : Prop :=
                 (fun omega i => ∑ j, G i j omega * u j)
                 (fun omega i => ∑ j, G i j omega * v j) mu
 
+
 end NumStability.HDP.Contract

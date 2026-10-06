@@ -21,4 +21,5 @@ theorem hdp_03_body_3_2_standard_score__contract :
     hdp_03_body_3_2_standard_score__contract_type :=
   hdp_03_body_3_2_standard_score
 
+
 end NumStability.HDP.Contract

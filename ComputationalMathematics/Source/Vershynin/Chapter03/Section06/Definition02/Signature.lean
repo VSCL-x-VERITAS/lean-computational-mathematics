@@ -11,4 +11,5 @@ def hdp_03_def_3_6_2__contract_type : Prop :=
     (G.adjMatrix ℝ).IsSymm ∧
     ∀ i j, G.adjMatrix ℝ i j = if G.Adj i j then 1 else 0
 
+
 end NumStability.HDP.Contract

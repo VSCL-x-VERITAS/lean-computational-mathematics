@@ -16,4 +16,5 @@ def hdp_03_eq_3_26__contract_type : Prop :=
         (NumStability.HDP.Graph.hyperplaneRounding X g i).value =
           Real.sign ⟪(X i : EuclideanSpace ℝ (Fin n)), g⟫_ℝ)
 
+
 end NumStability.HDP.Contract

@@ -20,4 +20,5 @@ theorem hdp_03_body_3_6_maxcut_sdp__contract :
     hdp_03_body_3_6_maxcut_sdp__contract_type :=
   hdp_03_body_3_6_maxcut_sdp
 
+
 end NumStability.HDP.Contract

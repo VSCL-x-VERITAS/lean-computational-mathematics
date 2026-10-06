@@ -25,4 +25,5 @@ theorem scalarReactionDiffusion : scalarReactionDiffusionTarget := by
     hm hopen hx htime hspace hgradient hbalance
   simpa [Matrix.mulVec_diagonal, Pi.smul_apply, smul_eq_mul] using h
 
+
 end NumStability.Leveque02Tracer

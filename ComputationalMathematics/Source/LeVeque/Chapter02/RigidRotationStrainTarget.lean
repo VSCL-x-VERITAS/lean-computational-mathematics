@@ -30,4 +30,5 @@ def rigidRotationStrainTarget : Prop :=
     planarQuarterTurn.det = 1 ∧
     infinitesimalStrain (planarQuarterTurn - 1) = -1
 
+
 end NumStability.Leveque02Tracer

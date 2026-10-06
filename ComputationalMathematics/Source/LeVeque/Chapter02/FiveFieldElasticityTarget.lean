@@ -114,4 +114,5 @@ def chapter22CrossReferencedTarget : Prop :=
   fiveFieldElasticityTarget ∧ stressChapter22Target ∧
     stressPrintedClaimsTarget
 
+
 end NumStability.Leveque02Tracer.PlaneElasticity

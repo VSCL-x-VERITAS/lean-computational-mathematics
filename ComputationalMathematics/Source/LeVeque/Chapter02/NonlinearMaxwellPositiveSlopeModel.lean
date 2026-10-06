@@ -33,4 +33,5 @@ noncomputable def frozenNonlinearMaxwellMatrix
   !![0, (electricConstitutiveSlope permittivity electricField)⁻¹;
      (magneticConstitutiveSlope permeability magneticField)⁻¹, 0]
 
+
 end NumStability.Leveque02Tracer

@@ -186,4 +186,5 @@ theorem signBound_iff_normBound {m n : ℕ}
             rcases hy j with hyj | hyj <;> simp [hyj]
         nlinarith [norm_nonneg x, norm_nonneg y]
 
+
 end NumStability.HDP.Optimization

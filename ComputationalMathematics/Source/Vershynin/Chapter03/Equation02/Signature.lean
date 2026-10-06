@@ -12,4 +12,5 @@ def hdp_03_heq_h3_d2__contract_type : Prop :=
         δ ≤ |z - 1| →
           max δ (δ ^ 2) ≤ |z ^ 2 - 1|
 
+
 end NumStability.HDP.Contract

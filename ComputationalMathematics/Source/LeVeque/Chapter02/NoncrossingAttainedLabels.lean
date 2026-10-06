@@ -104,4 +104,5 @@ theorem noncrossingAttainedLabels : noncrossingAttainedLabelsTarget := by
   rw [hidentity] at hpos
   exact sub_pos.mp hpos
 
+
 end NumStability.Leveque02Tracer

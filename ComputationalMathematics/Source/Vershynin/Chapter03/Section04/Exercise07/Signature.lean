@@ -20,4 +20,5 @@ def hdp_03_ex_3_4_7__contract_type : Prop :=
           (NumStability.HDP.Vector.UniformBall.functionSqrtDimensionBall n))
         (fun i x ↦ x i) ≤ ENNReal.ofReal C
 
+
 end NumStability.HDP.Contract

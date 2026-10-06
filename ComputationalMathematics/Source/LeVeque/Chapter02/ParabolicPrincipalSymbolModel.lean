@@ -46,4 +46,5 @@ def advectionDiffusionOperator (u β : ℝ) : OneSpaceEvolutionOperator :=
 def variableDiffusionOperator (β β' : ℝ) : OneSpaceEvolutionOperator :=
   ⟨-β', β⟩
 
+
 end NumStability.Leveque02Tracer

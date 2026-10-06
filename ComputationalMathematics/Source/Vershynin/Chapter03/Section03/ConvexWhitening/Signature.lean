@@ -25,4 +25,5 @@ def hdp_03_body_3_3_convex_whitening__contract_type : Prop :=
         NumStability.HDP.Vector.Isotropy.IsIsotropic μ
           (NumStability.HDP.Vector.centeredLinearTransform 0 B⁻¹ X)
 
+
 end NumStability.HDP.Contract

@@ -125,4 +125,5 @@ theorem leveque03_simpleWave_classicalAdvection
   rw [hzero]
   exact hdiff
 
+
 end NumStability

@@ -18,4 +18,5 @@ theorem hdp_03_body_3_3_isotropic_body_def__contract :
     hdp_03_body_3_3_isotropic_body_def__contract_type :=
   hdp_03_body_3_3_isotropic_body_def
 
+
 end NumStability.HDP.Contract

@@ -240,4 +240,5 @@ theorem indepFun_rowwise_linearMarginals_of_isStandardNormal
 
 end Gaussian
 
+
 end NumStability.HDP.Vector

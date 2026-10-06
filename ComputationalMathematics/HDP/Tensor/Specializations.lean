@@ -131,4 +131,5 @@ theorem inner_matrixTensor_eq_trace {m n : ℕ}
       Matrix.trace (A.transpose * B) := by
   rw [inner_matrixTensor_eq_sum, trace_transpose_mul_eq_sum]
 
+
 end NumStability.HDP.Tensor

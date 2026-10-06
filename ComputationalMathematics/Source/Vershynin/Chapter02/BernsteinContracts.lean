@@ -333,4 +333,5 @@ theorem hdp_02_body_h2_d8_hnormalized_hregimes_corrected
           2 * Real.exp (-(c * t * Real.sqrt (Fintype.card ι : ℝ)))) :=
   bernsteinNormalizedTwoRegimePsiOne_corrected hne hmeas hCenter hSubExp hIndep hK
 
+
 end NumStability.HDP.Contract

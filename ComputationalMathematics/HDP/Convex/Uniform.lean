@@ -47,4 +47,5 @@ theorem hasUniformConvexBodyLaw_iff {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
         HasLaw (fun ω i => X i ω) (uniformConvexBodyMeasure K) μ :=
   Iff.rfl
 
+
 end NumStability.HDP.Convex

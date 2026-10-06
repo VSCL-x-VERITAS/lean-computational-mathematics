@@ -140,4 +140,5 @@ theorem sub_principalProjection_mem_orthogonal {n : ℕ}
     x - principalProjection hM k hk x ∈ (principalSubspace hM k hk)ᗮ := by
   exact Submodule.sub_starProjection_mem_orthogonal _
 
+
 end NumStability.HDP.Vector.PrincipalComponents

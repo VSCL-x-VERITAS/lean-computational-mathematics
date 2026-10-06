@@ -72,4 +72,5 @@ theorem leveque03_riemannSolution_heaviside
   rw [leveque03_riemannSolution_fromLeft eigenbasis speeds initialState
     left right hdata X T hT hoff, hsum]
 
+
 end NumStability

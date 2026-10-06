@@ -19,4 +19,5 @@ set_option linter.style.nameCheck false in
 theorem hdp_03_intro_cube_volume__contract : hdp_03_intro_cube_volume__contract_type := by
   exact hdp_03_intro_cube_volume
 
+
 end NumStability.HDP.Contract

@@ -477,4 +477,5 @@ theorem uniformMeasure_isIsotropic {d : ℕ} (hd : 0 < d) :
     simpa [pow_two] using isotropicRadius_coordinate_square_uniformMeasure hd i
   · rw [if_neg hij, coordinate_mul_uniformMeasure_eq_zero i j hij]
 
+
 end NumStability.HDP.Vector.L1Ball

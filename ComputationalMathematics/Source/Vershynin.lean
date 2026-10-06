@@ -7,4 +7,5 @@ import ComputationalMathematics.Source.Vershynin.Chapter03
 
 Canonical entry point for formalized results and checked source contracts from
 Roman Vershynin's *High-Dimensional Probability*.
+
 -/

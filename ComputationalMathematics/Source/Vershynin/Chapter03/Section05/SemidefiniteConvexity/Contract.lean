@@ -18,4 +18,5 @@ theorem hdp_03_body_3_5_sdp_convex__contract :
     hdp_03_body_3_5_sdp_convex__contract_type :=
   hdp_03_body_3_5_sdp_convex
 
+
 end NumStability.HDP.Contract

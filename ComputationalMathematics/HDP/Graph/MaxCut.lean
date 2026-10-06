@@ -49,4 +49,5 @@ theorem exists_cutSize_eq_maxCut (G : SimpleGraph V) [DecidableRel G.Adj] :
   refine ⟨S, le_antisymm (cutSize_le_maxCut G S) ?_⟩
   exact Finset.sup_le hmax
 
+
 end NumStability.HDP.Graph

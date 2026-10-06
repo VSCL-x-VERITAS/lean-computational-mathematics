@@ -285,4 +285,5 @@ theorem tendsto_sphericalMarginalProbabilityMeasure
   rw [hSeq, hLimit] at h
   exact h
 
+
 end NumStability.HDP.Vector.Spherical.ProjectiveLimit

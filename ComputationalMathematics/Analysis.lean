@@ -286,4 +286,5 @@ import ComputationalMathematics.Source.Higham.Chapter18.Section01.MatrixPowerBou
 # Analysis aggregate
 
 Declaration-free aggregate for the reusable analysis subtree.
+
 -/

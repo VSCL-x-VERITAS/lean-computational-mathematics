@@ -44,4 +44,5 @@ theorem hdp_03_body_3_1_norm_square_mean__contract :
   intro Ω _ μ _ n X hIndep hMeas hMean hVar
   exact hdp_03_body_3_1_norm_square_mean X hIndep hMeas hMean hVar
 
+
 end NumStability.HDP.Contract

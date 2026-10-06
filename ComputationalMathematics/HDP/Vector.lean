@@ -46,4 +46,5 @@ import ComputationalMathematics.HDP.Vector.UniformBallSubGaussian
 # Vector high-dimensional probability
 
 Entry point for reusable finite-dimensional random-vector foundations.
+
 -/

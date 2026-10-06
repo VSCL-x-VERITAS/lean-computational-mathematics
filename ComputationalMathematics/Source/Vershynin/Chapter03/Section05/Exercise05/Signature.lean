@@ -21,4 +21,5 @@ def hdp_03_ex_3_5_5__contract_type : Prop :=
           NumStability.HDP.Optimization.semidefiniteQuadraticValue A M =
             NumStability.HDP.Optimization.vectorQuadraticValue A X)
 
+
 end NumStability.HDP.Contract

@@ -150,4 +150,5 @@ theorem bipartiteUnitMaximum_universalPiNormBound {m n : ℕ}
     (bipartiteUnitMaximum A) (bipartiteUnitMaximum_nonneg A)).1
     (bipartiteUnitMaximum_universalUnitBound A)
 
+
 end NumStability.HDP.Optimization

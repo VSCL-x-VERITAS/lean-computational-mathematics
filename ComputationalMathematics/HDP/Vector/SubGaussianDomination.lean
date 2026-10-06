@@ -151,4 +151,5 @@ theorem psiTwoNorm_eq_of_hasLaw
   exact NumStability.HDP.Scalar.SubGaussian.psiTwoNorm_eq_of_sameLaw
     (measurable_linearMarginal hX u.1) hL hSourceLaw hCanonicalLaw
 
+
 end NumStability.HDP.Vector.SubGaussian

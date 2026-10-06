@@ -26,4 +26,5 @@ theorem iIndepFun_iff_covariance_eq_zero_of_hasGaussianLaw
       (hX.eval i).memLp_two (hX.eval j).memLp_two
   · exact hX.iIndepFun_of_covariance_eq_zero
 
+
 end NumStability.HDP.Vector.Gaussian

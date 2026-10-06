@@ -66,4 +66,5 @@ import ComputationalMathematics.Source.LeVeque.Chapter03.Exercise37Averaging
 
 Source correspondence for *Characteristics and Riemann Problems for Linear
 Hyperbolic Equations*.
+
 -/

@@ -19,4 +19,5 @@ def hdp_03_body_3_6_maxcut_sdp__contract_type : Prop :=
           NumStability.HDP.Graph.maxCutSemidefiniteValue (G.adjMatrix ℝ) X =
             NumStability.HDP.Graph.maxCutSemidefiniteMatrixValue (G.adjMatrix ℝ) M
 
+
 end NumStability.HDP.Contract

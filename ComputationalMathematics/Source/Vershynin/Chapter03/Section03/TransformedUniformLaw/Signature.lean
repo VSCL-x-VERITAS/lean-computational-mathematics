@@ -19,4 +19,5 @@ def hdp_03_body_3_3_transformed_uniform_law__contract_type : Prop :=
         (NumStability.HDP.Convex.uniformConvexBodyMeasure
           (Matrix.toLin' A '' K)) μ
 
+
 end NumStability.HDP.Contract

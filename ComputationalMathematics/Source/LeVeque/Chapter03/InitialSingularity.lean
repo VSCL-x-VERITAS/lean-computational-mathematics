@@ -35,4 +35,5 @@ theorem leveque03_initialSingularity_component
   rw [hfun] at hcoords
   exact hsing ((eigenbasis.equivFun.toContinuousLinearEquiv.comp_contDiffAt_iff).mp hcoords)
 
+
 end NumStability

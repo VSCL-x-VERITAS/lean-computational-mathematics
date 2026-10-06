@@ -29,4 +29,5 @@ def hdp_03_eq_3_22__contract_type : Prop :=
             NumStability.HDP.Optimization.semidefiniteQuadraticValue A N ≤
               NumStability.HDP.Optimization.semidefiniteQuadraticMaximum A
 
+
 end NumStability.HDP.Contract

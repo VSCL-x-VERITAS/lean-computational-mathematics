@@ -17,4 +17,5 @@ def hdp_03_ex_3_4_9b__contract_type : Prop :=
           (NumStability.HDP.Vector.L1Ball.isotropicRadius n))
         (fun i (x : Fin n → ℝ) ↦ x i)
 
+
 end NumStability.HDP.Contract

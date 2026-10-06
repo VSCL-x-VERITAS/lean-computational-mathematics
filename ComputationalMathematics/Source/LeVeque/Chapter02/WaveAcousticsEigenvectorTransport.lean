@@ -45,4 +45,5 @@ theorem waveAcousticsEigenvectorTransport :
     rw [Matrix.mulVec_mulVec, hSinv, Matrix.one_mulVec, Matrix.mulVec_zero] at hback
     exact hvne hback
 
+
 end NumStability.Leveque02Tracer

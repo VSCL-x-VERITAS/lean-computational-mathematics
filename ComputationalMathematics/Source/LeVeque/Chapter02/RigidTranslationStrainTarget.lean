@@ -18,4 +18,5 @@ def rigidTranslationStrainTarget : Prop :=
       displacementGradient X Y x y t = 0 ∧
       infinitesimalStrain (displacementGradient X Y x y t) = 0
 
+
 end NumStability.Leveque02Tracer

@@ -446,4 +446,5 @@ theorem leveque03_exercise37Velocity_slow_error
     nlinarith
   · exact mul_le_mul_of_nonneg_left hb.2 hepsilon |>.trans_eq (mul_one _)
 
+
 end NumStability

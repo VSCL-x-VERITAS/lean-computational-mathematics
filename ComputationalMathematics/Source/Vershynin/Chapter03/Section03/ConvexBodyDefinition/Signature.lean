@@ -10,4 +10,5 @@ def hdp_03_body_3_3_convex_body_def__contract_type : Prop :=
     NumStability.HDP.Convex.IsConvexBody K ↔
       Convex ℝ K ∧ Bornology.IsBounded K ∧ (interior K).Nonempty
 
+
 end NumStability.HDP.Contract

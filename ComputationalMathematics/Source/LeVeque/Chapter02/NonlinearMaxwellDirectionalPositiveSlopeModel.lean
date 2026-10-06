@@ -36,4 +36,5 @@ noncomputable def frozenNonlinearMaxwellDirectionalMatrix
     Matrix MaxwellStateIndex MaxwellStateIndex ℝ :=
   maxwellDirectionalMatrix electricSlope magneticSlope direction
 
+
 end NumStability.Leveque02Tracer
