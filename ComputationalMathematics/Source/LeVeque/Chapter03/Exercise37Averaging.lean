@@ -175,4 +175,5 @@ theorem leveque03_exercise37FullAverage
     leveque03_exercise37Velocity_timeAverage density soundSpeed
       initialPressure epsilon x a hspeed hdensity⟩
 
+
 end NumStability

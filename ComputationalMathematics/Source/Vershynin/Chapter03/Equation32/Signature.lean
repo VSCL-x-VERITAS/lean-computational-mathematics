@@ -15,4 +15,5 @@ def hdp_03_eq_3_32__contract_type : Prop :=
     NumStability.HDP.Kernel.IsRealFeatureMap K Φ ↔
       ∀ u v, ⟪Φ u, Φ v⟫_ℝ = K u v
 
+
 end NumStability.HDP.Contract

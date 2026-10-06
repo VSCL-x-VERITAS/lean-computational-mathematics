@@ -52,4 +52,5 @@ theorem leveque03_acousticWaveDecomposition
     _ = w 0 • linearAcousticsLeftEigenvector density soundSpeed +
           w 1 • linearAcousticsRightEigenvector density soundSpeed := hsum w
 
+
 end NumStability

@@ -15,4 +15,5 @@ set_option linter.style.nameCheck false in
 theorem hdp_03_hex_h3_d5_d2a__contract : hdp_03_hex_h3_d5_d2a__contract_type :=
   hdp_03_hex_h3_d5_d2a
 
+
 end NumStability.HDP.Contract

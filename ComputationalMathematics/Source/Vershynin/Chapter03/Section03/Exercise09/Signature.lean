@@ -16,4 +16,5 @@ def hdp_03_ex_3_3_9__contract_type : Prop :=
         ∑ i, Matrix.vecMulVec (u i) (u i) =
           A • (1 : Matrix (Fin n) (Fin n) ℝ))
 
+
 end NumStability.HDP.Contract

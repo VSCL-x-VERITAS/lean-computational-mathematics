@@ -27,4 +27,5 @@ def hdp_03_ex_3_3_4_degenerate_obstruction__contract_type : Prop :=
         HasGaussianLaw (fun omega => innerSL ℝ theta (X omega)) (Measure.dirac ())) ∧
       ¬ HasBookNondegenerateNormalLaw (Measure.dirac ()) X
 
+
 end NumStability.HDP.Contract

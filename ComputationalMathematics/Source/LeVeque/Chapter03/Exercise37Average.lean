@@ -56,4 +56,5 @@ theorem leveque03_exercise37SlowField_acoustics
   · ring
   · ring
 
+
 end NumStability

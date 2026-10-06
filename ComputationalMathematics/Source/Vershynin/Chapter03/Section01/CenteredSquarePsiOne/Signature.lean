@@ -25,4 +25,5 @@ def hdp_03_body_3_1_square_centering__contract_type : Prop :=
               ENNReal.ofReal C *
                 NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X ^ 2
 
+
 end NumStability.HDP.Contract

@@ -132,4 +132,5 @@ theorem linearMarginal_psiOneGauge_lt_top_of_isConvexBody {n : ℕ}
     _ ≤ ∑ i : Fin n, |C| * |u i| := Finset.sum_le_sum (fun i _ => hterm i)
     _ ≤ B := by dsimp [B]; linarith
 
+
 end NumStability.HDP.Convex

@@ -59,4 +59,5 @@ def noncrossingAttainedLabelsTarget : Prop :=
         StrictMonoOn (fun η => particlePosition η t)
           (Set.range (lagrangianMassLabel initialDensity referenceLocation)))
 
+
 end NumStability.Leveque02Tracer

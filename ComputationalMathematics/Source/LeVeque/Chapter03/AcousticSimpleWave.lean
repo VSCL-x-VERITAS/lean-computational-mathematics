@@ -87,4 +87,5 @@ theorem leveque03_acousticSimpleWave_classicalAdvection
   rw [hzero]
   exact hdiff
 
+
 end NumStability

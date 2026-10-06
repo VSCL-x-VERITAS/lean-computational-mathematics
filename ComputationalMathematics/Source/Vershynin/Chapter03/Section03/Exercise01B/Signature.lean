@@ -30,4 +30,5 @@ def hdp_03_ex_3_3_1b_dimension_one_obstruction__contract_type : Prop :=
   iIndepFun (fun i : Fin 1 => fun x : Fin 1 → ℝ => x i)
     (NumStability.HDP.Vector.Spherical.sphericalVectorMeasure 1)
 
+
 end NumStability.HDP.Contract

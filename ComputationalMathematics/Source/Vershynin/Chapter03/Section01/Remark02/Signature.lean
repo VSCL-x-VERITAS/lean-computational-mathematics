@@ -37,4 +37,5 @@ def hdp_03_hrem_h3_d1_d2__contract_type : Prop :=
                     (1 / 100 : ℝ)) ∧
                 (∫ ω, NumStability.vecNorm2Sq (fun i => X i ω) ∂μ) = n
 
+
 end NumStability.HDP.Contract

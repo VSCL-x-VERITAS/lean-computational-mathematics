@@ -13,4 +13,5 @@ import ComputationalMathematics.HDP.Vector
 
 Complete entry point for the current HDP family: scalar and vector probability
 modules, frozen source-contract signatures, and stable source contracts.
+
 -/

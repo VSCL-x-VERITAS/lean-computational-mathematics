@@ -48,4 +48,5 @@ theorem leveque03_solutionSingularity_onInitialRay
   dsimp [leveque03_characteristicCurve]
   ring
 
+
 end NumStability

@@ -24,4 +24,5 @@ def hdp_03_thm_3_6_5__contract_type : Prop :=
         NumStability.HDP.Graph.gaussianHyperplaneCutExpectation
           (G.adjMatrix ℝ) X
 
+
 end NumStability.HDP.Contract

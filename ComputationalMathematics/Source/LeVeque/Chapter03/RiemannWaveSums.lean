@@ -127,4 +127,5 @@ theorem leveque03_riemannSolution_fromRight
       simp only [fR, fW, Finset.sum_ite, Finset.sum_const_zero, add_zero,
         hset]
 
+
 end NumStability

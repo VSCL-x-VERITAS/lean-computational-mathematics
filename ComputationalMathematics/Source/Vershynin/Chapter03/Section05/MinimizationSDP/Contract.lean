@@ -16,4 +16,5 @@ theorem hdp_03_body_3_5_minimization_sdp__contract :
     hdp_03_body_3_5_minimization_sdp__contract_type :=
   hdp_03_body_3_5_minimization_sdp
 
+
 end NumStability.HDP.Contract

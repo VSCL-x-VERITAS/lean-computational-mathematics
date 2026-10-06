@@ -244,4 +244,5 @@ theorem leveque03_exercise31bSolution_weak (originCoeff : Fin 2 → ℝ) :
       leveque03_exercise31abA.mulVec :=
   leveque03_exercise31abSolution_weak leveque03_exercise31bLeftCoeffs originCoeff leveque03_exercise31bRightCoeffs
 
+
 end NumStability

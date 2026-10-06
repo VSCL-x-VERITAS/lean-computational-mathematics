@@ -18,4 +18,5 @@ def hdp_03_ex_3_7_5c__contract_type : Prop :=
       NumStability.HDP.Tensor.powerSeriesFeature f a ha hseries v⟫_ℝ =
       f (∑ i, u i * v i)
 
+
 end NumStability.HDP.Contract

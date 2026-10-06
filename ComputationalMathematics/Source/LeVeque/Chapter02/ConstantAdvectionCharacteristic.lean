@@ -18,4 +18,5 @@ theorem constantAdvectionCharacteristic : constantAdvectionCharacteristicTarget 
   rw [NumStability.linearAdvection_eq_travelingWave_of_differentiable hdiff hpde]
   simp [NumStability.travelingWave]
 
+
 end NumStability.Leveque02Tracer

@@ -189,4 +189,5 @@ theorem universalUnitBound_iff_universalPiNormBound
       _ ≤ K * 1 * 1 := by gcongr
       _ = K := by ring
 
+
 end NumStability.HDP.Optimization

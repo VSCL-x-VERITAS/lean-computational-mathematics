@@ -18,4 +18,5 @@ set_option linter.style.nameCheck false in
 theorem hdp_03_heq_h3_d3__contract : hdp_03_heq_h3_d3__contract_type :=
   hdp_03_heq_h3_d3
 
+
 end NumStability.HDP.Contract

@@ -98,4 +98,5 @@ theorem maxwellPropagatingMode_nonvacuous :
     norm_num [state, electric] at h
 
 
+
 end NumStability.Leveque02Tracer

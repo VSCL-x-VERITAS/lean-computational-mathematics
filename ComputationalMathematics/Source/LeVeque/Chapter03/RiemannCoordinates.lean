@@ -60,4 +60,5 @@ theorem leveque03_riemannCharacteristicPropagation
   have hstep := leveque03_riemannCharacteristicData eigenbasis initialState left right hdata p
   exact ⟨fun x t hx => hstep.1 _ hx, fun x t hx => hstep.2 _ hx⟩
 
+
 end NumStability

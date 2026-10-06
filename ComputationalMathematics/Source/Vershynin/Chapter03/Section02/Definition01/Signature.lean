@@ -16,4 +16,5 @@ def hdp_03_hdef_h3_d2_d1__contract_type : Prop :=
       (NumStability.HDP.Vector.Isotropy.IsIsotropic μ X ↔
         NumStability.HDP.Vector.Covariance.secondMomentMatrix μ X = 1)
 
+
 end NumStability.HDP.Contract

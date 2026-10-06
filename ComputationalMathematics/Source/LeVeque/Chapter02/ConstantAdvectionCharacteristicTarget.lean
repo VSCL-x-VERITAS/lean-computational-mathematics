@@ -20,4 +20,5 @@ def constantAdvectionCharacteristicTarget : Prop :=
     ∀ origin time : ℝ,
       q (origin + velocity * time) time = q origin 0
 
+
 end NumStability.Leveque02Tracer

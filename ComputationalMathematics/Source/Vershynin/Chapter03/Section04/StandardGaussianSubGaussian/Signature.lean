@@ -18,4 +18,5 @@ def hdp_03_body_3_4_gaussian_subgaussian__contract_type : Prop :=
         (NumStability.standardGaussianVectorMeasure n)
         (fun i x ↦ x i) ≤ ENNReal.ofReal C
 
+
 end NumStability.HDP.Contract

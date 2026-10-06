@@ -11,4 +11,5 @@ def hdp_03_body_3_5_sdp_convex__contract_type : Prop :=
       (∀ X Y, P.value (X + Y) = P.value X + P.value Y) ∧
       ∀ (a : ℝ) X, P.value (a • X) = a * P.value X
 
+
 end NumStability.HDP.Contract

@@ -189,4 +189,5 @@ theorem hdp_02_hlem_h2_d7_d7
   ⟨NumStability.HDP.Scalar.SubExponential.psiOneGauge_mul_lt_top hX hY,
     NumStability.HDP.Scalar.SubExponential.psiOneGauge_mul_le hX hY⟩
 
+
 end NumStability.HDP.Contract

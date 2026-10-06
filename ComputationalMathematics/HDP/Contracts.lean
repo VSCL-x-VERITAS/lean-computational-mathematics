@@ -155,4 +155,5 @@ import ComputationalMathematics.Source.Vershynin.Chapter03.Section04.Exercise05.
 Historical family entry point for the stable, source-numbered HDP contracts.
 Canonical declarations live in the Vershynin source hierarchy; the legacy leaf
 paths remain available as import-only compatibility wrappers.
+
 -/

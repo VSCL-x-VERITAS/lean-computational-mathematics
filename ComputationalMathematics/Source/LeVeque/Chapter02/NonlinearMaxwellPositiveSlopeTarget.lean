@@ -25,4 +25,5 @@ def nonlinearMaxwellPositiveSlopeTarget : Prop :=
       (frozenNonlinearMaxwellMatrix permittivity permeability
         electricField magneticField)
 
+
 end NumStability.Leveque02Tracer

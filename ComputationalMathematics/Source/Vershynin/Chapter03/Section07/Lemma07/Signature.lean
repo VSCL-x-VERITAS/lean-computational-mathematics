@@ -20,4 +20,5 @@ def hdp_03_lem_3_7_7__contract_type : Prop :=
             NumStability.HDP.Tensor.krivineRightFeature v⟫_ℝ =
         NumStability.HDP.Tensor.krivineBeta * (∑ i, u i * v i)
 
+
 end NumStability.HDP.Contract

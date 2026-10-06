@@ -35,4 +35,5 @@ theorem leveque03_hyperbolicMatrix_diagonalization
   · rintro ⟨eigenvalues, eigenbasis, heigen, _⟩
     exact ⟨eigenvalues, eigenbasis, heigen⟩
 
+
 end NumStability

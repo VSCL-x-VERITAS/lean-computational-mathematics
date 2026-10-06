@@ -200,4 +200,5 @@ theorem indepFun_radius_direction_of_isStandardNormal
   rw [hpairLaw.map_eq, hradiusLaw.map_eq, hdirectionLaw.map_eq]
   simpa [pair] using hcanonical
 
+
 end NumStability.HDP.Vector.Gaussian

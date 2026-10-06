@@ -26,4 +26,5 @@ theorem hdp_03_lem_3_2_3__contract :
     hdp_03_lem_3_2_3__contract_type :=
   hdp_03_lem_3_2_3
 
+
 end NumStability.HDP.Contract

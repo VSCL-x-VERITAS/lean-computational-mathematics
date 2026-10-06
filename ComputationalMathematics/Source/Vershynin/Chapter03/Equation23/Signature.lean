@@ -21,4 +21,5 @@ def hdp_03_eq_3_23__contract_type : Prop :=
         (1 / 4 : ℝ) * ∑ i, ∑ j,
           G.adjMatrix ℝ i j * (1 - (x i).value * (x j).value)
 
+
 end NumStability.HDP.Contract

@@ -25,4 +25,5 @@ def hdp_03_body_3_3_spherical_law__contract_type : Prop :=
                 (volume : Measure (EuclideanSpace ℝ (Fin n))))
               Set.univ)) μ)
 
+
 end NumStability.HDP.Contract

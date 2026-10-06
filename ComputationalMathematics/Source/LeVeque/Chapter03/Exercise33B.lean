@@ -136,4 +136,5 @@ theorem leveque03_exercise33bSolution_right (valueAtJump : Fin 3 → ℝ)
       eigenmodeTravelingWave, travelingWave, riemannData,
       Fin.sum_univ_succ, hone, htwo, hnotTwo, hnotThree, hx]
 
+
 end NumStability

@@ -71,4 +71,5 @@ theorem isIsotropic_iff_marginalVariance
   · intro i j
     exact (hLp i).integrable_mul (hLp j)
 
+
 end NumStability.HDP.Vector.Isotropy

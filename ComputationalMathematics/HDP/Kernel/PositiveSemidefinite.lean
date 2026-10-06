@@ -40,4 +40,5 @@ theorem IsRealFeatureMap.isPositiveSemidefinite {X H : Type*}
   rw [hgram]
   exact Matrix.posSemidef_gram ℝ _
 
+
 end NumStability.HDP.Kernel

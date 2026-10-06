@@ -110,4 +110,5 @@ theorem leveque03_exercise36RightBoundaryTimes_iff (soundSpeed t : ℝ) :
     · exact ⟨1, k, Or.inl rfl, by norm_num; linarith⟩
     · exact ⟨-1, k, Or.inr rfl, by norm_num; linarith⟩
 
+
 end NumStability

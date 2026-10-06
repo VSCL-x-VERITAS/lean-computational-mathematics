@@ -23,4 +23,5 @@ noncomputable def exactPlanarStrain
 def planarQuarterTurn : Matrix (Fin 2) (Fin 2) ℝ :=
   !![0, -1; 1, 0]
 
+
 end NumStability.Leveque02Tracer

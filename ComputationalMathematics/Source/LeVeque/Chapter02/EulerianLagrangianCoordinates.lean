@@ -77,4 +77,5 @@ theorem movingMassLabeledParticleFlow :
     norm_num [flow, initialDensity, fixedSite, particleSite,
       labelOfInitialSite, lagrangianMassLabel] at hcoordinate
 
+
 end NumStability.Leveque02Tracer

@@ -380,4 +380,5 @@ theorem sphericalVector_isSubGaussian_psiTwoNorm_le :
   exact ⟨Vector.SubGaussian.isSubGaussian_of_psiTwoNorm_lt_top
       (hle.trans_lt ENNReal.ofReal_lt_top), hle⟩
 
+
 end NumStability.HDP.Vector.Spherical

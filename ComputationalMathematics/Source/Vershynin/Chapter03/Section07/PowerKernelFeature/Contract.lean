@@ -19,4 +19,5 @@ theorem hdp_03_body_3_7_power_kernel_feature__contract :
     hdp_03_body_3_7_power_kernel_feature__contract_type :=
   hdp_03_body_3_7_power_kernel_feature
 
+
 end NumStability.HDP.Contract

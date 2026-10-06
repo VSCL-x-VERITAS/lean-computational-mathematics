@@ -23,4 +23,5 @@ def hdp_03_body_3_2_pca_directions__contract_type : Prop :=
             (NumStability.HDP.Vector.PrincipalComponents.secondMomentPrincipalDirection μ X hX i) ∧
         ‖NumStability.HDP.Vector.PrincipalComponents.secondMomentPrincipalDirection μ X hX i‖ = 1
 
+
 end NumStability.HDP.Contract

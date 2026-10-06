@@ -61,4 +61,5 @@ def maxwellPropagatingPlaneWaveTarget : Prop :=
       dotProduct direction (magnetic position time) = 0 ∧
       dotProduct (electric position time) (magnetic position time) = 0)
 
+
 end NumStability.Leveque02Tracer

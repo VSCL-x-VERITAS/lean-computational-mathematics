@@ -25,4 +25,5 @@ def hdp_03_ex_3_3_1a__contract_type : Prop :=
             Set.univ)) μ →
       NumStability.HDP.Vector.Isotropy.IsIsotropic μ X
 
+
 end NumStability.HDP.Contract

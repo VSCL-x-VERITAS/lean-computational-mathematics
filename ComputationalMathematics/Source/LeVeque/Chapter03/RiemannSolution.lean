@@ -141,4 +141,5 @@ theorem leveque03_riemannSolution_cutoff
   rw [leveque03_riemannSolution_speedPartition eigenbasis speeds initialState
     left right hdata X T hT hoff, hrset, hlset]
 
+
 end NumStability

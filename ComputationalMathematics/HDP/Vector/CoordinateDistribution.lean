@@ -68,4 +68,5 @@ theorem coordinateDistributionMeasure_isIsotropic (n : ℕ) [NeZero n] :
     · simp [hij]
   · fun_prop
 
+
 end NumStability.HDP.Vector.CoordinateDistribution

@@ -20,4 +20,5 @@ def hdp_03_def_3_5_4__contract_type : Prop :=
             NumStability.HDP.Optimization.matrixInner A Y ≤
               NumStability.HDP.Optimization.matrixInner A X
 
+
 end NumStability.HDP.Contract

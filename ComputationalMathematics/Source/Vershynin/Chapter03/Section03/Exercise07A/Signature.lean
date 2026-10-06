@@ -19,4 +19,5 @@ def hdp_03_ex_3_3_7a__contract_type : Prop :=
         (fun omega =>
           NumStability.gaussianUnitDirection d (fun i => X i omega)) mu
 
+
 end NumStability.HDP.Contract

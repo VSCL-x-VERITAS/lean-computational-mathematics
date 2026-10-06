@@ -16,4 +16,5 @@ def hdp_03_body_3_2_spectral_decomposition__contract_type : Prop :=
         (∀ i, 0 ≤ hM.1.eigenvalues i) ∧
         Antitone hM.1.eigenvalues₀
 
+
 end NumStability.HDP.Contract

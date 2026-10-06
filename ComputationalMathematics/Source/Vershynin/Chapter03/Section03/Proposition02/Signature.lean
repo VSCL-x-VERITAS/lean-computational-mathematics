@@ -19,4 +19,5 @@ def hdp_03_prop_3_3_2__contract_type : Prop :=
           (U : Matrix (Fin n) (Fin n) ℝ)
           (fun j ↦ X j ω) i)
 
+
 end NumStability.HDP.Contract

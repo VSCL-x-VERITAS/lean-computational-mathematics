@@ -8,4 +8,5 @@ set_option linter.style.nameCheck false in
 def hdp_03_eq_3_18__contract_type : Prop :=
   hdp_03_def_3_5_4__contract_type
 
+
 end NumStability.HDP.Contract

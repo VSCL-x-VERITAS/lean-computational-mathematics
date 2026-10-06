@@ -30,4 +30,5 @@ theorem nonlinearMaxwellPositiveSlope :
       helectricInv hmagnetic
   simpa [frozenNonlinearMaxwellMatrix, linearAcousticsMatrix] using hhyperbolic
 
+
 end NumStability.Leveque02Tracer

@@ -14,4 +14,5 @@ def hdp_03_hex_h3_d5_d2b__contract_type : Prop :=
     0 ≤ K →
       (UniversalUnitBound.{u} A K ↔ UniversalPiNormBound.{u} A K)
 
+
 end NumStability.HDP.Contract

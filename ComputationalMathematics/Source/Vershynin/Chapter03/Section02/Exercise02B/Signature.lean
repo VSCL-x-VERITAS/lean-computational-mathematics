@@ -23,4 +23,5 @@ def hdp_03_ex_3_2_2b__contract_type : Prop :=
         NumStability.HDP.Vector.Isotropy.IsIsotropic μ
           (NumStability.HDP.Vector.centeredLinearTransform m B⁻¹ X)
 
+
 end NumStability.HDP.Contract

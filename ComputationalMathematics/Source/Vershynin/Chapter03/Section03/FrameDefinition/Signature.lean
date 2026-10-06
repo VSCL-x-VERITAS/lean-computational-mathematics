@@ -20,4 +20,5 @@ def hdp_03_def_3_3_8__contract_type : Prop :=
         0 < A ∧ ∀ x : Fin (n + 1) → ℝ,
           ∑ i, (u i ⬝ᵥ x) ^ 2 = A * ∑ j, (x j) ^ 2)
 
+
 end NumStability.HDP.Contract

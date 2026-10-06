@@ -22,4 +22,5 @@ def hdp_03_body_3_2_covariance_def__contract_type : Prop :=
             (∫ ω, X i ω * X j ω ∂μ) -
               (∫ ω, X i ω ∂μ) * (∫ ω, X j ω ∂μ))
 
+
 end NumStability.HDP.Contract

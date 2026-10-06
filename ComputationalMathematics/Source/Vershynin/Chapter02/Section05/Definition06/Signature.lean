@@ -25,4 +25,5 @@ def hdp_02_hdef_h2_d5_d6__contract_type : Prop :=
             sInf {t : ℝ≥0∞ |
               NumStability.HDP.Scalar.SubGaussian.PsiTwoAdmissible μ X t})
 
+
 end NumStability.HDP.Contract

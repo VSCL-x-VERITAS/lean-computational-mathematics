@@ -20,4 +20,5 @@ def hdp_03_rem_3_4_8__contract_type : Prop :=
       atTop
       (𝓝 (⟨gaussianReal 0 1, inferInstance⟩ : ProbabilityMeasure ℝ))
 
+
 end NumStability.HDP.Contract

@@ -66,4 +66,5 @@ theorem leveque03_waveJumpEigenvector
     rw [hjump]
     exact smul_ne_zero hα (eigenbasis.ne_zero p)
 
+
 end NumStability

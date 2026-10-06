@@ -27,4 +27,5 @@ def hdp_03_eq_3_14__contract_type : Prop :=
                 (NumStability.HDP.Optimization.bipartiteMaximizerColumnDirection A j).1 g
           ∂NumStability.standardGaussianVectorMeasure (m + n)
 
+
 end NumStability.HDP.Contract

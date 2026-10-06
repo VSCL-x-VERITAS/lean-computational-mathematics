@@ -101,4 +101,5 @@ theorem sinh_log_one_add_sqrt_two :
   rw [hinv]
   ring
 
+
 end NumStability.HDP.Tensor

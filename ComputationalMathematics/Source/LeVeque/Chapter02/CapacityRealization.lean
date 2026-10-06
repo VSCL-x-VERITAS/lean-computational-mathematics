@@ -79,4 +79,5 @@ theorem capacityRealization : capacityRealizationTarget := by
 #print axioms q_space
 #print axioms capacityRealization
 
+
 end NumStability.Leveque02Tracer

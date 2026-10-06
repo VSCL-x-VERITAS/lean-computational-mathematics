@@ -67,4 +67,5 @@ theorem leveque03_exercise37InitialBoundaryVariables
   fin_cases i <;>
     simp [leveque03_acousticBoundaryVariables]
 
+
 end NumStability

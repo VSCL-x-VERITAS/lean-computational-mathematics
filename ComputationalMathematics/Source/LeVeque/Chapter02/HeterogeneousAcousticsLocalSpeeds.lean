@@ -18,4 +18,5 @@ theorem heterogeneousAcousticsLocalSpeeds :
   intro bulkModulus density x hbulk hdensity
   exact stationaryAcousticsEigenvalues (bulkModulus x) (density x) hbulk hdensity
 
+
 end NumStability.Leveque02Tracer

@@ -36,4 +36,5 @@ def hdp_03_hex_h3_d1_d4b__contract_type : Prop :=
                         μ X) ^ 4 /
                     Real.sqrt (n : ℝ)
 
+
 end NumStability.HDP.Contract

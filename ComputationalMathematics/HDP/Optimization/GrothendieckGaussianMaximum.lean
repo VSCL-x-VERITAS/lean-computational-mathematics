@@ -39,4 +39,5 @@ theorem bipartiteUnitMaximum_gaussian_identity {m n : ℕ}
       (fun i ↦ (bipartiteMaximizerRowDirection A i).1)
       (fun j ↦ (bipartiteMaximizerColumnDirection A j).1)).symm
 
+
 end NumStability.HDP.Optimization

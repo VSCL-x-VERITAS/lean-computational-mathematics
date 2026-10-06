@@ -30,4 +30,5 @@ theorem matrix_mulVec_injective_of_nonzero_eigenvalues
   have hi := congrFun hcoord i
   exact (mul_left_cancel₀ (hnonzero i)) hi
 
+
 end NumStability

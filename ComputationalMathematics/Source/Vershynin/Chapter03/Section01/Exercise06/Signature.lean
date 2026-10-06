@@ -30,4 +30,5 @@ def hdp_03_hex_h3_d1_d6__contract_type : Prop :=
                     (fun ω => NumStability.vecNorm2 (fun i => X i ω)) μ ≤
                   C * K ^ 4
 
+
 end NumStability.HDP.Contract

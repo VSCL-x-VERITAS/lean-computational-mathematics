@@ -381,4 +381,5 @@ theorem symmetricQuadratic_grothendieck_bound
   apply abs_le.mpr
   constructor <;> norm_num at hpos hneg ⊢ <;> nlinarith
 
+
 end NumStability.HDP.Optimization

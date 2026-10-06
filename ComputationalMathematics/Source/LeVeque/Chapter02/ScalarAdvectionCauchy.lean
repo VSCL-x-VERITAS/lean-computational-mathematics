@@ -31,4 +31,5 @@ theorem scalarAdvectionCauchy : scalarAdvectionCauchyTarget := by
   exact hunique field hfcont (hfcd.differentiableOn (by norm_num))
     hfpde hfinit x t ht
 
+
 end NumStability.Leveque02Tracer

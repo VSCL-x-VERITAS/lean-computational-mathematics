@@ -20,4 +20,5 @@ theorem hdp_03_body_3_3_symmetric_bernoulli__contract :
     hdp_03_body_3_3_symmetric_bernoulli__contract_type :=
   hdp_03_body_3_3_symmetric_bernoulli
 
+
 end NumStability.HDP.Contract

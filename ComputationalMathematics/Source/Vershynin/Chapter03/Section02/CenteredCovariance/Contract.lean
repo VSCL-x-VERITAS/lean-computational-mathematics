@@ -20,4 +20,5 @@ theorem hdp_03_body_3_2_centered_covariance__contract :
     hdp_03_body_3_2_centered_covariance__contract_type :=
   hdp_03_body_3_2_centered_covariance
 
+
 end NumStability.HDP.Contract

@@ -113,4 +113,5 @@ theorem leveque03_figure38_reflectedWave
     reflectedPressure = (1 / 2) * reflectedVelocity := by
   linarith
 
+
 end NumStability

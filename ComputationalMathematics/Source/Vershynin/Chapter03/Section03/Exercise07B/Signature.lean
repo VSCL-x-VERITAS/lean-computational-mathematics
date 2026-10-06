@@ -17,4 +17,5 @@ def hdp_03_ex_3_3_7b__contract_type : Prop :=
           NumStability.gaussianUnitDirection d (fun i => X i omega))
         (@NumStability.HDP.Vector.Spherical.uniformUnitSphereMeasure (d + 1)) mu
 
+
 end NumStability.HDP.Contract

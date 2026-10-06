@@ -15,4 +15,5 @@ def hdp_03_body_3_7_polynomial_kernel__contract_type : Prop :=
     NumStability.HDP.Kernel.IsPositiveSemidefinite
       (fun u v : Fin n → ℝ ↦ ((∑ i, u i * v i) + r) ^ k)
 
+
 end NumStability.HDP.Contract

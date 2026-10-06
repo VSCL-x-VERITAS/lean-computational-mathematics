@@ -182,4 +182,5 @@ theorem krivineFeature_arcsin {n : ℕ} (u v : Fin n → ℝ)
   · nlinarith [krivineScale_pos, krivineScale_lt_pi_div_two]
   · nlinarith [krivineScale_pos, krivineScale_lt_pi_div_two]
 
+
 end NumStability.HDP.Tensor

@@ -15,4 +15,5 @@ def hdp_03_ex_3_4_9a__contract_type : Prop :=
         (NumStability.HDP.Vector.L1Ball.uniformMeasure n (r n))
         (fun i x ↦ x i)
 
+
 end NumStability.HDP.Contract

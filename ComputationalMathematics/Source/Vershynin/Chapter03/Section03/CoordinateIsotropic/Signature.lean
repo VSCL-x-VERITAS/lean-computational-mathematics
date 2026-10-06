@@ -13,4 +13,5 @@ def hdp_03_body_3_3_coordinate_isotropic__contract_type : Prop :=
       (NumStability.HDP.Vector.CoordinateDistribution.coordinateDistributionMeasure n)
       (fun i : Fin n => fun x : Fin n → ℝ => x i)
 
+
 end NumStability.HDP.Contract

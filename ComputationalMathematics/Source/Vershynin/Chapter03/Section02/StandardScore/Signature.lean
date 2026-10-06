@@ -18,4 +18,5 @@ def hdp_03_body_3_2_standard_score__contract_type : Prop :=
         (∫ ω, NumStability.HDP.Scalar.Standardization.standardScore μ X ω ∂μ) = 0 ∧
         variance (NumStability.HDP.Scalar.Standardization.standardScore μ X) μ = 1
 
+
 end NumStability.HDP.Contract

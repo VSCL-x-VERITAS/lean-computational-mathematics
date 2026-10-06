@@ -43,4 +43,5 @@ theorem integral_sq_coordinate
   have hii := (isIsotropic_iff_integral_mul μ X).1 hX i i
   simpa [pow_two] using hii
 
+
 end NumStability.HDP.Vector.Isotropy

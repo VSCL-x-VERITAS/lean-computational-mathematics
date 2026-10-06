@@ -198,4 +198,5 @@ theorem leveque03_exercise31fRiemann_weak (originCoeff : Fin 2 → ℝ) :
   leveque03_exercise31fSolution_weak leveque03_exercise31fLeftCoeffs
     originCoeff leveque03_exercise31fRightCoeffs
 
+
 end NumStability
