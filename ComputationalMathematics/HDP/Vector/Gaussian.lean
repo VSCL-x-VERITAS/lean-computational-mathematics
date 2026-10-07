@@ -121,4 +121,5 @@ theorem isIsotropic_of_isStandardNormal
     rw [(hCoord.2 i).variance_eq]
     exact variance_id_gaussianReal
 
+
 end NumStability.HDP.Vector.Gaussian

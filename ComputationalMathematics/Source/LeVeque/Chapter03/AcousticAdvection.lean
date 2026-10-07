@@ -82,4 +82,5 @@ theorem leveque03_acousticCharacteristicAdvection
   exact ⟨acoustic_advection_const_mul _ _ _ _ _ hL,
     acoustic_advection_const_mul _ _ _ _ _ hR⟩
 
+
 end NumStability

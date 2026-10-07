@@ -20,4 +20,5 @@ def hdp_03_body_3_3_isotropic_body_def__contract_type : Prop :=
           (NumStability.HDP.Convex.uniformConvexBodyMeasure K)
           (fun i x => x i)
 
+
 end NumStability.HDP.Contract

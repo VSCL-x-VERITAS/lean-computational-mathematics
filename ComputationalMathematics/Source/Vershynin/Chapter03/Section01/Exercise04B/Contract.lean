@@ -22,4 +22,5 @@ theorem hdp_03_hex_h3_d1_d4b__contract :
     hdp_03_hex_h3_d1_d4b__contract_type :=
   hdp_03_hex_h3_d1_d4b
 
+
 end NumStability.HDP.Contract

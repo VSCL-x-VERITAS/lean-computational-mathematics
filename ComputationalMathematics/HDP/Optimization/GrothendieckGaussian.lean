@@ -88,4 +88,5 @@ theorem integral_standardGaussian_bilinear_sum
       exact (NumStability.standardGaussianVectorCoordinate_memLp_two d k).mul_const _
     simpa only [mul_assoc] using (hu.integrable_mul hv).const_mul (A i j)
 
+
 end NumStability.HDP.Optimization

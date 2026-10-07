@@ -16,4 +16,5 @@ def hdp_03_body_3_3_bernoulli_isotropic__contract_type : Prop :=
       NumStability.HDP.Vector.Bernoulli.IsSymmetricBernoulli μ X →
         NumStability.HDP.Vector.Isotropy.IsIsotropic μ X
 
+
 end NumStability.HDP.Contract

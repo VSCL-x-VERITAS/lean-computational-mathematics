@@ -14,4 +14,5 @@ def hdp_03_def_3_7_1__contract_type : Prop :=
     (A B : NumStability.HDP.Tensor.FiniteTensor n),
     NumStability.HDP.Tensor.inner A B = ∑ i, A i * B i
 
+
 end NumStability.HDP.Contract

@@ -19,4 +19,5 @@ def hdp_03_eq_3_5__contract_type : Prop :=
           (fun x => ENNReal.ofReal
             (NumStability.HDP.Vector.Gaussian.covarianceGaussianDensity m S x))
 
+
 end NumStability.HDP.Contract

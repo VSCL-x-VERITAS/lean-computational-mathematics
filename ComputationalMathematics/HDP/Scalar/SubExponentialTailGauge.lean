@@ -80,4 +80,5 @@ theorem psiOneGauge_lt_top_of_ae_abs_le_const
       integral_mono_ae hInt (integrable_const 2) hPoint
     _ = 2 := by simp
 
+
 end NumStability.HDP.Scalar.SubExponential

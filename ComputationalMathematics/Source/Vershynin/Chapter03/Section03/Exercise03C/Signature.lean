@@ -21,4 +21,5 @@ def hdp_03_ex_3_3_3c__contract_type : Prop :=
           NumStability.HDP.Vector.Gaussian.IsStandardNormal mu
             (fun i omega => ∑ j, G i j omega * u j)
 
+
 end NumStability.HDP.Contract

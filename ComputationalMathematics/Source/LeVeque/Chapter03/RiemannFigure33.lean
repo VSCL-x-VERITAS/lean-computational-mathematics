@@ -147,4 +147,5 @@ theorem leveque03_figure33_rightExterior
   simpa [Finset.sum_filter, Fin.sum_univ_succ,
     not_lt.mpr h0.le, not_lt.mpr h1.le, not_lt.mpr h2.le] using hq
 
+
 end NumStability

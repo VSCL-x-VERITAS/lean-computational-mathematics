@@ -61,4 +61,5 @@ theorem inner_power_power {n : ℕ} (u v : Fin n → ℝ) (k : ℕ) :
   exact (Finset.prod_mul_distrib (f := fun j ↦ u (i j))
     (g := fun j ↦ v (i j))).symm
 
+
 end NumStability.HDP.Tensor

@@ -25,4 +25,5 @@ def hdp_03_body_3_7_moore_aronszajn__contract_type : Prop :=
       NumStability.HDP.Kernel.IsRealReproducingKernelPresentation K Φ₂ →
       ∃ e : H₁ ≃ₗᵢ[ℝ] H₂, ∀ x, e (Φ₁ x) = Φ₂ x
 
+
 end NumStability.HDP.Contract

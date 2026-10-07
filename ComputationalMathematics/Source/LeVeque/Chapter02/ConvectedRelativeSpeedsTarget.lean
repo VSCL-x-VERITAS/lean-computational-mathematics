@@ -28,4 +28,5 @@ def convectedRelativeSpeedsTarget : Prop :=
       (backgroundVelocity - soundSpeed) - backgroundVelocity = -soundSpeed ∧
       (backgroundVelocity + soundSpeed) - backgroundVelocity = soundSpeed
 
+
 end NumStability.Leveque02Tracer

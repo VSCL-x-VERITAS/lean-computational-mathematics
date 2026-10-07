@@ -243,4 +243,5 @@ theorem leveque03_periodicContinuation_spatialDifferentiable
       HasDerivAt (fun y => q y t) d a ∧
       HasDerivAt (fun y => q y t) d b from ⟨qx, hxa, hxb⟩)
 
+
 end NumStability

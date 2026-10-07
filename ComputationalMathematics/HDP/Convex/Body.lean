@@ -23,4 +23,5 @@ theorem isConvexBody_iff {n : ℕ} {K : Set (Fin n → ℝ)} :
       Convex ℝ K ∧ Bornology.IsBounded K ∧ (interior K).Nonempty :=
   Iff.rfl
 
+
 end NumStability.HDP.Convex

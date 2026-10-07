@@ -37,4 +37,5 @@ def nonlinearMaxwellDirectionalPositiveSlopeTarget : Prop :=
         (frozenNonlinearMaxwellDirectionalMatrix electricSlope magneticSlope
           direction)
 
+
 end NumStability.Leveque02Tracer

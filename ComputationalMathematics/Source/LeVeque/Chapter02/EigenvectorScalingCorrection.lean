@@ -39,4 +39,5 @@ theorem acousticEigenvectorScaling : acousticEigenvectorScalingTarget := by
   · intro scalar hscalar
     exact nonzeroScalarEigenvector _ _ _ _ scalar hright hscalar
 
+
 end NumStability.Leveque02Tracer

@@ -16,4 +16,5 @@ def hdp_03_body_3_2_plane_angle_mean__contract_type : Prop :=
           NumStability.HDP.Vector.planeDirectionMeasure) =
     Real.pi / 4
 
+
 end NumStability.HDP.Contract

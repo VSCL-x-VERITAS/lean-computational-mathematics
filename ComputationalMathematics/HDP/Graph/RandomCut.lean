@@ -106,4 +106,5 @@ theorem half_maxCut_le_uniformBoolCutExpectation (G : SimpleGraph V)
   unfold maxCut cutSize
   exact Finset.sup_le (fun S _ ↦ Finset.card_filter_le _ _)
 
+
 end NumStability.HDP.Graph

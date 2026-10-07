@@ -53,4 +53,5 @@ theorem hdp_03_ex_3_3_4_degenerate_obstruction__contract :
     hdp_03_ex_3_3_4_degenerate_obstruction__contract_type :=
   hdp_03_ex_3_3_4_degenerate_obstruction
 
+
 end NumStability.HDP.Contract

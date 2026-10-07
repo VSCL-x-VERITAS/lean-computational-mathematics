@@ -19,4 +19,5 @@ def hdp_03_lem_3_2_4b__contract_type : Prop :=
             (fun ω i => X i ω) ⟂ᵢ[μ] (fun ω i => Y i ω) →
               (∫ ω, (∑ i, X i ω * Y i ω) ^ 2 ∂μ) = n
 
+
 end NumStability.HDP.Contract

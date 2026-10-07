@@ -69,4 +69,5 @@ theorem powerSeriesFeature_inner {n : ℕ} (f : ℝ → ℝ) (a : ℕ → ℝ)
   rw [tsum_congr (fun k ↦ powerSeriesFeatureBlock_inner (a k) (ha k) u v k)]
   exact (hseries.eq_tsum (∑ i, u i * v i)).symm
 
+
 end NumStability.HDP.Tensor

@@ -29,4 +29,5 @@ theorem rigidTranslationStrain : rigidTranslationStrainTarget := by
     rw [hgradient]
     simp [infinitesimalStrain]
 
+
 end NumStability.Leveque02Tracer

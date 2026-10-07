@@ -26,4 +26,5 @@ def hdp_03_ex_3_4_10__contract_type : Prop :=
     (NumStability.HDP.Vector.IsotropicSubGaussianNonConcentration.counterexampleMeasure n).real
       {x | |NumStability.vecNorm2 x - Real.sqrt n| ≥ Real.sqrt n} = 1
 
+
 end NumStability.HDP.Contract

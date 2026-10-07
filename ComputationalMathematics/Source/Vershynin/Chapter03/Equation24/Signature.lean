@@ -14,4 +14,5 @@ def hdp_03_eq_3_24__contract_type : Prop :=
         NumStability.HDP.Graph.signCutValue G x ≤
           (NumStability.HDP.Graph.maxCut G : ℝ)
 
+
 end NumStability.HDP.Contract

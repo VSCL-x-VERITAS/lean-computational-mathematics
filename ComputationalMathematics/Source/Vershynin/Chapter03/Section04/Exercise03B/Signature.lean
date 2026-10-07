@@ -21,4 +21,5 @@ def hdp_03_ex_3_4_3b__contract_type : Prop :=
           (⨆ i, NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ (X i)) ≤
         NumStability.HDP.Vector.SubGaussian.PsiTwoNorm μ X
 
+
 end NumStability.HDP.Contract

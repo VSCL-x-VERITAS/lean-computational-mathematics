@@ -24,4 +24,5 @@ def heterogeneousAcousticsLocalSpeedsTarget : Prop :=
         (Matrix.toLin' (linearAcousticsMatrix (bulkModulus x) (density x)))
         soundSpeed
 
+
 end NumStability.Leveque02Tracer

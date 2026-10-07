@@ -152,4 +152,5 @@ theorem isTightFrame_iff_sum_vecMulVec {N n : ℕ}
   rw [isTightFrame_iff_pos_and_sum_vecMulVec]
   simp [hA]
 
+
 end NumStability.HDP.Vector.Frame

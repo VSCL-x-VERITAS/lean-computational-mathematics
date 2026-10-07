@@ -91,4 +91,5 @@ theorem leveque03_acousticPureWaveRelations (profile : ℝ → ℝ) :
     simp [eigenmodeTravelingWave, linearAcousticsRightEigenvector]
     ring
 
+
 end NumStability

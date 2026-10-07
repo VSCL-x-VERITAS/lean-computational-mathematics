@@ -16,4 +16,5 @@ def hdp_03_eq_3_13__contract_type : Prop :=
         UniversalPiNormBound.{u} A K ∧
           (UniversalUnitBound.{u} A K ↔ UniversalPiNormBound.{u} A K)
 
+
 end NumStability.HDP.Contract

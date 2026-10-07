@@ -7,4 +7,5 @@ import ComputationalMathematics.HDP.Scalar.LimitTheorems
 This historical import preserves the reusable Gaussian-tail API together with the prior
 source-facing limit-theorem re-exports. Reusable consumers should import
 `ComputationalMathematics.HDP.Scalar.GaussianTails.Basic`.
+
 -/

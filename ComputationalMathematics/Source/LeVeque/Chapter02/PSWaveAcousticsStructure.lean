@@ -116,4 +116,5 @@ theorem pSWaveAcousticsStructure : pSWaveAcousticsStructureTarget := by
             (shearWaveStrain W) ξ τ)
           (shearWaveVelocity W) shearModulus density x t)
 
+
 end NumStability.Leveque02Tracer

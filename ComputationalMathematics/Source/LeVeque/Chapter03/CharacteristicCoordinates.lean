@@ -48,4 +48,5 @@ theorem leveque03_characteristicCoordinates
   have h := congrArg (fun z => (R⁻¹).mulVec z) hrepr
   simpa only [Matrix.mulVec_mulVec, hInv, hSR, Matrix.one_mulVec] using h.symm
 
+
 end NumStability

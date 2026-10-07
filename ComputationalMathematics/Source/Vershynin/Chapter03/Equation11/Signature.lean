@@ -13,4 +13,5 @@ def hdp_03_eq_3_11__contract_type : Prop :=
         {x | NumStability.vecNorm2 x < Real.sqrt n / 2} ≤
       2 * Real.exp (-(c * n))
 
+
 end NumStability.HDP.Contract

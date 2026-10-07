@@ -18,4 +18,5 @@ def hdp_03_body_3_2_marginal_isotropy__contract_type : Prop :=
         ∀ x : Fin n → ℝ,
           variance (fun ω => ∑ i, X i ω * x i) μ = ∑ i, (x i) ^ 2)
 
+
 end NumStability.HDP.Contract

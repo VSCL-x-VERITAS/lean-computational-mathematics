@@ -184,4 +184,5 @@ theorem centered_isotropic_centeredLinearTransform_inverse
     (centeredLinearTransform_memLp m B⁻¹ X hX) hMeanWhite]
   exact hCovWhite
 
+
 end NumStability.HDP.Vector

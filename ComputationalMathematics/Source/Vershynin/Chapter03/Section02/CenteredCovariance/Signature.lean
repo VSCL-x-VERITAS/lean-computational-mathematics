@@ -18,4 +18,5 @@ def hdp_03_body_3_2_centered_covariance__contract_type : Prop :=
         NumStability.HDP.Vector.Covariance.covarianceMatrix μ X =
           NumStability.HDP.Vector.Covariance.secondMomentMatrix μ X
 
+
 end NumStability.HDP.Contract

@@ -202,4 +202,5 @@ theorem goemansWilliamson_arccos_bound {t : ℝ} (ht : t ∈ Icc (-1 : ℝ) 1) :
 
 end
 
+
 end NumStability.HDP.Graph

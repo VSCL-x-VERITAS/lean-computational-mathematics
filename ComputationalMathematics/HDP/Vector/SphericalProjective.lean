@@ -76,4 +76,5 @@ theorem gaussianProjectiveNumerator_hasStandardNormalLaw
       (NumStability.standardGaussianVectorMeasure (d + 1)) := by
   simpa using NumStability.HDP.Vector.Gaussian.unitWeightedGaussianLaw u
 
+
 end NumStability.HDP.Vector.Spherical

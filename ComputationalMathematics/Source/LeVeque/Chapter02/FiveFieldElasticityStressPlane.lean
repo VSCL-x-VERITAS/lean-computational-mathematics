@@ -173,4 +173,5 @@ theorem stressTwoDimensionalPlaneMotion_iff
       · simpa using heq]
   exact stressXOnlySolution_iff lam mu rho x t hK p s
 
+
 end NumStability.Leveque02Tracer.PlaneElasticity

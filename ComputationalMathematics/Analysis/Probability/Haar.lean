@@ -7,4 +7,5 @@ import ComputationalMathematics.Analysis.Probability.Haar.NormalizedOrthogonalMa
 
 Canonical import-only entry point for reusable results about Haar probability
 measures and homogeneous spaces.
+
 -/

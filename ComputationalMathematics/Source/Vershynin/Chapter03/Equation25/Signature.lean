@@ -15,4 +15,5 @@ def hdp_03_eq_3_25__contract_type : Prop :=
           NumStability.HDP.Graph.maxCutSemidefiniteValue (G.adjMatrix ℝ) Y ≤
             NumStability.HDP.Graph.maxCutSemidefiniteOptimalValue (G.adjMatrix ℝ)
 
+
 end NumStability.HDP.Contract

@@ -51,4 +51,5 @@ theorem leveque03_initialDataSolution_dependsOnDomain {m : ℕ}
     congrArg (fun w => ((Pi.basisFun ℝ (Fin m)).toMatrix eigenbasis).mulVec w)
       hprofiles
 
+
 end NumStability

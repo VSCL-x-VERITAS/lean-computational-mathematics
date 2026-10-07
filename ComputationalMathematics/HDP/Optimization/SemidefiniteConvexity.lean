@@ -37,4 +37,5 @@ theorem feasibleSet_convex {n m : ℕ} (P : SemidefiniteProgram n m) :
 
 end SemidefiniteProgram
 
+
 end NumStability.HDP.Optimization

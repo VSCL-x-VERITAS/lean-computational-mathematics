@@ -48,4 +48,5 @@ theorem exists_unitVectorFamily_matrixValue_eq {n : ℕ}
 
 end
 
+
 end NumStability.HDP.Graph

@@ -18,4 +18,5 @@ theorem hdp_03_body_3_4_finite_support_subgaussian__contract :
     hdp_03_body_3_4_finite_support_subgaussian__contract_type :=
   hdp_03_body_3_4_finite_support_subgaussian
 
+
 end NumStability.HDP.Contract

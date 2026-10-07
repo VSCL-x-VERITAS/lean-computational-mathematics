@@ -23,4 +23,5 @@ def hdp_03_ex_3_2_2a__contract_type : Prop :=
         NumStability.HDP.Vector.Covariance.covarianceMatrix μ
           (NumStability.HDP.Vector.affineTransform m B Z) = S
 
+
 end NumStability.HDP.Contract

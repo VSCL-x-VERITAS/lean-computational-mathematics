@@ -26,4 +26,5 @@ def physicalSectionMassTarget : Prop :=
     sectionMassFromLinearDensity q x₁ x₂ t =
       TracerMass.ofReal (∫ x in x₁..x₂, linearMassDensityValue (q x t))
 
+
 end NumStability.Leveque02Tracer

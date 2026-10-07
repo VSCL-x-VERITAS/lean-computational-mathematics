@@ -378,4 +378,5 @@ theorem isotropicRadius_linear_bounds {n : ℕ} (hn : 0 < n) :
   unfold isotropicRadius
   constructor <;> nlinarith
 
+
 end NumStability.HDP.Vector.L1Ball

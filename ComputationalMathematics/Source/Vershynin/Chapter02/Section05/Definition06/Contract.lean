@@ -14,4 +14,5 @@ theorem hdp_02_hdef_h2_d5_d6__contract :
   intro Ω instΩ μ instμ X hX
   exact hdp_02_hdef_h2_d5_d6 hX
 
+
 end NumStability.HDP.Contract

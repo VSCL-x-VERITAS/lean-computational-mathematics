@@ -27,4 +27,5 @@ theorem hdp_03_body_3_7_moore_aronszajn__contract :
     hdp_03_body_3_7_moore_aronszajn__contract_type :=
   hdp_03_body_3_7_moore_aronszajn
 
+
 end NumStability.HDP.Contract

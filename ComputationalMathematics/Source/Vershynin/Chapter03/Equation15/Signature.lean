@@ -19,4 +19,5 @@ def hdp_03_eq_3_15__contract_type : Prop :=
       2 * (R + 1 / R) * (Real.sqrt (2 * Real.pi))⁻¹ *
           Real.exp (-(R ^ 2) / 2) < 4 / R ^ 2
 
+
 end NumStability.HDP.Contract

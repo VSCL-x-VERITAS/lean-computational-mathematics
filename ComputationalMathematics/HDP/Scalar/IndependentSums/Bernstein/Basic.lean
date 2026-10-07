@@ -1603,4 +1603,5 @@ theorem bernsteinNormalizedTwoRegimePsiOne_corrected
     refine hbase.trans ?_
     gcongr
 
+
 end NumStability.HDP.Scalar.IndependentSums.Bernstein

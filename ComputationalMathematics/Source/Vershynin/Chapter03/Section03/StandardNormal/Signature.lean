@@ -17,4 +17,5 @@ def hdp_03_body_3_3_standard_normal_def__contract_type : Prop :=
       (NumStability.HDP.Vector.Gaussian.IsStandardNormal μ X ↔
         iIndepFun X μ ∧ ∀ i, HasLaw (X i) (gaussianReal 0 1) μ)
 
+
 end NumStability.HDP.Contract

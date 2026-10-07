@@ -19,4 +19,5 @@ def hdp_03_ex_3_3_5b__contract_type : Prop :=
           (NumStability.HDP.Vector.linearMarginal X v) =
         NumStability.vecNorm2 (u - v)
 
+
 end NumStability.HDP.Contract

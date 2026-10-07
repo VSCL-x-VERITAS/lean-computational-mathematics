@@ -177,4 +177,5 @@ theorem exists_signCutValue_eq_maxCut (G : SimpleGraph V) [DecidableRel G.Adj] :
   obtain ⟨S, hS⟩ := exists_cutSize_eq_maxCut G
   exact ⟨partitionSign S, (signCutValue_partitionSign G S).trans (congrArg Nat.cast hS)⟩
 
+
 end NumStability.HDP.Graph

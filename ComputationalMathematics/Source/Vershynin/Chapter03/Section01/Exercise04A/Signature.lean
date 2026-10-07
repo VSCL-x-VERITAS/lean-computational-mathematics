@@ -38,4 +38,5 @@ def hdp_03_hex_h3_d1_d4a__contract_type : Prop :=
                       (NumStability.HDP.Scalar.SubGaussian.psiTwoNormMax
                         μ X) ^ 2
 
+
 end NumStability.HDP.Contract

@@ -159,4 +159,5 @@ theorem leveque03_periodicInterval_eq_cauchySolution
             (leveque03_periodicExtension initialState a b hab
               (x - eigenvalues p * t))) p).symm
 
+
 end NumStability

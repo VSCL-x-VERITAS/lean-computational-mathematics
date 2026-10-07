@@ -16,4 +16,5 @@ theorem hdp_03_body_3_7_gaussian_kernel__contract :
     hdp_03_body_3_7_gaussian_kernel__contract_type :=
   hdp_03_body_3_7_gaussian_kernel
 
+
 end NumStability.HDP.Contract

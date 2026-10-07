@@ -23,4 +23,5 @@ def positivePressureSlopeNecessaryTarget : Prop :=
     (IsRealHyperbolicMatrix A ↔ 0 < pressureSlope) ∧
       (pressureSlope = 0 → ¬ IsRealHyperbolicMatrix A)
 
+
 end NumStability.Leveque02Tracer

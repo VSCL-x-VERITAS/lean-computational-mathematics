@@ -504,4 +504,5 @@ theorem hasSphericalLaw_iff {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
       HasLaw (fun ω i => X i ω) (sphericalVectorMeasure n) μ :=
   Iff.rfl
 
+
 end NumStability.HDP.Vector.Spherical

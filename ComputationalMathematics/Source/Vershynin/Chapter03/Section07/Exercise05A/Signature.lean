@@ -16,4 +16,5 @@ def hdp_03_ex_3_7_5a__contract_type : Prop :=
       2 * (∑ i, u i * v i) ^ 2 +
         5 * (∑ i, u i * v i) ^ 3
 
+
 end NumStability.HDP.Contract

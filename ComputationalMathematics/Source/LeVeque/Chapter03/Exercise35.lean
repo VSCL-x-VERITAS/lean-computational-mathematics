@@ -345,4 +345,5 @@ theorem leveque03_exercise35FullSolution
   · exact fun i x => leveque03_exercise35SampleProfiles
       density soundSpeed hZ.ne' i x
 
+
 end NumStability

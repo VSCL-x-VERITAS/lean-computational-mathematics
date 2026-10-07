@@ -75,4 +75,5 @@ theorem leveque03_exercise31eSolution_weak (valueAtJump : Fin 2 → ℝ) :
     (riemannData leveque03_exercise31eLeft valueAtJump leveque03_exercise31eRight)
     (riemannData_intervalIntegrable leveque03_exercise31eLeft valueAtJump leveque03_exercise31eRight) 2
 
+
 end NumStability

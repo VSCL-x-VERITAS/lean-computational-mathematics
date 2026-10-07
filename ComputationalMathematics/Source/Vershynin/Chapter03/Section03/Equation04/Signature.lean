@@ -21,4 +21,5 @@ def hdp_03_eq_3_4__contract_type : Prop :=
           (Real.sqrt (2 * Real.pi))⁻¹ ^ n *
             Real.exp (-(∑ i : Fin n, (x i) ^ 2) / 2)
 
+
 end NumStability.HDP.Contract

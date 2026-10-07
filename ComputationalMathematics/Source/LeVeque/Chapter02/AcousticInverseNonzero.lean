@@ -27,4 +27,5 @@ theorem acousticInverseNonzero : acousticInverseNonzeroTarget := by
       Matrix.mul_apply, Fin.sum_univ_two] <;>
     field_simp <;> ring
 
+
 end NumStability.Leveque02Tracer

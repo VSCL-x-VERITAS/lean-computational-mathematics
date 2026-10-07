@@ -24,4 +24,5 @@ def hdp_03_def_3_4_1__contract_type : Prop :=
         NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
           (NumStability.HDP.Vector.linearMarginal X u.1)
 
+
 end NumStability.HDP.Contract

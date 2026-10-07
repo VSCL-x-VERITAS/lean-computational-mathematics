@@ -29,4 +29,5 @@ def hdp_03_heq_h3_d3__contract_type : Prop :=
                   2 * Real.exp (-(c * t ^ 2 /
                     (NumStability.HDP.Scalar.SubGaussian.psiTwoNormMax μ X) ^ 4))
 
+
 end NumStability.HDP.Contract

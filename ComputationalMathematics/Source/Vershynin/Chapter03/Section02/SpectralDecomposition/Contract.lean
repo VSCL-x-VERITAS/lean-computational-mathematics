@@ -22,4 +22,5 @@ theorem hdp_03_body_3_2_spectral_decomposition__contract :
     hdp_03_body_3_2_spectral_decomposition__contract_type :=
   hdp_03_body_3_2_spectral_decomposition
 
+
 end NumStability.HDP.Contract

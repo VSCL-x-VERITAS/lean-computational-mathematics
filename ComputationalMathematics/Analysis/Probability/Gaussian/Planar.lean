@@ -503,4 +503,5 @@ theorem oppositeProbability_of_indep_standardGaussian
     hjoint]
   exact standardGaussianPairOppositeProbability htheta
 
+
 end NumStability.Analysis.Probability.Gaussian

@@ -694,4 +694,5 @@ theorem chapter22CrossReferencedTarget_proved :
     stressPrintedClaimsTarget_proved⟩
 
 
+
 end NumStability.Leveque02Tracer.PlaneElasticity

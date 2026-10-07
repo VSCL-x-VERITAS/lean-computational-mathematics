@@ -128,4 +128,5 @@ theorem covarianceMatrix_eq_secondMomentMatrix
   have hi := congrFun hMean i
   simp [hi]
 
+
 end NumStability.HDP.Vector.Covariance

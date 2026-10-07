@@ -53,4 +53,5 @@ def diffusionAndAdvectionDiffusionParabolicTarget : Prop :=
       IsForwardParabolic (diffusionOperator β) ∧
         IsForwardParabolic (advectionDiffusionOperator u β)
 
+
 end NumStability.Leveque02Tracer

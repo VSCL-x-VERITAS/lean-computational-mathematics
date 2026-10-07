@@ -22,4 +22,5 @@ theorem hdp_03_body_3_3_convex_whitening__contract :
     hdp_03_body_3_3_convex_whitening__contract_type :=
   hdp_03_body_3_3_convex_whitening
 
+
 end NumStability.HDP.Contract

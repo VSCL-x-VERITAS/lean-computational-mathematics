@@ -200,4 +200,5 @@ theorem isGrothendieckConstant_inv_krivineBeta :
       mul_le_mul_of_nonneg_left hscaled (inv_nonneg.mpr hbeta.le)
     _ = NumStability.HDP.Tensor.krivineBeta⁻¹ := mul_one _
 
+
 end NumStability.HDP.Optimization

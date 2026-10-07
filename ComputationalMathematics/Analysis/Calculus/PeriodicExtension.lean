@@ -473,4 +473,5 @@ theorem differentiable_comp_toIcoMod_pi
     have hb := (hasDerivAt_pi.mp hdb) i
     rw [ha.deriv, hb.deriv]
 
+
 end NumStability

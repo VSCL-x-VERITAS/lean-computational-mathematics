@@ -18,4 +18,5 @@ def hdp_03_lem_3_3_10a__contract_type : Prop :=
         NumStability.HDP.Vector.Isotropy.IsIsotropic μ
           (fun j ω ↦ Real.sqrt (((N + 1 : ℕ) : ℝ) / A) * X j ω)
 
+
 end NumStability.HDP.Contract

@@ -34,4 +34,5 @@ theorem isIsotropicConvexBody_iff {n : ℕ} {K : Set (Fin n → ℝ)} :
           (uniformConvexBodyMeasure K) (fun i x => x i) :=
   Iff.rfl
 
+
 end NumStability.HDP.Convex

@@ -80,4 +80,5 @@ theorem integral_inner_sq_eq_card
           have hYcoord := (isIsotropic_iff_integral_mul μ Y).1 hYiso
           simp [hXcoord, hYcoord]
 
+
 end NumStability.HDP.Vector.Isotropy

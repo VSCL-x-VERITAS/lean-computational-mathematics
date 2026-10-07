@@ -146,4 +146,5 @@ import ComputationalMathematics.Source.Vershynin.Chapter03.Section07.PowerKernel
 
 Source-facing contracts from Vershynin's *High-Dimensional Probability*,
 Chapter 03.
+
 -/

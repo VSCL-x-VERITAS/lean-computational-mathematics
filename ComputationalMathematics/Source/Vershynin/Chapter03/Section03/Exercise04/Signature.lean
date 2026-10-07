@@ -17,4 +17,5 @@ def hdp_03_ex_3_3_4__contract_type : Prop :=
         ∀ theta : EuclideanSpace ℝ (Fin n),
           HasGaussianLaw (fun omega => innerSL ℝ theta (X omega)) mu)
 
+
 end NumStability.HDP.Contract

@@ -24,4 +24,5 @@ def hdp_03_hex_h3_d5_d7__contract_type : Prop :=
               bipartiteUnitGram X Y = M ∧
                 bipartiteSemidefiniteValue A M = innerBilinearValue A X Y)
 
+
 end NumStability.HDP.Contract

@@ -59,4 +59,5 @@ theorem exists_signQuadraticValue_eq_maximum {n : ℕ}
       Finset.univ_nonempty (signQuadraticValue A)
   exact ⟨x, hx.symm⟩
 
+
 end NumStability.HDP.Optimization

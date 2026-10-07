@@ -40,4 +40,5 @@ theorem leveque03_strictCharacteristicFamilies
     apply hdistinct
     linarith
 
+
 end NumStability

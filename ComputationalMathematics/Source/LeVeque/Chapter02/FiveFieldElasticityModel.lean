@@ -163,4 +163,5 @@ noncomputable def stressPlaneState (lam mu : ℝ)
     (p s : Fin 2 → ℝ) : Fin 5 → ℝ :=
   ![p 0, lam / (lam + 2 * mu) * p 0, s 0, p 1, s 1]
 
+
 end NumStability.Leveque02Tracer.PlaneElasticity

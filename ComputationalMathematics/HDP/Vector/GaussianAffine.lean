@@ -359,4 +359,5 @@ theorem affineStandardGaussianDensity_eq_covarianceGaussianDensity
   rw [abs_inv, abs_of_nonneg hdetB, hsqrt]
   ring
 
+
 end NumStability.HDP.Vector.Gaussian

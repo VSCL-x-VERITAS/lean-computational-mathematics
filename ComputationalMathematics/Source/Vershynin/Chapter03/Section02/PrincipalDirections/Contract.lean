@@ -27,4 +27,5 @@ theorem hdp_03_body_3_2_pca_directions__contract :
     hdp_03_body_3_2_pca_directions__contract_type :=
   hdp_03_body_3_2_pca_directions
 
+
 end NumStability.HDP.Contract

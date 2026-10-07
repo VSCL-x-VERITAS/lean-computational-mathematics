@@ -84,4 +84,5 @@ theorem HasLaw.matrix_mulVec_uniformConvexBodyMeasure
     simpa [e] using map_uniformConvexBodyMeasure_matrix A hA K
   simpa [e, Function.comp_def] using he.comp hX
 
+
 end NumStability.HDP.Convex

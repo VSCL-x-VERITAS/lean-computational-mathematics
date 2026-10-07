@@ -119,4 +119,5 @@ theorem indepFun_fst_snd_of_invariant_probability_of_pretransitive
         (Prod.fst ⁻¹' s).indicator (fun _ => 1) p ∂mu) * F x0 := by rw [hind]
     _ = mu (Prod.fst ⁻¹' s) * F x0 := by rw [hind_measure]
 
+
 end MeasureTheory

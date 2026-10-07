@@ -85,4 +85,5 @@ theorem gaussianKernel_isPositiveSemidefinite {n : ℕ} (σ : ℝ) (hσ : 0 < σ
   intro u v
   exact gaussianFeature_inner σ hσ u v
 
+
 end NumStability.HDP.Kernel

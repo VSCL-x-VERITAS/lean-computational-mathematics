@@ -139,4 +139,5 @@ theorem expectationEuclideanNorm_sqrt_sub_le_div_sqrt :
     dsimp [C]
     nlinarith [hZSqIntegral, hZSqBound]
 
+
 end NumStability.HDP.Vector.NormConcentration

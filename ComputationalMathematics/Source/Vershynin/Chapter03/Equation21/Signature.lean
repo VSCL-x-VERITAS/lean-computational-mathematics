@@ -15,4 +15,5 @@ def hdp_03_eq_3_21__contract_type : Prop :=
         NumStability.HDP.Optimization.vectorQuadraticValue A Y ≤
           NumStability.HDP.Optimization.vectorQuadraticMaximum A
 
+
 end NumStability.HDP.Contract

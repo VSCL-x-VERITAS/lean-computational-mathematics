@@ -102,4 +102,5 @@ theorem leveque03_coupledAcoustics_decouples
       · simpa [leveque03_coupledAcousticsMatrix, Fin.sum_univ_succ,
           smul_eq_mul, mul_comm] using htracer
 
+
 end NumStability

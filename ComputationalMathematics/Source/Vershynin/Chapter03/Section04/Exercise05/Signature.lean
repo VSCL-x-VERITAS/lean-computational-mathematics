@@ -26,4 +26,5 @@ def hdp_03_ex_3_4_5__contract_type : Prop :=
               (fun j : Fin n ↦ fun y : Fin n → ℝ ↦ y j) ≤ ENNReal.ofReal K →
           Real.exp (c * n) ≤ (N : ℝ)
 
+
 end NumStability.HDP.Contract

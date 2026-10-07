@@ -268,4 +268,5 @@ theorem stressPrintedClaimsTarget_proved : stressPrintedClaimsTarget := by
       hrho hmu hK
 
 
+
 end NumStability.Leveque02Tracer.PlaneElasticity

@@ -33,4 +33,5 @@ theorem exercise22aPrintedMatrixMismatch :
 /-- The pressure/velocity primitive equations themselves remain valid. -/
 theorem exercise22aCorrectedPrimitive : exercise22aTarget :=
   exercise22aNumberingDiscrepancy.1
+
 end NumStability.Leveque02Tracer

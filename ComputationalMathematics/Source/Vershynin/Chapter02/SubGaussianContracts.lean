@@ -405,4 +405,5 @@ theorem hdp_02_hlem_hlp_hextrapolation
         (∫ ω, |Z ω| ^ (3 : ℕ) ∂μ) ^ (1 / 4 : ℝ) :=
   NumStability.HDP.Scalar.SubGaussian.lpExtrapolation hZ1 hZ3
 
+
 end NumStability.HDP.Contract

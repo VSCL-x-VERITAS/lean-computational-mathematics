@@ -233,4 +233,5 @@ theorem leveque03_exercise34FullSolution
   · exact fun x t _ => leveque03_exercise34Solution_formula
       density soundSpeed hZ.ne' x t
 
+
 end NumStability

@@ -174,4 +174,5 @@ theorem leveque03_acousticCharacteristicProfiles
   · have h := congrFun (congrFun hRprop x) t
     simpa [wR, travelingWave] using h
 
+
 end NumStability

@@ -14,4 +14,5 @@ def hdp_03_thm_3_5_6__contract_type : Prop :=
         signQuadraticMaximum A ≤ vectorQuadraticMaximum A ∧
           vectorQuadraticMaximum A ≤ 2 * K * signQuadraticMaximum A
 
+
 end NumStability.HDP.Contract

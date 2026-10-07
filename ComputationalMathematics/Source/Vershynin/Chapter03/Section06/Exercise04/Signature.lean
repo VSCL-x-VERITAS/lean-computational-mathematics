@@ -31,4 +31,5 @@ def hdp_03_ex_3_6_4__contract_type : Prop :=
           NumStability.HDP.Graph.repeatedUniformCutOutputPMF G ε n x) ≤
         (1 + 2 * ε) / (2 * ε)
 
+
 end NumStability.HDP.Contract

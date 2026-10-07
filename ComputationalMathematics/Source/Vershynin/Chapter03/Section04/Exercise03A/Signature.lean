@@ -16,4 +16,5 @@ def hdp_03_ex_3_4_3a__contract_type : Prop :=
     (∀ i, NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ (X i)) →
       NumStability.HDP.Vector.SubGaussian.IsSubGaussian μ X
 
+
 end NumStability.HDP.Contract

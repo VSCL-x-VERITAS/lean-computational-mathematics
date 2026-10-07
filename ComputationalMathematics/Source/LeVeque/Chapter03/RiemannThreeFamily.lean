@@ -38,4 +38,5 @@ theorem leveque03_threeFamilyFirstWedge
     initialState left right hdata X T hT (0 : Fin 3) hP hmax
   simpa [Finset.sum_filter, Fin.sum_univ_succ, add_assoc] using hc
 
+
 end NumStability

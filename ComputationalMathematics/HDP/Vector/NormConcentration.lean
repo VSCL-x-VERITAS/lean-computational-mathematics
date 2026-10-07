@@ -870,4 +870,5 @@ theorem expectationEuclideanNorm_abs_sub_sqrt_le :
       dsimp [C]
       nlinarith [sq_nonneg K]
 
+
 end NumStability.HDP.Vector.NormConcentration

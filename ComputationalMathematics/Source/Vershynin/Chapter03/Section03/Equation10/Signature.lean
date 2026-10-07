@@ -15,4 +15,5 @@ def hdp_03_eq_3_10__contract_type : Prop :=
       ∀ x : Fin (n + 1) → ℝ,
         ∑ i, (u i ⬝ᵥ x) • u i = A • x
 
+
 end NumStability.HDP.Contract

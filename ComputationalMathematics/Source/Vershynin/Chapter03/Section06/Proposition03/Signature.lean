@@ -13,4 +13,5 @@ def hdp_03_prop_3_6_3__contract_type : Prop :=
       (NumStability.HDP.Graph.maxCut G : ℝ) / 2 ≤
         NumStability.HDP.Graph.uniformBoolCutExpectation G
 
+
 end NumStability.HDP.Contract

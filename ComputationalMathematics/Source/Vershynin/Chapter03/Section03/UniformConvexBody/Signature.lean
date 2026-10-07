@@ -17,4 +17,5 @@ def hdp_03_body_3_3_uniform_convex_law__contract_type : Prop :=
         HasLaw (fun ω i => X i ω)
           (NumStability.HDP.Convex.uniformConvexBodyMeasure K) μ
 
+
 end NumStability.HDP.Contract

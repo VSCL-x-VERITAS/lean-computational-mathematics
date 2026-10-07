@@ -141,4 +141,5 @@ theorem leveque03_uniqueEigenvectorExpansion
       eigenbasis.equivFun q from
         leveque03_characteristicCoordinates eigenbasis q] using heq
 
+
 end NumStability

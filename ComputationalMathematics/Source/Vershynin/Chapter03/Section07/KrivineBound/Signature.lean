@@ -12,4 +12,5 @@ def hdp_03_body_3_7_krivine_bound__contract_type : Prop :=
   NumStability.HDP.Optimization.IsGrothendieckConstant.{u}
     NumStability.HDP.Tensor.krivineBeta⁻¹
 
+
 end NumStability.HDP.Contract

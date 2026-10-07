@@ -41,4 +41,5 @@ theorem leveque03_exercise32Solution_contract
   · intro x
     exact linearRiemannSolution_initial eigenbasis speeds left left right x
 
+
 end NumStability

@@ -18,4 +18,5 @@ def hdp_03_thm_3_4_6__contract_type : Prop :=
         (NumStability.HDP.Vector.Spherical.sphericalVectorMeasure n)
         (fun i x ↦ x i) ≤ ENNReal.ofReal C
 
+
 end NumStability.HDP.Contract

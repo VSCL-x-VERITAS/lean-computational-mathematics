@@ -23,4 +23,5 @@ def waveAcousticsEigenvectorTransportTarget : Prop :=
         wave.mulVec (S.mulVec v) = eigenvalue • (S.mulVec v) ∧
           (v ≠ 0 → S.mulVec v ≠ 0)
 
+
 end NumStability.Leveque02Tracer

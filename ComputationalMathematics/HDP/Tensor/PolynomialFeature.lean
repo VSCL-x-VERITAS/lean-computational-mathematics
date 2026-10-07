@@ -98,4 +98,5 @@ theorem polynomialFeature_inner {n d : ℕ} (a : Fin (d + 1) → ℝ)
   change a k * inner (power u k.1) (power v k.1) = _
   rw [inner_power_power]
 
+
 end NumStability.HDP.Tensor

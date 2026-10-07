@@ -175,4 +175,5 @@ theorem leveque03_twoFamilyIntermediate_intersection
       apply (eq_sub_iff_add_eq).mpr
       simpa only [add_comm] using ((sub_eq_iff_eq_add).mp hj.2).symm
 
+
 end NumStability

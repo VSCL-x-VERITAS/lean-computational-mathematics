@@ -70,4 +70,5 @@ theorem leveque03_acousticExampleEvolution (x t : ℝ) :
   · change u x t = _
     simpa [hpinit, huinit, acousticImpedance] using hu
 
+
 end NumStability

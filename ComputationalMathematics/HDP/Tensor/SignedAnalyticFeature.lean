@@ -117,4 +117,5 @@ theorem absolute_signed_powerSeriesFeature_norm_sq {n : ℕ}
       ← real_inner_self_eq_norm_sq,
       powerSeriesFeatureBlock_inner |a k| (abs_nonneg (a k)) u u k]
 
+
 end NumStability.HDP.Tensor

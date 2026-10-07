@@ -21,4 +21,5 @@ def hdp_03_ex_3_7_6__contract_type : Prop :=
       ‖NumStability.HDP.Tensor.signedPowerSeriesFeature f a hseries u‖ ^ 2 =
         ∑' k, |a k| * (∑ i, u i * u i) ^ k
 
+
 end NumStability.HDP.Contract

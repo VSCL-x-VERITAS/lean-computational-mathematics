@@ -245,4 +245,5 @@ theorem repeatedCoordinate_counterexample {n : ℕ} (hn : 0 < n) :
       NumStability.HDP.Scalar.SubGaussian.rademacherPsiTwoGauge_exact] using
       repeatedCoordinate_psiTwoNorm_gap hn
 
+
 end NumStability.HDP.Vector.SubGaussian

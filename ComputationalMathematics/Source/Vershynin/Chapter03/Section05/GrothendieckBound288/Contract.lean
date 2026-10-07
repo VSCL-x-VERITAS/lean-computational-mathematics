@@ -15,4 +15,5 @@ theorem hdp_03_body_3_5_grothendieck_bound_288__contract :
     hdp_03_body_3_5_grothendieck_bound_288__contract_type.{u} :=
   hdp_03_body_3_5_grothendieck_bound_288
 
+
 end NumStability.HDP.Contract

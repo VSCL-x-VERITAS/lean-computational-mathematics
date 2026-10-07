@@ -454,4 +454,5 @@ import ComputationalMathematics.Source.LeVeque.Chapter02.ZeroAdvectionStationary
 
 Source correspondences currently available for Chapter 2. This entry point
 does not assert that the chapter's formalization is complete.
+
 -/

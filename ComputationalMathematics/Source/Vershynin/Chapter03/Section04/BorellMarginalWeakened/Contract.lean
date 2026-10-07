@@ -26,4 +26,5 @@ theorem hdp_03_body_3_4_borell_marginal_weakened__contract :
     hdp_03_body_3_4_borell_marginal_weakened__contract_type :=
   hdp_03_body_3_4_borell_marginal_weakened
 
+
 end NumStability.HDP.Contract

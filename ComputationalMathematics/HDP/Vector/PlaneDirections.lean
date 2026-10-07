@@ -130,4 +130,5 @@ theorem integral_acuteAngle_planeDirectionMeasure_prod :
           rw [MeasureTheory.integral_fun_fst, MeasureTheory.probReal_univ, one_smul]
     _ = Real.pi / 4 := integral_norm_planeDirectionMeasure
 
+
 end NumStability.HDP.Vector

@@ -36,4 +36,5 @@ def maxwellPropagatingModeGeometryTarget : Prop :=
       dotProduct direction magnetic = 0 ∧
       dotProduct electric magnetic = 0
 
+
 end NumStability.Leveque02Tracer

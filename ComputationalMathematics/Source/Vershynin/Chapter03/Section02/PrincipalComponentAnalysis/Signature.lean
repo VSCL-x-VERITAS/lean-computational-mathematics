@@ -27,4 +27,5 @@ def hdp_03_body_3_2_pca__contract_type : Prop :=
           x - NumStability.HDP.Vector.PrincipalComponents.principalProjection hM k hk.le x ∈
             (NumStability.HDP.Vector.PrincipalComponents.principalSubspace hM k hk.le)ᗮ
 
+
 end NumStability.HDP.Contract

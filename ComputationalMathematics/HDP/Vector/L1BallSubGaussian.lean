@@ -176,4 +176,5 @@ theorem identityVector_psiTwoNorm_ge_of_pos {n : ℕ} (hn : 0 < n) :
   let i : Fin n := ⟨0, hn⟩
   exact identityVector_psiTwoNorm_ge hn i
 
+
 end NumStability.HDP.Vector.L1Ball

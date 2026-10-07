@@ -109,4 +109,5 @@ theorem exists_bipartite_unit_families_gram_eq
   rw [bipartiteUnitGram, hvsplit]
   exact hgram
 
+
 end NumStability.HDP.Optimization

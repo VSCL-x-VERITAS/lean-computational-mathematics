@@ -29,4 +29,5 @@ theorem power_two_apply {n : ℕ} (u : Fin n → ℝ)
     power u 2 i = outer u u (i 0) (i 1) := by
   simp [power, ofFactors, outer]
 
+
 end NumStability.HDP.Tensor

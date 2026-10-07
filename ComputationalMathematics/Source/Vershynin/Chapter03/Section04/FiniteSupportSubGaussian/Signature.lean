@@ -18,4 +18,5 @@ def hdp_03_body_3_4_finite_support_subgaussian__contract_type : Prop :=
       ∀ᵐ ω ∂μ, (fun i ↦ X i ω) ∈ S) →
     NumStability.HDP.Vector.SubGaussian.IsSubGaussian μ X
 
+
 end NumStability.HDP.Contract

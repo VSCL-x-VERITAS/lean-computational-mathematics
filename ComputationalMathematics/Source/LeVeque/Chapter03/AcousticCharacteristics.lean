@@ -32,4 +32,5 @@ theorem leveque03_acousticCharacteristicVariables
     (Leveque02Tracer.acousticWaveStrengthsFormula
       density soundSpeed pressure velocity hZ)
 
+
 end NumStability

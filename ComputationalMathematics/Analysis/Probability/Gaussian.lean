@@ -6,4 +6,5 @@ import ComputationalMathematics.Analysis.Probability.Gaussian.Planar
 
 Canonical import-only entry point for reusable results about Gaussian
 measures and their moments.
+
 -/

@@ -100,4 +100,5 @@ theorem exists_semidefiniteQuadraticValue_eq_maximum {n : ℕ} [Nonempty (Fin n)
   refine ⟨unitVectorGram X, unitVectorGram_isCorrelationMatrix X, ?_⟩
   simpa [semidefiniteQuadraticMaximum, semidefiniteQuadraticValue_unitVectorGram] using hX
 
+
 end NumStability.HDP.Optimization

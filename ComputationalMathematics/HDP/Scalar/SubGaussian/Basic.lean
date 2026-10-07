@@ -4834,4 +4834,5 @@ theorem independentGaussianWeightedSumLaw {ι Ω : Type*} [Fintype ι] [Measurab
   have h := independentGaussianSumLaw hLawY hIndepY
   simpa [Y, τ] using h
 
+
 end NumStability.HDP.Scalar.SubGaussian

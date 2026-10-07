@@ -91,4 +91,5 @@ theorem leveque03_riemannStatePath_ordered
   · intro k τ
     exact leveque03_riemannStatePath_segment eigenbasis left right k τ
 
+
 end NumStability

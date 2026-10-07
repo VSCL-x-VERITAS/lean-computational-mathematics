@@ -22,4 +22,5 @@ theorem nonlinearMaxwellDirectionalPositiveSlope :
   exact (maxwellDirectionalHyperbolicity electricSlope magneticSlope
     helectric hmagnetic direction).1
 
+
 end NumStability.Leveque02Tracer

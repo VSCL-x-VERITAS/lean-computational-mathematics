@@ -24,4 +24,5 @@ def hdp_03_example_3_7_2__contract_type : Prop :=
       Matrix.trace (A.transpose * B) =
         ∑ i, ∑ j, A i j * B i j
 
+
 end NumStability.HDP.Contract

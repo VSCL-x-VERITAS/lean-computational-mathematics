@@ -8,4 +8,5 @@ import ComputationalMathematics.HDP.Kernel.PositiveSemidefinite
 # Kernel foundations
 
 Entry point for reusable kernel and feature-map definitions.
+
 -/

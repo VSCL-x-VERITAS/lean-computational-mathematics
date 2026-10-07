@@ -116,4 +116,5 @@ theorem integral_vecNorm2Sq_eq_card
     simpa [pow_two] using (hLp i).integrable_mul (hLp i)
   · exact integral_sq_coordinate hX
 
+
 end NumStability.HDP.Vector.Isotropy

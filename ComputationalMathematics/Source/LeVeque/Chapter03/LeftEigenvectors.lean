@@ -50,4 +50,5 @@ theorem leveque03_characteristicVariable_leftEigenvector
       (leveque03_leftEigenvector eigenbasis p) ⬝ᵥ (q x t) := by
   rfl
 
+
 end NumStability

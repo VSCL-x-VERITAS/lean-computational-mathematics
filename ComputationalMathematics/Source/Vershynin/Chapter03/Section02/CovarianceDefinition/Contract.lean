@@ -25,4 +25,5 @@ theorem hdp_03_body_3_2_covariance_def__contract :
     hdp_03_body_3_2_covariance_def__contract_type :=
   hdp_03_body_3_2_covariance_def
 
+
 end NumStability.HDP.Contract

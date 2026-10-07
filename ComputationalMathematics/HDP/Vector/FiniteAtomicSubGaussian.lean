@@ -365,4 +365,5 @@ theorem exists_exponential_support_lower_bound (K : ℝ) (hK : 0 < K) :
   exact exp_half_dimension_div_sq_le_card_of_vector_psiTwoNorm_le
     hN p hp x hK hlarge hIso hPsi
 
+
 end NumStability.HDP.Vector.FiniteSupport

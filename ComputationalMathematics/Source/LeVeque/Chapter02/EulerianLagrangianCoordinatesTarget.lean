@@ -81,4 +81,5 @@ def eulerianLagrangianCoordinatesTarget : Prop :=
       particlePosition label.mass 0 = initialSite.coordinate →
         particleSite particlePosition label 0 = initialSite)
 
+
 end NumStability.Leveque02Tracer

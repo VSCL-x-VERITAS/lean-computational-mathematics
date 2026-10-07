@@ -24,4 +24,5 @@ theorem isRealFeatureMap_iff {X H : Type*} [NormedAddCommGroup H]
     IsRealFeatureMap K Φ ↔ ∀ u v, ⟪Φ u, Φ v⟫_ℝ = K u v :=
   Iff.rfl
 
+
 end NumStability.HDP.Kernel

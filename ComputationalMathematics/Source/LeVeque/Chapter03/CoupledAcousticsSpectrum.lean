@@ -187,4 +187,5 @@ theorem leveque03_coupledAcoustics_figure37
     refine ⟨h, hbackground, ?_⟩
     linarith
 
+
 end NumStability

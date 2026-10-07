@@ -15,4 +15,5 @@ def hdp_03_body_3_7_gaussian_kernel__contract_type : Prop :=
       (fun u v : Fin n → ℝ ↦
         Real.exp (-(∑ i, (u i - v i) ^ 2) / (2 * σ ^ 2)))
 
+
 end NumStability.HDP.Contract

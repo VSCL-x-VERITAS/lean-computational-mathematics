@@ -38,4 +38,5 @@ theorem isIsotropic_of_iIndepFun_mean_zero_variance_one
     rw [hFactor, hMean i, hMean j, zero_mul]
     simp [hij]
 
+
 end NumStability.HDP.Vector.Isotropy

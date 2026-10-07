@@ -75,4 +75,5 @@ theorem leveque03_initialDataSolution_smoothAt
       (X, T) :=
   leveque03_initialDataSolution_contDiffAt eigenbasis speeds initialState X T ⊤ hfeet
 
+
 end NumStability

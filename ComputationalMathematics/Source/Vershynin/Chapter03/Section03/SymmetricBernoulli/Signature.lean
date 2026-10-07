@@ -19,4 +19,5 @@ def hdp_03_body_3_3_symmetric_bernoulli__contract_type : Prop :=
         (NumStability.HDP.Vector.Bernoulli.IsSymmetricBernoulli μ X ↔
           NumStability.HDP.Vector.Bernoulli.HasUniformDiscreteCubeLaw μ X)
 
+
 end NumStability.HDP.Contract

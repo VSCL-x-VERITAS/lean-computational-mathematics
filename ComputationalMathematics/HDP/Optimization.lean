@@ -14,4 +14,5 @@ import ComputationalMathematics.HDP.Optimization.SemidefiniteRelaxation
 import ComputationalMathematics.HDP.Optimization.SignQuadratic
 import ComputationalMathematics.HDP.Optimization.VectorQuadratic
 
+
 /-! Stable entry point for finite optimization foundations used in HDP. -/

@@ -31,4 +31,5 @@ def scalarReactionDiffusionTarget : Prop :=
     qt + advection.mulVec (gradient x) =
       diffusivity • qxx + production (q x t)
 
+
 end NumStability.Leveque02Tracer

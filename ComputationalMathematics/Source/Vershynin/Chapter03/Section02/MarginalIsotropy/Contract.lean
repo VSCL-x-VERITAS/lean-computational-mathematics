@@ -21,4 +21,5 @@ theorem hdp_03_body_3_2_marginal_isotropy__contract :
     hdp_03_body_3_2_marginal_isotropy__contract_type :=
   hdp_03_body_3_2_marginal_isotropy
 
+
 end NumStability.HDP.Contract

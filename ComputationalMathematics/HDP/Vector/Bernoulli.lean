@@ -116,4 +116,5 @@ theorem isIsotropic_of_isSymmetricBernoulli
   · intro i
     exact variance_eq_one_of_hasLaw_rademacher (hX.2 i)
 
+
 end NumStability.HDP.Vector.Bernoulli

@@ -227,4 +227,5 @@ theorem maxwellPropagatingPlaneWave_nonvacuous :
   simpa using h
 
 
+
 end NumStability.Leveque02Tracer

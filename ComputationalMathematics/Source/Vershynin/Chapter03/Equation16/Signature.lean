@@ -17,4 +17,5 @@ def hdp_03_eq_3_16__contract_type : Prop :=
     (∫ ω, ∑ i, ∑ j, A i j * U i ω * V j ω ∂μ) =
       ∑ i, ∑ j, A i j * ⟪U i, V j⟫_ℝ
 
+
 end NumStability.HDP.Contract

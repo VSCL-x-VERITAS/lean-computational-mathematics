@@ -130,4 +130,5 @@ theorem varianceEuclideanNorm_le_fourthMoment
       (variance_le_expectation_sq hZMeas.aestronglyMeasurable)
   exact hVariance.trans hZSqBound
 
+
 end NumStability.HDP.Vector.NormFourthMoment

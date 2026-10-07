@@ -22,4 +22,5 @@ def hdp_03_ex_3_2_6__contract_type : Prop :=
                   (∫ ω, NumStability.vecNorm2Sq (fun i => X i ω - Y i ω) ∂μ) =
                     2 * n
 
+
 end NumStability.HDP.Contract

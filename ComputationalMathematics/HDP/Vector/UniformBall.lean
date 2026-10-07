@@ -559,4 +559,5 @@ theorem map_polarBallVector (n : ℕ) (hn : 0 < n) :
       rw [map_polarUnitFunction n hn]
     _ = _ := map_uniform_functionUnitBall_scale n hn
 
+
 end NumStability.HDP.Vector.UniformBall

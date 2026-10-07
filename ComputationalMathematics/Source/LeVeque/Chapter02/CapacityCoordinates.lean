@@ -18,4 +18,5 @@ theorem capacityModel : capacityModelTarget := by
 
 #print axioms capacityModel
 
+
 end NumStability.Leveque02Tracer

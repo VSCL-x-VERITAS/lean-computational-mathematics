@@ -20,4 +20,5 @@ theorem hdp_03_body_3_3_coordinate_distribution__contract :
     hdp_03_body_3_3_coordinate_distribution__contract_type :=
   hdp_03_body_3_3_coordinate_distribution
 
+
 end NumStability.HDP.Contract

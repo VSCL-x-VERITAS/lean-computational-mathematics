@@ -2486,4 +2486,5 @@ theorem psiOneGauge_mul_lt_top
     PsiOneGauge μ (fun ω => X ω * Y ω) < ∞ :=
   lt_of_le_of_lt (psiOneGauge_mul_le hX hY) (ENNReal.mul_lt_top hX hY)
 
+
 end NumStability.HDP.Scalar.SubExponential

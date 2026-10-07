@@ -15,4 +15,5 @@ def hdp_03_body_3_7_power_kernel_feature__contract_type : Prop :=
       (∀ u, Φ u = NumStability.HDP.Tensor.powerFeature k u) ∧
         ∀ u v, ⟪Φ u, Φ v⟫_ℝ = (∑ i, u i * v i) ^ k
 
+
 end NumStability.HDP.Contract

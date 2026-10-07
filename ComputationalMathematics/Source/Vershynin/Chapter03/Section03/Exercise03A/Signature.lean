@@ -21,4 +21,5 @@ def hdp_03_ex_3_3_3a__contract_type : Prop :=
             { val := ‖u‖ ^ 2
               property := sq_nonneg ‖u‖ })) mu
 
+
 end NumStability.HDP.Contract

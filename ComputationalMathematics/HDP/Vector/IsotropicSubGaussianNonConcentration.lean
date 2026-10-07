@@ -368,4 +368,5 @@ theorem exists_isotropicSubGaussian_nonconcentrated :
       (hBound.trans_lt ENNReal.ofReal_lt_top), hBound,
     counterexampleMeasure_norm_deviation_one hn⟩
 
+
 end NumStability.HDP.Vector.IsotropicSubGaussianNonConcentration

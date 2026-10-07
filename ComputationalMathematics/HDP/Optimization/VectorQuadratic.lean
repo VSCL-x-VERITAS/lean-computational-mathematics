@@ -65,4 +65,5 @@ theorem exists_vectorQuadraticValue_eq_maximum {n : ℕ} [Nonempty (Fin n)]
       vectorQuadraticValue A X = vectorQuadraticMaximum A :=
   ⟨vectorQuadraticMaximizer A, rfl⟩
 
+
 end NumStability.HDP.Optimization

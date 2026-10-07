@@ -47,4 +47,5 @@ theorem isentropicPowerSlope_iff (coefficient exponent : ℝ) :
 theorem isentropicPowerSlope_zeroCounterexample :
     ¬ positivePressureSlope (fun density : ℝ => (0 : ℝ) * density ^ (2 : ℝ)) :=
   isentropicPowerSlopeCorrection.2
+
 end NumStability.Leveque02Tracer

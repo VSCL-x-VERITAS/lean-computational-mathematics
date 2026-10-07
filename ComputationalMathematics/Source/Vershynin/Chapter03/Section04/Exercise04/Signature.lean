@@ -21,4 +21,5 @@ def hdp_03_ex_3_4_4__contract_type : Prop :=
             (NumStability.HDP.Vector.CoordinateDistribution.coordinateRandomVector n) ≤
           ENNReal.ofReal (C * Real.sqrt ((n : ℝ) / Real.log n))
 
+
 end NumStability.HDP.Contract

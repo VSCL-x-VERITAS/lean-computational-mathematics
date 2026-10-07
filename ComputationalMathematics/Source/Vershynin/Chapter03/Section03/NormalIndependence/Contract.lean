@@ -77,4 +77,5 @@ theorem hdp_03_body_3_3_normal_identity_parenthetical_obstruction__contract :
     hdp_03_body_3_3_normal_identity_parenthetical_obstruction__contract_type :=
   hdp_03_body_3_3_normal_identity_parenthetical_obstruction
 
+
 end NumStability.HDP.Contract

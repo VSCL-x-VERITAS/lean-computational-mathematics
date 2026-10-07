@@ -16,4 +16,5 @@ def hdp_03_thm_3_5_1__contract_type : Prop :=
       (∀ x y, IsSignVector x → IsSignVector y → bilinearValue A x y ≤ 1) →
         UniversalUnitBound.{u} A K
 
+
 end NumStability.HDP.Contract

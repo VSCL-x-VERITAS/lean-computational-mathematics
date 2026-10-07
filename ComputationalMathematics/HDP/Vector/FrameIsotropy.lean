@@ -192,4 +192,5 @@ theorem isTightFrame_sqrtWeights_of_hasFiniteWeightedVectorLaw
     (NumStability.HDP.Vector.Isotropy.isIsotropic_iff_integral_mul μ X).1 hIso j k
   exact hTransfer.symm.trans hSource
 
+
 end NumStability.HDP.Vector.FrameIsotropy

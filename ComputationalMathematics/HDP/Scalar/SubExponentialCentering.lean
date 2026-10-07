@@ -268,4 +268,5 @@ theorem centeredSubExponentialPsiOneNorm_uniform :
   · intro Ω _ μ _ X hX hFinite
     exact (centeredSubExponentialPsiOneNorm hX hFinite).2
 
+
 end NumStability.HDP.Scalar.SubExponential

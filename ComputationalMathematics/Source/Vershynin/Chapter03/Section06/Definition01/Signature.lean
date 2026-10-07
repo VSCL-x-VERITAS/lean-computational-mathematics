@@ -16,4 +16,5 @@ def hdp_03_def_3_6_1__contract_type : Prop :=
       ∀ T : Finset V,
         NumStability.HDP.Graph.cutSize G T ≤ NumStability.HDP.Graph.maxCut G
 
+
 end NumStability.HDP.Contract

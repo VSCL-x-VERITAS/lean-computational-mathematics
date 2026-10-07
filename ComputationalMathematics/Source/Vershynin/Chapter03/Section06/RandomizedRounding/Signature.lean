@@ -21,4 +21,5 @@ def hdp_03_body_3_6_randomized_rounding__contract_type : Prop :=
           (fun g i ↦ if ⟪(X i : EuclideanSpace ℝ (Fin n)), g⟫_ℝ < 0
             then (-1 : ℝ) else 1) μ
 
+
 end NumStability.HDP.Contract

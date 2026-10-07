@@ -17,4 +17,5 @@ def hdp_03_body_3_2_second_moment_def__contract_type : Prop :=
       NumStability.HDP.Vector.Covariance.secondMomentMatrix μ X =
         fun i j => ∫ ω, X i ω * X j ω ∂μ
 
+
 end NumStability.HDP.Contract

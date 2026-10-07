@@ -22,4 +22,5 @@ def hdp_03_lem_3_3_10b__contract_type : Prop :=
             NumStability.HDP.Vector.Frame.IsTightFrame
               (fun i ↦ Real.sqrt (p i : ℝ) • x i) 1
 
+
 end NumStability.HDP.Contract

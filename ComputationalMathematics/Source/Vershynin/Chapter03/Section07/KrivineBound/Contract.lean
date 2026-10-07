@@ -16,4 +16,5 @@ theorem hdp_03_body_3_7_krivine_bound__contract :
     hdp_03_body_3_7_krivine_bound__contract_type.{u} :=
   hdp_03_body_3_7_krivine_bound
 
+
 end NumStability.HDP.Contract

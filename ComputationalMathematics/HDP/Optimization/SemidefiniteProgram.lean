@@ -76,4 +76,5 @@ theorem isMaximizer_negateObjective_iff_isMinimizer {n m : ℕ}
 
 end SemidefiniteProgram
 
+
 end NumStability.HDP.Optimization

@@ -11,4 +11,5 @@ def hdp_03_body_3_5_minimization_sdp__contract_type : Prop :=
     (∀ X, P.negateObjective.value X = -P.value X) ∧
     (∀ X, P.negateObjective.IsMaximizer X ↔ P.IsMinimizer X)
 
+
 end NumStability.HDP.Contract

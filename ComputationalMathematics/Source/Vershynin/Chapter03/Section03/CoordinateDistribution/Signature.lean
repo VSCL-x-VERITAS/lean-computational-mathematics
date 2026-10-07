@@ -16,4 +16,5 @@ def hdp_03_body_3_3_coordinate_distribution__contract_type : Prop :=
       (fun i k =>
         NumStability.HDP.Vector.CoordinateDistribution.coordinateVector n k i)
 
+
 end NumStability.HDP.Contract

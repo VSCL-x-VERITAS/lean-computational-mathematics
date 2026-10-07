@@ -12,4 +12,5 @@ def hdp_03_eq_3_12__contract_type : Prop :=
     (∀ x y, IsSignVector x → IsSignVector y → bilinearValue A x y ≤ 1) →
       ∀ x y, bilinearValue A x y ≤ ‖x‖ * ‖y‖
 
+
 end NumStability.HDP.Contract

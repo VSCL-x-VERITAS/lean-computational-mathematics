@@ -60,4 +60,5 @@ theorem leveque03_leftLinearBoundary_zero
       ∀ t, leveque03_positiveSpeedCoordinates (w left t) = g₁ t := by
   simp [leveque03_IsLeftLinearBoundary]
 
+
 end NumStability

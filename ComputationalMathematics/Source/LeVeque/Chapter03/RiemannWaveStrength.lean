@@ -44,4 +44,5 @@ noncomputable def leveque03_riemannWave
     (left right : Fin m → ℝ) (p : Fin m) : Fin m → ℝ :=
   leveque03_waveStrength eigenbasis left right p • eigenbasis p
 
+
 end NumStability

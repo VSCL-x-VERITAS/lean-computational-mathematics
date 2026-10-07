@@ -16,4 +16,5 @@ theorem hdp_03_body_3_4_bernoulli_subgaussian__contract :
     hdp_03_body_3_4_bernoulli_subgaussian__contract_type :=
   hdp_03_body_3_4_bernoulli_subgaussian
 
+
 end NumStability.HDP.Contract

@@ -1073,4 +1073,5 @@ theorem smallBallProbability
       rw [← Real.exp_nat_mul]
       norm_num
 
+
 end NumStability.HDP.Scalar.IndependentSums.Hoeffding

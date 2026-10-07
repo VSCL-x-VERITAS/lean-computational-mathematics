@@ -21,4 +21,5 @@ def isentropicPowerSlopeCorrectionTarget : Prop :=
       0 < coefficient * exponent) ∧
   ¬ positivePressureSlope (fun density : ℝ => (0 : ℝ) * density ^ (2 : ℝ))
 
+
 end NumStability.Leveque02Tracer

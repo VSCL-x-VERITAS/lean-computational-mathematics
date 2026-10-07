@@ -91,4 +91,5 @@ theorem leveque03_singleWaveJump
   simp only [fR, fL, if_pos hright,
     if_neg (not_lt.mpr hleft.le), sub_smul]
 
+
 end NumStability

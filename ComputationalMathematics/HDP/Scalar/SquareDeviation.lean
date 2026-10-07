@@ -34,4 +34,5 @@ theorem max_le_abs_sq_sub_one {z δ : ℝ} (hz : 0 ≤ z) (hδ : 0 ≤ δ)
   · nlinarith [abs_nonneg (z - 1)]
   · nlinarith [abs_nonneg (z - 1)]
 
+
 end NumStability.HDP.Scalar.SquareDeviation

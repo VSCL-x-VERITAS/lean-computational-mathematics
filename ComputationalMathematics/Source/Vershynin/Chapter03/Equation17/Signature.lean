@@ -20,4 +20,5 @@ def hdp_03_eq_3_17__contract_type : Prop :=
                 (∀ i, ‖x i‖ = 1) → (∀ j, ‖y j‖ = 1) →
                   |innerBilinearValue A x y| ≤ 2 * K
 
+
 end NumStability.HDP.Contract

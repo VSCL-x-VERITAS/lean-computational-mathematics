@@ -153,4 +153,5 @@ theorem leveque03_acousticFigure36b
   · linarith
   · exact hvelocity
 
+
 end NumStability

@@ -27,4 +27,5 @@ def hdp_03_body_3_4_borell_marginal_weakened__contract_type : Prop :=
           (NumStability.HDP.Vector.linearMarginal
             (fun (i : Fin n) (x : Fin n → ℝ) => x i) u) < ∞
 
+
 end NumStability.HDP.Contract

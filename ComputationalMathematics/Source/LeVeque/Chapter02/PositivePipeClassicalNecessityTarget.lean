@@ -35,4 +35,5 @@ def positivePipeClassicalNecessityTarget : Prop :=
     positivePipeQuietField 0 1 ≠ positivePipeIncomingField 0 1 ∧
     positivePipeQuietField (1 / 2) 1 ≠ positivePipeIncomingField (1 / 2) 1
 
+
 end NumStability.Leveque02Tracer
