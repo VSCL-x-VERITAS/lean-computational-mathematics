@@ -38,6 +38,23 @@ suppression, or a toolchain, Mathlib, or platform change that invalidates the
 capture. A diagnostic that stops firing also fails, as an improvement that
 requires a reviewed baseline reduction: `--write-baseline` is review-only, so
 the census can only fall through a reviewed batch, never drift.
+
+Strict capture-platform equality remains the default, including CI. For a
+captured log from the other Linux GNU architecture, an explicit
+`check_warnings.py --check --allow-linux-cross-architecture --root <checkout>
+--log <actual-log>` comparison admits only `x86_64-unknown-linux-gnu` and
+`aarch64-unknown-linux-gnu`. It requires a complete Lean version header with a
+40-hex compiler commit; every header must agree on version, platform, commit,
+and build mode. The worktree and log toolchain and the baseline/worktree
+Mathlib pin must match. Missing, malformed, conflicting, or unsupported
+headers refuse the comparison. All fingerprints, source anchors, ceilings,
+suppression rules, and reviewed reductions remain enforced. A pass reports
+both platforms and census compatibility; it preserves the distinct native
+capture provenance. The historical baseline has no compiler-commit field,
+so header coherence does not authenticate that commit against the original
+capture. Never rewrite the baseline or actual header to make platforms match;
+the opt-in cannot be used with `--write-baseline`.
+
 A change that touches CI-facing tooling is additionally rehearsed in a
 checkout-shaped local clone (long paths on, `core.autocrlf` off, detached
 HEAD at the exact candidate commit) before it is pushed.

@@ -90,6 +90,13 @@ SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 LEAN_VERSION_RE = re.compile(
     r"^Lean \(version (?P<version>[^,]+), (?P<platform>[^,]+), commit "
 )
+LEAN_HEADER_RE = re.compile(
+    r"^Lean \(version (?P<version>[^,\s]+), (?P<platform>[^,\s]+), commit "
+    r"(?P<commit>[0-9a-f]{40}), (?P<mode>Release|Debug)\)$"
+)
+LINUX_GNU_PLATFORMS = frozenset(
+    {"x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"}
+)
 
 # ---------------------------------------------------------------------------
 # Kind classification
@@ -451,6 +458,8 @@ class LogCapture:
         self.commit: str | None = None
         self.toolchain: str | None = None
         self.platform: str | None = None
+        self.compiler_headers: list[tuple[str, str, str, str]] = []
+        self.malformed_compiler_headers: list[str] = []
         self.captured_at: str | None = None
         self.pass_labels: dict[int, str] = {}
         self.diagnostics: list[Diagnostic] = []
@@ -500,6 +509,16 @@ def read_log(path: Path, anchors: AnchorReader) -> LogCapture:
         if version and capture.toolchain is None:
             capture.toolchain = f"leanprover/lean4:v{version.group('version')}"
             capture.platform = version.group("platform")
+        # Preserve the strict mode's historical first-header interpretation.
+        # The opt-in comparison separately requires coherent complete headers.
+        if line.startswith("Lean ("):
+            header = LEAN_HEADER_RE.fullmatch(line)
+            if header:
+                capture.compiler_headers.append(
+                    tuple(header.group(name) for name in ("version", "platform", "commit", "mode"))
+                )
+            else:
+                capture.malformed_compiler_headers.append(line)
         if not line.startswith("warning: "):
             continue
         head = DIAGNOSTIC_HEAD_RE.match(line)
@@ -1278,6 +1297,7 @@ def check_capture(
     baseline: dict[str, Any],
     capture: LogCapture,
     problems: Problems,
+    allow_linux_cross_architecture: bool = False,
 ) -> None:
     recorded = baseline.get("capture")
     if not isinstance(recorded, dict):
@@ -1327,7 +1347,23 @@ def check_capture(
             f"baseline records {recorded.get('mathlib_revision')!r}, "
             f"{LAKE_MANIFEST.as_posix()} records {revision!r}",
         )
-    if capture.platform is not None and recorded.get("platform") != capture.platform:
+    if allow_linux_cross_architecture:
+        if not capture.compiler_headers:
+            problems.violation("capture", "Linux cross-architecture comparison requires a complete compiler header")
+        if capture.malformed_compiler_headers:
+            problems.violation("capture", "Linux cross-architecture comparison refuses malformed compiler headers")
+        if len(set(capture.compiler_headers)) > 1:
+            problems.violation("capture", "Linux cross-architecture comparison refuses conflicting compiler headers")
+        if not isinstance(recorded.get("platform"), str) or recorded["platform"] not in LINUX_GNU_PLATFORMS or any(
+            header[1] not in LINUX_GNU_PLATFORMS for header in capture.compiler_headers
+        ):
+            problems.violation(
+                "capture", "Linux cross-architecture comparison supports only "
+                "x86_64-unknown-linux-gnu and aarch64-unknown-linux-gnu",
+            )
+        if not isinstance(revision, str) or not SHA1_RE.fullmatch(revision):
+            problems.violation("capture", "Linux cross-architecture comparison requires a known Mathlib revision")
+    elif capture.platform is not None and recorded.get("platform") != capture.platform:
         problems.violation(
             "capture",
             f"capture platform mismatch between baseline and log: baseline records "
@@ -1412,6 +1448,7 @@ def check(
     today: date,
     expect_diagnostics: int | None,
     expect_files: int | None,
+    allow_linux_cross_architecture: bool = False,
 ) -> int:
     problems = Problems()
     anchors = AnchorReader(root)
@@ -1510,7 +1547,7 @@ def check(
 
     allowances = active_exceptions(baseline, today, problems)
     check_ceilings(baseline, census, allowances, problems)
-    check_capture(root, baseline, capture, problems)
+    check_capture(root, baseline, capture, problems, allow_linux_cross_architecture)
     check_suppressions(baseline, scan_suppressions(root, anchors), today, problems)
 
     if expect_diagnostics is not None and census.total != expect_diagnostics:
@@ -1526,6 +1563,16 @@ def check(
     if not problems.ok:
         problems.render()
         return problems.exit_code()
+    if allow_linux_cross_architecture:
+        recorded_platform = baseline["capture"]["platform"]
+        provenance = (
+            "native capture provenance differs" if recorded_platform != capture.platform
+            else "native capture platform unchanged"
+        )
+        print(
+            f"warning census compatible: baseline capture platform {recorded_platform}; "
+            f"actual log platform {capture.platform}; {provenance}"
+        )
     print(
         f"warning contract satisfied: {census.total} baselined diagnostic(s) across "
         f"{census.files} file(s), {len(baseline.get('suppressions') or [])} reviewed "
@@ -1878,6 +1925,127 @@ def run_self_test() -> int:
             log_path.write_bytes(render_self_test_log(entries))
 
         cases: list[str] = []
+        cross_flag = "--allow-linux-cross-architecture"
+        arm_platform = "aarch64-unknown-linux-gnu"
+        original_log = log_path.read_bytes()
+        arm_log = original_log.replace(SELF_TEST_PLATFORM.encode(), arm_platform.encode())
+        cross_check = common + ["--check", cross_flag]
+
+        # Every existing rejection below must still hold with an actual ARM64
+        # header and the opt-in enabled; only the architecture guard may relax.
+        def expect_rejection(argv: Sequence[str], needle: str, label: str) -> bool:
+            if not expect_failure(argv, needle, label):
+                return False
+            raw = log_path.read_bytes()
+            log_path.write_bytes(raw.replace(SELF_TEST_PLATFORM.encode(), arm_platform.encode()))
+            try:
+                return expect_failure(list(argv) + [cross_flag], needle, "cross-architecture " + label)
+            finally:
+                log_path.write_bytes(raw)
+
+        log_path.write_bytes(arm_log)
+        if not expect_failure(common + ["--check"], "capture platform mismatch", "strict ARM64 comparison"):
+            return 1
+        cases.append("strict cross-architecture comparison")
+        for capture_platform, raw in (
+            (SELF_TEST_PLATFORM, arm_log),
+            (arm_platform, original_log),
+            (SELF_TEST_PLATFORM, original_log),
+        ):
+            mutated = json.loads(pristine)
+            mutated["capture"]["platform"] = capture_platform
+            write_baseline(baseline_path, mutated)
+            log_path.write_bytes(raw)
+            baseline_bytes = baseline_path.read_bytes()
+            code, output = run_checker(cross_check)
+            if code != 0 or "warning census compatible" not in output or capture_platform not in output:
+                print(f"self-test failure: Linux GNU census comparison failed (exit {code})\n{output}", file=sys.stderr)
+                return 1
+            if capture_platform != (arm_platform if raw == arm_log else SELF_TEST_PLATFORM) and "native capture provenance differs" not in output:
+                print("self-test failure: differing native capture provenance was not reported", file=sys.stderr)
+                return 1
+            if baseline_path.read_bytes() != baseline_bytes or log_path.read_bytes() != raw:
+                print("self-test failure: comparison rewrote the baseline or log", file=sys.stderr)
+                return 1
+        accepted.append("Linux GNU census compatibility in both directions with provenance and unchanged inputs")
+        restore()
+
+        # Inspect every full header, including headers after the first one.
+        header = next(line for line in normalize_log_lines(arm_log) if line.startswith("Lean ("))
+        no_header = b"\n".join(line for line in arm_log.splitlines() if b"Lean (" not in line)
+        malformed = arm_log.replace(b"commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef", b"commit unknown")
+        unsupported = arm_log.replace(arm_platform.encode(), b"aarch64-apple-darwin")
+        unsupported_gnu = arm_log.replace(arm_platform.encode(), b"riscv64-unknown-linux-gnu")
+        for label, raw, needle in (
+            ("missing compiler header", no_header, "requires a complete compiler header"),
+            ("unknown compiler commit", malformed, "refuses malformed compiler headers"),
+            ("partial compiler header", arm_log + b"\nLean (version unknown)\n", "refuses malformed compiler headers"),
+            ("unsupported platform", unsupported, "supports only"),
+            ("unsupported Linux architecture", unsupported_gnu, "supports only"),
+            ("conflicting platforms", arm_log + header.replace(arm_platform, SELF_TEST_PLATFORM).encode() + b"\n", "refuses conflicting compiler headers"),
+            ("conflicting versions", arm_log + header.replace("4.99.0-fixture", "4.98.0-fixture").encode() + b"\n", "refuses conflicting compiler headers"),
+            ("conflicting compiler commits", arm_log + header.replace("deadbeef" * 5, "a" * 40).encode() + b"\n", "refuses conflicting compiler headers"),
+            ("conflicting build modes", arm_log + header.replace("Release", "Debug").encode() + b"\n", "refuses conflicting compiler headers"),
+            ("changed log toolchain", arm_log.replace(b"4.99.0-fixture", b"4.98.0-fixture"), "capture toolchain mismatch"),
+        ):
+            log_path.write_bytes(raw)
+            if not expect_failure(cross_check, needle, label):
+                return 1
+            cases.append(label)
+        log_path.write_bytes(arm_log + header.encode() + b"\n")
+        code, output = run_checker(cross_check)
+        if code != 0:
+            print(f"self-test failure: repeated identical compiler headers refused\n{output}", file=sys.stderr)
+            return 1
+        accepted.append("repeated coherent compiler headers")
+        for platform in (None, "unknown", "x86_64-pc-windows-msvc", {"platform": arm_platform}):
+            mutated = json.loads(pristine)
+            mutated["capture"]["platform"] = platform
+            write_baseline(baseline_path, mutated)
+            if not expect_failure(cross_check, "supports only", "unknown or unsupported baseline platform"):
+                return 1
+        cases.append("unknown or unsupported baseline platforms")
+        restore()
+        log_path.write_bytes(arm_log)
+        for path, replacement, needle in (
+            (root / LEAN_TOOLCHAIN, "leanprover/lean4:v4.98.0-fixture\n", "capture toolchain mismatch"),
+            (root / LAKE_MANIFEST, json.dumps({"packages": [{"name": "mathlib", "rev": "a" * 40}]}), "capture Mathlib revision mismatch"),
+        ):
+            raw = path.read_bytes()
+            path.write_text(replacement, encoding="utf-8")
+            try:
+                if not expect_failure(cross_check, needle, "changed worktree pin"):
+                    return 1
+            finally:
+                path.write_bytes(raw)
+        mutated = json.loads(pristine)
+        mutated["capture"]["mathlib_revision"] = "a" * 40
+        write_baseline(baseline_path, mutated)
+        if not expect_failure(cross_check, "capture Mathlib revision mismatch", "changed baseline Mathlib pin"):
+            return 1
+        restore()
+        cases.append("changed worktree and baseline pins")
+        manifest_path = root / LAKE_MANIFEST
+        manifest_bytes = manifest_path.read_bytes()
+        log_path.write_bytes(arm_log)
+        for revision in (None, "unknown"):
+            mutated = json.loads(pristine)
+            mutated["capture"]["mathlib_revision"] = revision
+            write_baseline(baseline_path, mutated)
+            manifest_path.write_text(json.dumps({"packages": [{"name": "mathlib", "rev": revision}]}), encoding="utf-8")
+            try:
+                if not expect_failure(cross_check, "requires a known Mathlib revision", "unknown matching Mathlib pins"):
+                    return 1
+            finally:
+                manifest_path.write_bytes(manifest_bytes)
+        restore()
+        cases.append("unknown matching Mathlib pins")
+        baseline_bytes = baseline_path.read_bytes()
+        code, output = run_checker(common + ["--write-baseline", cross_flag])
+        if code != 2 or "cannot be used with --write-baseline" not in output or baseline_path.read_bytes() != baseline_bytes:
+            print(f"self-test failure: opt-in allowed baseline writing (exit {code})\n{output}", file=sys.stderr)
+            return 1
+        cases.append("cross-architecture baseline writing")
 
         # New fingerprint: an extra diagnostic in a baselined file.
         extra = entries + [
@@ -1893,14 +2061,14 @@ def run_self_test() -> int:
             )
         ]
         log_path.write_bytes(render_self_test_log(extra))
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "new diagnostic that is not in the reviewed baseline", "new fingerprint"
         ):
             return 1
         cases.append("new fingerprint")
 
         # Zero-warning ceiling for a file with no reviewed allowance.
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"],
             "file has no reviewed warning allowance",
             "zero-warning ceiling for a new file",
@@ -1918,7 +2086,7 @@ def run_self_test() -> int:
             ["A brand new diagnostic shape with no linter note"],
         )
         log_path.write_bytes(render_self_test_log(unknown))
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "unknown or unclassifiable diagnostic kind", "unknown kind"
         ):
             return 1
@@ -1929,22 +2097,22 @@ def run_self_test() -> int:
         doubled = list(entries)
         doubled.insert(1, entries[0])
         log_path.write_bytes(render_self_test_log(doubled))
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "global warning ceiling exceeded", "global ceiling breach"
         ):
             return 1
         cases.append("global ceiling")
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "per-kind warning ceiling exceeded", "per-kind ceiling breach"
         ):
             return 1
         cases.append("per-kind ceiling")
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "per-role warning ceiling exceeded", "per-role ceiling breach"
         ):
             return 1
         cases.append("per-role ceiling")
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "per-file warning ceiling exceeded", "per-file ceiling breach"
         ):
             return 1
@@ -1960,7 +2128,7 @@ def run_self_test() -> int:
         mutated["ceilings"]["by_file"]["NumStability/Fixture/Gamma.lean"] = 1
         mutated["ceilings"]["by_file"]["NumStability/Fixture/Beta.lean"] -= 1
         write_baseline(baseline_path, mutated)
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "path mutation of a known fingerprint", "path mutation"
         ):
             return 1
@@ -1975,7 +2143,7 @@ def run_self_test() -> int:
         mutated["ceilings"]["by_kind"]["linter.unreachableTactic"] = 1
         mutated["ceilings"]["by_kind"]["linter.unnecessarySeqFocus"] = 1
         write_baseline(baseline_path, mutated)
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "kind mutation of a known fingerprint", "kind mutation"
         ):
             return 1
@@ -1986,7 +2154,7 @@ def run_self_test() -> int:
         mutated = json.loads(pristine)
         mutated["capture"]["toolchain"] = "leanprover/lean4:v4.98.0-fixture"
         write_baseline(baseline_path, mutated)
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "capture toolchain mismatch", "toolchain mismatch"
         ):
             return 1
@@ -2021,7 +2189,7 @@ def run_self_test() -> int:
             encoding="utf-8",
             newline="\n",
         )
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"], "new or unlisted suppression", "unlisted suppression"
         ):
             return 1
@@ -2042,11 +2210,11 @@ def run_self_test() -> int:
         for entry in mutated["suppressions"]:
             entry["expires_at"] = "2020-01-01"
         write_baseline(baseline_path, mutated)
-        if not expect_failure(common + ["--check"], "expired suppression", "expired suppression"):
+        if not expect_rejection(common + ["--check"], "expired suppression", "expired suppression"):
             return 1
         cases.append("expired suppression")
         gamma.write_text(original_gamma, encoding="utf-8", newline="\n")
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"],
             "baseline suppression is no longer present in the worktree",
             "resolved suppression",
@@ -2057,7 +2225,7 @@ def run_self_test() -> int:
 
         # Disappeared fingerprint: an improvement that must be reviewed down.
         log_path.write_bytes(render_self_test_log(entries[:-1]))
-        if not expect_failure(
+        if not expect_rejection(
             common + ["--check"],
             "this is an improvement, not a regression",
             "disappeared fingerprint",
@@ -2079,7 +2247,7 @@ def run_self_test() -> int:
             }
         ]
         write_baseline(baseline_path, mutated)
-        if not expect_failure(common + ["--check"], "expired exception", "expired exception"):
+        if not expect_rejection(common + ["--check"], "expired exception", "expired exception"):
             return 1
         cases.append("expired exception")
         restore()
@@ -2177,6 +2345,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="exercise the contract against synthetic fixtures and exit",
     )
+    parser.add_argument(
+        "--allow-linux-cross-architecture",
+        action="store_true",
+        help="check the same reviewed census across Linux GNU x86-64/ARM64; "
+        "requires coherent complete compiler headers and unchanged pins (check only)",
+    )
     parser.add_argument("--capture-run-id", default=None, help="workflow run id to record")
     parser.add_argument("--capture-job-id", default=None, help="workflow job id to record")
     parser.add_argument(
@@ -2203,6 +2377,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    if args.allow_linux_cross_architecture and args.write_baseline:
+        print("error: malformed input: --allow-linux-cross-architecture cannot be used with --write-baseline", file=sys.stderr)
+        return 2
     if args.self_test:
         return run_self_test()
 
@@ -2241,6 +2418,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             today=today,
             expect_diagnostics=args.expect_diagnostics,
             expect_files=args.expect_files,
+            allow_linux_cross_architecture=args.allow_linux_cross_architecture,
         )
     except InputError as error:
         print(f"error: malformed input: {error}", file=sys.stderr)

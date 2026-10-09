@@ -37,3 +37,13 @@ reconciliation, install and check the checkout-local exclusions required by
 the active book-formalization workflow. A tracked ignore rule or layout check
 is only defense in depth and does not make campaign-state files part of the
 Lean product.
+
+## Warning checks across Linux architectures
+
+Keep `tools/architecture/check_warnings.py --check` strict by default. An
+explicit `--allow-linux-cross-architecture` comparison may check an unchanged
+reviewed warning census between Linux GNU x86-64 and ARM64; it requires
+coherent complete actual compiler headers and matching toolchain/Mathlib pins.
+Preserve the actual log and historical baseline. A census-compatible pass
+does not change native capture provenance or permit baseline writing. See
+[`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md) for the contract.
