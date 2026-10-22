@@ -38,7 +38,9 @@ FULL_LOCATOR_RE = re.compile(
     r"^(?:Theorem|Lemma|Equation|Corollary|Problem|Algorithm|Example|Table)(\d+)(.*)$"
 )
 PLACEHOLDER_RE = re.compile(
-    r"\b(?:sorry|admit)\b|^\s*(?:axiom|constant)\b(?!\s*[:=])",
+    # A declaration starts on its own line. Letting the leading whitespace
+    # cross newlines repeatedly rescans large comment-only spans after stripping.
+    r"\b(?:sorry|admit)\b|^[^\S\n]*(?:axiom|constant)\b(?!\s*[:=])",
     re.MULTILINE,
 )
 PROCESS_WORDS = (
@@ -476,8 +478,37 @@ def check() -> int:
     return 0
 
 
+def self_test() -> int:
+    cases = (
+        ("theorem example : True := by sorry", True),
+        ("theorem example : True := by admit", True),
+        ("axiom example : True", True),
+        ("\n\t axiom example : True", True),
+        ("\r\tconstant example : True", True),
+        ("\n\v\f\u00a0constant example : True", True),
+        ("/- nested /- axiom false : False -/ admit -/\naxiom example : True", True),
+        ("-- sorry\n/- axiom false : False -/\ndef example := 1", False),
+        ("def example := 1\n", False),
+        ("constant : Type", False),
+        ("constant\n  : Type", False),
+        ("axiom := 1", False),
+        ("axiom\n := 1", False),
+        ("def axiomName := 1", False),
+        ("def sorryName := 1", False),
+        ("\n" * 20000 + "def example := 1", False),
+        ("/-" + "\n" * 20000 + "-/\nconstant example : True", True),
+    )
+    for text, expected in cases:
+        observed = bool(PLACEHOLDER_RE.search(remove_lean_comments(text)))
+        if observed != expected:
+            raise LayoutError(f"placeholder self-test failed: expected {expected}, got {observed}")
+    print(f"Layout placeholder self-tests passed: {len(cases)} cases.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true", help="check placeholder detection fixtures")
     parser.add_argument(
         "--write-baseline",
         action="store_true",
@@ -485,6 +516,10 @@ def main() -> int:
     )
     args = parser.parse_args()
     try:
+        if args.self_test:
+            if args.write_baseline:
+                raise LayoutError("--self-test cannot write a baseline")
+            return self_test()
         if not args.write_baseline:
             return check()
         _, modules = scan_sources(ROOT)
