@@ -1,3 +1,17 @@
+## Broken CI runners: standing user authorization
+
+CI runner configuration and availability are deeply broken. Do not wait for a
+queued CI job with no runner assigned. The user authorizes otherwise authorized
+merges and publication after appropriate local validation, without asking for
+confirmation again. Record the exact commit, run/job identity, observed runner
+state, relevant local results and explicit CI waiver. Pending or skipped CI
+must never be reported as passing.
+
+Assess assigned jobs and actual test failures on their evidence. This exception
+does not weaken source, audit, proof or mathematical acceptance checks. Preserve
+server-enforced repository protections; if they prevent the action, record the
+specific restriction and continue independent work.
+
 ## Project naming and stability terminology
 
 The project is called Lean Computational Mathematics. The selected repository
