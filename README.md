@@ -45,11 +45,16 @@ faithfully.
 
 ## Current repository status
 
-At published commit [`f8ce76ee7`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/f8ce76ee791152180d5386598800878d2e090fda),
+The October 23, 2026 review measures published snapshot
+[`042142525`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/04214252556b2294ac4fa17f4b2fe4c43b6d3d28).
 `main` contains 3,785 classified production Lean modules. The source and import
-measurements below come from a strict source scan of that commit; the role counts
-come from the [tier manifest](docs/architecture/tiers.json). LeVeque Chapters 2
-and 3 have complete audited scopes, described below.
+measurements below were rechecked with a strict source scan of that commit;
+the role counts come from the [tier manifest](docs/architecture/tiers.json).
+The published mathematical scope is unchanged since the September 27 README
+update: LeVeque Chapters 2 and 3 have complete audited scopes, described below.
+Later changes add publication policies, refresh file dates, strengthen diagnostic
+validation, improve source-check performance, and record CI runner resources.
+Work on other branches or in local checkouts is not counted as published coverage.
 
 | Current-tree metric | Value |
 |---|---:|
@@ -61,10 +66,15 @@ and 3 have complete audited scopes, described below.
 | Direct imports | 32,456 |
 | Import cycles / unresolved project imports | 0 / 0 |
 | Forbidden reusable-to-source import paths | 0 |
-| Test Lean modules | 151 |
+| Test Lean modules (including the root) | 152 |
 | Reviewed warning baseline | 227 diagnostics |
 | Reviewed lint baseline | 3,903 findings |
-| Tracked files / size | 4,479 / 107.9 MB |
+| Tracked files / size | 4,482 / 107.9 MB |
+
+Module counts measure files, not theorems or accepted source claims. Warning
+and lint counts are the reviewed baselines enforced by CI, not zero-diagnostic
+claims. The tracked-file size is the sum of file bytes in this snapshot,
+excluding Git history, dependencies, and build artifacts.
 
 ### Historical: baseline before LeVeque Chapter 2
 
@@ -150,7 +160,21 @@ and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
 
 ### CI status
 
-The badge tracks `main`. Release 0.2.0 and the retirements that followed it were
+The badge tracks `main`. The
+[October 22 run on `042142525`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/39753456088)
+passed the source checks, library and test builds, `lake test`, and warning/lint
+enforcement. This is evidence for that exact commit; the badge shows subsequent
+runs.
+
+Recent CI maintenance adds runner CPU, memory, and cgroup resource logging and
+per-target build progress, and avoids repeated blank-line scans in the source
+guards. Warning checks remain strict by default. An explicit
+`--allow-linux-cross-architecture` comparison can validate an unchanged warning
+census across Linux GNU x86-64 and ARM64 with coherent compiler headers and
+matching pins; it preserves the actual capture provenance and cannot rewrite
+the baseline. See the [warning-check contract](docs/architecture/PROCESS.md).
+
+Release 0.2.0 and the retirements that followed it were
 each verified green before the next landed; the run on the tagged commit
 `e93dd14c1` passed every step, including the library build, the `lake test`
 driver and both reviewed diagnostic baselines.
@@ -187,7 +211,7 @@ and enforces the reviewed warning and lint baselines. The clean-project
 consumer builds the six canonical identity fixtures. Manual
 `clean_project=true` builds fresh project artifacts; the recorded run skipped
 project cache restore/save while using the permitted Mathlib cache. It captures
-the compiled graph, axiom reports and canonical/old/mixed consumer build with
+the compiled graph, axiom reports and canonical consumer build with
 exact source/fixture/pin checks. Artifacts are retained for 14 days; ordinary
 push/PR cache behavior is unchanged.
 
@@ -320,8 +344,12 @@ rather than tracked in this repository.
 [`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
 probability entry point. Its semantic layer covers probability preliminaries,
 limit theorems, independent sums, Hoeffding and Chernoff bounds, random-graph
-degree laws, and sub-Gaussian and sub-exponential variables used by the retained
-Chapter 1–2 source development.
+degree laws, and sub-Gaussian and sub-exponential variables. It also exposes
+vector probability and covariance, isotropy and norm concentration, convex
+bodies, finite-graph Max-Cut and randomized rounding, semidefinite and
+Grothendieck foundations, kernels, and finite tensors. These reusable families
+support the source development; their presence does not establish completion
+of additional book chapters.
 
 [`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
 checked source contracts and frozen signatures for selected material in
@@ -347,13 +375,11 @@ canonical destinations are recorded in the
 ## Building
 
 Install Git and [elan](https://github.com/leanprover/elan), then clone the
-active repository. Check out the published Chapter 3 commit for a reproducible
-tree:
+active repository to build current `main`:
 
 ```bash
 git clone https://github.com/VSCL-x-VERITAS/lean-computational-mathematics.git lean-computational-mathematics
 cd lean-computational-mathematics
-git checkout f8ce76ee791152180d5386598800878d2e090fda
 lake exe cache get
 lake build ComputationalMathematics NumStabilityTest
 lake test
@@ -361,6 +387,8 @@ lake test
 
 `lake build` selects the canonical library; the explicit command above also
 includes the test library. `lake test` uses the `NumStabilityTest` driver.
+For the reproducible snapshot measured above, run
+`git checkout 04214252556b2294ac4fa17f4b2fe4c43b6d3d28` before the Lake commands.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -409,7 +437,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "f8ce76ee791152180d5386598800878d2e090fda"
+rev = "04214252556b2294ac4fa17f4b2fe4c43b6d3d28"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
@@ -457,7 +485,7 @@ ComputationalMathematics/
 │   ├── LinearSystems/, MatrixEquations/, MatrixPowers/
 │   └── RandomizedLinearAlgebra/
 ├── HDP.lean                              high-dimensional-probability entry point
-├── HDP/                                  scalar probability, concentration, and old contract paths
+├── HDP/                                  scalar/vector probability, concentration, graphs, kernels
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
@@ -524,17 +552,20 @@ subject to the reviewed baseline.
 
 ## Roadmap
 
-The companion source catalogue lists six candidates whose formalization status
-is `not-started`: Greenbaum and Saad on iterative linear solvers, LeVeque on
-finite differences, Krüger and Succi on lattice Boltzmann methods, and Kettner
-et al. on robust geometric computation. The finite-difference source
-collection currently contains only Chapters 1–4. A kinetic-models and
-macroscopic-limits request still needs an authoritative source.
+The tracked [publication policies](.formalization-policy/publication/) cover
+LeVeque, Vershynin, the Fountoulakis random-automata paper, a Higham recheck,
+Bhatia's matrix analysis, and Nocedal's numerical optimization. The Nocedal
+policy disables automatic publication. These policies configure how candidate
+work may be published; they do not certify completed chapters or add source
+coverage to the library.
 
-These are candidate source materials, not completed library coverage. The
-[verified source inventory](docs/migrations/lean-computational-mathematics/source-scope.md)
-records exact titles, editions, source identifiers, catalogue status and the
-boundary between present developments and future work.
+The [source inventory from the September identity migration](docs/migrations/lean-computational-mathematics/source-scope.md)
+records exact titles, editions, source identifiers, and the companion catalogue
+as observed on September 6, 2026. Its prospective sources include Greenbaum and
+Saad on iterative linear solvers, LeVeque on finite differences, Krüger and
+Succi on lattice Boltzmann methods, and Kettner et al. on robust geometric
+computation. Its catalogue statuses and source-collection limits describe that
+historical snapshot. The current published source areas are listed above.
 
 ## References
 
