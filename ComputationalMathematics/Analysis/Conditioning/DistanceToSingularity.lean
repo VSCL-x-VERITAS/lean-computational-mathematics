@@ -45,7 +45,7 @@ theorem singular_perturbation_inv_condition_le_relative_bound
   have hA_eq_neg : A x = complexVecSMul (-1 : ℂ) (Δ x) := by
     ext i
     have hcoord := congrFun hxsing i
-    simp [complexVectorMapAdd, complexVecAdd, complexVecSMul] at hcoord ⊢
+    simp [complexVectorMapAdd, complexVecSMul] at hcoord ⊢
     exact eq_neg_of_add_eq_zero_left hcoord
   have hx_eq : x = Ainv (complexVecSMul (-1 : ℂ) (Δ x)) := by
     calc
@@ -119,7 +119,7 @@ theorem exists_singular_perturbation_attaining_inverse_bound
         rw [← hmap]
         simpa [xunit] using hBxunit
       ext i
-      simp [complexVectorMapAdd, complexVecAdd, hA_right y, x, hΔx, negy,
+      simp [complexVectorMapAdd, hA_right y, x, hΔx, negy,
         complexVecSMul]
 
 /-- Relative form of the attaining perturbation in the local Theorem 6.5 model:
@@ -541,7 +541,7 @@ theorem exists_inverseSandwich_scaled_normValue_eq_square_mul
         complexVectorMapSMul (d : ℂ)
           (complexVectorMapComp S (complexVectorMapComp Δ S)) := by
     funext x
-    simp [D, complexVectorMapComp, complexVectorMapSMul, hSlin.map_smul]
+    exact IsLinearMap.map_smul hSlin (d : ℂ) (Δ (S x))
   have hSandScaled :
       IsMixedSubordinateNormValue νβ να
         (complexVectorMapComp S (complexVectorMapComp D S)) (d * s ^ 2) := by
