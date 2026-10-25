@@ -9346,7 +9346,7 @@ lemma ch7_complexMatrixVecMul_smul {m n : ℕ} (z : ℂ) (A : CMatrix m n) :
     complexMatrixVecMul ((z • A : Matrix (Fin m) (Fin n) ℂ) : CMatrix m n) =
       complexVectorMapSMul z (complexMatrixVecMul A) := by
   ext x i
-  unfold complexMatrixVecMul complexVectorMapSMul complexVecSMul
+  unfold complexMatrixVecMul complexVectorMapSMul
   calc
     (∑ j : Fin n, (z • A : Matrix (Fin m) (Fin n) ℂ) i j * x j)
         = ∑ j : Fin n, z * (A i j * x j) := by
@@ -9402,7 +9402,7 @@ theorem ch7_complexMatrixLpNormOfReal_smul {m n : ℕ} (hn : 0 < n)
           (complexMatrixVecMul
             (((z • A : Matrix (Fin m) (Fin n) ℂ) : CMatrix m n))) := by
     ext x i
-    unfold complexMatrixVecMul complexVectorMapSMul complexVecSMul
+    unfold complexMatrixVecMul complexVectorMapSMul
     calc
       ∑ j : Fin n, A i j * x j
           = z⁻¹ * (z * ∑ j : Fin n, A i j * x j) := by

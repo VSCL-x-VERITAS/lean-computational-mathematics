@@ -593,23 +593,11 @@ theorem exists_mixedSubordinateMatrixNormValue_le_of_maxComplexMatrixEigenvalueM
   have htoTri : IsComplexVectorMapLinear toTri := by
     constructor
     · intro x y
-      have hadd : complexVecAdd x y = x + y := by
-        ext k
-        rfl
       ext i
-      rw [hadd]
-      have hmap := congrFun (b.equivFun.map_add x y) i
-      change (b.equivFun (x + y)) i = (b.equivFun x) i + (b.equivFun y) i
-      exact hmap
+      exact congrFun (b.equivFun.map_add x y) i
     · intro a x
       ext i
-      have hsmul : complexVecSMul a x = a • x := by
-        ext k
-        rfl
-      rw [hsmul]
-      have hmap := congrFun (b.equivFun.map_smul a x) i
-      change (b.equivFun (a • x)) i = a * (b.equivFun x) i
-      exact hmap
+      exact congrFun (b.equivFun.map_smul a x) i
   have htoTri_inj_zero : ∀ x : CVec n, toTri x = 0 → x = 0 := by
     intro x hx
     apply b.equivFun.injective

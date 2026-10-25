@@ -1,3 +1,17 @@
+## Broken CI runners: standing user authorization
+
+CI runner configuration and availability are deeply broken. Do not wait for a
+queued CI job with no runner assigned. The user authorizes otherwise authorized
+merges and publication after appropriate local validation, without asking for
+confirmation again. Record the exact commit, run/job identity, observed runner
+state, relevant local results and explicit CI waiver. Pending or skipped CI
+must never be reported as passing.
+
+Assess assigned jobs and actual test failures on their evidence. This exception
+does not weaken source, audit, proof or mathematical acceptance checks. Preserve
+server-enforced repository protections; if they prevent the action, record the
+specific restriction and continue independent work.
+
 ## Project naming and stability terminology
 
 The project is called Lean Computational Mathematics. The selected repository
@@ -37,3 +51,13 @@ reconciliation, install and check the checkout-local exclusions required by
 the active book-formalization workflow. A tracked ignore rule or layout check
 is only defense in depth and does not make campaign-state files part of the
 Lean product.
+
+## Warning checks across Linux architectures
+
+Keep `tools/architecture/check_warnings.py --check` strict by default. An
+explicit `--allow-linux-cross-architecture` comparison may check an unchanged
+reviewed warning census between Linux GNU x86-64 and ARM64; it requires
+coherent complete actual compiler headers and matching toolchain/Mathlib pins.
+Preserve the actual log and historical baseline. A census-compatible pass
+does not change native capture provenance or permit baseline writing. See
+[`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md) for the contract.
