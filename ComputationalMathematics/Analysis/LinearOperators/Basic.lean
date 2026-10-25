@@ -2,6 +2,7 @@
 --
 -- Basic finite complex-linear operator infrastructure.
 
+import Mathlib.Algebra.Module.LinearMap.Defs
 import ComputationalMathematics.Analysis.VectorNorms.Basic
 
 /-!
@@ -9,6 +10,10 @@ import ComputationalMathematics.Analysis.VectorNorms.Basic
 
 Defines the finite complex-vector map interfaces and linear-map bridges used
 by subordinate operator and matrix norms.
+
+The source-facing names below forward to Mathlib's linearity predicate and
+standard function operations. Their existing names and interfaces remain
+supported; no compatibility-wrapper removal is scheduled.
 -/
 
 namespace NumStability
@@ -23,37 +28,111 @@ open ENNReal
     representation until the matrix API is fixed. -/
 abbrev ComplexVectorMap (n m : ℕ) := CVec n → CVec m
 
-/-- Explicit linearity predicate for source-facing maps `C^n -> C^m`. -/
-structure IsComplexVectorMapLinear {n m : ℕ} (T : ComplexVectorMap n m) : Prop where
-  map_add : ∀ x y : CVec n,
-    T (complexVecAdd x y) = complexVecAdd (T x) (T y)
-  map_smul : ∀ (a : ℂ) (x : CVec n),
-    T (complexVecSMul a x) = complexVecSMul a (T x)
+/-- Mathlib linearity under the legacy source-facing name. -/
+abbrev IsComplexVectorMapLinear {n m : ℕ} (T : ComplexVectorMap n m) : Prop :=
+  IsLinearMap ℂ T
+
+namespace IsComplexVectorMapLinear
+
+/-- Compatibility constructor forwarding to `IsLinearMap.mk`. -/
+@[match_pattern]
+abbrev mk {n m : ℕ} {T : ComplexVectorMap n m}
+    (map_add : ∀ x y : CVec n,
+      T (complexVecAdd x y) = complexVecAdd (T x) (T y))
+    (map_smul : ∀ (a : ℂ) (x : CVec n),
+      T (complexVecSMul a x) = complexVecSMul a (T x)) :
+    IsComplexVectorMapLinear T :=
+  IsLinearMap.mk map_add map_smul
+
+/-- Retain the former generated constructor spelling as a forwarding alias. -/
+abbrev mk._flat_ctor {n m : ℕ} {T : ComplexVectorMap n m}
+    (map_add : ∀ x y : CVec n,
+      T (complexVecAdd x y) = complexVecAdd (T x) (T y))
+    (map_smul : ∀ (a : ℂ) (x : CVec n),
+      T (complexVecSMul a x) = complexVecSMul a (T x)) :
+    IsComplexVectorMapLinear T :=
+  IsComplexVectorMapLinear.mk map_add map_smul
+
+/-- Compatibility projection forwarding to `IsLinearMap.map_add`. -/
+abbrev map_add {n m : ℕ} {T : ComplexVectorMap n m}
+    (self : IsComplexVectorMapLinear T) (x y : CVec n) :
+    T (complexVecAdd x y) = complexVecAdd (T x) (T y) :=
+  IsLinearMap.map_add self x y
+
+/-- Compatibility projection forwarding to `IsLinearMap.map_smul`. -/
+abbrev map_smul {n m : ℕ} {T : ComplexVectorMap n m}
+    (self : IsComplexVectorMapLinear T) (a : ℂ) (x : CVec n) :
+    T (complexVecSMul a x) = complexVecSMul a (T x) :=
+  IsLinearMap.map_smul self a x
+
+/-- Compatibility eliminator using the canonical `IsLinearMap` projections. -/
+@[elab_as_elim]
+abbrev rec {n m : ℕ} {T : ComplexVectorMap n m}
+    {motive : IsComplexVectorMapLinear T → Sort u}
+    (mk : ∀ (map_add : ∀ x y : CVec n,
+        T (complexVecAdd x y) = complexVecAdd (T x) (T y))
+      (map_smul : ∀ (a : ℂ) (x : CVec n),
+        T (complexVecSMul a x) = complexVecSMul a (T x)),
+      motive (IsComplexVectorMapLinear.mk map_add map_smul))
+    (t : IsComplexVectorMapLinear T) : motive t :=
+  mk (IsLinearMap.map_add t) (IsLinearMap.map_smul t)
+
+/-- Compatibility argument order for the legacy dependent eliminator. -/
+@[elab_as_elim]
+abbrev recOn {n m : ℕ} {T : ComplexVectorMap n m}
+    {motive : IsComplexVectorMapLinear T → Sort u}
+    (t : IsComplexVectorMapLinear T)
+    (mk : ∀ (map_add : ∀ x y : CVec n,
+        T (complexVecAdd x y) = complexVecAdd (T x) (T y))
+      (map_smul : ∀ (a : ℂ) (x : CVec n),
+        T (complexVecSMul a x) = complexVecSMul a (T x)),
+      motive (IsComplexVectorMapLinear.mk map_add map_smul)) : motive t :=
+  rec mk t
+
+/-- Compatibility case analysis using the canonical linearity fields. -/
+@[elab_as_elim]
+abbrev casesOn {n m : ℕ} {T : ComplexVectorMap n m}
+    {motive : IsComplexVectorMapLinear T → Sort u}
+    (t : IsComplexVectorMapLinear T)
+    (mk : ∀ (map_add : ∀ x y : CVec n,
+        T (complexVecAdd x y) = complexVecAdd (T x) (T y))
+      (map_smul : ∀ (a : ℂ) (x : CVec n),
+        T (complexVecSMul a x) = complexVecSMul a (T x)),
+      motive (IsComplexVectorMapLinear.mk map_add map_smul)) : motive t :=
+  rec mk t
+
+end IsComplexVectorMapLinear
 
 /-- Composition of source-facing vector maps. -/
 def complexVectorMapComp {n m k : ℕ} (A : ComplexVectorMap m k)
     (B : ComplexVectorMap n m) : ComplexVectorMap n k :=
-  fun x => A (B x)
+  Function.comp A B
 
 /-- Pointwise addition of source-facing vector maps. -/
 noncomputable def complexVectorMapAdd {n m : ℕ} (A B : ComplexVectorMap n m) :
     ComplexVectorMap n m :=
-  fun x => complexVecAdd (A x) (B x)
+  A + B
 
 /-- Scalar multiplication of a source-facing vector map. -/
 noncomputable def complexVectorMapSMul {n m : ℕ} (a : ℂ)
     (A : ComplexVectorMap n m) : ComplexVectorMap n m :=
-  fun x => complexVecSMul a (A x)
+  a • A
+
+/-- Pointwise scalar action in the legacy explicit-vector notation. -/
+@[simp]
+theorem complexVectorMapSMul_apply {n m : ℕ} (a : ℂ)
+    (A : ComplexVectorMap n m) (x : CVec n) :
+    complexVectorMapSMul a A x = complexVecSMul a (A x) := rfl
 
 /-- Pointwise negation of a source-facing vector map. -/
 noncomputable def complexVectorMapNeg {n m : ℕ} (A : ComplexVectorMap n m) :
     ComplexVectorMap n m :=
-  complexVectorMapSMul (-1 : ℂ) A
+  -A
 
 /-- Pointwise subtraction of source-facing vector maps. -/
 noncomputable def complexVectorMapSub {n m : ℕ} (A B : ComplexVectorMap n m) :
     ComplexVectorMap n m :=
-  complexVectorMapAdd A (complexVectorMapNeg B)
+  A - B
 
 /-- A source-facing square map is singular if it has a nonzero kernel vector. -/
 def IsSingularComplexVectorMap {n : ℕ} (A : ComplexVectorMap n n) : Prop :=
@@ -65,46 +144,48 @@ lemma complexVectorMapComp_linear {n m k : ℕ} {A : ComplexVectorMap m k}
     IsComplexVectorMapLinear (complexVectorMapComp A B) := by
   constructor
   · intro x y
-    simp [complexVectorMapComp, hB.map_add x y, hA.map_add]
+    change A (B (x + y)) = A (B x) + A (B y)
+    rw [IsLinearMap.map_add hB, IsLinearMap.map_add hA]
   · intro a x
-    simp [complexVectorMapComp, hB.map_smul a x, hA.map_smul]
+    change A (B (a • x)) = a • A (B x)
+    rw [IsLinearMap.map_smul hB, IsLinearMap.map_smul hA]
 
 lemma complexVectorMapAdd_linear {n m : ℕ} {A B : ComplexVectorMap n m}
     (hA : IsComplexVectorMapLinear A) (hB : IsComplexVectorMapLinear B) :
     IsComplexVectorMapLinear (complexVectorMapAdd A B) := by
   constructor
   · intro x y
-    ext i
-    simp [complexVectorMapAdd, complexVecAdd, hA.map_add, hB.map_add]
-    ring
+    change A (x + y) + B (x + y) = (A x + B x) + (A y + B y)
+    rw [IsLinearMap.map_add hA, IsLinearMap.map_add hB]
+    abel
   · intro a x
-    ext i
-    simp [complexVectorMapAdd, complexVecAdd, complexVecSMul, hA.map_smul,
-      hB.map_smul]
-    ring
+    change A (a • x) + B (a • x) = a • (A x + B x)
+    rw [IsLinearMap.map_smul hA, IsLinearMap.map_smul hB, smul_add]
 
 lemma complexVectorMapSMul_linear {n m : ℕ} {A : ComplexVectorMap n m}
     (a : ℂ) (hA : IsComplexVectorMapLinear A) :
     IsComplexVectorMapLinear (complexVectorMapSMul a A) := by
   constructor
   · intro x y
-    ext i
-    simp [complexVectorMapSMul, complexVecAdd, complexVecSMul, hA.map_add]
-    ring
+    change a • A (x + y) = a • A x + a • A y
+    rw [IsLinearMap.map_add hA, smul_add]
   · intro b x
-    ext i
-    simp [complexVectorMapSMul, complexVecSMul, hA.map_smul]
-    ring
+    change a • A (b • x) = b • (a • A x)
+    rw [IsLinearMap.map_smul hA]
+    exact smul_comm a b (A x)
 
 lemma complexVectorMapNeg_linear {n m : ℕ} {A : ComplexVectorMap n m}
     (hA : IsComplexVectorMapLinear A) :
     IsComplexVectorMapLinear (complexVectorMapNeg A) := by
-  exact complexVectorMapSMul_linear (-1 : ℂ) hA
+  simpa [complexVectorMapSMul, complexVectorMapNeg] using
+    complexVectorMapSMul_linear (-1 : ℂ) hA
 
 lemma complexVectorMapSub_linear {n m : ℕ} {A B : ComplexVectorMap n m}
     (hA : IsComplexVectorMapLinear A) (hB : IsComplexVectorMapLinear B) :
     IsComplexVectorMapLinear (complexVectorMapSub A B) := by
-  exact complexVectorMapAdd_linear hA (complexVectorMapNeg_linear hB)
+  simpa only [complexVectorMapAdd, complexVectorMapNeg, complexVectorMapSub,
+    sub_eq_add_neg] using
+    complexVectorMapAdd_linear hA (complexVectorMapNeg_linear hB)
 
 lemma IsComplexVectorMapLinear.map_zero {n m : ℕ} {T : ComplexVectorMap n m}
     (hT : IsComplexVectorMapLinear T) : T 0 = 0 := by

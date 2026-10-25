@@ -103,7 +103,7 @@ theorem inversePerturbation_firstOrder_remainder_identity
         (S (Δ (S x))) i + -1 * (S (Δ (S (Δ (B x))))) i := by
     simpa [complexVecAdd, complexVecSMul] using congrFun hSDelta_decomp i
   simp [complexVectorMapSub, complexVectorMapAdd, complexVectorMapNeg,
-    complexVectorMapSMul, complexVectorMapComp, complexVecAdd, complexVecSMul]
+    complexVectorMapComp]
   calc
     (B x) i + -(S x) i = -(S (Δ (B x))) i := by
       have hb : (B x) i = (S x) i - (S (Δ (B x))) i :=
@@ -172,8 +172,7 @@ theorem inversePerturbation_firstOrder_error_identity
         (complexVectorMapComp S (complexVectorMapComp Δ B)))) x
   rw [congrFun hid x]
   ext i
-  simp [complexVectorMapAdd, complexVectorMapNeg, complexVectorMapSMul,
-    complexVectorMapComp, complexVecAdd, complexVecSMul]
+  simp [complexVectorMapAdd, complexVectorMapNeg, complexVectorMapComp, complexVecAdd]
 
 /-- Bound for the first-order inverse linearization error. Under the inverse
     hypotheses, `(B - S) + S Δ S` is exactly the quadratic remainder and hence
@@ -374,7 +373,7 @@ theorem inversePerturbation_small_add_eq_zero_imp_eq_zero
   have hA_eq_negD : A x = complexVecSMul (-1 : ℂ) (D x) := by
     ext i
     have hcoord := congrFun hx i
-    simp [complexVectorMapAdd, complexVecAdd, complexVecSMul] at hcoord ⊢
+    simp [complexVectorMapAdd, complexVecSMul] at hcoord ⊢
     exact eq_neg_of_add_eq_zero_left hcoord
   have hx_eq : x = complexVecSMul (-1 : ℂ) (S (D x)) := by
     calc

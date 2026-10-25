@@ -33,12 +33,12 @@ noncomputable def complexMatrixVecMul {m n : ℕ} (A : CMatrix m n) :
 /-- `Ainv` is a left inverse of `A` through the concrete complex matrix-vector
     action: `Ainv * A` acts as the identity on finite complex vectors. -/
 def IsComplexMatrixLeftInverse {n : ℕ} (A Ainv : CMatrix n n) : Prop :=
-  ∀ x : CVec n, complexMatrixVecMul Ainv (complexMatrixVecMul A x) = x
+  Function.LeftInverse (complexMatrixVecMul Ainv) (complexMatrixVecMul A)
 
 /-- `Ainv` is a right inverse of `A` through the concrete complex matrix-vector
     action: `A * Ainv` acts as the identity on finite complex vectors. -/
 def IsComplexMatrixRightInverse {n : ℕ} (A Ainv : CMatrix n n) : Prop :=
-  ∀ x : CVec n, complexMatrixVecMul A (complexMatrixVecMul Ainv x) = x
+  Function.RightInverse (complexMatrixVecMul Ainv) (complexMatrixVecMul A)
 
 /-- Source-facing two-sided inverse predicate for concrete complex matrices. -/
 def IsComplexMatrixInverse {n : ℕ} (A Ainv : CMatrix n n) : Prop :=
@@ -902,7 +902,7 @@ lemma complexMatrixVecMul_linear {m n : ℕ} (A : CMatrix m n) :
   constructor
   · intro x y
     ext i
-    simp only [complexMatrixVecMul, complexVecAdd]
+    simp only [complexMatrixVecMul]
     calc
       (∑ j : Fin n, A i j * (x j + y j)) =
           ∑ j : Fin n, (A i j * x j + A i j * y j) := by
@@ -913,7 +913,7 @@ lemma complexMatrixVecMul_linear {m n : ℕ} (A : CMatrix m n) :
             rw [Finset.sum_add_distrib]
   · intro a x
     ext i
-    simp only [complexMatrixVecMul, complexVecSMul]
+    simp only [complexMatrixVecMul]
     calc
       (∑ j : Fin n, A i j * (a * x j)) =
           ∑ j : Fin n, a * (A i j * x j) := by
