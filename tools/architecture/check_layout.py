@@ -61,6 +61,12 @@ MATHEMATICAL_NAME_WORDS = {
     "ComputationalMathematics.Analysis.FiniteVolume.OpenClosureCover": {"Closure"},
     "ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFoot": {"Support"},
 }
+# In this reusable quadrature module, "endpoint" denotes the mathematical
+# endpoints of an integration interval, not a migration/process endpoint.
+MATHEMATICAL_ENDPOINT_MODULE = (
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations."
+    "FiniteVolume.LocalEndpointMeanQuadrature"
+)
 GENERATED_PARTS = {"__pycache__", ".DS_Store"}
 # Session working artifacts must not be tracked under the evidence trees. The
 # 2026-09 evidence retirement removed 18,215 such files; these rules keep them
@@ -208,6 +214,8 @@ def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
         chapter_parts = [part for part in parts if part.startswith("Chapter")]
         if any(not re.fullmatch(r"Chapter\d{2}", part) for part in chapter_parts):
             return True
+        return False
+    if module.name == MATHEMATICAL_ENDPOINT_MODULE:
         return False
     return (
         any("_" in part for part in parts)
