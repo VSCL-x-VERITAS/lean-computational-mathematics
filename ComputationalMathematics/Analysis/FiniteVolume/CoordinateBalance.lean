@@ -23,19 +23,23 @@ noncomputable section
 
 namespace NumStability.FiniteVolume.CoordinateBalance
 
+/-- Finite-dimensional real Euclidean coordinate space. -/
 abbrev Point (d : ℕ) := EuclideanSpace ℝ (Fin d)
 
 /-- Replace exactly the `i`th spatial coordinate. -/
 def replace {d : ℕ} (x : Point d) (i : Fin d) (s : ℝ) : Point d :=
   WithLp.toLp 2 (Function.update (fun j => x j) i s)
 
+/-- Derivative in time of the scalar field, with the spatial point fixed. -/
 def timePartial {d : ℕ} (q : Point d → ℝ → ℝ) (x : Point d) (t : ℝ) : ℝ :=
   deriv (fun τ => q x τ) t
 
+/-- One-dimensional derivative along a selected spatial coordinate, with time fixed. -/
 def spatialPartial {d : ℕ} (q : Point d → ℝ → ℝ)
     (i : Fin d) (x : Point d) (t : ℝ) : ℝ :=
   deriv (fun s => q (replace x i s) t) (x i)
 
+/-- Sum of the spatial coordinate derivatives of the corresponding vector components. -/
 def divergence {d : ℕ} (F : Point d → ℝ → Point d) (x : Point d) (t : ℝ) : ℝ :=
   ∑ i, spatialPartial (fun x t => F x t i) i x t
 
@@ -52,6 +56,8 @@ def LocalLawAt {d : ℕ} (q : Point d → ℝ → ℝ)
     (x : Point d) (t : ℝ) : Prop :=
   PartialsExistAt q F x t ∧ timePartial q x t + divergence F x t = f x t
 
+/-- Pointwise local balance of the conserved density, flux divergence and source on a space-time
+set. -/
 def LocalLawOn {d : ℕ} (R : Set (Point d × ℝ)) (q : Point d → ℝ → ℝ)
     (F : Point d → ℝ → Point d) (f : Point d → ℝ → ℝ) : Prop :=
   ∀ x t, (x, t) ∈ R → LocalLawAt q F f x t
@@ -71,9 +77,13 @@ inductive FluxLaw (d : ℕ) (V : Type*) where
   | gradient : (Point d → ℝ → (Fin d → V) → Point d) → FluxLaw d V
   | valueGradient : (Point d → ℝ → V → (Fin d → V) → Point d) → FluxLaw d V
 
+/-- Supplied constitutive maps for the conserved density, vector flux and source. -/
 structure TypicalConstitutiveData (d : ℕ) (V : Type*) where
+  /-- Constitutive conserved-density map evaluated at position, time and state. -/
   qbar : Point d → ℝ → V → ℝ
+  /-- State-dependent constitutive vector flux law. -/
   flux : FluxLaw d V
+  /-- Constitutive source map evaluated at position, time and state. -/
   source : Point d → ℝ → V → ℝ
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
@@ -86,10 +96,12 @@ def spatialJacobian {d : ℕ} (u : Point d → ℝ → V)
     (x : Point d) (t : ℝ) : Fin d → V :=
   fun i => deriv (fun s => u (replace x i s) t) (x i)
 
+/-- Applicability condition for the coordinate Jacobian identities at the selected point and time. -/
 def JacobianApplicableAt {d : ℕ} (u : Point d → ℝ → V)
     (x : Point d) (t : ℝ) : Prop :=
   ∀ i, DifferentiableAt ℝ (fun s => u (replace x i s) t) (x i)
 
+/-- Evaluate the constitutive flux along the supplied state field. -/
 def evaluateFlux {d : ℕ} (Φ : FluxLaw d V) (u : Point d → ℝ → V)
     (x : Point d) (t : ℝ) : Point d :=
   match Φ with
@@ -105,10 +117,12 @@ def FluxApplicableAt {d : ℕ} (Φ : FluxLaw d V) (u : Point d → ℝ → V)
   | .gradient _ => JacobianApplicableAt u x t
   | .valueGradient _ => JacobianApplicableAt u x t
 
+/-- Compose the constitutive conserved density with the supplied state field. -/
 def closedQ {d : ℕ} (C : TypicalConstitutiveData d V)
     (u : Point d → ℝ → V) (x : Point d) (t : ℝ) : ℝ :=
   C.qbar x t (u x t)
 
+/-- Compose the constitutive source with the supplied state field. -/
 def closedSource {d : ℕ} (C : TypicalConstitutiveData d V)
     (u : Point d → ℝ → V) (x : Point d) (t : ℝ) : ℝ :=
   C.source x t (u x t)
@@ -135,14 +149,18 @@ def ClosureFormula {d : ℕ} (C : TypicalConstitutiveData d V)
 
 /-- Spatial coordinates precede the final time coordinate. -/
 abbrev SpaceTimeCoordinate (d : ℕ) := Sum (Fin d) Unit
+/-- Euclidean coordinates consisting of the spatial coordinates and one time coordinate. -/
 abbrev SpaceTimePoint (d : ℕ) := EuclideanSpace ℝ (SpaceTimeCoordinate d)
 
+/-- Pack the spatial point and time into the Euclidean space-time coordinates. -/
 def pack {d : ℕ} (x : Point d) (t : ℝ) : SpaceTimePoint d :=
   WithLp.toLp 2 (Sum.elim (fun i => x i) (fun _ => t))
 
+/-- Extract the spatial coordinates from a space-time point. -/
 def spacePart {d : ℕ} (z : SpaceTimePoint d) : Point d :=
   WithLp.toLp 2 (fun i => z (Sum.inl i))
 
+/-- Extract the time coordinate from a space-time point. -/
 def timePart {d : ℕ} (z : SpaceTimePoint d) : ℝ := z (Sum.inr ())
 
 /-- The explicit field `(F,q)`, with the positive time component `q`. -/
@@ -151,14 +169,17 @@ def spaceTimeFlux {d : ℕ} (q : Point d → ℝ → ℝ)
   WithLp.toLp 2 (Sum.elim (fun i => F (spacePart z) (timePart z) i)
     (fun _ => q (spacePart z) (timePart z)))
 
+/-- Replace one space-time coordinate by a supplied real value. -/
 def replaceSpaceTime {d : ℕ} (z : SpaceTimePoint d)
     (j : SpaceTimeCoordinate d) (s : ℝ) : SpaceTimePoint d :=
   WithLp.toLp 2 (Function.update (fun k => z k) j s)
 
+/-- Sum of all coordinate derivatives of the full space-time vector field. -/
 def spaceTimeDivergence {d : ℕ} (G : SpaceTimePoint d → SpaceTimePoint d)
     (z : SpaceTimePoint d) : ℝ :=
   ∑ j, deriv (fun s => G (replaceSpaceTime z j s) j) (z j)
 
+/-- Existence of the coordinate partial derivatives of a space-time vector field at a point. -/
 def SpaceTimePartialsExistAt {d : ℕ} (G : SpaceTimePoint d → SpaceTimePoint d)
     (z : SpaceTimePoint d) : Prop :=
   ∀ j, DifferentiableAt ℝ (fun s => G (replaceSpaceTime z j s) j) (z j)

@@ -37,9 +37,11 @@ def flux (V : Point 2 → ℝ → Point 2) (u : Point 2 → ℝ → ℝ)
 
 /-- Explicit embedding of the original spatial velocity; not a restriction
 on the primary time-dependent velocity domain. -/
+@[nolint unusedArguments] -- The time argument is part of the constant-in-time field interface.
 def constantTimeVelocity (v : Point 2 → Point 2) : Point 2 → ℝ → Point 2 :=
   fun x _ => v x
 
+/-- Joint C1 regularity of the state and time-dependent velocity on the space-time product. -/
 def C1On (U : Set (Point 2)) (I : Set ℝ)
     (u : Point 2 → ℝ → ℝ) (V : Point 2 → ℝ → Point 2) : Prop :=
   ContDiffOn ℝ 1 (fun z : Point 2 × ℝ => u z.1 z.2) (U.prod I) ∧

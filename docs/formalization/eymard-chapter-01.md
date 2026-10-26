@@ -42,6 +42,9 @@ metadata. The mathematical declarations are unchanged; the archive retains the
 original authoring bytes and receipts. The layout checker distinguishes the
 mathematical terms “closure” and “supporting line” in the two exact geometry
 module names from workflow-oriented names; negative naming tests remain active.
+Four scoped lint annotations retain intentionally unused time coordinates of
+constant-in-time lifts and the common decidable-face interfaces. No lint or
+warning baseline is relaxed.
 
 ## Continue on another computer
 

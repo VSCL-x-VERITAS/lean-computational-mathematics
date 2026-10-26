@@ -23,13 +23,16 @@ open scoped BigOperators
 
 namespace NumStability.Eymard.Chapter01
 
+/-- Union of the finitely indexed cell regions. -/
 def finiteCellUnion {α : Type*} {n : ℕ} (K : Fin n → Set α) : Set α :=
   ⋃ i, K i
 
+/-- Finite cellwise reconstruction from the supplied cell values. -/
 def finiteCellReconstruction {α : Type*} {n : ℕ}
     (K : Fin n → Set α) (U : Fin n → ℝ) (x : α) : ℝ :=
   ∑ i : Fin n, U i * (K i).indicator (fun _ => (1 : ℝ)) x
 
+/-- Cellwise reconstruction with the supplied off-cell extension. -/
 def finiteCellSkeletonExtension {α : Type*} {n : ℕ}
     (K : Fin n → Set α) (U : Fin n → ℝ) (g : α → ℝ) (x : α) : ℝ :=
   finiteCellReconstruction K U x + (finiteCellUnion K)ᶜ.indicator g x

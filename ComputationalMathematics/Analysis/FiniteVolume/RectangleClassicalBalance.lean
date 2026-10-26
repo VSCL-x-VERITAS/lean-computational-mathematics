@@ -37,9 +37,11 @@ def edgeFlux (R : Rectangle2) (F : Point → Point) (s : RectangleSide2) : ℝ :
   ∫ x in R.side s, inner ℝ (F x) (outwardNormal R s)
     ∂(EuclideanMeasure.surfaceMeasure 2)
 
+/-- Sum of the four oriented side flux integrals of the vector field. -/
 def boundaryFlux (R : Rectangle2) (F : Point → Point) : ℝ :=
   ∑ s : RectangleSide2, edgeFlux R F s
 
+/-- Negative gradient vector field of the scalar potential. -/
 def negativeGradient (u : Point → ℝ) (x : Point) : Point :=
   -(gradient u x)
 

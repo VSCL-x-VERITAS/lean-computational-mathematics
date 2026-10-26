@@ -35,6 +35,7 @@ does not establish an induced-area identity. -/
 abbrev defaultSurfaceHausdorff :=
   NumStability.FiniteVolume.EuclideanMeasure.surfaceMeasure
 
+/-- Canonical boundary measure restricted to the supplied Euclidean boundary. -/
 abbrev defaultDgamma {d : ℕ} (boundary : Set (EuclideanSpace ℝ (Fin d))) : Measure (EuclideanSpace ℝ (Fin d)) :=
   NumStability.FiniteVolume.EuclideanMeasure.boundaryMeasure boundary
 

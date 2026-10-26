@@ -33,12 +33,15 @@ for this time-independent vector field. -/
 def spatialDivergence {d : ℕ} (F : Point d → Point d) (x : Point d) : ℝ :=
   divergence (fun y _ => F y) x 0
 
+/-- Pair a vector field with the prescribed outward unit normal at the boundary point. -/
 def normalFlux {d : ℕ} (K : Set (Point d))
     (F : Point d → Point d) (x : Point d) : ℝ :=
   inner ℝ (F x) (outwardUnitNormal K x)
 
+/-- Embed a real coordinate into one-dimensional Euclidean space. -/
 def point1 (a : ℝ) : Point 1 := WithLp.toLp 2 (fun _ => a)
 
+/-- Open interval in the one-dimensional Euclidean coordinate space. -/
 def interval1 (a b : ℝ) : Set (Point 1) :=
   {x | a < x 0 ∧ x 0 < b}
 

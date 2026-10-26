@@ -24,6 +24,7 @@ open MeasureTheory Set
 
 namespace NumStability.FiniteVolume.ResidualLocalization
 
+/-- Finite-dimensional real Euclidean coordinate space. -/
 abbrev Point (d : ℕ) := EuclideanSpace ℝ (Fin d)
 
 /-- A positive-radius ball whose closure lies in the spatial domain.
@@ -39,6 +40,7 @@ def ballSlabIntegral {d : ℕ} (r : Point d × ℝ → ℝ)
     (fun t => ∫ y in Metric.ball x ρ, r (y, t)
       ∂(EuclideanMeasure.spatialVolume d)) a b (volume : Measure ℝ)
 
+/-- Vanishing-residual integral condition on the admissible spatial-ball and time-slab family. -/
 def ZeroBallSlabFamily {d : ℕ} (Ω : Set (Point d)) (I : Set ℝ)
     (r : Point d × ℝ → ℝ) : Prop :=
   ∀ x ∈ Ω, ∀ ρ : ℝ, BallCompactlyContained Ω x ρ →

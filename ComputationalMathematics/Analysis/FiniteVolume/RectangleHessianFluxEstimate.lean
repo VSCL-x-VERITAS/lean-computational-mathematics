@@ -56,6 +56,7 @@ rectangle two-point flux producer. -/
 def numericalFlux (K L : Rectangle2) (σ : Segment) (u : Point → ℝ) : ℝ :=
   rectangleInteriorFlux K L σ (u K.center) (u L.center)
 
+/-- Absolute difference between numerical and exact flux, divided by the face length. -/
 def normalizedError (K L : Rectangle2) (σ : Segment) (u : Point → ℝ) : ℝ :=
   |numericalFlux K L σ u - exactFlux K L σ u| / σ.length
 

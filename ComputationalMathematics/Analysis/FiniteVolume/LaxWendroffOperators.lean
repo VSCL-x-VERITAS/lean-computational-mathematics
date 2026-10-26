@@ -69,6 +69,7 @@ def laxWendroffReconstruction (face : ℤ → ℝ) (hmesh : laxWendroffMesh face
   ∑' i : ℤ, if z.1 ∈ Set.Ico (face i) (face (i + 1)) then
     laxWendroffValues face hmesh k initial g (Nat.floor (z.2 / k)) i else 0
 
+/-- Closed half-space of space-time points with nonnegative time coordinate. -/
 def laxWendroffHalfSpace : Set (ℝ × ℝ) := {z | 0 ≤ z.2}
 
 /-- C^1 up to the boundary, with compact support relative to the closed
@@ -77,9 +78,11 @@ def laxWendroffTest (φ : (ℝ × ℝ) → ℝ) : Prop :=
   ContDiffOn ℝ 1 φ laxWendroffHalfSpace ∧
     IsCompact (closure (Function.support φ ∩ laxWendroffHalfSpace))
 
+/-- Within-half-space Fréchet derivative of a test function in the spatial direction. -/
 def laxWendroffTestX (φ : (ℝ × ℝ) → ℝ) (z : ℝ × ℝ) : ℝ :=
   fderivWithin ℝ φ laxWendroffHalfSpace z (1, 0)
 
+/-- Within-half-space Fréchet derivative of a test function in the time direction. -/
 def laxWendroffTestT (φ : (ℝ × ℝ) → ℝ) (z : ℝ × ℝ) : ℝ :=
   fderivWithin ℝ φ laxWendroffHalfSpace z (0, 1)
 

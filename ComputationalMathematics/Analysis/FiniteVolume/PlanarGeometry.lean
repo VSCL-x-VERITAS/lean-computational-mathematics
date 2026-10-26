@@ -29,6 +29,7 @@ abbrev Point := EuclideanSpace ℝ (Fin 2)
 
 /-- A filled nondegenerate bounded convex polygon, represented by its vertices. -/
 structure Polygon where
+  /-- Finite vertex set whose convex hull determines the polygon. -/
   vertices : Finset Point
   interior_nonempty : (interior (convexHull ℝ (vertices : Set Point))).Nonempty
 
@@ -42,13 +43,17 @@ def Polygon.region (K : Polygon) : Set Point :=
 
 /-- An actual nondegenerate closed Euclidean segment. -/
 structure Segment where
+  /-- First endpoint of the nondegenerate segment. -/
   a : Point
+  /-- Second endpoint of the nondegenerate segment. -/
   b : Point
   nondegenerate : a ≠ b
 
+/-- Closed segment joining the two endpoints. -/
 def Segment.carrier (σ : Segment) : Set Point :=
   segment ℝ σ.a σ.b
 
+/-- Set consisting of the two segment endpoints. -/
 def Segment.endpoints (σ : Segment) : Set Point :=
   {σ.a, σ.b}
 
@@ -75,9 +80,13 @@ of one cell overlap only at endpoints. Neither global index type is finite.
 The normal and neighbour contracts are geometric input data; reversal of
 normals and antisymmetry of numerical fluxes are not fields. -/
 structure Mesh (Cell Face : Type) [DecidableEq Face] where
+  /-- Polygon assigned to each cell. -/
   polygon : Cell → Polygon
+  /-- Geometric segment assigned to each face. -/
   segment : Face → Segment
+  /-- Finite family of faces incident to each cell. -/
   faces : Cell → Finset Face
+  /-- Normal vector assigned to each oriented cell-and-face pair. -/
   normal : Cell → Face → Point
   cover : NumStability.FiniteVolume.IsOpenClosureCover
     (univ : Set Point) (Set.range (fun K => (polygon K).region))
@@ -89,6 +98,7 @@ structure Mesh (Cell Face : Type) [DecidableEq Face] where
       (segment σ).endpoints ∪ (segment τ).endpoints
   outward : ∀ K σ, σ ∈ faces K →
     IsOutwardNormal (polygon K) (segment σ) (normal K σ)
+  /-- Neighbour selected across an oriented cell face. -/
   neighbour : Cell → Face → Cell
   neighbour_ne : ∀ K σ, σ ∈ faces K → neighbour K σ ≠ K
   neighbour_incident : ∀ K σ, σ ∈ faces K → σ ∈ faces (neighbour K σ)

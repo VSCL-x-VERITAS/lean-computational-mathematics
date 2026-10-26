@@ -24,6 +24,7 @@ open scoped BigOperators
 
 /-- One explicit step with supplied signed coefficients. This algebraic operation
 does not assert that the coefficients are velocity integrals. -/
+@[nolint unusedArguments] -- Retain the common decidable-face interface used by the trajectory family.
 def signedUpwindStep {Cell Face : Type} [DecidableEq Face]
     (faces : Cell → Finset Face) (neighbour : Cell → Face → Cell)
     (mass : Cell → ℝ) (step : ℝ) (coefficient : Cell → Face → ℝ)
@@ -32,6 +33,7 @@ def signedUpwindStep {Cell Face : Type} [DecidableEq Face]
     ∑ σ ∈ faces K, scalarUpwindFlux (coefficient K σ) (state K) (state (neighbour K σ))
 
 /-- The exact residual coefficient of the current cell value. -/
+@[nolint unusedArguments] -- Retain the common decidable-face interface used by the trajectory family.
 def upwindSelfWeight {Face : Type} [DecidableEq Face]
     (faces : Finset Face) (coefficient : Face → ℝ) (mass step : ℝ) : ℝ :=
   1 - (step / mass) * ∑ σ ∈ faces, max (coefficient σ) 0

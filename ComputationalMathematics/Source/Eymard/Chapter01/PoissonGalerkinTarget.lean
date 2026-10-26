@@ -22,19 +22,23 @@ def loadForm {d : ℕ} {Ω : Opens (Space d)}
     (f : ScalarL2 Ω) (v : ValueGradient Ω) : ℝ :=
   ∫ x, f x * v.1 x ∂domainMeasure Ω
 
+/-- Continuous zero-boundary variational problem for the supplied square-integrable load. -/
 def continuousProblem {d : ℕ} {Ω : Opens (Space d)}
     (f : ScalarL2 Ω) (u : ValueGradient Ω) : Prop :=
   InH01Graph u ∧ ∀ v : ValueGradient Ω, InH01Graph v → poissonForm u v = loadForm f v
 
+/-- Conformity of the discrete space with the zero-boundary weak-gradient graph. -/
 def IsConforming {d : ℕ} {Ω : Opens (Space d)}
     (Vh : Submodule ℝ (ValueGradient Ω)) : Prop :=
   ∀ w ∈ Vh, InH01Graph w
 
+/-- Reconstruct the value-gradient pair from its finite basis coefficients. -/
 def reconstruction {d N : ℕ} {Ω : Opens (Space d)}
     {Vh : Submodule ℝ (ValueGradient Ω)} (b : Basis (Fin N) ℝ Vh)
     (U : Fin N → ℝ) : Vh :=
   ∑ i : Fin N, U i • b i
 
+/-- Galerkin variational problem in the supplied finite-dimensional subspace. -/
 def discreteProblem {d N : ℕ} {Ω : Opens (Space d)}
     {Vh : Submodule ℝ (ValueGradient Ω)} (f : ScalarL2 Ω)
     (b : Basis (Fin N) ℝ Vh) (U : Fin N → ℝ) : Prop :=
@@ -47,6 +51,7 @@ def stiffnessEntry {d N : ℕ} {Ω : Opens (Space d)}
     (j i : Fin N) : ℝ :=
   poissonForm (b i : ValueGradient Ω) (b j : ValueGradient Ω)
 
+/-- Galerkin equations expressed in the supplied finite basis. -/
 def basisLinearSystem {d N : ℕ} {Ω : Opens (Space d)}
     {Vh : Submodule ℝ (ValueGradient Ω)} (f : ScalarL2 Ω)
     (b : Basis (Fin N) ℝ Vh) (U : Fin N → ℝ) : Prop :=
@@ -67,16 +72,19 @@ def smoothClosureHasWeakGradient : Prop :=
   ∀ (d : ℕ) (Ω : Opens (Space d)) (w : ValueGradient Ω),
     w ∈ closure (smoothCompactGraph Ω) → HasWeakGradient w
 
+/-- Uniqueness obligation for a weak gradient on the selected open domain. -/
 def weakGradientUnique : Prop :=
   ∀ (d : ℕ) (Ω : Opens (Space d)) (u : ScalarL2 Ω) (g h : GradientL2 Ω),
     HasWeakGradient (u, g) → HasWeakGradient (u, h) → g = h
 
+/-- Linearity obligation for the zero-boundary weak-gradient graph. -/
 def h01GraphLinear : Prop :=
   ∀ (d : ℕ) (Ω : Opens (Space d)),
     InH01Graph (0 : ValueGradient Ω) ∧
     (∀ w v : ValueGradient Ω, InH01Graph w → InH01Graph v → InH01Graph (w + v)) ∧
     (∀ (c : ℝ) (w : ValueGradient Ω), InH01Graph w → InH01Graph (c • w))
 
+/-- Integrability obligation for the gradient and load pairings in the weak problem. -/
 def physicalPairingIntegrable : Prop :=
   ∀ (d : ℕ) (Ω : Opens (Space d)) (f : ScalarL2 Ω) (w v : ValueGradient Ω),
     Integrable (fun x => inner ℝ (w.2 x) (v.2 x)) (domainMeasure Ω) ∧

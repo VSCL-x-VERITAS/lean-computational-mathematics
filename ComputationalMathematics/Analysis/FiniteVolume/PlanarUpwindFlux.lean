@@ -26,13 +26,16 @@ open MeasureTheory
 
 /-- A spatial C1 velocity on the Euclidean plane. -/
 structure SpatialVelocity where
+  /-- Underlying spatial velocity field. -/
   toFun : Point → Point
   regularity : ContDiff ℝ 1 toFun
 
 /-- The constant-in-time lift of a spatial velocity. -/
+@[nolint unusedArguments] -- The time argument is part of the constant-in-time field interface.
 def constantTimeLift (v : SpatialVelocity) (x : Point) (_t : ℝ) : Point :=
   v.toFun x
 
+/-- A real time step supplied with its strict positivity proof. -/
 abbrev PositiveStep := {k : ℝ // 0 < k}
 
 /-- Use the existing zero-based constant-step time grid. -/

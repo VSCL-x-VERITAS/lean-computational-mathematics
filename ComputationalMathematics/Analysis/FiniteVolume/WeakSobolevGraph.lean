@@ -17,13 +17,18 @@ namespace NumStability.FiniteVolume.SobolevGraph
 open MeasureTheory TopologicalSpace Set
 open scoped BigOperators ENNReal Topology InnerProductSpace NNReal
 
+/-- Finite-dimensional real Euclidean space used by the weak-gradient graph. -/
 abbrev Space (d : ℕ) := EuclideanSpace ℝ (Fin d)
 
+/-- Lebesgue measure restricted to the selected open domain. -/
 def domainMeasure {d : ℕ} (Ω : Opens (Space d)) : Measure (Space d) :=
   volume.restrict (Ω : Set (Space d))
 
+/-- Square-integrable real scalar functions on the selected open domain. -/
 abbrev ScalarL2 {d : ℕ} (Ω : Opens (Space d)) := Lp ℝ 2 (domainMeasure Ω)
+/-- Square-integrable Euclidean vector fields on the selected open domain. -/
 abbrev GradientL2 {d : ℕ} (Ω : Opens (Space d)) := Lp (Space d) 2 (domainMeasure Ω)
+/-- Pair consisting of a square-integrable scalar value and vector gradient. -/
 abbrev ValueGradient {d : ℕ} (Ω : Opens (Space d)) := ScalarL2 Ω × GradientL2 Ω
 
 /-- Local one-sided Lipschitz graph description at every boundary point.
@@ -38,13 +43,16 @@ def HasLipschitzGraphBoundary {d : ℕ} (Ω : Opens (Space d)) : Prop :=
         (x ∈ (Ω : Set (Space d)) ↔
           g ((x - p) - (inner ℝ n (x - p)) • n) < inner ℝ n (x - p))
 
+/-- Boundedness and the prescribed Lipschitz-graph boundary condition for the open domain. -/
 def IsBoundedLipschitzOpen {d : ℕ} (Ω : Opens (Space d)) : Prop :=
   Bornology.IsBounded (Ω : Set (Space d)) ∧ HasLipschitzGraphBoundary Ω
 
+/-- Spatial partial derivative of the test function in the selected coordinate direction. -/
 def testPartial {d : ℕ} {Ω : Opens (Space d)}
     (φ : TestFunction Ω ℝ ⊤) (i : Fin d) (x : Space d) : ℝ :=
   (fderiv ℝ (φ : Space d → ℝ) x) (EuclideanSpace.single i 1)
 
+/-- Vector of spatial partial derivatives of the smooth test function. -/
 def testGradient {d : ℕ} {Ω : Opens (Space d)}
     (φ : TestFunction Ω ℝ ⊤) (x : Space d) : Space d :=
   ∑ i : Fin d, (testPartial φ i x) • EuclideanSpace.single i 1

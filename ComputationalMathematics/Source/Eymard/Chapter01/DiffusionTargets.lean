@@ -26,6 +26,7 @@ namespace NumStability.Eymard.Chapter01
 open NumStability.FiniteVolume
 open NumStability.FiniteVolume.Planar
 
+/-- Open unit square in the canonical Euclidean plane. -/
 def diffusionUnitSquare : Set Point := {x | ∀ i, 0 < x i ∧ x i < 1}
 
 /-- Equation (1.9) on every applicable local common edge, in either orientation.
@@ -61,6 +62,7 @@ def boundaryDiffusionFluxGlobalBoundaryReading (K : Rectangle2) (σ : Segment)
 do not require this global context. Faces may be side pieces, and only the
 per-cell `cellFaces` are finite; no global `Fintype` or conformity is required. -/
 structure Example12DiffusionMesh (Cell Face : Type*) [DecidableEq Face] where
+  /-- Underlying rectangular cell-and-face data. -/
   data : RectangularDiffusionData Cell Face
   contained : ∀ K, (data.rectangle K).region ⊆ diffusionUnitSquare
   disjoint : ∀ K L, K ≠ L →
@@ -99,11 +101,13 @@ the unknowns. Applicability makes the exact mean below a genuine mean. No
 quantitative approximation condition or equality with that mean is imposed. -/
 structure DiffusionSourceData {Cell Face : Type*} [DecidableEq Face]
     (M : Example12DiffusionMesh Cell Face) where
+  /-- Spatial source term in the diffusion balance. -/
   f : Point → ℝ
   mean_applicable : ∀ K,
     volume (M.data.rectangle K).region ≠ 0 ∧
     volume (M.data.rectangle K).region ≠ ⊤ ∧
     IntegrableOn f (M.data.rectangle K).region
+  /-- Supplied cellwise source values. -/
   fMean : Cell → ℝ
 
 /-- Mathematical referent of `fMean`, reusing the existing normalized integral.

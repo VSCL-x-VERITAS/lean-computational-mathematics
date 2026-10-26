@@ -29,7 +29,9 @@ open scoped BigOperators
 /-- An actual L∞ class and a supplied representative of that class.
 No continuity or boundary trace is imposed on the representative. -/
 structure TransportInitialDatum where
+  /-- Essentially bounded initial datum represented as an L-infinity equivalence class. -/
   equivalenceClass : Lp (α := Point) ℝ ⊤ volume
+  /-- Chosen pointwise representative of the initial datum. -/
   representative : Point → ℝ
   memLp : MemLp representative ⊤ volume
   sameClass : representative =ᵐ[volume] (equivalenceClass : Point → ℝ)
