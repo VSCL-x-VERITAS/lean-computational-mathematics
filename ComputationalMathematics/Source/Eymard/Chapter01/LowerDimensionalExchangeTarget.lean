@@ -4,6 +4,17 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.LowerDimensionalExchange
 
+/-!
+# Lower Dimensional Exchange Target
+
+Section 2.2's numerical zero-exchange requirement on the full source mesh
+domain. This characterizes a requirement; it does not assert it for arbitrary
+supplied exchanges. The mesh uses the existing open-closure-cover predicate.
+No finite, neighbour, disjointness, or boundary-regularity restriction is added.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 namespace NumStability.Eymard.Chapter01

@@ -5,6 +5,18 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.RectangleBoundaryFootTargets
 import ComputationalMathematics.Source.Eymard.Chapter01.DiffusionTargets
 
+/-!
+# Diffusion Selected Foot Targets
+
+Selected source realization of the existing numerical construction (1.10).
+The producer remains rectangleBoundaryFlux with rectangleFaceDistance. Its
+expression using the endpoint-computed foot requires the separate geometric
+correspondence; merely unfolding the existing flux does not establish it.
+The conclusion is a numerical formula, with no exact PDE-flux claim.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

@@ -36,6 +36,13 @@ import ComputationalMathematics.Source.Eymard.Chapter01
 The integration smoke test imports the same entry point and checks all three
 accepted proof wrappers against their target propositions.
 
+All 69 original Eymard modules passed the native Lean build before this
+checkpoint. Publication adds module documentation, entry-point imports and tier
+metadata. The mathematical declarations are unchanged; the archive retains the
+original authoring bytes and receipts. The layout checker distinguishes the
+mathematical terms “closure” and “supporting line” in the two exact geometry
+module names from workflow-oriented names; negative naming tests remain active.
+
 ## Continue on another computer
 
 Clone this repository's `main` branch to obtain the passed product sources. The

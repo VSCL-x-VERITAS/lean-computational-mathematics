@@ -4,6 +4,17 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.RectangleHessianFluxEstimate
 
+/-!
+# Diffusion Hessian Flux Estimate Target
+
+Owner-adopted specificity-20261026 realization of Example 1.2's introductory
+order-h claim. The explicit M*h value is an authored estimate, not a printed
+constant. No geometric, differential, integrability or error-bound conclusion
+is an assumed input. Boundary fluxes and discrete-solution errors are separate.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

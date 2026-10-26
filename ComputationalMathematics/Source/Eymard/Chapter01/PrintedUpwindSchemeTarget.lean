@@ -7,6 +7,15 @@ import ComputationalMathematics.Analysis.FiniteVolume.PlanarUpwindFlux
 import ComputationalMathematics.Source.Eymard.Chapter01.CellUnknownsTarget
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
+/-!
+# Printed Upwind Scheme Target
+
+An actual L∞ class and a supplied representative of that class.
+No continuity or boundary trace is imposed on the representative.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

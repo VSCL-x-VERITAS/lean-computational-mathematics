@@ -5,6 +5,16 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.CoordinateBalance
 import Mathlib.Analysis.Convex.Topology
 
+/-!
+# Convex Polytope Geometry
+
+The open full-dimensional part of a finite Euclidean convex hull.
+Nonempty interior excludes lower-dimensional and empty polytopes.
+Finite convex hulls are compact; the region is therefore bounded.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

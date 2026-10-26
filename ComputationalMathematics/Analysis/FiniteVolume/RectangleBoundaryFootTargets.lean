@@ -5,6 +5,17 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFoot
 import ComputationalMathematics.Analysis.FiniteVolume.RectangularDiffusion
 
+/-!
+# Rectangle Boundary Foot Targets
+
+Existing actual side/sidePoint membership is applicability. The computed
+foot, its perpendicularity, positive distance and infDist correspondence are
+conclusions. Side pieces are allowed; the midpoint of the selected piece need
+not be the sidePoint. No new distance or flux operation is defined.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

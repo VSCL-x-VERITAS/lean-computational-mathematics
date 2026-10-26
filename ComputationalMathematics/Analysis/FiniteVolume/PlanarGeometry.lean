@@ -8,6 +8,14 @@ import Mathlib.Analysis.Convex.Topology
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 import Mathlib.MeasureTheory.Measure.Hausdorff
 
+/-!
+# Planar Geometry
+
+The Euclidean plane, with its Euclidean metric and inner product.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

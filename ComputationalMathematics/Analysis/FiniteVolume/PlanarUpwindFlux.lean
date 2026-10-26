@@ -8,6 +8,14 @@ import ComputationalMathematics.Analysis.FiniteVolume.UniformTimeGrid
 import Mathlib.Analysis.Calculus.ContDiff.Defs
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 
+/-!
+# Planar Upwind Flux
+
+A spatial C1 velocity on the Euclidean plane.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

@@ -8,6 +8,15 @@ import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 
+/-!
+# Rectangle Hessian Flux Estimate
+
+The actual oriented centre-to-centre normal. Its unit length and outward
+orientation are geometric conclusions below, not fields of an input record.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

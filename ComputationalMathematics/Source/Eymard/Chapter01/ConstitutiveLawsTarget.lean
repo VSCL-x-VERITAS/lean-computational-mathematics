@@ -4,6 +4,15 @@ SPDX-License-Identifier: MIT
 
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
+/-!
+# Constitutive Laws Target
+
+An entropy-fixed slice of a supplied partial internal-energy law. The value
+outside its domain is immaterial at the locally covered points used below.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 namespace NumStability.Eymard.Chapter01

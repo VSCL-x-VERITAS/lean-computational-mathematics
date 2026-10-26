@@ -7,6 +7,16 @@ import ComputationalMathematics.Analysis.FiniteVolume.RectangularDiffusion
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverage
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 
+/-!
+# Diffusion Targets
+
+Equation (1.9) on every applicable local common edge, in either orientation.
+The unknowns are arbitrary reals. No exact solution, smoothness, orthogonality,
+whole-side conformity or global mesh is needed for this definition.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory

@@ -4,6 +4,14 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.CoordinateBalance
 
+/-!
+# General Law Target
+
+The physical spatial dimensions specified in Section 2.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 open scoped BigOperators

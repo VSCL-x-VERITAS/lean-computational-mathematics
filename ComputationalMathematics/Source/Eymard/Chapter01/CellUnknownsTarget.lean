@@ -1,6 +1,15 @@
 /-
 SPDX-License-Identifier: MIT
 -/
+/-!
+# Cell Unknowns Target
+
+The Section 2.2 notation supplies one value per control volume and natural
+time level. This type specifies no numerical accuracy or reconstruction.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 
 set_option autoImplicit false
 

@@ -5,6 +5,15 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.EuclideanMeasures
 import ComputationalMathematics.Source.Eymard.Chapter01.GeneralLawTarget
 
+/-!
+# Measure Conventions Target
+
+Section 2 default for dx; explicitly stated exceptions remain local to
+the later source passage making them.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

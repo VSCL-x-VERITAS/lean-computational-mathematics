@@ -4,6 +4,14 @@ SPDX-License-Identifier: MIT
 
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
+/-!
+# Material Interface
+
+Affine extension of the left material branch with interface value v.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section
@@ -44,4 +52,3 @@ def materialOutwardFlux (xK s xL kK kL uK uL v : ℝ) (side : Bool) : ℝ :=
   else -kK * deriv (interfaceLeftBranch xK s uK v) s
 
 end NumStability.FiniteVolume
-

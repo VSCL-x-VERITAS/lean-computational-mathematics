@@ -4,6 +4,15 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Source.Eymard.Chapter01.ConservativeExchangeTarget
 
+/-!
+# Conservative Exchange
+
+Ordered-pair incidence gives exactly the source's numerical-exchange
+antisymmetry condition, at every natural time level and every cell pair.
+
+This module contains an accepted Chapter 1 proof wrapper.
+-/
+
 set_option autoImplicit false
 
 namespace NumStability.Eymard.Chapter01

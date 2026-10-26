@@ -7,6 +7,14 @@ import Mathlib.Algebra.Notation.Indicator
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fintype.Fin
 
+/-!
+# Finite Cell Reconstruction
+
+Transparent mathematical definitions used by the Chapter 1 formalization.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

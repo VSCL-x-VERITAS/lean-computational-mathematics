@@ -4,6 +4,15 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.PlanarGeometry
 
+/-!
+# Segment Supporting Foot
+
+Supporting-line projection computed from the actual nondegenerate segment
+endpoints. The existing Segment.nondegenerate supplies a ≠ b.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

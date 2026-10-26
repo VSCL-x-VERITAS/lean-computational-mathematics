@@ -6,6 +6,16 @@ import ComputationalMathematics.Analysis.FiniteVolume.ForwardDifference
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
+/-!
+# Flux Operator Polynomial Target
+
+Owner-selected local polynomial illustration of the flux/operator distinction.
+The construction is authored; its numbers are not those of printed Example 5.1.
+The only supplied parameter is the positive central-cell width.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

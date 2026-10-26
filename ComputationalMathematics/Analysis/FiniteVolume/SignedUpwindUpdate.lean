@@ -5,6 +5,15 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.ScalarUpwindFlux
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 
+/-!
+# Signed Upwind Update
+
+One explicit step with supplied signed coefficients. This algebraic operation
+does not assert that the coefficients are velocity integrals.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section
@@ -41,4 +50,3 @@ def signedUpwindTrajectory {Cell Face : Type} [DecidableEq Face]
       (signedUpwindTrajectory faces neighbour mass step coefficient initial n)
 
 end NumStability.FiniteVolume
-

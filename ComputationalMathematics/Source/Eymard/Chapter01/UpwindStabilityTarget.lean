@@ -5,6 +5,18 @@ SPDX-License-Identifier: MIT
 import ComputationalMathematics.Analysis.FiniteVolume.PlanarUpwindUpdate
 import ComputationalMathematics.Source.Eymard.Chapter01.PrintedUpwindSchemeTarget
 
+/-!
+# Upwind Stability Target
+
+The owner-selected balanced signed-net-flux CFL maximum principle.
+This transparent proposition includes the local convex-combination identity,
+the interval implication, induction for a supplied update family, the actual
+explicit recursion, and its canonical geometric realization. The assumptions
+are on the actual discrete initial values.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

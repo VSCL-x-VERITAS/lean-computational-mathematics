@@ -9,6 +9,15 @@ import ComputationalMathematics.Source.Eymard.Chapter01.GeneralLawTarget
 import Mathlib.Analysis.Calculus.ContDiff.Defs
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 
+/-!
+# Control Volume Balance Target
+
+Reuse the existing actual coordinate partial derivatives, at a dummy time
+for this time-independent vector field.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

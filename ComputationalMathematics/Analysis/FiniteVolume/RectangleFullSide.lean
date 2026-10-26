@@ -4,6 +4,16 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.RectangularDiffusion
 
+/-!
+# Rectangle Full Side
+
+Select the coordinate presentation of the existing rectangle producer.
+Positive half widths are already fields of Rectangle2. Its region and sides
+are symmetric about its center; no new rectangle or point producer is used.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

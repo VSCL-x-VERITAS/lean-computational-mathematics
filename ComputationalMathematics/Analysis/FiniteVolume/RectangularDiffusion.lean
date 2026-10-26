@@ -7,6 +7,14 @@ import Mathlib.Analysis.Convex.Segment
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 import Mathlib.Topology.MetricSpace.HausdorffDistance
 
+/-!
+# Rectangular Diffusion
+
+A nondegenerate Euclidean rectangle, with arbitrary orientation and widths.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

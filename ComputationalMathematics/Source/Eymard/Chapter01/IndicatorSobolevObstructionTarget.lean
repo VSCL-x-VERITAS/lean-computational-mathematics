@@ -5,6 +5,14 @@ import Mathlib.MeasureTheory.Function.LpSpace.Indicator
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
+/-!
+# Indicator Sobolev Obstruction Target
+
+The owner-selected one-dimensional domain; its endpoints are excluded.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 noncomputable section
 

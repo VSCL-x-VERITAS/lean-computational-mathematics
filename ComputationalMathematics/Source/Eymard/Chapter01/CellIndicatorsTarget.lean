@@ -7,6 +7,16 @@ import Mathlib.Algebra.Notation.Indicator
 import Mathlib.Topology.Constructions
 import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
+/-!
+# Cell Indicators Target
+
+Section 3's scalar cell indicator, restricted to any chosen ambient set.
+The two cases define one actual indicator and assert no continuity, summed
+reconstruction, test-space admissibility or PDE identity.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 namespace NumStability.Eymard.Chapter01

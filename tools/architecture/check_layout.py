@@ -55,6 +55,12 @@ PROCESS_WORDS = (
     "Support",
     "Whole",
 )
+# These exact names describe mathematics: topological closure of open regions,
+# and projection onto a segment's supporting line. They are not workflow names.
+MATHEMATICAL_NAME_WORDS = {
+    "ComputationalMathematics.Analysis.FiniteVolume.OpenClosureCover": {"Closure"},
+    "ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFoot": {"Support"},
+}
 GENERATED_PARTS = {"__pycache__", ".DS_Store"}
 # Session working artifacts must not be tracked under the evidence trees. The
 # 2026-09 evidence retirement removed 18,215 such files; these rules keep them
@@ -206,7 +212,12 @@ def noncanonical_name(module: SourceModule, tier: str | None) -> bool:
     return (
         any("_" in part for part in parts)
         or any(SOURCE_LOCATOR_RE.match(part) for part in parts)
-        or any(word in part for part in parts for word in PROCESS_WORDS)
+        or any(
+            word in part
+            for part in parts
+            for word in PROCESS_WORDS
+            if word not in MATHEMATICAL_NAME_WORDS.get(module.name, ())
+        )
     )
 
 
@@ -479,6 +490,16 @@ def check() -> int:
 
 
 def self_test() -> int:
+    from types import SimpleNamespace
+    name_cases = (
+        ("ComputationalMathematics.Analysis.FiniteVolume.OpenClosureCover", False),
+        ("ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFoot", False),
+        ("ComputationalMathematics.Analysis.FiniteVolume.RemainingClosure", True),
+        ("ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFootBridge", True),
+    )
+    for name, expected in name_cases:
+        if noncanonical_name(SimpleNamespace(name=name), "reusable") != expected:
+            raise LayoutError(f"mathematical/workflow name self-test failed: {name}")
     cases = (
         ("theorem example : True := by sorry", True),
         ("theorem example : True := by admit", True),
@@ -503,6 +524,7 @@ def self_test() -> int:
         if observed != expected:
             raise LayoutError(f"placeholder self-test failed: expected {expected}, got {observed}")
     print(f"Layout placeholder self-tests passed: {len(cases)} cases.")
+    print(f"Layout mathematical/workflow name self-tests passed: {len(name_cases)} cases.")
     return 0
 
 

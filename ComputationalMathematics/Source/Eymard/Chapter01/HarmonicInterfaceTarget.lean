@@ -6,6 +6,15 @@ import ComputationalMathematics.Analysis.FiniteVolume.MaterialInterface
 import ComputationalMathematics.Analysis.FiniteVolume.ForwardDifference
 import ComputationalMathematics.Analysis.FiniteVolume.LocalConservativity
 
+/-!
+# Harmonic Interface Target
+
+Closed proof-free target for the owner-selected positive two-material interface.
+Existence/uniqueness concerns the interface value, not a global discrete/PDE solution.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

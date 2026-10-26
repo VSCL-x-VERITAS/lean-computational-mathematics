@@ -4,6 +4,17 @@ SPDX-License-Identifier: MIT
 
 import ComputationalMathematics.Analysis.FiniteVolume.RectangleFullSide
 
+/-!
+# Rectangle Orthogonality Target
+
+Current owner-specificity claim for Example 1.2. The two disjuncts expose
+the vertical and horizontal cases and matching tangential extents. Nonzero
+displacement and perpendicularity are conclusions, never input certificates.
+The claim concerns directions; it specifies no outward-oriented normal.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section

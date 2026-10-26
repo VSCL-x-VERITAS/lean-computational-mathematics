@@ -12,6 +12,16 @@ import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 import Mathlib.MeasureTheory.Measure.Restrict
 import Mathlib.Topology.Closure
 
+/-!
+# Cell Reconstruction Target
+
+Finite measurable-cell realization plus the finite open convex-cell
+null-skeleton bridge. The final clause makes the owner-selected finite, disjoint, open convex
+source-form applicability explicit. Full admissible-mesh encoding is not claimed.
+
+Source-faithfulness and proof status are recorded in `docs/formalization/eymard-chapter-01.md`.
+-/
+
 set_option autoImplicit false
 
 noncomputable section
