@@ -1,0 +1,61 @@
+/-
+SPDX-License-Identifier: MIT
+-/
+
+import ComputationalMathematics.Analysis.MatrixAlgebra
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Examples.MovingRiemannJump
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.Examples.StationaryJump
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.LocalLinearAdvection
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.LocalRectangleReference
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.ConservationLaws.VariableCoefficient
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverageLinearEquiv
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverageLipschitzTrace
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.CellAverageNeighborTaylor
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.LinearRiemannSolution
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.TravelingJumpAverage
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.FirstOrderEquation
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolic.ClassicalFinitePropagation
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolic.ForcedEnergyCone
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolic.ContractingEnergy
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolic.VaryingCoordinates
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.Transport.MaterialDerivative
+import ComputationalMathematics.Analysis.PartialDifferentialEquations.VariableLinearFlux
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Ring.Abs
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Analysis.Calculus.Deriv.Pow
+import Mathlib.Analysis.Calculus.Deriv.Prod
+import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.Analysis.ODE.Gronwall
+import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+import Mathlib.Data.Matrix.Mul
+import Mathlib.Data.Real.Basic
+import Mathlib.MeasureTheory.Function.JacobianOneDim
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+import Mathlib.MeasureTheory.Measure.OpenPos
+import Mathlib.Tactic.Abel
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.FunProp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Topology.MetricSpace.Lipschitz
+import Mathlib.Topology.Order.Compact
+
+/-!
+# ForcedFinitePropagation
+
+Import compatibility entry point for the generic forced energy/cone producers.
+The historical ClassicalFinitePropagation import surface is retained.
+-/
+
+namespace NumStability
+
+open Set Filter MeasureTheory Topology
+open scoped BigOperators Topology NNReal
+
+end NumStability

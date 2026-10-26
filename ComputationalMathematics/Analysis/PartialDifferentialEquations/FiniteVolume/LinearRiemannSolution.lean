@@ -6,6 +6,7 @@ import ComputationalMathematics.Analysis.PartialDifferentialEquations.Conservati
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.EigenmodeWaves
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.RiemannData
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.Hyperbolicity
+import Mathlib.Tactic.Linarith
 
 /-!
 # Explicit Riemann solutions for real hyperbolic matrices
@@ -114,6 +115,56 @@ theorem linearRiemannSolution_initial
   · subst x
     simpa only [riemannData_zero] using hexpand valueAtOrigin
   · simpa only [riemannData, hx, not_lt_of_ge hx.le, if_pos, if_false] using hexpand rightState
+
+/-- To the left of every characteristic ray, a linear Riemann solution
+    remains in its left constant state. -/
+theorem linearRiemannSolution_farLeft
+    {ι : Type*} [Fintype ι]
+    (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+    (leftState valueAtOrigin rightState : ι → ℝ)
+    (speedBound x t : ℝ)
+    (hspeed : ∀ p, |eigenvalues p| ≤ speedBound)
+    (ht : 0 ≤ t) (hx : x < -speedBound * t) :
+    linearRiemannSolution eigenbasis eigenvalues
+        leftState valueAtOrigin rightState x t = leftState := by
+  have harg (p : ι) : x - eigenvalues p * t < 0 := by
+    have hp := (abs_le.mp (hspeed p)).1
+    have hmul := mul_le_mul_of_nonneg_right hp ht
+    nlinarith
+  calc
+    _ = ∑ p, eigenbasis.equivFun leftState p • eigenbasis p := by
+      apply Finset.sum_congr rfl
+      intro p _
+      simp [eigenmodeTravelingWave,
+        travelingWave, riemannData, harg p]
+    _ = leftState := by
+      rw [← eigenbasis.equivFun_symm_apply]
+      exact eigenbasis.equivFun.symm_apply_apply leftState
+
+/-- To the right of every characteristic ray, a linear Riemann solution
+    remains in its right constant state. -/
+theorem linearRiemannSolution_farRight
+    {ι : Type*} [Fintype ι]
+    (eigenbasis : Module.Basis ι ℝ (ι → ℝ)) (eigenvalues : ι → ℝ)
+    (leftState valueAtOrigin rightState : ι → ℝ)
+    (speedBound x t : ℝ)
+    (hspeed : ∀ p, |eigenvalues p| ≤ speedBound)
+    (ht : 0 ≤ t) (hx : speedBound * t < x) :
+    linearRiemannSolution eigenbasis eigenvalues
+        leftState valueAtOrigin rightState x t = rightState := by
+  have harg (p : ι) : 0 < x - eigenvalues p * t := by
+    have hp := (abs_le.mp (hspeed p)).2
+    have hmul := mul_le_mul_of_nonneg_right hp ht
+    nlinarith
+  calc
+    _ = ∑ p, eigenbasis.equivFun rightState p • eigenbasis p := by
+      apply Finset.sum_congr rfl
+      intro p _
+      simp [eigenmodeTravelingWave,
+        travelingWave, riemannData, harg p, not_lt_of_ge (harg p).le]
+    _ = rightState := by
+      rw [← eigenbasis.equivFun_symm_apply]
+      exact eigenbasis.equivFun.symm_apply_apply rightState
 
 theorem riemannData_mul_pos {State : Type*} (leftState valueAtOrigin rightState : State)
     (x : ℝ) {t : ℝ} (ht : 0 < t) :
