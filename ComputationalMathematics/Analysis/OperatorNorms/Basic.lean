@@ -204,7 +204,7 @@ theorem mixedSubordinateBound_smul {n m : ℕ}
   intro x
   calc
     νβ (complexVectorMapSMul z A x) = ‖z‖ * νβ (A x) := by
-      simp [complexVectorMapSMul, hβ.smul]
+      rw [complexVectorMapSMul_apply, hβ.smul]
     _ ≤ ‖z‖ * (a * να x) :=
       mul_le_mul_of_nonneg_left (hA x) (norm_nonneg z)
     _ = (‖z‖ * a) * να x := by ring
@@ -216,7 +216,7 @@ theorem mixedSubordinateBound_neg {n m : ℕ}
     {A : ComplexVectorMap n m} {a : ℝ}
     (hA : MixedSubordinateBound να νβ A a) :
     MixedSubordinateBound να νβ (complexVectorMapNeg A) a := by
-  simpa [complexVectorMapNeg] using
+  simpa [complexVectorMapNeg, complexVectorMapSMul] using
     (mixedSubordinateBound_smul (να := να) (νβ := νβ) hβ (-1 : ℂ) hA)
 
 /-- Subtraction is bounded by the sum of the two local mixed subordinate upper
@@ -228,7 +228,8 @@ theorem mixedSubordinateBound_sub {n m : ℕ}
     (hA : MixedSubordinateBound να νβ A a)
     (hB : MixedSubordinateBound να νβ B b) :
     MixedSubordinateBound να νβ (complexVectorMapSub A B) (a + b) := by
-  simpa [complexVectorMapSub] using
+  simpa only [complexVectorMapSub, complexVectorMapAdd, complexVectorMapNeg,
+    sub_eq_add_neg] using
     (mixedSubordinateBound_add (να := να) (νβ := νβ) hβ hA
       (mixedSubordinateBound_neg (να := να) (νβ := νβ) hβ hB))
 
@@ -281,8 +282,7 @@ theorem mixedSubordinateNormValue_right_le_add_of_add_eq {n m : ℕ}
       rw [hadd]
       funext x
       ext i
-      simp [complexVectorMapSub, complexVectorMapAdd, complexVectorMapNeg,
-        complexVectorMapSMul, complexVecAdd, complexVecSMul]
+      simp [complexVectorMapSub, complexVectorMapAdd]
     simpa [hsub_eq] using hV
   exact mixedSubordinateNormValue_sub_le hβ hVsub hT hU
 
@@ -303,8 +303,7 @@ theorem mixedSubordinateNormValue_left_le_add_of_add_eq {n m : ℕ}
       rw [hadd]
       funext x
       ext i
-      simp [complexVectorMapSub, complexVectorMapAdd, complexVectorMapNeg,
-        complexVectorMapSMul, complexVecAdd, complexVecSMul]
+      simp [complexVectorMapSub, complexVectorMapAdd]
     simpa [hsub_eq] using hU
   exact mixedSubordinateNormValue_sub_le hβ hUsub hT hV
 
@@ -350,14 +349,14 @@ theorem mixedSubordinateNormValue_smul_real_pos
     calc
       νβ (complexVectorMapSMul (r : ℂ) T v)
           = r * νβ (T v) := by
-            rw [complexVectorMapSMul, hβ.smul, Complex.norm_of_nonneg (le_of_lt hrpos)]
+            rw [complexVectorMapSMul_apply, hβ.smul, Complex.norm_of_nonneg (le_of_lt hrpos)]
       _ ≤ r * (c * να v) := mul_le_mul_of_nonneg_left (hT.1 v) (le_of_lt hrpos)
       _ = (r * c) * να v := by ring
   · intro d hd
     have hbound : MixedSubordinateBound να νβ T (d / r) := by
       intro v
       have h := hd v
-      rw [complexVectorMapSMul, hβ.smul, Complex.norm_of_nonneg (le_of_lt hrpos)] at h
+      rw [complexVectorMapSMul_apply, hβ.smul, Complex.norm_of_nonneg (le_of_lt hrpos)] at h
       have hdiv : νβ (T v) ≤ (d * να v) / r := by
         exact (le_div_iff₀ hrpos).mpr (by simpa [mul_comm] using h)
       calc

@@ -226,7 +226,7 @@ theorem complexMatrixVecMul_add
       complexVectorMapAdd (complexMatrixVecMul A) (complexMatrixVecMul B) := by
   funext x
   ext i
-  simp [complexMatrixVecMul, complexVectorMapAdd, complexVecAdd,
+  simp [complexMatrixVecMul, complexVectorMapAdd,
     Finset.sum_add_distrib, add_mul]
 
 theorem isComplexMatrixLpNormValue_two_op2
@@ -428,7 +428,7 @@ theorem fixedEigenvaluePerturbationOp2Set_iff_singularShift
     · ext i
       have hi := congrFun heig i
       simp only [complexMatrixVecMul_add, complexVectorMapAdd,
-        complexVecAdd] at hi ⊢
+        Pi.add_apply] at hi ⊢
       rw [complexMatrixVecMul_complexShiftMatrix_apply]
       simp only [complexMatrixVecMul, Pi.neg_apply, neg_mul, Finset.sum_neg_distrib,
         complexVecSMul, Pi.zero_apply] at hi ⊢
@@ -439,7 +439,7 @@ theorem fixedEigenvaluePerturbationOp2Set_iff_singularShift
     · ext i
       have hi := congrFun hsing i
       simp only [complexMatrixVecMul_add, complexVectorMapAdd,
-        complexVecAdd] at hi ⊢
+        Pi.add_apply] at hi ⊢
       rw [complexMatrixVecMul_complexShiftMatrix_apply] at hi
       simp only [complexMatrixVecMul, Pi.neg_apply, neg_mul, Finset.sum_neg_distrib,
         complexVecSMul, Pi.zero_apply] at hi ⊢

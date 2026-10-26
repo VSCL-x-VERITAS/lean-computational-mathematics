@@ -344,10 +344,10 @@ lemma dualFunctionalAsVectorMap_linear {n : ℕ} {φ : CVec n → ℂ}
   constructor
   · intro x y
     ext i
-    simp [dualFunctionalAsVectorMap, complexVecAdd, hφ.map_add]
+    exact hφ.map_add x y
   · intro a x
     ext i
-    simp [dualFunctionalAsVectorMap, complexVecSMul, hφ.map_smul]
+    exact hφ.map_smul a x
 
 lemma complexVecOneNorm_dualFunctionalAsVectorMap_apply
     {n : ℕ} (φ : CVec n → ℂ) (x : CVec n) :
@@ -613,12 +613,14 @@ lemma rankOneOperator_linear {n m : ℕ} {φ : CVec n → ℂ} {y : CVec m}
     IsComplexVectorMapLinear (rankOneOperator φ y) := by
   constructor
   · intro u v
+    have h : φ (u + v) = φ u + φ v := hφ.map_add u v
     ext j
-    simp [rankOneOperator, complexVecAdd, hφ.map_add]
+    simp [rankOneOperator, h]
     ring
   · intro a v
+    have h : φ (a • v) = a * φ v := hφ.map_smul a v
     ext j
-    simp [rankOneOperator, complexVecSMul, hφ.map_smul, mul_assoc]
+    simp [rankOneOperator, h, mul_assoc]
 
 lemma rankOneOperator_apply_norm {n m : ℕ} {νβ : CVec m → ℝ}
     (hβ : IsComplexVectorNorm νβ) (φ : CVec n → ℂ) (y : CVec m)

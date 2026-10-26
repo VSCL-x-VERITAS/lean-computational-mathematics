@@ -36,6 +36,7 @@ jobs:
           python tools/architecture/check_lint.py --self-test
           python tools/architecture/check_links.py --self-test
           python tools/architecture/migrate_diagnostic_roots.py --self-test
+          python tools/architecture/check_layout.py --self-test
           python tools/architecture/check_layout.py
           python tools/architecture/check_tiers.py --self-test
           python tools/architecture/check_tiers.py
@@ -44,11 +45,28 @@ jobs:
           python tools/architecture/check_provenance.py
           python tools/architecture/check_links.py
           python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/ci-architecture --name source
+      - name: Record build resource facts
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'event=%s ref=%s sha=%s\n' "$GITHUB_EVENT_NAME" "$GITHUB_REF" "$GITHUB_SHA"
+          printf 'affinity-visible processors: '
+          nproc
+          printf 'online processors: '
+          getconf _NPROCESSORS_ONLN
+          free -m
+          printf 'LEAN_NUM_THREADS=%s\n' "${LEAN_NUM_THREADS:-unset}"
+          for bound in /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max; do
+            if [[ -r "$bound" ]]; then
+              printf '%s: ' "$bound"
+              cat "$bound"
+            fi
+          done
       - name: Build library and smoke tests
         uses: leanprover/lean-action@v1
         with:
           build: true
-          build-args: --quiet ComputationalMathematics NumStabilityTest
+          build-args: ComputationalMathematics NumStabilityTest
           use-github-cache: ${{ !(github.event_name == 'workflow_dispatch' && inputs.clean_project) }}
           test: false
           lint: false

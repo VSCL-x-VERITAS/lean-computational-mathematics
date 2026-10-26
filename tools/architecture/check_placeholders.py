@@ -33,7 +33,9 @@ from project_roots import PRODUCTION_ROOTS
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = "docs/architecture/allowed-axioms.json"
 PLACEHOLDER_RE = re.compile(r"(?<![A-Za-z0-9_'.])(sorry|admit)(?![A-Za-z0-9_'])")
-AXIOM_DECL_RE = re.compile(r"^\s*(axiom|constant)\s+([A-Za-z_][A-Za-z0-9_'.]*)", re.M)
+# Match indentation on the declaration's line, rather than repeatedly traversing
+# all preceding blank/comment lines. Keep whitespace between keyword and name.
+AXIOM_DECL_RE = re.compile(r"^[^\S\n]*(axiom|constant)\s+([A-Za-z_][A-Za-z0-9_'.]*)", re.M)
 AXIOM_REPORT_RE = re.compile(r"depends on axioms: \[([^\]]*)\]")
 SORRY_AX = "sorryAx"
 
@@ -216,9 +218,18 @@ def self_test() -> list[str]:
     # namespace forms and indentation
     for text in ("namespace N\naxiom bad_ax : True\nend N\n",
                  "  axiom indented_ax : True\n",
+                 "\n\v\f\u00a0axiom unicode_ax : True\n",
+                 "axiom\n  multiline_ax : True\n",
                  "constant legacy_const : Nat\n"):
         if not AXIOM_DECL_RE.search(strip_lean_comments_and_strings(text)):
             failures.append(f"self-test: an axiom declaration must be found in {text.strip()[:28]!r}")
+
+    blank_prefix = "/-" + "\n" * 20000 + "-/\n"
+    if AXIOM_DECL_RE.search(strip_lean_comments_and_strings(blank_prefix + "def example := 1\n")):
+        failures.append("self-test: a large comment span must not create an axiom")
+    match = AXIOM_DECL_RE.search(strip_lean_comments_and_strings(blank_prefix + "  axiom late_ax : True\n"))
+    if match is None or match.group(2) != "late_ax" or match.start() != len(blank_prefix):
+        failures.append("self-test: an axiom after a large comment must retain its declaration line")
 
     # a new axiom in a dependency report must be rejected, and the allowlist must not escape
     allowed = {"propext", "Classical.choice", "Quot.sound"}
