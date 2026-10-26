@@ -339,6 +339,21 @@ These are completions of the audited chapter scopes, not a claim that the whole
 book is formalized. Inventories, audit packages, and gates remain checkout-local
 rather than tracked in this repository.
 
+The accepted portion of [Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/)
+is available through
+[`Chapter04`](ComputationalMathematics/Source/LeVeque/Chapter04.lean).
+The October 26, 2026 acceptance record contains 99 proved rows, 11 reused rows,
+and 6 recorded source discrepancies out of 139 obligations. The remaining 23
+rows are unfinished; Chapter 4 has no complete chapter-gate PASS.
+This publication includes accepted correspondence and its mathematical
+dependencies, while unfinished campaign files remain outside product Git.
+
+The scalar large-step result is the adopted convergence/CFL domain obstruction
+for arbitrary fixed two-point fluxes, using exact cell means and actual numerical
+updates. It does not assert the book's unqualified norm-instability wording.
+Its precise statement is
+[`LocalizedScalarCFLConvergenceObstruction`](ComputationalMathematics/Source/LeVeque/Chapter04/LocalizedScalarCFLConvergenceObstruction.lean).
+
 ### Vershynin: high-dimensional probability
 
 [`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
