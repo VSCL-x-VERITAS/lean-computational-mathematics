@@ -69,6 +69,31 @@ theorem continuous_if_lt_of_closed {f g : ℝ → ℝ} {c : ℝ}
   · simp only [if_pos hy, if_neg (not_le.mpr hy)]
   · simp only [if_neg hy, if_pos (le_of_not_gt hy)]
 
+/-- Squaring the positive part removes the corner at zero. -/
+theorem hasDerivAt_sq_max_zero (x : ℝ) :
+    HasDerivAt (fun y : ℝ => (max 0 y) ^ 2) (2 * max 0 x) x := by
+  rcases lt_trichotomy x 0 with hx | hx | hx
+  · rw [max_eq_left hx.le, mul_zero]
+    apply (hasDerivAt_const x (0 : ℝ)).congr_of_eventuallyEq
+    filter_upwards [eventually_lt_nhds hx] with y hy
+    simp [max_eq_left hy.le]
+  · subst x
+    have hglue := hasDerivAt_if_of_eq (fun y : ℝ => y < 0)
+      (hasDerivAt_const 0 (0 : ℝ))
+      (by simpa using (hasDerivAt_id (0 : ℝ)).pow 2) (by norm_num)
+    convert hglue using 1
+    · funext y
+      by_cases hy : y < 0
+      · simp [hy, max_eq_left hy.le]
+      · simp [hy, max_eq_right (le_of_not_gt hy)]
+    · norm_num
+  · rw [max_eq_right hx.le]
+    have hsq : HasDerivAt (fun y : ℝ => y ^ 2) (2 * x) x := by
+      simpa using (hasDerivAt_id x).pow 2
+    apply hsq.congr_of_eventuallyEq
+    filter_upwards [eventually_gt_nhds hx] with y hy
+    simp [max_eq_right hy.le]
+
 
 end
 

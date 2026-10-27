@@ -25,202 +25,100 @@ records the verified GitHub cutover state and package/import compatibility.
 The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
 records the validated source revision, preserved interfaces and publication status.
 
-The principal source developments currently cover:
+## Source coverage at a glance
 
-- all 28 chapters of Nicholas J. Higham's *Accuracy and Stability of Numerical
-  Algorithms* (2nd ed.), within a selected audited scope;
-- Chapters 1–3 of Randall J. LeVeque's
-  *Finite Volume Methods for Hyperbolic Problems*, backed by reusable PDE and
-  finite-volume foundations;
-- Chapters 1 and 2 of Roman Vershynin's *High-Dimensional Probability*,
-  with additional Chapter 3 source contracts, backed by reusable
-  scalar-probability and concentration modules; and
-- a randomized numerical linear algebra case study based on work by Petros
-  Drineas and Michael W. Mahoney.
+| Source | Published material | Coverage status |
+|---|---|---|
+| Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed. | Selected material across Chapters 1–28 | All 28 chapter rows terminal under the selected audit rules; proofs, discrepancies and deferrals are distinguished below |
+| LeVeque, *Finite Volume Methods for Hyperbolic Problems* | Chapters 1–3 and accepted Chapter 4 results | Chapters 2 and 3 have complete audited scopes; Chapter 4 has 116/139 resolved obligations, with 23 unfinished |
+| Eymard, Gallouët and Herbin, *Finite Volume Methods*, January 2019 manuscript | Chapter 1 introduction and supporting finite-volume models | 3/46 obligations accepted; 43 unfinished; compiled candidate targets are included |
+| Vershynin, *High-Dimensional Probability* | Selected Chapters 1–2 results and Chapter 3 contracts | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 3 has no completed chapter gate |
+| Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Selected sampling, sketching, low-rank and preconditioning results | A source-linked case study; no complete-paper coverage claim |
 
-Source coverage is deliberately not described as “the whole book.” Audits
-distinguish formalized claims, corrected discrepancies, claims ready for more
-work, and statements that are too narrative or underspecified to formalize
-faithfully.
+The detailed sections below link the source modules and coverage records.
+A proof-free contract or a definition of a target proposition records a
+statement to be proved. Accepted source results require their own proof and
+source-faithfulness evidence. Source audits distinguish accepted proofs, reuse,
+corrected source discrepancies, weaker results and unfinished work. The chapter
+scopes above do not imply whole-book formalization.
 
 ## Current repository status
 
-The October 23, 2026 review measures published snapshot
-[`042142525`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/04214252556b2294ac4fa17f4b2fe4c43b6d3d28).
-`main` contains 3,785 classified production Lean modules. The source and import
-measurements below were rechecked with a strict source scan of that commit;
-the role counts come from the [tier manifest](docs/architecture/tiers.json).
-The published mathematical scope is unchanged since the September 27 README
-update: LeVeque Chapters 2 and 3 have complete audited scopes, described below.
-Later changes add publication policies, refresh file dates, strengthen diagnostic
-validation, improve source-check performance, and record CI runner resources.
-Work on other branches or in local checkouts is not counted as published coverage.
+The October 26, 2026 snapshot is published commit
+[`d23b546e`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/d23b546e518c9451979708f51e0d81d1b3a11454),
+which includes the LeVeque Chapter 4 and Eymard Chapter 1 publications.
+The measurements below come from a strict source scan of that revision and the
+[tier manifest](docs/architecture/tiers.json). Local campaigns and unpublished
+branches are excluded.
 
-| Current-tree metric | Value |
+| Snapshot metric | Value |
 |---|---:|
-| Production Lean modules | 3,785 |
-| Reusable / source / aggregate / internal / upstream | 831 / 2,489 / 455 / 5 / 5 |
-| Classified modules | 3,785 / 3,785 (100%) |
+| Production Lean modules | 4,291 |
+| Reusable / source / aggregate / internal / upstream | 1,018 / 2,806 / 457 / 5 / 5 |
+| Classified modules | 4,291 / 4,291 (100%) |
 | Mixed or unclassified modules | 0 |
-| Nonblank Lean source lines | 1,576,743 |
-| Direct imports | 32,456 |
+| Nonblank Lean source lines | 1,632,038 |
+| Direct imports | 35,464 |
 | Import cycles / unresolved project imports | 0 / 0 |
 | Forbidden reusable-to-source import paths | 0 |
-| Test Lean modules (including the root) | 152 |
-| Reviewed warning baseline | 227 diagnostics |
-| Reviewed lint baseline | 3,903 findings |
-| Tracked files / size | 4,482 / 107.9 MB |
+| Test Lean modules (including the root) | 154 |
+| Reviewed warning baseline | 336 diagnostics |
+| Reviewed lint baseline | 4,014 findings |
+| Tracked files / size | 4,993 / 111.4 MB |
 
 Module counts measure files, not theorems or accepted source claims. Warning
-and lint counts are the reviewed baselines enforced by CI, not zero-diagnostic
-claims. The tracked-file size is the sum of file bytes in this snapshot,
-excluding Git history, dependencies, and build artifacts.
+and lint counts are reviewed baselines enforced by CI. Tracked size sums Git
+blob bytes in the snapshot, excluding history, dependencies and build artifacts.
 
-### Historical: baseline before LeVeque Chapter 2
+The exact snapshot's [main push CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/40370404457)
+passed architecture and provenance checks, the library and test builds,
+`lake test`, and warning/lint enforcement. The badge tracks later `main` runs;
+a successful run certifies its own commit. CI also checks source placeholders,
+documentation links and Python tooling. Its optional clean-project job captures
+a compiled dependency graph, representative axioms and a downstream consumer;
+see the [validation record](docs/migrations/lean-computational-mathematics/validation.md)
+for the separately verified identity-migration revision and its scope.
 
-The following statistics describe the pre–Chapter 2 baseline `0777b2802`.
-They are retained as historical measurements, not current-tree counts.
+Release 0.2.0 removed the historical `NumStability` import forwarders. Canonical
+imports use `ComputationalMathematics`; the package remains `numStability`, the
+test root `NumStabilityTest`, and declaration namespaces `NumStability`.
+Historical measurements and compatibility decisions are retained in the
+[migration reports](docs/migrations/lean-computational-mathematics/README.md),
+[architecture phase records](docs/architecture/phases/2026-08-repository-reorganization-completion/README.md)
+and [changelog](CHANGELOG.md).
 
-| Metric | Value |
-|---|---:|
-| Production Lean modules | 2,679 |
-| Declaration-bearing / import-only | 2,081 / 598 |
-| Reusable / source / aggregate / internal / upstream | 706 / 1,516 / 447 / 5 / 5 |
-| Classified modules | 2,679 / 2,679 (100%) |
-| Mixed or unclassified modules | 0 |
-| Nonblank Lean source lines | 1,518,729 |
-| Direct imports | 29,771 |
-| Import cycles / unresolved project imports | 0 / 0 |
-| Forbidden reusable-to-source import paths | 0 |
-| Test Lean modules | 151 |
-| Reviewed lint baseline | 3,690 findings |
-| Tracked files / size | 3,365 / 99.6 MB |
+## Mathematical coverage
 
-The baseline checks found no `sorry` or `admit`, no unreviewed project axiom
-declaration, and no canonical production import of a historical path. Five
-attributed upstream modules and 127 Apache-2.0-marked production files are
-covered by the provenance gate.
+The following map covers the current library's main mathematical families.
+Links lead to implementations or source correspondence; the source status above
+and each declaration's hypotheses determine the strength of a particular result.
+Directory presence alone is not a chapter-completion claim.
 
-Release 0.2.0 (2026-09-10) removed the 3,334 historical `NumStability` import
-forwarders and the working record of the completed audit and reorganization
-campaigns. The tracked tree went from 41,651 files and 1,764 MB to the baseline
-size, and the Lean library from 17% of the tree to 74%. No Lean statement,
-proof, import or build target changed in that work, and the reviewed lint
-baseline is unchanged. See
-[`CHANGELOG.md`](CHANGELOG.md) and the retirement records under
-[`docs/architecture/reviews/`](docs/architecture/reviews/).
+| Area | Material available | Where to start |
+|---|---|---|
+| Floating-point arithmetic | Abstract rounding models, operation laws, unit roundoff, fused multiply-add, finite-format and IEEE-facing examples, underflow and special-value analysis | [FloatingPoint](ComputationalMathematics/FloatingPoint/), [floating-point analysis](ComputationalMathematics/Analysis/FloatingPointArithmetic/) |
+| Error, stability and conditioning | Forward, backward and mixed error, normwise and componentwise perturbations, first-order bounds and problem-dependent stability | [error measures](ComputationalMathematics/Analysis/Error/), [conditioning](ComputationalMathematics/Analysis/Conditioning/), [perturbations](ComputationalMathematics/Analysis/Perturbation/) |
+| Arithmetic and summation algorithms | Dot products, matrix-vector/matrix-matrix products, pairwise and compensated summation, accumulation and rounding-error bounds | [arithmetic](ComputationalMathematics/Algorithms/Arithmetic/), [summation](ComputationalMathematics/Algorithms/Summation/), [matrix multiplication](ComputationalMathematics/Algorithms/MatMul.lean) |
+| Polynomial and elementary numerical evaluation | Horner and polynomial evaluation, divided differences and Vandermonde systems, quadrature, FFT/convolution, nonlinear systems and automatic error analysis | [polynomial evaluation](ComputationalMathematics/Algorithms/PolynomialEvaluation/), [quadrature](ComputationalMathematics/Algorithms/Quadrature.lean), Higham [Chapters 22–26](ComputationalMathematics/Source/Higham/) |
+| Linear systems and least squares | Triangular solves, LU/block LU, Cholesky, symmetric-indefinite factorizations, Householder/Givens/Gram–Schmidt QR, least squares, minimum-norm underdetermined systems, stationary iteration and iterative refinement | [linear-system algorithms](ComputationalMathematics/Algorithms/LinearSystems/) |
+| Matrix equations, inverses and estimation | Sylvester/Lyapunov equations, matrix inversion, one-/two-/p-norm estimation and associated conditioning/error analysis | [matrix equations](ComputationalMathematics/Algorithms/MatrixEquations/), [inversion](ComputationalMathematics/Algorithms/MatrixInversion/), [norm estimation](ComputationalMathematics/Algorithms/NormEstimation/) |
+| Matrix and operator analysis | Vector/matrix/operator norms, singular values, Schur/Jordan forms, numerical radius, pseudospectra, matrix powers and semiconvergence | [matrix norms](ComputationalMathematics/Analysis/MatrixNorms/), [singular values](ComputationalMathematics/Analysis/SingularValues/), [linear operators](ComputationalMathematics/Analysis/LinearOperators/) |
+| Positive operators and functional calculus | Finite C*-matrix algebras, matrix inequalities and continuous functional calculus | [C*-matrices](ComputationalMathematics/Analysis/CStarMatrices/), [functional calculus](ComputationalMathematics/Analysis/FunctionalCalculus/), [matrix inequalities](ComputationalMathematics/Analysis/MatrixInequalities/) |
+| Conservation laws and hyperbolic PDEs | Scalar advection, acoustics, elasticity and Euler models, characteristics, Riemann problems, weak/integral balance, entropy and boundary models | [PDE foundations](ComputationalMathematics/Analysis/PartialDifferentialEquations/), [LeVeque correspondence](ComputationalMathematics/Source/LeVeque/) |
+| Finite-volume and difference schemes | Cell averages, conservative flux updates, upwind, Godunov, Lax–Friedrichs, Lax–Wendroff/Richtmyer and wave-propagation results; CFL restrictions, consistency, accuracy and stability; explicit and Crank–Nicolson diffusion | [finite-volume analysis](ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/), [LeVeque Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/) |
+| Control-volume geometry and models | Cells/faces, planar geometry, reconstruction, interfaces, transport and diffusion definitions; Chapter 1 candidate contracts alongside three accepted proofs | [geometric models](ComputationalMathematics/Analysis/FiniteVolume/), [Eymard checkpoint](docs/formalization/eymard-chapter-01.md) |
+| Scalar probability and concentration | Distribution and moment models, independent sums and limit theorems, Gaussian/Poisson/Bernoulli/binomial laws, tail/MGF bounds, Hoeffding/Chernoff, Khintchine, sub-Gaussian/sub-exponential and Orlicz-norm analysis | [scalar probability](ComputationalMathematics/HDP/Scalar/), [Gaussian and Haar analysis](ComputationalMathematics/Analysis/Probability/) |
+| Random vectors and convex geometry | Covariance and principal components, isotropy, Gaussian and independent-coordinate vectors, spherical/ball laws, norm concentration and small-ball models, convex bodies and linear images | [random vectors](ComputationalMathematics/HDP/Vector/), [convex geometry](ComputationalMathematics/HDP/Convex/) |
+| Random graphs and optimization | Random-graph degree concentration, Max-Cut, random cuts/hyperplane rounding, semidefinite programs and relaxations, Grothendieck bounds | [graph results](ComputationalMathematics/HDP/Graph/), [optimization](ComputationalMathematics/HDP/Optimization/), [independent-sum applications](ComputationalMathematics/HDP/Scalar/IndependentSums/) |
+| Kernels and tensors | Positive-semidefinite, Gaussian and polynomial kernels, feature maps, Moore–Aronszajn, finite/rank-one tensors and analytic power-series features | [kernels](ComputationalMathematics/HDP/Kernel/), [tensors](ComputationalMathematics/HDP/Tensor/) |
+| Randomized numerical linear algebra | Elementwise/row sampling, matrix concentration, spectral/Gram approximation, subspace embeddings, least-squares sketching, low-rank approximation and randomized preconditioning | [reusable RandNLA](ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/), [paper correspondence](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/) |
+| Supporting analysis and examples | Taylor/derivative estimates, integration and differentiation, sample variance, asymptotics, equidistribution/leading digits, special functions and test matrices | [calculus](ComputationalMathematics/Analysis/Calculus/), [integration](ComputationalMathematics/MeasureTheory/Integral/), [statistics](ComputationalMathematics/Analysis/Statistics/), [leading digits](ComputationalMathematics/Analysis/LeadingDigits/), [test matrices](ComputationalMathematics/Analysis/TestMatrices/) |
 
-### Historical: the 2026-09 identity migration
-
-The figures in this subsection describe the tree as it stood on 2026-09-06,
-before release 0.2.0, and are kept because the migration evidence is stated
-against them. They are not current, and they are not a build or
-full-interface-preservation claim. They compare the clean publishing base
-`718beac641a8094611dc249c3508a2f5415381a3` with the repaired integration tree
-captured during the passing source-gate run on 2026-09-06,
-08:19:11-08:26:38 UTC, published as candidate
-`51c5540984780b0011f41739b9ddaf8e505b7c93`, whose normalized source-tree
-SHA-256 is
-`915ed2d52ada797abca1e37d5d7c8f35bcbf3bad2f30c7a6b1c282b3cc32d819`.
-
-| Metric | Clean base | Migrated tree |
-|---|---:|---:|
-| Production Lean modules, including compatibility | 3,198 | 5,599 |
-| Canonical implementation / aggregate modules | 2,401 | 2,401 |
-| Old import forwarders, since removed | 797 | 3,198 |
-| Nonblank Lean source lines | 1,475,097 | 1,503,619 |
-| Direct imports | 31,987 | 47,223 |
-| Import cycles / unresolved project imports | 0 / 0 | 0 / 0 |
-
-The additional files preserved existing import interfaces and added no
-mathematical results. The compatibility map of that tree recorded all 3,198 old
-paths, 2,401 unique canonical targets and 14,552 forwarding edges; it is
-retained as
-[`COMPATIBILITY-0.1.x.md`](docs/architecture/migrations/COMPATIBILITY-0.1.x.md).
-
-Canonical modules use `ComputationalMathematics`. The package remains
-`numStability`, the test root remains `NumStabilityTest`, and authored
-declarations remain in their existing `NumStability` namespaces. Release 0.2.0
-removed the historical `NumStability` import paths; the namespace is unaffected. The
-[validation record](docs/migrations/lean-computational-mathematics/validation.md)
-records passing source, clean build/test/diagnostic, downstream and strict
-compiled-comparison checks for the validated source revision. The
-[live tier manifest](docs/architecture/tiers.json) and
-[historical compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md) describe the mapped tree.
-
-The bounded 2026-08 repository-reorganization phase is accepted at checkpoint
-[`C0008`](docs/architecture/phases/2026-08-repository-reorganization-completion/checkpoints/C0008-gates.md),
-whose evidence commit is `897557779a2102aa0e23b0b2f63edeb35b06bc68`.
-Current `main` contains later work, including the LeVeque, MatrixPowers,
-PolynomialEvaluation, Higham Chapter 2, and high-dimensional-probability
-developments. Bounded-phase completion is recorded; repository-wide completion
-is not claimed. See the
-[`active phase registry`](docs/architecture/phases/2026-08-repository-reorganization-completion/README.md)
-and [`architecture process`](docs/architecture/PROCESS.md) for the distinction.
-
-### CI status
-
-The badge tracks `main`. The
-[October 22 run on `042142525`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/39753456088)
-passed the source checks, library and test builds, `lake test`, and warning/lint
-enforcement. This is evidence for that exact commit; the badge shows subsequent
-runs.
-
-Recent CI maintenance adds runner CPU, memory, and cgroup resource logging and
-per-target build progress, and avoids repeated blank-line scans in the source
-guards. Warning checks remain strict by default. An explicit
-`--allow-linux-cross-architecture` comparison can validate an unchanged warning
-census across Linux GNU x86-64 and ARM64 with coherent compiler headers and
-matching pins; it preserves the actual capture provenance and cannot rewrite
-the baseline. See the [warning-check contract](docs/architecture/PROCESS.md).
-
-Release 0.2.0 and the retirements that followed it were
-each verified green before the next landed; the run on the tagged commit
-`e93dd14c1` passed every step, including the library build, the `lake test`
-driver and both reviewed diagnostic baselines.
-
-The LeVeque Chapter 2 publication merged as
-[`708e788771965cde4c42f2d5bc83ec9751e5ed41`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/708e788771965cde4c42f2d5bc83ec9751e5ed41)
-through [PR #17](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/17).
-Its [post-merge CI run](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36122945465)
-passed the library build, `lake test`, and warning and lint enforcement on that
-exact `main` commit.
-
-The LeVeque Chapter 3 publication merged as
-[`f8ce76ee791152180d5386598800878d2e090fda`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/f8ce76ee791152180d5386598800878d2e090fda)
-through [PR #20](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/20).
-Its [merge-queue CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36292408422)
-and [post-merge CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/36293199109)
-passed the library build, `lake test`, and warning and lint enforcement on the
-exact merged commit.
-
-The remainder of this subsection records the earlier validated source revision,
-whose evidence the migration reports are stated against.
-
-Validated source commit [`51c5540984780b0011f41739b9ddaf8e505b7c93`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/51c5540984780b0011f41739b9ddaf8e505b7c93)
-passed [clean CI run 34021942176](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/34021942176)
-on 2026-09-06 at 12:45:10 UTC. All three libraries of that tree, `lake test`,
-warning/lint enforcement and the independent 13-fixture consumer passed. Authenticated
-compiled comparison preserved all 58,420 declarations and their signature/body
-edges, with zero differences; seven representative axiom sets also matched.
-Actual Git dependency resolution and all nine dependency pins were verified.
-
-CI checks architecture, provenance and source policy. It builds
-`ComputationalMathematics` and `NumStabilityTest`, runs the `lake test` driver,
-and enforces the reviewed warning and lint baselines. The clean-project
-consumer builds the six canonical identity fixtures. Manual
-`clean_project=true` builds fresh project artifacts; the recorded run skipped
-project cache restore/save while using the permitted Mathlib cache. It captures
-the compiled graph, axiom reports and canonical consumer build with
-exact source/fixture/pin checks. Artifacts are retained for 14 days; ordinary
-push/PR cache behavior is unchanged.
-
-The validated source commit and any later documentation publication commit are
-distinct; a run certifies its own SHA. The
-[validation record](docs/migrations/lean-computational-mathematics/validation.md)
-contains exact evidence, preserved attempt history and platform/scope limits.
-The [implementation report](docs/migrations/lean-computational-mathematics/implementation-report.md)
-records the implementation and separate publication verification.
+Small supporting extensions also live under [Logic](ComputationalMathematics/Logic/)
+and [Topology](ComputationalMathematics/Topology/). Five attributed
+[upstream adaptations](ComputationalMathematics/Upstream/Lindemann/) support the
+source developments; licensing and provenance are recorded in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Floating-point model
 
@@ -339,6 +237,37 @@ These are completions of the audited chapter scopes, not a claim that the whole
 book is formalized. Inventories, audit packages, and gates remain checkout-local
 rather than tracked in this repository.
 
+The accepted portion of [Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/)
+is available through
+[`Chapter04`](ComputationalMathematics/Source/LeVeque/Chapter04.lean).
+The October 26, 2026 acceptance record contains 99 proved rows, 11 reused rows,
+and 6 recorded source discrepancies out of 139 obligations. The remaining 23
+rows are unfinished; Chapter 4 has no complete chapter-gate PASS.
+This publication includes accepted correspondence and its mathematical
+dependencies, while unfinished campaign files remain outside product Git.
+
+The scalar large-step result is the adopted convergence/CFL domain obstruction
+for arbitrary fixed two-point fluxes, using exact cell means and actual numerical
+updates. It does not assert the book's unqualified norm-instability wording.
+Its precise statement is
+[`LocalizedScalarCFLConvergenceObstruction`](ComputationalMathematics/Source/LeVeque/Chapter04/LocalizedScalarCFLConvergenceObstruction.lean).
+
+### Eymard–Gallouët–Herbin: finite-volume foundations
+
+The [Chapter 1 entry point](ComputationalMathematics/Source/Eymard/Chapter01.lean)
+contains three accepted proofs: introductory local conservativity, Section 2.2
+cell unknowns and conservative exchange. The frozen inventory has **46
+obligations: 3 accepted (6.5%), 43 remaining, none skipped or deferred**.
+
+The publication also includes 69 compiled mathematical modules with geometric,
+transport, diffusion and reconstruction definitions and transparent candidate
+target propositions. In particular, a `...Target` definition is not a proof;
+the Lax–Wendroff convergence target remains unfinished. The
+[coverage and continuation document](docs/formalization/eymard-chapter-01.md)
+explains the accepted scope and links the separate archive containing the sealed
+inventory, original audits/receipts, source consultations and partial work.
+Chapter 1 is not complete.
+
 ### Vershynin: high-dimensional probability
 
 [`ComputationalMathematics.HDP`](ComputationalMathematics/HDP.lean) is the current high-dimensional
@@ -359,6 +288,14 @@ source-contract coverage, not a completed chapter gate. Historical
 paths were removed in release 0.2.0; the
 [compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
 records their canonical destinations.
+
+The tracked coverage reports distinguish the chapter states:
+
+| Chapter | Recorded scope and status |
+|---|---|
+| [1](docs/vershynin-hdp/chapter01/coverage.md) | Active: 37/45 formalized objects, including three source discrepancies; 8 remain. Three skipped rows and one deferred row are outside that denominator. |
+| [2](docs/vershynin-hdp/chapter02/coverage.md) | PASS under its recorded rules: 119/119 objects, comprising 116 proved, two discrepancies and one weaker result; 12 skipped rows reported separately. |
+| [3](ComputationalMathematics/Source/Vershynin/Chapter03/) | Source contracts and signatures are present; a completed chapter gate is not claimed. |
 
 ### Drineas–Mahoney: randomized numerical linear algebra
 
@@ -388,7 +325,7 @@ lake test
 `lake build` selects the canonical library; the explicit command above also
 includes the test library. `lake test` uses the `NumStabilityTest` driver.
 For the reproducible snapshot measured above, run
-`git checkout 04214252556b2294ac4fa17f4b2fe4c43b6d3d28` before the Lake commands.
+`git checkout d23b546e518c9451979708f51e0d81d1b3a11454` before the Lake commands.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -412,12 +349,23 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.FloatingPoint` | Reusable floating-point foundations and IEEE-facing utilities |
 | `ComputationalMathematics.Analysis` | Broad historical analysis discovery surface; prefer a narrower family import |
 | `ComputationalMathematics.Algorithms` | Broad historical algorithm discovery surface; prefer a canonical family import |
+| `ComputationalMathematics.Algorithms.LinearSystems` | Linear-system factorization and solver families |
+| `ComputationalMathematics.Analysis.LinearOperators` | Reusable matrix/operator analysis |
+| `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra` | Reusable randomized sampling, sketching and preconditioning |
+| `ComputationalMathematics.HDP.Scalar` | Scalar probability and concentration |
+| `ComputationalMathematics.HDP.Vector` | Random-vector probability and geometry |
+| `ComputationalMathematics.HDP.Graph` | Finite-graph optimization and randomized rounding |
+| `ComputationalMathematics.HDP.Optimization` | Semidefinite and Grothendieck foundations |
+| `ComputationalMathematics.HDP.Kernel` | Positive-semidefinite kernels and feature maps |
+| `ComputationalMathematics.HDP.Tensor` | Finite tensors and analytic features |
 | `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1–3 correspondence |
+| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1–3 and accepted Chapter 4 correspondence |
 | `ComputationalMathematics.Source.LeVeque.Chapter02` | Audited Chapter 2 proofs, models, and proof-free target contracts |
 | `ComputationalMathematics.Source.LeVeque.Chapter03` | Audited Chapter 3 characteristics, Riemann problems, and boundary results |
+| `ComputationalMathematics.Source.LeVeque.Chapter04` | Accepted Chapter 4 schemes, CFL, accuracy, stability and discrepancy results; chapter unfinished |
+| `ComputationalMathematics.Source.Eymard.Chapter01` | Three accepted proofs and compiled candidate definitions/targets; chapter unfinished |
 | `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–3 source contracts; Chapter 3 gate not claimed complete |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
@@ -437,7 +385,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "04214252556b2294ac4fa17f4b2fe4c43b6d3d28"
+rev = "d23b546e518c9451979708f51e0d81d1b3a11454"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
@@ -477,7 +425,8 @@ ComputationalMathematics/
 ├── Analysis.lean                        broad historical analysis aggregate
 ├── Analysis/
 │   ├── Error/, Conditioning/, Perturbation/
-│   ├── MatrixNorms/, SingularValues/, Probability/
+│   ├── MatrixNorms/, SingularValues/, LinearOperators/, CStarMatrices/
+│   ├── Calculus/, Probability/, Statistics/, FiniteVolume/
 │   └── PartialDifferentialEquations/    reusable PDE and finite-volume foundations
 ├── Algorithms.lean                      broad historical algorithm aggregate
 ├── Algorithms/
@@ -489,9 +438,11 @@ ComputationalMathematics/
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          finite-volume methods, Chapters 1–3
+│   ├── LeVeque/                          Chapters 1–3 and accepted Chapter 4 results
+│   ├── Eymard/                           partial Chapter 1 proofs and candidate targets
 │   ├── Vershynin/                        high-dimensional probability, Chapters 1–3 contracts
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
+├── Logic/, MeasureTheory/, Topology/     supporting foundational extensions
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 
 NumStabilityTest.lean                     complete test-library entry point
@@ -540,6 +491,8 @@ subject to the reviewed baseline.
 - The [identity migration report](docs/migrations/lean-computational-mathematics/README.md)
   records the public name, interface mapping, GitHub cutover and validation.
 - [`docs/README.md`](docs/README.md) maps current policy and retained evidence.
+- The [Eymard Chapter 1 checkpoint](docs/formalization/eymard-chapter-01.md) records accepted scope and restoration instructions.
+- The Vershynin [Chapter 1](docs/vershynin-hdp/chapter01/coverage.md) and [Chapter 2](docs/vershynin-hdp/chapter02/coverage.md) reports record the audited scopes.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
   and supported entry points.
 - [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) defines canonical
@@ -553,7 +506,7 @@ subject to the reviewed baseline.
 ## Roadmap
 
 The tracked [publication policies](.formalization-policy/publication/) cover
-LeVeque, Vershynin, the Fountoulakis random-automata paper, a Higham recheck,
+LeVeque, Eymard, Vershynin, the Fountoulakis random-automata paper, a Higham recheck,
 Bhatia's matrix analysis, and Nocedal's numerical optimization. The Nocedal
 policy disables automatic publication. These policies configure how candidate
 work may be published; they do not certify completed chapters or add source
@@ -573,6 +526,7 @@ historical snapshot. The current published source areas are listed above.
   SIAM, 2002.
 - R. J. LeVeque, *Finite Volume Methods for Hyperbolic Problems*, Cambridge
   University Press, 2002.
+- R. Eymard, T. Gallouët and R. Herbin, [*Finite Volume Methods*](https://raphaeleh.github.io/PUBLI/bookevol.pdf), January 2019 manuscript.
 - R. Vershynin, *High-Dimensional Probability: An Introduction with
   Applications in Data Science*, Cambridge University Press.
 - P. Drineas and M. W. Mahoney,

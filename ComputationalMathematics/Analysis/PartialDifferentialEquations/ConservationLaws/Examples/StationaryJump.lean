@@ -27,6 +27,38 @@ theorem stationaryField_constantFlux_residual
   refine ⟨0, 0, hasDerivAt_const t (profile x), hasDerivAt_const x fluxValue, ?_⟩
   simp
 
+/-- Any stationary locally integrable field with constant physical flux
+on its range solves the oriented rectangle conservation law. -/
+theorem stationaryField_constantFlux_rectangle
+    (profile : ℝ → ι → ℝ)
+    (hprofile : ∀ a b, IntervalIntegrable profile volume a b)
+    (flux : (ι → ℝ) → (ι → ℝ)) (fluxValue : ι → ℝ)
+    (hflux : ∀ x, flux (profile x) = fluxValue) :
+    IsRectangleConservationLawSolution (fun x _ => profile x) flux := by
+  refine ⟨(fun a b _ => hprofile a b), ?_, ?_⟩
+  · intro x s t
+    simpa only [hflux] using
+      (intervalIntegrable_const (a := s) (b := t) (c := fluxValue))
+  · intro a b s t
+    simp only [hflux, sub_self, intervalIntegral.integral_zero]
+
+/-- A stationary Riemann jump is an exact rectangle solution for any
+nonlinear flux that agrees on the left, origin, and right trace values. -/
+theorem stationaryRiemannData_rectangle_of_equalFlux
+    (left valueAtJump right : ι → ℝ)
+    (flux : (ι → ℝ) → (ι → ℝ))
+    (hleft : flux left = flux valueAtJump)
+    (hright : flux right = flux valueAtJump) :
+    IsRectangleConservationLawSolution
+      (fun x _ => riemannData left valueAtJump right x) flux := by
+  apply stationaryField_constantFlux_rectangle
+    (riemannData left valueAtJump right)
+    (riemannData_intervalIntegrable left valueAtJump right)
+    flux (flux valueAtJump)
+  intro x
+  unfold riemannData
+  split_ifs <;> simp [hleft, hright]
+
 /-- A discontinuous conserved vector state can satisfy the existing conservative
 residual, because that predicate does not require a spatial state derivative. -/
 theorem discontinuous_stationary_conservative_residual
