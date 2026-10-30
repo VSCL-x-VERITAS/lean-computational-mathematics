@@ -33,4 +33,14 @@ theorem hdp_04_maximal_separated_definition {T : Type*} [MetricSpace T]
     refine ⟨hN, fun x hxN hxinsert ↦ ?_⟩
     exact hmax x (hxinsert.1 (Set.mem_insert x N)) hxN hxinsert.2
 
+/-- Positive-radius source correspondence for the footnote following Lemma 4.2.6,
+with the scale domain inherited from Definition 4.2.1. The broader characterization
+`hdp_04_maximal_separated_definition` remains available at zero radius. -/
+theorem hdp_04_maximal_separated_positive_definition {T : Type*} [MetricSpace T]
+    {K N : Set T} {ε : ℝ≥0} (_hε : 0 < ε) :
+    Maximal (fun M : Set T ↦ M ⊆ K ∧ Metric.IsSeparated ε M) N ↔
+      (N ⊆ K ∧ Metric.IsSeparated ε N) ∧
+        ∀ x ∈ K, x ∉ N → ¬ Metric.IsSeparated ε (insert x N) :=
+  hdp_04_maximal_separated_definition
+
 end NumStability.HDP.Contract

@@ -22,12 +22,6 @@ namespace NumStability.HDP.Vector.GaussianMixture
 
 open NumStability.HDP.Scalar.IndependentSums.Hoeffding
 
-/-- The first coordinate of one latent observation has the Rademacher law. -/
-theorem latentSign_hasLaw (n : ℕ) :
-    HasLaw (fun z : ℝ × (Fin n → ℝ) ↦ z.1)
-      rademacherPMF.toMeasure (latentNoiseObservationMeasure n) := by
-  exact MeasureTheory.measurePreserving_fst.hasLaw
-
 /-- The second coordinate of one latent observation is a standard Gaussian
 vector. -/
 theorem latentNoise_isStandardNormal (n : ℕ) :

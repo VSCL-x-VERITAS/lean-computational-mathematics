@@ -1,41 +1,18 @@
-import ComputationalMathematics.HDP.Vector.SubGaussianL2
-import ComputationalMathematics.HDP.Vector.SubGaussianDomination
+import ComputationalMathematics.HDP.Vector.SubGaussianRelativeL2
 
 /-!
 # Vershynin Chapter 4, Equation (4.24)
+
+The historical extended-norm wrapper remains available. The separately named
+probability-space wrapper uses integrable ordinary moments and a finite real
+gauge, with explicit marginal sub-Gaussian membership.
 -/
 
 noncomputable section
-
 open MeasureTheory
 open scoped ENNReal NNReal
 
 namespace NumStability.HDP.Contract
-
-/-- Vershynin, Equation (4.24), as the operative condition imposed on the
-sub-Gaussian random vector in Theorem 4.7.1.  Coordinate measurability and
-finite `L²`/`ψ₂` effective domains exclude the unintended extended-real
-tautology `⊤ ≤ K * ⊤`; one *uniform* finite constant `K ≥ 1` controls every
-linear marginal by the `L²` norm of that same marginal.
-
-This is deliberately a proposition-valued definition rather than a theorem
-asserting that every random vector has the property: in the source, (4.24) is
-a hypothesis. The definition is meaningful for an arbitrary measure; the
-source uses it on a probability space. No probability assumption is needed
-to identify the condition with its expanded marginal quantifiers. -/
-def Equation424Condition {Ω : Type*} [MeasurableSpace Ω]
-    {μ : Measure Ω} {n : ℕ}
-    (X : Fin n → Ω → ℝ) : Prop :=
-  (∀ j, Measurable (X j)) ∧
-    ∃ K : ℝ≥0, 1 ≤ K ∧
-      ∀ x : Fin n → ℝ,
-        NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ
-            (NumStability.HDP.Vector.linearMarginal X x) ∧
-          eLpNorm (NumStability.HDP.Vector.linearMarginal X x) 2 μ < ∞ ∧
-          NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
-              (NumStability.HDP.Vector.linearMarginal X x) ≤
-            (K : ℝ≥0∞) *
-              eLpNorm (NumStability.HDP.Vector.linearMarginal X x) 2 μ
 
 /-- Proof-free audit surface for the exact Equation (4.24) condition.  The
 selected audit scope is this condition-definition, not an assertion that every
@@ -56,43 +33,33 @@ theorem hdp_04_equation_4_24 {Ω : Type*} [MeasurableSpace Ω]
                   eLpNorm (NumStability.HDP.Vector.linearMarginal X x) 2 μ := by
   rfl
 
-/-- The Equation (4.24) condition with its finite `L²` norm written as the
-square root of the ordinary second moment, as in the source's footnote.
-The same uniform finite `K ≥ 1` controls all scalar marginals, whose
-sub-Gaussian membership and square-integrability remain explicit. -/
-theorem equation424Condition_iff_ordinary_second_moment
-    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} {n : ℕ}
-    (X : Fin n → Ω → ℝ) :
-    Equation424Condition (μ := μ) X ↔
-      (∀ j, Measurable (X j)) ∧
-        ∃ K : ℝ≥0, 1 ≤ K ∧
-          ∀ x : Fin n → ℝ,
-            NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ
-                (NumStability.HDP.Vector.linearMarginal X x) ∧
-              MemLp (NumStability.HDP.Vector.linearMarginal X x) 2 μ ∧
-              NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
-                  (NumStability.HDP.Vector.linearMarginal X x) ≤
-                (K : ℝ≥0∞) * ENNReal.ofReal
-                  (Real.sqrt (∫ ω,
-                    (NumStability.HDP.Vector.linearMarginal X x ω) ^ 2 ∂μ)) := by
-  constructor
-  · rintro ⟨hMeas, K, hK, hMarginal⟩
-    refine ⟨hMeas, K, hK, ?_⟩
-    intro x
-    obtain ⟨hSG, hFinite, hBound⟩ := hMarginal x
-    have hMarginalMeas :=
-      NumStability.HDP.Vector.SubGaussian.measurable_linearMarginal hMeas x
-    have hLp : MemLp (NumStability.HDP.Vector.linearMarginal X x) 2 μ :=
-      ⟨hMarginalMeas.aestronglyMeasurable, hFinite⟩
-    refine ⟨hSG, hLp, ?_⟩
-    rwa [NumStability.HDP.Scalar.Preliminaries.eLpNorm_two_eq_ofReal_sqrt_integral_sq
-      hLp] at hBound
-  · rintro ⟨hMeas, K, hK, hMarginal⟩
-    refine ⟨hMeas, K, hK, ?_⟩
-    intro x
-    obtain ⟨hSG, hLp, hBound⟩ := hMarginal x
-    refine ⟨hSG, hLp.eLpNorm_lt_top, ?_⟩
-    rwa [NumStability.HDP.Scalar.Preliminaries.eLpNorm_two_eq_ofReal_sqrt_integral_sq
-      hLp]
-
 end NumStability.HDP.Contract
+
+namespace NumStability.HDP.Contract
+
+/-- Probability-space source condition, reusing the single transparent
+finite real-value producer. No estimate is asserted for an arbitrary vector. -/
+def HDP04Equation424ProbabilityOrdinaryCondition {Ω : Type*} [MeasurableSpace Ω]
+    {μ : Measure Ω} [IsProbabilityMeasure μ] {n : ℕ}
+    (X : Fin n → Ω → ℝ) : Prop :=
+  NumStability.HDP.Vector.SubGaussian.ProbabilityRelativeSecondMomentCondition (μ := μ) X
+
+/-- Exact expanded condition-definition audit surface for Equation (4.24),
+on its probability space and finite ordinary-second-moment domain. -/
+theorem hdp_04_equation_4_24_probability_ordinary
+    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
+    [IsProbabilityMeasure μ] {n : ℕ} (X : Fin n → Ω → ℝ) :
+    HDP04Equation424ProbabilityOrdinaryCondition (μ := μ) X ↔
+      (∀ j, Measurable (X j)) ∧
+        ∃ K : ℝ≥0, 1 ≤ K ∧ ∀ x : Fin n → ℝ,
+          NumStability.HDP.Scalar.SubGaussian.IsSubGaussian μ
+            (NumStability.HDP.Vector.linearMarginal X x) ∧
+          Integrable (fun ω => (NumStability.HDP.Vector.linearMarginal X x ω) ^ 2) μ ∧
+          (NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+            (NumStability.HDP.Vector.linearMarginal X x)).toReal ≤
+            (K : ℝ) * Real.sqrt
+              (∫ ω, (NumStability.HDP.Vector.linearMarginal X x ω) ^ 2 ∂μ) := by
+  rfl
+end NumStability.HDP.Contract
+
+end

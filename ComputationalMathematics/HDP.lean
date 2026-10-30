@@ -1,18 +1,48 @@
+import ComputationalMathematics.HDP.Coding.BinaryLengthThirty
+import ComputationalMathematics.HDP.Coding.QaryHammingVolume
+import ComputationalMathematics.HDP.Coding.ThirtyLengthPolynomial
+import ComputationalMathematics.HDP.Contract.FiniteSubsetPackingDefinition
 import ComputationalMathematics.HDP.Contracts
 import ComputationalMathematics.HDP.ContractSignatures
 import ComputationalMathematics.HDP.Convex
 import ComputationalMathematics.HDP.Graph
 import ComputationalMathematics.HDP.Kernel
+import ComputationalMathematics.HDP.Matrix.LiteralBilinearMaximum
+import ComputationalMathematics.HDP.Matrix.RealSVDFullBases
+import ComputationalMathematics.HDP.Matrix.RealSVDOrderedGram
+import ComputationalMathematics.HDP.Matrix.SignedEigenvalueOrdering
+import ComputationalMathematics.HDP.Matrix.SubGaussianBilinearMaximum
+import ComputationalMathematics.HDP.Matrix.TwoUnitEigenvectorAlignment
+import ComputationalMathematics.HDP.Matrix.UnitEigenvectorAlignment
+import ComputationalMathematics.HDP.Matrix.WeylFiniteMaximum
+import ComputationalMathematics.HDP.Matrix.ZeroSquareActiveSVDGram
+import ComputationalMathematics.HDP.Metric.BoundedEuclideanCoverPacking
+import ComputationalMathematics.HDP.Metric.BoundedEuclideanExternalCovering
 import ComputationalMathematics.HDP.Metric.CardinalCovering
+import ComputationalMathematics.HDP.Metric.CardinalExternalCoverAttainment
+import ComputationalMathematics.HDP.Metric.CountableCovering
+import ComputationalMathematics.HDP.Metric.CoveringCardinalEncoding
+import ComputationalMathematics.HDP.Metric.ExternalCoverAttainment
+import ComputationalMathematics.HDP.Metric.NormedPackingNonattainment
+import ComputationalMathematics.HDP.Metric.PackingAttainment
+import ComputationalMathematics.HDP.Metric.PackingNonattainment
+import ComputationalMathematics.HDP.Metric.PackingPair
 import ComputationalMathematics.HDP.Optimization
+import ComputationalMathematics.HDP.Probability.DiracIndependence
+import ComputationalMathematics.HDP.Probability.FiniteBernoulliModes
+import ComputationalMathematics.HDP.Probability.FiniteGaussianPosterior
+import ComputationalMathematics.HDP.Probability.FiniteGaussianTranslation
+import ComputationalMathematics.HDP.Probability.FiniteSignProducts
+import ComputationalMathematics.HDP.Probability.RegularAEPointwise
 import ComputationalMathematics.HDP.Scalar
 import ComputationalMathematics.HDP.Tensor
 import ComputationalMathematics.HDP.Vector
+import ComputationalMathematics.HDP.Vector.GaussianRecoveryBudget
+import ComputationalMathematics.Source.Vershynin.Chapter04.Equation425.ExplicitMassOneRealization
 
 /-!
 # High-dimensional probability
 
 Complete entry point for the current HDP family: scalar and vector probability
 modules, frozen source-contract signatures, and stable source contracts.
-
 -/

@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Vector.GaussianMixture
+import ComputationalMathematics.HDP.Vector.GaussianMixture.Basic
 import ComputationalMathematics.HDP.Vector.SpectralClustering
 import ComputationalMathematics.HDP.Vector.SphericalSubGaussian
 import Mathlib.MeasureTheory.Measure.Real

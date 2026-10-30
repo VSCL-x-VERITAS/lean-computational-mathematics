@@ -119,19 +119,20 @@ private theorem spectral_gap_mul_sin_angle_le_residual
         (NumStability.hermitianOrderedEigenbasis hS i) v) ≤ ‖r‖
   nlinarith [norm_nonneg r]
 
-private theorem eigenvector_residual_le_two_operatorNorm
+/-- An arbitrary unit eigenvector at the indexed ordered eigenvalue has a
+residual controlled by twice the Euclidean operator perturbation. No particular
+basis vector or choice inside a repeated eigenspace is required. -/
+theorem unit_eigenvector_residual_le_two_operatorNorm
     {n : ℕ} (S T : Matrix (Fin n) (Fin n) ℝ)
-    (hS : S.IsHermitian) (hT : T.IsHermitian) (i : Fin n) :
-    ‖Matrix.toEuclideanLin S
-          (NumStability.hermitianOrderedEigenbasis hT i) -
-        NumStability.hermitianOrderedEigenvalue hS i •
-          NumStability.hermitianOrderedEigenbasis hT i‖ ≤
+    (hS : S.IsHermitian) (hT : T.IsHermitian) (i : Fin n)
+    (v : EuclideanSpace ℝ (Fin n)) (hv : ‖v‖ = 1)
+    (hTv : Matrix.toEuclideanLin T v =
+      NumStability.hermitianOrderedEigenvalue hT i • v) :
+    ‖Matrix.toEuclideanLin S v -
+        NumStability.hermitianOrderedEigenvalue hS i • v‖ ≤
       2 * NumStability.realMatrixOperatorNorm (S - T) := by
-  let v := NumStability.hermitianOrderedEigenbasis hT i
   let evalS := NumStability.hermitianOrderedEigenvalue hS i
   let evalT := NumStability.hermitianOrderedEigenvalue hT i
-  have hTv : Matrix.toEuclideanLin T v = evalT • v :=
-    NumStability.hermitianOrderedEigenbasis_apply hT i
   have hdecomp :
       Matrix.toEuclideanLin S v - evalS • v =
         Matrix.toEuclideanLin (S - T) v + (evalT - evalS) • v := by
@@ -151,7 +152,7 @@ private theorem eigenvector_residual_le_two_operatorNorm
           ‖NumStability.realMatrixContinuousLinearMap (S - T)‖ * ‖v‖ :=
         ContinuousLinearMap.le_opNorm _ _
       _ = ‖NumStability.realMatrixContinuousLinearMap (S - T)‖ := by
-        rw [NumStability.norm_hermitianOrderedEigenbasis hT i, mul_one]
+        rw [hv, mul_one]
   have heigen : |evalT - evalS| ≤
       NumStability.realMatrixOperatorNorm (S - T) := by
     simpa [abs_sub_comm] using
@@ -162,10 +163,23 @@ private theorem eigenvector_residual_le_two_operatorNorm
     _ ≤ ‖Matrix.toEuclideanLin (S - T) v‖ + ‖(evalT - evalS) • v‖ := norm_add_le _ _
     _ = ‖Matrix.toEuclideanLin (S - T) v‖ + |evalT - evalS| := by
       rw [norm_smul, Real.norm_eq_abs,
-        NumStability.norm_hermitianOrderedEigenbasis hT i, mul_one]
+        hv, mul_one]
     _ ≤ NumStability.realMatrixOperatorNorm (S - T) +
         NumStability.realMatrixOperatorNorm (S - T) := add_le_add hmatrix heigen
     _ = 2 * NumStability.realMatrixOperatorNorm (S - T) := by ring
+
+private theorem eigenvector_residual_le_two_operatorNorm
+    {n : ℕ} (S T : Matrix (Fin n) (Fin n) ℝ)
+    (hS : S.IsHermitian) (hT : T.IsHermitian) (i : Fin n) :
+    ‖Matrix.toEuclideanLin S
+          (NumStability.hermitianOrderedEigenbasis hT i) -
+        NumStability.hermitianOrderedEigenvalue hS i •
+          NumStability.hermitianOrderedEigenbasis hT i‖ ≤
+      2 * NumStability.realMatrixOperatorNorm (S - T) := by
+  exact unit_eigenvector_residual_le_two_operatorNorm S T hS hT i
+    (NumStability.hermitianOrderedEigenbasis hT i)
+    (NumStability.norm_hermitianOrderedEigenbasis hT i)
+    (NumStability.hermitianOrderedEigenbasis_apply hT i)
 
 /-- Davis--Kahan for a simple ordered eigenvalue of two real Hermitian
 matrices.  The angle is sign-invariant because its sine is unchanged by
@@ -187,6 +201,29 @@ theorem sin_angle_orderedEigenvectors_le_two_operatorNorm_div_gap
       (NumStability.hermitianOrderedEigenbasis hT i)
       (NumStability.norm_hermitianOrderedEigenbasis hT i)
   have hupper := eigenvector_residual_le_two_operatorNorm S T hS hT i
+  apply (le_div_iff₀ hδ).2
+  rw [mul_comm]
+  exact hlower.trans hupper
+
+/-- Davis--Kahan for any unit eigenvector at the corresponding ordered
+eigenvalue of the perturbed matrix. The reference eigenvalue is separated;
+the perturbed eigenvalue may be repeated. -/
+theorem sin_angle_unit_eigenvector_le_two_operatorNorm_div_gap
+    {n : ℕ} (S T : Matrix (Fin n) (Fin n) ℝ)
+    (hS : S.IsHermitian) (hT : T.IsHermitian) (i : Fin n)
+    (δ : ℝ) (hδ : 0 < δ)
+    (hsep : ∀ j : Fin n, j ≠ i →
+      δ ≤ |NumStability.hermitianOrderedEigenvalue hS i -
+        NumStability.hermitianOrderedEigenvalue hS j|)
+    (v : EuclideanSpace ℝ (Fin n)) (hv : ‖v‖ = 1)
+    (hTv : Matrix.toEuclideanLin T v =
+      NumStability.hermitianOrderedEigenvalue hT i • v) :
+    Real.sin
+        (InnerProductGeometry.angle
+          (NumStability.hermitianOrderedEigenbasis hS i) v) ≤
+      2 * NumStability.realMatrixOperatorNorm (S - T) / δ := by
+  have hlower := spectral_gap_mul_sin_angle_le_residual S hS i δ hδ hsep v hv
+  have hupper := unit_eigenvector_residual_le_two_operatorNorm S T hS hT i v hv hTv
   apply (le_div_iff₀ hδ).2
   rw [mul_comm]
   exact hlower.trans hupper

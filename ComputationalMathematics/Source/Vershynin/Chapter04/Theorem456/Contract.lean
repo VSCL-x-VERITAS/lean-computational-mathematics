@@ -1,4 +1,5 @@
 import ComputationalMathematics.HDP.Graph.SpectralClusteringGuarantee
+import ComputationalMathematics.HDP.Graph.FinStochasticBlock
 import ComputationalMathematics.HDP.Graph.SpectralClustering
 import ComputationalMathematics.HDP.Vector.BinaryLabelSwap
 import ComputationalMathematics.Source.Vershynin.Chapter04.BalancedFinSBM

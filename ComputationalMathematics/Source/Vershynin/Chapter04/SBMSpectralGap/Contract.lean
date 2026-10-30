@@ -1,4 +1,5 @@
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation417LooplessFullCorrection.Contract
+import ComputationalMathematics.HDP.Graph.FinStochasticBlock
 import ComputationalMathematics.Source.Vershynin.Chapter04.BalancedFinSBM
 
 /-!

@@ -1,4 +1,5 @@
 import ComputationalMathematics.Analysis.Eigenvalues.CourantFischer
+import ComputationalMathematics.Analysis.Eigenvalues.Multiplicity
 import ComputationalMathematics.Analysis.Eigenvalues.OrderedSpectrum
 
 /-!

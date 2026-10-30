@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Vector.GaussianMixture
+import ComputationalMathematics.HDP.Vector.GaussianMixture.Basic
 
 /-!
 # Vershynin Chapter 4, Definition 4.7.4

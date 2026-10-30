@@ -20,39 +20,6 @@ namespace NumStability.HDP.Vector.GaussianMixture
 
 open NumStability.HDP.Scalar.IndependentSums.Hoeffding
 
-/-- The real Rademacher law is concentrated on `{-1, 1}`. -/
-theorem rademacher_ae_eq_neg_one_or_one :
-    ∀ᵐ z ∂rademacherPMF.toMeasure, z = -1 ∨ z = 1 := by
-  rw [show rademacherPMF.toMeasure =
-      Measure.map rademacherValue fairBernoulliPMF.toMeasure by
-    simpa [rademacherPMF] using
-      (PMF.toMeasure_map rademacherValue fairBernoulliPMF
-        (measurable_of_countable rademacherValue)).symm]
-  apply (ae_map_iff
-    (measurable_of_countable rademacherValue).aemeasurable
-    ((measurableSet_singleton (-1 : ℝ)).union
-      (measurableSet_singleton (1 : ℝ)))).2
-  refine Filter.Eventually.of_forall ?_
-  intro b
-  change rademacherValue b = -1 ∨ rademacherValue b = 1
-  cases b <;> simp [rademacherValue]
-
-/-- Every canonical latent label has the Rademacher law. -/
-theorem canonicalLabel_hasLaw (m n : ℕ) (i : Fin m) :
-    HasLaw (fun ω : Fin m → ℝ × (Fin n → ℝ) ↦ canonicalLabel ω i)
-      rademacherPMF.toMeasure (latentNoiseSampleMeasure m n) := by
-  simpa [canonicalLabel] using
-    (latentSign_hasLaw n).fun_comp (canonicalRow_hasLaw m n i)
-
-/-- All labels in a finite canonical sample lie in `{-1,1}` almost surely. -/
-theorem canonicalLabels_ae_eq_neg_one_or_one (m n : ℕ) :
-    ∀ᵐ ω ∂latentNoiseSampleMeasure m n,
-      ∀ i, canonicalLabel ω i = -1 ∨ canonicalLabel ω i = 1 := by
-  rw [ae_all_iff]
-  intro i
-  exact ((canonicalLabel_hasLaw m n i).ae_iff (by fun_prop)).2
-    rademacher_ae_eq_neg_one_or_one
-
 /-- The projection of a canonical noise row on a nonzero deterministic
 direction has `ψ₂` norm at most twice the Euclidean length of that direction. -/
 theorem canonicalNoise_projection_psiTwoNorm_le {m n : ℕ}

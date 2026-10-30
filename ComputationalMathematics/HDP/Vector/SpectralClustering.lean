@@ -4,9 +4,9 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 /-!
 # Spectral clustering of finite point samples
 
-The deterministic algorithmic layer used for the Gaussian-mixture application:
-form the sample covariance, choose a unit vector maximizing its Rayleigh
-quotient, and divide sample points according to projection sign.
+Sign clustering and quadratic-form maximization on the function-space unit
+sphere. This sphere uses the Pi sup norm. The Euclidean leading-eigenvector
+algorithm is provided by `EuclideanSpectralClustering`.
 -/
 
 noncomputable section
@@ -15,8 +15,8 @@ open Matrix Set
 
 namespace NumStability.HDP.Vector.SpectralClustering
 
-/-- A unit vector attaining the largest Rayleigh quotient of a real square
-matrix. For symmetric matrices this is exactly a unit top eigenvector. -/
+/-- A vector maximizing a real matrix's quadratic form on the Pi sup-norm unit
+sphere. See `EuclideanSpectralClustering` for the Euclidean eigenvector interface. -/
 def IsTopRayleighVector {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
     (v : Fin n → ℝ) : Prop :=
   ‖v‖ = 1 ∧ ∀ w : Fin n → ℝ, ‖w‖ = 1 →

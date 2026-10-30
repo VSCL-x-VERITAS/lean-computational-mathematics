@@ -1,8 +1,10 @@
 import ComputationalMathematics.Analysis.OperatorNorms.RealComplexification
 import ComputationalMathematics.Analysis.Eigenvalues.OrderedSpectrum
 import ComputationalMathematics.Analysis.SingularValues.ExtremeValues
-import ComputationalMathematics.Source.Higham.Chapter14.Section05.SpectralConvergence
-import ComputationalMathematics.Source.Higham.Chapter20.Lemma11.Core.Results
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Pseudoinverse.CompactSVD
+import ComputationalMathematics.Analysis.SingularValues.PseudoinverseNorm
+import ComputationalMathematics.Analysis.SingularValues.FullColumnRank
+import ComputationalMathematics.Algorithms.LinearSystems.Underdetermined.MinimumNorm.Pseudoinverse.PenroseEquations
 
 /-!
 # Vershynin Chapter 4: smallest singular value and pseudoinverse
@@ -93,5 +95,36 @@ theorem hdp_04_smallest_singular_value_full_rank_and_pseudoinverse
       field_simp [ne_of_gt hspos]
     rw [NumStability.realMatrixOperatorNorm_eq_complexMatrixOp2_realRectToCMatrix]
     exact hsigma
+
+/-- Vershynin, Chapter 4, p. 77: the shape obstruction, full-column-rank
+equivalence, and reciprocal pseudoinverse norm, with full column rank expressed
+as a trivial real kernel and the pseudoinverse specified by all four Penrose
+equations. The original spectral/rank contract remains available above. -/
+theorem hdp_04_smallest_singular_value_kernel_and_penrose_equations
+    {m k : ℕ} (A : Matrix (Fin m) (Fin (k + 1)) ℝ) :
+    (rectCourantFischerSingularValue A (Fin.last k) ≠ 0 → k + 1 ≤ m) ∧
+    (k + 1 ≤ m →
+      ((∀ x : Fin (k + 1) → ℝ, rectMatMulVec A x = 0 → x = 0) ↔
+        0 < rectCourantFischerSingularValue A (Fin.last k))) ∧
+    (∃ B : Matrix (Fin (k + 1)) (Fin m) ℝ,
+      (A * B) * A = A ∧ (B * A) * B = B ∧
+        (A * B).transpose = A * B ∧ (B * A).transpose = B * A) ∧
+    (∀ B : Matrix (Fin (k + 1)) (Fin m) ℝ,
+      ((A * B) * A = A ∧ (B * A) * B = B ∧
+        (A * B).transpose = A * B ∧ (B * A).transpose = B * A) →
+      (∀ x : Fin (k + 1) → ℝ, rectMatMulVec A x = 0 → x = 0) →
+      rectCourantFischerSingularValue A (Fin.last k) =
+        1 / realMatrixOperatorNorm B) := by
+  obtain ⟨_hspectrum, _hmultiplicity, _horder, _hleast, hshape, hrank, hex, hrecip⟩ :=
+    hdp_04_smallest_singular_value_full_rank_and_pseudoinverse A
+  refine ⟨hshape,
+    fun _ ↦ trivial_rectMatMulVec_kernel_iff_last_singularValue_pos A, ?_, ?_⟩
+  · obtain ⟨B, hB⟩ := hex
+    exact ⟨B, (rectMoorePenrosePseudoinverse_iff_penrose_equations A B).mp hB⟩
+  · intro B hB hker
+    have hspos := (trivial_rectMatMulVec_kernel_iff_last_singularValue_pos A).mp hker
+    exact hrecip B
+      ((rectMoorePenrosePseudoinverse_iff_penrose_equations A B).mpr hB)
+      ((hrank (hshape (ne_of_gt hspos))).mpr hspos)
 
 end NumStability.HDP.Contract

@@ -102,4 +102,19 @@ theorem coordinate_psiTwoNorm_le_of_unit_marginal_l2
   rw [hL2e] at h
   simpa using h
 
+/-- A zero vector satisfies the relative `ψ₂`/`L²` condition at every
+nonnegative constant, including the source's supplied `K = 1`. -/
+theorem satisfiesPsiTwoL2Bound_zero
+    {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {n : ℕ} (K : ℝ≥0) :
+    SatisfiesPsiTwoL2Bound μ (fun (_ : Fin n) (_ : Ω) => (0 : ℝ)) K := by
+  intro x
+  have hZero : NumStability.HDP.Vector.linearMarginal
+      (fun (_ : Fin n) (_ : Ω) => (0 : ℝ)) x = fun _ => 0 := by
+    funext ω
+    simp [NumStability.HDP.Vector.linearMarginal]
+  rw [hZero]
+  simp [NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm,
+    NumStability.HDP.Scalar.SubGaussian.psiTwoGauge_zero]
+
 end NumStability.HDP.Vector.SubGaussian

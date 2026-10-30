@@ -1,5 +1,6 @@
 import ComputationalMathematics.HDP.Vector.CovarianceEstimationBound
 import ComputationalMathematics.HDP.Vector.CovarianceEstimation
+import ComputationalMathematics.HDP.Scalar.SubGaussianDomination
 import ComputationalMathematics.HDP.Vector.IsotropyMarginals
 import ComputationalMathematics.HDP.Vector.SubGaussianL2
 import ComputationalMathematics.HDP.Metric.EuclideanSphereCovering
@@ -33,30 +34,10 @@ theorem psiTwoGauge_eq_of_identDistrib
     (h : IdentDistrib X Y μ ν) :
     NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge μ X =
       NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge ν Y := by
-  unfold NumStability.HDP.Scalar.SubGaussian.PsiTwoGauge
-  congr 1
-  ext t
-  constructor
-  · rintro ⟨_hXm, ht0, htTop, hInt, hBound⟩
-    let F : ℝ → ℝ := fun z => Real.exp (z ^ 2 / t.toReal ^ 2)
-    have hF : Measurable F := by
-      dsimp [F]
-      fun_prop
-    have hLaw : IdentDistrib (fun ω => F (X ω)) (fun ω => F (Y ω)) μ ν := by
-      simpa [Function.comp_def] using h.comp hF
-    refine ⟨hY, ht0, htTop, ?_, ?_⟩
-    · simpa [F] using hLaw.integrable_snd hInt
-    · simpa [F] using hLaw.integral_eq ▸ hBound
-  · rintro ⟨_hYm, ht0, htTop, hInt, hBound⟩
-    let F : ℝ → ℝ := fun z => Real.exp (z ^ 2 / t.toReal ^ 2)
-    have hF : Measurable F := by
-      dsimp [F]
-      fun_prop
-    have hLaw : IdentDistrib (fun ω => F (Y ω)) (fun ω => F (X ω)) ν μ := by
-      simpa [Function.comp_def] using h.symm.comp hF
-    refine ⟨hX, ht0, htTop, ?_, ?_⟩
-    · simpa [F] using hLaw.integrable_snd hInt
-    · simpa [F] using hLaw.integral_eq ▸ hBound
+  have hXLaw : HasLaw X (μ.map X) μ := ⟨hX.aemeasurable, rfl⟩
+  simpa only [NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm] using
+    NumStability.HDP.Scalar.SubGaussian.psiTwoNorm_eq_of_sameLaw
+      hX hY hXLaw (h.hasLaw hXLaw)
 
 /-- The `L²` norm of a unit marginal is bounded by the square root of the
 operator norm of the vector's second-moment matrix. -/

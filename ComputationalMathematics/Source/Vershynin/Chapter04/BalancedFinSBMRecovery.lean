@@ -1,4 +1,5 @@
 import ComputationalMathematics.HDP.Matrix.EigenvectorPerturbation
+import ComputationalMathematics.HDP.Graph.FinStochasticBlock
 import ComputationalMathematics.HDP.Vector.SignRecovery
 import ComputationalMathematics.Source.Vershynin.Chapter04.BalancedFinSBM
 

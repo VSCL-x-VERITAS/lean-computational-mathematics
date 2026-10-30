@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Graph.StochasticBlock
+import ComputationalMathematics.HDP.Graph.FinStochasticBlockExpectedAdjacency
 import ComputationalMathematics.HDP.Matrix.SymmetricOperatorNormBounded
 import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.ProbabilityMassFunction.Integrals
@@ -62,11 +62,6 @@ def adjacency {n : ℕ} (ω : UpperPair n → Bool) : Matrix (Fin n) (Fin n) ℝ
       if i = j then 0 else cond (ω ⟨(i, j), h⟩) 1 0
     else
       cond (ω ⟨(j, i), le_of_not_ge h⟩) 1 0
-
-/-- The expected loopless adjacency matrix for a supplied community map. -/
-def expectedAdjacency {n : ℕ} (community : Fin n → Fin 2) (p q : ℝ) :
-    Matrix (Fin n) (Fin n) ℝ :=
-  fun i j ↦ if i = j then 0 else if community i = community j then p else q
 
 theorem adjacency_symmetric {n : ℕ} (ω : UpperPair n → Bool) (i j : Fin n) :
     adjacency ω i j = adjacency ω j i := by

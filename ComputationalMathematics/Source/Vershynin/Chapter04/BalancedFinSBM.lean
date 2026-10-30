@@ -1,4 +1,4 @@
-import ComputationalMathematics.HDP.Graph.FinStochasticBlock
+import ComputationalMathematics.HDP.Graph.FinStochasticBlockExpectedAdjacency
 import ComputationalMathematics.HDP.Graph.StochasticBlockDecomposition
 import ComputationalMathematics.Analysis.Eigenvalues.OrderedSpectrum
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation417LooplessFullCorrection.Contract
