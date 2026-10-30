@@ -153,6 +153,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter04.Equation414.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation415.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation415.SourceTarget
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation415.PositiveScaleQuarterNetCase
+import ComputationalMathematics.Source.Vershynin.Chapter04.Equation415.OwnerQualifiedFullProof
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation416.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.OrthogonalProjection.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.OperatorNormDefinition.Contract
