@@ -388,6 +388,8 @@ import ComputationalMathematics.Analysis.RelativePrecision
 import ComputationalMathematics.Analysis.Rounding
 import ComputationalMathematics.Analysis.SemiconvergentSpectral
 import ComputationalMathematics.Analysis.SingularValues
+import ComputationalMathematics.Analysis.SingularValues.PseudoinverseNorm
+import ComputationalMathematics.Analysis.SingularValues.SymmetricPartialInverse
 import ComputationalMathematics.Analysis.SpecialFunctions.Huber
 import ComputationalMathematics.Analysis.Stability
 import ComputationalMathematics.Analysis.StatisticalRounding
