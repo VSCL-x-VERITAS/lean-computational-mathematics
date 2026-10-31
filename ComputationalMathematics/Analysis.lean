@@ -41,6 +41,7 @@ import ComputationalMathematics.Analysis.ComplexSqrt
 import ComputationalMathematics.Analysis.ConditionEstimatorLowerBound
 import ComputationalMathematics.Analysis.Conditioning
 import ComputationalMathematics.Analysis.CStarMatrices
+import ComputationalMathematics.Analysis.Eigenvalues
 import ComputationalMathematics.Analysis.Equidistribution
 import ComputationalMathematics.Analysis.Error.MatrixProducts
 import ComputationalMathematics.Analysis.Error.Measures.All
@@ -387,6 +388,8 @@ import ComputationalMathematics.Analysis.RelativePrecision
 import ComputationalMathematics.Analysis.Rounding
 import ComputationalMathematics.Analysis.SemiconvergentSpectral
 import ComputationalMathematics.Analysis.SingularValues
+import ComputationalMathematics.Analysis.SingularValues.PseudoinverseNorm
+import ComputationalMathematics.Analysis.SingularValues.SymmetricPartialInverse
 import ComputationalMathematics.Analysis.SpecialFunctions.Huber
 import ComputationalMathematics.Analysis.Stability
 import ComputationalMathematics.Analysis.StatisticalRounding
