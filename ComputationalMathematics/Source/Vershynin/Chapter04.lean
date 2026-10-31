@@ -89,6 +89,7 @@ import ComputationalMathematics.Source.Vershynin.Chapter04.ExpectedAdjacencyDeco
 import ComputationalMathematics.Source.Vershynin.Chapter04.ExpectedAdjacencyN4.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.Equation417.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.DiscrepancyParents.Equation417.Proof
+import ComputationalMathematics.Source.Vershynin.Chapter04.DiscrepancyParents.SignalNorm.Proof
 import ComputationalMathematics.Source.Vershynin.Chapter04.DiscrepancyParents.Theorem475.Proof
 import ComputationalMathematics.Source.Vershynin.Chapter04.SBMLooplessCorrections.Contract
 import ComputationalMathematics.Source.Vershynin.Chapter04.SBMActualExpectationNormObstruction.Contract

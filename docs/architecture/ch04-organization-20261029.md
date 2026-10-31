@@ -77,3 +77,21 @@ partial-inverse algebra. The 2020 prior exact rules remain unchanged. The actual
 tracked production census is 4742 modules, with 2024 exact and 27 prefix rules;
 the tier checker passes with zero mixed or unclassified modules. The earlier
 4525-module census is retained in its original preparation records.
+
+
+## October 31 accepted signal-norm export
+
+The current preparation still contains 666 selected files and 11 import-only
+entrypoint boundaries. It retains 665 complete module assessments unchanged and
+refreshes only the chapter aggregate assessment for one import of the accepted
+[signal-norm parent proof](../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SignalNorm/Proof.lean).
+Its proof and target were already in the selected scope. Removing that one import
+restores the prior assessed aggregate bytes. The actual affected aggregate build
+passes 4100 jobs. The existing Ginibre source ownership and separately reviewed
+shared-Pi compatibility integration remain preserved.
+
+Source acceptance is now 122/124, with nine accepted discrepancy closures.
+Spectral gap and Exercise 4.7.6 remain open; the latest complete gap review is
+unaccepted with retained uncertainties. The organization preparation grants no
+additional source credit. Native whole-unit organization, Chapter PASS and
+protected publication remain pending.

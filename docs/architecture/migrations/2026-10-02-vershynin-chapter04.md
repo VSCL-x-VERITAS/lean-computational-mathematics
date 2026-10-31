@@ -88,3 +88,16 @@ The initial focused Chapter 4, singular-value, and Gaussian-mixture-counterexamp
 build passed after the moves. Final closure also requires the full library build,
 public-aggregate declaration lookup, standard-axiom check, layout/tier checks,
 source inventory, per-row audits, and protected exact-commit publication.
+
+
+## October 31 continuation
+
+The chapter aggregate now exports the accepted
+[signal-norm full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SignalNorm/Proof.lean)
+with one import. Its existing proof and target modules remain in the reviewed
+666-file scope; 665 assessments are retained unchanged and only the aggregate
+assessment is refreshed. The affected aggregate build passes 4100 jobs. This
+export introduces no additional mathematical producer or tier rule. Current
+source acceptance is 122/124; the native whole-unit organization receipt,
+Chapter PASS and protected publication remain pending. Historical organization
+and source-review records above retain their original scope and dates.

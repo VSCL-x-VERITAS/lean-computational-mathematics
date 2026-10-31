@@ -1,21 +1,26 @@
 # Chapter 4 coverage evidence map
 
-## Current acceptance snapshot — October 30, 2026
+## Current acceptance snapshot — October 31, 2026
 
-The selected sealed inventory contains **124 formalization obligations, three skips and 17 deferrals**. The gate records **121 accepted and three open**, including eight accepted discrepancy closures. Chapter PASS, the native whole-unit organization receipt and protected publication remain pending. [Current coverage](coverage.md) lists every source row and disposition.
+The selected sealed inventory contains **124 formalization obligations, three skips and 17 deferrals**. The gate records **122 accepted and two open**, including nine accepted discrepancy closures. Chapter PASS, the native whole-unit organization receipt and protected publication remain pending. [Current coverage](coverage.md) lists every source row and disposition.
 
-The selected inventory SHA-256 is `4f78d8aa158dc0dc2e08bb489fa5b488e7a809d8dbf549501c0eea632b8d9908`; the gate snapshot SHA-256 is `80f952ab52292177733b91f8e491ef1b1a3046f7bab976cbcffaffda7e585068`. The pinned Lean and Mathlib environment is unchanged. Original accepted receipts remain the authority; a later workflow or file locator does not require historical proof or audit replay.
+The selected inventory SHA-256 is `4f78d8aa158dc0dc2e08bb489fa5b488e7a809d8dbf549501c0eea632b8d9908`; the gate snapshot SHA-256 is `09e763cbf21be702f4a9c0f111e5836638140d3c1824db008b689e644e9ce4d3`. The pinned Lean and Mathlib environment is unchanged. Original accepted receipts remain the authority; a later workflow or file locator does not require historical proof or audit replay.
 
-Two recent complete discrepancy-parent acceptances use these original canonical proof receipts:
+Three recent complete discrepancy-parent acceptances use these original canonical proof receipts:
 
 | Source parent | Canonical proof receipt SHA-256 |
 |---|---|
 | `HDP-04-EQ-4.17` | `8fbb3e38935909d357b26686e56ba97959518e7429e249f4a2ab6e975eb72992` |
 | `HDP-04-THEOREM-4.7.5` | `886342102d0435c8be1484b651adf5522de18e072b61445184b705c6a54c4a05` |
+| `HDP-04-SBM-SIGNAL-NORM` | `eccd289bd25ab063d1aca0da418a91b500356f130da2ec4239d70b0e86b42c58` |
 
-These proof receipts are accompanied by the selected original child proofs, fresh complete parent statement reviews and actual source-parent consumption. A proof receipt for a child or pending bridge by itself grants no parent credit. The three open source parents remain signal norm, spectral gap and Exercise 4.7.6.
+These proof receipts are accompanied by the selected original child proofs, fresh complete parent statement reviews and actual source-parent consumption. A proof receipt for a child or pending bridge by itself grants no parent credit. The two open source parents remain spectral gap and Exercise 4.7.6.
 
 Equation 4.15 is now accepted through canonical proof receipt `a588dfa70152586557d58c9d1b76d4ec2b675f6520fe923cb3a7ad44033e104c`, with exact frozen-target comparison, actual Lean compilation and only the three standard axioms. Its original complete T3 statement review has no remaining uncertainties. The source’s literal indexing issue and all historical review evidence remain preserved.
+
+The accepted [signal-norm parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SignalNorm/Proof.lean) assembles the witness and complete corrected counterpart in the reviewed order. Its original T3 decision SHA-256 is `cb75a1c8b06454a525a314ce075db8ae0cac00e7b0f80ffe644045bb1f7c435b`; completion SHA-256 is `45e9ddd5f1f938839e5efa81345ec2ff28e280df2132f00646b80c9fbd7c3722`. The canonical proof receipt records exact target equality, no custom axioms, no placeholders and only `propext`, `Classical.choice` and `Quot.sound`. Actual parent consumption closes this source row without proving the false printed assertion or reconstructing private author intent. The [chapter aggregate](../../../ComputationalMathematics/Source/Vershynin/Chapter04.lean) exports the parent once, and its affected build passes 4100 jobs.
+
+The latest complete spectral-gap review remains unaccepted: decision SHA-256 `842351183fd7b7ef028896f0b7756f66043a05be844d5e611769a40bf2009014`, completion SHA-256 `03d919ea497290f28732c0c1e2ba9616ed04cec9985ee62ec50ef60c4916b1c4`. Its retained uncertainties grant no source credit. Exercise 4.7.6 also remains open.
 
 ## Historical evidence map — October 3, 2026
 

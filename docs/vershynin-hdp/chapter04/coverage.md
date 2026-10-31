@@ -1,10 +1,10 @@
 # Vershynin Chapter 4 coverage
 
-The selected source is the pinned 2018 first edition, Chapter 4, *Random matrices*. As of October 30, 2026, **121 of 124 source obligations are accepted (97.58%)**, with **three open**, **three skipped** and **17 deferred**. Chapter 4 is **ACTIVE and unpublished**. The complete independently reviewed inventory covers all 29 chapter-PDF pages; witness and correction children do not enlarge its denominator.
+The selected source is the pinned 2018 first edition, Chapter 4, *Random matrices*. As of October 31, 2026, **122 of 124 source obligations are accepted (98.39%)**, with **two open**, **three skipped** and **17 deferred**. Chapter 4 is **ACTIVE and unpublished**. The complete independently reviewed inventory covers all 29 chapter-PDF pages; witness and correction children do not enlarge its denominator.
 
-Lean `v4.29.0-rc3` and Mathlib `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` remain pinned. Continuation uses workflow `8.1.46`; previously accepted results retain their original proof and review receipts.
+Lean `v4.29.0-rc3` and Mathlib `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` remain pinned. Continuation uses workflow `8.1.56`; previously accepted results retain their original proof and review receipts.
 
-Source SHA-256: `b7448935fe23081eefa4d1589a07550c384d986f6ae499fb06547d10c2f993f9`. Sealed inventory SHA-256: `4f78d8aa158dc0dc2e08bb489fa5b488e7a809d8dbf549501c0eea632b8d9908`. Gate snapshot SHA-256: `80f952ab52292177733b91f8e491ef1b1a3046f7bab976cbcffaffda7e585068`.
+Source SHA-256: `b7448935fe23081eefa4d1589a07550c384d986f6ae499fb06547d10c2f993f9`. Sealed inventory SHA-256: `4f78d8aa158dc0dc2e08bb489fa5b488e7a809d8dbf549501c0eea632b8d9908`. Gate snapshot SHA-256: `09e763cbf21be702f4a9c0f111e5836638140d3c1824db008b689e644e9ce4d3`.
 
 ## Acceptance and remaining work
 
@@ -12,18 +12,18 @@ Source SHA-256: `b7448935fe23081eefa4d1589a07550c384d986f6ae499fb06547d10c2f993f
 |---|---:|
 | `PROVED` | 87 |
 | `REUSED` | 26 |
-| `DISCREPANCY` | 8 |
-| `IN_PROGRESS` | 3 |
+| `DISCREPANCY` | 9 |
+| `IN_PROGRESS` | 2 |
 | `SKIPPED` | 3 |
 | `DEFERRED` | 17 |
 
 `PROVED` and `REUSED` consume accepted source correspondences and canonical Lean proof receipts. `DISCREPANCY` closes a false printed assertion through its formal witness, distinct corrected result and required complete parent correspondence. It does not prove the false printed assertion. Open candidates, generic builds, source opinions and favorable partial reviews grant no source-row credit.
 
-The three open rows are the Section 4.5 signal-norm claim, the Section 4.5 spectral-gap claim, and Exercise 4.7.6. Their source evidence, remaining review and canonical proof/source-parent consumption remain pending. Equation 4.15 has an accepted complete statement review and exact-target canonical proof. Equation 4.17 and Theorem 4.7.5 have accepted complete discrepancy correspondences.
+The two open rows are the Section 4.5 spectral-gap claim and Exercise 4.7.6. The latest complete spectral-gap statement review remains unaccepted with retained uncertainties; Exercise 4.7.6 remains under review. The signal-norm parent now has its accepted complete T3 correspondence, canonical proof and actual source-parent consumption. Equation 4.15 has an accepted complete statement review and exact-target canonical proof. Equation 4.17 and Theorem 4.7.5 retain their accepted complete discrepancy correspondences.
 
 Remark 4.7.2 is excluded for unresolved dependence of the printed comparison constants on the inherited subgaussian parameter. Its existing conditional sufficient bound remains useful mathematics and grants no source-row credit. All saved source uncertainty and the earlier formal target remain preserved. See [the sample-complexity analysis](remark-4-7-2-analysis.md).
 
-Chapter PASS additionally requires all selected obligations and the actual whole-unit organization gate. Protected publication is a separate pending stage. The current 666-file organization preparation preserves completed assessments; it is not the native organization receipt.
+Chapter PASS additionally requires all selected obligations and the actual whole-unit organization gate. Protected publication is a separate pending stage. The current 666-file organization preparation preserves 665 unchanged assessments and refreshes the chapter aggregate for the accepted signal-norm proof export. The affected aggregate build passes 4100 jobs; the native organization receipt remains pending.
 
 ## Module structure
 
@@ -130,7 +130,7 @@ The table accounts for all **144 inventory rows**: 124 formalization obligations
 | `HDP-04-EXPECTED-ADJACENCY-N4-EXAMPLE` | `DISCREPANCY` | `NumStability.HDP.Contract.hdp_04_expected_adjacency_n4_concrete_literal_obstruction`; `NumStability.HDP.Contract.hdp_04_expected_adjacency_n4_corrected` |
 | `HDP-04-EXERCISE-4.5.2` | `DISCREPANCY` | `NumStability.HDP.Contract.hdp_04_exercise_4_5_2_actual_expectation_rank_obstruction`; `NumStability.HDP.Contract.hdp_04_exercise_4_5_2_loopless_rank_classification`; `NumStability.HDP.Contract.hdp_04_equation_4_17_loopless_full_corrected` |
 | `HDP-04-EQ-4.17` | `DISCREPANCY` | `NumStability.HDP.Contract.DiscrepancyChildren.equation417_witness_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.equation417_correction_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.signal_norm_correction_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.spectral_gap_correction_child_proved` |
-| `HDP-04-SBM-SIGNAL-NORM` | `IN_PROGRESS` | Pending statement audit, canonical proof acceptance and source consumption. |
+| `HDP-04-SBM-SIGNAL-NORM` | `DISCREPANCY` | `NumStability.HDP.Contract.DiscrepancyChildren.signal_norm_witness_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.equation417_correction_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.signal_norm_correction_child_proved`; `NumStability.HDP.Contract.DiscrepancyChildren.spectral_gap_correction_child_proved` |
 | `HDP-04-SBM-EIGENVECTOR-COEFFICIENT-SIZES` | `DISCREPANCY` | `NumStability.HDP.Contract.hdp_04_sbm_eigenvector_coefficient_sizes_counterexample`; `NumStability.HDP.Contract.hdp_04_sbm_eigenvector_sign_correction` |
 | `HDP-04-EQ-4.18` | `PROVED` | `NumStability.HDP.Contract.hdp_04_equation_4_18` |
 | `HDP-04-THEOREM-4.5.3` | `REUSED` | `NumStability.HDP.Contract.hdp_04_theorem_4_5_3` |
