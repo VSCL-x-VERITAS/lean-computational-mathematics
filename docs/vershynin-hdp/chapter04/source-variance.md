@@ -1,8 +1,8 @@
 # Chapter 4 source variance ledger
 
-## Current source dispositions — October 31, 2026
+## Current source dispositions — October 30, 2026
 
-Chapter 4 remains **122/124 accepted, two open, three skipped and 17 deferred; unpublished**. Nine accepted rows close as discrepancies. Each preserves its printed classification and original adverse evidence, together with separately accepted witness/correction results and its selected complete parent correspondence. Accepted original receipts remain final across workflow changes.
+Chapter 4 remains **124/124 accepted, none open, three skipped and 17 deferred; unpublished**. Eleven accepted rows close as discrepancies. Each preserves its printed classification and original adverse evidence, together with separately accepted witness/correction results and its selected complete parent correspondence. Accepted original receipts remain final across workflow changes.
 
 | Source row | Current disposition |
 |---|---|
@@ -13,16 +13,20 @@ Chapter 4 remains **122/124 accepted, two open, three skipped and 17 deferred; u
 | `HDP-04-EXERCISE-4.5.2` | Accepted discrepancy; false printed assertion is not proved. |
 | `HDP-04-EQ-4.17` | Accepted discrepancy; false printed assertion is not proved. |
 | `HDP-04-SBM-SIGNAL-NORM` | Accepted discrepancy; false printed assertion is not proved. |
+| `HDP-04-SBM-SPECTRAL-GAP` | Accepted discrepancy; false printed assertion is not proved. |
+| `HDP-04-EXERCISE-4.7.6` | Accepted discrepancy; false printed assertion is not proved. |
 | `HDP-04-SBM-EIGENVECTOR-COEFFICIENT-SIZES` | Accepted discrepancy; false printed assertion is not proved. |
 | `HDP-04-THEOREM-4.7.5` | Accepted discrepancy; false printed assertion is not proved. |
 
-The spectral-gap parent and Exercise 4.7.6 remain open. The latest complete spectral-gap review is unaccepted with retained uncertainties; compiled children and favorable partial reviews do not establish source-parent acceptance. Equation 4.15 is accepted under its recorded positive-scale/positive-dimension qualification with separate zero/empty cases, exact canonical proof receipt `a588dfa70152586557d58c9d1b76d4ec2b675f6520fe923cb3a7ad44033e104c` and complete T3 correspondence.
+The spectral-gap parent and Exercise 4.7.6 are now accepted complete discrepancy correspondences. Their original adverse judgments and prior uncertainties remain historical evidence; complete accepted parent reviews, canonical proofs and actual source-parent consumption supply the new closure authority. Equation 4.15 is accepted under its recorded positive-scale/positive-dimension qualification with separate zero/empty cases, exact canonical proof receipt `a588dfa70152586557d58c9d1b76d4ec2b675f6520fe923cb3a7ad44033e104c` and complete T3 correspondence.
 
 Remark 4.7.2 is a reasoned source-specification exclusion for unresolved dependence of comparison constants on the inherited subgaussian parameter. Its conditional sufficient theorem is preserved without counting it as a formalization of the unqualified printed claim.
 
 The accepted Equation 4.17 parent is `DiscrepancyParents.equation417WholeParent_proved`; the accepted Theorem 4.7.5 parent is `DiscrepancyParents.theorem475WholeParent_proved`, under namespace `NumStability.HDP.Contract`. The latter correction has the explicitly admitted all-unit-vector scope. Neither closure claims to recover unrecorded author intent. See [current coverage](coverage.md) for all 144 source-row dispositions.
 
 The signal-norm parent is now accepted through its complete T3 review, canonical proof receipt `eccd289bd25ab063d1aca0da418a91b500356f130da2ec4239d70b0e86b42c58` and actual source-parent consumption. Its [public parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SignalNorm/Proof.lean) preserves the separately named witness, equation correction, exact loopless norm and complete spectral-gap counterpart. The admitted fixed-parameter quantifiers, n=2 and q=0 cases and historical adverse notes remain preserved. This closes the selected discrepancy correspondence and makes no claim about unrecorded historical author intent.
+
+The accepted [spectral-gap full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SpectralGap/Proof.lean) has canonical receipt `61a7af36f2acdb5a8f5482ba2cd3fb7e9f8cc956a73197d4e17ed6ea48f10d3a`; the accepted [Exercise 4.7.6 full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/Exercise476/Proof.lean) has receipt `ea571094365dc2eaa2398f5fbbd14f5c2faa40bcf3f88639d45465378abe2873`. Their witnesses and corrected endpoints remain separately named, with the admitted all-unit-vector scope preserved. Neither closure reconstructs private author intent. Whole-unit organization and protected publication remain pending.
 
 ## Historical source-variance records
 
