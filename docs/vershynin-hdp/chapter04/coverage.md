@@ -1,8 +1,8 @@
 # Vershynin Chapter 4 coverage
 
-The selected source is the pinned 2018 first edition, Chapter 4, *Random matrices*. As of October 30, 2026, **124 of 124 source obligations are accepted (100.00%)**, with **none open**, **three skipped** and **17 deferred**. Chapter 4 is **ACTIVE and unpublished**. The complete independently reviewed inventory covers all 29 chapter-PDF pages; witness and correction children do not enlarge its denominator.
+The selected source is the pinned 2018 first edition, Chapter 4, *Random matrices*. As of October 30, 2026, **124 of 124 source obligations are accepted (100.00%)**, with **none open**, **three skipped** and **17 deferred**. The Chapter 4 gate is **PASS**, including the actual whole-unit organization check. Protected publication is tracked separately. The complete independently reviewed inventory covers all 29 chapter-PDF pages; witness and correction children do not enlarge its denominator.
 
-Lean `v4.29.0-rc3` and Mathlib `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` remain pinned. Continuation uses workflow `8.1.63`; previously accepted results retain their original proof and review receipts.
+Lean `v4.29.0-rc3` and Mathlib `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` remain pinned. Continuation uses workflow `8.1.65`; previously accepted results retain their original proof and review receipts.
 
 Source SHA-256: `b7448935fe23081eefa4d1589a07550c384d986f6ae499fb06547d10c2f993f9`. Sealed inventory SHA-256: `4f78d8aa158dc0dc2e08bb489fa5b488e7a809d8dbf549501c0eea632b8d9908`. Gate snapshot SHA-256: `e4bcd3129392a5d1fc1ed18f509b676117d80c6c707db9e9d1cc97b61c21d851`.
 
@@ -23,7 +23,7 @@ No selected source obligation remains open. The spectral-gap parent and Exercise
 
 Remark 4.7.2 is excluded for unresolved dependence of the printed comparison constants on the inherited subgaussian parameter. Its existing conditional sufficient bound remains useful mathematics and grants no source-row credit. All saved source uncertainty and the earlier formal target remain preserved. See [the sample-complexity analysis](remark-4-7-2-analysis.md).
 
-Chapter PASS additionally requires all selected obligations and the actual whole-unit organization gate. Protected publication is a separate pending stage. The current 666-file organization preparation preserves 665 unchanged assessments and refreshes the chapter aggregate for the two final accepted parent exports. The affected aggregate build passes 4105 jobs; the native organization receipt remains pending.
+The actual Chapter 4 terminal gate and whole-unit organization check both pass. The native organization receipt covers 666 modules, with all five finding counters zero and complete semantic coverage. It retains 665 unchanged assessments and the final two-parent aggregate assessment; the affected aggregate build passes 4105 jobs. Protected publication is tracked separately.
 
 ## Module structure
 

@@ -2,7 +2,7 @@
 
 ## Current source dispositions — October 30, 2026
 
-Chapter 4 remains **124/124 accepted, none open, three skipped and 17 deferred; unpublished**. Eleven accepted rows close as discrepancies. Each preserves its printed classification and original adverse evidence, together with separately accepted witness/correction results and its selected complete parent correspondence. Accepted original receipts remain final across workflow changes.
+Chapter 4 has **124/124 accepted, none open, three skipped and 17 deferred; chapter gate PASS**. Eleven accepted rows close as discrepancies. Each preserves its printed classification and original adverse evidence, together with separately accepted witness/correction results and its selected complete parent correspondence. Accepted original receipts remain final across workflow changes.
 
 | Source row | Current disposition |
 |---|---|
@@ -26,7 +26,7 @@ The accepted Equation 4.17 parent is `DiscrepancyParents.equation417WholeParent_
 
 The signal-norm parent is now accepted through its complete T3 review, canonical proof receipt `eccd289bd25ab063d1aca0da418a91b500356f130da2ec4239d70b0e86b42c58` and actual source-parent consumption. Its [public parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SignalNorm/Proof.lean) preserves the separately named witness, equation correction, exact loopless norm and complete spectral-gap counterpart. The admitted fixed-parameter quantifiers, n=2 and q=0 cases and historical adverse notes remain preserved. This closes the selected discrepancy correspondence and makes no claim about unrecorded historical author intent.
 
-The accepted [spectral-gap full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SpectralGap/Proof.lean) has canonical receipt `61a7af36f2acdb5a8f5482ba2cd3fb7e9f8cc956a73197d4e17ed6ea48f10d3a`; the accepted [Exercise 4.7.6 full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/Exercise476/Proof.lean) has receipt `ea571094365dc2eaa2398f5fbbd14f5c2faa40bcf3f88639d45465378abe2873`. Their witnesses and corrected endpoints remain separately named, with the admitted all-unit-vector scope preserved. Neither closure reconstructs private author intent. Whole-unit organization and protected publication remain pending.
+The accepted [spectral-gap full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/SpectralGap/Proof.lean) has canonical receipt `61a7af36f2acdb5a8f5482ba2cd3fb7e9f8cc956a73197d4e17ed6ea48f10d3a`; the accepted [Exercise 4.7.6 full-parent proof](../../../ComputationalMathematics/Source/Vershynin/Chapter04/DiscrepancyParents/Exercise476/Proof.lean) has receipt `ea571094365dc2eaa2398f5fbbd14f5c2faa40bcf3f88639d45465378abe2873`. Their witnesses and corrected endpoints remain separately named, with the admitted all-unit-vector scope preserved. Neither closure reconstructs private author intent. Whole-unit organization and the chapter terminal gate have passed under workflow `8.1.65`. Protected publication is tracked separately.
 
 ## Historical source-variance records
 
