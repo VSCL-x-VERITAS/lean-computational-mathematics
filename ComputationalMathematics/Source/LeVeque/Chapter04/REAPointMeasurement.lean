@@ -17,8 +17,10 @@ noncomputable section
 namespace NumStability.REA.PointMeasurement
 open Set MeasureTheory
 
+/-- The singleton domain at the prescribed observation point. -/
 abbrev PointDomain {α : Type} (j : α) := ({j} : Set α)
 
+/-- Linear evaluation of a measurement function on its singleton domain. -/
 def evaluation {α : Type} (d : ℕ) (j : α) :
     (⊤ : Submodule ℝ (PointDomain j → State d)) →ₗ[ℝ] State d where
   toFun e := e.val ⟨j, mem_singleton j⟩

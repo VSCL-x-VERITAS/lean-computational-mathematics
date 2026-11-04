@@ -22,6 +22,7 @@ namespace NumStability
 open Filter MeasureTheory Set
 open scoped Topology ENNReal
 
+/-- The approved Chapter 4 physical-mesh convergence specification with real norms. -/
 def leveque04_RealNormPhysicalConvergenceDefinitionTarget : Prop :=
   (∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
       [FiniteDimensional ℝ E] [CompleteSpace E],

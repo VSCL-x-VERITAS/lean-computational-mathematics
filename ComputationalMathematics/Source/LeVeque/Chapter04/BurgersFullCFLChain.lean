@@ -18,6 +18,8 @@ namespace NumStability
 
 /-- The actual finite profiles are ordered throughout the full characteristic
 CFL window. No bound on twice the characteristic speed is imposed. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_burgersFiniteChain_ordered_fullCFL
     (states : ℕ → ℝ) (count : ℕ) (width bound horizon x time : ℝ)
     (_hwidth : 0 < width) (hbound : 0 ≤ bound)

@@ -21,6 +21,7 @@ open scoped Interval
 
 namespace NumStability
 
+/-- The Godunov full-step extension under the prescribed propagation bound. -/
 def Leveque04GodunovCourantExtensionTarget : Prop :=
   ∀ (N : ℕ), 1 ≤ N → ∀ (old : Fin (N + 2) → ℝ) (origin width : ℝ), 0 < width →
     let U := leveque04_burgersFiniteActionEvolution old origin width

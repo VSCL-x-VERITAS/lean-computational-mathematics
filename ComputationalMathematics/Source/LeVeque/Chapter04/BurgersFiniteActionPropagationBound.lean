@@ -24,6 +24,7 @@ open scoped Topology NNReal
 
 namespace NumStability
 
+/-- The prescribed full-horizon propagation bound for the finite-action Burgers field. -/
 def leveque04_burgersFiniteActionPropagationBound {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width horizon bound : ℝ) : Prop :=
   0 ≤ bound ∧ ∀ time ∈ Ioc (0 : ℝ) horizon,

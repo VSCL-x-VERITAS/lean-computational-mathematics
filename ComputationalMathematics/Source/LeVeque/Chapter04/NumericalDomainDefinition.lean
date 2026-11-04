@@ -42,6 +42,8 @@ def leveque04_scalarNumericalDomain
 
 /-- Positive finite-component source-facing numerical domain. A change in
 any component of the observed vector counts as a changed observation. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def leveque04_vectorNumericalDomain {m : ℕ} [NeZero m]
     (admissible : (ℝ → Fin m → ℝ) → Prop)
     (observation : (ℝ → Fin m → ℝ) → Fin m → ℝ) : Set ℝ :=

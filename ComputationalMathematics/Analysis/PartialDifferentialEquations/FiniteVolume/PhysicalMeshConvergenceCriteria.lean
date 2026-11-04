@@ -38,9 +38,11 @@ def IsPhysicalCellMesh (domain : Set ℝ) (active : A → Set ℤ)
       edge a (i + 1) ≤ edge a j) ∧
     ∀ a x, x ∈ domain → ∃ i ∈ active a, x ∈ Icc (edge a i) (edge a (i + 1))
 
+/-- The midpoint between consecutive physical cell edges. -/
 def physicalCellCenter (edge : A → ℤ → ℝ) : A → ℤ → ℝ :=
   fun a i => (edge a i + edge a (i + 1)) / 2
 
+/-- The physical cell width as a counting weight, zero outside active indices. -/
 def physicalCellWeight (active : A → Set ℤ) (edge : A → ℤ → ℝ)
     (a : A) (i : ℤ) : ℝ≥0∞ := by
   classical
@@ -56,6 +58,7 @@ def IsPhysicalTimeMesh (time : A → ℕ → ℝ) (dt : A → ℝ) : Prop :=
   ∀ a, time a 0 = 0 ∧ ∀ n, time a n < time a (n + 1) ∧
     time a (n + 1) - time a n ≤ dt a
 
+/-- Every mesh reaches the same prescribed positive physical horizon exactly. -/
 def HasPhysicalHorizon (time : A → ℕ → ℝ) (steps : A → ℕ) (T : ℝ) : Prop :=
   0 < T ∧ ∀ a, time a (steps a) = T
 
@@ -73,18 +76,23 @@ def HasPhysicalReconstructionIndices (domain : Set ℝ) (active : A → Set ℤ)
     ∀ a t, 0 ≤ t → time a (timeCell a t) ≤ t ∧
       t < time a (timeCell a t + 1)
 
+/-- The physical cell edges on a uniform spatial grid. -/
 def uniformPhysicalEdge (origin dx : A → ℝ) : A → ℤ → ℝ :=
   fun a i => origin a + (i : ℝ) * dx a
 
+/-- The integer cell index containing a physical point on a uniform grid. -/
 def uniformPhysicalSpaceCell (origin dx : A → ℝ) : A → ℝ → ℤ :=
   fun a x => ⌊(x - origin a) / dx a⌋
 
+/-- The physical time at an integer step on a uniform time grid. -/
 def uniformPhysicalTime (dt : A → ℝ) : A → ℕ → ℝ :=
   fun a n => (n : ℝ) * dt a
 
+/-- The natural-number slab index containing a nonnegative physical time. -/
 def uniformPhysicalTimeCell (dt : A → ℝ) : A → ℝ → ℕ :=
   fun a t => ⌊t / dt a⌋₊
 
+/-- Extend the grid function by zero outside the prescribed active indices. -/
 def activePhysicalGridFunction (active : A → Set ℤ) (U : A → ℤ → E)
     (a : A) (i : ℤ) : E := by
   classical
@@ -143,6 +151,7 @@ def HasPhysicalSpaceTimeConvergence (l : Filter A) (domain : Set ℝ)
     0 < T ∧ HasSpaceTimeL1Convergence l domain T
       (numericalSpaceTimeReconstruction Q spaceCell timeCell) q
 
+/-- Local space-time L¹ convergence on the prescribed refining physical mesh. -/
 def HasPhysicalLocalSpaceTimeConvergence (l : Filter A) (domain : Set ℝ)
     (active : A → Set ℤ) (edge : A → ℤ → ℝ) (dx dt : A → ℝ)
     (time : A → ℕ → ℝ) (Q : A → ℕ → ℤ → E)

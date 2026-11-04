@@ -22,6 +22,7 @@ open scoped BigOperators Topology Interval
 
 namespace NumStability
 
+/-- The finite-grid piecewise-constant initial profile for the Burgers evolution. -/
 def leveque04_burgersFiniteActionInitialData {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width x : ℝ) : ℝ :=
   leveque04_burgersActionState old 0 +

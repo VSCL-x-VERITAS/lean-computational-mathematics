@@ -186,6 +186,8 @@ theorem leveque04_burgersFiniteGridREA_faceFluxAverage
 
 /-- The actual terminal vector cell mean is the finite recipe update for
 every supplied-ghost array under the inclusive noninteraction hypothesis. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_burgersFiniteGridREA_terminalMean
     {N : ℕ} (_hN : 1 ≤ N) (old : Fin (N + 2) → ℝ)
     (origin width bound duration : ℝ)

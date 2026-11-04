@@ -37,6 +37,7 @@ The nominal relation index is retained even though execution itself is not a
 certificate that the output solves the IVP or is an accurate approximation. -/
 structure Leveque04DeclaredApproximateProcedure
     {m : ℕ} (problem : Leveque04ForwardIVP m) where
+  /-- The declared approximate evolution, which may report execution failure. -/
   execute : OneDimensionalFiniteVolumeGrid → (ℝ → Fin m → ℝ) →
     ℝ → Option (ℝ → Fin m → ℝ)
 

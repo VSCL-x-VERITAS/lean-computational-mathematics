@@ -86,6 +86,8 @@ theorem leveque04_linearRoe_characteristicIterate
 
 /-- Under every characteristic CFL bound, the actual Roe step preserves
 a uniform characteristic difference bound for arbitrary pairs and all steps. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_linearRoe_iterate_characteristic_difference_bound
     {m : ℕ} (coefficient : Matrix (Fin m) (Fin m) ℝ)
     (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ))

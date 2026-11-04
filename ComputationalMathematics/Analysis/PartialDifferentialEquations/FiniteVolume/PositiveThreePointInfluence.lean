@@ -15,6 +15,7 @@ arrays; PDE data classes and physical initialization require separate bridges.
 
 namespace NumStability
 
+/-- The nearest-neighbor three-point stencil with position-dependent coefficients. -/
 def weightedThreePointStep (left center right : ℤ → ℝ) (u : ℤ → ℝ) (i : ℤ) : ℝ :=
   left i * u (i - 1) + center i * u i + right i * u (i + 1)
 

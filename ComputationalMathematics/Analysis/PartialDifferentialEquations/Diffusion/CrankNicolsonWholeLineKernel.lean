@@ -34,7 +34,6 @@ theorem cnWholeLineResolventKernel_neg (offset : ℤ) :
     cnWholeLineResolventKernel (-offset) = cnWholeLineResolventKernel offset := by
   simp only [cnWholeLineResolventKernel, Int.natAbs_neg]
 
-@[simp]
 theorem cnWholeLineResolventKernel_neg_one :
     cnWholeLineResolventKernel (-1) = 1 / 6 := by
   rw [cnWholeLineResolventKernel_neg, cnWholeLineResolventKernel_one]

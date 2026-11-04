@@ -72,7 +72,9 @@ def Leveque04REAPrescribedCertificate :
 /-- The procedure and its criterion/budget policy are fixed before execution. -/
 structure Leveque04PrescribedREAProcedure
     {m : ℕ} (problem : Leveque04ForwardIVP m) where
+  /-- The error or residual criterion fixed before this approximate evolution. -/
   criterion : Leveque04PrescribedREACriterion m problem
+  /-- The approximate evolution algorithm, with explicit execution failure. -/
   execute : OneDimensionalFiniteVolumeGrid → (ℝ → Fin m → ℝ) →
     ℝ → Option (ℝ → Fin m → ℝ)
 
@@ -113,15 +115,21 @@ noncomputable def leveque04_scalarTaylorProcedure (speed curvature : ℝ) :
         deriv (fun y => reconstructed y component) x) }
 
 /-- A genuine polynomial reconstruction, embedded in the one-state physical model. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def leveque04_quadraticREAReconstruction (curvature linear constant : ℝ) : ℝ → Fin 1 → ℝ :=
   fun x _ => AdvectionTaylor.quadraticProfile curvature linear constant x
 
 /-- The actual Taylor endpoint in that same one-state model. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def leveque04_quadraticREAEndpoint
     (speed curvature linear constant timeStep : ℝ) : ℝ → Fin 1 → ℝ :=
   fun x _ => AdvectionTaylor.quadraticTaylorPath speed curvature linear constant x timeStep
 
 /-- The actual transported reference, not an unconstrained reference field. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def leveque04_quadraticREAReference
     (speed curvature linear constant : ℝ) : ℝ → ℝ → Fin 1 → ℝ :=
   fun x t _ => travelingWave (AdvectionTaylor.quadraticProfile curvature linear constant) speed x t

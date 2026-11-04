@@ -110,6 +110,8 @@ theorem leveque04_burgersFiniteGridREA_faceFluxAverage_fullCFL
 
 /-- The actual terminal vector cell mean is the finite recipe update for
 every supplied-ghost array under the inclusive full characteristic-CFL hypothesis. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_burgersFiniteGridREA_terminalMean_fullCFL
     {N : ℕ} (_hN : 1 ≤ N) (old : Fin (N + 2) → ℝ)
     (origin width bound duration : ℝ)

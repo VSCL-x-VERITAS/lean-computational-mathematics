@@ -116,6 +116,8 @@ theorem linearError_norm_le_of_power_bound_of_defect_bound
 The nonnegative time-step hypothesis records the time-step domain; once the
 defect inequality and clock inequality are supplied, the estimate only needs
 nonnegativity of `C` and `rate`. Zero steps and zero time steps are permitted. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem linearError_norm_le_of_power_bound_of_finite_horizon
     (N : E →ₗ[ℝ] E) (error defect : ℕ → E) (M : ℕ)
     (dt C rate horizon : ℝ) (_hdt : 0 ≤ dt) (hC : 0 ≤ C) (hrate : 0 ≤ rate)

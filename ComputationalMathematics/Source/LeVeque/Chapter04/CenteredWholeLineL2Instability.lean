@@ -45,7 +45,7 @@ theorem leveque04_centeredWholeLineL2Step_eq_actual
       leveque04_centeredScalarAdvectionStep timeStep width speed u i := by
   rw [leveque04_centeredWholeLineL2Step_apply,
     leveque04_centeredScalarAdvectionStep_ftcs timeStep width speed u i hwidth]
-  field_simp [hwidth.ne'] <;> ring
+  field_simp [hwidth.ne']
 
 private def centeredArrayStep (courant : ℝ) (u : ℤ → ℝ) (i : ℤ) : ℝ :=
   u i - courant / 2 * (u (i + 1) - u (i - 1))
@@ -84,7 +84,7 @@ private theorem integerQuarterWave_step (courant : ℝ) (amplitude : ℝ × ℝ)
     simp only [hi] at hl hr
     norm_num at hl hr
     simp [centeredArrayStep, integerQuarterWave, leveque04_centeredModeStep, hi, hl, hr]
-    <;> ring
+    ring
 
 private theorem integerQuarterWave_iterate (courant : ℝ) (n : ℕ) :
     (centeredArrayStep courant)^[n] (integerQuarterWave (1, 0)) =
@@ -153,7 +153,7 @@ private theorem centeredTruncated_iterate_coordinate
   intro j hj
   have hwindow : j ∈ Finset.Icc (-(n : ℤ)) ((n : ℤ) + 1) := by
     simp only [Finset.mem_Icc]
-    rcases hi with rfl | rfl <;> simp only [Set.mem_Icc, mul_one] at hj <;>
+    rcases hi with rfl | rfl <;> simp only [Set.mem_Icc] at hj <;>
       constructor <;> omega
   simp only [leveque04_centeredTruncatedQuarterWave_apply, if_pos hwindow]
 

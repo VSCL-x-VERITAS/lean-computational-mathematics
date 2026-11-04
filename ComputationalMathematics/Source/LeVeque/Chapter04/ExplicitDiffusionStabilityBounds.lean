@@ -259,6 +259,8 @@ theorem leveque04_explicitDiffusion_faceRatio_bound
 /-- The source's quadratic refinement necessity uses the weaker uniform
 fixed-physical-time stability notion. It does not assume power stability of
 each fixed mesh or infer the sharp `1/2` threshold from that weaker premise. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_explicitDiffusion_constant_refinement_necessary
     (horizon bound diffusivity : ℝ) (timeStep width : ℕ → ℝ) (start : ℕ)
     (hhorizon : 0 < horizon) (_hbound : 0 ≤ bound) (hpositive : 0 < diffusivity)
@@ -283,6 +285,8 @@ theorem leveque04_explicitDiffusion_constant_refinement_necessary
 /-- The same quadratic necessity for variable interfaces needs only one
 uniformly positive face, not a global upper/lower conductivity or derivative
 bound. A fixed positive coefficient sampled at the origin is included. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 theorem leveque04_explicitDiffusion_variable_refinement_necessary
     (horizon bound lower : ℝ) (timeStep width : ℕ → ℝ)
     (diffusivity : ℕ → ℤ → ℝ) (start : ℕ)

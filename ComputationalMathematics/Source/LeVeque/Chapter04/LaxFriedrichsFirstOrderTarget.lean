@@ -25,14 +25,14 @@ def leveque04_laxFriedrichs_firstOrder_target : Prop :=
   (∀ {m : ℕ} [NeZero m] (q : ℝ → ℝ → Fin m → ℝ) (flux : (Fin m → ℝ) → Fin m → ℝ)
     (states : Set (Fin m → ℝ)) (L R H a b d left right finish ratio : ℝ)
     (_hhyperbolic : IsHyperbolicFluxOn flux states)
-    (hreference : RectangleReferenceOn q flux L R H)
-    (hq : ContDiffOn ℝ 2 (Function.uncurry q) (Icc L R ×ˢ Icc 0 H))
+    (_hreference : RectangleReferenceOn q flux L R H)
+    (_hq : ContDiffOn ℝ 2 (Function.uncurry q) (Icc L R ×ˢ Icc 0 H))
     (_hstates : ∀ x ∈ Icc L R, ∀ τ ∈ Icc 0 H, q x τ ∈ states)
-    (hflux : ContDiffOn ℝ 2
+    (_hflux : ContDiffOn ℝ 2
       (Function.uncurry (fun x τ => flux (q x τ))) (Icc L R ×ˢ Icc 0 H))
-    (hLa : L < a) (hal : a < left) (_hlr : left ≤ right) (hrb : right < b)
-    (hbR : b < R) (h0f : 0 < finish)
-    (hfd : finish < d) (hdH : d < H) (hratio : 0 < ratio),
+    (_hLa : L < a) (_hal : a < left) (_hlr : left ≤ right) (_hrb : right < b)
+    (_hbR : b < R) (_h0f : 0 < finish)
+    (_hfd : finish < d) (_hdH : d < H) (_hratio : 0 < ratio),
     ∃ threshold C : ℝ, 0 < threshold ∧ 0 ≤ C ∧
       ∀ center ∈ Icc left right, ∀ time ∈ Icc 0 finish,
         ∀ width : ℝ, 0 < width → width < threshold →
@@ -46,8 +46,8 @@ def leveque04_laxFriedrichs_firstOrder_target : Prop :=
                   (leveque04_localInterfaceFlux
                     (leveque04_laxFriedrichsFlux (ratio * width) width flux) old) i -
                   q center (time + ratio * width))‖ ≤ C * width ) ∧
-  (∀ (g : ℝ → ℝ) (speed ratio center : ℝ) (hratio : 0 < ratio)
-    (hsmooth : ContDiffAt ℝ 3 g center),
+  (∀ (g : ℝ → ℝ) (speed ratio center : ℝ) (_hratio : 0 < ratio)
+    (_hsmooth : ContDiffAt ℝ 3 g center),
     ∃ threshold C : ℝ, 0 < threshold ∧ 0 ≤ C ∧
       ∀ width : ℝ, 0 < width → width < threshold →
       ∀ (old : ℤ → ℝ) (i : ℤ), old (i - 1) = g (center - width) →
@@ -62,8 +62,8 @@ def leveque04_laxFriedrichs_firstOrder_target : Prop :=
           (1 - (speed * ratio) ^ 2) / (2 * ratio) * width * deriv (deriv g) center| ≤
           C * width ^ 2 ) ∧
   (∀ (speed ratio width : ℝ) (i : ℤ)
-    (hratio : 0 < ratio) (hwidth : 0 < width)
-    (hcfl : |speed * ratio| < 1),
+    (_hratio : 0 < ratio) (_hwidth : 0 < width)
+    (_hcfl : |speed * ratio| < 1),
     (leveque04_scalarLaxFriedrichsStep (speed * ratio)
         (leveque04_quadraticCellAverage width) i -
       oneDimensionalCellAverage
@@ -73,12 +73,12 @@ def leveque04_laxFriedrichs_firstOrder_target : Prop :=
       ((1 - (speed * ratio) ^ 2) / ratio) * width ) ∧
   (∀ {m : ℕ} [NeZero m] (coefficient : Matrix (Fin m) (Fin m) ℝ)
     (basis : Module.Basis (Fin m) ℝ (Fin m → ℝ)) (speeds : Fin m → ℝ)
-    (heigen : ∀ p, coefficient.mulVec (basis p) = speeds p • basis p)
+    (_heigen : ∀ p, coefficient.mulVec (basis p) = speeds p • basis p)
     (profile : Fin m → ℝ → ℝ) (ratio horizon : ℝ)
-    (hratio : 0 < ratio) (hhorizon : 0 ≤ horizon)
-    (hcfl : ∀ p, |speeds p * ratio| ≤ 1)
-    (hsmooth : ∀ p, ContDiff ℝ 2 (profile p))
-    (hcompact : ∀ p, HasCompactSupport (profile p)),
+    (_hratio : 0 < ratio) (_hhorizon : 0 ≤ horizon)
+    (_hcfl : ∀ p, |speeds p * ratio| ≤ 1)
+    (_hsmooth : ∀ p, ContDiff ℝ 2 (profile p))
+    (_hcompact : ∀ p, HasCompactSupport (profile p)),
     let initial := fun x => basis.equivFun.symm (fun p => profile p x)
     let reference := linearCharacteristicEvolution basis speeds initial
     (∀ x, reference x 0 = initial x) ∧

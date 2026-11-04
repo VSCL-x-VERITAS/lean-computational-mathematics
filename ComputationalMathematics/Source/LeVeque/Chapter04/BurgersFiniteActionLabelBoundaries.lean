@@ -26,11 +26,13 @@ open scoped Topology
 
 namespace NumStability
 
+/-- The left boundary associated with a backtracked initial label. -/
 def leveque04_burgersFiniteActionLabelLeft {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width label time : ℝ) : ℝ :=
   if time ≤ 0 then label else
     footThresholdLeft (fun x => leveque04_burgersFiniteActionFoot old origin width x time) label
 
+/-- The right boundary associated with a backtracked initial label. -/
 def leveque04_burgersFiniteActionLabelRight {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width label time : ℝ) : ℝ :=
   if time ≤ 0 then label else

@@ -21,9 +21,11 @@ open Set
 
 namespace NumStability
 
+/-- The supremum of positions whose backtracked foot lies strictly left of the label. -/
 def footThresholdLeft (foot : ℝ → ℝ) (label : ℝ) : ℝ :=
   sSup {x | foot x < label}
 
+/-- The infimum of positions whose backtracked foot lies strictly right of the label. -/
 def footThresholdRight (foot : ℝ → ℝ) (label : ℝ) : ℝ :=
   sInf {x | label < foot x}
 

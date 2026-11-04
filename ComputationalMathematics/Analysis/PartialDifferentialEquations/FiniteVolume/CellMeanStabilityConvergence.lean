@@ -21,6 +21,8 @@ open scoped Topology ENNReal
 /-- Uniform executed-step consistency for this prescribed equation reference.
 An application can require this for its admitted data class without requiring
 finite global norm defects for unrelated unbounded smooth solutions. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def IsCellMeanReferenceErrorConsistentS06
     {m : ℕ} (p : ENNReal) [Fact (1 ≤ p)]
     {equation : FirstOrderEquation (Fin m)} {origin horizon : ℝ}

@@ -26,11 +26,13 @@ open scoped Interval
 
 namespace NumStability
 
+/-- The finite-action Burgers evolution, retaining the supplied profile at nonpositive times. -/
 def leveque04_burgersFiniteActionEvolution {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width x time : ℝ) : ℝ :=
   if time ≤ 0 then leveque04_burgersFiniteActionInitialData old origin width x
   else leveque04_burgersFiniteActionVelocity old origin width x time
 
+/-- The finite-action forward potential, retaining the initial primitive at nonpositive times. -/
 def leveque04_burgersFiniteActionForwardPotential {N : ℕ}
     (old : Fin (N + 2) → ℝ) (origin width x time : ℝ) : ℝ :=
   if time ≤ 0 then leveque04_burgersInitialPrimitive old origin width x

@@ -84,6 +84,7 @@ def rectangleBudget {m : ℕ} (eta : Input m → ℝ → ℝ) (i : Input m)
     (r : ForwardRectangle i.step) : ℝ :=
   (r.right - r.left) * ∫ t in r.start..r.stop, eta i t
 
+/-- The prescribed pointwise rectangle-residual measurement and error budget. -/
 def policy {m : ℕ} (flux : State m → State m) (hm : 0 < m)
     (eta : Input m → ℝ → ℝ) :
     ResidualPolicy (presentation flux hm) (fun i => ForwardRectangle i.step)

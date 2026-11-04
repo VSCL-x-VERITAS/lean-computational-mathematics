@@ -17,6 +17,7 @@ meaning remains subject to independent statement review and proof checking.
 
 namespace NumStability
 
+/-- The approved actual-influence definition of numerical dependence. -/
 def Leveque04NumericalDomainDefinitionQualifiedTarget : Prop :=
   (∀ (State : Type) (admissible : (ℝ → ℝ) → Prop)
     (initialization : (ℝ → ℝ) → State) (update : State → State)

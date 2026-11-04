@@ -20,13 +20,17 @@ namespace NumStability
 /-- Fixed whole-line diffusion parameters, including a genuine uniform bound
 on the nonnegative interface coefficient. Zero time step is allowed. -/
 structure WholeLineCrankNicolsonGrid where
+  /-- The face conductivity on the integer grid. -/
   diffusivity : ℤ → ℝ
+  /-- The nonnegative uniform bound on the face conductivity. -/
   bound : ℝ
   bound_nonneg : 0 ≤ bound
   diffusivity_le : ∀ i, |diffusivity i| ≤ bound
   diffusivity_nonneg : ∀ i, 0 ≤ diffusivity i
+  /-- The positive physical grid spacing. -/
   width : ℝ
   width_pos : 0 < width
+  /-- The nonnegative physical time step. -/
   timeStep : ℝ
   timeStep_nonneg : 0 ≤ timeStep
 

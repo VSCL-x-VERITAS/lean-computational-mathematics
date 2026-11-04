@@ -29,7 +29,7 @@ theorem leveque04_richtmyerUnitStepUndershoot :
         conservativeFluxDifferenceUpdateInt, leveque04_localInterfaceFlux,
         leveque04_richtmyerFlux, leveque04_richtmyerPredictor,
         leveque04_richtmyerUnitStepData, div_eq_mul_inv, mul_inv_rev]
-      <;> ring
+      ring
     refine ⟨hvalue, ?_⟩
     rw [hvalue]
     exact div_neg_of_neg_of_pos

@@ -18,6 +18,7 @@ noncomputable section
 namespace NumStability.REA.SeminormRecipe.Rectangle
 open Set MeasureTheory
 
+/-- The point-evaluation seminorm descriptor on a singleton domain. -/
 def pointDescriptor {α : Type} [MeasurableSpace α] (d : ℕ) (j : α) : Descriptor α d where
   domain := {j}
   domain_nonempty := singleton_nonempty j
@@ -52,11 +53,13 @@ theorem rawBound_point_iff {α : Type} [MeasurableSpace α]
       ⟨fun x => f x, Submodule.mem_top⟩
     exact ⟨hb, e, fun _ => rfl, hn⟩
 
+/-- The input-qualified conservative rectangle-residual presentation. -/
 abbrev presentation {m : ℕ} (flux : State m → State m) (hm : 0 < m)
     (eta : Input m → ℝ → ℝ) : ResidualPresentation (ConservativeIVP flux) :=
   InputQualifiedResidual.presentation (ConservativeRectangleResidual.presentation flux hm)
     (ConservativeRectangleResidual.qualification eta)
 
+/-- The prescribed rectangle-residual measurements and error budgets. -/
 def policy {m : ℕ} (flux : State m → State m) (hm : 0 < m)
     (eta : Input m → ℝ → ℝ) :
     ResidualPolicy (presentation flux hm eta) (fun i => ForwardRectangle i.step) where
@@ -65,6 +68,7 @@ def policy {m : ℕ} (flux : State m → State m) (hm : 0 < m)
   descriptor := fun i r => @pointDescriptor (ForwardRectangle i.step) (⊤) m r
   budget := ConservativeRectangleResidual.rectangleBudget eta
 
+/-- The prescribed conservative rectangle-residual criterion. -/
 def criterion {m : ℕ} (flux : State m → State m) (hm : 0 < m)
     (eta : Input m → ℝ → ℝ) : Criterion (ConservativeIVP flux) :=
   .residual (presentation flux hm eta) (policy flux hm eta)

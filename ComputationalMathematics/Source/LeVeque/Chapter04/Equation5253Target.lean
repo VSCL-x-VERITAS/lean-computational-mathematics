@@ -21,6 +21,7 @@ open scoped Topology
 
 namespace NumStability
 
+/-- The negative Burgers fluctuation identity in equation (4.52). -/
 def Leveque04Equation52BurgersTarget : Prop :=
   ∀ left right : ℝ,
     leveque04_burgersFanShockMinusContribution left right =
@@ -44,6 +45,7 @@ def Leveque04Equation52BurgersTarget : Prop :=
       representative ^ 2 / 2 = leveque04_burgersPhysicalInterfaceFlux left right ∧
       leveque04_burgersFanShockMinusContribution left right = 0)
 
+/-- The positive Burgers fluctuation identity in equation (4.53). -/
 def Leveque04Equation53BurgersTarget : Prop :=
   ∀ left right : ℝ,
     leveque04_burgersFanShockPlusContribution left right =
@@ -67,6 +69,7 @@ def Leveque04Equation53BurgersTarget : Prop :=
       representative ^ 2 / 2 = leveque04_burgersPhysicalInterfaceFlux left right ∧
       leveque04_burgersFanShockPlusContribution left right = 0)
 
+/-- The negative fluctuation identity (4.52) for a scalar affine flux. -/
 def Leveque04Equation52ScalarAffineTarget : Prop :=
   ∀ a b left right representative : ℝ,
     representative = left ∨ representative = right →
@@ -80,6 +83,7 @@ def Leveque04Equation52ScalarAffineTarget : Prop :=
       IntervalIntegrable (fun time => f (q 0 time)) volume 0 duration ∧
       (∫ time in (0 : ℝ)..duration, f (q 0 time)) / duration = numericalFlux)
 
+/-- The positive fluctuation identity (4.53) for a scalar affine flux. -/
 def Leveque04Equation53ScalarAffineTarget : Prop :=
   ∀ a b left right representative : ℝ,
     representative = left ∨ representative = right →
@@ -93,6 +97,7 @@ def Leveque04Equation53ScalarAffineTarget : Prop :=
       IntervalIntegrable (fun time => f (q 0 time)) volume 0 duration ∧
       (∫ time in (0 : ℝ)..duration, f (q 0 time)) / duration = numericalFlux)
 
+/-- The negative fluctuation identity (4.52) for a linear system. -/
 def Leveque04Equation52LinearTarget : Prop :=
   ∀ m : ℕ, 0 < m →
     ∀ (coefficient : Matrix (Fin m) (Fin m) ℝ)
@@ -113,6 +118,7 @@ def Leveque04Equation52LinearTarget : Prop :=
       oneDimensionalCellAverage (fun time => coefficient.mulVec (q 0 time)) 0 duration =
         numericalFlux)
 
+/-- The positive fluctuation identity (4.53) for a linear system. -/
 def Leveque04Equation53LinearTarget : Prop :=
   ∀ m : ℕ, 0 < m →
     ∀ (coefficient : Matrix (Fin m) (Fin m) ℝ)
@@ -133,10 +139,12 @@ def Leveque04Equation53LinearTarget : Prop :=
       oneDimensionalCellAverage (fun time => coefficient.mulVec (q 0 time)) 0 duration =
         numericalFlux)
 
+/-- Equation (4.52) for Burgers, scalar affine fluxes and linear systems. -/
 def Leveque04Equation52Target : Prop :=
   Leveque04Equation52BurgersTarget ∧
     Leveque04Equation52ScalarAffineTarget ∧ Leveque04Equation52LinearTarget
 
+/-- Equation (4.53) for Burgers, scalar affine fluxes and linear systems. -/
 def Leveque04Equation53Target : Prop :=
   Leveque04Equation53BurgersTarget ∧
     Leveque04Equation53ScalarAffineTarget ∧ Leveque04Equation53LinearTarget

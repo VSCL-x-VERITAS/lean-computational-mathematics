@@ -29,6 +29,8 @@ def explicitDiffusionPhysicalWeight (p : ENNReal) (width : ℝ) : ℝ :=
 
 /-- Actual whole-line iterates, with honest lp membership and all-data bounds.
 No norm is assigned to a nonmember and no solver is supplied as an argument. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def IsExplicitDiffusionLpStableThrough (p : ENNReal) [Fact (1 ≤ p)]
     (horizon bound timeStep width : ℝ) (diffusivity : ℤ → ℝ) : Prop :=
   ∀ before reference : lp (fun _ : ℤ => ℝ) p, ∀ n : ℕ,
@@ -77,6 +79,8 @@ def explicitDiffusionFiniteWitnessFace {cells : ℕ}
 Arbitrary boundary closures are not asserted stable. Their actual iterates
 must satisfy this premise, and the necessary local estimate uses an interior
 row with neighboring free active inputs. -/
+-- Preserve the source hypotheses and the existing public interface.
+@[nolint unusedArguments]
 def IsExplicitDiffusionFiniteLpStableThrough (p : ENNReal) [Fact (1 ≤ p)]
     {cells : ℕ} (horizon bound timeStep width : ℝ)
     (diffusivity : Fin (cells + 1) → ℝ)

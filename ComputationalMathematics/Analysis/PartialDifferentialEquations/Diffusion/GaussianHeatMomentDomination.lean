@@ -16,6 +16,7 @@ namespace NumStability
 
 open MeasureTheory
 
+/-- An explicit envelope for differentiated Gaussian moment integrands. -/
 noncomputable def gaussianHeatMomentDifferentialEnvelope (order : ℕ)
     (diffusion lowerTime upperTime radius bound location : ℝ) : ℝ :=
   ((order : ℝ) * gaussianHeatMomentEnvelope (order - 1)

@@ -49,25 +49,25 @@ def Leveque04CFLQualifiedStabilityNecessityFiniteVector.{uE, uG, uH} : Prop :=
     [∀ n, AddCommGroup (G n)] [∀ n, Module ℝ (G n)]
     [∀ n, NormedAddCommGroup (H n)] [∀ n, NormedSpace ℝ (H n)]
     (admissible : (ℝ → E) → Prop)
-    (J : ∀ n, H n →ₗ[ℝ] G n) (hJ : ∀ n, Function.Injective (J n))
+    (J : ∀ n, H n →ₗ[ℝ] G n) (_hJ : ∀ n, Function.Injective (J n))
     (update : ∀ n, ℕ → G n → G n)
     (initial : ∀ n, (ℝ → E) → G n) (reference : ∀ n, (ℝ → E) → ℕ → G n)
     (error defect : ∀ n, (ℝ → E) → ℕ → H n)
     (steps : ℕ → ℕ) (dt weight : ℕ → ℝ) (rate : (ℝ → E) → ℕ → ℝ)
-    (horizon : ℝ) (hdt : ∀ n, 0 ≤ dt n) (hweight : ∀ n, 0 < weight n)
-    (hclock : ∀ n, (steps n : ℝ) * dt n ≤ horizon)
-    (hconsistent : ∀ f, admissible f →
+    (horizon : ℝ) (_hdt : ∀ n, 0 ≤ dt n) (_hweight : ∀ n, 0 < weight n)
+    (_hclock : ∀ n, (steps n : ℝ) * dt n ≤ horizon)
+    (_hconsistent : ∀ f, admissible f →
       HasConsistentInitializedErrors J update (fun n => initial n f)
         (fun n => reference n f) (fun n => error n f) (fun n => defect n f)
         steps dt weight (rate f))
-    (hstable : (∃ growth, 0 ≤ growth ∧ IsRepresentedPairStable J update steps dt growth) ∨
+    (_hstable : (∃ growth, 0 ≤ growth ∧ IsRepresentedPairStable J update steps dt growth) ∨
       HasRepresentedLinearPowerBound J update steps)
     (observe : ∀ n, G n → E) (exactValue : (ℝ → E) → E)
     (B : ∀ n, H n →L[ℝ] E) (amplification : ℝ)
-    (hobserve : ∀ n (P Q : G n) (e : H n), J n e = P - Q →
+    (_hobserve : ∀ n (P Q : G n) (e : H n), J n e = P - Q →
       observe n P - observe n Q = B n e)
-    (hbound : ∀ n e, ‖B n e‖ ≤ amplification * (weight n * ‖e‖))
-    (hreference : ∀ f, admissible f →
+    (_hbound : ∀ n e, ‖B n e‖ ≤ amplification * (weight n * ‖e‖))
+    (_hreference : ∀ f, admissible f →
       Tendsto (fun n => observe n (reference n f (steps n))) atTop (𝓝 (exactValue f))),
     let approximation := fun n f =>
       observe n (representedGridEvolution (update n) (initial n f) (steps n))
@@ -87,10 +87,10 @@ def Leveque04CFLAdvectionRealizationFiniteVector : Prop :=
     (speed origin horizon ratio : ℝ) (radius : ℕ)
     (update : ℕ → ℕ → (ℤ → Fin 1 → ℝ) → ℤ → Fin 1 → ℝ)
     (hhorizon : 0 < horizon) (hratio : 0 < ratio)
-    (hlocal : ∀ n k (left right : ℤ → Fin 1 → ℝ) (i : ℤ),
+    (_hlocal : ∀ n k (left right : ℤ → Fin 1 → ℝ) (i : ℤ),
       (∀ j ∈ Icc (i - (radius : ℤ)) (i + (radius : ℤ)), left j = right j) →
       update n k left i = update n k right i)
-    (hsupport : ∀ (profile : ℝ → ℝ)
+    (_hsupport : ∀ (profile : ℝ → ℝ)
       (hprofile : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) profile),
       HasCompactSupport profile → (∀ x, 0 ≤ profile x ∧ profile x ≤ 1) →
       let reference := scalarAdvectionFixedRatioCellReferenceS06

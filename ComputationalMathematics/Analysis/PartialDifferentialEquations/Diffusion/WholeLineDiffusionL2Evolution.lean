@@ -19,10 +19,13 @@ namespace NumStability
 /-- Physical whole-line grid parameters. The nonnegative conductivity may be
 unbounded along the integer line; no common or per-grid bound is required. -/
 structure WholeLineDiffusionL2Grid where
+  /-- The nonnegative face conductivity on the integer grid. -/
   diffusivity : ℤ → ℝ
   diffusivity_nonneg : ∀ i, 0 ≤ diffusivity i
+  /-- The positive physical grid spacing. -/
   width : ℝ
   width_pos : 0 < width
+  /-- The nonnegative physical time step. -/
   timeStep : ℝ
   timeStep_nonneg : 0 ≤ timeStep
 
