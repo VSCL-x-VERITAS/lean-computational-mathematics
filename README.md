@@ -30,7 +30,7 @@ records the validated source revision, preserved interfaces and publication stat
 | Source | Published material | Coverage status |
 |---|---|---|
 | Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed. | Selected material across Chapters 1–28 | All 28 chapter rows terminal under the selected audit rules; proofs, discrepancies and deferrals are distinguished below |
-| LeVeque, *Finite Volume Methods for Hyperbolic Problems* | Chapters 1–3 and accepted Chapter 4 results | Chapters 2 and 3 have complete audited scopes; Chapter 4 has 116/139 resolved obligations, with 23 unfinished |
+| LeVeque, *Finite Volume Methods for Hyperbolic Problems* | Selected Chapter 1 material and Chapters 2–4 | Chapters 2–4 have complete audited scopes; Chapter 4 closes 137/137 formalization objects, with 2 reviewed source exclusions and 0 remaining |
 | Eymard, Gallouët and Herbin, *Finite Volume Methods*, January 2019 manuscript | Chapter 1 introduction and supporting finite-volume models | 3/46 obligations accepted; 43 unfinished; compiled candidate targets are included |
 | Vershynin, *High-Dimensional Probability* | Selected Chapters 1–2 results and Chapter 3 contracts | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 3 has no completed chapter gate |
 | Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Selected sampling, sketching, low-rank and preconditioning results | A source-linked case study; no complete-paper coverage claim |
@@ -44,44 +44,50 @@ scopes above do not imply whole-book formalization.
 
 ## Current repository status
 
-The October 26, 2026 snapshot is published commit
-[`d23b546e`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/d23b546e518c9451979708f51e0d81d1b3a11454),
-which includes the LeVeque Chapter 4 and Eymard Chapter 1 publications.
+The November 4, 2026 snapshot is published commit
+[`532da382`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/532da382e7127972a0675e989061c6ffa4140dd9),
+which includes the completed audited LeVeque Chapter 4 scope and the Eymard
+Chapter 1 checkpoint.
 The measurements below come from a strict source scan of that revision and the
 [tier manifest](docs/architecture/tiers.json). Local campaigns and unpublished
 branches are excluded.
 
 | Snapshot metric | Value |
 |---|---:|
-| Production Lean modules | 4,291 |
-| Reusable / source / aggregate / internal / upstream | 1,018 / 2,806 / 457 / 5 / 5 |
-| Classified modules | 4,291 / 4,291 (100%) |
+| Production Lean modules | 4,964 |
+| Reusable / source / aggregate / internal / upstream | 1,328 / 3,166 / 460 / 5 / 5 |
+| Classified modules | 4,964 / 4,964 (100%) |
 | Mixed or unclassified modules | 0 |
-| Nonblank Lean source lines | 1,632,038 |
-| Direct imports | 35,464 |
+| Nonblank Lean source lines | 1,700,083 |
+| Direct imports | 37,440 |
 | Import cycles / unresolved project imports | 0 / 0 |
 | Forbidden reusable-to-source import paths | 0 |
-| Test Lean modules (including the root) | 154 |
-| Reviewed warning baseline | 336 diagnostics |
-| Reviewed lint baseline | 4,014 findings |
-| Tracked files / size | 4,993 / 111.4 MB |
+| Test Lean modules (including the root) | 186 |
+| Reviewed warning baseline | 354 diagnostics |
+| Reviewed lint baseline | 4,039 findings |
+| Tracked files / size | 5,707 / 115.4 MB |
 
 Module counts measure files, not theorems or accepted source claims. Warning
 and lint counts are reviewed baselines enforced by CI. Tracked size sums Git
-blob bytes in the snapshot, excluding history, dependencies and build artifacts.
+blob bytes in the snapshot (115,396,322 bytes; decimal MB), excluding history,
+dependencies and build artifacts. Source-line and import counts cover production
+modules; test modules are counted separately. The source scan used
+`generate_baseline.py --skip-declarations --strict-source` in a clean checkout
+of the pinned revision, excluding local drafts.
 
-The exact snapshot's [main push CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/40370404457)
+The exact snapshot's [main push CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/41870223006)
 passed architecture and provenance checks, the library and test builds,
 `lake test`, and warning/lint enforcement. The badge tracks later `main` runs;
 a successful run certifies its own commit. CI also checks source placeholders,
-documentation links and Python tooling. Its optional clean-project job captures
+documentation links and Python tooling. Its optional clean-project mode captures
 a compiled dependency graph, representative axioms and a downstream consumer;
 see the [validation record](docs/migrations/lean-computational-mathematics/validation.md)
 for the separately verified identity-migration revision and its scope.
 
 Release 0.2.0 removed the historical `NumStability` import forwarders. Canonical
-imports use `ComputationalMathematics`; the package remains `numStability`, the
-test root `NumStabilityTest`, and declaration namespaces `NumStability`.
+imports use `ComputationalMathematics`; the package remains `numStability`
+(currently version `0.3.0`), the test root `NumStabilityTest`, and declaration
+namespaces `NumStability`.
 Historical measurements and compatibility decisions are retained in the
 [migration reports](docs/migrations/lean-computational-mathematics/README.md),
 [architecture phase records](docs/architecture/phases/2026-08-repository-reorganization-completion/README.md)
@@ -212,12 +218,16 @@ and [Chapter 3 development](ComputationalMathematics/Source/LeVeque/Chapter03/)
 are available through their
 [`Chapter02`](ComputationalMathematics/Source/LeVeque/Chapter02.lean) and
 [`Chapter03`](ComputationalMathematics/Source/LeVeque/Chapter03.lean) imports.
-Both independently reviewed, PDF-pinned inventories have certified PASS gates:
+Chapters 2–4 have independently reviewed, PDF-pinned inventories and PASS gates:
 
-| Audited scope | Inventory rows | Proved | Reused | Printed-source discrepancies | Complete | Remaining / skipped / deferred |
+| Audited scope | Inventory rows | Proved | Reused | Source discrepancies/corrections | Closed formalization objects | Remaining / skipped / deferred |
 |---|---:|---:|---:|---:|---:|---:|
 | Chapter 2 | 209 | 20 | 179 | 10 | 209/209 (100%) | 0 / 0 / 0 |
 | Chapter 3 | 110 | 97 | 11 | 2 | 110/110 (100%) | 0 / 0 / 0 |
+| Chapter 4 | 139 | 119 | 11 | 7 | 137/137 (100%) | 0 / 2 / 0 |
+
+Inventory rows include reviewed skips; skipped rows are excluded from the
+formalization denominator and receive no proof credit.
 
 Chapter 3 binds 296 distinct compiled Lean declarations across its 110 rows.
 All 110 rows passed blind and round-trip statement checks; 108 passed direct
@@ -237,14 +247,30 @@ These are completions of the audited chapter scopes, not a claim that the whole
 book is formalized. Inventories, audit packages, and gates remain checkout-local
 rather than tracked in this repository.
 
-The accepted portion of [Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/)
+The completed audited scope of [Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/)
 is available through
 [`Chapter04`](ComputationalMathematics/Source/LeVeque/Chapter04.lean).
-The October 26, 2026 acceptance record contains 99 proved rows, 11 reused rows,
-and 6 recorded source discrepancies out of 139 obligations. The remaining 23
-rows are unfinished; Chapter 4 has no complete chapter-gate PASS.
-This publication includes accepted correspondence and its mathematical
-dependencies, while unfinished campaign files remain outside product Git.
+It was published in [PR #39](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/39)
+on November 4, 2026. Its PASS gate closes 137 formalization objects: 119 proved,
+11 reused and 7 source-discrepancy/correction closures. The gate binds 249
+distinct compiled Lean declarations, with only `Classical.choice`, `Quot.sound`
+and `propext` among their axioms. These are total chapter counts, not increments
+to the earlier 116-row checkpoint.
+
+The published scope includes actual numerical dependence, qualified convergence
+and CFL necessity, accuracy and stability of finite-volume schemes, explicit
+and Crank–Nicolson diffusion, exact or certified approximate REA evolution,
+Burgers Godunov methods, linear wave propagation and Roe correction results.
+The Lean statements retain the selected data classes, norms, initialization,
+refinement, coefficient and certificate assumptions, together with the
+fixed-grid implicit-domain correction.
+
+Two underspecified prose rows are reviewed source exclusions: the general
+introductory consistency/stability necessity remark and the variable-coefficient
+continuous diffusion-domain assertion. Qualified supporting results remain
+available; neither exclusion is counted as a proved claim. There are no
+remaining or deferred Chapter 4 rows. Partial drafts and campaign evidence
+remain outside product Git.
 
 The scalar large-step result is the adopted convergence/CFL domain obstruction
 for arbitrary fixed two-point fluxes, using exact cell means and actual numerical
@@ -325,7 +351,7 @@ lake test
 `lake build` selects the canonical library; the explicit command above also
 includes the test library. `lake test` uses the `NumStabilityTest` driver.
 For the reproducible snapshot measured above, run
-`git checkout d23b546e518c9451979708f51e0d81d1b3a11454` before the Lake commands.
+`git checkout 532da382e7127972a0675e989061c6ffa4140dd9` before the Lake commands.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -361,10 +387,10 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.HDP` | High-dimensional-probability semantics, contracts, and signatures |
 | `ComputationalMathematics.Source` | Complete canonical umbrella for book- and paper-specific correspondence |
 | `ComputationalMathematics.Source.Higham` | Higham correspondence for Chapters 1–28 and cross-chapter bridges |
-| `ComputationalMathematics.Source.LeVeque` | LeVeque Chapters 1–3 and accepted Chapter 4 correspondence |
+| `ComputationalMathematics.Source.LeVeque` | Selected Chapter 1 material and the completed audited Chapters 2–4 scopes |
 | `ComputationalMathematics.Source.LeVeque.Chapter02` | Audited Chapter 2 proofs, models, and proof-free target contracts |
 | `ComputationalMathematics.Source.LeVeque.Chapter03` | Audited Chapter 3 characteristics, Riemann problems, and boundary results |
-| `ComputationalMathematics.Source.LeVeque.Chapter04` | Accepted Chapter 4 schemes, CFL, accuracy, stability and discrepancy results; chapter unfinished |
+| `ComputationalMathematics.Source.LeVeque.Chapter04` | Completed audited Chapter 4 scope: schemes, qualified CFL/convergence, accuracy, stability, REA and source corrections |
 | `ComputationalMathematics.Source.Eymard.Chapter01` | Three accepted proofs and compiled candidate definitions/targets; chapter unfinished |
 | `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–3 source contracts; Chapter 3 gate not claimed complete |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
@@ -385,7 +411,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "d23b546e518c9451979708f51e0d81d1b3a11454"
+rev = "532da382e7127972a0675e989061c6ffa4140dd9"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
@@ -438,7 +464,7 @@ ComputationalMathematics/
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          Chapters 1–3 and accepted Chapter 4 results
+│   ├── LeVeque/                          selected Chapter 1 material and audited Chapters 2–4
 │   ├── Eymard/                           partial Chapter 1 proofs and candidate targets
 │   ├── Vershynin/                        high-dimensional probability, Chapters 1–3 contracts
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
@@ -480,17 +506,19 @@ compatibility, testing, and licensing requirements. Architecture changes
 follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 
 The lint driver's [declaration-specific exceptions](scripts/nolints.json)
-retain the intentional admissibility argument of `physicalSectionMass`: it
-restricts the physical domain although the integral value does not depend on
-the proof. Keeping this exception outside the model preserves the exact source
-bytes used by its audited consumers. Other declarations and linters remain
+retain the intentional admissibility argument of `physicalSectionMass` and
+exempt the compatibility constructor and projection aliases of `IsComplexVectorMapLinear`
+from `defLemma`. The admissibility argument restricts the physical domain
+although the integral value does not depend on the proof. Keeping that exception
+outside the model preserves the source bytes used by its audited consumers.
+The exceptions name exact declarations and linters; other findings remain
 subject to the reviewed baseline.
 
 ## Documentation
 
 - The [identity migration report](docs/migrations/lean-computational-mathematics/README.md)
   records the public name, interface mapping, GitHub cutover and validation.
-- [`docs/README.md`](docs/README.md) maps current policy and retained evidence.
+- [`docs/README.md`](docs/README.md) maps architecture documents and retained evidence.
 - The [Eymard Chapter 1 checkpoint](docs/formalization/eymard-chapter-01.md) records accepted scope and restoration instructions.
 - The Vershynin [Chapter 1](docs/vershynin-hdp/chapter01/coverage.md) and [Chapter 2](docs/vershynin-hdp/chapter02/coverage.md) reports record the audited scopes.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
