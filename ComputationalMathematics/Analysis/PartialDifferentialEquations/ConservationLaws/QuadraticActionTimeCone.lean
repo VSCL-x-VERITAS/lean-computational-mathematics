@@ -50,8 +50,8 @@ theorem quadraticAction_minimizers_timeCone_ordered
       (potential y₁ - potential y₂) * (t - s) := by nlinarith
   have hb := hbound y₁ y₂
   rw [abs_of_pos hd] at hb
-  have hprod : (potential y₁ - potential y₂) * (t - s) ≤
-      constant * (y₁ - y₂) * |t - s| := by
+  have hprod : (potential y₁ - potential y₂) * (t - s) ≤ constant *
+      (y₁ - y₂) * |t - s| := by
     calc
       _ ≤ |(potential y₁ - potential y₂) * (t - s)| := le_abs_self _
       _ = |potential y₁ - potential y₂| * |t - s| := abs_mul _ _

@@ -6,6 +6,12 @@ import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolu
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.ExpandingGridDomains
 import Mathlib.Tactic
 
+/-!
+# LeVeque Chapter 4: influence of explicit diffusion steps
+
+Positive stencil weights give responses to localized data; locality bounds the numerical dependence domains.
+-/
+
 open Set Metric Filter
 open scoped Topology
 namespace NumStability

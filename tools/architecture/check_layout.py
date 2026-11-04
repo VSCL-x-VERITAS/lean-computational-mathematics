@@ -60,6 +60,19 @@ PROCESS_WORDS = (
 MATHEMATICAL_NAME_WORDS = {
     "ComputationalMathematics.Analysis.FiniteVolume.OpenClosureCover": {"Closure"},
     "ComputationalMathematics.Analysis.FiniteVolume.SegmentSupportingFoot": {"Support"},
+    # Here "Whole" denotes the whole spatial line, not a workflow claim.
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLine": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineConvolution": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineInfluence": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineInverse": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineKernel": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineStructure": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLineUniqueness": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.WholeLineCrankNicolsonEvolution": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.WholeLineDiffusionL2Evolution": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.WholeLineDiffusionL2Existence": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.WholeLineDiffusionL2Uniqueness": {"Whole"},
+    "ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.WholeLineWeightedDiffusion": {"Whole"},
 }
 # In this reusable quadrature module, "endpoint" denotes the mathematical
 # endpoints of an integration interval, not a migration/process endpoint.

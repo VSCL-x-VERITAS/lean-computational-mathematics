@@ -3,6 +3,12 @@ import ComputationalMathematics.Source.LeVeque.Chapter04.DiffusionRefinementPhys
 import ComputationalMathematics.Source.LeVeque.Chapter04.DiffusionRefinementInfluence
 import Mathlib.Analysis.SpecificLimits.Basic
 
+/-!
+# LeVeque Chapter 4: physical diffusion refinement
+
+The results separate necessary time-step scaling from constructive quadratic refinement for bounded positive conductivity.
+-/
+
 open Set Metric Filter
 open scoped Topology
 namespace NumStability

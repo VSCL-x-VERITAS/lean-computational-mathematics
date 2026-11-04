@@ -1,6 +1,12 @@
 /- Proof-free owner-qualified fixed-grid corrected target with explicit computed-solution identity. -/
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.Diffusion.CrankNicolsonWholeLine
 
+/-!
+# LeVeque Chapter 4: a fixed-grid implicit-domain correction
+
+The computed Crank-Nicolson map is the unique bounded solution of its fixed whole-line recurrence. Structural coupling is distinguished from coordinate influence.
+-/
+
 namespace NumStability
 
 /-- The same computed map used by coordinate influence is the unique bounded

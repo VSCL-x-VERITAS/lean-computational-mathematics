@@ -6,6 +6,12 @@ import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolu
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.AdvectionCellMeanStabilityCFL
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 
+/-!
+# LeVeque Chapter 4: qualified CFL necessity for finite vector states
+
+The target fixes the state norm, admissible data, initialization, reference observation and convergence assumptions.
+-/
+
 noncomputable section
 open Set Filter MeasureTheory
 open scoped Topology ENNReal

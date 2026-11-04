@@ -1,6 +1,12 @@
 /- SPDX-License-Identifier: MIT -/
 import ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.AdmissibleDomainNecessity
 
+/-!
+# Locality bounds for essential points
+
+A functional determined by data on a closed interval has no essential point outside that interval.
+-/
+
 open Set Metric
 namespace NumStability
 

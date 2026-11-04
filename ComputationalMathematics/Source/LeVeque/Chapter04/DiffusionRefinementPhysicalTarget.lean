@@ -1,6 +1,12 @@
 /- Proof-free owner-qualified target. No proof or statement acceptance is supplied. -/
 import ComputationalMathematics.Source.LeVeque.Chapter04.DiffusionRefinementObservations
 
+/-!
+# LeVeque Chapter 4: the physical diffusion-refinement target
+
+The target records necessary scaling and separate point-value and cell-average refinement families for exact face samples.
+-/
+
 open Set Filter
 open scoped Topology
 

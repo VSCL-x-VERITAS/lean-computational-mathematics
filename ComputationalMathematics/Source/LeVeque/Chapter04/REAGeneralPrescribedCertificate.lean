@@ -7,6 +7,12 @@ An IVP-relative template supplies no physical authenticity for arbitrary data.
 import ComputationalMathematics.Source.LeVeque.Chapter04.REAPrescribedCertificate
 import ComputationalMathematics.Source.LeVeque.Chapter04.REAUniformReconstruction
 
+/-!
+# LeVeque Chapter 4: prescribed REA certificates
+
+These types and propositions describe reconstruction, evolution and averaging relative to a specified problem and a certificate fixed in advance.
+-/
+
 namespace NumStability.REA
 
 open MeasureTheory
