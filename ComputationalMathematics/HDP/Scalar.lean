@@ -24,10 +24,12 @@ import ComputationalMathematics.HDP.Scalar.SubExponentialPowerOrlicz
 import ComputationalMathematics.HDP.Scalar.SubExponentialPropertyThreeGauge
 import ComputationalMathematics.HDP.Scalar.SubExponentialTailGauge
 import ComputationalMathematics.HDP.Scalar.SubGaussian
+import ComputationalMathematics.HDP.Scalar.SubGaussian.ZeroFiniteFamily
 import ComputationalMathematics.HDP.Scalar.SubGaussianCentering
 import ComputationalMathematics.HDP.Scalar.SubGaussianDomination
 import ComputationalMathematics.HDP.Scalar.SubGaussianMaxima
 import ComputationalMathematics.HDP.Scalar.SubGaussianMinimality
+import ComputationalMathematics.HDP.Scalar.SubGaussianMomentLowerBound
 import ComputationalMathematics.HDP.Scalar.SubGaussianToSubExponential
 
 /-!

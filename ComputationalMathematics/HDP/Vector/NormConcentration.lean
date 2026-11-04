@@ -1,5 +1,6 @@
 import ComputationalMathematics.Analysis.MatrixAlgebra
 import ComputationalMathematics.HDP.Scalar.IndependentSums.Bernstein.Basic
+import ComputationalMathematics.HDP.Scalar.SquareDeviation
 import ComputationalMathematics.HDP.Scalar.SubExponentialCentering
 import ComputationalMathematics.HDP.Vector.Moments
 
@@ -24,20 +25,7 @@ open NumStability.HDP.Scalar
 theorem max_le_abs_sq_sub_one_of_le_abs_sub_one
     {z δ : ℝ} (hz : 0 ≤ z) (hδ : 0 ≤ δ) (hdev : δ ≤ |z - 1|) :
     max δ (δ ^ 2) ≤ |z ^ 2 - 1| := by
-  by_cases hzOne : 1 ≤ z
-  · rw [abs_of_nonneg (sub_nonneg.mpr hzOne)] at hdev
-    rw [abs_of_nonneg (by nlinarith : 0 ≤ z ^ 2 - 1)]
-    apply max_le
-    · nlinarith [sq_nonneg (z - 1)]
-    · nlinarith [sq_nonneg (z - 1)]
-  · have hzLe : z ≤ 1 := le_of_not_ge hzOne
-    rw [abs_of_nonpos (sub_nonpos.mpr hzLe)] at hdev
-    rw [abs_of_nonpos (by nlinarith : z ^ 2 - 1 ≤ 0)]
-    apply max_le
-    · nlinarith [sq_nonneg (z - 1)]
-    · have hδOne : δ ≤ 1 := by linarith
-      have hδSq : δ ^ 2 ≤ δ := by nlinarith
-      nlinarith [sq_nonneg (z - 1)]
+  exact SquareDeviation.max_le_abs_sq_sub_one hz hδ hdev
 
 /-- The average of the centered coordinate squares is the normalized squared
 Euclidean norm minus one. -/

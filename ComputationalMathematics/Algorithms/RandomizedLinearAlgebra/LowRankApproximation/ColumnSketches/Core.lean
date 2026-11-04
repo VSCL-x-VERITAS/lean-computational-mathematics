@@ -1593,6 +1593,26 @@ theorem finCardIndex_rectRightGramBasisOrderedIndex (n : ℕ) (b : Fin n) :
   apply Fin.ext
   simp [finCardIndex, rectRightGramBasisOrderedIndex]
 
+/-- Equivalence from a right-Gram basis index to the ordered singular-value
+coordinate selected by the same mathlib Hermitian reindexing. -/
+noncomputable def rectRightGramBasisOrderedEquiv (n : ℕ) : Fin n ≃ Fin n where
+  toFun := rectRightGramBasisOrderedIndex n
+  invFun i := rectRightGramOrderedEigenbasisEquiv n (finCardIndex n i)
+  left_inv := by
+    intro b
+    change rectRightGramOrderedEigenbasisEquiv n
+        (finCardIndex n (rectRightGramBasisOrderedIndex n b)) = b
+    rw [finCardIndex_rectRightGramBasisOrderedIndex]
+    exact (rectRightGramOrderedEigenbasisEquiv n).apply_symm_apply b
+  right_inv := by
+    intro i
+    apply Fin.ext
+    have h :=
+      finCardIndex_rectRightGramBasisOrderedIndex n
+        (rectRightGramOrderedEigenbasisEquiv n (finCardIndex n i))
+    rw [(rectRightGramOrderedEigenbasisEquiv n).symm_apply_apply] at h
+    simpa [finCardIndex] using congrArg Fin.val h
+
 /-- A basis-indexed right-Gram singular value is the ordered singular value at
 the basis column's inverse mathlib reindexing coordinate. -/
 theorem rectRightGramBasisSingularValue_eq_orderedIndex {m n : ℕ}

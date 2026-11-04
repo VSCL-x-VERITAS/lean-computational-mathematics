@@ -32,6 +32,17 @@ open Probability
 
 namespace NumStability.HDP.Scalar.Preliminaries
 
+/-- The real `L²` norm is the square root of the ordinary second moment on
+its square-integrable domain. -/
+theorem eLpNorm_two_eq_ofReal_sqrt_integral_sq
+    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} {f : Ω → ℝ}
+    (hf : MemLp f 2 μ) :
+    eLpNorm f 2 μ = ENNReal.ofReal (Real.sqrt (∫ ω, f ω ^ 2 ∂μ)) := by
+  rw [hf.eLpNorm_eq_integral_rpow_norm (by norm_num) (by norm_num)]
+  simp only [ENNReal.toReal_ofNat, Real.norm_eq_abs,
+    Real.rpow_two, sq_abs]
+  rw [show (2 : ℝ)⁻¹ = (1 / 2 : ℝ) by norm_num, ← Real.sqrt_eq_rpow]
+
 /-- The distribution (pushforward law) of `X` under `μ`. -/
 noncomputable def distribution {Ω : Type*} [MeasurableSpace Ω]
     (μ : Measure Ω) (X : Ω → ℝ) : Measure ℝ :=

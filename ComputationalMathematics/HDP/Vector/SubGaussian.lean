@@ -52,6 +52,35 @@ theorem psiTwoNorm_eq_iSup {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
           (NumStability.HDP.Vector.linearMarginal X u.1) := by
   rfl
 
+/-- A vector gauge bound is exactly a scalar gauge bound for every ordinary
+unit Euclidean direction. This includes the empty-dimensional unit sphere. -/
+theorem psiTwoNorm_le_iff_unit_marginals
+    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    {μ : Measure Ω} {X : Fin n → Ω → ℝ} {K : ℝ≥0∞} :
+    PsiTwoNorm μ X ≤ K ↔
+      ∀ z : Fin n → ℝ, (∑ j, z j ^ 2) = 1 →
+        NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+          (fun ω ↦ ∑ j, X j ω * z j) ≤ K := by
+  have hunit (z : Fin n → ℝ) :
+      NumStability.vecNorm2 z = 1 ↔ (∑ j, z j ^ 2) = 1 := by
+    constructor
+    · intro hz
+      have hsq := NumStability.vecNorm2_sq z
+      simpa only [hz, one_pow] using hsq.symm
+    · intro hz
+      have hsq : NumStability.vecNorm2 z ^ 2 = 1 :=
+        (NumStability.vecNorm2_sq z).trans hz
+      nlinarith [NumStability.vecNorm2_nonneg z]
+  constructor
+  · intro h z hz
+    exact (le_iSup
+      (fun u : UnitDirection n ↦
+        NumStability.HDP.Scalar.SubGaussian.PsiTwoNorm μ
+          (NumStability.HDP.Vector.linearMarginal X u.1))
+      ⟨z, (hunit z).mpr hz⟩).trans h
+  · intro h
+    exact iSup_le fun u ↦ h u.1 ((hunit u.1).mp u.2)
+
 /-- A finite vector is sub-Gaussian as soon as its vector `ψ₂` norm is finite. -/
 theorem isSubGaussian_of_psiTwoNorm_lt_top
     {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}

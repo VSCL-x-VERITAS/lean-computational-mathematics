@@ -26,6 +26,25 @@ noncomputable def realRectToCMatrix {m n : Nat}
     (A : Fin m -> Fin n -> Real) : CMatrix m n :=
   fun i j => (A i j : Complex)
 
+/-- Complexifying a real rectangular matrix preserves its squared Frobenius
+norm. -/
+theorem frobNormRect_sq_eq_complexMatrixFrobeniusSq_realRectToCMatrix
+    {m n : Nat} (A : Fin m -> Fin n -> Real) :
+    frobNormRect A ^ 2 =
+      complexMatrixFrobeniusSq (realRectToCMatrix A) := by
+  rw [frobNormRect_sq]
+  simp [frobNormSqRect, complexMatrixFrobeniusSq, realRectToCMatrix,
+    Real.norm_eq_abs, sq_abs]
+
+/-- Complexifying a real rectangular matrix preserves its Frobenius norm. -/
+theorem frobNormRect_eq_complexMatrixFrobenius_realRectToCMatrix
+    {m n : Nat} (A : Fin m -> Fin n -> Real) :
+    frobNormRect A = complexMatrixFrobenius (realRectToCMatrix A) := by
+  unfold frobNormRect complexMatrixFrobenius
+  congr 1
+  simp [frobNormSqRect, complexMatrixFrobeniusSq, realRectToCMatrix,
+    Real.norm_eq_abs, sq_abs]
+
 /-- Complexification commutes with the repository's real finite transpose. -/
 theorem realRectToCMatrix_matTranspose {n : Nat}
     (A : Fin n -> Fin n -> Real) :
