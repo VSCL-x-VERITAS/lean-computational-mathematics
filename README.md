@@ -502,8 +502,9 @@ and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
 reviewed warning and lint baselines. Those
 baselines are review records and must not be regenerated merely to silence new
 findings. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains placement,
-compatibility, testing, and licensing requirements. Architecture changes
-follow [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
+compatibility, testing, and licensing requirements. Publication uses pull
+requests and the protected merge queue. Architecture review and diagnostic
+contracts are documented in [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 
 The lint driver's [declaration-specific exceptions](scripts/nolints.json)
 retain the intentional admissibility argument of `physicalSectionMass` and
