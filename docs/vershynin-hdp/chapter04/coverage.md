@@ -186,7 +186,7 @@ The table accounts for all **144 inventory rows**: 124 formalization obligations
 
 ## Source conventions and exercise scope
 
-Every precise mathematical exercise in the selected inventory remains a proof obligation. Exercise 4.7.6 is still open. Quantified constants, probability bounds, dimensions, laws and independence assumptions follow each admitted source contract. Equation 4.15 separately treats positive scale/dimensions, zero scale and empty dimensions, following the recorded owner qualification. Its complete current statement review and canonical proof are accepted.
+Every precise mathematical exercise in the selected inventory is accounted for in the table above. Exercise 4.7.6 is closed as a discrepancy, through its formal witness and complete corrected counterpart. Quantified constants, probability bounds, dimensions, laws and independence assumptions follow each admitted source contract. Equation 4.15 separately treats positive scale/dimensions, zero scale and empty dimensions, following the recorded owner qualification. Its complete current statement review and canonical proof are accepted.
 
 Ordinary real expectations use the module's finite-integral definability convention. The stochastic-block-model correspondence preserves loopless adjacency and explicitly handles the conflicting displayed diagonal formula through separate witness and correction claims. Gaussian corrections preserve their explicitly admitted all-unit-vector scope and distinguish analyst counterparts from claims about author intent. All original adverse reviews and source-variance records remain preserved.
 

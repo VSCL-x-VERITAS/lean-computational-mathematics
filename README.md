@@ -32,7 +32,7 @@ records the validated source revision, preserved interfaces and publication stat
 | Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed. | Selected material across Chapters 1–28 | All 28 chapter rows terminal under the selected audit rules; proofs, discrepancies and deferrals are distinguished below |
 | LeVeque, *Finite Volume Methods for Hyperbolic Problems* | Selected Chapter 1 material and Chapters 2–4 | Chapters 2–4 have complete audited scopes; Chapter 4 closes 137/137 formalization objects, with 2 reviewed source exclusions and 0 remaining |
 | Eymard, Gallouët and Herbin, *Finite Volume Methods*, January 2019 manuscript | Chapter 1 introduction and supporting finite-volume models | 3/46 obligations accepted; 43 unfinished; compiled candidate targets are included |
-| Vershynin, *High-Dimensional Probability* | Selected Chapters 1–2 results and Chapter 3 contracts | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 3 has no completed chapter gate |
+| Vershynin, *High-Dimensional Probability*, 1st ed. | Selected Chapters 1–2 results, Chapter 3 contracts and the audited Chapter 4 scope | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 4 closes 124/124 obligations, with 3 skips and 17 deferrals outside that denominator; Chapter 3 has no completed chapter gate |
 | Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Selected sampling, sketching, low-rank and preconditioning results | A source-linked case study; no complete-paper coverage claim |
 
 The detailed sections below link the source modules and coverage records.
@@ -46,8 +46,8 @@ scopes above do not imply whole-book formalization.
 
 The November 4, 2026 snapshot is published commit
 [`532da382`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/532da382e7127972a0675e989061c6ffa4140dd9),
-which includes the completed audited LeVeque Chapter 4 scope and the Eymard
-Chapter 1 checkpoint.
+which includes the completed audited LeVeque Chapter 4 scope, the accepted
+Vershynin Chapter 4 scope and the Eymard Chapter 1 checkpoint.
 The measurements below come from a strict source scan of that revision and the
 [tier manifest](docs/architecture/tiers.json). Local campaigns and unpublished
 branches are excluded.
@@ -115,13 +115,15 @@ Directory presence alone is not a chapter-completion claim.
 | Control-volume geometry and models | Cells/faces, planar geometry, reconstruction, interfaces, transport and diffusion definitions; Chapter 1 candidate contracts alongside three accepted proofs | [geometric models](ComputationalMathematics/Analysis/FiniteVolume/), [Eymard checkpoint](docs/formalization/eymard-chapter-01.md) |
 | Scalar probability and concentration | Distribution and moment models, independent sums and limit theorems, Gaussian/Poisson/Bernoulli/binomial laws, tail/MGF bounds, Hoeffding/Chernoff, Khintchine, sub-Gaussian/sub-exponential and Orlicz-norm analysis | [scalar probability](ComputationalMathematics/HDP/Scalar/), [Gaussian and Haar analysis](ComputationalMathematics/Analysis/Probability/) |
 | Random vectors and convex geometry | Covariance and principal components, isotropy, Gaussian and independent-coordinate vectors, spherical/ball laws, norm concentration and small-ball models, convex bodies and linear images | [random vectors](ComputationalMathematics/HDP/Vector/), [convex geometry](ComputationalMathematics/HDP/Convex/) |
+| Random matrices, metric entropy and coding | Singular-value and operator-norm results, covering and packing, error-correcting codes, random-matrix concentration, covariance estimation, stochastic block models and spectral clustering; printed-source discrepancies have separate corrections | [matrix results](ComputationalMathematics/HDP/Matrix/), [metric results](ComputationalMathematics/HDP/Metric/), [coding](ComputationalMathematics/HDP/Coding/), [Vershynin Chapter 4](ComputationalMathematics/Source/Vershynin/Chapter04/) |
 | Random graphs and optimization | Random-graph degree concentration, Max-Cut, random cuts/hyperplane rounding, semidefinite programs and relaxations, Grothendieck bounds | [graph results](ComputationalMathematics/HDP/Graph/), [optimization](ComputationalMathematics/HDP/Optimization/), [independent-sum applications](ComputationalMathematics/HDP/Scalar/IndependentSums/) |
 | Kernels and tensors | Positive-semidefinite, Gaussian and polynomial kernels, feature maps, Moore–Aronszajn, finite/rank-one tensors and analytic power-series features | [kernels](ComputationalMathematics/HDP/Kernel/), [tensors](ComputationalMathematics/HDP/Tensor/) |
 | Randomized numerical linear algebra | Elementwise/row sampling, matrix concentration, spectral/Gram approximation, subspace embeddings, least-squares sketching, low-rank approximation and randomized preconditioning | [reusable RandNLA](ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/), [paper correspondence](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/) |
 | Supporting analysis and examples | Taylor/derivative estimates, integration and differentiation, sample variance, asymptotics, equidistribution/leading digits, special functions and test matrices | [calculus](ComputationalMathematics/Analysis/Calculus/), [integration](ComputationalMathematics/MeasureTheory/Integral/), [statistics](ComputationalMathematics/Analysis/Statistics/), [leading digits](ComputationalMathematics/Analysis/LeadingDigits/), [test matrices](ComputationalMathematics/Analysis/TestMatrices/) |
 
-Small supporting extensions also live under [Logic](ComputationalMathematics/Logic/)
-and [Topology](ComputationalMathematics/Topology/). Five attributed
+Small supporting extensions also live under [Data](ComputationalMathematics/Data/),
+[Logic](ComputationalMathematics/Logic/) and [Topology](ComputationalMathematics/Topology/).
+Five attributed
 [upstream adaptations](ComputationalMathematics/Upstream/Lindemann/) support the
 source developments; licensing and provenance are recorded in
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
@@ -140,8 +142,8 @@ fl(x ◦ y) = (x ◦ y)(1 + δ),    |δ| ≤ u.
 
 Division carries a nonzero-denominator condition, square root a
 nonnegative-input condition, and the model assumes `fl_add 0 x = x`.
-Individual theorems state additional guards, such as bounds ensuring that
-`γ(n)` is defined.
+Individual theorems state additional guards, such as `n * u < 1` for a positive
+denominator in bounds involving `γ(n) = n * u / (1 - n * u)`.
 
 Results are parameterized by this model. The exact-arithmetic instance
 `FPModel.exactWithUnitRoundoff` is useful for proving that an overly strong
@@ -302,14 +304,16 @@ limit theorems, independent sums, Hoeffding and Chernoff bounds, random-graph
 degree laws, and sub-Gaussian and sub-exponential variables. It also exposes
 vector probability and covariance, isotropy and norm concentration, convex
 bodies, finite-graph Max-Cut and randomized rounding, semidefinite and
-Grothendieck foundations, kernels, and finite tensors. These reusable families
-support the source development; their presence does not establish completion
-of additional book chapters.
+Grothendieck foundations, kernels, finite tensors, matrix spectral results,
+covering and packing, coding, covariance estimation and spectral clustering.
+These reusable families support the source development; their presence does
+not establish completion of additional book chapters.
 
 [`ComputationalMathematics.Source.Vershynin`](ComputationalMathematics/Source/Vershynin.lean) exposes
-checked source contracts and frozen signatures for selected material in
-Chapters 1–3 of *High-Dimensional Probability*. Chapter 3's presence here is
-source-contract coverage, not a completed chapter gate. Historical
+source results, checked contracts and frozen signatures for selected material in
+Chapters 1–4 of the 2018 first edition of *High-Dimensional Probability*.
+Chapter 3's presence here is source-contract coverage, not a completed chapter
+gate. Historical
 `NumStability.HDP.Contracts` and `NumStability.HDP.ContractSignatures` import
 paths were removed in release 0.2.0; the
 [compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md)
@@ -322,6 +326,16 @@ The tracked coverage reports distinguish the chapter states:
 | [1](docs/vershynin-hdp/chapter01/coverage.md) | Active: 37/45 formalized objects, including three source discrepancies; 8 remain. Three skipped rows and one deferred row are outside that denominator. |
 | [2](docs/vershynin-hdp/chapter02/coverage.md) | PASS under its recorded rules: 119/119 objects, comprising 116 proved, two discrepancies and one weaker result; 12 skipped rows reported separately. |
 | [3](ComputationalMathematics/Source/Vershynin/Chapter03/) | Source contracts and signatures are present; a completed chapter gate is not claimed. |
+| [4](docs/vershynin-hdp/chapter04/coverage.md) | PASS for 124/124 obligations: 87 proved, 26 reused and 11 discrepancy closures; 0 open. Three skips and 17 deferrals are outside that denominator (144 inventory rows in total). |
+
+The [Chapter 4 import](ComputationalMathematics/Source/Vershynin/Chapter04.lean)
+exposes the accepted random-matrix scope, including singular values, nets,
+coding, matrix concentration, covariance estimation and spectral clustering.
+Discrepancy closures retain witnesses and separately named corrected results;
+they do not prove the false printed assertions. In particular, Remark 4.7.2's
+unresolved comparison-constant dependence remains a reviewed exclusion. The
+[coverage evidence map](docs/vershynin-hdp/chapter04/coverage-evidence.md)
+records the accepted scope and retained qualifications.
 
 ### Drineas–Mahoney: randomized numerical linear algebra
 
@@ -380,6 +394,7 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra` | Reusable randomized sampling, sketching and preconditioning |
 | `ComputationalMathematics.HDP.Scalar` | Scalar probability and concentration |
 | `ComputationalMathematics.HDP.Vector` | Random-vector probability and geometry |
+| `ComputationalMathematics.HDP.Convex` | Convex bodies, gauges and linear images |
 | `ComputationalMathematics.HDP.Graph` | Finite-graph optimization and randomized rounding |
 | `ComputationalMathematics.HDP.Optimization` | Semidefinite and Grothendieck foundations |
 | `ComputationalMathematics.HDP.Kernel` | Positive-semidefinite kernels and feature maps |
@@ -392,7 +407,8 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Source.LeVeque.Chapter03` | Audited Chapter 3 characteristics, Riemann problems, and boundary results |
 | `ComputationalMathematics.Source.LeVeque.Chapter04` | Completed audited Chapter 4 scope: schemes, qualified CFL/convergence, accuracy, stability, REA and source corrections |
 | `ComputationalMathematics.Source.Eymard.Chapter01` | Three accepted proofs and compiled candidate definitions/targets; chapter unfinished |
-| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–3 source contracts; Chapter 3 gate not claimed complete |
+| `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–4 results and source contracts; Chapter 3 gate not claimed complete |
+| `ComputationalMathematics.Source.Vershynin.Chapter04` | Accepted random-matrix scope, with separate discrepancy witnesses/corrections and explicit skips/deferrals |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
@@ -438,8 +454,10 @@ in release 0.2.0; the old-path to canonical-path table is
 
 ## Repository layout
 
-The map emphasizes supported entry points and semantic boundaries rather than
-listing every theorem leaf.
+The map covers every top-level production directory, the source chapter
+surfaces, tests and repository support files. Nested mathematical directories
+are grouped examples; individual theorem leaves and local build artifacts are
+omitted. Directory presence does not imply source acceptance or completion.
 
 ```text
 ComputationalMathematics.lean             canonical complete-tree entry point
@@ -451,36 +469,68 @@ ComputationalMathematics/
 ├── Analysis.lean                        broad historical analysis aggregate
 ├── Analysis/
 │   ├── Error/, Conditioning/, Perturbation/
-│   ├── MatrixNorms/, SingularValues/, LinearOperators/, CStarMatrices/
-│   ├── Calculus/, Probability/, Statistics/, FiniteVolume/
-│   └── PartialDifferentialEquations/    reusable PDE and finite-volume foundations
+│   ├── FloatingPointArithmetic/, FirstOrder/, Summation/
+│   ├── MatrixNorms/, SingularValues/, LinearOperators/, OperatorNorms/
+│   ├── CStarMatrices/, FunctionalCalculus/, MatrixInequalities/
+│   ├── Calculus/, Probability/, Statistics/, Normed/
+│   ├── FiniteVolume/                    control-volume geometry and transport models
+│   └── PartialDifferentialEquations/
+│       ├── ConservationLaws/, Hyperbolic/, LinearSystems/, Transport/
+│       ├── Diffusion/                   reusable diffusion analysis
+│       └── FiniteVolume/                scheme updates, dependence, accuracy and stability
 ├── Algorithms.lean                      broad historical algorithm aggregate
 ├── Algorithms/
 │   ├── Arithmetic/, Summation/, PolynomialEvaluation/
 │   ├── LinearSystems/, MatrixEquations/, MatrixPowers/
+│   ├── MatrixInversion/, NormEstimation/
 │   └── RandomizedLinearAlgebra/
 ├── HDP.lean                              high-dimensional-probability entry point
-├── HDP/                                  scalar/vector probability, concentration, graphs, kernels
+├── HDP/
+│   ├── Scalar/, Vector/, Probability/    probability and concentration
+│   ├── Convex/, Metric/                 convex geometry, covering and packing
+│   ├── Matrix/, Coding/                 matrix results and error-correcting codes
+│   ├── Graph/, Optimization/, Kernel/, Tensor/
+│   └── Contract/, Contracts.lean, ContractSignatures.lean
 ├── Source.lean                           canonical source-correspondence entry point
 ├── Source/
 │   ├── Higham/                           Chapters 1–28 and cross-chapter correspondence
-│   ├── LeVeque/                          selected Chapter 1 material and audited Chapters 2–4
+│   ├── LeVeque/
+│   │   ├── Chapter01.lean, Chapter01/    selected introductory source material
+│   │   ├── Chapter02.lean, Chapter02/    audited PDE models and conservation laws
+│   │   ├── Chapter03.lean, Chapter03/    audited characteristics and Riemann problems
+│   │   └── Chapter04.lean, Chapter04/    completed audited finite-volume scope
 │   ├── Eymard/                           partial Chapter 1 proofs and candidate targets
-│   ├── Vershynin/                        high-dimensional probability, Chapters 1–3 contracts
+│   ├── Vershynin/
+│   │   ├── Chapter01.lean, Chapter01/    active probability-preliminaries scope
+│   │   ├── Chapter02.lean, Chapter02/    recorded concentration scope
+│   │   ├── Chapter03.lean, Chapter03/    random-vector source contracts/signatures
+│   │   └── Chapter04.lean, Chapter04/    accepted random-matrix scope and corrections
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
-├── Logic/, MeasureTheory/, Topology/     supporting foundational extensions
+├── Data/, Logic/, MeasureTheory/, Topology/  supporting foundational extensions
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 
 NumStabilityTest.lean                     complete test-library entry point
 NumStabilityTest/
+├── HDP/Chapter04/                       random-matrix target and proof checks
 ├── Import/
 │   ├── HDPCheckpointSync/               canonical HDP contract and signature checks
-│   └── ProjectIdentity/Canonical/       identity fixtures the clean-project consumer builds
-└── Reorganization/                      private-name placement checks
+│   ├── ProjectIdentity/Canonical/       identity fixtures the clean-project consumer builds
+│   └── EymardChapter01.lean, SharedVectorOperators.lean
+├── Reorganization/                      private-name placement checks
+└── LeVequeChapter02Equation01Target.lean
 
-docs/                                     architecture, source coverage, and benchmarks
-tools/                                    architecture checks and benchmark tooling
-experiments/                              C/Python reproductions of selected source examples
+docs/                                    architecture, migrations, coverage and benchmark records
+tools/architecture/, tools/benchmark/     source/compiled checks and benchmark tooling
+tools/retirement/                        retained-evidence reference utility
+scripts/nolints.json                     declaration-specific linter exceptions
+experiments/chapter01/ … chapter04/       C/Python reproductions of Higham examples
+.github/workflows/                       CI and repository automation
+.formalization-policy/publication/       tracked publication configuration
+lakefile.toml, lake-manifest.json         package/targets and resolved dependency pins
+lean-toolchain                           pinned Lean release
+ARCHITECTURE.md, CONTRIBUTING.md          API structure and contribution guidance
+CHANGELOG.md, CITATION.cff                release history and citation metadata
+LICENSE, LICENSES/, THIRD_PARTY_NOTICES.md  licensing and attribution
 ```
 
 ## Verification and contribution
@@ -496,7 +546,7 @@ python tools/architecture/check_links.py
 python tools/architecture/generate_baseline.py --skip-declarations --strict-source --output-dir benchmark-results/architecture --name source-check
 ```
 
-CI additionally compiles its Python tooling, runs the architecture and
+The [CI workflow](.github/workflows/lean_action_ci.yml) additionally compiles its Python tooling, runs the architecture and
 diagnostic checker self-tests, builds `ComputationalMathematics`
 and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
 reviewed warning and lint baselines. Those
@@ -521,7 +571,7 @@ subject to the reviewed baseline.
   records the public name, interface mapping, GitHub cutover and validation.
 - [`docs/README.md`](docs/README.md) maps architecture documents and retained evidence.
 - The [Eymard Chapter 1 checkpoint](docs/formalization/eymard-chapter-01.md) records accepted scope and restoration instructions.
-- The Vershynin [Chapter 1](docs/vershynin-hdp/chapter01/coverage.md) and [Chapter 2](docs/vershynin-hdp/chapter02/coverage.md) reports record the audited scopes.
+- The Vershynin [Chapter 1](docs/vershynin-hdp/chapter01/coverage.md), [Chapter 2](docs/vershynin-hdp/chapter02/coverage.md) and [Chapter 4](docs/vershynin-hdp/chapter04/coverage.md) reports record the audited scopes.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
   and supported entry points.
 - [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) defines canonical
@@ -557,7 +607,7 @@ historical snapshot. The current published source areas are listed above.
   University Press, 2002.
 - R. Eymard, T. Gallouët and R. Herbin, [*Finite Volume Methods*](https://raphaeleh.github.io/PUBLI/bookevol.pdf), January 2019 manuscript.
 - R. Vershynin, *High-Dimensional Probability: An Introduction with
-  Applications in Data Science*, Cambridge University Press.
+  Applications in Data Science*, 1st ed., Cambridge University Press, 2018.
 - P. Drineas and M. W. Mahoney,
   [“RandNLA: Randomized Numerical Linear Algebra”](https://dl.acm.org/doi/10.1145/2842602),
   *Communications of the ACM* 59(6), 80–90, 2016.
