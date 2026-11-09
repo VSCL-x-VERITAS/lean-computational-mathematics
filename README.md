@@ -7,9 +7,9 @@
 Lean Computational Mathematics is a Lean 4 library of formalized results in
 computational mathematics and its mathematical foundations, developed from
 books and research papers. It contains reusable mathematics for floating-point
-error analysis, numerical stability, matrix algorithms, finite-volume methods,
-hyperbolic partial differential equations, and high-dimensional probability,
-together with source-correspondence modules.
+error analysis, numerical stability, matrix algorithms, optimization,
+finite-volume methods, hyperbolic partial differential equations, and
+high-dimensional probability, together with source-correspondence modules.
 
 > **Active development repository:**
 > [`VSCL-x-VERITAS/lean-computational-mathematics`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics).
@@ -33,6 +33,7 @@ records the validated source revision, preserved interfaces and publication stat
 | LeVeque, *Finite Volume Methods for Hyperbolic Problems* | Selected Chapter 1 material and Chapters 2–4 | Chapters 2–4 have complete audited scopes; Chapter 4 closes 137/137 formalization objects, with 2 reviewed source exclusions and 0 remaining |
 | Eymard, Gallouët and Herbin, *Finite Volume Methods*, January 2019 manuscript | Chapter 1 introduction and supporting finite-volume models | 3/46 obligations accepted; 43 unfinished; compiled candidate targets are included |
 | Vershynin, *High-Dimensional Probability*, 1st ed. | Selected Chapters 1–2 results, Chapter 3 contracts and the audited Chapter 4 scope | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 4 closes 124/124 obligations, with 3 skips and 17 deferrals outside that denominator; Chapter 3 has no completed chapter gate |
+| Nocedal and Wright, *Numerical Optimization*, 2nd ed. | Reviewed Chapter 1 definitions, models and convexity results | The pinned Chapter 1 gate accepted 14/14 Lean-bearing rows; three ambiguous source claims remain deferred and are reported separately; Chapter 2 is unpublished |
 | Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Selected sampling, sketching, low-rank and preconditioning results | A source-linked case study; no complete-paper coverage claim |
 
 The detailed sections below link the source modules and coverage records.
@@ -44,38 +45,40 @@ scopes above do not imply whole-book formalization.
 
 ## Current repository status
 
-The November 4, 2026 snapshot is published commit
-[`532da382`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/532da382e7127972a0675e989061c6ffa4140dd9),
-which includes the completed audited LeVeque Chapter 4 scope, the accepted
-Vershynin Chapter 4 scope and the Eymard Chapter 1 checkpoint.
+The November 9, 2026 snapshot is published commit
+[`ee23e1ae`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f),
+which adds Shenghao Yang's reviewed Nocedal–Wright Chapter 1 development in
+[PR #42](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/42)
+to the completed audited LeVeque Chapter 4 scope, the accepted Vershynin
+Chapter 4 scope and the Eymard Chapter 1 checkpoint.
 The measurements below come from a strict source scan of that revision and the
 [tier manifest](docs/architecture/tiers.json). Local campaigns and unpublished
 branches are excluded.
 
 | Snapshot metric | Value |
 |---|---:|
-| Production Lean modules | 4,964 |
-| Reusable / source / aggregate / internal / upstream | 1,328 / 3,166 / 460 / 5 / 5 |
-| Classified modules | 4,964 / 4,964 (100%) |
+| Production Lean modules | 5,003 |
+| Reusable / source / aggregate / internal / upstream | 1,336 / 3,197 / 460 / 5 / 5 |
+| Classified modules | 5,003 / 5,003 (100%) |
 | Mixed or unclassified modules | 0 |
-| Nonblank Lean source lines | 1,700,083 |
-| Direct imports | 37,440 |
+| Nonblank Lean source lines | 1,700,804 |
+| Direct imports | 37,510 |
 | Import cycles / unresolved project imports | 0 / 0 |
 | Forbidden reusable-to-source import paths | 0 |
 | Test Lean modules (including the root) | 186 |
 | Reviewed warning baseline | 354 diagnostics |
 | Reviewed lint baseline | 4,039 findings |
-| Tracked files / size | 5,707 / 115.4 MB |
+| Tracked files / size | 5,747 / 115.4 MB |
 
 Module counts measure files, not theorems or accepted source claims. Warning
 and lint counts are reviewed baselines enforced by CI. Tracked size sums Git
-blob bytes in the snapshot (115,396,322 bytes; decimal MB), excluding history,
+blob bytes in the snapshot (115,439,866 bytes; decimal MB), excluding history,
 dependencies and build artifacts. Source-line and import counts cover production
 modules; test modules are counted separately. The source scan used
 `generate_baseline.py --skip-declarations --strict-source` in a clean checkout
 of the pinned revision, excluding local drafts.
 
-The exact snapshot's [main push CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/41870223006)
+The exact snapshot's [main push CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/42555471529)
 passed architecture and provenance checks, the library and test builds,
 `lake test`, and warning/lint enforcement. The badge tracks later `main` runs;
 a successful run certifies its own commit. CI also checks source placeholders,
@@ -86,8 +89,10 @@ for the separately verified identity-migration revision and its scope.
 
 Release 0.2.0 removed the historical `NumStability` import forwarders. Canonical
 imports use `ComputationalMathematics`; the package remains `numStability`
-(currently version `0.3.0`), the test root `NumStabilityTest`, and declaration
-namespaces `NumStability`.
+(currently version `0.3.0`) and the test root `NumStabilityTest`. Existing
+`NumStability` declaration namespaces are retained. The new optimization
+modules use `ComputationalMathematics.Optimization` and
+`ComputationalMathematics.Source.NocedalWright` namespaces.
 Historical measurements and compatibility decisions are retained in the
 [migration reports](docs/migrations/lean-computational-mathematics/README.md),
 [architecture phase records](docs/architecture/phases/2026-08-repository-reorganization-completion/README.md)
@@ -110,6 +115,7 @@ Directory presence alone is not a chapter-completion claim.
 | Matrix equations, inverses and estimation | Sylvester/Lyapunov equations, matrix inversion, one-/two-/p-norm estimation and associated conditioning/error analysis | [matrix equations](ComputationalMathematics/Algorithms/MatrixEquations/), [inversion](ComputationalMathematics/Algorithms/MatrixInversion/), [norm estimation](ComputationalMathematics/Algorithms/NormEstimation/) |
 | Matrix and operator analysis | Vector/matrix/operator norms, singular values, Schur/Jordan forms, numerical radius, pseudospectra, matrix powers and semiconvergence | [matrix norms](ComputationalMathematics/Analysis/MatrixNorms/), [singular values](ComputationalMathematics/Analysis/SingularValues/), [linear operators](ComputationalMathematics/Analysis/LinearOperators/) |
 | Positive operators and functional calculus | Finite C*-matrix algebras, matrix inequalities and continuous functional calculus | [C*-matrices](ComputationalMathematics/Analysis/CStarMatrices/), [functional calculus](ComputationalMathematics/Analysis/FunctionalCalculus/), [matrix inequalities](ComputationalMathematics/Analysis/MatrixInequalities/) |
+| Optimization modeling and convexity | Constrained minimization, maximization as minimization, finite candidate domains, transportation models, convex/strictly convex/concave functions, convex polyhedra and Euclidean balls, and positive-semidefinite quadratic forms; qualified local-to-global and volume-discount companions | [reusable optimization](ComputationalMathematics/Optimization/), [Nocedal–Wright Chapter 1](ComputationalMathematics/Source/NocedalWright/Chapter01/) |
 | Conservation laws and hyperbolic PDEs | Scalar advection, acoustics, elasticity and Euler models, characteristics, Riemann problems, weak/integral balance, entropy and boundary models | [PDE foundations](ComputationalMathematics/Analysis/PartialDifferentialEquations/), [LeVeque correspondence](ComputationalMathematics/Source/LeVeque/) |
 | Finite-volume and difference schemes | Cell averages, conservative flux updates, upwind, Godunov, Lax–Friedrichs, Lax–Wendroff/Richtmyer and wave-propagation results; CFL restrictions, consistency, accuracy and stability; explicit and Crank–Nicolson diffusion | [finite-volume analysis](ComputationalMathematics/Analysis/PartialDifferentialEquations/FiniteVolume/), [LeVeque Chapter 4](ComputationalMathematics/Source/LeVeque/Chapter04/) |
 | Control-volume geometry and models | Cells/faces, planar geometry, reconstruction, interfaces, transport and diffusion definitions; Chapter 1 candidate contracts alongside three accepted proofs | [geometric models](ComputationalMathematics/Analysis/FiniteVolume/), [Eymard checkpoint](docs/formalization/eymard-chapter-01.md) |
@@ -337,6 +343,48 @@ unresolved comparison-constant dependence remains a reviewed exclusion. The
 [coverage evidence map](docs/vershynin-hdp/chapter04/coverage-evidence.md)
 records the accepted scope and retained qualifications.
 
+### Nocedal–Wright: numerical optimization
+
+The reviewed Chapter 1 development of *Numerical Optimization*, second edition,
+was published in
+[PR #42](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/42).
+It adds 39 Lean modules: eight reusable modules under
+[`ComputationalMathematics/Optimization/`](ComputationalMathematics/Optimization/)
+and 31 source modules, including entry points and a clarification companion,
+under [`ComputationalMathematics/Source/NocedalWright/`](ComputationalMathematics/Source/NocedalWright/).
+The pinned Chapter 1 gate accepted **14/14 Lean-bearing rows**; three ambiguous
+source claims remain separately deferred. This is the accepted selected scope,
+not acceptance of every Chapter 1 sentence or completion of the book.
+
+The [Chapter 1 import](ComputationalMathematics/Source/NocedalWright/Chapter01.lean)
+exposes proofs for constrained-minimum formulation (1.1), the solution of
+example (1.2), transportation formulation (1.3), maximization as minimization,
+finite discrete domains, convex sets and functions, strict convexity,
+concavity, affine functions, polyhedra, Euclidean unit balls,
+positive-semidefinite quadratic forms and the convex-program definition.
+Convex-program models state each function's domain explicitly and use affine
+equalities and concave inequalities with the source's nonnegative sign
+convention. The target propositions have separate proof modules.
+
+The three deferred claims concern integer/discrete nonconvexity,
+local-to-global convexity and volume-discount nonlinearity. Proved companions
+provide a [nonconvex binary-set example](ComputationalMathematics/Optimization/Discrete/Convexity.lean),
+a [local-to-global theorem](ComputationalMathematics/Source/NocedalWright/Chapter01/LocalGlobalClarified.lean)
+whose convex objective domain contains the convex feasible set, and
+[square-root shipping-cost results](ComputationalMathematics/Optimization/Modeling/VolumeDiscount.lean)
+showing the zero-cost exception and nonaffinity when the shift is positive and
+at least one route cost is nonzero. These companions do not confer audit
+acceptance on the three original source sentences.
+
+[`ComputationalMathematics.Source.NocedalWright`](ComputationalMathematics/Source/NocedalWright.lean)
+imports the accepted Chapter 1 statements. Import the local/global companion
+separately when needed; the broader `ComputationalMathematics.Source` umbrella
+includes both. `ComputationalMathematics.All` also exposes all eight reusable
+optimization modules; use their narrower imports listed below. The
+[integration note](docs/architecture/nocedal-optimization-integration-20261109.md)
+records placement, gate status and focused validation. Chapter 2 remains active
+on a separate unpublished branch and is outside this snapshot.
+
 ### Drineas–Mahoney: randomized numerical linear algebra
 
 The RandNLA case study separates reusable algorithms and analysis under
@@ -365,7 +413,7 @@ lake test
 `lake build` selects the canonical library; the explicit command above also
 includes the test library. `lake test` uses the `NumStabilityTest` driver.
 For the reproducible snapshot measured above, run
-`git checkout 532da382e7127972a0675e989061c6ffa4140dd9` before the Lake commands.
+`git checkout ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f` before the Lake commands.
 
 The project pins Lean `4.29.0-rc3` in [`lean-toolchain`](lean-toolchain) and
 Mathlib revision `e8ea1afc32790ce1d4e1a4e45cc412ba9388716b` in
@@ -377,6 +425,7 @@ To build one module, pass its Lean module name to Lake, for example:
 lake build ComputationalMathematics.FloatingPoint.Model
 lake build ComputationalMathematics.HDP.Scalar.SubGaussian
 lake build ComputationalMathematics.Source.LeVeque
+lake build ComputationalMathematics.Source.NocedalWright
 ```
 
 ## Key entry points
@@ -392,6 +441,11 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Algorithms.LinearSystems` | Linear-system factorization and solver families |
 | `ComputationalMathematics.Analysis.LinearOperators` | Reusable matrix/operator analysis |
 | `ComputationalMathematics.Algorithms.RandomizedLinearAlgebra` | Reusable randomized sampling, sketching and preconditioning |
+| `ComputationalMathematics.Optimization.Convex.Euclidean` | Reusable finite-dimensional convexity, matrix and extrema APIs |
+| `ComputationalMathematics.Optimization.Discrete.Basic` | Finite candidate domains and feasible-subset classification |
+| `ComputationalMathematics.Optimization.Discrete.Convexity` | Nonconvex binary-set example |
+| `ComputationalMathematics.Optimization.Modeling.Domains` | Affine functions and convex-program classification on explicit domains |
+| `ComputationalMathematics.Optimization.Modeling.VolumeDiscount` | Square-root shipping costs, the zero-cost exception and qualified nonaffinity |
 | `ComputationalMathematics.HDP.Scalar` | Scalar probability and concentration |
 | `ComputationalMathematics.HDP.Vector` | Random-vector probability and geometry |
 | `ComputationalMathematics.HDP.Convex` | Convex bodies, gauges and linear images |
@@ -409,6 +463,9 @@ Choose the narrowest import that supplies the declarations you need.
 | `ComputationalMathematics.Source.Eymard.Chapter01` | Three accepted proofs and compiled candidate definitions/targets; chapter unfinished |
 | `ComputationalMathematics.Source.Vershynin` | Vershynin Chapters 1–4 results and source contracts; Chapter 3 gate not claimed complete |
 | `ComputationalMathematics.Source.Vershynin.Chapter04` | Accepted random-matrix scope, with separate discrepancy witnesses/corrections and explicit skips/deferrals |
+| `ComputationalMathematics.Source.NocedalWright` | Accepted Nocedal–Wright Chapter 1 statements |
+| `ComputationalMathematics.Source.NocedalWright.Chapter01` | Fourteen accepted Chapter 1 definitions, models and convexity results |
+| `ComputationalMathematics.Source.NocedalWright.Chapter01.LocalGlobalClarified` | Qualified local-to-global companion; the original source sentence remains deferred |
 | `ComputationalMathematics.Analysis.PartialDifferentialEquations.FiniteVolume.FluxDifference` | Narrow reusable finite-volume update and conservation results |
 | `ComputationalMathematics.All` | Complete supported library surface |
 | `ComputationalMathematics` | Complete-tree entry point forwarding to `ComputationalMathematics.All` |
@@ -427,7 +484,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "532da382e7127972a0675e989061c6ffa4140dd9"
+rev = "ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
@@ -451,6 +508,16 @@ The import root and declaration namespace are different interfaces:
 `NumStability.FPModel`. The historical `NumStability` import paths were removed
 in release 0.2.0; the old-path to canonical-path table is
 [`docs/architecture/migrations/2026-09-forwarder-map.json`](docs/architecture/migrations/2026-09-forwarder-map.json).
+
+For the new optimization APIs, use their authored namespaces directly:
+
+```lean
+import ComputationalMathematics.Optimization.Modeling.Domains
+import ComputationalMathematics.Source.NocedalWright.Chapter01
+
+#check ComputationalMathematics.Optimization.Modeling.IsConvexProgramOnDomains
+#check ComputationalMathematics.Source.NocedalWright.Chapter01.psdQuadraticConvex
+```
 
 ## Repository layout
 
@@ -484,6 +551,10 @@ ComputationalMathematics/
 │   ├── LinearSystems/, MatrixEquations/, MatrixPowers/
 │   ├── MatrixInversion/, NormEstimation/
 │   └── RandomizedLinearAlgebra/
+├── Optimization/                        reusable optimization modules (narrow imports)
+│   ├── Convex/                         real and Euclidean convex-analysis APIs
+│   ├── Discrete/                       finite candidate domains and nonconvexity example
+│   └── Modeling/                       convex programs, explicit domains and shipping costs
 ├── HDP.lean                              high-dimensional-probability entry point
 ├── HDP/
 │   ├── Scalar/, Vector/, Probability/    probability and concentration
@@ -505,6 +576,8 @@ ComputationalMathematics/
 │   │   ├── Chapter02.lean, Chapter02/    recorded concentration scope
 │   │   ├── Chapter03.lean, Chapter03/    random-vector source contracts/signatures
 │   │   └── Chapter04.lean, Chapter04/    accepted random-matrix scope and corrections
+│   ├── NocedalWright.lean, NocedalWright/  numerical optimization source entry point
+│   │   └── Chapter01.lean, Chapter01/    accepted Chapter 1 scope and clarification companion
 │   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
 ├── Data/, Logic/, MeasureTheory/, Topology/  supporting foundational extensions
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
@@ -572,6 +645,7 @@ subject to the reviewed baseline.
 - [`docs/README.md`](docs/README.md) maps architecture documents and retained evidence.
 - The [Eymard Chapter 1 checkpoint](docs/formalization/eymard-chapter-01.md) records accepted scope and restoration instructions.
 - The Vershynin [Chapter 1](docs/vershynin-hdp/chapter01/coverage.md), [Chapter 2](docs/vershynin-hdp/chapter02/coverage.md) and [Chapter 4](docs/vershynin-hdp/chapter04/coverage.md) reports record the audited scopes.
+- The [Nocedal–Wright Chapter 1 integration note](docs/architecture/nocedal-optimization-integration-20261109.md) records the reusable/source split, 14 accepted Lean rows and three deferred source claims.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) defines API tiers, dependency direction,
   and supported entry points.
 - [`docs/architecture/NAMING.md`](docs/architecture/NAMING.md) defines canonical
@@ -587,9 +661,10 @@ subject to the reviewed baseline.
 The tracked [publication policies](.formalization-policy/publication/) cover
 LeVeque, Eymard, Vershynin, the Fountoulakis random-automata paper, a Higham recheck,
 Bhatia's matrix analysis, and Nocedal's numerical optimization. The Nocedal
-policy disables automatic publication. These policies configure how candidate
-work may be published; they do not certify completed chapters or add source
-coverage to the library.
+policy disables automatic publication; Chapter 1 was published through the
+reviewed PR above, while Chapter 2 remains active and unpublished. These
+policies configure how candidate work may be published; they do not certify
+completed chapters or add source coverage to the library.
 
 The [source inventory from the September identity migration](docs/migrations/lean-computational-mathematics/source-scope.md)
 records exact titles, editions, source identifiers, and the companion catalogue
@@ -608,6 +683,7 @@ historical snapshot. The current published source areas are listed above.
 - R. Eymard, T. Gallouët and R. Herbin, [*Finite Volume Methods*](https://raphaeleh.github.io/PUBLI/bookevol.pdf), January 2019 manuscript.
 - R. Vershynin, *High-Dimensional Probability: An Introduction with
   Applications in Data Science*, 1st ed., Cambridge University Press, 2018.
+- J. Nocedal and S. J. Wright, *Numerical Optimization*, 2nd ed., Springer, 2006.
 - P. Drineas and M. W. Mahoney,
   [“RandNLA: Randomized Numerical Linear Algebra”](https://dl.acm.org/doi/10.1145/2842602),
   *Communications of the ACM* 59(6), 80–90, 2016.
