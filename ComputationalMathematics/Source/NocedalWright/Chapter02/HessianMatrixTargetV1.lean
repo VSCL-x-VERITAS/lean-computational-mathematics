@@ -1,6 +1,10 @@
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
+/-!
+Proof-free coordinate Hessian-matrix target for Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The matrix whose i,j entry is the j-th directional derivative of the i-th

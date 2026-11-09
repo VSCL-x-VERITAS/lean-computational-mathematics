@@ -2,6 +2,10 @@ import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 
+/-!
+Proof-free Taylor mean-value target from Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The first assertion of Nocedal and Wright, Theorem 2.1 (equation 2.4). -/

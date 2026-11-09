@@ -3,6 +3,10 @@ import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21Hessian
 import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21UniqueLocalMinimizerTargetV1
 import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21PositiveHessianTargetV1
 
+/-!
+Proof-free combined target for the Chapter 2 Exercise 2.1 calculations.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- All four requests in Nocedal and Wright, Exercise 2.1. -/

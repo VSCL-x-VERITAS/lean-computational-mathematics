@@ -1,6 +1,10 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21GradientTargetV1
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
+/-!
+Proof-free Hessian target for Chapter 2 Exercise 2.1.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The matrix of second coordinate partials of the Exercise 2.1 polynomial. -/

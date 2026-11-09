@@ -1,5 +1,9 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.PositiveDefiniteTargetV2
 
+/-!
+Checked quadratic-form positive-definiteness definition from Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- Nocedal and Wright, Chapter 2: strict quadratic-form positivity on every

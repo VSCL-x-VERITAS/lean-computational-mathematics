@@ -2,6 +2,10 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Order.Filter.Extr
 
+/-!
+Proof-free full-space global-minimizer definition from Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The full-space branch of the global minimizer definition in Chapter 2,

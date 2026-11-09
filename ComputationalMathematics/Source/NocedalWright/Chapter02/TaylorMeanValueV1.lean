@@ -1,6 +1,10 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.TaylorMeanValueTargetV1
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
+/-!
+Checked Taylor mean-value statement from Chapter 2.
+-/
+
 open Set
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 

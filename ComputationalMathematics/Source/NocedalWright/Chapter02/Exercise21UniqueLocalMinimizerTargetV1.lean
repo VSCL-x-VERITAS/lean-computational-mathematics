@@ -1,6 +1,10 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21GradientTargetV1
 import Mathlib.Topology.Order.LocalExtr
 
+/-!
+Proof-free unique-local-minimizer target for Chapter 2 Exercise 2.1.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The book's weak open-neighborhood local-minimum criterion, specialized

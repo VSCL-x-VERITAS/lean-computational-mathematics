@@ -1,6 +1,10 @@
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
+/-!
+Proof-free gradient target for Chapter 2 Exercise 2.1.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The two-variable Rosenbrock function in Exercise 2.1. -/

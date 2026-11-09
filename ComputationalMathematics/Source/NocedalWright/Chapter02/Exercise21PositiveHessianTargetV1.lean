@@ -2,6 +2,10 @@ import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21Gradien
 import ComputationalMathematics.Source.NocedalWright.Chapter02.HessianMatrixTargetV1
 import ComputationalMathematics.Source.NocedalWright.Chapter02.PositiveDefiniteTargetV2
 
+/-!
+Proof-free positive-Hessian target for Chapter 2 Exercise 2.1.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- Exercise 2.1: the Hessian of the fixed Rosenbrock function is positive

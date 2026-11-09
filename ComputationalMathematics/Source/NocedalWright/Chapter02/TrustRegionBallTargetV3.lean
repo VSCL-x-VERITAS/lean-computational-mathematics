@@ -1,5 +1,9 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
+/-!
+Proof-free usual trust-region-ball target from Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- The usual trust-region displacement set in the printed coordinate

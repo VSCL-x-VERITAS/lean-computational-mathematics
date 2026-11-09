@@ -5,6 +5,10 @@ import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21Hessian
 import Mathlib.Tactic
 import Mathlib.Analysis.Calculus.LocalExtr.Basic
 
+/-!
+Checked combined proof for the Chapter 2 Exercise 2.1 calculations.
+-/
+
 open InnerProductSpace
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02

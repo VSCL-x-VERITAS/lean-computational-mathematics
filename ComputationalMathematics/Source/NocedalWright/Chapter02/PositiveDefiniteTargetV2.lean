@@ -2,6 +2,10 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 
+/-!
+Proof-free quadratic-form positive-definiteness definition from Chapter 2.
+-/
+
 open scoped BigOperators
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02

@@ -1,5 +1,9 @@
 import Mathlib.Data.Nat.Basic
 
+/-!
+Arithmetic evidence used by the Chapter 2 degenerate quartic example.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- Checked exponent reduction for the first derivative of the quartic. -/

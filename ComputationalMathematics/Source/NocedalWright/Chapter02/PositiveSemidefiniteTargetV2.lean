@@ -1,5 +1,9 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.PositiveDefiniteTargetV2
 
+/-!
+Proof-free quadratic-form positive-semidefiniteness definition from Chapter 2.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-- Positive semidefiniteness as the book defines it, with no symmetry premise. -/

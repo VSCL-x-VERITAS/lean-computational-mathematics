@@ -1,5 +1,9 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter02.QuarticDegenerateHessianTargetV5
 
+/-!
+Checked degenerate-Hessian example for the Chapter 2 quartic.
+-/
+
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
 theorem quarticDegenerateHessianV5 : quarticDegenerateHessianTargetV5 := by
