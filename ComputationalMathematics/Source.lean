@@ -56,6 +56,8 @@ import ComputationalMathematics.Source.Higham.Chapter08.Problem09.KahanSingularV
 import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.ComparisonConditioningResults.Theorems
 import ComputationalMathematics.Source.Higham.Chapter08.Section03.TriangularSystems.InverseNormResults.Theorems
 import ComputationalMathematics.Source.LeVeque
+import ComputationalMathematics.Source.NocedalWright
+import ComputationalMathematics.Source.NocedalWright.Chapter01.LocalGlobalClarified
 import ComputationalMathematics.Source.Vershynin
 
 /-!

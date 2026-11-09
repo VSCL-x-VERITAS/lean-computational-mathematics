@@ -1,0 +1,21 @@
+import ComputationalMathematics.Source.NocedalWright.Chapter01.Concavity
+import ComputationalMathematics.Source.NocedalWright.Chapter01.ConvexProgram
+import ComputationalMathematics.Source.NocedalWright.Chapter01.ConvexFunction
+import ComputationalMathematics.Source.NocedalWright.Chapter01.ConvexSet
+import ComputationalMathematics.Source.NocedalWright.Chapter01.DiscreteProblem
+import ComputationalMathematics.Source.NocedalWright.Chapter01.Example12
+import ComputationalMathematics.Source.NocedalWright.Chapter01.Formulation
+import ComputationalMathematics.Source.NocedalWright.Chapter01.LinearFunction
+import ComputationalMathematics.Source.NocedalWright.Chapter01.MaxAsMin
+import ComputationalMathematics.Source.NocedalWright.Chapter01.Polyhedron
+import ComputationalMathematics.Source.NocedalWright.Chapter01.PSDQuadratic
+import ComputationalMathematics.Source.NocedalWright.Chapter01.StrictConvex
+import ComputationalMathematics.Source.NocedalWright.Chapter01.Transportation
+import ComputationalMathematics.Source.NocedalWright.Chapter01.UnitBall
+
+/-!
+# Nocedal--Wright Chapter 1
+
+Formalization entry point for the accepted Chapter 1 statements from
+*Numerical Optimization*, second edition.
+-/
