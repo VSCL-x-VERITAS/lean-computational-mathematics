@@ -1,4 +1,5 @@
 import ComputationalMathematics.Source.NocedalWright.Chapter01
+import ComputationalMathematics.Source.NocedalWright.Chapter02
 
 /-!
 # Nocedal and Wright, Numerical Optimization
