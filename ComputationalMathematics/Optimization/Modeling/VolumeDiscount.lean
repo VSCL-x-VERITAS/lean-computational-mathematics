@@ -9,6 +9,7 @@ noncomputable section
 
 namespace ComputationalMathematics.Optimization.Modeling
 
+/-- The square-root shipping-cost objective for two origins and twelve destinations. -/
 def volumeDiscountObjective (δ : ℝ) (c x : Fin 2 → Fin 12 → ℝ) : ℝ :=
   ∑ i, ∑ j, c i j * Real.sqrt (δ + x i j)
 
