@@ -1,0 +1,22 @@
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise213NotLinearV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.GlobalMinimizerFullSpaceV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise213LimitV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise23LinearGradientV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise23LinearHessianV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise23QuadraticGradientV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise23QuadraticHessianV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.ShiftedQuarticStrictV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.QuarticDegenerateHessianV5
+import ComputationalMathematics.Source.NocedalWright.Chapter02.TrustRegionBallV3
+import ComputationalMathematics.Source.NocedalWright.Chapter02.PositiveDefiniteV2
+import ComputationalMathematics.Source.NocedalWright.Chapter02.PositiveSemidefiniteV2
+import ComputationalMathematics.Source.NocedalWright.Chapter02.TaylorMeanValueV1
+import ComputationalMathematics.Source.NocedalWright.Chapter02.Exercise21FullV1
+
+/-!
+Accepted source correspondences for Chapter 2 of Nocedal and Wright,
+*Numerical Optimization*, second edition.
+
+This entry point collects the currently accepted results. Chapter coverage is
+tracked separately by the source inventory.
+-/
