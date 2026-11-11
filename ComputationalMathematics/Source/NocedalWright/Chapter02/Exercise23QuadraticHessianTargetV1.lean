@@ -10,6 +10,7 @@ The Hessian is the matrix of iterated coordinate partial derivatives.
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
+/-- Exercise 2.3's quadratic-function Hessian claim. -/
 def exercise23QuadraticHessianTargetV1 : Prop :=
   ∀ (n : ℕ), 0 < n →
     ∀ (A : Matrix (Fin n) (Fin n) ℝ), A.IsSymm →

@@ -8,6 +8,7 @@ Proof-free target for the gradient of f₁(x) = aᵀx in Nocedal and Wright,
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
+/-- Exercise 2.3's linear-function gradient claim. -/
 def exercise23LinearGradientTargetV1 : Prop :=
   ∀ (n : ℕ), 0 < n →
     ∀ (a x : EuclideanSpace ℝ (Fin n)),

@@ -9,6 +9,7 @@ Nocedal and Wright, Numerical Optimization, second edition.
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
+/-- Exercise 2.3's quadratic-function gradient claim. -/
 def exercise23QuadraticGradientTargetV1 : Prop :=
   ∀ (n : ℕ), 0 < n →
     ∀ (A : Matrix (Fin n) (Fin n) ℝ), A.IsSymm →

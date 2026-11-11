@@ -9,6 +9,7 @@ The Hessian entries are iterated coordinate partial derivatives.
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
+/-- Exercise 2.3's linear-function Hessian claim. -/
 def exercise23LinearHessianTargetV1 : Prop :=
   ∀ (n : ℕ), 0 < n →
     ∀ (a x : EuclideanSpace ℝ (Fin n)),

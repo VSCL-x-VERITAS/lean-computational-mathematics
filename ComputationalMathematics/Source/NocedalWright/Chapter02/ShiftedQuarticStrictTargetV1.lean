@@ -7,6 +7,7 @@ Nocedal and Wright, *Numerical Optimization*, second edition.
 
 namespace ComputationalMathematics.Source.NocedalWright.Chapter02
 
+/-- The shifted quartic has a strict local minimum at two. -/
 def shiftedQuarticStrictTargetV1 : Prop :=
   ∃ U : Set ℝ, IsOpen U ∧ (2 : ℝ) ∈ U ∧
     ∀ x ∈ U, x ≠ (2 : ℝ) →

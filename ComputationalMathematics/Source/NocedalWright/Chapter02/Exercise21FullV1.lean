@@ -170,12 +170,14 @@ private theorem rosenbrock_bookHessian_eq_formula
     dsimp
     rw [(rosenbrock_grad0_hasFDerivAt x).fderiv]
     fin_cases j <;>
-      norm_num [rosenbrockHessianFormulaV1, EuclideanSpace.single_apply] <;> ring
+      norm_num [rosenbrockHessianFormulaV1, EuclideanSpace.single_apply]
+    ring
   · unfold bookHessianMatrixV1
     dsimp
     rw [(rosenbrock_grad1_hasFDerivAt x).fderiv]
     fin_cases j <;>
-      norm_num [rosenbrockHessianFormulaV1, EuclideanSpace.single_apply] <;> ring
+      norm_num [rosenbrockHessianFormulaV1, EuclideanSpace.single_apply]
+    ring
 
 
 private def numericRosenbrockHessian : Fin 2 → Fin 2 → ℝ :=
@@ -229,7 +231,8 @@ private theorem rosenbrock_line_hasDerivAt
     HasDerivAt (fun s : ℝ => x + s • EuclideanSpace.single i 1)
       (EuclideanSpace.single i 1) 0 := by
   convert ((hasDerivAt_id (0 : ℝ)).smul_const
-    (EuclideanSpace.single i 1)).const_add x using 1 <;> simp
+    (EuclideanSpace.single i 1)).const_add x using 1
+  simp
 
 private theorem rosenbrock_line_deriv_eq_gradient_component
     (x : EuclideanSpace ℝ (Fin 2)) (i : Fin 2) :
