@@ -44,7 +44,7 @@ SCHEMA_VERSION = 1
 
 # Bump whenever the normalization or fingerprint rules below change; a baseline
 # written under an older normalization is refused rather than misread.
-NORMALIZATION_VERSION = 1
+NORMALIZATION_VERSION = 2
 
 # Lean source trees whose diagnostics this contract governs.  Anything outside
 # them (Mathlib, toolchain sources) is not fingerprinted.
@@ -79,6 +79,8 @@ DIAGNOSTIC_HEAD_RE = re.compile(
 OTHER_HEAD_RE = re.compile(r"^(?:warning|error|info): ")
 # Lake progress markers: "✔ [12/34] Built X", "⚠ [12/34] Replayed X", "[12/34] ...".
 LAKE_PROGRESS_RE = re.compile(r"^(?:[^\s\[]{1,3}\s*)?\[\d+/\d+\]")
+# Lake's terminal success summary is a separate record, including on cache replay.
+LAKE_COMPLETION_RE = re.compile(r"^Build completed successfully(?: \(\d+ jobs?\))?\.$")
 RECORD_MARKER_RE = re.compile(r"^(?:##\[|\[command\]|\$\{)")
 GROUP_RE = re.compile(r"^##\[group\](?P<label>.*)$")
 LINTER_NOTE_RE = re.compile(
@@ -400,6 +402,7 @@ def is_block_break(line: str) -> bool:
     return bool(
         OTHER_HEAD_RE.match(line)
         or LAKE_PROGRESS_RE.match(line)
+        or LAKE_COMPLETION_RE.match(line)
         or RECORD_MARKER_RE.match(line)
     )
 
@@ -1870,6 +1873,38 @@ def run_self_test() -> int:
         build_self_test_root(root)
         log_path = base / "fixture.log"
         log_path.write_bytes(render_self_test_log(entries))
+        # A cache replay may end directly after a warning. Only complete,
+        # unindented Lake summaries terminate that diagnostic record.
+        terminal_log = base / "terminal.log"
+        warning = (
+            "warning: NumStability/Fixture/Alpha.lean:10:1: "
+            "Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n"
+            "Note: This linter can be disabled with "
+            "`set_option linter.unnecessarySeqFocus false`\n"
+        )
+        summaries = (
+            "Build completed successfully (9250 jobs).",
+            "Build completed successfully (1 job).",
+            "Build completed successfully.",
+        )
+        continuations = (
+            "  Build completed successfully (9250 jobs).",
+            "Build completed successfully (9250 jobs). quoted in the diagnostic",
+            "A diagnostic mentions Build completed successfully (9250 jobs).",
+        )
+        for ending in summaries + continuations:
+            terminal_log.write_text(warning + ending + "\n", encoding="utf-8")
+            diagnostics = read_log(terminal_log, AnchorReader(root)).diagnostics
+            expected_end = "false`" if ending in summaries else ending.strip()
+            if (
+                is_block_break(ending) != (ending in summaries)
+                or len(diagnostics) != 1
+                or diagnostics[0].kind != "linter.unnecessarySeqFocus"
+                or not diagnostics[0].message.endswith(expected_end)
+            ):
+                print("self-test failure: Lake terminal record boundary", file=sys.stderr)
+                return 1
+        accepted.append("Lake terminal summaries preserve warning bodies and notes")
         baseline_path = base / "warnings.json"
 
         common = ["--root", str(root), "--log", str(log_path), "--baseline", str(baseline_path)]
