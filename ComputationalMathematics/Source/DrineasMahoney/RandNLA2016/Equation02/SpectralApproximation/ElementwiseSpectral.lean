@@ -53,25 +53,23 @@ open scoped BigOperators ComplexOrder
 /-!
 ## Algorithm 1 spectral transfer layer
 
-The CACM RandNLA survey states a high-probability spectral-norm concentration
-bound for Algorithm 1, equation (2).  This file proves deterministic spectral
-and floating-point transfer infrastructure and several exact concentration
-layers for the truncated self-adjoint dilation route, including parameterized
-trace-MGF-to-eigenvalue tails.  The remaining open piece is the final
-theta-optimization/source-constant conversion from the scaled dilation
-eigenvalue statement to the exact CACM equation (2) spectral-norm theorem:
+The CACM RandNLA survey places a high-probability spectral rate next to raw
+squared-entry sampling. That raw estimator is distinct from the thresholded
+construction in its reference18, Drineas--Zouzias. The latter first removes
+entries below `eps/(2n)`, samples the retained matrix, and adds the deterministic
+truncation bias. Its expectation is the retained matrix, rather than the input.
 
-* if the exact sampled residual satisfies a rectangular vector-action
-  operator-2 bound, and
-* if the floating-point sampled sketch is entrywise close to the exact sampled
-  sketch,
+This module develops concentration and floating-point transfer for both laws.
+Its thresholded sample-budget endpoints use the conservative two-tail factor
+`log(4n/delta)`. `OneSidedDilation` removes the unnecessary second tail and
+proves the reference18 factor `log(2n/delta)`. `TruncatedSampling` supplies the
+explicit deterministic zero branch and the at-most-s nonzero-coordinate bound;
+`Proofs.EntrySparsification` combines these into the corrected all-matrix theorem.
 
-then the floating-point sampled residual satisfies the same operator-2 bound
-with the rectangular Frobenius norm of the entrywise perturbation budget added.
-
-This keeps the equation (2) backlog explicit: the missing piece is the final
-source-constant concentration conversion, not the lower-level trace-MGF or
-floating-point transfer infrastructure.
+The raw law and its valid unbiasedness remain unchanged. Source-rate raw
+corollaries here require the explicit no-small-entries hypothesis, which makes
+thresholding leave the input unchanged. They must not be read as an unconditional
+proof of the displayed survey rate for the untruncated sampler.
 -/
 
 -- ============================================================

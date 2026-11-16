@@ -18,6 +18,7 @@ import ComputationalMathematics.Analysis.MatrixAlgebra
 import ComputationalMathematics.Analysis.MatrixSpectral
 import ComputationalMathematics.Analysis.Rounding
 import ComputationalMathematics.FloatingPoint.Model
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation09.LowRankApproximation.StructuralBound
 
 /-!
 # NumStability.Source.DrineasMahoney.RandNLA2016.Equation09.LowRankApproximation.Endpoints
@@ -42,12 +43,17 @@ W11 canonical source correspondence destination. Whole commands are copied uncha
 /-!
 # Low-rank approximation foundations for the RandNLA CACM formalization
 
-This file begins the local foundation for the paper's low-rank approximation
-claims, including the structural condition around equation (9).  It deliberately
-separates exact analysis objects from implementation-facing floating-point
-objects: sampling probabilities remain exact mathematical inputs by the current
-project convention, while computed projectors/bases are handled in
-`Preconditioning.lean` by explicit certificates.
+This entry point re-exports the general structural theorem
+`randNLA2016_equation09_structuralBound` and its supplied-SVD variant from
+`Equation09.LowRankApproximation.StructuralBound`. Those results derive the
+bound using the actual Moore--Penrose objects and a dimension-coherent
+unitarily invariant norm family.
+
+The declarations below preserve the legacy conditional certificate API.
+A supplied residual certificate or relative-radius comparison is an explicit
+premise of its adapter, not a proof of the paper's bound. These adapters remain
+useful for separately certified exact or floating-point implementations; the
+re-exported structural theorem is the direct exact-analysis entry point.
 -/
 
 namespace NumStability
@@ -3367,9 +3373,10 @@ end UnitaryInvariantRectNormLike
 /-- Certificate-shaped exact residual surface for the source equation (9).
 The terms `tail` and `coupling` stand for the exact analysis quantities
 `||Σ_{k,⊥}||` and `||Σ_{k,⊥}(V_{k,⊥}ᵀ Z)(V_kᵀ Z)^+||` after choosing a
-concrete norm route.  This structure records the inequality without pretending
-that the repository has already built the rectangular SVD, pseudoinverse, or
-unitarily invariant norm infrastructure needed to instantiate it. -/
+concrete norm route.  This structure records a supplied inequality; constructing it is a separate
+obligation. It does not establish the source bound by itself. The re-exported
+`randNLA2016_equation09_structuralBound` derives the actual structural bound
+without requiring this residual inequality as a hypothesis. -/
 structure Equation9ResidualCertificate {m n : ℕ}
     (A : Fin m → Fin n → ℝ) (P_AZ : Fin m → Fin m → ℝ)
     (tail coupling : ℝ) : Prop where
@@ -3379,9 +3386,9 @@ structure Equation9ResidualCertificate {m n : ℕ}
     lowRankResidualFrob A (preconditionRows P_AZ A) ≤ tail + coupling
 
 /-- Norm-generic exact residual surface for source equation (9).  The supplied
-functional `ξ` may later be instantiated by a concrete unitarily invariant norm,
-but this theorem surface only assumes the explicit norm-like fields in
-`RectNormLike`. -/
+functional `ξ` may be instantiated by a concrete norm, but this conditional
+certificate only uses the explicit norm-like fields in `RectNormLike`.
+It does not itself establish unitarily invariant norm or singular-value laws. -/
 structure Equation9ResidualNormCertificate {m n : ℕ}
     (ξ : RectNormLike m n)
     (A : Fin m → Fin n → ℝ) (P_AZ : Fin m → Fin m → ℝ)
@@ -3393,10 +3400,11 @@ structure Equation9ResidualNormCertificate {m n : ℕ}
 
 /-- Head/tail decomposition certificate for equation (9).
 
-This exposes the exact algebra hidden in the source proof before the remaining
-rectangular-SVD and pseudoinverse foundations are available: `A = Head + Tail`,
-the head lies in the exact sketch column space, and the tail plus projected-tail
-Frobenius norms are bounded by the displayed radii. -/
+This conditional certificate exposes explicit head-in-sketch algebra:
+`A = Head + Tail`, the head lies in the exact sketch column space, and the
+supplied tail and projected-tail Frobenius bounds use the displayed radii.
+The general SVD/pseudoinverse structural theorem is available through the
+re-export above; consuming this certificate does not replace its proof. -/
 structure Equation9HeadTailSketchCertificate {m n r : ℕ}
     (A : Fin m → Fin n → ℝ) (Z : Fin n → Fin r → ℝ)
     (P_AZ : Fin m → Fin m → ℝ)
@@ -3606,9 +3614,9 @@ theorem Equation9ResidualNormCertificate.tail_add_coupling_nonneg {m n : ℕ}
     0 ≤ tail + coupling :=
   add_nonneg h.tail_nonneg h.coupling_nonneg
 
-/-- Exact equation (9) rank/residual surface: a supplied column-sketch projector
-factorization and a supplied residual certificate imply that `P_AZ A` is a
-rank-`r` candidate with the displayed equation (9) residual bound. -/
+/-- Conditional rank/residual adapter for a supplied equation-(9) certificate.
+The projector factorization supplies the rank statement; the residual bound is
+already a field of `hEq9`. This adapter is not the source structural theorem. -/
 theorem equation9RankResidualSurface {m n r : ℕ}
     (A : Fin m → Fin n → ℝ) (Z : Fin n → Fin r → ℝ)
     (P_AZ : Fin m → Fin m → ℝ) (tail coupling : ℝ)
@@ -3618,10 +3626,10 @@ theorem equation9RankResidualSurface {m n r : ℕ}
       lowRankResidualFrob A (preconditionRows P_AZ A) ≤ tail + coupling :=
   ⟨sketchColumnProjectorApprox_rankAtMost A Z P_AZ hP, hEq9.residual_bound⟩
 
-/-- Norm-generic equation (9) rank/residual surface.  This proves the algebraic
-rank and residual wrapper for any supplied `RectNormLike`; proving that a
-specific unitarily invariant norm supplies the required head/tail bounds is a
-separate foundation. -/
+/-- Conditional norm-generic rank/residual adapter for a supplied certificate.
+This wrapper does not derive its head/tail inequality. The re-exported general
+structural theorem supplies an independent dimension-coherent norm-family
+route. -/
 theorem equation9RankResidualNormSurface {m n r : ℕ}
     (ξ : RectNormLike m n)
     (A : Fin m → Fin n → ℝ) (Z : Fin n → Fin r → ℝ)
@@ -3930,10 +3938,10 @@ theorem equation9HeadTailSketchUnitaryNormRankResidualSurface {m n r : ℕ}
   equation9HeadTailSketchNormRankResidualSurface ξ.toRectNormLike
     A Z P_AZ Head Tail tail coupling hP hrepr hHT
 
-/-- Relative-error surface for equation (9): if the supplied equation (9)
-right-hand side is itself bounded by `rho` times the residual of a certified
-best rank-`k` approximation, then the exact projector candidate has that
-relative residual bound. -/
+/-- Conditional relative-error adapter for supplied residual and comparison
+certificates. Both the equation-(9) right-hand side and its comparison with a
+best rank-`k` residual are premises here; this theorem does not establish a
+relative approximation rate for a sampling law. -/
 theorem equation9RelativeResidualSurface {m n k r : ℕ}
     {A Ak : Fin m → Fin n → ℝ}
     (Z : Fin n → Fin r → ℝ) (P_AZ : Fin m → Fin m → ℝ)
