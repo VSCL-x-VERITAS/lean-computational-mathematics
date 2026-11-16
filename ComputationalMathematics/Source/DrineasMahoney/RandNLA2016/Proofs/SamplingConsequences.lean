@@ -35,4 +35,27 @@ theorem elementwiseSamplingSparsity : Targets.elementwiseSamplingSparsity := by
     exact (Finset.mem_filter.mp hij).2 hz
   exact (Finset.card_le_card hsub).trans ((Finset.card_image_le).trans (by simp))
 
+theorem gramErrorHighProbability : Targets.gramErrorHighProbability := by
+  intro m n s A hA hs δ hδ _
+  let P := rowSqNormTraceProbability (steps := s) A hA
+  let X : RowTrace m s → ℝ := fun ω =>
+    frobNorm (fun j k => rowSampleGram s A ω j k - rowGram A j k)
+  let T := rowSqNormProbDen A / (δ * Real.sqrt (s : ℝ))
+  have hsR : 0 < (s : ℝ) := by exact_mod_cast hs
+  have hT : 0 < T := div_pos hA (mul_pos hδ (Real.sqrt_pos.mpr hsR))
+  have hmarkov := FiniteProbability.eventProb_real_le_ge_one_sub_expectationReal_div
+    P X T (fun _ => frobNorm_nonneg _) hT
+  have hmean : P.expectationReal X ≤ rowSqNormProbDen A / Real.sqrt (s : ℝ) := by
+    simpa [P, X, one_div, div_eq_mul_inv, mul_comm] using
+      rowSqNormTraceProbability_expectationReal_rowSampleGram_frob_error_le A hA hsR
+  have hratio : P.expectationReal X / T ≤ δ := by
+    calc
+      P.expectationReal X / T ≤ (rowSqNormProbDen A / Real.sqrt (s : ℝ)) / T :=
+        div_le_div_of_nonneg_right hmean hT.le
+      _ = δ := by
+        dsimp [T]
+        field_simp [hA.ne', hδ.ne', (Real.sqrt_pos.mpr hsR).ne']
+  have hleft : 1 - δ ≤ 1 - P.expectationReal X / T := by linarith
+  exact hleft.trans hmarkov
+
 end NumStability.Source.DrineasMahoney.RandNLA2016

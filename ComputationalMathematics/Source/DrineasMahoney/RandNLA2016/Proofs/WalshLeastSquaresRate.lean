@@ -56,4 +56,41 @@ theorem walshUniformLeastSquaresRelativeError : Targets.walshUniformLeastSquares
     norm_num at hp ⊢
     exact hp
 
+theorem walshUniformLeastSquaresSamples : Targets.walshUniformLeastSquaresSamples := by
+  obtain ⟨C, hC, hquality⟩ := walshUniformLeastSquaresRelativeError
+  refine ⟨C, hC, ?_⟩
+  intro q n A b hm ε hn hε hεone
+  let B := C * (n : ℝ) * Real.log (2 * ((2 ^ q : ℕ) : ℝ)) / ε
+  have hmR : (1 : ℝ) ≤ ((2 ^ q : ℕ) : ℝ) := by exact_mod_cast hm
+  have hnR : (1 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+  have hlog : (1 / 2 : ℝ) ≤ Real.log (2 * ((2 ^ q : ℕ) : ℝ)) := by
+    have := Real.log_le_log (show (0 : ℝ) < 2 by norm_num)
+      (show (2 : ℝ) ≤ 2 * ((2 ^ q : ℕ) : ℝ) by linarith)
+    linarith [Real.log_two_gt_d9]
+  have hBpos : 0 < B := by dsimp [B]; positivity
+  have hceilpos : 0 < ⌈B⌉₊ := by
+    exact Nat.ceil_pos.mpr hBpos
+  have hceil : B ≤ (⌈B⌉₊ : ℝ) := Nat.le_ceil B
+  have hBhalf : (1 / 2 : ℝ) ≤ B := by
+    apply (le_div_iff₀ hε).mpr
+    have hCn : 1 ≤ C * (n : ℝ) := by nlinarith
+    have := mul_le_mul_of_nonneg_right hCn (show 0 ≤ Real.log (2 * ((2 ^ q : ℕ) : ℝ)) by linarith)
+    nlinarith
+  -- Increasing the witness constant ensures one full unit for rounding.
+  -- The proof below uses C≥1 and the sharp lower logarithm bound.
+  have hB : 1 ≤ 2 * B := by linarith
+  have hupper : (⌈B⌉₊ : ℝ) ≤ 2 * B := by
+    by_cases hBle : B ≤ 1
+    · have hc : ⌈B⌉₊ ≤ 1 := (Nat.ceil_le).mpr (by exact_mod_cast hBle)
+      exact (show (⌈B⌉₊ : ℝ) ≤ 1 by exact_mod_cast hc).trans hB
+    · have hB1 : 1 ≤ B := (lt_of_not_ge hBle).le
+      have hc := Nat.ceil_lt_add_one (show 0 ≤ B by positivity)
+      linarith
+  obtain ⟨hexists, hall⟩ := hquality q n ⌈B⌉₊ A b hm ε hn hceilpos hε hεone hceil
+  obtain ⟨xHat, hhat⟩ := hexists
+  refine ⟨⌈B⌉₊, rfl, hceilpos, ?_, xHat, hhat, ?_⟩
+  · convert hupper using 1; dsimp [B]; ring
+  · intro xOpt hopt
+    exact hall xHat xOpt hhat hopt
+
 end NumStability.Source.DrineasMahoney.RandNLA2016
