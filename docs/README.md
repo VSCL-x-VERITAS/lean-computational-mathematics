@@ -62,7 +62,7 @@ remains a separate later control.
    points.
 2. [`architecture/NAMING.md`](architecture/NAMING.md) defines module placement
    and naming.
-3. [`../CONTRIBUTING.md`](../CONTRIBUTING.md) defines required checks.
+3. [`../README.md`](../README.md#verification-and-contribution) lists the required checks.
 4. [`architecture/TIERS.md`](architecture/TIERS.md) defines the reviewed tier
    contract; [`architecture/migrations/COMPATIBILITY-0.1.x.md`](architecture/migrations/COMPATIBILITY-0.1.x.md)
    records the forwarding-path contract release 0.2.0 retired.

@@ -28,7 +28,7 @@ permitted Mathlib cache used; see [validation](validation.md).
 
 The project is **Lean Computational Mathematics** at the verified canonical
 repository. [README](../../../README.md), [architecture](../../../ARCHITECTURE.md),
-[contribution guidance](../../../CONTRIBUTING.md), [citation](../../../CITATION.cff),
+contribution guidance (since removed), [citation](../../../CITATION.cff),
 [agent guidance](../../../AGENTS.md) and current navigation describe the actual
 mathematical breadth and supported interfaces. Live module references, Lake,
 CI, source scanners, diagnostics and benchmark defaults follow the approved map.
