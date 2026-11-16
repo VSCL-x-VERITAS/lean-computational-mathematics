@@ -64,4 +64,41 @@ theorem relativeLeverageLeastSquaresRelativeError : Targets.relativeLeverageLeas
       intro samples hgood
       exact lsResidual_norm_le_of_objective_le hε.le hgood
 
+/-- The ceiling of the sufficient source-scale budget is a genuine successful
+algorithm budget, including singular and zero matrices. -/
+theorem relativeLeverageLeastSquaresSamples : Targets.relativeLeverageLeastSquaresSamples := by
+  obtain ⟨C, hC, hquality⟩ := relativeLeverageLeastSquaresRelativeError
+  refine ⟨C, hC, ?_⟩
+  intro m n A b a α ε hα ha hm hn hα0 hε hεone
+  have hβ : 0 < (1 - α) / (1 + α) := div_pos (by linarith) (by linarith)
+  have hβone : (1 - α) / (1 + α) ≤ 1 := (div_le_one (by linarith)).mpr (by linarith)
+  let B := C * (n : ℝ) * Real.log (2 * (m : ℝ)) / (((1 - α) / (1 + α)) * ε)
+  have hmR : (1 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm
+  have hnR : (1 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+  have hlog : (1 / 2 : ℝ) ≤ Real.log (2 * (m : ℝ)) := by
+    have := Real.log_le_log (show (0 : ℝ) < 2 by norm_num)
+      (show (2 : ℝ) ≤ 2 * (m : ℝ) by linarith)
+    linarith [Real.log_two_gt_d9]
+  have hden : 0 < ((1 - α) / (1 + α)) * ε := mul_pos hβ hε
+  have hdenone : ((1 - α) / (1 + α)) * ε ≤ 1 := by nlinarith
+  have hBpos : 0 < B := by dsimp [B]; positivity
+  have hceilpos : 0 < ⌈B⌉₊ := Nat.ceil_pos.mpr hBpos
+  have hceil : B ≤ (⌈B⌉₊ : ℝ) := Nat.le_ceil B
+  have hBhalf : (1 / 2 : ℝ) ≤ B := by
+    apply (le_div_iff₀ hden).mpr
+    have hCn : 1 ≤ C * (n : ℝ) := by nlinarith
+    have := mul_le_mul_of_nonneg_right hCn (show 0 ≤ Real.log (2 * (m : ℝ)) by linarith)
+    nlinarith
+  have hB : 1 ≤ 2 * B := by linarith
+  have hupper : (⌈B⌉₊ : ℝ) ≤ 2 * B := by
+    by_cases hBle : B ≤ 1
+    · have hc : ⌈B⌉₊ ≤ 1 := (Nat.ceil_le).mpr (by exact_mod_cast hBle)
+      exact (show (⌈B⌉₊ : ℝ) ≤ 1 by exact_mod_cast hc).trans hB
+    · have hB1 : 1 ≤ B := (lt_of_not_ge hBle).le
+      have hc := Nat.ceil_lt_add_one (show 0 ≤ B by positivity)
+      linarith
+  refine ⟨⌈B⌉₊, rfl, hceilpos, ?_, ?_⟩
+  · convert hupper using 1; dsimp [B]; ring
+  · exact hquality m n ⌈B⌉₊ A b a α ε hα ha hm hn hceilpos hα0 hε hεone hceil
+
 end NumStability.Source.DrineasMahoney.RandNLA2016
