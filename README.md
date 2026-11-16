@@ -523,7 +523,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f"
+rev = "7640e65477dfbb41019833063fe40ba5b3b9c35b"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
