@@ -736,3 +736,25 @@ licensed under the [Apache License, Version 2.0](LICENSES/Apache-2.0.txt).
 Third-party attribution is recorded in
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and citation metadata is
 available in [`CITATION.cff`](CITATION.cff).
+
+### Citation
+
+If you use Lean Computational Mathematics (VSCL) in your research, please cite:
+
+Kimon Fountoulakis, Maksim Melnichenko, Muhammad Fetrat Qharabagh,
+Georgios Alexandros Georgantzas, George Spyrou, Oleg Balabanov,
+Vasileios Georgiou, Riley Murray, and Michael W. Mahoney.
+**Trustworthy Numerical Software in the Age of AI: What Would Turing Do?**
+Preprint, 2026.
+
+```bibtex
+@unpublished{fountoulakis2026trustworthy,
+  author = {Fountoulakis, Kimon and Melnichenko, Maksim and
+            Qharabagh, Muhammad Fetrat and Georgantzas, Georgios Alexandros and
+            Spyrou, George and Balabanov, Oleg and Georgiou, Vasileios and
+            Murray, Riley and Mahoney, Michael W.},
+  title  = {{Trustworthy Numerical Software in the Age of AI: What Would Turing Do?}},
+  year   = {2026},
+  note   = {Preprint}
+}
+```
