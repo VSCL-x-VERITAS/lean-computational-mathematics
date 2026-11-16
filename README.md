@@ -34,7 +34,7 @@ records the validated source revision, preserved interfaces and publication stat
 | Eymard, Gallouët and Herbin, *Finite Volume Methods*, January 2019 manuscript | Chapter 1 introduction and supporting finite-volume models | 3/46 obligations accepted; 43 unfinished; compiled candidate targets are included |
 | Vershynin, *High-Dimensional Probability*, 1st ed. | Selected Chapters 1–2 results, Chapter 3 contracts and the audited Chapter 4 scope | Chapter 1 remains active; Chapter 2 has a complete recorded scope including discrepancies and a weaker result; Chapter 4 closes 124/124 obligations, with 3 skips and 17 deferrals outside that denominator; Chapter 3 has no completed chapter gate |
 | Nocedal and Wright, *Numerical Optimization*, 2nd ed. | Reviewed Chapter 1 definitions, models and convexity results | The pinned Chapter 1 gate accepted 14/14 Lean-bearing rows; three ambiguous source claims remain deferred and are reported separately; Chapter 2 is unpublished |
-| Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Selected sampling, sketching, low-rank and preconditioning results | A source-linked case study; no complete-paper coverage claim |
+| Drineas and Mahoney, “RandNLA: Randomized Numerical Linear Algebra” | Algorithms (1)–(3), Equations (1)–(9), and selected supporting claims | 31/31 selected obligations accepted and published, with 0 remaining, skips or deferrals; includes explicitly corrected specifications; no complete-paper coverage claim |
 
 The detailed sections below link the source modules and coverage records.
 A proof-free contract or a definition of a target proposition records a
@@ -45,7 +45,17 @@ scopes above do not imply whole-book formalization.
 
 ## Current repository status
 
-The November 9, 2026 snapshot is published commit
+The November 16, 2026 RandNLA checkpoint is published commit
+[`7640e654`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/7640e65477dfbb41019833063fe40ba5b3b9c35b).
+It completes statement and proof acceptance for all 31 obligations in the
+selected existing Drineas–Mahoney contribution. The final theorem was merged in
+[PR #50](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/50);
+the PR, merge-queue and
+[post-merge CI](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/actions/runs/43900337393/attempts/2)
+passed. The source section below records the scope and qualifications.
+
+The repository-wide measurements below remain pinned to the November 9, 2026
+snapshot, published commit
 [`ee23e1ae`](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/commit/ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f),
 which adds Shenghao Yang's reviewed Nocedal–Wright Chapter 1 development in
 [PR #42](https://github.com/VSCL-x-VERITAS/lean-computational-mathematics/pull/42)
@@ -387,13 +397,42 @@ on a separate unpublished branch and is outside this snapshot.
 
 ### Drineas–Mahoney: randomized numerical linear algebra
 
-The RandNLA case study separates reusable algorithms and analysis under
+The RandNLA development separates reusable algorithms and analysis under
 [`ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/`](ComputationalMathematics/Algorithms/RandomizedLinearAlgebra/)
 from source correspondence under
 [`ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/`](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/).
-It covers sampling, matrix concentration, low-rank approximation,
-least-squares sketching, and randomized preconditioning. Historical
-`NumStability.Algorithms.RandNLA` imports were removed in release 0.2.0; their
+
+As of November 16, 2026, all **31 selected obligations** have accepted statements
+and compiled proofs, with **0 remaining, 0 skips and 0 deferrals**. This scope
+covers Algorithms (1)–(3), Equations (1)–(9), and the supporting claims selected
+from the existing contribution: sampling, matrix concentration, subspace
+embeddings, low-rank approximation, least-squares sketching, and randomized
+preconditioning. The survey's matrix-completion, graph-solver and statistical
+applications are outside this completed scope.
+
+The accepted specifications include explicit corrections and qualifications:
+sampling unbiasedness requires positive probability for each nonzero
+contribution; Equation (2) uses truncated entry sampling; Equation (9) uses
+compatible orthonormal coordinates from one ordered SVD. The preprocessing and
+least-squares sample-count theorems state their precise probability, dimension
+and rank conditions. Printed discrepancies and broader runtime, padding and
+minimum-norm solver claims remain documented separately.
+
+The proofs reuse the library's finite-probability, matrix-concentration,
+operator-norm and least-squares results. Exact theorem-type and transitive-axiom
+checks passed for all 31 accepted results, using only standard Lean axioms and
+no `sorry` or custom axioms. Useful proof entry points are:
+
+| Material | Proof module |
+|---|---|
+| Sampling algorithms and supported unbiasedness | [SamplingAlgorithms](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/SamplingAlgorithms.lean) |
+| Corrected entry-sampling spectral error and sparsity | [EntrySparsification](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/EntrySparsification.lean) |
+| Leverage-score subspace embeddings | [LeverageSketching](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/LeverageSketching.lean) |
+| Approximate-leverage least-squares error and sufficient sample budget | [RelativeLeverageLeastSquaresRate](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/RelativeLeverageLeastSquaresRate.lean) |
+| Signed Walsh–Hadamard least-squares error and sufficient sample budget | [WalshLeastSquaresRate](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/WalshLeastSquaresRate.lean) |
+| Corrected structural low-rank bound for coherent unitarily invariant norms | [LowRankApproximation](ComputationalMathematics/Source/DrineasMahoney/RandNLA2016/Proofs/LowRankApproximation.lean) |
+
+Historical `NumStability.Algorithms.RandNLA` imports were removed in release 0.2.0; their
 canonical destinations are recorded in the
 [compatibility map](docs/architecture/migrations/COMPATIBILITY-0.1.x.md).
 
@@ -484,7 +523,7 @@ Retain the package name `numStability` and pin a revision:
 [[require]]
 name = "numStability"
 git = "https://github.com/VSCL-x-VERITAS/lean-computational-mathematics"
-rev = "ee23e1ae09b607b19dd8b2c0848fe11c5d139b0f"
+rev = "7640e65477dfbb41019833063fe40ba5b3b9c35b"
 ```
 
 Update the revision deliberately when consuming newer results. The inherited
@@ -578,7 +617,7 @@ ComputationalMathematics/
 │   │   └── Chapter04.lean, Chapter04/    accepted random-matrix scope and corrections
 │   ├── NocedalWright.lean, NocedalWright/  numerical optimization source entry point
 │   │   └── Chapter01.lean, Chapter01/    accepted Chapter 1 scope and clarification companion
-│   └── DrineasMahoney/RandNLA2016/       randomized linear algebra case study
+│   └── DrineasMahoney/RandNLA2016/       accepted selected randomized linear algebra scope
 ├── Data/, Logic/, MeasureTheory/, Topology/  supporting foundational extensions
 └── Upstream/Lindemann/                   attributed Mathlib adaptation and backports
 
