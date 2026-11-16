@@ -39,6 +39,3 @@ otherwise.
 known upstream attribution records in CI. The separate, review-only
 `normalize_apache_notices.py` utility fixes legacy license pointers without
 rewriting copyright or author lines.
-
-See [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md) before adding adapted or
-backported code.

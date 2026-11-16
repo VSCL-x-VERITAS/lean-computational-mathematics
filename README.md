@@ -601,7 +601,7 @@ experiments/chapter01/ … chapter04/       C/Python reproductions of Higham exa
 .formalization-policy/publication/       tracked publication configuration
 lakefile.toml, lake-manifest.json         package/targets and resolved dependency pins
 lean-toolchain                           pinned Lean release
-ARCHITECTURE.md, CONTRIBUTING.md          API structure and contribution guidance
+ARCHITECTURE.md                          API structure
 CHANGELOG.md, CITATION.cff                release history and citation metadata
 LICENSE, LICENSES/, THIRD_PARTY_NOTICES.md  licensing and attribution
 ```
@@ -624,8 +624,9 @@ diagnostic checker self-tests, builds `ComputationalMathematics`
 and `NumStabilityTest`, runs the literal `lake test` driver, and checks the
 reviewed warning and lint baselines. Those
 baselines are review records and must not be regenerated merely to silence new
-findings. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains placement,
-compatibility, testing, and licensing requirements. Publication uses pull
+findings. [`ARCHITECTURE.md`](ARCHITECTURE.md) and
+[`docs/architecture/PROVENANCE.md`](docs/architecture/PROVENANCE.md) explain placement and
+licensing requirements. Publication uses pull
 requests and the protected merge queue. Architecture review and diagnostic
 contracts are documented in [`docs/architecture/PROCESS.md`](docs/architecture/PROCESS.md).
 

@@ -176,7 +176,7 @@ covering:
 - important implementation boundaries;
 - source citations when applicable.
 
-Keep root community files conventional: `README.md`, `CONTRIBUTING.md`,
+Keep root community files conventional: `README.md`,
 `LICENSE`, `CHANGELOG.md`, and `CITATION.cff`. Below `docs/`, use descriptive
 lowercase paths, archive superseded dated audits, and avoid filenames named for
 temporary tools or contributors.
