@@ -7,6 +7,7 @@ import ComputationalMathematics.Analysis.SingularValues.CourantFischer
 import ComputationalMathematics.Analysis.SingularValues.Decay
 import ComputationalMathematics.Analysis.SingularValues.ExtremeValues
 import ComputationalMathematics.Analysis.SingularValues.FullColumnRank
+import ComputationalMathematics.Analysis.SingularValues.FullRightSVD
 import ComputationalMathematics.Analysis.SingularValues.InverseBounds
 import ComputationalMathematics.Analysis.SingularValues.InverseSVD
 import ComputationalMathematics.Analysis.SingularValues.Isometries
@@ -21,6 +22,7 @@ import ComputationalMathematics.Analysis.SingularValues.Symmetric
 import ComputationalMathematics.Analysis.SingularValues.SymmetricPartialInverse
 import ComputationalMathematics.Analysis.SingularValues.Transpose
 import ComputationalMathematics.Analysis.SingularValues.WeylMirsky
+import ComputationalMathematics.Analysis.SingularValues.ZeroPaddedCoordinates
 
 /-!
 # Singular-value analysis

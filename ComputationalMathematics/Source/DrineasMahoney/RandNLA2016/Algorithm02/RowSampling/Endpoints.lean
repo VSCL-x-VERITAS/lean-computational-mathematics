@@ -1,3 +1,4 @@
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.RowNorm.TraceProbability
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Real.Basic
@@ -775,89 +776,5 @@ end ComputedRowScaleDen
 
 
 
-
-theorem rowSqNormTraceProbMass_sum_eq_one {m n steps : ℕ}
-    (A : Fin m → Fin n → ℝ) (hden : rowSqNormProbDen A ≠ 0) :
-    (∑ samples : RowTrace m steps,
-      rowSqNormTraceProbMass A samples) = 1 := by
-  classical
-  have hprod :=
-    Finset.prod_univ_sum
-      (t := fun _ : Fin steps => (Finset.univ : Finset (RowSample m)))
-      (f := fun _ x => rowSqNormProb A x)
-  have hleft :
-      (∏ _ : Fin steps,
-        ∑ x ∈ (Finset.univ : Finset (RowSample m)),
-          rowSqNormProb A x) = 1 := by
-    simp [rowSqNormProb_sum_eq_one A hden]
-  have hright :
-      (∑ x ∈ Fintype.piFinset
-        (fun _ : Fin steps => (Finset.univ : Finset (RowSample m))),
-        ∏ i, rowSqNormProb A (x i))
-        = ∑ samples : RowTrace m steps,
-          rowSqNormTraceProbMass A samples := by
-    simp [rowSqNormTraceProbMass, RowTrace]
-  rw [← hright, ← hprod]
-  exact hleft
-
-/-- The canonical finite probability space for Algorithm 2 row traces with
-    independent norm-squared row samples at every step. -/
-noncomputable def rowSqNormTraceProbability {m n steps : ℕ}
-    (A : Fin m → Fin n → ℝ) (hden : 0 < rowSqNormProbDen A) :
-    FiniteProbability (RowTrace m steps) where
-  prob := rowSqNormTraceProbMass A
-  prob_nonneg := rowSqNormTraceProbMass_nonneg A hden
-  prob_sum := rowSqNormTraceProbMass_sum_eq_one A hden.ne'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/-- The independent Algorithm 2 row sampler assigns probability one to traces
-    whose sampled rows all have positive row-sampling probability. -/
-theorem rowSqNormTraceProbability_eventProb_rowTracePositiveProb
-    {m n steps : ℕ} (A : Fin m → Fin n → ℝ)
-    (hden : 0 < rowSqNormProbDen A) :
-    (rowSqNormTraceProbability (steps := steps) A hden).eventProb
-      {samples | rowTracePositiveProb A samples} = 1 := by
-  classical
-  let P := rowSqNormTraceProbability (steps := steps) A hden
-  let Good : Set (RowTrace m steps) := {samples | rowTracePositiveProb A samples}
-  have hcompl_zero : P.eventProb Goodᶜ = 0 := by
-    unfold FiniteProbability.eventProb
-    apply Finset.sum_eq_zero
-    intro samples _
-    by_cases hbad : samples ∈ Goodᶜ
-    · have hnot_good : samples ∉ Good := by simpa using hbad
-      have hexists : ∃ t : Fin steps, rowSqNormProb A (samples t) = 0 := by
-        by_contra hno
-        have hgood : samples ∈ Good := by
-          intro t
-          have hne : rowSqNormProb A (samples t) ≠ 0 := by
-            intro hzero
-            exact hno ⟨t, hzero⟩
-          exact lt_of_le_of_ne
-            (rowSqNormProb_nonneg A hden (samples t)) (Ne.symm hne)
-        exact hnot_good hgood
-      have hmass :=
-        rowSqNormTraceProbMass_eq_zero_of_exists_prob_zero A samples hexists
-      simp [P, Good, rowSqNormTraceProbability, hbad, hmass]
-    · simp [hbad]
-  have hsplit := P.eventProb_add_eventProb_compl Good
-  rw [hcompl_zero] at hsplit
-  linarith
 
 end NumStability

@@ -3,6 +3,7 @@ import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Basic
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.Basic
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.GQR
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Equality.KKT
+import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.Existence
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.GramBasis
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.MGS
 import ComputationalMathematics.Algorithms.LinearSystems.LeastSquares.NormalEquations

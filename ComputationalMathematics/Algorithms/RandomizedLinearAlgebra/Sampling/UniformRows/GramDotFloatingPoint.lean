@@ -1,6 +1,6 @@
 import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.UniformRows.GramMoments
 import ComputationalMathematics.Analysis.LinearOperators.Jordan.NormalForm.PrimaryDecomposition
-import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Algorithm03.RandomProjectionPreconditioning.FloatingPoint
+import ComputationalMathematics.Algorithms.RandomizedLinearAlgebra.Sampling.UniformRows.FloatingPoint
 
 /-!
 Relocated from the historical wave owners NumStability.Algorithms.RandNLA.UniformRowSamplingFP under the R09/R10 completion waves; reusable-tier destination per the reviewed route ledger.
