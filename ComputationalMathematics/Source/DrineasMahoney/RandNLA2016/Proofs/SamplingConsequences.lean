@@ -1,3 +1,4 @@
+import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Equation05.GramApproximation.SampledGramEndpoints
 import ComputationalMathematics.Source.DrineasMahoney.RandNLA2016.Targets.SamplingConsequences
 
 /-! # Column sampling and deterministic entry sparsity -/
