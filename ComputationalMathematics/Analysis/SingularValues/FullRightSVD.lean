@@ -9,6 +9,8 @@ left columns. This represents rectangular SVDs uniformly, including `m < n`.
 namespace NumStability
 open scoped BigOperators
 
+/-- An ordered real SVD with a full orthonormal right basis and zero left
+coordinates for zero singular values, including rectangular and empty shapes. -/
 structure IsRealFullRightSVD {m n : ℕ}
     (A U : Matrix (Fin m) (Fin n) ℝ) (sigma : Fin n → ℝ)
     (V : Matrix (Fin n) (Fin n) ℝ) : Prop where

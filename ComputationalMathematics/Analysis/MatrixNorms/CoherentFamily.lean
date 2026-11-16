@@ -9,7 +9,10 @@ this coherence and the square-contraction midpoint theorem.
 -/
 namespace NumStability
 
+/-- Unitarily invariant matrix norms coherent under left and right isometric
+embeddings, including changes of matrix dimensions. -/
 structure ComplexMatrixUnitaryInvariantNormFamily where
+  /-- The unitarily invariant norm at each fixed rectangular shape. -/
   fixed : (m n : ℕ) → ComplexMatrixFixedUnitaryInvariantNorm m n
   left_isometry : ∀ {m n p : ℕ} (E : CMatrix p m) (A : CMatrix m n),
     complexMatrixMul (complexMatrixAdjoint E) E = (1 : Matrix (Fin m) (Fin m) ℂ) →
@@ -98,6 +101,8 @@ noncomputable def ideal (N : ComplexMatrixUnitaryInvariantNormFamily) :
 theorem compatible (N : ComplexMatrixUnitaryInvariantNormFamily)
     {m n : ℕ} (A : CMatrix m n) : N.ideal.norm A = (N.fixed m n).norm A := rfl
 
+/-- Evaluate the coherent complex norm on a real matrix through the canonical
+entrywise inclusion into complex matrices. -/
 noncomputable def realNorm (N : ComplexMatrixUnitaryInvariantNormFamily)
     {m n : ℕ} (A : Fin m → Fin n → ℝ) : ℝ := N.ideal.norm (realRectToCMatrix A)
 

@@ -59,14 +59,18 @@ theorem randNLA2016_equation09_structuralBound_of_svd
     (squareSVDTailDiagonal sigma) (squareSVDHeadRight Vfull)
     (squareSVDTailRight Vfull) Z hdecomp hfull hU hV hW
 
+/-- The first `k` canonical right singular coordinates for equation (9). -/
 noncomputable def randNLAEquation09HeadRight {m k q : ℕ}
     (A : Matrix (Fin m) (Fin (k + q)) ℝ) : Fin (k + q) → Fin k → ℝ :=
   fun i a => realSVDRightCoordinates A i (Fin.castAdd q a)
 
+/-- The trailing `q` canonical right singular coordinates for equation (9). -/
 noncomputable def randNLAEquation09TailRight {m k q : ℕ}
     (A : Matrix (Fin m) (Fin (k + q)) ℝ) : Fin (k + q) → Fin q → ℝ :=
   fun i a => realSVDRightCoordinates A i (Fin.natAdd k a)
 
+/-- The diagonal matrix of the trailing `q` ordered singular values, retaining
+zero singular values through the nullspace. -/
 noncomputable def randNLAEquation09TailSigma {m k q : ℕ}
     (A : Matrix (Fin m) (Fin (k + q)) ℝ) : Fin q → Fin q → ℝ :=
   fun a b => if a = b then rectSingularValue A (Fin.natAdd k a) else 0

@@ -8,6 +8,8 @@ the rectangular product bounds are obtained through the derived family API.
 -/
 namespace NumStability
 
+/-- The Frobenius norms form a coherent unitarily invariant family under
+rectangular isometric embeddings. -/
 noncomputable def complexFrobeniusUnitaryInvariantNormFamily :
     ComplexMatrixUnitaryInvariantNormFamily where
   fixed := complexFrobeniusFixedUnitaryInvariantNorm
