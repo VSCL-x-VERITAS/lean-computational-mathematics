@@ -745,16 +745,20 @@ Kimon Fountoulakis, Maksim Melnichenko, Muhammad Fetrat Qharabagh,
 Georgios Alexandros Georgantzas, George Spyrou, Oleg Balabanov,
 Vasileios Georgiou, Riley Murray, and Michael W. Mahoney.
 **Trustworthy Numerical Software in the Age of AI: What Would Turing Do?**
-Preprint, 2026.
+[arXiv:2611.21570 [math.NA]](https://arxiv.org/abs/2611.21570), 2026.
 
 ```bibtex
-@unpublished{fountoulakis2026trustworthy,
+@misc{fountoulakis2026trustworthy,
   author = {Fountoulakis, Kimon and Melnichenko, Maksim and
             Qharabagh, Muhammad Fetrat and Georgantzas, Georgios Alexandros and
             Spyrou, George and Balabanov, Oleg and Georgiou, Vasileios and
             Murray, Riley and Mahoney, Michael W.},
   title  = {{Trustworthy Numerical Software in the Age of AI: What Would Turing Do?}},
   year   = {2026},
-  note   = {Preprint}
+  eprint = {2611.21570},
+  archivePrefix = {arXiv},
+  primaryClass  = {math.NA},
+  doi    = {10.48550/arXiv.2611.21570},
+  url    = {https://arxiv.org/abs/2611.21570}
 }
 ```
